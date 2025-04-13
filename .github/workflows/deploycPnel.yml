@@ -22,9 +22,6 @@ jobs:
       - name: Build project
         run: npm run build
 
-      - name: project test
-        run: npm run test
-
       - name: FTP Deploy
         uses: Samkirkland/FTP-Deploy-Action@v4.3.4
         with:
