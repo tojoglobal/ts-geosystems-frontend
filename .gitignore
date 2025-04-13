@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# other ignore file 
+.zip
+*.zip
+.env
