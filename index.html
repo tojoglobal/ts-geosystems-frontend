@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.png" />
     <!-- Mobile Specific Meta Tag-->
     <meta
       name="viewport"
@@ -75,7 +75,30 @@
     </script>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <div id="loading-screen" role="status">
+        <img src="/favicon.png" alt="TOJO Global Loading" />
+      </div>
+    </div>
     <script type="module" src="/src/main.jsx"></script>
+    <style>
+      /* Loader Styling */
+      #loading-screen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #204e6b;
+        z-index: 9999;
+      }
+      #loading-screen img {
+        width: 50%;
+        height: auto;
+      }
+    </style>
   </body>
 </html>
