@@ -1,4 +1,4 @@
-name: Deploy to cPanel
+name: Deploy to cPanel pulish the github
 
 on:
   push:
@@ -11,10 +11,10 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v2
 
-      - name: Setup Node.js
+      - name: Setup Node.js v20
         uses: actions/setup-node@v3
         with:
-          node-version: "18"
+          node-version: "20"
 
       - name: Install dependencies
         run: npm install
@@ -22,12 +22,15 @@ jobs:
       - name: Build project
         run: npm run build
 
+      - name: project test
+        run: npm run test
+
       - name: FTP Deploy
-        uses: samkirkland/FTP-Deploy-Action@v4.3.4
+        uses: Samkirkland/FTP-Deploy-Action@v4.3.4
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           server-dir: /public_html/
-          local-dir: ./dist
+          local-dir: ./dist/
           dangerous-clean-slate: true

@@ -1,0 +1,26 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Redirect non-www to www
+  RewriteCond %{HTTP_HOST} ^tsgb\.site [NC]
+  RewriteRule ^(.*)$ https://tsgb.site//$1 [L,R=301]
+
+  # Prevent rewriting if the requested file or directory exists
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+
+  # Route all other requests to index.html
+  RewriteRule ^ index.html [L]
+
+  # Redirect /home/ to the preferred domain
+  Redirect 301 /home https://tsgb.site
+
+  # Enable HSTS and force HTTPS for all connections
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+</IfModule>
+
+# Ensure ads.txt is served with text/plain content type
+<Files "ads.txt">
+    ForceType text/plain
+</Files>
+
