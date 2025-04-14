@@ -1,0 +1,5 @@
+primary color = #e62245,  rgb(230, 34, 69) ,
+secondary color = #97112a ,rgb(151, 17, 42)
+text primary color = #2f2f2b
+text secondary color = #111111 , rgba(17, 17, 17, 0.7)
+max-width : 1390px
