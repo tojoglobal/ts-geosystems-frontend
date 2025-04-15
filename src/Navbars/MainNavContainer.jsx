@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
+import { MdOutlineKeyboardArrowDown } from "react-icons/md";
+import { IoSearchOutline } from "react-icons/io5";
+import { LuUserRound } from "react-icons/lu";
+import { PiShoppingCart } from "react-icons/pi";
 
 const MainNavContainer = () => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
@@ -78,25 +82,84 @@ const MainNavContainer = () => {
 
           {/* Right side */}
           {!isSticky ? (
-            <div className="flex gap-6 text-sm font-semibold text-black">
-              <span className="cursor-pointer">USED EQUIPMENT</span>
-              <span className="cursor-pointer">CLEARANCE</span>
-              <span className="cursor-pointer">HIRE</span>
-              <span className="cursor-pointer">SERVICE</span>
-              <span className="cursor-pointer">SUPPORT</span>
-              <span className="cursor-pointer">TRADE IN</span>
-              <span className="cursor-pointer">G2 BLOG</span>
-              <span className="cursor-pointer">ABOUT US</span>
-              <span className="cursor-pointer">CONTACT US</span>
+            <div className="flex gap-6 text-base font-semibold text-charcoal">
+              <span className="cursor-pointer hover:text-crimson-red transition-colors duration-300  py-2.5">
+                USED EQUIPMENT
+              </span>
+              <span className="cursor-pointer hover:text-crimson-red transition-colors duration-300  py-2.5">
+                CLEARANCE
+              </span>
+              <span className="cursor-pointer hover:text-crimson-red transition-colors duration-300  py-2.5">
+                HIRE
+              </span>
+              <span className="cursor-pointer hover:text-crimson-red transition-colors duration-300  py-2.5">
+                SERVICE
+              </span>
+
+              {/* Dropdown Wrapper */}
+              <div className="relative group cursor-pointer py-2.5">
+                <span className="flex items-center gap-1 hover:text-crimson-red transition-colors duration-300">
+                  SUPPORT{" "}
+                  <MdOutlineKeyboardArrowDown className="text-xl"></MdOutlineKeyboardArrowDown>
+                </span>
+
+                {/* Dropdown Menu */}
+                <div className="absolute -left-10 top-full w-50 bg-white rounded-sm border border-slightly-dark shadow-lg pl-4 py-2 hidden group-hover:block z-50">
+                  <ul className="space-y-1 text-sm text-charcoal">
+                    <li className="hover:text-crimson-red cursor-pointer transition-colors duration-300">
+                      Software Downloads
+                    </li>
+                    <li className="hover:text-crimson-red cursor-pointer transition-colors duration-300">
+                      Quick Guides
+                    </li>
+                    <li className="hover:text-crimson-red cursor-pointer transition-colors duration-300">
+                      User Manuals
+                    </li>
+                    <li className="hover:text-crimson-red cursor-pointer transition-colors duration-300">
+                      Remote Support
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <span className="cursor-pointer hover:text-crimson-red transition-colors duration-300  py-2.5">
+                TRADE IN
+              </span>
+              <span className="cursor-pointer hover:text-crimson-red transition-colors duration-300  py-2.5">
+                G2 BLOG
+              </span>
+              <span className="cursor-pointer hover:text-crimson-red transition-colors duration-300 py-2.5">
+                ABOUT US
+              </span>
+              <span className="cursor-pointer hover:text-crimson-red transition-colors duration-300 py-2.5">
+                CONTACT US
+              </span>
             </div>
           ) : (
-            <div className="ml-auto">
-              <input
-                type="text"
-                placeholder="Search..."
-                className="border px-3 py-1 rounded-md text-sm"
-              />
-            </div>
+            <>
+              <div className="flex items-center gap-4">
+                {/* Search Bar */}
+                <div className="flex items-center px-1 w-[495px] relative">
+                  <input
+                    type="text"
+                    placeholder="Search"
+                    className="input text-[13px] placeholder:italic w-full h-7 focus:outline-none focus:ring-0 border-slightly-dark focus:border-slightly-dark bg-transparent rounded-[4px]"
+                  />
+                  <IoSearchOutline className="text-[#e62245] text-[20px] absolute right-5" />
+                </div>
+
+                {/* User Icon */}
+                <LuUserRound className="text-[25px] text-davy-gray hover:text-crimson-red font-medium cursor-pointer duration-300 ease-in" />
+
+                {/* Cart Icon with badge */}
+                <div className="relative">
+                  <PiShoppingCart className="text-[25px] text-davy-gray hover:text-crimson-red cursor-pointer duration-300 ease-in font-medium" />
+                  <span className="absolute -top-1 -right-2.5 bg-[#e62245] text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
+                    0
+                  </span>
+                </div>
+              </div>
+            </>
           )}
         </div>
         {/* isDropdownOpen menu */}
