@@ -4,6 +4,7 @@ import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import { IoSearchOutline } from "react-icons/io5";
 import { LuUserRound } from "react-icons/lu";
 import { PiShoppingCart } from "react-icons/pi";
+import NewEquipmentDropdown from "./NewEquipmentDropdown";
 
 const MainNavContainer = () => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
@@ -162,7 +163,15 @@ const MainNavContainer = () => {
             </>
           )}
         </div>
-        {/* isDropdownOpen menu */}
+        {/* isDropdownOpen menu  // <div className="absolute left-[98px] top-[45px] z-50 bg-white shadow-md p-4 w-[250px] animate-fadeIn">
+            //   <ul className="space-y-2 text-black">
+            //     <li>Excavators</li>
+            //     <li>Bulldozers</li>
+            //     <li>Loaders</li>
+            //     <li>More...</li>
+            //   </ul>
+            // </div>
+*/}
         <>
           {/* Backdrop Overlay inside relative wrapper */}
           {isDropdownOpen && (
@@ -171,14 +180,17 @@ const MainNavContainer = () => {
 
           {/* Dropdown Menu */}
           {isDropdownOpen && (
-            <div className="absolute left-[98px] top-[45px] z-50 bg-white shadow-md p-4 w-[250px] animate-fadeIn">
-              <ul className="space-y-2 text-black">
-                <li>Excavators</li>
-                <li>Bulldozers</li>
-                <li>Loaders</li>
-                <li>More...</li>
-              </ul>
-            </div>
+            <>
+              <div className="absolute left-[98px] top-[45px] z-50 bg-white shadow-md p-4 w-[250px] animate-fadeIn">
+                {/* <ul className="space-y-2 text-black">
+                  <li>Excavators</li>
+                  <li>Bulldozers</li>
+                  <li>Loaders</li>
+                  <li>More...</li>
+                </ul> */}
+                <NewEquipmentDropdown />
+              </div>
+            </>
           )}
         </>
       </div>
