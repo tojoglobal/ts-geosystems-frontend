@@ -1,7 +1,8 @@
 import React from "react";
-import { AiOutlineShoppingCart } from "react-icons/ai";
+import { HiOutlineShoppingCart } from "react-icons/hi";
 import { IoSearchOutline } from "react-icons/io5";
 import { LuUserRound } from "react-icons/lu";
+import { PiShoppingCart } from "react-icons/pi";
 
 const HeaderContainer = () => {
   return (
@@ -29,11 +30,11 @@ const HeaderContainer = () => {
           </div>
 
           {/* User Icon */}
-          <LuUserRound className="text-[36px] text-davy-gray hover:text-crimson-red cursor-pointer duration-300 ease-in" />
+          <LuUserRound className="text-[36px] text-davy-gray hover:text-crimson-red font-medium cursor-pointer duration-300 ease-in" />
 
           {/* Cart Icon with badge */}
           <div className="relative">
-            <AiOutlineShoppingCart className="text-[36px] text-davy-gray hover:text-crimson-red cursor-pointer duration-300 ease-in" />
+            <PiShoppingCart className="text-[36px] text-davy-gray hover:text-crimson-red cursor-pointer duration-300 ease-in font-medium" />
             <span className="absolute -top-1 -right-1 bg-[#e62245] text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
               0
             </span>

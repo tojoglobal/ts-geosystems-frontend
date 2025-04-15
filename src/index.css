@@ -24,6 +24,11 @@
   color: white;
 }
 
+* {
+  box-sizing: border-box;
+  font-family: var(--font-lato);
+}
+
 body {
   font-family: var(--font-lato);
 }
