@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { MdArrowForwardIos } from "react-icons/md";
 const categories = {
   "Laser Scanners": [
@@ -172,6 +172,13 @@ const brands = [
 export default function NewEquipmentDropdown() {
   const [hoveredCategory, setHoveredCategory] = useState(null);
   const timeoutRef = useRef(null);
+  const [animateLine, setAnimateLine] = useState(true);
+
+  useEffect(() => {
+    setAnimateLine(false);
+    const timeout = setTimeout(() => setAnimateLine(true), 10);
+    return () => clearTimeout(timeout);
+  }, [hoveredCategory]);
 
   const handleMouseEnterCategory = (category) => {
     clearTimeout(timeoutRef.current);
@@ -187,8 +194,8 @@ export default function NewEquipmentDropdown() {
   return (
     <div
       className="flex w-[1380px] min-h-[300px]"
-      onMouseLeave={handleMouseLeaveWrapper}
       onMouseEnter={() => clearTimeout(timeoutRef.current)}
+      onMouseLeave={handleMouseLeaveWrapper}
     >
       {/* Sidebar */}
       <div className="w-[250px] bg-white pl-4 pt-3 pb-4 border-r-[1px] border-slightly-dark">
@@ -196,14 +203,21 @@ export default function NewEquipmentDropdown() {
           SHOP BY CATEGORY
         </h3>
         <ul className="space-y-2 text-sm text-gray-700">
-          <li className="cursor-pointer hover:text-crimson-red transition">
+          <li
+            className="cursor-pointer hover:text-crimson-red transition"
+            onMouseEnter={() => {
+              handleMouseEnterCategory(null);
+            }}
+          >
             Shop All
           </li>
 
           {Object.keys(categories).map((category) => (
             <li
               key={category}
-              onMouseEnter={() => handleMouseEnterCategory(category)}
+              onMouseEnter={() => {
+                handleMouseEnterCategory(category);
+              }}
               className="cursor-pointer pr-6"
             >
               <div className="flex justify-between items-center font-normal">
@@ -233,6 +247,9 @@ export default function NewEquipmentDropdown() {
           {brands.map((brand) => (
             <li
               key={brand}
+              onMouseEnter={() => {
+                handleMouseEnterCategory(null);
+              }}
               className="cursor-pointer text-[13px] transition-all duration-[0.2s] ease-in-out group"
             >
               <span className="group-hover:text-[#e62245] group-hover:tracking-wide group-hover:mr-[5px]">
@@ -247,27 +264,41 @@ export default function NewEquipmentDropdown() {
       {hoveredCategory && (
         <div className="flex-1 p-4 border-r-[1px] border-slightly-dark shadow-lg bg-white animate-fadeIn">
           <div className="relative inline-block mb-5">
-            <div className="text-reveal-wrapper text-lg font-semibold mb-3">
+            <div className={` text-reveal-wrapper text-3xl font-semibold mb-3`}>
               {hoveredCategory}
-              <div className="text-reveal-overlay text-lg font-semibold mb-3">
+              <div
+                className={`text-reveal-overlay  text-3xl font-semibold mb-3`}
+              >
                 {hoveredCategory}
               </div>
             </div>
-            <span className="absolute left-0 bottom-0 h-[3px] w-full bg-[#e62245] animate-growLine"></span>
+
+            <span
+              className={`absolute left-0 bottom-0 h-[4px] w-full bg-[#e62245] ${
+                animateLine ? "animate-growLine" : ""
+              }`}
+            />
           </div>
 
           <div className="grid grid-cols-4 gap-4">
             {categories[hoveredCategory].map((product, index) => (
-              <div
-                key={index}
-                className="relative group h-[180px] overflow-hidden rounded-lg shadow-md cursor-pointer bg-white"
-              >
-                <div className="w-full h-full overflow-hidden">
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className="w-full h-full object-contain transform transition-transform duration-500 ease-in-out group-hover:scale-110"
-                  />
+              <div className="flex flex-col group">
+                <div
+                  key={index}
+                  className="relative group h-[180px] overflow-hidden rounded-lg shadow-md cursor-pointer bg-white border-[1px] border-slightly-dark"
+                >
+                  <div className="w-full h-full overflow-hidden">
+                    <img
+                      src={product.image}
+                      alt={product.name}
+                      className="w-full h-full object-contain transform transition-transform duration-500 ease-in-out group-hover:scale-110"
+                    />
+                  </div>
+                </div>
+                <div className="text-center mt-2  transition-all duration-[0.2s] ease-in-out">
+                  <h4 className="font-bold text-base hover:text-crimson-red group-hover:underline cursor-pointer">
+                    {product.name}
+                  </h4>
                 </div>
               </div>
             ))}

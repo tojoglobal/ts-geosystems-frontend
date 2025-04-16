@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Menu, X } from "lucide-react";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import { IoSearchOutline } from "react-icons/io5";
@@ -11,6 +11,7 @@ const MainNavContainer = () => {
   const [isSticky, setSticky] = useState(false);
   const [menuIcon, setMenuIcon] = useState(false);
   const [shouldAnimateSticky, setShouldAnimateSticky] = useState(false);
+  const dropdownRef = useRef(null);
 
   const handleScroll = () => {
     if (window.scrollY > 100) {
@@ -26,6 +27,21 @@ const MainNavContainer = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setDropdownOpen(false);
+        setMenuIcon(false);
+      }
+    };
+    if (isDropdownOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isDropdownOpen]);
 
   const toggleDropdown = () => {
     setDropdownOpen(!isDropdownOpen);
@@ -44,7 +60,7 @@ const MainNavContainer = () => {
           : "-translate-y-full mt-12"
       }`}
     >
-      <div className="relative">
+      <div className="relative" ref={dropdownRef}>
         <div className="max-w-[1390px]  mx-auto flex justify-between items-center">
           {/* Left side */}
           <div
@@ -167,7 +183,10 @@ const MainNavContainer = () => {
         <>
           {/* Backdrop Overlay inside relative wrapper */}
           {isDropdownOpen && (
-            <div className="absolute top-[45px] w-full inset-0 z-[40] bg-black/40 bg-opacity-50 transition-all h-lvw duration-300"></div>
+            <div
+              className="absolute top-[45px] w-full inset-0 z-[40] bg-black/40 bg-opacity-50 transition-all h-lvw duration-300"
+              onClick={toggleDropdown}
+            ></div>
           )}
 
           {/* Dropdown Menu */}
