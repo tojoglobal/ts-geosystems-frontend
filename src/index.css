@@ -32,3 +32,44 @@
 body {
   font-family: var(--font-lato);
 }
+
+/* under line animation  */
+@keyframes growLine {
+  0% {
+    transform: scaleX(0);
+  }
+  100% {
+    transform: scaleX(1);
+  }
+}
+
+.animate-growLine {
+  animation: growLine 0.3s ease-in-out forwards;
+  transform-origin: left;
+}
+
+/* text animation  */
+@keyframes textReveal {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+.text-reveal-wrapper {
+  position: relative;
+  display: inline-block;
+  color: #111111;
+}
+
+.text-reveal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  color: #e62245;
+  animation: textReveal 0.3s ease forwards;
+}
