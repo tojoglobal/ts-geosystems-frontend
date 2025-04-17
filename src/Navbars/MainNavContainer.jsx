@@ -5,8 +5,10 @@ import { IoSearchOutline } from "react-icons/io5";
 import { LuUserRound } from "react-icons/lu";
 import { PiShoppingCart } from "react-icons/pi";
 import NewEquipmentDropdown from "./NewEquipmentDropdown";
+import { useAppContext } from "../context/useAppContext";
 
 const MainNavContainer = () => {
+  const { setShowSearch } = useAppContext();
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [isSticky, setSticky] = useState(false);
   const [menuIcon, setMenuIcon] = useState(false);
@@ -156,7 +158,10 @@ const MainNavContainer = () => {
             <>
               <div className="flex items-center gap-4">
                 {/* Search Bar */}
-                <div className="flex items-center px-1 w-[495px] relative">
+                <div
+                  className="flex items-center px-1 w-[495px] relative"
+                  onClick={() => setShowSearch(true)}
+                >
                   <input
                     type="text"
                     placeholder="Search"

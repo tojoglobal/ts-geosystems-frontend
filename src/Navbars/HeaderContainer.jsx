@@ -3,8 +3,11 @@ import { HiOutlineShoppingCart } from "react-icons/hi";
 import { IoSearchOutline } from "react-icons/io5";
 import { LuUserRound } from "react-icons/lu";
 import { PiShoppingCart } from "react-icons/pi";
+import SearchOverlay from "./SearchOverlay";
+import { useAppContext } from "../context/useAppContext";
 
 const HeaderContainer = () => {
+  const { showSearch, setShowSearch } = useAppContext();
   return (
     <div className="max-w-[1380px] mx-auto align-middle">
       <div className="flex justify-between items-center py-5">
@@ -20,7 +23,10 @@ const HeaderContainer = () => {
 
         <div className="flex items-center gap-4">
           {/* Search Bar */}
-          <div className="flex items-center  px-4 py-1 w-[395px] relative">
+          <div
+            className="flex items-center  mx-4 py-1 w-[395px] relative"
+            onClick={() => setShowSearch(true)}
+          >
             <input
               type="text"
               placeholder="Search"
@@ -39,6 +45,12 @@ const HeaderContainer = () => {
               0
             </span>
           </div>
+
+          {/* Search Overlay */}
+          <SearchOverlay
+            isOpen={showSearch}
+            onClose={() => setShowSearch(false)}
+          />
         </div>
       </div>
     </div>
