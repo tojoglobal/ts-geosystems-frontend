@@ -18,10 +18,12 @@
   --color-charcoal-black: #111111;
   --color-slightly-dark: #ebebeb;
   --color-davy-gray: #4f4f4f;
+  --color-charcoal-gray: #393939;
   --font-lato: "Lato", sans-serif;
 }
 :root {
-  color-scheme: only light;
+  --bg-color: #ffffff;
+  --text-color: #000000;
 }
 ::selection {
   background-color: #e62245;

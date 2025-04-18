@@ -3,17 +3,24 @@ import TopMenu from "./TopMenu";
 import HeaderContainer from "./HeaderContainer";
 import MainNavContainer from "./MainNavContainer";
 import HeaderBottom from "./HeaderBottom";
+import MobileNavbar from "./MobileNavbar";
 
 const MainNavbars = () => {
   return (
-    <div>
-      <div className="">
+    <>
+      {/* Desktop & tablet only */}
+      <div className="hidden md:block">
         <TopMenu />
         <HeaderContainer />
         <MainNavContainer />
         <HeaderBottom />
       </div>
-    </div>
+
+      {/* Mobile only */}
+      <div className="md:hidden">
+        <MobileNavbar />
+      </div>
+    </>
   );
 };
 
