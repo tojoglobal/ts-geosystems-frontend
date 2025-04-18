@@ -1,6 +1,4 @@
 import React from "react";
-import { FaFacebookF, FaLinkedinIn, FaPrint } from "react-icons/fa";
-import { FaXTwitter } from "react-icons/fa6";
 import SocialButtons from "../Components/SocialButtons";
 
 const Footer = () => {
