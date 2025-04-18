@@ -9,9 +9,10 @@ const MobileNavbar = () => {
   };
 
   return (
-    <>
+    <div className="w-full relative">
       {/* Top Navigation Bar */}
       <div className="fixed top-0 w-full flex items-center justify-between px-4 py-3 bg-white shadow-sm">
+        {/* this top mun bar  */}
         <div className="flex items-center gap-3">
           {/* Left: Hamburger Menu */}
           <button
@@ -62,9 +63,9 @@ const MobileNavbar = () => {
       </div>
 
       {/* Logo Section */}
-      <div className="flex justify-center items-center pt-4 pb-10 px-13 bg-white border-y border-slightly-dark">
+      <div className="flex w-full justify-center items-center mt-13 pt-4 pb-10 px-13  bg-white border-y border-slightly-dark">
         <img
-          className="h-auto w-full"
+          //   className="h-auto w-full"
           src="https://cdn11.bigcommerce.com/s-ew2v2d3jn1/images/stencil/250x64/g2-survey-logo_1611121872__30054.original.png"
           alt="G2 Survey"
           title="G2 Survey"
@@ -97,7 +98,7 @@ const MobileNavbar = () => {
           <li>Clearance</li>
         </ul>
       </div>
-    </>
+    </div>
   );
 };
 

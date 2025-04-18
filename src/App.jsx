@@ -5,7 +5,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { HelmetProvider } from "react-helmet-async";
 import { AppProvider } from "./context/AppContext";
-import Footer from "./component/Footer";
+import Footer from "./Footer/Footer";
 
 function App() {
   return (
@@ -81,7 +81,7 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
         </Routes> */}
-        <Footer />
+            <Footer />
           </BrowserRouter>
         </AppProvider>
       </HelmetProvider>
