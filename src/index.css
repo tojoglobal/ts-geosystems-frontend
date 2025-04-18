@@ -20,7 +20,9 @@
   --color-davy-gray: #4f4f4f;
   --font-lato: "Lato", sans-serif;
 }
-
+:root {
+  color-scheme: only light;
+}
 ::selection {
   background-color: #e62245;
   color: white;
