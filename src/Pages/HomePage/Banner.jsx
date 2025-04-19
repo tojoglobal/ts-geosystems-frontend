@@ -101,7 +101,7 @@ const Banner = () => {
                 loop={true}
                 effect="fade"
                 fadeEffect={{ crossFade: true }}
-                className="h-[500px] swiper-fade"
+                className="h-[500px] swiper-fade custom-swiper"
             >
                 {slides.map((slide, i) => (
                     <SwiperSlide key={i}>

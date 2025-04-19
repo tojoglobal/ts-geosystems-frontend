@@ -83,3 +83,20 @@ body {
   color: #e62245;
   animation: textReveal 0.3s ease forwards;
 }
+
+/* for swiper in banner*/
+/* Customize swiper pagination to use line-style indicators */
+.custom-swiper .swiper-pagination-bullet {
+  width: 40px;
+  height: 3px;
+  background-color: #6c0f20;
+  opacity: 1;
+  border-radius: 0;
+  margin: 0 4px;
+  transition: background-color 0.3s;
+}
+
+/* Hide bullets beyond the first 3 */
+.custom-swiper .swiper-pagination-bullet:nth-child(n+4) {
+  display: none;
+}
