@@ -48,7 +48,6 @@ const Footer = () => {
             <li>CONTACT US</li>
           </ul>
         </div>
-
         {/* Mailing List */}
         <div>
           <h2 className="text-xl font-semibold mb-4">JOIN OUR MAILING LIST</h2>
