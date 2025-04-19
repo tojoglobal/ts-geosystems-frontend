@@ -7,7 +7,7 @@ import {
 
 const SocialButtons = () => {
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-4 gap-1 w-full max-w-md mx-auto">
+    <div className="grid grid-cols-2 sm:grid-cols-4 gap-1 w-full max-w-md mx-auto z-10">
       {/* Facebook */}
       <div
         className="flex justify-center  items-center bg-[#155dfc] px-1 py-1 h-8"
