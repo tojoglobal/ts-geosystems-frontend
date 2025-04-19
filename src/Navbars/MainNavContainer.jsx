@@ -59,7 +59,7 @@ const MainNavContainer = () => {
       } ${
         isSticky
           ? "fixed top-0 translate-y-0 shadow-md"
-          : "-translate-y-full mt-12"
+          : "relative top-12 -translate-y-full"
       }`}
     >
       <div className="relative" ref={dropdownRef}>

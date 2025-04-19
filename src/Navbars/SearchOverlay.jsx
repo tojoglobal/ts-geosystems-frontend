@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import Slider from "react-slick";
+import { FaShoppingCart } from "react-icons/fa";
 import {
   IoCloseOutline,
   IoSearchOutline,
@@ -9,6 +10,8 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { MdOutlineKeyboardVoice } from "react-icons/md";
 import { RxCross1 } from "react-icons/rx";
+import PrevArrow from "../Components/PrevArrow";
+import NextArrow from "../Components/NextArrow";
 
 const POPULAR_SEARCHES = [
   "tripod",
@@ -96,13 +99,15 @@ const SearchOverlay = ({ isOpen, onClose }) => {
     speed: 500,
     slidesToShow: 4,
     slidesToScroll: 1,
+    prevArrow: <PrevArrow />,
+    nextArrow: <NextArrow />,
   };
 
   return (
     <>
       <div
         ref={overlayRef}
-        className={`fixed inset-0 bg-gray-100 z-[100] h-fit transition-transform duration-500 ease-in-out transform ${
+        className={`fixed inset-0 bg-gray-100 z-[100] h-10/12 transition-transform duration-500 ease-in-out transform ${
           isOpen ? "translate-y-0" : "-translate-y-full"
         }`}
       >
@@ -187,25 +192,32 @@ const SearchOverlay = ({ isOpen, onClose }) => {
           </div>
 
           {/* Right - Product Slider */}
-          <div className="w-7/9 pl-10">
+          <div className="w-7/9  pl-10">
             <h3 className="font-semibold text-lg mb-4">
               {searchText
                 ? `Results for "${searchText}"`
                 : "Recommended products"}
             </h3>
+
+            {/* <div className="relative w-full"> */}
             <Slider {...settings}>
               {RECOMMENDED_PRODUCTS.map((product, index) => (
                 <div key={index} className="px-2">
-                  <div className="border rounded-lg p-4 text-center">
+                  <div className="h-full min-h-[350px] flex flex-col bg-white p-6 shadow-sm border-2 border-transparent hover:border-gray-300 transition-all duration-200">
                     <img
                       src={product.image}
                       alt={product.name}
-                      className="mx-auto h-32 object-contain mb-2"
+                      className="mx-auto h-44 object-contain mb-3"
                     />
-                    <p className="text-sm font-medium">{product.name}</p>
-                    <p className="text-crimson-red mt-1 font-semibold">
-                      {product.price}
-                    </p>
+                    <p className="text-sm font-medium mb-1">{product.name}</p>
+                    <div className="flex justify-between items-center mt-8">
+                      <p className="text-sm font-semibold text-gray-800">
+                        {product.price}
+                      </p>
+                      <button className="bg-crimson-red p-2 rounded text-white">
+                        <FaShoppingCart className="text-sm" />
+                      </button>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -213,6 +225,7 @@ const SearchOverlay = ({ isOpen, onClose }) => {
           </div>
         </div>
       </div>
+      {/* </div> */}
       {/* Backdrop Overlay inside relative wrapper */}
       {isOpen && (
         <div
