@@ -90,7 +90,6 @@ const Banner = () => {
             <div className="custom-next absolute top-1/2 right-4 transform -translate-y-1/2 bg-[#e62245] text-white p-2 rounded-full cursor-pointer z-10">
                 <FaChevronRight />
             </div>
-
             <Swiper
                 modules={[Navigation, Pagination, Autoplay, EffectFade]}
                 navigation={{
@@ -98,11 +97,11 @@ const Banner = () => {
                     nextEl: ".custom-next",
                 }}
                 pagination={{ clickable: true }}
-                autoplay={{ delay: 4000 }}
+                autoplay={{ delay: 10000 }}
                 loop={true}
                 effect="fade"
                 fadeEffect={{ crossFade: true }}
-                className="h-[500px]"
+                className="h-[500px] swiper-fade"
             >
                 {slides.map((slide, i) => (
                     <SwiperSlide key={i}>
@@ -156,7 +155,7 @@ const Banner = () => {
                                                 <a
                                                     key={idx}
                                                     href={link.href}
-                                                    className="underline hover:text-[#e62245] transition"
+                                                    className="underline text-[#e62245] transition"
                                                 >
                                                     {link.label}
                                                 </a>
