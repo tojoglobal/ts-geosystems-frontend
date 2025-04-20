@@ -1,0 +1,4 @@
+.swiper-button-prev-custom,
+.swiper-button-next-custom {
+    transition: color 0.3s ease;
+}
