@@ -18,9 +18,13 @@ const Footer = () => {
             Dhaka-1000, Bangladesh.
           </p>
           <div className="flex gap-4 mt-4">
-            <img src="/iso.png" alt="ISO" className="h-8" />
-            <img src="/ur.png" alt="UR" className="h-8" />
-            <img src="/ea-jas.png" alt="EA-JAS" className="h-8" />
+            <img
+              src="https://ts-geosystems.com.bd/assets/images/ISO-WHITE.png"
+              alt="ISO"
+              className="h-8"
+            />
+            {/* <img src="/ur.png" alt="UR" className="h-8" />
+            <img src="/ea-jas.png" alt="EA-JAS" className="h-8" /> */}
           </div>
         </div>
 
@@ -74,12 +78,16 @@ const Footer = () => {
       <div className="max-w-[85%] mx-auto flex flex-col md:flex-row justify-between items-center text-sm pb-6">
         <p>TS Geosystem © All rights reserved | Sitemap</p>
         <div className="flex gap-4 mt-4 md:mt-0">
-          <img src="/visa.png" alt="Visa" className="h-6" />
-          <img src="/paypal.png" alt="Paypal" className="h-6" />
+          <img
+            src="https://ts-geosystems.com.bd/assets/images/16305963101621960148credit-cards-footer.png"
+            alt="Visa"
+            className="h-6"
+          />
+          {/* <img src="/paypal.png" alt="Paypal" className="h-6" />
           <img src="/vice.png" alt="Vice" className="h-6" />
           <img src="/electic.png" alt="Electic" className="h-6" />
           <img src="/amex.png" alt="Amex" className="h-6" />
-          <img src="/discover.png" alt="Discover" className="h-6" />
+          <img src="/discover.png" alt="Discover" className="h-6" /> */}
         </div>
       </div>
     </footer>
