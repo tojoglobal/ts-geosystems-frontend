@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FiMenu, FiSearch, FiUser, FiShoppingCart, FiX } from "react-icons/fi";
+import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { IoSearchOutline } from "react-icons/io5";
 import { LuUserRound } from "react-icons/lu";
 import { PiShoppingCart } from "react-icons/pi";
@@ -22,27 +23,46 @@ const categories = [
 ];
 
 const MobileNavbar = () => {
+  const submenuRef = useRef(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [openCategory, setOpenCategory] = useState(null);
+  const [submenuHeight, setSubmenuHeight] = useState(0);
+  const [animatingCategory, setAnimatingCategory] = useState(null);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
     if (!isMenuOpen) setIsSearchOpen(false);
   };
 
-  //   const toggleSearch = () => {
-  //     if (!isMenuOpen) {
-  //       setIsSearchOpen(!isSearchOpen);
-  //     }
-  //   };
   const toggleSearch = () => {
     setIsSearchOpen(!isSearchOpen);
     if (!isSearchOpen) setIsMenuOpen(false);
   };
 
+  // const handleCategoryClick = (title) => {
+  //   setOpenCategory((p) => (p === title ? null : title));
+  // };
+
   const handleCategoryClick = (title) => {
-    setOpenCategory((p) => (p === title ? null : title));
+    if (openCategory === title) {
+      // Closing: animate and then hide
+      setAnimatingCategory(title); // keep it rendered
+      setSubmenuHeight(0); // start animation
+      setTimeout(() => {
+        setOpenCategory(null); // hide it after animation
+        setAnimatingCategory(null); // clear animating
+      }, 500); // must match transition duration
+    } else {
+      // Opening: show and animate height
+      setOpenCategory(title);
+      setAnimatingCategory(title); // ensure it's mounted
+      setTimeout(() => {
+        if (submenuRef.current) {
+          setSubmenuHeight(submenuRef.current.scrollHeight);
+        }
+      }, 10);
+    }
   };
 
   useEffect(() => {
@@ -50,7 +70,7 @@ const MobileNavbar = () => {
   }, [isMenuOpen]);
 
   return (
-    <div className="w-full relative">
+    <div className="w-full relative z-50">
       {/* Top Navigation Bar */}
       <div className="fixed top-0 w-full ">
         <div className="flex items-center justify-between px-4 py-3 bg-white shadow-sm">
@@ -132,7 +152,7 @@ const MobileNavbar = () => {
 
       {/* Side Menu */}
       <div
-        className={`fixed top-12 left-0 w-full h-full bg-charcoal-gray border-t-2 border-davy-gray text-white transform ${
+        className={`fixed top-12 left-0 w-full h-full bg-charcoal-gray border-t-2 z-50 border-davy-gray text-white transform ${
           isMenuOpen ? "translate-x-0" : "-translate-x-full"
         } transition-transform duration-300 ease-in-out`}
       >
@@ -144,47 +164,55 @@ const MobileNavbar = () => {
           />
           <IoSearchOutline className="text-[#e62245] text-[28px] absolute top-3 right-5" />
         </div>
-        <div
-          className="overflow-y-auto max-h-[calc(100vh-150px)]"
-          //   className={`bg-charcoal-gray border-t-2 border-davy-gray text-white transform ${
-          //     isMenuOpen ? "translate-x-0" : "-translate-x-full"
-          //   } transition-transform duration-300 ease-in-out`}
-        >
+        <div className="overflow-y-auto max-h-[calc(100vh-150px)]">
           <div>
-            <div
-              //   className="sticky top-0 z-10 bg-charcoal-gray p-4 "
-              className="flex justify-between items-center p-4"
-            >
-              <span className="text-lg font-semibold">SHOP BY CATEGORY</span>
+            <div className=" border border-crimson-red rounded-sm mx-3 my-4 px-3 py-1">
+              <span className="text-base font-semibold">SHOP BY CATEGORY</span>
             </div>
 
-            <ul className="px-4 space-y-4">
+            <ul className="mx-3 px-4 space-y-1">
               {categories.map((item, index) => (
                 <li key={index} className="cursor-pointer">
                   <div
                     onClick={() => handleCategoryClick(item.title)}
-                    className="flex justify-between items-center py-2 text-white"
+                    className="flex justify-between items-center py-0.5 text-white"
                   >
                     {item.title}
                     {item.subLinks && (
                       <span className="text-xl">
-                        {openCategory === item.title ? "▲" : "▼"}
+                        {openCategory === item.title ? (
+                          <IoIosArrowUp />
+                        ) : (
+                          <IoIosArrowDown />
+                        )}
                       </span>
                     )}
                   </div>
-                  {item.subLinks && openCategory === item.title && (
-                    <ul
-                      className={`scroll-smooth ml-4 space-y-1 text-sm text-red-400 transition-all duration-300 overflow-hidden ${
-                        openCategory === item.title ? "max-h-40" : "max-h-0"
-                      }`}
-                    >
-                      {item.subLinks.map((sub, idx) => (
-                        <li key={idx} className="pl-2 border-l border-red-400">
-                          {sub}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
+                  {item.subLinks &&
+                    (openCategory === item.title ||
+                      animatingCategory === item.title) && (
+                      <ul
+                        ref={submenuRef}
+                        style={{
+                          height:
+                            openCategory === item.title ? submenuHeight : 0,
+                        }}
+                        className={`ml-4 space-y-1 text-sm text-red-400 overflow-hidden transition-all duration-500 ease-in-out ${
+                          openCategory === item.title
+                            ? "opacity-100 translate-y-0"
+                            : "opacity-0 -translate-y-2"
+                        }`}
+                      >
+                        {item.subLinks.map((sub, idx) => (
+                          <li
+                            key={idx}
+                            className="pl-2 border-l border-red-400"
+                          >
+                            {sub}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
                 </li>
               ))}
             </ul>
