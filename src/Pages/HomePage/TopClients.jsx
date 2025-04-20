@@ -1,65 +1,65 @@
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Autoplay } from 'swiper/modules';
-import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
-import 'swiper/css';
-import 'swiper/css/navigation';
-import { Link } from 'react-router-dom';
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Autoplay } from "swiper/modules";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import "swiper/css";
+import "swiper/css/navigation";
+import { Link } from "react-router-dom";
 
-const PopularBrands = () => {
+const TopClients = () => {
     const brands = [
         {
             id: 1,
-            name: "Leica",
-            image: "https://ts-geosystems.com.bd/assets/images/MrWm6451596f6f2572643b59990f_logo%20(2).png",
-            url: "/catalog?brand=Leica",
+            name: "Sinohydro",
+            image: "https://ts-geosystems.com.bd/assets/images/xG2F4380367e82c88e06edd079ee71c925d4.jpeg",
+            url: "/catalog?brand=SinoHydro",
         },
         {
             id: 2,
-            name: "Hi-Target",
-            image: "https://ts-geosystems.com.bd/assets/images/dWTSHorizontal%20Logo.png",
-            url: "/catalog?brand=Hi-Target",
+            name: "Corporation",
+            image: "https://ts-geosystems.com.bd/assets/images/VQ4k1624769132308.jpg",
+            url: "/catalog?brand=Corporation",
         },
         {
             id: 3,
-            name: "Geomax",
-            image: "https://ts-geosystems.com.bd/assets/images/bRwcimages%20(1).png",
-            url: "/catalog?brand=Geomax",
+            name: "Italian-Thai",
+            image: "https://ts-geosystems.com.bd/assets/images/IPfMLOGO%20ITALIAN-THAI1.png",
+            url: "/catalog?brand=Italian-Thai",
         },
         {
             id: 4,
-            name: "Bosch",
-            image: "https://ts-geosystems.com.bd/assets/images/kEwvpng-transparent-bosch-logo.png",
-            url: "/catalog?brand=Bosch",
+            name: "RHD",
+            image: "https://ts-geosystems.com.bd/assets/images/HzEball-client-logo_07.jpg",
+            url: "/catalog?brand=RHD",
         },
         {
             id: 5,
-            name: "Bosch",
-            image: "https://ts-geosystems.com.bd/assets/images/B9l5Pentax-Logo.wine.png",
-            url: "/catalog?brand=Bosch",
+            name: "CCCC",
+            image: "https://ts-geosystems.com.bd/assets/images/fKo7cccc.png",
+            url: "/catalog?brand=CCCC",
         },
         {
             id: 6,
-            name: "Leica",
-            image: "https://ts-geosystems.com.bd/assets/images/kEwvpng-transparent-bosch-logo.png",
-            url: "/catalog?brand=Leica",
+            name: "OSJI",
+            image: "https://ts-geosystems.com.bd/assets/images/0VhA1-OSJI-Logo.jpg",
+            url: "/catalog?brand=OSJI",
         },
         {
             id: 7,
-            name: "Hi-Target",
-            image: "https://ts-geosystems.com.bd/assets/images/7w2t5cf8bc5eb6f89.jpg",
-            url: "/catalog?brand=Hi-Target",
+            name: "DORREN",
+            image: "https://ts-geosystems.com.bd/assets/images/iQwZ1580296185.png",
+            url: "/catalog?brand=DORREN",
         },
         {
             id: 8,
-            name: "Geomax",
-            image: "https://ts-geosystems.com.bd/assets/images/1737370495images.png",
-            url: "/catalog?brand=Geomax",
+            name: "Tss",
+            image: "https://ts-geosystems.com.bd/assets/images/sYTHbrand-rothbucher-systeme-ezgif.com-webp-to-jpg-converter.jpg",
+            url: "/catalog?brand=Tss",
         },
         {
             id: 9,
-            name: "Bosch",
-            image: "https://ts-geosystems.com.bd/assets/images/0oG5kolida-logo-gm.png",
-            url: "/catalog?brand=Bosch",
+            name: "Posco",
+            image: "https://ts-geosystems.com.bd/assets/images/bguq0.jpg",
+            url: "/catalog?brand=Posco",
         },
     ];
 
@@ -69,10 +69,11 @@ const PopularBrands = () => {
                 <div className="flex items-center justify-center gap-4 mb-12">
                     <div className="flex-1 h-0.5 bg-[#e62245]"></div>
                     <h2 className="text-center text-xl sm:text-2xl md:text-4xl font-bold text-[#e62245] whitespace-nowrap">
-                        POPULAR BRANDS
+                        TOP CLIENTS
                     </h2>
                     <div className="flex-1 h-0.5 bg-[#e62245]"></div>
                 </div>
+
                 <div className="relative">
                     <div className="custom-prev absolute top-1/2 left-4 transform -translate-y-1/2 hover:bg-[#e62245] p-2 rounded-full cursor-pointer z-10">
                         <FaChevronLeft size={20} />
@@ -108,7 +109,10 @@ const PopularBrands = () => {
                     >
                         {brands.map((brand) => (
                             <SwiperSlide key={brand.id}>
-                                <Link to={brand.url} className="brand-card p-4 transition-all duration-300 hover:border-[#e62245] hover:border-2 rounded-lg h-32 flex items-center justify-center">
+                                <Link
+                                    to={brand.url}
+                                    className="brand-card p-4 transition-all duration-300 hover:border-[#e62245] hover:border-2 rounded-lg h-32 flex items-center justify-center"
+                                >
                                     <img
                                         src={brand.image}
                                         alt={brand.name}
@@ -124,4 +128,4 @@ const PopularBrands = () => {
     );
 };
 
-export default PopularBrands;
+export default TopClients;
