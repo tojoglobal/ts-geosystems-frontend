@@ -1,5 +1,6 @@
 import Banner from "./Banner";
 import ExperienceCenter from "./ExperienceCenter";
+import OurAchievements from "./OurAchievements";
 import OurAdServices from "./OurAdServices";
 import OurYoutube from "./OurYoutube";
 import PopularBrands from "./PopularBrands";
@@ -13,6 +14,7 @@ const MainHome = () => {
             <ExperienceCenter />
             <TotalStation />
             <WeProvide />
+            <OurAchievements />
             <TopClients />
             <OurAdServices />
             <PopularBrands />
