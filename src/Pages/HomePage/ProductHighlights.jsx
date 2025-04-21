@@ -265,7 +265,12 @@ const ProductHighlights = () => {
                 >
                     {items.map((item, idx) => (
                         <SwiperSlide key={idx}>
-                            <div className="flex flex-col items-center p-4 rounded-md shadow-sm bg-white">
+                            <div className="relative flex flex-col items-center p-4 rounded-md shadow-sm bg-white">
+                                {activeTab !== "featured" && (
+                                    <p className="absolute top-2 right-2 px-2 py-[2px] rounded-md text-white bg-[#e62245]">
+                                        SALE
+                                    </p>
+                                )}
                                 <Link to={item?.productUrl}>
                                     <img
                                         src={item.img}

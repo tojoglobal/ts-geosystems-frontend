@@ -5,75 +5,76 @@ import "swiper/css/navigation";
 import "./TotalStation.css";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 
 const items = [
     {
         name: "Kolida CTS-662R10 Total Station",
         img: "https://ts-geosystems.com.bd/assets/images/JMqcf5wY.png",
-        link: "#",
+        link: "https://ts-geosystems.com.bd/product/Kolida-KTS470-Windows-Total-Station",
         price: "162,174.39",
         discountPrice: "225,297.94",
     },
     {
         name: "Kolida CTS-632R10M Total Station",
         img: "https://ts-geosystems.com.bd/assets/images/f6ID2zYF.png",
-        link: "#",
+        link: "https://ts-geosystems.com.bd/product/Kolida-KTS470-Windows-Total-Station",
         price: "162,174.39",
         discountPrice: "225,297.94",
     },
     {
         name: "Kolida CTS-662R10 Total Station",
         img: "https://ts-geosystems.com.bd/assets/images/JMqcf5wY.png",
-        link: "#",
+        link: "https://ts-geosystems.com.bd/product/Kolida-KTS470-Windows-Total-Station",
         price: "162,174.39",
         discountPrice: "225,297.94",
     },
     {
         name: "Kolida CTS-632R10M Total Station",
         img: "https://ts-geosystems.com.bd/assets/images/f6ID2zYF.png",
-        link: "#",
+        link: "https://ts-geosystems.com.bd/product/Kolida-KTS470-Windows-Total-Station",
         price: "162,174.39",
         discountPrice: "225,297.94",
     },
     {
         name: "Kolida CTS-662R10 Total Station",
         img: "https://ts-geosystems.com.bd/assets/images/JMqcf5wY.png",
-        link: "#",
+        link: "https://ts-geosystems.com.bd/product/Kolida-KTS470-Windows-Total-Station",
         price: "162,174.39",
         discountPrice: "225,297.94",
     },
     {
         name: "Kolida CTS-632R10M Total Station",
         img: "https://ts-geosystems.com.bd/assets/images/f6ID2zYF.png",
-        link: "#",
+        link: "https://ts-geosystems.com.bd/product/Kolida-KTS470-Windows-Total-Station",
         price: "162,174.39",
         discountPrice: "225,297.94",
     },
     {
         name: "Kolida CTS-662R10 Total Station",
         img: "https://ts-geosystems.com.bd/assets/images/JMqcf5wY.png",
-        link: "#",
+        link: "https://ts-geosystems.com.bd/product/Kolida-KTS470-Windows-Total-Station",
         price: "162,174.39",
         discountPrice: "225,297.94",
     },
     {
         name: "Kolida CTS-632R10M Total Station",
         img: "https://ts-geosystems.com.bd/assets/images/f6ID2zYF.png",
-        link: "#",
+        link: "https://ts-geosystems.com.bd/product/Kolida-KTS470-Windows-Total-Station",
         price: "162,174.39",
         discountPrice: "225,297.94",
     },
     {
         name: "Kolida CTS-662R10 Total Station",
         img: "https://ts-geosystems.com.bd/assets/images/JMqcf5wY.png",
-        link: "#",
+        link: "https://ts-geosystems.com.bd/product/Kolida-KTS470-Windows-Total-Station",
         price: "162,174.39",
         discountPrice: "225,297.94",
     },
     {
         name: "Kolida CTS-632R10M Total Station",
         img: "https://ts-geosystems.com.bd/assets/images/f6ID2zYF.png",
-        link: "#",
+        link: "https://ts-geosystems.com.bd/product/Kolida-KTS470-Windows-Total-Station",
         price: "162,174.39",
         discountPrice: "225,297.94",
     },
@@ -108,7 +109,6 @@ const TotalStation = () => {
                         <span className="absolute -left-3 -bottom-[6px] h-[4px] w-0 bg-[#e62245] transition-all duration-300 group-hover:w-full"></span>
                     </div>
                 </div>
-
                 {/* Custom Arrows */}
                 <div className="flex gap-2 pr-4">
                     <div
@@ -131,7 +131,6 @@ const TotalStation = () => {
                     </div>
                 </div>
             </div>
-
             {/* Swiper */}
             <div className="mt-4">
                 <Swiper
@@ -170,18 +169,23 @@ const TotalStation = () => {
                                 <p className="absolute top-2 right-2 px-2 py-[2px] rounded-md text-white bg-[#e62245]">
                                     SALE
                                 </p>
-                                <img
-                                    src={item.img}
-                                    alt={item.name}
-                                    className="mx-auto w-full max-w-[120px] sm:max-w-[140px] md:max-w-[260px] h-auto pb-3"
-                                />
+                                <Link to={item?.link}>
+                                    <img
+                                        className="mx-auto w-full max-w-[120px] sm:max-w-[140px] md:max-w-[260px] h-auto pb-3"
+                                        src={item.img}
+                                        alt={item.name}
+                                    />
+                                </Link>
                                 <div className="w-full border-t pt-3">
                                     <p className="text-xs text-gray-500">
                                         Total Station | Sku: 65dVv8Jr8fe
                                     </p>
-                                    <p className="font-semibold text-sm text-gray-800 mt-1">
+                                    <Link
+                                        to={item?.link}
+                                        className="font-semibold text-sm text-gray-800 mt-1"
+                                    >
                                         {item.name}
-                                    </p>
+                                    </Link>
                                     <div className="mt-2 space-x-2">
                                         <span className="text-lg font-bold text-[#222]">
                                             ৳{item.price}
