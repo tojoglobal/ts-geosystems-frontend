@@ -102,10 +102,10 @@ const TotalStation = () => {
             <div className="flex items-center justify-between border border-gray-200">
                 <div className="relative group px-3 py-1">
                     <div className="relative">
-                        <h2 className="text-[#e62245] p-2 text-2xl font-semibold w-fit pr-3 border-r border-gray-200">
+                        <h2 className="text-[#e62245] p-2 text-xl md:text-2xl font-semibold w-fit pr-3 border-r border-gray-200">
                             TOTAL STATION
                         </h2>
-                        <span className="absolute left-0 bottom-[1px] h-[3px] w-0 bg-[#e62245] transition-all duration-300 group-hover:w-full"></span>
+                        <span className="absolute -left-3 -bottom-[6px] h-[4px] w-0 bg-[#e62245] transition-all duration-300 group-hover:w-full"></span>
                     </div>
                 </div>
 
