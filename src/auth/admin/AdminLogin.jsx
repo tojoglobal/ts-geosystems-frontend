@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { FaFacebook, FaLinkedin, FaEye, FaEyeSlash } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
-import { IoPersonSharp } from "react-icons/io5";
 import { MdEmail } from "react-icons/md";
 import { useNavigate } from "react-router";
+import Swal from "sweetalert2";
+import { useAxiospublic } from "../../Hooks/useAxiospublic";
 
 const AdminLogin = () => {
-  const apiKey = import.meta.env.VITE_OPEN_APIURL;
+  const axiosPublicUrl = useAxiospublic();
+  // const apiKey = import.meta.env.VITE_OPEN_APIURL;
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
 
@@ -34,36 +36,43 @@ const AdminLogin = () => {
     e.preventDefault();
     const { useremail, password } = formData;
     try {
-      const response = await fetch(`${apiKey}/api/adminlogin`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: useremail,
-          password: password,
-        }),
+      const response = await axiosPublicUrl.post("/api/adminlogin", {
+        email: useremail,
+        password: password,
       });
-
-      const data = await response.json();
-
-      if (response.ok && data.success) {
-        console.log("Login successful!");
+      const data = response.data;
+      if (data.success) {
         localStorage.setItem("userEmail", JSON.stringify({ useremail }));
         navigate("/dashboard");
+        Swal.fire({
+          icon: "success",
+          title: "Login successful!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
       } else {
-        alert(data.message || "Invalid username or password");
+        Swal.fire({
+          position: "top-end",
+          icon: "error",
+          title: data.message || "Invalid username or password",
+          showConfirmButton: false,
+          timer: 1500,
+        });
       }
     } catch (error) {
       console.error("Login failed:", error);
-      //   alert("An error occurred. Please try again.");
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Something went wrong. Please try again!",
+      });
     }
   };
 
   return (
     <>
       {/* <!-- Login form --> */}
-      <form action="" method="post" id="Login" onSubmit={handleSubmit}>
+      <form action="" method="post" id="adminLogin" onSubmit={handleSubmit}>
         {/* <!-- Left section of the form --> */}
         <div className="left">
           <div className="w-[80%]">
@@ -114,10 +123,10 @@ const AdminLogin = () => {
             <button type="submit">Login</button>
 
             {/* <!-- Social login options --> */}
-            <p>or login with social platforms</p>
+            <p>or login with social platforms </p>
             <div>
               <a href="">
-                <FcGoogle classNameName="pt-6" />{" "}
+                <FcGoogle className="pt-6" />{" "}
               </a>
               <a href="">
                 <FaFacebook className="text-[#1877F2]" />
