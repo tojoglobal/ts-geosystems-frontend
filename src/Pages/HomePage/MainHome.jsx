@@ -1,3 +1,4 @@
+import ProductDetails from "../ProductDetails";
 import Banner from "./Banner";
 import ExperienceCenter from "./ExperienceCenter";
 import OurAchievements from "./OurAchievements";
