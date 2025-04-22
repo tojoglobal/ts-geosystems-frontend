@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 export const AppContext = createContext(null);
 
 export const AppProvider = ({ children }) => {
-  const [apiUrl, setApiUrl] = useState("https://api.tojoglobal.com");
+  const [apiUrl, setApiUrl] = useState(import.meta.env.VITE_OPEN_APIURL);
   const [showSearch, setShowSearch] = useState(false);
 
   const value = useMemo(

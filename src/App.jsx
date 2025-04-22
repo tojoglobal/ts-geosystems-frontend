@@ -1,25 +1,59 @@
 import "./App.css";
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+} from "react-router-dom";
 import MainNavbars from "./Navbars/MainNavbars";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { HelmetProvider } from "react-helmet-async";
 import { AppProvider } from "./context/AppContext";
 import Footer from "./Footer/Footer";
 import MainHome from "./Pages/HomePage/MainHome";
+import Erro from "./Err/Erro";
+import AdminLogin from "./auth/admin/AdminLogin";
+import ProtectedRoute from "./utils/ProtectedRoute";
+import Dashboard from "./Dashboard/Dashboard";
+
+const AllRoute = () => {
+  const location = useLocation();
+  return (
+    <Routes location={location} key={location.pathname}>
+      <Route exact path="/" element={<MainHome />} />
+
+      {/* dashboard route */}
+      <Route path="/admin/login" element={<AdminLogin />} />
+      <Route
+        path="/admin/dashboard"
+        element={
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route path="*" element={<Erro />} />
+    </Routes>
+  );
+};
 
 function App() {
+  // const location = useLocation();
+  const hideNavFooter = ["/admin/login", "/admin/dashboard"].includes(
+    location.pathname
+  );
+
   return (
     <>
-      <HelmetProvider>
-        <AppProvider>
-          <BrowserRouter>
-            <MainNavbars />
-            <MainHome />
-            <Footer />
-          </BrowserRouter>
-        </AppProvider>
-      </HelmetProvider>
+      <AppProvider>
+        <Router
+          future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
+        >
+          {!hideNavFooter && <MainNavbars />}
+          <AllRoute />
+          {!hideNavFooter && <Footer />}
+        </Router>
+      </AppProvider>
     </>
   );
 }
