@@ -65,9 +65,12 @@ const Login = () => {
                      Save items to your wish list
                   </li>
                </ul>
-               <button className="bg-red-600 text-white px-6 py-2 rounded hover:bg-red-700">
+               <Link
+                  to="/create_account"
+                  className="bg-red-600 text-white px-6 py-2 rounded hover:bg-red-800"
+               >
                   CREATE ACCOUNT
-               </button>
+               </Link>
             </div>
          </div>
       </div>

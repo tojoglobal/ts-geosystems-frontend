@@ -3,6 +3,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Thumbs } from "swiper/modules";
 import { FaFacebook, FaLinkedin, FaTwitter, FaPinterest } from "react-icons/fa";
 import Recommended from "./Recommended";
+import { useParams } from "react-router-dom";
 
 const images = [
    "https://ts-geosystems.com.bd/assets/images/1727171133KTS-472R10LC.png",
@@ -12,6 +13,8 @@ const images = [
 ];
 
 const ProductDetails = () => {
+   const { id } = useParams();
+   console.log("dynamic", id);
    const [selectedImage, setSelectedImage] = useState(images[0]);
    console.log(selectedImage);
    const [activeTab, setActiveTab] = useState("OVERVIEW");

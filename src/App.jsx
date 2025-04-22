@@ -16,6 +16,9 @@ import AdminLogin from "./auth/admin/AdminLogin";
 import Dashboard from "./Dashboard/Dashboard";
 import ProtectedRoute from "./utils/ProtectedRoute";
 import DashboardLayout from "./Dashboard/Layout/Layout";
+import ProductPage from "./Pages/ProductPage/ProductPage";
+import Login from "./Pages/Auth/Login";
+import Register from "./Pages/Auth/Register";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -23,29 +26,33 @@ const AppLayout = () => {
     location.pathname.startsWith("/dashboard") ||
     location.pathname === "/admin/login";
   return (
-    <>
-      {!hideNavFooter && <MainNavbars />}
-      <Routes location={location} key={location.pathname}>
-        <Route path="/" element={<MainHome />} />
+     <>
+        {!hideNavFooter && <MainNavbars />}
+        <Routes location={location} key={location.pathname}>
+           <Route path="/" element={<MainHome />} />
+           {/* Product Routes */}
+           <Route path="/login" element={<Login />} />
+           <Route path="/create_account" element={<Register />} />
+           <Route path="/products/:id" element={<ProductPage />} />
 
-        {/* dashboard route */}
-        <Route path="/admin/login" element={<AdminLogin />} />
-        {/* Dashboard Route */}
-        <Route
-          path="/dashboard/*"
-          element={
-            <ProtectedRoute>
-              <DashboardLayout />
-            </ProtectedRoute>
-          }
-        >
-          {/* <Route index element={<DashboardHome />} /> */}
-        </Route>
+           {/* dashboard route */}
+           <Route path="/admin/login" element={<AdminLogin />} />
+           {/* Dashboard Route */}
+           <Route
+              path="/dashboard/*"
+              element={
+                 <ProtectedRoute>
+                    <DashboardLayout />
+                 </ProtectedRoute>
+              }
+           >
+              {/* <Route index element={<DashboardHome />} /> */}
+           </Route>
 
-        <Route path="*" element={<Erro />} />
-      </Routes>
-      {!hideNavFooter && <Footer />}
-    </>
+           <Route path="*" element={<Erro />} />
+        </Routes>
+        {!hideNavFooter && <Footer />}
+     </>
   );
 };
 
