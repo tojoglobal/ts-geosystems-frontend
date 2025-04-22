@@ -8,7 +8,7 @@ import {
 } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis } from "recharts";
 import { Card, CardContent } from "@/components/ui/card.tsx";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button.tsx";
 
 export default function Dashboard() {
   return (
