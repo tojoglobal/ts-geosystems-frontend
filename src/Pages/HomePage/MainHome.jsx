@@ -1,4 +1,4 @@
-import ProductDetails from "../ProductDetails";
+import ProductDetails from "../ProductDetails/ProductDetails";
 import Banner from "./Banner";
 import ExperienceCenter from "./ExperienceCenter";
 import OurAchievements from "./OurAchievements";
@@ -22,6 +22,7 @@ const MainHome = () => {
             <OurAdServices />
             <PopularBrands />
             <OurYoutube />
+            <ProductDetails />
         </>
     );
 };

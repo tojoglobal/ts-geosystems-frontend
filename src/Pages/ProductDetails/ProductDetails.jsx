@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Thumbs } from "swiper/modules";
 import { FaFacebook, FaLinkedin, FaTwitter, FaPinterest } from "react-icons/fa";
+import Recommended from "./Recommended";
 
 const images = [
     "https://ts-geosystems.com.bd/assets/images/1727171133KTS-472R10LC.png",
@@ -35,7 +36,7 @@ const ProductDetails = () => {
 
     return (
         <div className="bg-white">
-            <div className="container mx-auto px-4 py-10">
+            <div className="container mx-auto px-4 pt-10">
                 <div className="flex flex-col md:flex-row gap-10">
                     {/* Image Gallery */}
                     <div className="flex flex-col items-start gap-4 relative">
@@ -292,6 +293,7 @@ const ProductDetails = () => {
                     </div>
                 </div>
             </div>
+            <Recommended />
         </div>
     );
 };
