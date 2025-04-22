@@ -30,7 +30,7 @@ const HeaderContainer = () => {
             <input
               type="text"
               placeholder="Search"
-              className="input text-sm placeholder:italic w-full focus:outline-none focus:ring-0 border-slightly-dark focus:border-slightly-dark bg-transparent rounded-[4px]"
+              className="input text-sm placeholder:italic w-full focus:outline-none focus:ring-0 border border-[#ebebeb] focus:border-slightly-dark bg-transparent rounded-[4px]"
             />
             <IoSearchOutline className="text-[#e62245] text-[28px] absolute right-6" />
           </div>
