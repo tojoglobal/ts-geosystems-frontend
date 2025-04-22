@@ -43,7 +43,8 @@
     "eslint-plugin-react-hooks": "^5.1.0",
     "eslint-plugin-react-refresh": "^0.4.19",
     "globals": "^15.15.0",
-    "vite": "^6.2.0"
+    "vite": "^6.2.0",
+    "vite-tsconfig-paths": "^5.1.4"
   },
   "main": "index.js",
   "repository": "https://github.com/tojoglobal/ts-geosystems-frontend.git",
