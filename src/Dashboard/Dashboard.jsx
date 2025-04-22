@@ -7,8 +7,8 @@ import {
   CreditCard,
 } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis } from "recharts";
-import { Card, CardContent } from "@/Components/ui/card.tsx";
-import { Button } from "@/Components/ui/button.tsx";
+import { Card, CardContent } from "@/Components/ui/card";
+import { Button } from "@/Components/ui/button";
 
 export default function Dashboard() {
   return (
