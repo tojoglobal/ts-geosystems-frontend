@@ -37,7 +37,7 @@ const ProductDetails = () => {
    };
 
    return (
-      <div className="bg-white">
+      <div className="bg-white p-3">
          <div className="container mx-auto px-4 pt-10">
             <div className="flex flex-col md:flex-row gap-10">
                {/* Image Gallery */}
@@ -53,7 +53,6 @@ const ProductDetails = () => {
                         </span>
                      </div>
                   </div>
-
                   <div className="w-[550px] h-[550px] border rounded-xl overflow-hidden">
                      <Swiper
                         spaceBetween={0}
@@ -72,7 +71,6 @@ const ProductDetails = () => {
                         ))}
                      </Swiper>
                   </div>
-
                   {/* Swiper for thumbnails */}
                   <Swiper
                      spaceBetween={10}
@@ -96,7 +94,6 @@ const ProductDetails = () => {
                      ))}
                   </Swiper>
                </div>
-
                {/* Product Info */}
                <div className="flex-1">
                   <h1 className="text-3xl text-black font-semibold mb-4">
@@ -165,7 +162,6 @@ const ProductDetails = () => {
                               </select>
                            </div>
                         </div>
-
                         <div className="flex items-center gap-4">
                            <label className="text-gray-600 font-medium">
                               Quantity:
@@ -184,11 +180,10 @@ const ProductDetails = () => {
                         </div>
                      </div>
                   </div>
-                  <button className="bg-[#e62245] text-white px-6 py-2 rounded hover:bg-[#c51e3b] transition">
-                     ADD TO CART
+                  <button className="relative overflow-hidden group text-white px-12 font-semibold py-[11px] rounded bg-[#e62245]">
+                     <span className="absolute left-0 top-0 h-full w-0 bg-black transition-all duration-500 ease-out group-hover:w-full z-0"></span>
+                     <span className="relative z-10">ADD TO CART</span>
                   </button>
-
-                  {/* Social Share */}
                   <div className="mt-6">
                      <div className="flex gap-2 text-white">
                         <span className="font-medium mr-2 text-[#8d7f90]">
@@ -210,7 +205,6 @@ const ProductDetails = () => {
                   </div>
                </div>
             </div>
-
             {/* Tabs */}
             <div className="mt-12" ref={overviewRef}>
                <div className="flex gap-2 border border-gray-300 rounded-md overflow-hidden">
@@ -219,7 +213,7 @@ const ProductDetails = () => {
                         <button
                            key={tab}
                            onClick={() => setActiveTab(tab)}
-                           className={`text-xl sm:text-2xl font-semibold px-4 py-3 transition-colors duration-200 ${
+                           className={`text-base sm:text-2xl font-semibold px-4 py-3 transition-colors duration-200 ${
                               activeTab === tab
                                  ? "text-[#e62245]"
                                  : "text-gray-600 hover:text-[#e62245]"

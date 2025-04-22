@@ -11,15 +11,15 @@ const sidebarData = [
    },
    {
       label: "3D Laser Scanner",
-      children: null,
+      children: [],
    },
    {
       label: "Echo Sounder",
-      children: null,
+      children: [],
    },
    {
       label: "LiDAR",
-      children: null,
+      children: [],
    },
    {
       label: "Total Station",
@@ -46,6 +46,8 @@ const sidebarData = [
       label: "Distance Meters",
       children: ["Leica"],
    },
+   // Added gap with a spacer object
+   { label: "", type: "spacer", height: "20px" },
    {
       label: "Shop by Brand",
       children: [
@@ -73,52 +75,68 @@ const ProductSidebar = () => {
 
    return (
       <div className="w-full">
-         {sidebarData.map((item, index) => (
-            <div
-               key={item.label}
-               className={`bg-[#ebebeb] p-3 text-black border-b border-white ${
-                  index !== 0 ? "mt-1" : ""
-               }`}
-            >
-               {item.children ? (
-                  <div>
-                     <button
-                        onClick={() => toggleSection(item.label)}
-                        className="w-full flex items-center justify-between font-medium text-left"
+         {sidebarData.map((item, index) =>
+            item.type === "spacer" ? (
+               <div key={index} style={{ height: item.height }} />
+            ) : (
+               <div
+                  key={item.label}
+                  className={`bg-[#ebebeb] text-black ${
+                     index !== 0 ? "mt-1" : ""
+                  }`}
+               >
+                  {item.children !== null ? (
+                     <div>
+                        <button
+                           onClick={() => toggleSection(item.label)}
+                           className={`w-full hover:text-[#e62245] flex items-center justify-between font-medium text-left p-3 ${
+                              openSections[item.label]
+                                 ? "border-b-2 border-[#e62245]"
+                                 : ""
+                           }`}
+                        >
+                           <span>{item.label}</span>
+                           {openSections[item.label] ? (
+                              <FaChevronDown />
+                           ) : (
+                              <FaChevronRight />
+                           )}
+                        </button>
+                        {openSections[item.label] &&
+                           item.children.length > 0 && (
+                              <div className="bg-white">
+                                 {item.children.map((child) => (
+                                    <Link
+                                       key={child}
+                                       to={`/${child
+                                          .toLowerCase()
+                                          .replace(/\s+/g, "-")}`}
+                                       className="block px-5 py-3 text-sm hover:bg-gray-50 border-t border-[#ebebeb]"
+                                    >
+                                       {child}
+                                    </Link>
+                                 ))}
+                              </div>
+                           )}
+                     </div>
+                  ) : (
+                     <Link
+                        to={item.link}
+                        className="block p-3 hover:text-[#e62245] font-medium hover:underline"
                      >
-                        <span>{item.label}</span>
-                        {openSections[item.label] ? (
-                           <FaChevronDown />
-                        ) : (
-                           <FaChevronRight />
-                        )}
-                     </button>
-                     {openSections[item.label] && (
-                        <div className="mt-2 ml-3 divide-y divide-[#ddd] bg-white">
-                           {item.children.map((child) => (
-                              <Link
-                                 key={child}
-                                 to={`/${child
-                                    .toLowerCase()
-                                    .replace(/\s+/g, "-")}`}
-                                 className="block px-2 py-2 text-sm hover:underline"
-                              >
-                                 {child}
-                              </Link>
-                           ))}
-                        </div>
-                     )}
-                  </div>
-               ) : (
-                  <Link
-                     to={item.link}
-                     className="block font-medium hover:underline"
-                  >
-                     {item.label}
-                  </Link>
-               )}
-            </div>
-         ))}
+                        {item.label}
+                     </Link>
+                  )}
+               </div>
+            )
+         )}
+         <div className="mt-6">
+            <img
+               src="https://ts-geosystems.com.bd/assets/images/6enPbrand-leica-adsp.png"
+               alt="Leica Authorized Distributor"
+               className="w-full"
+            />
+         </div>
       </div>
    );
 };
