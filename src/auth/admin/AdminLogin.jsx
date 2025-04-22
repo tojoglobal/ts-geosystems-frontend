@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { FaFacebook, FaLinkedin, FaEye, FaEyeSlash } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
-import { IoPersonSharp } from "react-icons/io5";
 import { MdEmail } from "react-icons/md";
 import { useNavigate } from "react-router";
 import Swal from "sweetalert2";
@@ -124,7 +123,7 @@ const AdminLogin = () => {
             <button type="submit">Login</button>
 
             {/* <!-- Social login options --> */}
-            <p>or login with social platforms</p>
+            <p>or login with social platforms </p>
             <div>
               <a href="">
                 <FcGoogle className="pt-6" />{" "}
