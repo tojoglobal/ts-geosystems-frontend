@@ -6,6 +6,7 @@ import { LuUserRound } from "react-icons/lu";
 import { PiShoppingCart } from "react-icons/pi";
 import NewEquipmentDropdown from "./NewEquipmentDropdown";
 import { useAppContext } from "../context/useAppContext";
+import { Link } from "react-router-dom";
 
 const MainNavContainer = () => {
   const { setShowSearch } = useAppContext();
@@ -129,7 +130,7 @@ const MainNavContainer = () => {
                       Software Downloads
                     </li>
                     <li className="hover:text-crimson-red cursor-pointer transition-colors duration-300">
-                      Quick Guides
+                      <Link to="/quick-guides">Quick Guides</Link>
                     </li>
                     <li className="hover:text-crimson-red cursor-pointer transition-colors duration-300">
                       User Manuals
