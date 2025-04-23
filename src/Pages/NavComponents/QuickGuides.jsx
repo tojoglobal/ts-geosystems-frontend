@@ -1,77 +1,136 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Link } from "react-router-dom";
 
 const QuickGuides = () => {
   const guides = [
     {
       id: 1,
       name: 'Leica FlexLine TS07 5" R500 Manual Total Station',
-      image: '/images/flexline-ts07-5.png',
-      downloadLink: '#'
+      image: "https://ts-geosystems.com.bd/assets/images/JMqcf5wY.png",
+      downloadLink: "#",
     },
     {
       id: 2,
       name: 'Leica FlexLine TS07 1" R500 Manual Total Station',
-      image: '/images/flexline-ts07-1.png',
-      downloadLink: '#'
+      image: "https://ts-geosystems.com.bd/assets/images/JMqcf5wY.png",
+      downloadLink: "#",
     },
     {
       id: 3,
       name: 'Leica FlexLine TS03 5" R500 Manual Total Station',
-      image: '/images/flexline-ts03-5.png',
-      downloadLink: '#'
+      image: "https://ts-geosystems.com.bd/assets/images/JMqcf5wY.png",
+      downloadLink: "#",
     },
     {
       id: 4,
       name: 'Leica FlexLine TS10 5" R500 Manual Total Station',
-      image: '/images/flexline-ts10-5.png',
-      downloadLink: '#'
-    }
+      image: "https://ts-geosystems.com.bd/assets/images/JMqcf5wY.png",
+      downloadLink: "#",
+    },
+    {
+      id: 5,
+      name: 'Leica FlexLine TS07 5" R500 Manual Total Station',
+      image: "https://ts-geosystems.com.bd/assets/images/JMqcf5wY.png",
+      downloadLink: "#",
+    },
+    {
+      id: 6,
+      name: 'Leica FlexLine TS07 1" R500 Manual Total Station',
+      image: "https://ts-geosystems.com.bd/assets/images/JMqcf5wY.png",
+      downloadLink: "#",
+    },
+    {
+      id: 7,
+      name: 'Leica FlexLine TS03 5" R500 Manual Total Station',
+      image: "https://ts-geosystems.com.bd/assets/images/JMqcf5wY.png",
+      downloadLink: "#",
+    },
+    {
+      id: 8,
+      name: 'Leica FlexLine TS10 5" R500 Manual Total Station',
+      image: "https://ts-geosystems.com.bd/assets/images/JMqcf5wY.png",
+      downloadLink: "#",
+    },
+    {
+      id: 9,
+      name: 'Leica FlexLine TS07 5" R500 Manual Total Station',
+      image: "https://ts-geosystems.com.bd/assets/images/JMqcf5wY.png",
+      downloadLink: "#",
+    },
+    {
+      id: 10,
+      name: 'Leica FlexLine TS07 1" R500 Manual Total Station',
+      image: "https://ts-geosystems.com.bd/assets/images/JMqcf5wY.png",
+      downloadLink: "#",
+    },
+    {
+      id: 11,
+      name: 'Leica FlexLine TS03 5" R500 Manual Total Station',
+      image: "https://ts-geosystems.com.bd/assets/images/JMqcf5wY.png",
+      downloadLink: "#",
+    },
+    {
+      id: 12,
+      name: 'Leica FlexLine TS10 5" R500 Manual Total Station',
+      image: "https://ts-geosystems.com.bd/assets/images/JMqcf5wY.png",
+      downloadLink: "#",
+    },
   ];
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="flex flex-col">
-        <nav className="text-sm mb-6">
-          <Link to="/" className="text-red-500 hover:text-red-700">Home</Link>
-          {' / '}
-          <Link to="/support" className="text-red-500 hover:text-red-700">SUPPORT</Link>
-          {' / '}
-          <span className="text-gray-600">Quick Guides</span>
-        </nav>
-        
-        <h1 className="text-3xl font-bold mb-8">Quick Guides</h1>
-        
-        <h2 className="text-xl font-semibold mb-6">G2 Survey 3D Laser Scanner Quick Guides</h2>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {guides.map((guide) => (
-            <div key={guide.id} className="flex flex-col items-center">
-              <img 
-                src={guide.image} 
-                alt={guide.name} 
-                className="w-full max-w-[200px] mb-4"
-              />
-              <h3 className="text-sm text-center mb-3">{guide.name}</h3>
-              <button 
-                className="bg-red-500 text-white px-6 py-2 rounded-sm hover:bg-red-600 transition-colors"
-                onClick={() => window.open(guide.downloadLink, '_blank')}
-              >
-                DOWNLOAD
-              </button>
-            </div>
+    <div className="p-4">
+      <div className="flex items-center gap-2 text-sm">
+        <Link to="/" className="text-[#e62245]">
+          Home
+        </Link>
+        <span>/</span>
+        <Link to="/support" className="text-[#e62245]">
+          SUPPORT
+        </Link>
+        <span>/</span>
+        <span className="text-[#e62245]">Quick Guides</span>
+      </div>
+      <p className="text-[#e62245] mb-6 text-2xl">Quick Guides</p>
+      <h1 className="text-[#e62245] font-bold text-xl mb-8">
+        G2 Survey 3D Laser Scanner Quick Guides
+      </h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {guides.map((guide) => (
+          <div
+            key={guide.id}
+            className="border rounded-lg p-4 flex flex-col items-center"
+          >
+            <img
+              src={guide.image}
+              alt={guide.name}
+              className="w-full h-auto object-contain mb-4"
+            />
+            <div className="border-b w-full mb-4"></div>
+            <h3 className="text-center text-sm mb-4">{guide.name}</h3>
+            <button
+              onClick={() => window.open(guide.downloadLink, "_blank")}
+              className="bg-[#e62245] text-white px-6 py-1 rounded hover:bg-[#d41d3f] transition-colors w-full"
+            >
+              DOWNLOAD
+            </button>
+          </div>
+        ))}
+      </div>
+      {/* Pagination */}
+      <div className="flex justify-between items-center mt-8">
+        <div className="flex gap-2">
+          {[1, 2, 3, 4, 5, 6].map((page) => (
+            <button
+              key={page}
+              className="px-3 py-1 border hover:border-[#e62245] hover:text-[#e62245]"
+            >
+              {page}
+            </button>
           ))}
         </div>
-        
-        <div className="flex items-center justify-center gap-2 mt-8">
-          <button className="px-3 py-1 border border-gray-300">1</button>
-          <button className="px-3 py-1 border border-gray-300">2</button>
-          <button className="px-3 py-1 border border-gray-300">3</button>
-          <button className="px-3 py-1 border border-gray-300">4</button>
-          <button className="px-3 py-1 border border-gray-300">5</button>
-          <button className="px-3 py-1 border border-gray-300">6</button>
-          <button className="px-3 py-1 border border-gray-300">Next</button>
-        </div>
+        <button className="px-3 py-1 border hover:border-[#e62245] hover:text-[#e62245] flex items-center gap-1">
+          Next <span>&gt;</span>
+        </button>
       </div>
     </div>
   );
