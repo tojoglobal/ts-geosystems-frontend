@@ -1,73 +1,285 @@
-import React, { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { useState } from "react";
+import { NavLink } from "react-router-dom";
+import {
+  Menu,
+  X,
+  LayoutDashboard,
+  Mail,
+  Calendar,
+  ChevronDown,
+  ChevronUp,
+  MessageCircle,
+  File,
+  FileText,
+  Users,
+  Layers,
+} from "lucide-react";
+import SidebarProfileDropdown from "./SidebarProfileDropdown/SidebarProfileDropdown";
 
-const ResponsiveNavbar = () => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+const menuItems = [
+  {
+    label: "Dashboard",
+    icon: <LayoutDashboard size={20} />,
+    to: "/dashboard",
+  },
+  {
+    label: "Email",
+    icon: <Mail size={20} />,
+    submenu: [
+      { label: "Inbox", to: "/dashboard/email/inbox" },
+      { label: "Sent", to: "/dashboard/email/sent" },
+    ],
+  },
+  {
+    label: "Calendar",
+    icon: <Calendar size={20} />,
+    to: "/dashboard/calendar",
+  },
+  {
+    label: "Chat",
+    icon: <MessageCircle size={20} />,
+    to: "/dashboard/chat",
+  },
+  {
+    label: "Files",
+    icon: <File size={20} />,
+    submenu: [
+      { label: "Documents", to: "/dashboard/files/documents" },
+      { label: "Images", to: "/dashboard/files/images" },
+    ],
+  },
+  {
+    label: "Users",
+    icon: <Users size={20} />,
+    to: "/dashboard/users",
+  },
+  {
+    label: "Layouts",
+    icon: <Layers size={20} />,
+    to: "/dashboard/layouts",
+  },
+  {
+    label: "Files",
+    icon: <File size={20} />,
+    submenu: [
+      { label: "Documents", to: "/dashboard/files/documents" },
+      { label: "Images", to: "/dashboard/files/images" },
+    ],
+  },
+  {
+    label: "Users",
+    icon: <Users size={20} />,
+    to: "/dashboard/users",
+  },
+  {
+    label: "Layouts",
+    icon: <Layers size={20} />,
+    to: "/dashboard/layouts",
+  },
+  {
+    label: "Files",
+    icon: <File size={20} />,
+    submenu: [
+      { label: "Documents", to: "/dashboard/files/documents" },
+      { label: "Images", to: "/dashboard/files/images" },
+    ],
+  },
+  {
+    label: "Users",
+    icon: <Users size={20} />,
+    to: "/dashboard/users",
+  },
+  {
+    label: "Layouts",
+    icon: <Layers size={20} />,
+    to: "/dashboard/layouts",
+  },
+  {
+    label: "Files",
+    icon: <File size={20} />,
+    submenu: [
+      { label: "Documents", to: "/dashboard/files/documents" },
+      { label: "Images", to: "/dashboard/files/images" },
+    ],
+  },
+  {
+    label: "Users",
+    icon: <Users size={20} />,
+    to: "/dashboard/users",
+  },
+  {
+    label: "Layouts",
+    icon: <Layers size={20} />,
+    to: "/dashboard/layouts",
+  },
+  {
+    label: "Files",
+    icon: <File size={20} />,
+    submenu: [
+      { label: "Documents", to: "/dashboard/files/documents" },
+      { label: "Images", to: "/dashboard/files/images" },
+    ],
+  },
+  {
+    label: "Users",
+    icon: <Users size={20} />,
+    to: "/dashboard/users",
+  },
+  {
+    label: "Layouts",
+    icon: <Layers size={20} />,
+    to: "/dashboard/layouts",
+  },
+  {
+    label: "Files",
+    icon: <File size={20} />,
+    submenu: [
+      { label: "Documents", to: "/dashboard/files/documents" },
+      { label: "Images", to: "/dashboard/files/images" },
+    ],
+  },
+  {
+    label: "Users",
+    icon: <Users size={20} />,
+    to: "/dashboard/users",
+  },
+  {
+    label: "Layouts",
+    icon: <Layers size={20} />,
+    to: "/dashboard/layouts",
+  },
+];
 
-  const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
-  const closeSidebar = () => setIsSidebarOpen(false);
+const Sidebar = ({
+  collapsed,
+  toggleSidebar,
+  mobileOpen,
+  toggleMobileSidebar,
+}) => {
+  const [openSubmenus, setOpenSubmenus] = useState({});
+
+  const toggleSubmenu = (label) => {
+    setOpenSubmenus((prev) => ({
+      ...prev,
+      [label]: !prev[label],
+    }));
+  };
 
   return (
-    <div className="relative min-h-screen bg-gray-900 text-white">
-      {/* Top Bar */}
-      <div className="flex justify-between items-center px-4 py-3 bg-gray-800 shadow-md fixed w-full z-50">
-        <div className="flex items-center gap-2">
-          <button onClick={toggleSidebar} className="md:hidden">
-            <Menu size={24} />
-          </button>
-          <span className="text-lg font-semibold">Tocly</span>
-        </div>
-        <div className="hidden md:flex gap-4">
-          {/* Add top right icons / items here */}
-          <input
-            type="text"
-            placeholder="Search..."
-            className="bg-gray-700 text-sm px-3 py-1 rounded focus:outline-none"
-          />
-        </div>
-      </div>
-
-      {/* Sidebar */}
+    <>
       <div
-        className={`fixed top-0 left-0 w-64 h-full bg-teal-700 z-40 transform transition-transform duration-300 ease-in-out ${
-          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } md:translate-x-0 md:relative md:block`}
+        className={`h-screen bg-gray-800 flex flex-col justify-between fixed md:relative z-40 transition-all duration-300 ${
+          collapsed ? "w-20" : "w-64"
+        } ${
+          mobileOpen ? "translate-x-0" : "-translate-x-full"
+        } md:translate-x-0`}
       >
-        <div className="flex items-center justify-between p-4 border-b border-teal-600">
-          <div className="text-lg font-semibold">Team Reporting</div>
-          <button className="md:hidden" onClick={closeSidebar}>
-            <X size={24} />
+        {/* Top Fixed Section */}
+        <div className="flex items-center justify-between px-4 py-4 border-b border-gray-700">
+          <h2
+            className={`text-xl font-bold transition-all ${
+              collapsed ? "hidden md:block text-center" : ""
+            }`}
+          >
+            {collapsed ? "T" : "Tocly"}
+          </h2>
+          <button
+            onClick={toggleSidebar}
+            className="hidden md:block text-white"
+          >
+            <Menu size={20} />
+          </button>
+          <button
+            onClick={toggleMobileSidebar}
+            className="md:hidden text-white"
+          >
+            <X size={20} />
           </button>
         </div>
-        <nav className="p-4">
-          <ul className="space-y-4">
-            <li className="hover:text-teal-200">Dashboard</li>
-            <li className="hover:text-teal-200">Email</li>
-            <li className="hover:text-teal-200">Calendar</li>
-            <li className="hover:text-teal-200">Chat</li>
-            <li className="hover:text-teal-200">File Manager</li>
-            <li className="hover:text-teal-200">Invoice</li>
-            <li className="hover:text-teal-200">Users</li>
-            <li className="hover:text-teal-200">Layouts</li>
-          </ul>
-        </nav>
+
+        {/* Scrollable Menu Section */}
+        <div className="flex-1 overflow-y-auto px-2 py-2 space-y-1">
+          {menuItems.map(({ label, to, icon, submenu }) => (
+            <div key={label} className="relative group">
+              {!submenu ? (
+                <NavLink
+                  to={to}
+                  className={({ isActive }) =>
+                    `flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition ${
+                      isActive
+                        ? "bg-teal-600 text-white"
+                        : "text-gray-300 hover:bg-teal-700 hover:text-white"
+                    }`
+                  }
+                >
+                  <span className="ml-1">{icon}</span>
+                  {!collapsed && <span>{label}</span>}
+                </NavLink>
+              ) : (
+                <div>
+                  <button
+                    onClick={() => toggleSubmenu(label)}
+                    className="w-full flex items-center justify-between gap-2 px-3 py-2 rounded-md text-sm text-gray-300 hover:bg-teal-700 hover:text-white"
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className="ml-1">{icon}</span>
+                      {!collapsed && <span>{label}</span>}
+                    </div>
+                    {!collapsed &&
+                      (openSubmenus[label] ? (
+                        <ChevronUp size={16} />
+                      ) : (
+                        <ChevronDown size={16} />
+                      ))}
+                  </button>
+                  {/* Submenu */}
+                  {openSubmenus[label] && (
+                    <div className="pl-10 mt-1 space-y-1 transition-all duration-300 ease-in-out">
+                      {submenu.map((item) => (
+                        <NavLink
+                          key={item.to}
+                          to={item.to}
+                          className={({ isActive }) =>
+                            `block text-sm px-2 py-1 rounded text-gray-300 hover:bg-teal-600 hover:text-white ${
+                              isActive ? "bg-teal-600 text-white" : ""
+                            }`
+                          }
+                        >
+                          {item.label}
+                        </NavLink>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Tooltip when collapsed */}
+              {collapsed && (
+                <div className="absolute left-full top-1 z-50 ml-2 w-40 p-2 rounded bg-gray-700 text-sm text-white shadow-lg opacity-0 group-hover:opacity-100 transition">
+                  {label}
+                  {submenu && (
+                    <div className="mt-2 space-y-1">
+                      {submenu.map((sub) => (
+                        <div
+                          key={sub.to}
+                          className="text-xs text-gray-300 hover:text-white"
+                        >
+                          {sub.label}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+
+        {/* Bottom Profile Section Fixed */}
+        <SidebarProfileDropdown collapsed={collapsed} />
       </div>
-
-      {/* Overlay when sidebar open */}
-      {isSidebarOpen && (
-        <div
-          onClick={closeSidebar}
-          className="fixed inset-0 bg-black opacity-50 z-30 md:hidden"
-        />
-      )}
-
-      {/* Main Content Placeholder */}
-      <main className="pt-16 p-4 md:ml-64">
-        <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
-        <p className="text-gray-300">Your content goes here...</p>
-      </main>
-    </div>
+    </>
   );
 };
 
-export default ResponsiveNavbar;
+export default Sidebar;

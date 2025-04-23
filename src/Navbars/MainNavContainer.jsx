@@ -165,7 +165,7 @@ const MainNavContainer = () => {
                   <input
                     type="text"
                     placeholder="Search"
-                    className="input text-[13px] placeholder:italic w-full h-7 focus:outline-none focus:ring-0 border-slightly-dark focus:border-slightly-dark bg-transparent rounded-[4px]"
+                    className="input text-[13px] placeholder:italic w-full h-7 focus:outline-none focus:ring-0 border border-slightly-dark focus:border-slightly-dark bg-transparent rounded-[4px]"
                   />
                   <IoSearchOutline className="text-[#e62245] text-[20px] absolute right-5" />
                 </div>

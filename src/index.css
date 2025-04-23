@@ -22,6 +22,7 @@
   --color-charcoal-gray: #393939;
   --font-lato: "Lato", sans-serif;
 }
+
 :root {
   --bg-color: #ffffff;
   --text-color: #000000;
@@ -76,6 +77,7 @@
 
 body {
   font-family: var(--font-lato);
+  background: rgb(255, 255, 255);
 }
 
 /* under line animation  */
@@ -139,10 +141,6 @@ body {
 /* admin login page  */
 .material-symbols-outlined {
   font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 24;
-}
-
-body {
-  background: rgb(255, 255, 255);
 }
 
 #adminLogin {
