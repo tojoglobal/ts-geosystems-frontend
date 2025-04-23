@@ -22,6 +22,7 @@ import QuickGuides from "./Pages/NavComponents/QuickGuides";
 
 import ProductDetails from "./Pages/ProductPage/ProductDetails";
 import ProductLayout from "./Pages/ProductLayout";
+import AboutUs from "./Pages/NavComponents/AboutUs/AboutUs";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -40,6 +41,7 @@ const AppLayout = () => {
         <Route element={<ProductLayout />}>
           <Route path="/products/:id" element={<ProductDetails />} />
           <Route path="/quick-guides" element={<QuickGuides />} />
+          <Route path="/about-us" element={<AboutUs />} />
         </Route>
 
         {/* Admin Routes */}

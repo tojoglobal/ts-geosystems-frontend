@@ -149,7 +149,7 @@ const MainNavContainer = () => {
                 G2 BLOG
               </span>
               <span className="cursor-pointer hover:text-crimson-red transition-colors duration-300 py-2.5">
-                ABOUT US
+                <Link to="/about-us">ABOUT US</Link>
               </span>
               <span className="cursor-pointer hover:text-crimson-red transition-colors duration-300 py-2.5">
                 CONTACT US
