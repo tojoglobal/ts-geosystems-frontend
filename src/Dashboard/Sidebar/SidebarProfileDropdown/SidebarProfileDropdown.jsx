@@ -14,7 +14,7 @@ const SidebarProfileDropdown = ({ collapsed }) => {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="relative p-3">
+    <div className=" relative p-3">
       {/* Profile Trigger */}
       <button
         onClick={() => setOpen(!open)}

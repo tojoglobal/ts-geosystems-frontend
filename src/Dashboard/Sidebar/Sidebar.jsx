@@ -15,7 +15,8 @@ import {
   Layers,
 } from "lucide-react";
 import SidebarProfileDropdown from "./SidebarProfileDropdown/SidebarProfileDropdown";
-
+import logo from "/public/TS-WEB-LOGO.png";
+import smallLogo from "/public/favicon.png";
 const menuItems = [
   {
     label: "Dashboard",
@@ -168,24 +169,38 @@ const Sidebar = ({
   return (
     <>
       <div
-        className={`h-screen bg-gray-800 flex flex-col justify-between fixed md:relative z-40 transition-all duration-300 ${
-          collapsed ? "w-20" : "w-64"
+        className={`bg-gray-800 flex flex-col justify-between fixed md:relative z-50 transition-all duration-300 ${
+          collapsed
+            ? "w-20 pt-5 md:pt-0 h-full md:h-[174vh]"
+            : "w-64 h-[200vh] md:h-screen"
         } ${
           mobileOpen ? "translate-x-0" : "-translate-x-full"
         } md:translate-x-0`}
       >
         {/* Top Fixed Section */}
-        <div className="flex items-center justify-between px-4 py-4 border-b border-gray-700">
+        <div
+          className={`${
+            collapsed
+              ? "flex items-center justify-center "
+              : " flex items-center justify-between"
+          } px-4 py-4 border-b border-gray-700`}
+        >
           <h2
             className={`text-xl font-bold transition-all ${
               collapsed ? "hidden md:block text-center" : ""
             }`}
           >
-            {collapsed ? "T" : "Tocly"}
+            {collapsed ? (
+              <img src={smallLogo} alt="Logo" className="h-fit" />
+            ) : (
+              <img src={logo} alt="Logo" className="w-[90%]" />
+            )}
           </h2>
           <button
             onClick={toggleSidebar}
-            className="hidden md:block text-white"
+            className={`${
+              collapsed ? "hidden" : " hidden md:block"
+            }  text-white `}
           >
             <Menu size={20} />
           </button>
@@ -198,7 +213,11 @@ const Sidebar = ({
         </div>
 
         {/* Scrollable Menu Section */}
-        <div className="flex-1 overflow-y-auto px-2 py-2 space-y-1">
+        <div
+          className={`flex-1 ${
+            collapsed ? "" : "overflow-y-auto overflow-x-hidden"
+          }  px-2 py-2 space-y-1`}
+        >
           {menuItems.map(({ label, to, icon, submenu }) => (
             <div key={label} className="relative group">
               {!submenu ? (
@@ -233,8 +252,14 @@ const Sidebar = ({
                       ))}
                   </button>
                   {/* Submenu */}
-                  {openSubmenus[label] && (
-                    <div className="pl-10 mt-1 space-y-1 transition-all duration-300 ease-in-out">
+                  {(openSubmenus[label] || collapsed) && (
+                    <div
+                      className={`${
+                        collapsed
+                          ? "absolute left-full top-1 ml-2 w-48 z-[1000] p-2 rounded bg-gray-800 shadow-lg opacity-0 group-hover:opacity-100 transition-all"
+                          : "pl-10 mt-1"
+                      } space-y-1`}
+                    >
                       {submenu.map((item) => (
                         <NavLink
                           key={item.to}
