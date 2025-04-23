@@ -113,16 +113,14 @@ const MainNavContainer = () => {
                 HIRE
               </span>
               <span className="cursor-pointer hover:text-crimson-red transition-colors duration-300  py-2.5">
-                SERVICE
+                <Link to="/service">SERVICE</Link>
               </span>
-
               {/* Dropdown Wrapper */}
               <div className="relative group cursor-pointer py-2.5">
                 <span className="flex items-center gap-1 hover:text-crimson-red transition-colors duration-300">
                   SUPPORT{" "}
                   <MdOutlineKeyboardArrowDown className="text-xl"></MdOutlineKeyboardArrowDown>
                 </span>
-
                 {/* Dropdown Menu */}
                 <div className="absolute -left-10 top-full w-50 bg-white rounded-sm border border-slightly-dark shadow-lg pl-4 py-2 hidden group-hover:block z-50">
                   <ul className="space-y-1 text-sm text-charcoal">
@@ -141,7 +139,6 @@ const MainNavContainer = () => {
                   </ul>
                 </div>
               </div>
-
               <span className="cursor-pointer hover:text-crimson-red transition-colors duration-300  py-2.5">
                 TRADE IN
               </span>
