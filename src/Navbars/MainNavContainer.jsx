@@ -152,7 +152,7 @@ const MainNavContainer = () => {
                 <Link to="/about-us">ABOUT US</Link>
               </span>
               <span className="cursor-pointer hover:text-crimson-red transition-colors duration-300 py-2.5">
-                CONTACT US
+                <Link to="/contact-us">CONTACT US</Link>
               </span>
             </div>
           ) : (

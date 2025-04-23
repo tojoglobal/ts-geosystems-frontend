@@ -51,7 +51,6 @@ const GoogleReview = () => {
 
   return (
     <section className="pb-10">
-      {/* Heading */}
       <div className="flex items-center justify-center gap-4 my-12">
         <div className="flex-1 h-0.5 bg-[#e62245]"></div>
         <h2 className="text-xl md:text-2xl font-bold text-[#e62245] text-center">
@@ -59,8 +58,6 @@ const GoogleReview = () => {
         </h2>
         <div className="flex-1 h-0.5 bg-[#e62245]"></div>
       </div>
-
-      {/* Google Review Summary */}
       <div className="flex items-center justify-between bg-gray-100 p-6 rounded shadow">
         <div>
           <p className="text-2xl font-bold">
@@ -92,7 +89,6 @@ const GoogleReview = () => {
           Review us on Google
         </button>
       </div>
-
       {/* Swiper Slider */}
       <div className="relative max-w-6xl mx-auto mt-10">
         {/* Navigation Arrows */}
@@ -104,7 +100,6 @@ const GoogleReview = () => {
             <FaChevronLeft />
           </button>
         )}
-
         {activeIndex < reviews.length - 4 && (
           <button
             className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-white p-2 rounded-full shadow"
@@ -128,7 +123,7 @@ const GoogleReview = () => {
         >
           {reviews.map((review, index) => (
             <SwiperSlide key={index}>
-              <div className="bg-white border p-4 rounded shadow h-full">
+              <div className="bg-gray-100 border p-4 rounded shadow h-full">
                 <div className="flex items-center gap-2 mb-1">
                   <div className="w-6 h-6 rounded-full bg-blue-200 flex items-center justify-center text-sm font-bold text-blue-800">
                     {review.name[0]}

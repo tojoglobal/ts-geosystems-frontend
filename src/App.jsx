@@ -23,6 +23,8 @@ import QuickGuides from "./Pages/NavComponents/QuickGuides";
 import ProductDetails from "./Pages/ProductPage/ProductDetails";
 import ProductLayout from "./Pages/ProductLayout";
 import AboutUs from "./Pages/NavComponents/AboutUs/AboutUs";
+import ContactUs from "./Pages/NavComponents/ContactUs";
+import CertificateTracking from "./Pages/NavComponents/CertificateTracking";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -37,11 +39,13 @@ const AppLayout = () => {
         {/* Auth Routes */}
         <Route path="/login" element={<Login />} />
         <Route path="/create_account" element={<Register />} />
+        <Route path="/cc" element={<CertificateTracking />} />
 
         <Route element={<ProductLayout />}>
           <Route path="/products/:id" element={<ProductDetails />} />
           <Route path="/quick-guides" element={<QuickGuides />} />
           <Route path="/about-us" element={<AboutUs />} />
+          <Route path="/contact-us" element={<ContactUs />} />
         </Route>
 
         {/* Admin Routes */}
