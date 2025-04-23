@@ -46,7 +46,7 @@ const AppLayout = () => {
             </ProtectedRoute>
           }
         >
-          {/* <Route index element={<DashboardHome />} /> */}
+          <Route index element={<Dashboard />} />
         </Route>
 
         <Route path="*" element={<Erro />} />
