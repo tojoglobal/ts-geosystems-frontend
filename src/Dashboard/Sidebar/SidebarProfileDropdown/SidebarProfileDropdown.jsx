@@ -10,7 +10,7 @@ import {
   Lock,
 } from "lucide-react";
 
-const SidebarProfileDropdown = ({ collapsed }) => {
+const SidebarProfileDropdown = () => {
   const [open, setOpen] = useState(false);
 
   return (
@@ -26,15 +26,9 @@ const SidebarProfileDropdown = ({ collapsed }) => {
             alt="avatar"
             className={`w-8 h-8 rounded-full`}
           />
-          {collapsed ? null : (
-            <span className="font-semibold text-sm">Steven Deese</span>
-          )}
+          <span className="font-semibold text-sm">Steven Deese</span>
         </div>
-        {collapsed ? null : open ? (
-          <ChevronUp size={18} />
-        ) : (
-          <ChevronDown size={18} />
-        )}
+        {open ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
       </button>
 
       {/* Dropdown Menu */}

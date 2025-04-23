@@ -66,14 +66,14 @@ const transactions = [
 
 const LatestTransactions = () => {
   return (
-    <div className="bg-slate-900 text-white rounded-lg p-4">
+    <div className="bg-slate-800 text-white rounded-lg p-4">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold">Latest Transaction</h2>
         <div className="text-sm text-gray-400">Sort By: Yearly</div>
       </div>
       <div className="overflow-x-auto">
         <table className="min-w-full text-sm text-gray-300">
-          <thead className="text-xs text-gray-400 uppercase bg-slate-800">
+          <thead className="text-xs text-gray-400 uppercase bg-slate-900">
             <tr>
               <th className="px-4 py-2">
                 <input type="checkbox" />
@@ -92,7 +92,7 @@ const LatestTransactions = () => {
             {transactions.map((transaction, index) => (
               <tr
                 key={index}
-                className="bg-slate-800 border-b border-slate-700"
+                className="bg-slate-800 border-b border-slate-600"
               >
                 <td className="px-4 py-2">
                   <input type="checkbox" />

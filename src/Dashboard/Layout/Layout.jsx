@@ -16,7 +16,7 @@ const Layout = () => {
         {/* side bar  */}
         <aside
           className={`bg-gray-800  flex flex-col ${
-            collapsed ? "md:h-full" : " md:h-screen"
+            collapsed ? "md:min-h-[230vh]" : " md:h-screen"
           }`}
         >
           <Sidebar

@@ -1,75 +1,38 @@
 import React from "react";
-import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 import { Card, CardContent } from "@/Components/ui/card";
 import { Button } from "@/Components/ui/button";
 
-const COLORS = ["#0f766e", "#2dd4bf", "#facc15"];
+const data = [
+  {
+    label: "Product Pending",
+    orders: "17,351",
+    returns: "2,123",
+    earnings: "+45.3%",
+    earningsClass: "text-green-400",
+  },
+  {
+    label: "Product Cancelled",
+    orders: "67,356",
+    returns: "3,652",
+    earnings: "-14.6%",
+    earningsClass: "text-red-400",
+  },
+  {
+    label: "Product Delivered",
+    orders: "67,356",
+    returns: "3,652",
+    earnings: "-14.6%",
+    earningsClass: "text-red-400",
+  },
+];
 
 export default function DashboardWidgets() {
-  // Data for Pie Chart
-  const pieData = [
-    { name: "E-Commerce", value: 52.524 },
-    { name: "Facebook", value: 48.625 },
-    { name: "Instagram", value: 85.745 },
-  ];
-
   return (
-    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-      {/* Source of Purchases */}
-      <Card className="bg-slate-900 text-white">
-        <CardContent className="p-4">
-          <div className="flex justify-between items-center">
-            <div className="text-xl font-semibold">Source of Purchases</div>
-            <div className="text-gray-400 text-sm">Sort By: Yearly</div>
-          </div>
-          <div className="text-gray-400 text-sm mt-1">Total Sales: 5,685</div>
-          <div className="h-48 flex items-center justify-center relative">
-            <ResponsiveContainer>
-              <PieChart>
-                <Pie
-                  data={pieData}
-                  dataKey="value"
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={50}
-                  outerRadius={70}
-                  fill="#8884d8"
-                  paddingAngle={5}
-                >
-                  {pieData.map((entry, index) => (
-                    <Cell
-                      key={`cell-${index}`}
-                      fill={COLORS[index % COLORS.length]}
-                    />
-                  ))}
-                </Pie>
-              </PieChart>
-            </ResponsiveContainer>
-          </div>
-          <div className="text-gray-400 text-sm mt-4">
-            Magnis dis parturient montes nascetur ridiculus tincidunt lobortis.
-          </div>
-          <div className="flex justify-between text-gray-400 text-sm mt-4">
-            {pieData.map((entry, index) => (
-              <div key={index} className="flex flex-col items-center">
-                <div
-                  className={`w-3 h-3 rounded-full`}
-                  style={{ background: COLORS[index % COLORS.length] }}
-                ></div>
-                <span>{entry.name}</span>
-                <span className="font-bold text-white">
-                  {entry.value.toLocaleString()}
-                </span>
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
-
+    <div className="grid grid-cols-11 md:grid-cols-10 gap-4">
       {/* Sales Statistics */}
-      <Card className="bg-slate-900 text-white">
+      <Card className="bg-slate-800 col-span-5 border-0 text-white">
         <CardContent className="p-4">
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between items-center pb-5">
             <div className="text-xl font-semibold">Sales Statistics</div>
             <div className="text-gray-400 text-sm">Today</div>
           </div>
@@ -77,8 +40,34 @@ export default function DashboardWidgets() {
           <div className="text-gray-400 text-sm mb-4">
             <span className="text-green-400">+15.72% vs. previous month</span>
           </div>
-          <div className="grid grid-cols-3 gap-2">
-            <SalesStat
+          {/* <div className=""> */}
+          <table className="text-gray-300 w-full">
+            <thead className="text-sm text-gray-400 uppercase bg-slate-800">
+              <tr className="text-left">
+                <th className="py-2">Order Status</th>
+                <th className="px-2 py-2">Orders</th>
+                <th className="px-2 py-2">Returns</th>
+                <th className="px-2 py-2">Earnings</th>
+              </tr>
+            </thead>
+            <tbody className="w-full">
+              {data.map((item, index) => (
+                <tr
+                  key={index}
+                  className="bg-slate-800 border-b text-sm border-slate-700"
+                >
+                  <td className="text-nowrap py-2">{item.label}</td>
+                  <td className="px-2 py-2">{item.orders}</td>
+                  <td className="px-2 py-2">{item.returns}</td>
+                  <td className={`px-2 py-2 ${item.earningsClass}`}>
+                    {item.earnings}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          {/* </div> */}
+          {/* <SalesStat
               label="Product Pending"
               orders="17,351"
               returns="2,123"
@@ -96,16 +85,16 @@ export default function DashboardWidgets() {
               orders="67,356"
               returns="3,652"
               earnings="-14.6%"
-            />
-          </div>
-          <Button variant="outline" className="w-full mt-4">
+            /> */}
+          {/* </div> */}
+          <Button variant="outline" className="w-full bg-[#0B6D7F] mt-4">
             View More
           </Button>
         </CardContent>
       </Card>
 
       {/* Top Users */}
-      <Card className="bg-slate-900 text-white col-span-1 md:col-span-2">
+      <Card className="bg-slate-800 border-0 text-white col-span-1 md:col-span-5">
         <CardContent className="p-4">
           <div className="flex justify-between items-center">
             <div className="text-xl font-semibold">Top Users</div>

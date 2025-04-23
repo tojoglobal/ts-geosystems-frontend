@@ -6,9 +6,7 @@ import {
   ShoppingCart,
   CreditCard,
 } from "lucide-react";
-import { BarChart, Bar, XAxis, YAxis } from "recharts";
 import { Card, CardContent } from "@/Components/ui/card";
-import { Button } from "@/Components/ui/button";
 import DashboardCharts from "./DBComponents/DashboardCharts";
 import DashboardWidgets from "./DBComponents/DashboardWidgets";
 import LatestTransactions from "./DBComponents/LatestTransactions";
@@ -53,61 +51,10 @@ export default function Dashboard() {
         <DashboardCharts />
       </div>
       {/* Audiences Chart */}
-      {/* <Card className="col-span-2 bg-slate-900 text-white">
-        <CardContent className="p-4">
-          <div className="text-xl font-semibold mb-2">Audience Metrics</div>
-          <div className="h-48 bg-slate-800 rounded-lg flex items-center justify-center text-sm text-gray-400">
-            [Bar Chart Here]
-          </div>
-        </CardContent>
-      </Card> */}
-
-      {/* Pie Chart */}
-      {/* <Card className="bg-slate-900 text-white">
-        <CardContent className="p-4">
-          <div className="text-xl font-semibold mb-2">Total Value</div>
-          <div className="h-48 bg-slate-800 rounded-lg flex items-center justify-center text-sm text-gray-400">
-            [$75,781 Pie Chart Here]
-          </div>
-        </CardContent>
-      </Card> */}
-
       <div className="col-span-4">
         <DashboardWidgets />
       </div>
-      {/* Source of Purchases */}
-      <Card className="col-span-1 bg-slate-900 text-white">
-        <CardContent className="p-4">
-          <div className="text-xl font-semibold mb-2">Source of Purchases</div>
-          <div className="text-gray-400 text-sm">Total Sales: 5,685</div>
-          <div className="h-32 bg-slate-800 rounded-lg mt-2 flex items-center justify-center text-sm">
-            [Circular Graph Placeholder]
-          </div>
-        </CardContent>
-      </Card>
 
-      {/* Sales Statistics */}
-      <Card className=" col-span-1 bg-slate-900 text-white">
-        <CardContent className="p-4">
-          <div className="text-xl font-semibold mb-2">Sales Statistics</div>
-          <div className="text-gray-400 text-sm mb-4">
-            Today vs previous month
-          </div>
-          <div className="grid grid-cols-3 gap-2">
-            <SalesStat label="Pending" count="2,123" value="17,351" />
-            <SalesStat label="Cancelled" count="3,662" value="67,536" />
-            <SalesStat label="Delivered" count="3,662" value="67,536" />
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Top Users */}
-      <Card className="col-span-2 bg-slate-900 text-white">
-        <CardContent className="p-4">
-          <div className="text-xl font-semibold mb-2">Top Users</div>
-          <div className="text-sm text-gray-400">[Users List Placeholder]</div>
-        </CardContent>
-      </Card>
       <div className="col-span-4">
         <LatestTransactions />
       </div>

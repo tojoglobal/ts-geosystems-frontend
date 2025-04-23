@@ -67,88 +67,6 @@ const menuItems = [
       { label: "Images", to: "/dashboard/files/images" },
     ],
   },
-  {
-    label: "Users",
-    icon: <Users size={20} />,
-    to: "/dashboard/users",
-  },
-  {
-    label: "Layouts",
-    icon: <Layers size={20} />,
-    to: "/dashboard/layouts",
-  },
-  {
-    label: "Files",
-    icon: <File size={20} />,
-    submenu: [
-      { label: "Documents", to: "/dashboard/files/documents" },
-      { label: "Images", to: "/dashboard/files/images" },
-    ],
-  },
-  {
-    label: "Users",
-    icon: <Users size={20} />,
-    to: "/dashboard/users",
-  },
-  {
-    label: "Layouts",
-    icon: <Layers size={20} />,
-    to: "/dashboard/layouts",
-  },
-  {
-    label: "Files",
-    icon: <File size={20} />,
-    submenu: [
-      { label: "Documents", to: "/dashboard/files/documents" },
-      { label: "Images", to: "/dashboard/files/images" },
-    ],
-  },
-  {
-    label: "Users",
-    icon: <Users size={20} />,
-    to: "/dashboard/users",
-  },
-  {
-    label: "Layouts",
-    icon: <Layers size={20} />,
-    to: "/dashboard/layouts",
-  },
-  {
-    label: "Files",
-    icon: <File size={20} />,
-    submenu: [
-      { label: "Documents", to: "/dashboard/files/documents" },
-      { label: "Images", to: "/dashboard/files/images" },
-    ],
-  },
-  {
-    label: "Users",
-    icon: <Users size={20} />,
-    to: "/dashboard/users",
-  },
-  {
-    label: "Layouts",
-    icon: <Layers size={20} />,
-    to: "/dashboard/layouts",
-  },
-  {
-    label: "Files",
-    icon: <File size={20} />,
-    submenu: [
-      { label: "Documents", to: "/dashboard/files/documents" },
-      { label: "Images", to: "/dashboard/files/images" },
-    ],
-  },
-  {
-    label: "Users",
-    icon: <Users size={20} />,
-    to: "/dashboard/users",
-  },
-  {
-    label: "Layouts",
-    icon: <Layers size={20} />,
-    to: "/dashboard/layouts",
-  },
 ];
 
 const Sidebar = ({
@@ -170,9 +88,7 @@ const Sidebar = ({
     <>
       <div
         className={`bg-gray-800 flex flex-col justify-between fixed md:relative z-50 transition-all duration-300 ${
-          collapsed
-            ? "w-20 pt-5 md:pt-0 h-full md:h-[174vh]"
-            : "w-64 h-[200vh] md:h-screen"
+          collapsed ? "w-20 pt-5 md:pt-0 h-full" : "w-64 h-[200vh] md:h-screen"
         } ${
           mobileOpen ? "translate-x-0" : "-translate-x-full"
         } md:translate-x-0`}
@@ -301,7 +217,7 @@ const Sidebar = ({
         </div>
 
         {/* Bottom Profile Section Fixed */}
-        <SidebarProfileDropdown collapsed={collapsed} />
+        {!collapsed && <SidebarProfileDropdown collapsed={collapsed} />}
       </div>
     </>
   );

@@ -9,7 +9,9 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { Bar, Pie } from "react-chartjs-2";
+
+import { Bar } from "react-chartjs-2";
+import SourceOfPurchases from "./SourceOfPurchases";
 // import Map, { Marker } from "react-map-gl";
 // import "mapbox-gl/dist/mapbox-gl.css";
 
@@ -63,38 +65,42 @@ const DashboardCharts = () => {
   };
 
   // Pie Chart Data
-  const pieData = {
-    labels: ["Active Users", "Inactive Users"],
-    datasets: [
-      {
-        label: "Total Value",
-        data: [75, 25],
-        backgroundColor: ["#0f766e", "#2dd4bf"],
-        hoverOffset: 4,
-      },
-    ],
-  };
+  //   const pieData = {
+  //     labels: ["Active Users", "Inactive Users"],
+  //     datasets: [
+  //       {
+  //         label: "Total Value",
+  //         data: [75, 25],
+  //         backgroundColor: ["#0f766e", "#2dd4bf"],
+  //         hoverOffset: 4,
+  //       },
+  //     ],
+  //   };
 
-  const pieOptions = {
-    responsive: true,
-    plugins: {
-      legend: { position: "bottom" },
-    },
-  };
+  //   const pieOptions = {
+  //     responsive: true,
+  //     plugins: {
+  //       legend: { position: "bottom" },
+  //     },
+  //   };
+
+  // Data for Pie Chart
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
       {/* Audiences Chart */}
-      <div className="col-span-2 bg-slate-900 text-white rounded-lg p-4">
+      <div className="col-span-2 bg-slate-800 text-white rounded-lg p-4">
         <div className="text-xl font-semibold mb-4">Audience Metrics</div>
         <Bar data={barData} options={barOptions} />
       </div>
 
+      {/* Source of Purchases */}
+      <SourceOfPurchases />
       {/* Pie Chart */}
-      <div className="bg-slate-900 text-white rounded-lg p-4">
+      {/* <div className="bg-slate-800 text-white rounded-lg p-4">
         <div className="text-xl font-semibold mb-4">Total Value</div>
         <Pie data={pieData} options={pieOptions} />
-      </div>
+      </div> */}
 
       {/* Map Box */}
       {/* <div className="bg-slate-900 text-white rounded-lg p-4 col-span-3">
