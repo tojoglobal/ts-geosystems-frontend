@@ -18,17 +18,25 @@ import ProtectedRoute from "./utils/ProtectedRoute";
 import DashboardLayout from "./Dashboard/Layout/Layout";
 import Login from "./Pages/Auth/Login";
 import Register from "./Pages/Auth/Register";
-import QuickGuides from "./Pages/NavComponents/QuickGuides";
-
-import ProductDetails from "./Pages/ProductPage/ProductDetails";
+import CertificateTracking from "./Pages/NavComponents/CertificateTracking";
 import ProductLayout from "./Pages/ProductLayout";
+import ProductDetails from "./Pages/ProductPage/ProductDetails";
+import Hire from "./Pages/NavComponents/Hire";
+import Service from "./Pages/NavComponents/Service";
+import QuickGuides from "./Pages/NavComponents/QuickGuides";
+import SoftwareDownloads from "./Pages/NavComponents/SoftwareDownloads";
 import AboutUs from "./Pages/NavComponents/AboutUs/AboutUs";
 import ContactUs from "./Pages/NavComponents/ContactUs";
+<<<<<<< HEAD
 import CertificateTracking from "./Pages/NavComponents/CertificateTracking";
 import Service from "./Pages/NavComponents/Service";
 import SoftwareDownloads from "./Pages/NavComponents/SoftwareDownloads";
 import Hire from "./Pages/NavComponents/Hire";
 import Support from "./Pages/NavComponents/Support";
+=======
+import ViewProfile from "./Dashboard/Profile/ViewProfile";
+import UpdateProfile from "./Dashboard/Profile/UpdateProfile";
+>>>>>>> 7a7ff56893b71a3cc83dac7117f8c319ec5feddb
 
 const AppLayout = () => {
   const location = useLocation();
@@ -67,6 +75,8 @@ const AppLayout = () => {
           }
         >
           <Route index element={<Dashboard />} />
+          <Route path="viewprofile" element={<ViewProfile />} />
+          <Route path="update-profile" element={<UpdateProfile />} />
         </Route>
 
         <Route path="*" element={<Erro />} />
