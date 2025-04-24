@@ -96,9 +96,7 @@ const Support = () => {
           SUPPORT
         </Link>
       </div>
-      {/* Page Title */}
       <h1 className="text-3xl mt-2 text-[#e62245] mb-6">SUPPORT</h1>
-      {/* Navigation Links */}
       <div className="flex flex-col items-center text-center md:flex-row md:justify-center gap-2 md:gap-8 text-sm font-medium text-[#e62245] mb-12">
         <Link to="/software-downloads">SOFTWARE DOWNLOADS</Link>
         <Link to="/remote-support">QUICK GUIDES</Link>
@@ -106,7 +104,7 @@ const Support = () => {
         <Link to="/remote-support">REMOTE SUPPORT</Link>
       </div>
       <div className="max-w-4xl mx-auto relative bg-gradient-to-b from-[#f4f5f9] to-[#e6e7ec] rounded-md p-3 mb-6">
-        <div className="absolute -top-2 right-4 md:right-48 text-[#e62245] text-sm">
+        <div className="absolute -top-3 md:-top-4 right-4 md:right-11 text-[#e62245] text-base md:text-lg">
           <Link to="/cc">Certificate Tracking</Link>
         </div>
         <div className="grid grid-cols-3 gap-2 md:flex md:justify-center md:gap-4">
