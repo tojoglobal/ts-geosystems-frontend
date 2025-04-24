@@ -17,11 +17,17 @@ import {
 import SidebarProfileDropdown from "./SidebarProfileDropdown/SidebarProfileDropdown";
 import logo from "/public/TS-WEB-LOGO.png";
 import smallLogo from "/public/favicon.png";
+import { MdOutlineShoppingCart } from "react-icons/md";
 const menuItems = [
   {
     label: "Dashboard",
     icon: <LayoutDashboard size={20} />,
     to: "/dashboard",
+  },
+  {
+    label: "Product",
+    icon: <MdOutlineShoppingCart size={20} />,
+    to: "/dashboard/add-product",
   },
   {
     label: "Email",

@@ -19,6 +19,8 @@ import DashboardLayout from "./Dashboard/Layout/Layout";
 import ProductPage from "./Pages/ProductPage/ProductPage";
 import Login from "./Pages/Auth/Login";
 import Register from "./Pages/Auth/Register";
+import ViewProfile from "./Dashboard/Profile/ViewProfile";
+import UpdateProfile from "./Dashboard/Profile/UpdateProfile";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -47,6 +49,8 @@ const AppLayout = () => {
           }
         >
           <Route index element={<Dashboard />} />
+          <Route path="viewprofile" element={<ViewProfile />} />
+          <Route path="update-profile" element={<UpdateProfile />} />
         </Route>
 
         <Route path="*" element={<Erro />} />

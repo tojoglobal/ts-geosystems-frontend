@@ -8,10 +8,34 @@ import {
   CreditCard,
   Settings,
   Lock,
+  LogOut,
 } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+
+const handleLogout = async (navigate, b) => {
+  console.log(b);
+
+  try {
+    await axios.post(
+      `${import.meta.env.VITE_OPEN_APIURL}/api/logout`,
+      {},
+      { withCredentials: true }
+    );
+    localStorage.removeItem("userEmail");
+    navigate("/admin/login");
+  } catch (error) {
+    console.error("Logout failed:", error);
+  }
+};
 
 const SidebarProfileDropdown = () => {
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const onLogoutClick = () => {
+    handleLogout(navigate, "swapnil");
+  };
 
   return (
     <div className=" relative p-3">
@@ -35,9 +59,17 @@ const SidebarProfileDropdown = () => {
       {open && (
         <div className="absolute bottom-14 left-3 w-64 bg-white shadow-lg rounded-lg z-50">
           <div className="p-2">
-            <DropdownItem icon={<User size={16} />} label="Profile" />
+            <Link to="/dashboard/viewprofile">
+              <DropdownItem icon={<User size={16} />} label="Profile" />
+            </Link>
             <DropdownItem icon={<MessageSquare size={16} />} label="Messages" />
-            <DropdownItem icon={<HelpCircle size={16} />} label="Help" />
+            {/* <DropdownItem icon={<HelpCircle size={16} />} label="Help" /> */}
+
+            <DropdownItem
+              icon={<LogOut size={16} />}
+              label="Logout"
+              onClick={onLogoutClick}
+            />
           </div>
           <div className="border-t" />
           <div className="p-2">
@@ -68,8 +100,11 @@ const SidebarProfileDropdown = () => {
   );
 };
 
-const DropdownItem = ({ icon, label }) => (
-  <div className="flex items-center gap-3 px-3 py-2 text-gray-800 hover:bg-gray-100 rounded cursor-pointer transition">
+const DropdownItem = ({ icon, label, onClick }) => (
+  <div
+    className="flex items-center gap-3 px-3 py-2 text-gray-800 hover:bg-gray-100 rounded cursor-pointer transition"
+    onClick={onClick}
+  >
     {icon}
     <span className="text-sm">{label}</span>
   </div>
