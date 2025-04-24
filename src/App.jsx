@@ -18,16 +18,6 @@ import ProtectedRoute from "./utils/ProtectedRoute";
 import DashboardLayout from "./Dashboard/Layout/Layout";
 import Login from "./Pages/Auth/Login";
 import Register from "./Pages/Auth/Register";
-import QuickGuides from "./Pages/NavComponents/QuickGuides";
-
-import ProductDetails from "./Pages/ProductPage/ProductDetails";
-import ProductLayout from "./Pages/ProductLayout";
-import AboutUs from "./Pages/NavComponents/AboutUs/AboutUs";
-import ContactUs from "./Pages/NavComponents/ContactUs";
-import CertificateTracking from "./Pages/NavComponents/CertificateTracking";
-import Service from "./Pages/NavComponents/Service";
-import SoftwareDownloads from "./Pages/NavComponents/SoftwareDownloads";
-import Hire from "./Pages/NavComponents/Hire";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -65,6 +55,8 @@ const AppLayout = () => {
           }
         >
           <Route index element={<Dashboard />} />
+          <Route path="viewprofile" element={<ViewProfile />} />
+          <Route path="update-profile" element={<UpdateProfile />} />
         </Route>
 
         <Route path="*" element={<Erro />} />

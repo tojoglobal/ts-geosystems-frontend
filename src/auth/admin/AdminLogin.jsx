@@ -41,6 +41,8 @@ const AdminLogin = () => {
         password: password,
       });
       const data = response.data;
+      console.log(data);
+
       if (data.success) {
         localStorage.setItem("userEmail", JSON.stringify({ useremail }));
         navigate("/dashboard");

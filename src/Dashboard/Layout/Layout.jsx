@@ -12,9 +12,13 @@ const Layout = () => {
 
   return (
     <>
-      <div className="min-h-screen flex bg-gray-900 text-white">
+      <div className="md:min-h-screen bg-gray-900 flex  text-white">
         {/* side bar  */}
-        <aside className="bg-gray-800 flex flex-col h-screen">
+        <aside
+          className={`bg-gray-800  flex flex-col ${
+            collapsed ? "md:min-h-[230vh]" : " md:h-screen"
+          }`}
+        >
           <Sidebar
             collapsed={collapsed}
             toggleSidebar={toggleSidebar}
@@ -24,13 +28,25 @@ const Layout = () => {
         </aside>
 
         {/*rigth side topMenu - outlet - footer part */}
-        <aside className="flex-1 flex flex-col h-screen">
+        <aside
+          className={`flex-1 flex flex-col ${
+            collapsed ? "h-full" : "md:h-screen"
+          }`}
+        >
           {/* Top Bar */}
-          <TopMenuBar toggleMobileSidebar={toggleMobileSidebar} />
+          <TopMenuBar
+            toggleMobileSidebar={toggleMobileSidebar}
+            collapsed={collapsed}
+            toggleSidebar={toggleSidebar}
+          />
 
           {/* Scrollable Content Area */}
-          <div className="flex-1 overflow-y-auto">
-            <div className="px-4 pb-4">
+          <div
+            className={`flex-1 flex flex-col ${
+              collapsed ? "" : "overflow-y-auto"
+            }`}
+          >
+            <div className="px-4 pb-4 flex-1">
               <Outlet />
             </div>
             <footer className="bg-gray-800 text-center text-sm py-3 text-gray-400">
