@@ -110,7 +110,7 @@ const MainNavContainer = () => {
                 CLEARANCE
               </span>
               <span className="cursor-pointer hover:text-crimson-red transition-colors duration-300  py-2.5">
-                HIRE
+                <Link to="/hire">HIRE</Link>
               </span>
               <span className="cursor-pointer hover:text-crimson-red transition-colors duration-300  py-2.5">
                 <Link to="/service">SERVICE</Link>
@@ -125,7 +125,7 @@ const MainNavContainer = () => {
                 <div className="absolute -left-10 top-full w-50 bg-white rounded-sm border border-slightly-dark shadow-lg pl-4 py-2 hidden group-hover:block z-50">
                   <ul className="space-y-1 text-sm text-charcoal">
                     <li className="hover:text-crimson-red cursor-pointer transition-colors duration-300">
-                      Software Downloads
+                      <Link to="/software-downloads">Software Downloads</Link>
                     </li>
                     <li className="hover:text-crimson-red cursor-pointer transition-colors duration-300">
                       <Link to="/quick-guides">Quick Guides</Link>
