@@ -28,6 +28,7 @@ import CertificateTracking from "./Pages/NavComponents/CertificateTracking";
 import Service from "./Pages/NavComponents/Service";
 import SoftwareDownloads from "./Pages/NavComponents/SoftwareDownloads";
 import Hire from "./Pages/NavComponents/Hire";
+import Support from "./Pages/NavComponents/Support";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -48,6 +49,7 @@ const AppLayout = () => {
           <Route path="/products/:id" element={<ProductDetails />} />
           <Route path="/hire" element={<Hire />} />
           <Route path="/service" element={<Service />} />
+          <Route path="/support" element={<Support />} />
           <Route path="/quick-guides" element={<QuickGuides />} />
           <Route path="/software-downloads" element={<SoftwareDownloads />} />
           <Route path="/about-us" element={<AboutUs />} />

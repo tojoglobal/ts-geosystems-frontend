@@ -88,11 +88,11 @@ const SoftwareDownloads = () => {
           SUPPORT
         </Link>
         <span>/</span>
-        <span className="text-[#e62245]">Software Downloads</span>
+        <span className="text-[#e62245]">Quick Guides</span>
       </div>
-      <p className="text-[#e62245] mb-6 text-2xl">Software Downloads</p>
+      <p className="text-[#e62245] mb-6 text-2xl">Quick Guides</p>
       <h1 className="text-[#e62245] font-bold text-xl mb-8">
-        G2 Survey 3D Laser Scanner Software Downloads
+        G2 Survey 3D Laser Scanner Quick Guides
       </h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {guides.map((guide) => (

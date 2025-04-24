@@ -1,8 +1,83 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { FaFileAlt } from "react-icons/fa";
 import { FaRegFileLines } from "react-icons/fa6";
 
 const Hire = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    company: "",
+    email: "",
+    phone: "",
+    existingCustomer: "",
+    equipment: [],
+    hireDate: "",
+    hirePeriod: "",
+    comments: "",
+  });
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleCheckboxChange = (e) => {
+    const { value, checked } = e.target;
+    setFormData((prev) => {
+      if (checked) {
+        return {
+          ...prev,
+          equipment: [...prev.equipment, value],
+        };
+      } else {
+        return {
+          ...prev,
+          equipment: prev.equipment.filter((item) => item !== value),
+        };
+      }
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const submissionData = {
+      contactDetails: {
+        name: formData.name,
+        company: formData.company,
+        email: formData.email,
+        phone: formData.phone,
+        existingCustomer: formData.existingCustomer,
+      },
+      hireRequirements: {
+        equipment: formData.equipment,
+        hireDate: formData.hireDate,
+        hirePeriod: formData.hirePeriod,
+        specialInstructions: formData.comments,
+      },
+    };
+
+    console.log("Submitting data:", JSON.stringify(submissionData, null, 2));
+
+    try {
+      setFormData({
+        name: "",
+        company: "",
+        email: "",
+        phone: "",
+        existingCustomer: "",
+        equipment: [],
+        hireDate: "",
+        hirePeriod: "",
+        comments: "",
+      });
+    } catch (error) {
+      console.log(error)
+    }
+  };
+
   return (
     <div className="p-4">
       <div className="flex items-center gap-2 text-sm mb-4">
@@ -96,7 +171,7 @@ const Hire = () => {
             contact us...
           </Link>
         </p>
-        <form className="space-y-6">
+        <form className="space-y-6" onSubmit={handleSubmit}>
           <p className="text-lg font-semibold">Contact Details</p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="relative w-full">
@@ -105,6 +180,8 @@ const Hire = () => {
                 name="name"
                 id="name"
                 required
+                value={formData.name}
+                onChange={handleInputChange}
                 className="peer w-full border border-gray-300 p-2 pt-5 placeholder-transparent focus:outline-none focus:ring focus:ring-[#e62245] rounded"
                 placeholder="Name *"
               />
@@ -121,6 +198,8 @@ const Hire = () => {
                 name="company"
                 id="company"
                 required
+                value={formData.company}
+                onChange={handleInputChange}
                 className="peer w-full border border-gray-300 p-2 pt-5 placeholder-transparent focus:outline-none focus:ring focus:ring-[#e62245] rounded"
                 placeholder="Company Name *"
               />
@@ -137,6 +216,8 @@ const Hire = () => {
                 name="email"
                 id="email"
                 required
+                value={formData.email}
+                onChange={handleInputChange}
                 className="peer w-full border border-gray-300 p-2 pt-5 placeholder-transparent focus:outline-none focus:ring focus:ring-[#e62245] rounded"
                 placeholder="Email *"
               />
@@ -153,6 +234,8 @@ const Hire = () => {
                 name="phone"
                 id="phone"
                 required
+                value={formData.phone}
+                onChange={handleInputChange}
                 className="peer w-full border border-gray-300 p-2 pt-5 placeholder-transparent focus:outline-none focus:ring focus:ring-[#e62245] rounded"
                 placeholder="Phone *"
               />
@@ -172,6 +255,8 @@ const Hire = () => {
                   type="radio"
                   name="existingCustomer"
                   value="yes"
+                  checked={formData.existingCustomer === "yes"}
+                  onChange={handleInputChange}
                   className="w-4 h-4 text-[#e62245] border-gray-300 focus:ring-[#e62245]"
                 />
                 <span>Yes</span>
@@ -181,6 +266,8 @@ const Hire = () => {
                   type="radio"
                   name="existingCustomer"
                   value="no"
+                  checked={formData.existingCustomer === "no"}
+                  onChange={handleInputChange}
                   className="w-4 h-4 text-[#e62245] border-gray-300 focus:ring-[#e62245]"
                 />
                 <span>No</span>
@@ -258,6 +345,8 @@ const Hire = () => {
                     type="checkbox"
                     name="equipment"
                     value={equipment.name}
+                    checked={formData.equipment.includes(equipment.name)}
+                    onChange={handleCheckboxChange}
                     className="hidden"
                   />
                   <div className="border-2 border-[#dcdcdc] rounded-lg p-2 transition-all group-has-[:checked]:border-[#e62245]">
@@ -304,6 +393,8 @@ const Hire = () => {
                     type="date"
                     id="hireDate"
                     name="hireDate"
+                    value={formData.hireDate}
+                    onChange={handleInputChange}
                     className="w-full border border-gray-300 rounded p-2 focus:outline-none focus:ring focus:ring-[#e62245]"
                     required
                   />
@@ -325,6 +416,8 @@ const Hire = () => {
                             type="radio"
                             name="hirePeriod"
                             value={label}
+                            checked={formData.hirePeriod === label}
+                            onChange={handleInputChange}
                             className="form-radio text-[#e62245] focus:ring-[#e62245]"
                           />
                           <span>{label}</span>
@@ -338,6 +431,8 @@ const Hire = () => {
                 <textarea
                   name="comments"
                   id="comments"
+                  value={formData.comments}
+                  onChange={handleInputChange}
                   className="peer w-full border border-gray-300 p-2 pt-5 h-32 rounded placeholder-transparent focus:outline-none focus:ring focus:ring-[#e62245]"
                   placeholder="Special Instructions/Requirements"
                 ></textarea>

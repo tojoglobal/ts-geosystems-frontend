@@ -118,7 +118,7 @@ const MainNavContainer = () => {
               {/* Dropdown Wrapper */}
               <div className="relative group cursor-pointer py-2.5">
                 <span className="flex items-center gap-1 hover:text-crimson-red transition-colors duration-300">
-                  SUPPORT{" "}
+                  <Link to="/support">SUPPORT</Link>
                   <MdOutlineKeyboardArrowDown className="text-xl"></MdOutlineKeyboardArrowDown>
                 </span>
                 {/* Dropdown Menu */}

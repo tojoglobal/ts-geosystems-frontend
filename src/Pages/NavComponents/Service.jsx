@@ -242,25 +242,23 @@ const Service = () => {
               <option value="Sokkia">Sokkia</option>
             </select>
           </div>
-          <div>
-            <div className="relative w-full">
-              <input
-                type="text"
-                name="model"
-                id="model"
-                required
-                value={formData.model}
-                onChange={handleInputChange}
-                className="peer w-full border border-gray-300 p-2 pt-4 placeholder-transparent focus:outline-none focus:ring focus:ring-[#e62245] rounded"
-                placeholder="Instrument Model"
-              />
-              <label
-                htmlFor="model"
-                className="absolute pl-2 left-2 top-2 text-gray-500 text-sm transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-placeholder-shown:text-black peer-focus:top-2 peer-focus:text-xs peer-focus:text-black"
-              >
-                Instrument Model *
-              </label>
-            </div>
+          <div className="relative w-full">
+            <input
+              type="text"
+              name="model"
+              id="model"
+              required
+              value={formData.model}
+              onChange={handleInputChange}
+              className="peer w-full border border-gray-300 p-2 pt-4 placeholder-transparent focus:outline-none focus:ring focus:ring-[#e62245] rounded"
+              placeholder="Instrument Model"
+            />
+            <label
+              htmlFor="model"
+              className="absolute pl-2 left-2 top-2 text-gray-500 text-sm transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-placeholder-shown:text-black peer-focus:top-2 peer-focus:text-xs peer-focus:text-black"
+            >
+              Instrument Model *
+            </label>
           </div>
           <div className="space-y-4 text-sm text-gray-800">
             {/* Request checkboxes */}
