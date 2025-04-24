@@ -1,5 +1,6 @@
 import React from "react";
 import SocialButtons from "../Components/SocialButtons";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
@@ -33,6 +34,9 @@ const Footer = () => {
           <h2 className="text-xl font-semibold mb-4">ACCOUNTS & ORDERS</h2>
           <ul className="space-y-2 text-sm">
             <li>Login or SignUp</li>
+            <li>
+              <Link to="/admin/login">My Account</Link>
+            </li>
             <li>Order Status</li>
             <li>Privacy Policy</li>
             <li>Terms & Service</li>
