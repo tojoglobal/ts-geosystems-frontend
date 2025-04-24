@@ -18,6 +18,17 @@ import ProtectedRoute from "./utils/ProtectedRoute";
 import DashboardLayout from "./Dashboard/Layout/Layout";
 import Login from "./Pages/Auth/Login";
 import Register from "./Pages/Auth/Register";
+import CertificateTracking from "./Pages/NavComponents/CertificateTracking";
+import ProductLayout from "./Pages/ProductLayout";
+import ProductDetails from "./Pages/ProductPage/ProductDetails";
+import Hire from "./Pages/NavComponents/Hire";
+import Service from "./Pages/NavComponents/Service";
+import QuickGuides from "./Pages/NavComponents/QuickGuides";
+import SoftwareDownloads from "./Pages/NavComponents/SoftwareDownloads";
+import AboutUs from "./Pages/NavComponents/AboutUs/AboutUs";
+import ContactUs from "./Pages/NavComponents/ContactUs";
+import ViewProfile from "./Dashboard/Profile/ViewProfile";
+import UpdateProfile from "./Dashboard/Profile/UpdateProfile";
 
 const AppLayout = () => {
   const location = useLocation();
