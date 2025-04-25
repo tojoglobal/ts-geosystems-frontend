@@ -35,6 +35,7 @@ import ProductAddForm from "./Dashboard/Products/AddProducts";
 import RemoteSupport from "./Pages/NavComponents/RemoteSupport";
 import UserManuals from "./Pages/NavComponents/UserManuals";
 import G2Blog from "./Pages/NavComponents/G2Blog";
+import Clearance from "./Pages/NavComponents/Clearance";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -54,6 +55,7 @@ const AppLayout = () => {
 
         <Route element={<ProductLayout />}>
           <Route path="/products/:id" element={<ProductDetails />} />
+          <Route path="/clearance" element={<Clearance />} />
           <Route path="/hire" element={<Hire />} />
           <Route path="/service" element={<Service />} />
           <Route path="/support" element={<Support />} />

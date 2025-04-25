@@ -107,7 +107,7 @@ const MainNavContainer = () => {
                 USED EQUIPMENT
               </span>
               <span className="cursor-pointer hover:text-crimson-red transition-colors duration-300  py-2.5">
-                CLEARANCE
+                <Link to="/clearance">CLEARANCE</Link>
               </span>
               <span className="cursor-pointer hover:text-crimson-red transition-colors duration-300  py-2.5">
                 <Link to="/hire">HIRE</Link>
@@ -139,7 +139,6 @@ const MainNavContainer = () => {
                   </ul>
                 </div>
               </div>
-
               <span className="cursor-pointer hover:text-crimson-red transition-colors duration-300  py-2.5">
                 <Link to="/trade-in">TRADE IN</Link>
               </span>
