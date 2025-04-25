@@ -3,3 +3,71 @@ secondary color = #97112a ,rgb(151, 17, 42)
 text primary color = #2f2f2b
 text secondary color = #111111 , rgba(17, 17, 17, 0.7)
 max-width : 1390px
+
+=========================
+dashbord input filed style :
+inputFiled: input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500
+
+=======================================
+when use the Controller then use this fromate stle 
+
+<Controller
+            name="productOptions"
+            control={control}
+            render={({ field }) => (
+              <Select
+                {...field}
+                isMulti
+                options={[
+                  { value: "wifi", label: "WiFi" },
+                  { value: "bluetooth", label: "Bluetooth" },
+                ]}
+                placeholder="Product Options"
+                className="react-select-container"
+                classNamePrefix="react-select"
+                styles={{
+                  control: (base, state) => ({
+                    ...base,
+                    backgroundColor: "rgb(255, 255, 255)", // Tailwind: dark:bg-gray-800
+                    borderColor: state.isFocused ? "#14b8a6" : "rgb(75 85 99)", // Tailwind: focus:border-teal-500, dark:border-gray-600
+                    color: "white",
+                    boxShadow: state.isFocused ? "0 0 0 1px #14b8a6" : "none",
+                  }),
+                  menu: (base) => ({
+                    ...base,
+                    backgroundColor: "rgb(255,255,255)",
+                    color: "white",
+                    zIndex: 10,
+                  }),
+                  option: (base, state) => ({
+                    ...base,
+                    backgroundColor: state.isSelected
+                      ? "#0f766e" // Tailwind: bg-teal-700
+                      : state.isFocused
+                      ? "#115e59" // Tailwind: hover:bg-teal-800
+                      : "rgb(209, 213, 219)",
+                    color: state.isFocused ? "white" : "black",
+                  }),
+                  multiValue: (base) => ({
+                    ...base,
+                    backgroundColor: "#363636", // dark teal
+                    color: "white",
+                  }),
+                  multiValueLabel: (base) => ({
+                    ...base,
+                    color: "white",
+                  }),
+                  multiValueRemove: (base) => ({
+                    ...base,
+                    color: "white",
+                    ":hover": {
+                      backgroundColor: "#0f766e",
+                      color: "white",
+                    },
+                  }),
+                }}
+              />
+            )}
+          />
+
+

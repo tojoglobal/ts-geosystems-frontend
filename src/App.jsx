@@ -30,9 +30,13 @@ import ContactUs from "./Pages/NavComponents/ContactUs";
 import Support from "./Pages/NavComponents/Support";
 import ViewProfile from "./Dashboard/Profile/ViewProfile";
 import UpdateProfile from "./Dashboard/Profile/UpdateProfile";
+<<<<<<< HEAD
 import UserManuals from "./Pages/NavComponents/UserManuals";
 import RemoteSupport from "./Pages/NavComponents/RemoteSupport";
 import TradeIn from "./Pages/NavComponents/TradeIn";
+=======
+import ProductAddForm from "./Dashboard/Products/AddProducts";
+>>>>>>> 8167d9da2023da5350874747f53200b38589a2af
 
 const AppLayout = () => {
   const location = useLocation();
@@ -76,6 +80,7 @@ const AppLayout = () => {
           <Route index element={<Dashboard />} />
           <Route path="viewprofile" element={<ViewProfile />} />
           <Route path="update-profile" element={<UpdateProfile />} />
+          <Route path="add-product" element={<ProductAddForm />} />
         </Route>
 
         <Route path="*" element={<Erro />} />
