@@ -31,6 +31,7 @@ import Support from "./Pages/NavComponents/Support";
 import ViewProfile from "./Dashboard/Profile/ViewProfile";
 import UpdateProfile from "./Dashboard/Profile/UpdateProfile";
 import ProductAddForm from "./Dashboard/Products/AddProducts";
+import Categorys from "./Dashboard/Categorys/Categorys";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -72,6 +73,7 @@ const AppLayout = () => {
           <Route path="viewprofile" element={<ViewProfile />} />
           <Route path="update-profile" element={<UpdateProfile />} />
           <Route path="add-product" element={<ProductAddForm />} />
+          <Route path="add-categorys" element={<Categorys />} />
         </Route>
 
         <Route path="*" element={<Erro />} />
