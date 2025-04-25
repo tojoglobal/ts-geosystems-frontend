@@ -32,10 +32,14 @@ import ViewProfile from "./Dashboard/Profile/ViewProfile";
 import UpdateProfile from "./Dashboard/Profile/UpdateProfile";
 import TradeIn from "./Pages/NavComponents/TradeIn";
 import ProductAddForm from "./Dashboard/Products/AddProducts";
+<<<<<<< HEAD
 import RemoteSupport from "./Pages/NavComponents/RemoteSupport";
 import UserManuals from "./Pages/NavComponents/UserManuals";
 import G2Blog from "./Pages/NavComponents/G2Blog";
 import Clearance from "./Pages/NavComponents/Clearance";
+=======
+import Categorys from "./Dashboard/Categorys/Categorys";
+>>>>>>> sw
 
 const AppLayout = () => {
   const location = useLocation();
@@ -82,6 +86,7 @@ const AppLayout = () => {
           <Route path="viewprofile" element={<ViewProfile />} />
           <Route path="update-profile" element={<UpdateProfile />} />
           <Route path="add-product" element={<ProductAddForm />} />
+          <Route path="add-categorys" element={<Categorys />} />
         </Route>
 
         <Route path="*" element={<Erro />} />
