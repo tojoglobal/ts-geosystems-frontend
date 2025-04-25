@@ -131,16 +131,17 @@ const MainNavContainer = () => {
                       <Link to="/quick-guides">Quick Guides</Link>
                     </li>
                     <li className="hover:text-crimson-red cursor-pointer transition-colors duration-300">
-                      User Manuals
+                      <Link to="/user-manuals">User Manuals</Link>
                     </li>
                     <li className="hover:text-crimson-red cursor-pointer transition-colors duration-300">
-                      Remote Support
+                      <Link to="/remote-support">Remote Support</Link>
                     </li>
                   </ul>
                 </div>
               </div>
+
               <span className="cursor-pointer hover:text-crimson-red transition-colors duration-300  py-2.5">
-                TRADE IN
+                <Link to="/trade-in">TRADE IN</Link>
               </span>
               <span className="cursor-pointer hover:text-crimson-red transition-colors duration-300  py-2.5">
                 G2 BLOG

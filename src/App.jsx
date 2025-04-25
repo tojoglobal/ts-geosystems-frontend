@@ -30,6 +30,9 @@ import ContactUs from "./Pages/NavComponents/ContactUs";
 import Support from "./Pages/NavComponents/Support";
 import ViewProfile from "./Dashboard/Profile/ViewProfile";
 import UpdateProfile from "./Dashboard/Profile/UpdateProfile";
+import UserManuals from "./Pages/NavComponents/UserManuals";
+import RemoteSupport from "./Pages/NavComponents/RemoteSupport";
+import TradeIn from "./Pages/NavComponents/TradeIn";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -45,6 +48,7 @@ const AppLayout = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/create_account" element={<Register />} />
         <Route path="/cc" element={<CertificateTracking />} />
+        <Route path="/remote-support" element={<RemoteSupport />} />
 
         <Route element={<ProductLayout />}>
           <Route path="/products/:id" element={<ProductDetails />} />
@@ -53,8 +57,10 @@ const AppLayout = () => {
           <Route path="/support" element={<Support />} />
           <Route path="/quick-guides" element={<QuickGuides />} />
           <Route path="/software-downloads" element={<SoftwareDownloads />} />
+          <Route path="/trade-in" element={<TradeIn />} />
           <Route path="/about-us" element={<AboutUs />} />
           <Route path="/contact-us" element={<ContactUs />} />
+          <Route path="/user-manuals" element={<UserManuals />} />
         </Route>
 
         {/* Admin Routes */}
