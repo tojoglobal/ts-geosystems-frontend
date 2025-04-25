@@ -144,7 +144,7 @@ const MainNavContainer = () => {
                 <Link to="/trade-in">TRADE IN</Link>
               </span>
               <span className="cursor-pointer hover:text-crimson-red transition-colors duration-300  py-2.5">
-                G2 BLOG
+                <Link to="/g2-blog">G2 BLOG</Link>
               </span>
               <span className="cursor-pointer hover:text-crimson-red transition-colors duration-300 py-2.5">
                 <Link to="/about-us">ABOUT US</Link>

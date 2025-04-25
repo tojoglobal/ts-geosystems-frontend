@@ -1,5 +1,57 @@
 import { Link } from "react-router-dom";
+import { useState } from "react";
+
 const TradeIn = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    company: "",
+    email: "",
+    phone: "",
+    equipment: "",
+    model: "",
+    serialNumber: "",
+    software: "",
+    manufactureDate: "",
+    condition: "",
+    sellOrTrade: "",
+    comments: "",
+    photos: null,
+  });
+
+  const handleChange = (e) => {
+    const { name, value, type } = e.target;
+
+    if (type === "file") {
+      setFormData({
+        ...formData,
+        [name]: e.target.files,
+      });
+    } else {
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
+    }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Here you can send formData to your server
+    console.log("Form submitted:", formData);
+    // Add your API call here
+    // Example:
+    // fetch('/api/trade-in', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify(formData),
+    // })
+    // .then(response => response.json())
+    // .then(data => console.log('Success:', data))
+    // .catch(error => console.error('Error:', error));
+  };
+
   return (
     <div className="p-3">
       <div className="flex items-center gap-2 text-sm">
@@ -58,7 +110,7 @@ const TradeIn = () => {
           Please fill in the form, together with your surveying instrument
           details, and we will reply with an offer.
         </p>
-        <form className="space-y-6 text-black">
+        <form className="space-y-6 text-black" onSubmit={handleSubmit}>
           <p className="text-lg font-semibold">Contact Details</p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="relative w-full">
@@ -67,6 +119,8 @@ const TradeIn = () => {
                 name="name"
                 id="name"
                 required
+                value={formData.name}
+                onChange={handleChange}
                 className="peer w-full border border-gray-300 p-2 pt-5 placeholder-transparent focus:outline-none focus:ring focus:ring-[#e62245] rounded"
                 placeholder="Name *"
               />
@@ -83,6 +137,8 @@ const TradeIn = () => {
                 name="company"
                 id="company"
                 required
+                value={formData.company}
+                onChange={handleChange}
                 className="peer w-full border border-gray-300 p-2 pt-5 placeholder-transparent focus:outline-none focus:ring focus:ring-[#e62245] rounded"
                 placeholder="Company Name *"
               />
@@ -99,6 +155,8 @@ const TradeIn = () => {
                 name="email"
                 id="email"
                 required
+                value={formData.email}
+                onChange={handleChange}
                 className="peer w-full border border-gray-300 p-2 pt-5 placeholder-transparent focus:outline-none focus:ring focus:ring-[#e62245] rounded"
                 placeholder="Email *"
               />
@@ -115,6 +173,8 @@ const TradeIn = () => {
                 name="phone"
                 id="phone"
                 required
+                value={formData.phone}
+                onChange={handleChange}
                 className="peer w-full border border-gray-300 p-2 pt-5 placeholder-transparent focus:outline-none focus:ring focus:ring-[#e62245] rounded"
                 placeholder="Phone *"
               />
@@ -136,6 +196,8 @@ const TradeIn = () => {
                 <select
                   className="w-full border p-4 focus:outline-none focus:ring focus:ring-[#e62245]"
                   name="equipment"
+                  value={formData.equipment}
+                  onChange={handleChange}
                   required
                 >
                   <option value=""></option>
@@ -153,6 +215,8 @@ const TradeIn = () => {
                     name="model"
                     id="model"
                     required
+                    value={formData.model}
+                    onChange={handleChange}
                     className="peer w-full border border-gray-300 p-2 pt-5 placeholder-transparent focus:outline-none focus:ring focus:ring-[#e62245] rounded"
                     placeholder="Instrument Model"
                   />
@@ -166,14 +230,16 @@ const TradeIn = () => {
                 <div className="relative w-full">
                   <input
                     type="text"
-                    name="model"
-                    id="model"
+                    name="serialNumber"
+                    id="serialNumber"
                     required
+                    value={formData.serialNumber}
+                    onChange={handleChange}
                     className="peer w-full border border-gray-300 p-2 pt-5 placeholder-transparent focus:outline-none focus:ring focus:ring-[#e62245] rounded"
                     placeholder="Serial Number/s"
                   />
                   <label
-                    htmlFor="model"
+                    htmlFor="serialNumber"
                     className="absolute pl-2 left-2 top-2 text-gray-500 text-sm transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-placeholder-shown:text-black peer-focus:top-2 peer-focus:text-xs peer-focus:text-black"
                   >
                     Serial Number/s
@@ -182,14 +248,16 @@ const TradeIn = () => {
                 <div className="relative w-full">
                   <input
                     type="text"
-                    name="model"
-                    id="model"
+                    name="software"
+                    id="software"
                     required
+                    value={formData.software}
+                    onChange={handleChange}
                     className="peer w-full border border-gray-300 p-2 pt-5 placeholder-transparent focus:outline-none focus:ring focus:ring-[#e62245] rounded"
                     placeholder="Software/Apps"
                   />
                   <label
-                    htmlFor="model"
+                    htmlFor="software"
                     className="absolute pl-2 left-2 top-2 text-gray-500 text-sm transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-placeholder-shown:text-black peer-focus:top-2 peer-focus:text-xs peer-focus:text-black"
                   >
                     Software/Apps
@@ -198,14 +266,16 @@ const TradeIn = () => {
                 <div className="relative w-full">
                   <input
                     type="text"
-                    name="model"
-                    id="model"
+                    name="manufactureDate"
+                    id="manufactureDate"
                     required
+                    value={formData.manufactureDate}
+                    onChange={handleChange}
                     className="peer w-full border border-gray-300 p-2 pt-5 placeholder-transparent focus:outline-none focus:ring focus:ring-[#e62245] rounded"
                     placeholder="Manufacture Date"
                   />
                   <label
-                    htmlFor="model"
+                    htmlFor="manufactureDate"
                     className="absolute pl-2 left-2 top-2 text-gray-500 text-sm transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-placeholder-shown:text-black peer-focus:top-2 peer-focus:text-xs peer-focus:text-black"
                   >
                     Manufacture Date
@@ -222,6 +292,8 @@ const TradeIn = () => {
                           type="radio"
                           name="condition"
                           value={number}
+                          checked={formData.condition === number.toString()}
+                          onChange={handleChange}
                           className="peer sr-only"
                           required
                         />
@@ -245,6 +317,8 @@ const TradeIn = () => {
                       type="radio"
                       name="sellOrTrade"
                       value="sell"
+                      checked={formData.sellOrTrade === "sell"}
+                      onChange={handleChange}
                       className="w-4 h-4 text-[#e62245] bg-gray-200 border-gray-300 focus:ring-[#e62245] checked:bg-[#e62245] accent-[#e62245]"
                       required
                     />
@@ -255,6 +329,8 @@ const TradeIn = () => {
                       type="radio"
                       name="sellOrTrade"
                       value="tradeIn"
+                      checked={formData.sellOrTrade === "tradeIn"}
+                      onChange={handleChange}
                       className="w-4 h-4 text-[#e62245] bg-gray-200 border-gray-300 focus:ring-[#e62245] checked:bg-[#e62245] accent-[#e62245]"
                     />
                     <span className="text-sm">Trade In</span>
@@ -263,13 +339,15 @@ const TradeIn = () => {
               </div>
               <div className="relative w-full">
                 <textarea
-                  name="Comments"
-                  id="Comments"
+                  name="comments"
+                  id="comments"
+                  value={formData.comments}
+                  onChange={handleChange}
                   className="peer w-full border border-gray-300 p-2 pt-5 h-24 rounded placeholder-transparent focus:outline-none focus:ring focus:ring-[#e62245]"
                   placeholder="Comments"
                 ></textarea>
                 <label
-                  htmlFor="Comments"
+                  htmlFor="comments"
                   className="absolute left-2 px-2 top-2 text-gray-500 text-sm transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-black peer-focus:top-2 peer-focus:text-xs peer-focus:text-black"
                 >
                   Comments
@@ -280,7 +358,13 @@ const TradeIn = () => {
                 <label className="border-2 border-dashed border-gray-300 rounded p-8 text-center text-sm text-black block cursor-pointer">
                   <span className="text-[#e62245]">Choose file</span> or drop
                   here
-                  <input type="file" className="hidden" multiple />
+                  <input
+                    type="file"
+                    name="photos"
+                    onChange={handleChange}
+                    className="hidden"
+                    multiple
+                  />
                 </label>
               </div>
               <div className="flex justify-center">

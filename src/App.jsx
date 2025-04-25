@@ -34,6 +34,7 @@ import TradeIn from "./Pages/NavComponents/TradeIn";
 import ProductAddForm from "./Dashboard/Products/AddProducts";
 import RemoteSupport from "./Pages/NavComponents/RemoteSupport";
 import UserManuals from "./Pages/NavComponents/UserManuals";
+import G2Blog from "./Pages/NavComponents/G2Blog";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -59,6 +60,7 @@ const AppLayout = () => {
           <Route path="/quick-guides" element={<QuickGuides />} />
           <Route path="/software-downloads" element={<SoftwareDownloads />} />
           <Route path="/trade-in" element={<TradeIn />} />
+          <Route path="/g2-blog" element={<G2Blog />} />
           <Route path="/about-us" element={<AboutUs />} />
           <Route path="/contact-us" element={<ContactUs />} />
           <Route path="/user-manuals" element={<UserManuals />} />
