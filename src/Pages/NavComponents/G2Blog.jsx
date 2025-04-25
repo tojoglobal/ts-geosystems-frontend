@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState } from "react"; 
 import { Link } from "react-router-dom";
-
+import { IoSearch } from "react-icons/io5";
 const tabs = ["Features", "Tips", "Announcements", "Events"];
 const fakeData = [
   {
@@ -20,7 +20,7 @@ const fakeData = [
     logo: "https://dropinblog.net/34252524/authors/G213PNG.png",
     meta: "Leica Geosystems . Jun 2nd 2024 - 5 minute read",
     title: "G2 Survey Become Pix4D Official Reseller",
-    type: "Announcements",
+    type: "Tips",
     url: "/g2-blog/?p=release-of-the-new-leica-gs05-gnss-smart-antenna",
   },
   {
@@ -30,7 +30,7 @@ const fakeData = [
     logo: "https://dropinblog.net/34252524/authors/G213PNG.png",
     meta: "Leica Geosystems . Jun 2nd 2024 - 5 minute read",
     title: "G2 Survey Become Pix4D Official Reseller",
-    type: "Announcements",
+    type: "Features",
     url: "/g2-blog/?p=release-of-the-new-leica-gs05-gnss-smart-antenna",
   },
   {
@@ -39,7 +39,7 @@ const fakeData = [
     logo: "https://dropinblog.net/34252524/authors/G213PNG.png",
     meta: "Leica Geosystems . Jun 2nd 2024 - 5 minute read",
     title: "G2 Survey Become Pix4D Official Reseller",
-    type: "Announcements",
+    type: "Events",
     url: "/g2-blog/?p=release-of-the-new-leica-gs05-gnss-smart-antenna",
   },
   {
@@ -49,7 +49,7 @@ const fakeData = [
     logo: "https://dropinblog.net/34252524/authors/G213PNG.png",
     meta: "Leica Geosystems . Jun 2nd 2024 - 5 minute read",
     title: "G2 Survey Become Pix4D Official Reseller",
-    type: "Announcements",
+    type: "Tips",
     url: "/g2-blog/?p=release-of-the-new-leica-gs05-gnss-smart-antenna",
   },
   {
@@ -59,7 +59,7 @@ const fakeData = [
     logo: "https://dropinblog.net/34252524/authors/G213PNG.png",
     meta: "Leica Geosystems . Jun 2nd 2024 - 5 minute read",
     title: "G2 Survey Become Pix4D Official Reseller",
-    type: "Announcements",
+    type: "Features",
     url: "/g2-blog/?p=release-of-the-new-leica-gs05-gnss-smart-antenna",
   },
 ];
@@ -80,16 +80,31 @@ const G2Blog = () => {
       </div>
       <h1 className="text-3xl mt-2 text-[#e62245] mb-2">G2 BLOG</h1>
       <section className="mt-12">
-        <div className="border-t border-b py-4 flex justify-center gap-6 text-[#db7084] font-medium">
+        {activeTab !== "All" && (
+          <div className="text-center mb-8">
+            <h2 className="text-3xl text-[#e62245] font-semibold">{activeTab}</h2>
+          </div>
+        )}
+        <div className="border-t border-b py-4 flex justify-center items-center gap-6 text-[#db7084] font-medium">
+          {activeTab !== "All" && (
+            <button onClick={() => setActiveTab("All")} className="text-sm">
+              Back to Blog
+            </button>
+          )}
           {tabs.map((tab) => (
             <button
-              className="hover:text-[#754e55]"
+              className={`hover:text-[#754e55] ${
+                activeTab === tab ? "text-[#e62245] underline" : ""
+              }`}
               key={tab}
               onClick={() => setActiveTab(tab)}
             >
               {tab}
             </button>
           ))}
+          <button className="hover:text-[#754e55]">
+            <IoSearch className="w-5" />
+          </button>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-10">
           {fakeData
@@ -98,23 +113,23 @@ const G2Blog = () => {
               <Link
                 key={index}
                 to={post.url}
-                className="relative border rounded-lg overflow-hidden transition-all"
+                className="relative border rounded-lg overflow-hidden transition-all hover:shadow-lg"
               >
                 <img
                   src={post.image}
                   alt="post"
-                  className="w-full object-cover"
+                  className="w-full h-48 object-cover"
                 />
                 <img
                   src={post.logo}
                   alt="logo"
-                  className="absolute bottom-[135px] left-3 w-12 h-12 rounded-full"
+                  className="absolute bottom-[135px] left-3 w-10 h-10 rounded-full"
                 />
                 <div className="p-4 mt-1">
                   <p className="text-xs text-gray-500 text-center mb-1">
                     {post.meta}
                   </p>
-                  <h3 className="text-3xl text-center font-bold mb-2">
+                  <h3 className="text-2xl text-center font-bold mb-2">
                     {post.title}
                   </h3>
                   <p className="text-sm text-center text-gray-400 uppercase">
