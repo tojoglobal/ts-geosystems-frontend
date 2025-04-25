@@ -2,15 +2,67 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 
 const tabs = ["Features", "Tips", "Announcements", "Events"];
-const fakeData = Array(6).fill({
-  id: 1,
-  image:
-    "https://dropinblog.net/34252524/files/featured/g2survey-pix4d-official-reseller.png",
-  logo: "https://dropinblog.net/34252524/authors/G213PNG.png",
-  meta: "Leica Geosystems . Jun 2nd 2024 - 5 minute read",
-  title: "G2 Survey Become Pix4D Official Reseller",
-  type: "Announcements",
-});
+const fakeData = [
+  {
+    id: 1,
+    image:
+      "https://dropinblog.net/34252524/files/featured/g2survey-pix4d-official-reseller.png",
+    logo: "https://dropinblog.net/34252524/authors/G213PNG.png",
+    meta: "Leica Geosystems . Jun 2nd 2024 - 5 minute read",
+    title: "G2 Survey Become Pix4D Official Reseller",
+    type: "Announcements",
+    url: "/g2-blog/?p=release-of-the-new-leica-gs05-gnss-smart-antenna",
+  },
+  {
+    id: 2,
+    image:
+      "https://dropinblog.net/34252524/files/featured/leica-gs18-captivate-firmware.jpg",
+    logo: "https://dropinblog.net/34252524/authors/G213PNG.png",
+    meta: "Leica Geosystems . Jun 2nd 2024 - 5 minute read",
+    title: "G2 Survey Become Pix4D Official Reseller",
+    type: "Announcements",
+    url: "/g2-blog/?p=release-of-the-new-leica-gs05-gnss-smart-antenna",
+  },
+  {
+    id: 3,
+    image:
+      "https://dropinblog.net/34252524/files/featured/the-sunday-times-100-2024.png",
+    logo: "https://dropinblog.net/34252524/authors/G213PNG.png",
+    meta: "Leica Geosystems . Jun 2nd 2024 - 5 minute read",
+    title: "G2 Survey Become Pix4D Official Reseller",
+    type: "Announcements",
+    url: "/g2-blog/?p=release-of-the-new-leica-gs05-gnss-smart-antenna",
+  },
+  {
+    id: 4,
+    image: "https://dropinblog.net/34252524/files/featured/cices-burns.jpeg",
+    logo: "https://dropinblog.net/34252524/authors/G213PNG.png",
+    meta: "Leica Geosystems . Jun 2nd 2024 - 5 minute read",
+    title: "G2 Survey Become Pix4D Official Reseller",
+    type: "Announcements",
+    url: "/g2-blog/?p=release-of-the-new-leica-gs05-gnss-smart-antenna",
+  },
+  {
+    id: 5,
+    image:
+      "https://dropinblog.net/34252524/files/featured/g2-survey-road-expo-scotland-2024.jpg",
+    logo: "https://dropinblog.net/34252524/authors/G213PNG.png",
+    meta: "Leica Geosystems . Jun 2nd 2024 - 5 minute read",
+    title: "G2 Survey Become Pix4D Official Reseller",
+    type: "Announcements",
+    url: "/g2-blog/?p=release-of-the-new-leica-gs05-gnss-smart-antenna",
+  },
+  {
+    id: 6,
+    image:
+      "https://dropinblog.net/34252524/files/featured/leica-gs05-gnss-antenna.jpg",
+    logo: "https://dropinblog.net/34252524/authors/G213PNG.png",
+    meta: "Leica Geosystems . Jun 2nd 2024 - 5 minute read",
+    title: "G2 Survey Become Pix4D Official Reseller",
+    type: "Announcements",
+    url: "/g2-blog/?p=release-of-the-new-leica-gs05-gnss-smart-antenna",
+  },
+];
 
 const G2Blog = () => {
   const [activeTab, setActiveTab] = useState("All");
@@ -42,10 +94,10 @@ const G2Blog = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-10">
           {fakeData
             .filter((post) => activeTab === "All" || post.type === activeTab)
-            .slice(0, 6)
             .map((post, index) => (
-              <div
+              <Link
                 key={index}
+                to={post.url}
                 className="relative border rounded-lg overflow-hidden transition-all"
               >
                 <img
@@ -69,7 +121,7 @@ const G2Blog = () => {
                     {post.type}
                   </p>
                 </div>
-              </div>
+              </Link>
             ))}
         </div>
       </section>
