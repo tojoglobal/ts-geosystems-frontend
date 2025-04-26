@@ -37,6 +37,7 @@ import G2Blog from "./Pages/NavComponents/G2Blog";
 import Clearance from "./Pages/NavComponents/Clearance";
 import Categorys from "./Dashboard/Categorys/Categorys";
 import Compare from "./Pages/NavComponents/Compare";
+import UsedEquipment from "./Pages/NavComponents/UsedEquipment";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -58,6 +59,7 @@ const AppLayout = () => {
           <Route path="/products/:id" element={<ProductDetails />} />
           <Route path="/clearance" element={<Clearance />} />
           <Route path="/compare/:ids" element={<Compare />} />
+          <Route path="/used" element={<UsedEquipment />} />
           <Route path="/hire" element={<Hire />} />
           <Route path="/service" element={<Service />} />
           <Route path="/support" element={<Support />} />

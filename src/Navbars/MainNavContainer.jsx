@@ -104,7 +104,7 @@ const MainNavContainer = () => {
           {!isSticky ? (
             <div className="flex gap-6 text-base font-semibold text-charcoal">
               <span className="cursor-pointer hover:text-crimson-red transition-colors duration-300  py-2.5">
-                USED EQUIPMENT
+                <Link to="/used">USED EQUIPMENT</Link>
               </span>
               <span className="cursor-pointer hover:text-crimson-red transition-colors duration-300  py-2.5">
                 <Link to="/clearance">CLEARANCE</Link>
