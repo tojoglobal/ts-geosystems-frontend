@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { BsGrid3X3GapFill } from "react-icons/bs";
 import { FaThList } from "react-icons/fa";
+import Swal from "sweetalert2";
 
 const fakeProducts = [
   {
@@ -113,8 +114,11 @@ const sortOptions = [
 const Clearance = () => {
   const [viewMode, setViewMode] = useState("grid");
   const [sortBy, setSortBy] = useState("FEATURED ITEMS");
-  const [hoveredProductId, setHoveredProductId] = useState(null);const [currentPage, setCurrentPage] = useState(1);
-  const productsPerPage = 8; // or any number you want
+  const [hoveredProductId, setHoveredProductId] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [compareItems, setCompareItems] = useState([]);
+  const navigate = useNavigate();
+  const productsPerPage = 8;
   const totalPages = Math.ceil(fakeProducts.length / productsPerPage);
 
   // Pagination logic
@@ -125,6 +129,29 @@ const Clearance = () => {
     indexOfLastProduct
   );
 
+  const toggleCompare = (productId) => {
+    setCompareItems((prev) =>
+      prev.includes(productId)
+        ? prev.filter((id) => id !== productId)
+        : [...prev, productId]
+    );
+  };
+
+  const handleCompareSelected = () => {
+    if (compareItems.length < 2) {
+      Swal.fire({
+        title: "Comparison Error",
+        text: "You must select at least two products to compare",
+        icon: "error",
+        confirmButtonColor: "#e62245",
+        confirmButtonText: "OK",
+      });
+    } else {
+      // Sort the IDs to maintain consistent URL regardless of selection order
+      const sortedIds = [...compareItems].sort((a, b) => a - b);
+      navigate(`/compare/${sortedIds.join(",")}`);
+    }
+  };
 
   return (
     <div className="p-3">
@@ -295,10 +322,12 @@ const Clearance = () => {
                         type="checkbox"
                         id={`compare-${product.id}`}
                         className="accent-[#0075ff]"
+                        checked={compareItems.includes(product.id)}
+                        onChange={() => toggleCompare(product.id)}
                       />
                       <label
                         htmlFor={`compare-${product.id}`}
-                        className="text-sm"
+                        className="text-sm cursor-pointer"
                       >
                         COMPARE
                       </label>
@@ -353,9 +382,18 @@ const Clearance = () => {
         )}
       </div>
       <div className="mt-8 flex justify-end">
-        <button className="bg-gray-200 hover:bg-[#e62245] hover:text-white text-xs font-semibold px-6 py-2 rounded">
-          COMPARE SELECTED
-        </button>
+        <div className="mt-8 flex justify-end">
+          <button
+            onClick={handleCompareSelected}
+            className={`${
+              compareItems.length >= 2
+                ? "bg-[#e62245] hover:bg-[#d41d3f] text-white"
+                : "bg-gray-200 hover:bg-gray-300"
+            } text-xs font-semibold px-6 py-2 rounded transition-colors`}
+          >
+            COMPARE SELECTED ({compareItems.length})
+          </button>
+        </div>
       </div>
     </div>
   );
