@@ -13,6 +13,7 @@ const fakeProducts = [
     priceExVat: 11994.0,
     image:
       "https://cdn11.bigcommerce.com/s-ew2v2d3jn1/images/stencil/500x659/products/788/4467/leica-icon-icg70-antenna__78227.1723046790.jpg?c=1",
+    img2: "https://cdn11.bigcommerce.com/s-ew2v2d3jn1/images/stencil/500x659/products/788/4468/leica-icon-icg70-second__12345.1723046791.jpg?c=1",
   },
   {
     id: 2,
@@ -63,6 +64,7 @@ const fakeProducts = [
     priceExVat: 124.95,
     image:
       "https://cdn11.bigcommerce.com/s-ew2v2d3jn1/images/stencil/500x659/products/255/1782/leica-disto-d510-b__27186.1659454649.jpg?c=1",
+    img2: "https://cdn11.bigcommerce.com/s-ew2v2d3jn1/images/stencil/500x659/products/255/1782/leica-disto-d510-b__27186.1659454649.jpg?c=1",
   },
   {
     id: 7,
@@ -84,6 +86,17 @@ const fakeProducts = [
     image:
       "https://cdn11.bigcommerce.com/s-ew2v2d3jn1/images/stencil/500x659/products/838/5026/leica-black-container-799275__42061.1744323007.jpg?c=1",
   },
+  {
+    id: 9,
+    name: "Leica iCON iCG70 GNSS Rover Package",
+    sku: "868636",
+    brand: "Leica Geosystems",
+    price: 9995.0,
+    priceExVat: 11994.0,
+    image:
+      "https://cdn11.bigcommerce.com/s-ew2v2d3jn1/images/stencil/500x659/products/788/4467/leica-icon-icg70-antenna__78227.1723046790.jpg?c=1",
+    img2: "https://cdn11.bigcommerce.com/s-ew2v2d3jn1/images/stencil/500x659/products/788/4468/leica-icon-icg70-second__12345.1723046791.jpg?c=1",
+  },
 ];
 
 const sortOptions = [
@@ -100,6 +113,18 @@ const sortOptions = [
 const Clearance = () => {
   const [viewMode, setViewMode] = useState("grid");
   const [sortBy, setSortBy] = useState("FEATURED ITEMS");
+  const [hoveredProductId, setHoveredProductId] = useState(null);const [currentPage, setCurrentPage] = useState(1);
+  const productsPerPage = 8; // or any number you want
+  const totalPages = Math.ceil(fakeProducts.length / productsPerPage);
+
+  // Pagination logic
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = fakeProducts.slice(
+    indexOfFirstProduct,
+    indexOfLastProduct
+  );
+
 
   return (
     <div className="p-3">
@@ -113,6 +138,7 @@ const Clearance = () => {
       <h1 className="text-4xl font-bold mb-6">CLEARANCE</h1>
       <section>
         <div className="flex items-center justify-between md:justify-normal md:gap-52 mb-6">
+          {/* View Mode Buttons */}
           <div className="flex gap-2">
             <button
               onClick={() => setViewMode("grid")}
@@ -153,6 +179,7 @@ const Clearance = () => {
             </div>
           </div>
         </div>
+        {/* Products Grid/List */}
         <div
           className={`grid ${
             viewMode === "grid"
@@ -160,13 +187,14 @@ const Clearance = () => {
               : "grid-cols-1"
           } gap-6`}
         >
-          {fakeProducts.map((product) => (
+          {currentProducts.map((product) => (
             <div
               key={product.id}
               className={`${
                 viewMode === "list" ? "flex gap-6 p-4" : "p-4"
               } relative`}
             >
+              {/* SALE badge */}
               <div
                 className={`absolute ${
                   viewMode === "list" ? "top-4 left-60" : "top-4 right-4"
@@ -174,13 +202,25 @@ const Clearance = () => {
               >
                 SALE
               </div>
-              <div className={viewMode === "list" ? "w-1/4" : ""}>
+
+              {/* Product Image */}
+              <div
+                className={viewMode === "list" ? "w-1/4" : ""}
+                onMouseEnter={() => setHoveredProductId(product.id)}
+                onMouseLeave={() => setHoveredProductId(null)}
+              >
                 <img
-                  src={product.image}
+                  src={
+                    hoveredProductId === product.id && product.img2
+                      ? product.img2
+                      : product.image
+                  }
                   alt={product.name}
-                  className="w-full h-52 object-contain"
+                  className="w-full h-52 object-contain transition-all duration-300 ease-in-out"
                 />
               </div>
+
+              {/* Product Details */}
               <div
                 className={`${
                   viewMode === "list"
@@ -237,7 +277,7 @@ const Clearance = () => {
                         <p className="text-[#2f2f2b] text-lg font-semibold">
                           Price:
                         </p>
-                      )}{" "}
+                      )}
                       £{product.priceExVat.toFixed(2)}{" "}
                       <span className="underline">(Inc. VAT)</span>
                     </div>
@@ -270,6 +310,53 @@ const Clearance = () => {
           ))}
         </div>
       </section>
+      {/* Pagination */}
+      <div className="flex items-center justify-between mt-10">
+        <div className="flex items-center">
+          {/* Previous button (only show if not on page 1) */}
+          {currentPage > 1 ? (
+            <button
+              onClick={() => setCurrentPage(currentPage - 1)}
+              className="border px-3 py-1 rounded hover:bg-gray-100 transition text-sm"
+            >
+              ← Previous
+            </button>
+          ) : (
+            <div></div>
+          )}
+          {/* Page numbers */}
+          <div className="flex gap-2">
+            {Array.from({ length: totalPages }).map((_, idx) => (
+              <button
+                key={idx}
+                onClick={() => setCurrentPage(idx + 1)}
+                className={`border px-3 py-1 rounded text-sm ${
+                  currentPage === idx + 1 ? "bg-gray-200" : "hover:bg-gray-100"
+                }`}
+              >
+                {idx + 1}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Next button */}
+        {currentPage < totalPages ? (
+          <button
+            onClick={() => setCurrentPage(currentPage + 1)}
+            className="border px-3 py-1 rounded hover:bg-gray-100 transition text-sm"
+          >
+            Next →
+          </button>
+        ) : (
+          <div></div>
+        )}
+      </div>
+      <div className="mt-8 flex justify-end">
+        <button className="bg-gray-200 hover:bg-[#e62245] hover:text-white text-xs font-semibold px-6 py-2 rounded">
+          COMPARE SELECTED
+        </button>
+      </div>
     </div>
   );
 };
