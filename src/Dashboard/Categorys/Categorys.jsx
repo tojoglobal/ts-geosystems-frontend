@@ -37,7 +37,7 @@ const Categorys = () => {
 
   const watchCategoryName = watchCategory("category_name", "");
   //   const watchSerialNumber = watchCategory("serialNumber", "");
-  const watchImage = watchCategory("photo");
+  // const watchImage = watchCategory("photo");
   const watchSubCategoryName = watchSubCategory("name", "");
 
   useEffect(() => {
@@ -248,6 +248,7 @@ const Categorys = () => {
       <h2 className="text-xl font-bold mb-4">Add Categories & Subcategories</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div>
+          <h2 className="text-base font-bold mb-2">Categories</h2>
           <form
             onSubmit={handleSubmitCategory(addCategory)}
             className="space-y-4"
@@ -255,24 +256,24 @@ const Categorys = () => {
             <input
               {...registerCategory("category_name", { required: true })}
               placeholder="Category Name"
-              className="input border dark:border-gray-600 dark:bg-gray-900 dark:text-white"
+              className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
             />
             <input
               value={generateSlug(watchCategoryName)}
               readOnly
               placeholder="Slug"
-              className="input border dark:border-gray-600 dark:bg-gray-900 dark:text-white"
+              className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
             />
             <input
               {...registerCategory("serialNumber", { required: true })}
               type="number"
               placeholder="Order"
-              className="input border dark:border-gray-600 dark:bg-gray-900 dark:text-white"
+              className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
             />
             <input
               type="file"
               accept="image/*"
-              className="input border dark:border-gray-600 dark:bg-gray-900 dark:text-white"
+              className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
               onChange={(e) => {
                 const file = e.target.files[0];
                 setValueCategory("photo", [file]);
@@ -287,13 +288,13 @@ const Categorys = () => {
             )}
             <input
               {...registerCategory("metaKeyword")}
-              placeholder="Meta Keywords"
-              className="input border dark:border-gray-600 dark:bg-gray-900 dark:text-white"
+              placeholder="Meta Keywords comma separated"
+              className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
             />
             <textarea
               {...registerCategory("meta_description")}
               placeholder="Meta Description"
-              className="input border dark:border-gray-600 dark:bg-gray-900 dark:text-white"
+              className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
             ></textarea>
             <label className="flex items-center space-x-2">
               <input type="checkbox" {...registerCategory("is_feature")} />
@@ -338,12 +339,12 @@ const Categorys = () => {
                     >
                       <FaEdit />
                     </button>
-                    <button
+                    {/* <button
                       onClick={() => confirmDelete("category", cat.id)}
                       className="text-red-600 hover:underline"
                     >
                       <FaTrash />
-                    </button>
+                    </button> */}
                   </td>
                 </tr>
               ))}
@@ -353,6 +354,7 @@ const Categorys = () => {
 
         {/* sub category */}
         <div>
+          <h2 className="text-base font-bold mb-2">Sub Categories</h2>
           <form
             onSubmit={handleSubmitSubCategory(addSubCategory)}
             className="space-y-4"
@@ -360,17 +362,17 @@ const Categorys = () => {
             <input
               {...registerSubCategory("name", { required: true })}
               placeholder="Subcategory Name"
-              className="input border dark:border-gray-600 dark:bg-gray-900 dark:text-white"
+              className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
             />
             <input
               value={generateSlug(watchSubCategoryName || "")}
               readOnly
               placeholder="Slug"
-              className="input border dark:border-gray-600 dark:bg-gray-900 dark:text-white"
+              className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
             />
             <select
               {...registerSubCategory("main_category_id", { required: true })}
-              className="input border dark:border-gray-600 dark:bg-gray-900 dark:text-white"
+              className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
             >
               <option value="">Select Category</option>
               {categories.map((cat) => (
@@ -383,7 +385,7 @@ const Categorys = () => {
             <input
               type="file"
               accept="image/*"
-              className="input border dark:border-gray-600 dark:bg-gray-900 dark:text-white"
+              className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
               onChange={(e) => {
                 const file = e.target.files[0];
                 setValueSubCategory("photo", [file]);
@@ -397,6 +399,7 @@ const Categorys = () => {
               />
             )}
             <input type="hidden" value={1} {...registerSubCategory("status")} />
+            <br />
             <button
               type="submit"
               className="bg-teal-600 text-white px-4 py-2 rounded hover:bg-teal-700"
@@ -438,12 +441,12 @@ const Categorys = () => {
                     >
                       <FaEdit />
                     </button>
-                    <button
+                    {/* <button
                       onClick={() => confirmDelete("subcategory", sub.id)}
                       className="text-red-600 hover:underline"
                     >
                       <FaTrash />
-                    </button>
+                    </button> */}
                   </td>
                 </tr>
               ))}
