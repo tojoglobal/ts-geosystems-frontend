@@ -12,7 +12,7 @@ const fakeProducts = [
     price: 9995.0,
     priceExVat: 11994.0,
     image:
-      "https://cdn11.bigcommerce.com/s-ew2v2d3jn1/images/stencil/500x659/products/788/4468/leica-icon-cc170-controller__40664.1723046791.jpg?c=1",
+      "https://cdn11.bigcommerce.com/s-ew2v2d3jn1/images/stencil/500x659/products/788/4467/leica-icon-icg70-antenna__78227.1723046790.jpg?c=1",
   },
   {
     id: 2,
@@ -161,15 +161,17 @@ const Clearance = () => {
           } gap-6`}
         >
           {fakeProducts.map((product) => (
-            <div 
-              key={product.id} 
+            <div
+              key={product.id}
               className={`${
-                viewMode === "list" 
-                  ? "flex gap-6 border p-4"
-                  : "p-4"
+                viewMode === "list" ? "flex gap-6 p-4" : "p-4"
               } relative`}
             >
-              <div className="absolute top-4 right-4 bg-[#e62245] text-white px-2 py-[1px] font-semibold rounded-sm text-sm">
+              <div
+                className={`absolute ${
+                  viewMode === "list" ? "top-4 left-60" : "top-4 right-4"
+                } bg-[#e62245] text-white px-2 py-[1px] font-semibold rounded-sm text-sm`}
+              >
                 SALE
               </div>
               <div className={viewMode === "list" ? "w-1/4" : ""}>
@@ -179,36 +181,72 @@ const Clearance = () => {
                   className="w-full h-52 object-contain"
                 />
               </div>
-              <div className={`${
-                viewMode === "list" 
-                  ? "w-3/4 flex flex-col justify-between"
-                  : "space-y-2 border-t pt-2"
-              }`}>
+              <div
+                className={`${
+                  viewMode === "list"
+                    ? "w-3/4 flex flex-col justify-between"
+                    : "space-y-2 border-t pt-2"
+                }`}
+              >
                 <div>
-                  <div className="text-sm text-gray-600">
+                  <div className="text-xs text-gray-600">
                     {product.brand} | Sku: {product.sku}
                   </div>
-                  <h3 className="font-medium hover:text-[#e62245] cursor-pointer text-lg">
+                  <h3
+                    className={`${
+                      viewMode === "list"
+                        ? "text-2xl text-[#545454]"
+                        : "text-[#54546f] text-lg"
+                    } font-medium hover:text-[#e62245] cursor-pointer`}
+                  >
                     {product.name}
                   </h3>
                   {viewMode === "list" && (
-                    <p className="text-sm text-gray-600 mt-2">
-                      Ex Demo - As New GNSS Antenna iCON iCG70 UHF Performance AntennaGEB334 Li-Ion Battery x2GNSS Rover Container Controller iCON CC170 Field ControllerGEB260 Li-Ion BatteryGAT25 AntennaGEV288 Mains ChargerGHT63 Pole ClampGHT81 Holder Plate Accessories GKL341...
+                    <p className="text-sm text-[#2f2f2b] mt-2">
+                      Ex Demo - As New GNSS Antenna iCON iCG70 UHF Performance
+                      AntennaGEB334 Li-Ion Battery x2GNSS Rover Container
+                      Controller iCON CC170 Field ControllerGEB260 Li-Ion
+                      BatteryGAT25 AntennaGEV288 Mains ChargerGHT63 Pole
+                      ClampGHT81 Holder Plate Accessories GKL341...
                     </p>
                   )}
                 </div>
                 <div className="mt-auto">
                   <div className="flex flex-col">
-                    <div className="text-gray-500">Was: £16,661.67</div>
+                    {viewMode === "list" && (
+                      <div className="text-[#2f2f2b] text-lg font-semibold">
+                        Was: £16,661.67
+                      </div>
+                    )}
                     <div className="flex items-center gap-1">
-                      <p className="font-bold text-lg">£{product.price.toFixed(2)}</p>
-                      <p className="text-sm text-gray-500">(Ex. VAT)</p>
+                      <p className="font-bold text-lg">
+                        {viewMode === "list" && "Price"} £
+                        {product.price.toFixed(2)}
+                      </p>
+                      <p className="text-sm text-gray-500 underline">
+                        (Ex. VAT)
+                      </p>
                     </div>
-                    <div className="text-sm text-gray-500">
-                      £{product.priceExVat.toFixed(2)} (Inc. VAT)
+                    {viewMode === "list" && (
+                      <div className="text-[#2f2f2b] text-lg mb-1 font-semibold">
+                        Was: £16,661.67
+                      </div>
+                    )}
+                    <div className="flex items-center gap-1 text-sm text-[#b3b3b5]">
+                      {viewMode === "list" && (
+                        <p className="text-[#2f2f2b] text-lg font-semibold">
+                          Price:
+                        </p>
+                      )}{" "}
+                      £{product.priceExVat.toFixed(2)}{" "}
+                      <span className="underline">(Inc. VAT)</span>
                     </div>
                   </div>
-                  <div className="flex gap-4 mt-4">
+                  <div
+                    className={`flex gap-4 mt-4 ${
+                      viewMode === "list" ? "flex-row" : "flex-col"
+                    }`}
+                  >
                     <button className="bg-[#e62245] text-white px-6 py-2 hover:bg-[#d41d3f] transition-colors">
                       ADD TO CART
                     </button>
@@ -218,7 +256,10 @@ const Clearance = () => {
                         id={`compare-${product.id}`}
                         className="accent-[#0075ff]"
                       />
-                      <label htmlFor={`compare-${product.id}`} className="text-sm">
+                      <label
+                        htmlFor={`compare-${product.id}`}
+                        className="text-sm"
+                      >
                         COMPARE
                       </label>
                     </div>
