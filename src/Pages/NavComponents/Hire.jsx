@@ -62,19 +62,9 @@ const Hire = () => {
     console.log("Submitting data:", JSON.stringify(submissionData, null, 2));
 
     try {
-      setFormData({
-        name: "",
-        company: "",
-        email: "",
-        phone: "",
-        existingCustomer: "",
-        equipment: [],
-        hireDate: "",
-        hirePeriod: "",
-        comments: "",
-      });
+      // logic
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   };
 

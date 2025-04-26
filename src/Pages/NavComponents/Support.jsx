@@ -68,17 +68,7 @@ const Support = () => {
     console.log(submissionData);
 
     try {
-      setFormData({
-        name: "",
-        company: "",
-        email: "",
-        phone: "",
-        equipment: "",
-        model: "",
-        supportIssues: [],
-        details: "",
-        files: [],
-      });
+      // logic here 
     } catch (error) {
       console.error(error);
     }

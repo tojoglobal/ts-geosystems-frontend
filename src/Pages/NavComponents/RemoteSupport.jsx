@@ -3,6 +3,7 @@ import { useState } from "react";
 const RemoteSupport = () => {
   const [sessionCode, setSessionCode] = useState("");
   const [isFocused, setIsFocused] = useState(false);
+  // console.log(sessionCode);
 
   return (
     <div className="max-w-md min-h-[70vh] mx-auto mt-20 p-4">

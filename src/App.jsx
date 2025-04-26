@@ -11,7 +11,7 @@ import "slick-carousel/slick/slick-theme.css";
 import { AppProvider } from "./context/AppContext";
 import Footer from "./Footer/Footer";
 import MainHome from "./Pages/HomePage/MainHome";
-import Erro from "./Err/Erro";
+import Error from "./Err/Error";
 import AdminLogin from "./auth/admin/AdminLogin";
 import Dashboard from "./Dashboard/Dashboard";
 import ProtectedRoute from "./utils/ProtectedRoute";
@@ -97,7 +97,7 @@ const AppLayout = () => {
           <Route path="add-brands" element={<Brands />} />
         </Route>
 
-        <Route path="*" element={<Erro />} />
+        <Route path="*" element={<Error />} />
       </Routes>
       {!hideNavFooter && <Footer />}
     </>
