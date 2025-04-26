@@ -32,14 +32,14 @@ import ViewProfile from "./Dashboard/Profile/ViewProfile";
 import UpdateProfile from "./Dashboard/Profile/UpdateProfile";
 import TradeIn from "./Pages/NavComponents/TradeIn";
 import ProductAddForm from "./Dashboard/Products/AddProducts";
-<<<<<<< HEAD
 import RemoteSupport from "./Pages/NavComponents/RemoteSupport";
 import UserManuals from "./Pages/NavComponents/UserManuals";
 import G2Blog from "./Pages/NavComponents/G2Blog";
 import Clearance from "./Pages/NavComponents/Clearance";
-=======
 import Categorys from "./Dashboard/Categorys/Categorys";
->>>>>>> sw
+import Brands from "./Dashboard/Brands/Brands";
+import UpdateProductForm from "./Dashboard/Products/EditProducts";
+import ProductTable from "./Dashboard/Products/ProductsPage";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -85,8 +85,11 @@ const AppLayout = () => {
           <Route index element={<Dashboard />} />
           <Route path="viewprofile" element={<ViewProfile />} />
           <Route path="update-profile" element={<UpdateProfile />} />
+          <Route path="product" element={<ProductTable />} />
           <Route path="add-product" element={<ProductAddForm />} />
+          <Route path="update-product/:id" element={<UpdateProductForm />} />
           <Route path="add-categorys" element={<Categorys />} />
+          <Route path="add-brands" element={<Brands />} />
         </Route>
 
         <Route path="*" element={<Erro />} />

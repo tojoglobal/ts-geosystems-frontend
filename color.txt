@@ -9,6 +9,8 @@ dashbord input filed style :
 inputFiled: input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500
 
 =======================================
+btn styel : w-full bg-teal-600 text-white py-2 px-4 rounded-md hover:bg-teal-700 transition
+=======================================
 when use the Controller then use this fromate stle 
 
 <Controller

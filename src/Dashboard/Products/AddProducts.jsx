@@ -153,6 +153,11 @@ const ProductAddForm = () => {
 
           {/* Third Column */}
           <div className="col-span-1 space-y-4">
+            <input
+              {...register("price", { required: true })}
+              placeholder="price"
+              className="w-full input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
+            />
             <Controller
               name="productOptions"
               control={control}

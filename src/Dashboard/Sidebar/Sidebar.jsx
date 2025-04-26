@@ -13,6 +13,7 @@ import {
   FileText,
   Users,
   Layers,
+  Drum,
 } from "lucide-react";
 import SidebarProfileDropdown from "./SidebarProfileDropdown/SidebarProfileDropdown";
 import logo from "/public/TS-WEB-LOGO.png";
@@ -30,9 +31,19 @@ const menuItems = [
     to: "/dashboard/add-product",
   },
   {
+    label: "update Product",
+    icon: <MdOutlineShoppingCart size={20} />,
+    to: "/dashboard/update-product",
+  },
+  {
     label: "Add categorys",
     icon: <MdCategory size={20} />,
     to: "/dashboard/add-categorys",
+  },
+  {
+    label: "Add Brands",
+    icon: <Drum size={20} />,
+    to: "/dashboard/add-brands",
   },
   {
     label: "Email",
