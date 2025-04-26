@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { BsGrid3X3GapFill } from "react-icons/bs";
 import { FaThList } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
+import { useState } from "react";
 
 const demoProducts = [
   {
@@ -41,8 +42,10 @@ const demoProducts = [
 ];
 
 const Compare = () => {
-//   const { ids } = useParams();
-//   const idArray = ids.split("/").map((id) => Number(id));
+  //   const { ids } = useParams();
+  //   const idArray = ids.split("/").map((id) => Number(id));
+
+  const [viewMode, setViewMode] = useState("grid"); // 'grid' or 'list'
 
   return (
     <div className="p-3">
@@ -58,17 +61,39 @@ const Compare = () => {
           Comparing {demoProducts.length} Products
         </h1>
         <div className="flex items-center gap-2">
-          <button className="p-3 bg-[#e62245] text-white rounded-sm">
+          <button
+            className={`p-3 rounded-sm ${
+              viewMode === "grid"
+                ? "bg-[#e62245] text-white"
+                : "border text-black"
+            }`}
+            onClick={() => setViewMode("grid")}
+          >
             <BsGrid3X3GapFill size={20} />
           </button>
-          <button className="p-3 border text-black">
+          <button
+            className={`p-3 rounded-sm ${
+              viewMode === "list"
+                ? "bg-[#e62245] text-white"
+                : "border text-black"
+            }`}
+            onClick={() => setViewMode("list")}
+          >
             <FaThList size={20} />
           </button>
         </div>
       </div>
-      <div className="grid grid-cols-4 gap-6">
+
+      <div
+        className={`${
+          viewMode === "grid" ? "grid grid-cols-4 gap-6" : "flex flex-col gap-6"
+        }`}
+      >
         {demoProducts.map((product) => (
-          <div key={product.id} className="relative">
+          <div
+            key={product.id}
+            className={`relative ${viewMode === "list" ? "w-1/4" : ""}`}
+          >
             <button className="absolute right-0 top-0 p-2 text-gray-500 hover:text-[#e62245]">
               <IoClose size={24} />
             </button>
