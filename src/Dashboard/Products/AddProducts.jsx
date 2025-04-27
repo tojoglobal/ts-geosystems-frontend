@@ -9,56 +9,132 @@ import Button from "../Button/Button";
 const ProductAddForm = () => {
   const axiosPublicUrl = useAxiospublic();
   const [images, setImages] = useState([]);
+  const [Categories, setCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
+  const [brands, setBrands] = useState([]);
 
-  const {
-    register,
-    handleSubmit,
-    control,
-    setValue,
-    watch,
-    formState: { errors },
-  } = useForm();
+  const [productOptions, setProductOptions] = useState([]);
+  const [softwareOptions, setSoftwareOptions] = useState([]);
 
-  const watchCategory = watch("category");
+  const { register, handleSubmit, setValue, control, watch } = useForm({
+    defaultValues: {
+      priceShowHide: 0,
+      productOptionShowHide: 0,
+    },
+  });
 
+  const watchCategoryRaw = watch("category");
+  const watchCategory = watchCategoryRaw ? JSON.parse(watchCategoryRaw) : null;
+
+  // Fetch All Products and Softwar
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [productsRes, softwarRes] = await Promise.all([
+          axiosPublicUrl.get("/api/products"),
+          axiosPublicUrl.get("/api/softwar"),
+        ]);
+
+        const mappedProducts =
+          productsRes.data?.products?.map((prod) => ({
+            value: prod.slug,
+            label: prod.product_name,
+          })) || [];
+
+        const mappedSoftware =
+          softwarRes.data?.map((soft) => ({
+            value: soft.slug,
+            label: soft.softwar_name,
+          })) || [];
+
+        setProductOptions(mappedProducts);
+        setSoftwareOptions(mappedSoftware);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchData();
+  }, []);
+
+  // fetch the brands
+  useEffect(() => {
+    const fetchBrands = async () => {
+      try {
+        const res = await axiosPublicUrl.get("/api/brands");
+        setBrands(res.data);
+      } catch (error) {
+        console.error("Error fetching brands:", error);
+      }
+    };
+    fetchBrands();
+  }, []);
+
+  // fetch categories and subcategories
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await axiosPublicUrl.get("/api/category");
+        setCategories(response.data?.categories);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+    fetchCategories();
+  }, []);
+
+  // Fetch Subcategories based on selected category
   useEffect(() => {
     if (watchCategory) {
-      // Fetch subcategories based on selected category
-      setSubCategories([
-        { value: "camera", label: "Camera" },
-        { value: "lens", label: "Lens" },
-      ]);
+      const fetchSubCategories = async () => {
+        try {
+          const response = await axiosPublicUrl.get("/api/subcategory");
+          setSubCategories(response.data?.subcategories);
+        } catch (error) {
+          console.error("Error fetching subcategories:", error);
+        }
+      };
+      fetchSubCategories();
     }
   }, [watchCategory]);
 
+  // Dropzone for image upload
   const onDrop = (acceptedFiles) => {
     const newFiles = acceptedFiles.slice(0, 20);
     setImages((prev) => [...prev, ...newFiles]);
   };
 
+  // Remove image from preview
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
     multiple: true,
     maxFiles: 20,
   });
 
+  // onChange handler for file input
   const onSubmit = async (data) => {
-    console.log({ ...data, images });
+    console.log(data);
+
+    const parsedData = {
+      ...data,
+      category: data.category ? JSON.parse(data.category) : null,
+      subCategory: data.subCategory ? JSON.parse(data.subCategory) : null,
+    };
+
+    console.log({ ...parsedData, images });
 
     try {
       const formData = new FormData();
 
-      // Append images (support multiple files)
       images.forEach((file) => {
         formData.append("images", file);
       });
 
-      // Append other fields
-      Object.entries(data).forEach(([key, value]) => {
+      Object.entries(parsedData).forEach(([key, value]) => {
         formData.append(
           key,
-          Array.isArray(value) ? JSON.stringify(value) : value
+          typeof value === "object" && value !== null
+            ? JSON.stringify(value)
+            : value
         );
       });
 
@@ -115,7 +191,19 @@ const ProductAddForm = () => {
               placeholder="Product Name"
               className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
             />
-
+            <select
+              {...register("brandName", { required: true })}
+              className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
+            >
+              <option value="" className="hover:bg-amber-200">
+                Select Brand
+              </option>
+              {brands.map((br) => (
+                <option key={br.id} value={br.slug}>
+                  {br.brands_name}
+                </option>
+              ))}
+            </select>
             <select
               {...register("category", { required: true })}
               className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
@@ -123,8 +211,14 @@ const ProductAddForm = () => {
               <option value="" className="hover:bg-amber-200">
                 Select Category
               </option>
-              <option value="electronics">Electronics</option>
-              <option value="cameras">Cameras</option>
+              {Categories.map((cat) => (
+                <option
+                  key={cat.id}
+                  value={JSON.stringify({ id: cat.id, cat: cat.slug_name })}
+                >
+                  {cat.category_name}
+                </option>
+              ))}
             </select>
 
             <select
@@ -132,11 +226,16 @@ const ProductAddForm = () => {
               className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
             >
               <option value="">Select Sub Category</option>
-              {subCategories.map((sub) => (
-                <option key={sub.value} value={sub.value}>
-                  {sub.label}
-                </option>
-              ))}
+              {subCategories
+                .filter((sub) => sub.main_category_id === watchCategory?.id)
+                .map((sub) => (
+                  <option
+                    key={sub.id}
+                    value={JSON.stringify({ id: sub.id, slug: sub.slug })}
+                  >
+                    {sub.name}
+                  </option>
+                ))}
             </select>
 
             <input
@@ -158,6 +257,23 @@ const ProductAddForm = () => {
               placeholder="price"
               className="w-full input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
             />
+
+            {/* NEW FIELD: Price Show/Hide */}
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                // {...register("priceShowHide")}
+                checked={watch("priceShowHide") === 1}
+                onChange={(e) =>
+                  setValue("priceShowHide", e.target.checked ? 1 : 0)
+                }
+                // value="1"
+                className="w-5 h-5 accent-teal-600"
+              />
+              <label>Hide Price</label>
+            </div>
+
+            {/* product option */}
             <Controller
               name="productOptions"
               control={control}
@@ -165,10 +281,8 @@ const ProductAddForm = () => {
                 <Select
                   {...field}
                   isMulti
-                  options={[
-                    { value: "wifi", label: "WiFi" },
-                    { value: "bluetooth", label: "Bluetooth" },
-                  ]}
+                  isSearchable={true}
+                  options={productOptions}
                   placeholder="Product Options"
                   className="react-select-container"
                   classNamePrefix="react-select"
@@ -218,7 +332,21 @@ const ProductAddForm = () => {
                 />
               )}
             />
-
+            {/* NEW FIELD: Product Option Show/Hide */}
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                // {...register("productOptionShowHide")}
+                // value="1"
+                checked={watch("productOptionShowHide") === 1}
+                onChange={(e) =>
+                  setValue("productOptionShowHide", e.target.checked ? 1 : 0)
+                }
+                className="w-5 h-5 accent-teal-600"
+              />
+              <label>Hide Product Options</label>
+            </div>
+            {/* softaware option */}
             <Controller
               name="softwareOptions"
               control={control}
@@ -226,10 +354,8 @@ const ProductAddForm = () => {
                 <Select
                   {...field}
                   isMulti
-                  options={[
-                    { value: "photoshop", label: "Photoshop" },
-                    { value: "lightroom", label: "Lightroom" },
-                  ]}
+                  isSearchable={true}
+                  options={softwareOptions}
                   placeholder="Software Options"
                   className="react-select-container"
                   classNamePrefix="react-select"
@@ -278,12 +404,6 @@ const ProductAddForm = () => {
                   }}
                 />
               )}
-            />
-
-            <input
-              {...register("brandName", { required: true })}
-              placeholder="Brand Name"
-              className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
             />
 
             <select

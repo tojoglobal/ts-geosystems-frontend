@@ -14,12 +14,14 @@ const HeaderContainer = () => {
       <div className="flex justify-between items-center py-5">
         {/* ts-geosystems logo */}
         <div>
-          <img
-            class=" w-full"
-            src="https://cdn11.bigcommerce.com/s-ew2v2d3jn1/images/stencil/250x64/g2-survey-logo_1611121872__30054.original.png"
-            alt="G2 Survey"
-            title="G2 Survey"
-          ></img>
+          <Link to="/">
+            <img
+              class=" w-full"
+              src="https://cdn11.bigcommerce.com/s-ew2v2d3jn1/images/stencil/250x64/g2-survey-logo_1611121872__30054.original.png"
+              alt="G2 Survey"
+              title="G2 Survey"
+            />
+          </Link>
         </div>
 
         <div className="flex items-center gap-4">

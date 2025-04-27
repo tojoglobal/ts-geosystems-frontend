@@ -9,55 +9,52 @@ const generateSlug = (text) =>
     .replace(/\s+/g, "-")
     .replace(/[^a-z0-9-]/g, "");
 
-const Brands = () => {
+const Softwar = () => {
   const axiosPublicUrl = useAxiospublic();
   const [imagePreview, setImagePreview] = useState(null);
-  const [brands, setBrands] = useState([]);
+  const [softwar, setSoftwar] = useState([]);
   const [editingBrand, setEditingBrand] = useState(null);
 
   const { register, handleSubmit, watch, reset, setValue } = useForm();
 
-  const watchBrandName = watch("brandName", "");
+  const watchSoftwarName = watch("softwarName", "");
 
-  const fetchBrands = async () => {
+  const fetchSoftwar = async () => {
     try {
-      const res = await axiosPublicUrl.get("/api/brands");
-      setBrands(res.data);
+      const res = await axiosPublicUrl.get("/api/softwar");
+      setSoftwar(res.data);
     } catch (error) {
-      console.error("Error fetching brands:", error);
+      console.error("Error fetching softwar:", error);
     }
   };
 
   useEffect(() => {
-    fetchBrands();
+    fetchSoftwar();
   }, []);
 
   const onSubmit = async (data) => {
-    console.log(data);
+    // console.log(data);
 
     try {
       const formData = new FormData();
-      formData.append("brands_name", data.brandName);
-      formData.append("slug", generateSlug(data.brandName));
-      formData.append("is_populer", data.is_populer ? 1 : 0);
-      formData.append("home_page_show", data.home_page_show ? 1 : 0);
-      formData.append("status", data.status ? 1 : 0);
-
+      formData.append("softwar_name", data.softwarName);
+      formData.append("slug", generateSlug(data.softwarName));
+      formData.append("softwarlink", data.softwarlink);
       if (data.photo && data.photo[0]) {
         formData.append("photo", data.photo[0]);
       }
 
       if (editingBrand) {
-        await axiosPublicUrl.put(`/api/brands/${editingBrand.id}`, formData, {
+        await axiosPublicUrl.put(`/api/softwar/${editingBrand.id}`, formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
       } else {
-        await axiosPublicUrl.post("/api/brands", formData, {
+        await axiosPublicUrl.post("/api/softwar", formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
       }
 
-      fetchBrands();
+      fetchSoftwar();
       reset();
       setEditingBrand(null);
       setImagePreview(null);
@@ -68,18 +65,16 @@ const Brands = () => {
 
   const handleEdit = (brand) => {
     setEditingBrand(brand);
-    setValue("brandName", brand.brands_name);
-    setValue("is_populer", brand.is_populer === 1);
-    setValue("home_page_show", brand.home_page_show === 1);
-    setValue("status", brand.status === 1);
+    setValue("softwarName", brand.softwar_name);
+    setValue("softwarlink", brand.softwarlink);
     setImagePreview(brand.photo);
   };
 
   const handleDelete = async (id) => {
     if (confirm("Are you sure you want to delete this brand?")) {
       try {
-        await axiosPublicUrl.delete(`/api/brands/${id}`);
-        fetchBrands();
+        await axiosPublicUrl.delete(`/api/softwar/${id}`);
+        fetchSoftwar();
       } catch (error) {
         console.error("Error deleting brand:", error);
       }
@@ -100,21 +95,23 @@ const Brands = () => {
     return () => subscription.unsubscribe();
   }, [watch]);
 
+  //   console.log(softwar);
+
   return (
     <div className="min-h-screen bg-[#f1f4ff] dark:bg-gray-900 p-4 text-gray-900 dark:text-gray-100">
       <div className="max-w-4xl mx-auto">
-        <h2 className="text-2xl font-bold mb-6">Add a Brand</h2>
+        <h2 className="text-2xl font-bold mb-6">Add a Software</h2>
         <form
           className="p-6 bg-white dark:bg-gray-800 rounded shadow-md"
           onSubmit={handleSubmit(onSubmit)}
         >
           <div className="mb-4">
             <label className="block text-sm font-semibold mb-1">
-              Brand Name
+              Softwar Name
             </label>
             <input
               type="text"
-              {...register("brandName", { required: true })}
+              {...register("softwarName", { required: true })}
               className="w-full input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
               placeholder="Enter brand name"
             />
@@ -124,7 +121,7 @@ const Brands = () => {
             <label className="block text-sm font-semibold mb-1">Slug</label>
             <input
               type="text"
-              value={generateSlug(watchBrandName)}
+              value={generateSlug(watchSoftwarName)}
               readOnly
               className="w-full input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
             />
@@ -132,7 +129,7 @@ const Brands = () => {
 
           <div className="mb-4">
             <label className="block text-sm font-semibold mb-1">
-              Brand Logo
+              Softwar Logo
             </label>
             <input
               type="file"
@@ -140,7 +137,6 @@ const Brands = () => {
               {...register("photo")}
               className="w-full input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
             />
-
             {imagePreview && (
               <img
                 src={
@@ -154,30 +150,25 @@ const Brands = () => {
                 className="w-4/12 h-24 object-cover mt-2 rounded"
               />
             )}
-          </div>
 
-          <div className="flex flex-wrap gap-4 mb-4">
-            <label className="flex items-center gap-2">
-              <input type="checkbox" {...register("is_populer")} />
-              Popular Brand
-            </label>
-
-            <label className="flex items-center gap-2">
-              <input type="checkbox" {...register("home_page_show")} />
-              Show on Home Page
-            </label>
-
-            <label className="flex items-center gap-2">
-              <input type="checkbox" {...register("status")} defaultChecked />
-              Active
-            </label>
+            <div className="mt-4">
+              <label className="block text-sm font-semibold mb-1">
+                Softwar Link
+              </label>
+              <input
+                type="text"
+                {...register("softwarlink", { required: true })}
+                className="w-full input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
+                placeholder="Enter Softwar Link"
+              />
+            </div>
           </div>
 
           <button
             type="submit"
             className="w-full bg-teal-600 text-white py-2 px-4 rounded-md hover:bg-teal-700 transition"
           >
-            {editingBrand ? "Update Brand" : "Add Brand"}
+            {editingBrand ? "Update Software" : "Add Software"}
           </button>
         </form>
 
@@ -188,34 +179,32 @@ const Brands = () => {
               <tr className="bg-gray-100 dark:bg-gray-700">
                 <th className="text-left p-3">Brand Name</th>
                 <th className="text-left p-3">Logo</th>
-                <th className="text-center p-3">Home Page</th>
+                <th className="text-center p-3">softwarlink</th>
                 <th className="text-center p-3">Actions</th>
               </tr>
             </thead>
             <tbody>
-              {Array.isArray(brands) && brands.length > 0 ? (
-                brands.map((brand) => (
+              {Array.isArray(softwar) && softwar.length > 0 ? (
+                softwar.map((brand) => (
                   <tr key={brand.id} className="border-b dark:border-gray-700">
-                    <td className="p-3">{brand.brands_name}</td>
+                    <td className="p-3">{brand.softwar_name}</td>
                     <td className="p-3">
                       <img
                         src={`${import.meta.env.VITE_OPEN_APIURL}/uploads/${
                           brand.photo
                         }`}
-                        alt={brand.brands_name}
+                        alt={brand.softwar_name}
                         className="w-10/12 h-12 object-cover rounded"
                       />
                     </td>
                     <td className="text-center p-3">
-                      {brand.home_page_show === 1 ? (
-                        <span className="text-green-500 font-semibold">
-                          Shown
-                        </span>
-                      ) : (
-                        <span className="text-red-500 font-semibold">
-                          Hidden
-                        </span>
-                      )}
+                      <a
+                        href={brand.softwarlink}
+                        target="_blank"
+                        className="                        text-blue-600 hover:text-blue-800"
+                      >
+                        {brand.softwar_name.slice(0, 20)}
+                      </a>
                     </td>
                     <td className="text-center p-3 flex justify-center gap-4">
                       <button
@@ -236,7 +225,7 @@ const Brands = () => {
               ) : (
                 <tr>
                   <td colSpan="4" className="text-center p-4">
-                    No brands found.
+                    No softwar found.
                   </td>
                 </tr>
               )}
@@ -248,4 +237,4 @@ const Brands = () => {
   );
 };
 
-export default Brands;
+export default Softwar;
