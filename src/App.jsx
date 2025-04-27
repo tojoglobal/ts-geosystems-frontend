@@ -43,6 +43,7 @@ import Brands from "./Dashboard/Brands/Brands";
 import UpdateProductForm from "./Dashboard/Products/EditProducts";
 import ProductTable from "./Dashboard/Products/ProductsPage";
 import Cart from "./Pages/NavComponents/Cart";
+import Checkout from "./Pages/NavComponents/Checkout";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -59,6 +60,7 @@ const AppLayout = () => {
         <Route path="/create_account" element={<Register />} />
         <Route path="/cc" element={<CertificateTracking />} />
         <Route path="/remote-support" element={<RemoteSupport />} />
+        <Route path="/checkout" element={<Checkout />} />
 
         <Route element={<ProductLayout />}>
           <Route path="/products/:id" element={<ProductDetails />} />
