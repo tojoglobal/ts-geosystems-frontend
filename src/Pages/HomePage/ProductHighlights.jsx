@@ -219,7 +219,6 @@ const ProductHighlights = () => {
             </div>
           ))}
         </div>
-
         {/* Custom Arrows */}
         <div className="flex gap-2 pr-4">
           <div
@@ -242,7 +241,6 @@ const ProductHighlights = () => {
           </div>
         </div>
       </div>
-
       {/* Swiper */}
       <div className="mt-4">
         <Swiper
@@ -279,7 +277,7 @@ const ProductHighlights = () => {
             <SwiperSlide key={idx}>
               <div className="relative flex flex-col items-center p-4 rounded-md shadow-sm bg-white">
                 {activeTab !== "featured" && (
-                  <p className="absolute top-2 right-2 px-2 py-[2px] rounded-md text-white bg-[#e62245]">
+                  <p className="absolute top-2 right-2 px-2 py-[2px] rounded-md text-white bg-[#e62245] z-50">
                     SALE
                   </p>
                 )}

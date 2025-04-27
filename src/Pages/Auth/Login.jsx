@@ -1,7 +1,19 @@
+import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { FaFacebook, FaGoogle, FaApple } from "react-icons/fa";
 
 const Login = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = (data) => {
+    console.log(data);
+    // Handle form submission
+  };
+
   const handleFacebookLogin = () => {
     // connect
   };
@@ -19,33 +31,62 @@ const Login = () => {
       <div className="w-full container mx-auto flex items-stretch text-black rounded-lg overflow-hidden">
         <div className="w-1/2 p-8">
           <h2 className="text-2xl mb-6">Login</h2>
-          <div className="mb-4">
-            <label className="block text-sm mb-1">Email Address:</label>
-            <input
-              type="email"
-              className="w-full px-4 py-2 border border-gray-300 rounded"
-              placeholder="Enter your email"
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-sm mb-1">Password:</label>
-            <input
-              type="password"
-              className="w-full px-4 py-2 border border-gray-300 rounded"
-              placeholder="Enter your password"
-            />
-          </div>
-          <div className="flex gap-2 mb-4">
-            <button className="bg-red-600 text-white px-6 py-2 rounded hover:bg-red-700">
-              LOGIN
-            </button>
-            <Link
-              to="login.php?action=reset_password"
-              className="text-sm text-red-600 underline"
-            >
-              Forgot your password?
-            </Link>
-          </div>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="mb-4">
+              <label className="block text-sm mb-1">Email Address:</label>
+              <input
+                type="email"
+                className="w-full px-4 py-2 border border-gray-300 rounded"
+                placeholder="Enter your email"
+                {...register("email", {
+                  required: "Email is required",
+                  pattern: {
+                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                    message: "Invalid email address",
+                  },
+                })}
+              />
+              {errors.email && (
+                <p className="text-red-500 text-xs mt-1">
+                  {errors.email.message}
+                </p>
+              )}
+            </div>
+            <div className="mb-4">
+              <label className="block text-sm mb-1">Password:</label>
+              <input
+                type="password"
+                className="w-full px-4 py-2 border border-gray-300 rounded"
+                placeholder="Enter your password"
+                {...register("password", {
+                  required: "Password is required",
+                  minLength: {
+                    value: 6,
+                    message: "Password must be at least 6 characters",
+                  },
+                })}
+              />
+              {errors.password && (
+                <p className="text-red-500 text-xs mt-1">
+                  {errors.password.message}
+                </p>
+              )}
+            </div>
+            <div className="flex gap-2 mb-4">
+              <button
+                type="submit"
+                className="bg-red-600 text-white px-6 py-2 rounded hover:bg-red-700"
+              >
+                LOGIN
+              </button>
+              <Link
+                to="login.php?action=reset_password"
+                className="text-sm text-red-600 underline"
+              >
+                Forgot your password?
+              </Link>
+            </div>
+          </form>
           <div className="mb-6">
             <div className="flex items-center mb-4">
               <div className="flex-grow border-t border-gray-300"></div>

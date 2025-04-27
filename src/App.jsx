@@ -42,6 +42,7 @@ import UsedEquipment from "./Pages/NavComponents/UsedEquipment";
 import Brands from "./Dashboard/Brands/Brands";
 import UpdateProductForm from "./Dashboard/Products/EditProducts";
 import ProductTable from "./Dashboard/Products/ProductsPage";
+import Cart from "./Pages/NavComponents/Cart";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -74,6 +75,7 @@ const AppLayout = () => {
           <Route path="/about-us" element={<AboutUs />} />
           <Route path="/contact-us" element={<ContactUs />} />
           <Route path="/user-manuals" element={<UserManuals />} />
+          <Route path="/cart" element={<Cart />} />
         </Route>
 
         {/* Admin Routes */}
