@@ -1,81 +1,92 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 const UserManuals = () => {
-  const manuals = [
-    {
-      id: 1,
-      name: 'Leica FlexLine TS07 5" R500 Manual Total Station',
-      image: "https://ts-geosystems.com.bd/assets/images/JMqcf5wY.png",
-      downloadLink: "#",
-    },
-    {
-      id: 2,
-      name: 'Leica FlexLine TS07 1" R500 Manual Total Station',
-      image: "https://ts-geosystems.com.bd/assets/images/JMqcf5wY.png",
-      downloadLink: "#",
-    },
-    {
-      id: 3,
-      name: 'Leica FlexLine TS03 5" R500 Manual Total Station',
-      image: "https://ts-geosystems.com.bd/assets/images/JMqcf5wY.png",
-      downloadLink: "#",
-    },
-    {
-      id: 4,
-      name: 'Leica FlexLine TS10 5" R500 Manual Total Station',
-      image: "https://ts-geosystems.com.bd/assets/images/JMqcf5wY.png",
-      downloadLink: "#",
-    },
-    {
-      id: 5,
-      name: 'Leica FlexLine TS07 5" R500 Manual Total Station',
-      image: "https://ts-geosystems.com.bd/assets/images/JMqcf5wY.png",
-      downloadLink: "#",
-    },
-    {
-      id: 6,
-      name: 'Leica FlexLine TS07 1" R500 Manual Total Station',
-      image: "https://ts-geosystems.com.bd/assets/images/JMqcf5wY.png",
-      downloadLink: "#",
-    },
-    {
-      id: 7,
-      name: 'Leica FlexLine TS03 5" R500 Manual Total Station',
-      image: "https://ts-geosystems.com.bd/assets/images/JMqcf5wY.png",
-      downloadLink: "#",
-    },
-    {
-      id: 8,
-      name: 'Leica FlexLine TS10 5" R500 Manual Total Station',
-      image: "https://ts-geosystems.com.bd/assets/images/JMqcf5wY.png",
-      downloadLink: "#",
-    },
-    {
-      id: 9,
-      name: 'Leica FlexLine TS07 5" R500 Manual Total Station',
-      image: "https://ts-geosystems.com.bd/assets/images/JMqcf5wY.png",
-      downloadLink: "#",
-    },
-    {
-      id: 10,
-      name: 'Leica FlexLine TS07 1" R500 Manual Total Station',
-      image: "https://ts-geosystems.com.bd/assets/images/JMqcf5wY.png",
-      downloadLink: "#",
-    },
-    {
-      id: 11,
-      name: 'Leica FlexLine TS03 5" R500 Manual Total Station',
-      image: "https://ts-geosystems.com.bd/assets/images/JMqcf5wY.png",
-      downloadLink: "#",
-    },
-    {
-      id: 12,
-      name: 'Leica FlexLine TS10 5" R500 Manual Total Station',
-      image: "https://ts-geosystems.com.bd/assets/images/JMqcf5wY.png",
-      downloadLink: "#",
-    },
-  ];
+  const [manuals, setManuals] = useState([]);
+
+  useEffect(() => {
+    // Simulate fetching manuals from an API
+    const fetchManuals = async () => {
+      // This would be replaced by an actual API call later
+      const data = [
+        {
+          id: 1,
+          name: 'Leica FlexLine TS07 5" R500 Manual Total Station',
+          image: "https://ts-geosystems.com.bd/assets/images/JMqcf5wY.png",
+          downloadLink: "#",
+        },
+        {
+          id: 2,
+          name: 'Leica FlexLine TS07 1" R500 Manual Total Station',
+          image: "https://ts-geosystems.com.bd/assets/images/JMqcf5wY.png",
+          downloadLink: "#",
+        },
+        {
+          id: 3,
+          name: 'Leica FlexLine TS03 5" R500 Manual Total Station',
+          image: "https://ts-geosystems.com.bd/assets/images/JMqcf5wY.png",
+          downloadLink: "#",
+        },
+        {
+          id: 4,
+          name: 'Leica FlexLine TS10 5" R500 Manual Total Station',
+          image: "https://ts-geosystems.com.bd/assets/images/JMqcf5wY.png",
+          downloadLink: "#",
+        },
+        {
+          id: 5,
+          name: 'Leica FlexLine TS07 5" R500 Manual Total Station',
+          image: "https://ts-geosystems.com.bd/assets/images/JMqcf5wY.png",
+          downloadLink: "#",
+        },
+        {
+          id: 6,
+          name: 'Leica FlexLine TS07 1" R500 Manual Total Station',
+          image: "https://ts-geosystems.com.bd/assets/images/JMqcf5wY.png",
+          downloadLink: "#",
+        },
+        {
+          id: 7,
+          name: 'Leica FlexLine TS03 5" R500 Manual Total Station',
+          image: "https://ts-geosystems.com.bd/assets/images/JMqcf5wY.png",
+          downloadLink: "#",
+        },
+        {
+          id: 8,
+          name: 'Leica FlexLine TS10 5" R500 Manual Total Station',
+          image: "https://ts-geosystems.com.bd/assets/images/JMqcf5wY.png",
+          downloadLink: "#",
+        },
+        {
+          id: 9,
+          name: 'Leica FlexLine TS07 5" R500 Manual Total Station',
+          image: "https://ts-geosystems.com.bd/assets/images/JMqcf5wY.png",
+          downloadLink: "#",
+        },
+        {
+          id: 10,
+          name: 'Leica FlexLine TS07 1" R500 Manual Total Station',
+          image: "https://ts-geosystems.com.bd/assets/images/JMqcf5wY.png",
+          downloadLink: "#",
+        },
+        {
+          id: 11,
+          name: 'Leica FlexLine TS03 5" R500 Manual Total Station',
+          image: "https://ts-geosystems.com.bd/assets/images/JMqcf5wY.png",
+          downloadLink: "#",
+        },
+        {
+          id: 12,
+          name: 'Leica FlexLine TS10 5" R500 Manual Total Station',
+          image: "https://ts-geosystems.com.bd/assets/images/JMqcf5wY.png",
+          downloadLink: "#",
+        },
+      ];
+      setManuals(data);
+    };
+
+    fetchManuals();
+  }, []);
 
   return (
     <div className="p-4">
@@ -90,10 +101,12 @@ const UserManuals = () => {
         <span>/</span>
         <span className="text-[#e62245]">User Manuals</span>
       </div>
+
       <p className="text-[#e62245] mb-6 text-2xl mt-2">User Manuals</p>
       <h1 className="text-[#e62245] font-bold text-xl mb-8">
         G2 Survey 3D Laser Scanner User Manuals
       </h1>
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {manuals.map((guide) => (
           <div
@@ -116,6 +129,7 @@ const UserManuals = () => {
           </div>
         ))}
       </div>
+
       {/* Pagination */}
       <div className="flex justify-between items-center mt-8">
         <div className="flex gap-2">
