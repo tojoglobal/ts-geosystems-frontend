@@ -1,4 +1,4 @@
-name: Deploy to cPanel pulish the github
+name: Deploy to cPanel and publish the GitHub
 
 on:
   push:
@@ -18,6 +18,11 @@ jobs:
 
       - name: Install Dependencies (Legacy Peer Deps)
         run: npm install --legacy-peer-deps
+
+      - name: Create .env file
+        run: |
+          echo "VITE_OPEN_APIURL=${{ secrets.VITE_OPEN_APIURL }}" >> .env
+          echo "VITE_TINY_APIKEY=${{ secrets.VITE_TINY_APIKEY }}" >> .env
 
       - name: Build project
         run: npm run build
