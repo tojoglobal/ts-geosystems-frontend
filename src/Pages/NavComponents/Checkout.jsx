@@ -1,5 +1,31 @@
 import { Link } from "react-router-dom";
+import { useState } from "react";
+
 const Checkout = () => {
+  const [formData, setFormData] = useState({
+    email: "",
+    newsletter: false,
+    shippingAddress: "",
+    billingAddress: "",
+    paymentMethod: "",
+  });
+
+  // Handle form input changes
+  const handleInputChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData({
+      ...formData,
+      [name]: type === "checkbox" ? checked : value,
+    });
+  };
+
+  // Handle form submission
+  const handleSubmit = () => {
+    // Send formData to backend or API
+    console.log("Form Data Submitted: ", formData);
+    // Example: fetch("/api/checkout", { method: "POST", body: JSON.stringify(formData) })
+  };
+
   return (
     <div className="max-w-[1300px] mx-auto py-6 mb-5">
       <div className="grid md:grid-cols-3 gap-6">
@@ -43,15 +69,27 @@ const Checkout = () => {
             <div className="flex w-2/3 gap-4 mb-3">
               <input
                 type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleInputChange}
                 placeholder="you@example.com"
                 className="border p-2 rounded flex-grow"
               />
-              <button className="bg-[#e62245] text-white font-semibold px-4 py-2 rounded">
+              <button
+                onClick={handleSubmit}
+                className="bg-[#e62245] text-white font-semibold px-4 py-2 rounded"
+              >
                 CONTINUE
               </button>
             </div>
             <div className="flex items-center gap-2 mb-2">
-              <input type="checkbox" id="newsletter" />
+              <input
+                type="checkbox"
+                id="newsletter"
+                name="newsletter"
+                checked={formData.newsletter}
+                onChange={handleInputChange}
+              />
               <label htmlFor="newsletter" className="text-sm">
                 Subscribe to our newsletter.
               </label>
@@ -66,14 +104,39 @@ const Checkout = () => {
           <hr className="border-gray-300" />
           <div>
             <h2 className="text-2xl mb-4">Shipping</h2>
+            <textarea
+              name="shippingAddress"
+              value={formData.shippingAddress}
+              onChange={handleInputChange}
+              placeholder="Enter your shipping address"
+              className="border p-2 rounded w-full"
+            />
           </div>
           <hr className="border-gray-300" />
           <div>
             <h2 className="text-2xl mb-4">Billing</h2>
+            <textarea
+              name="billingAddress"
+              value={formData.billingAddress}
+              onChange={handleInputChange}
+              placeholder="Enter your billing address"
+              className="border p-2 rounded w-full"
+            />
           </div>
           <hr className="border-gray-300" />
           <div>
             <h2 className="text-2xl mb-4">Payment</h2>
+            <select
+              name="paymentMethod"
+              value={formData.paymentMethod}
+              onChange={handleInputChange}
+              className="border p-2 rounded w-full"
+            >
+              <option value="">Select Payment Method</option>
+              <option value="paypal">PayPal</option>
+              <option value="credit-card">Credit Card</option>
+              <option value="amazon-pay">Amazon Pay</option>
+            </select>
           </div>
         </div>
         {/* Right side - Order Summary */}

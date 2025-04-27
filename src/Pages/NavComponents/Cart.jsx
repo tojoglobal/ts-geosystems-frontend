@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { TiDeleteOutline } from "react-icons/ti";
+import { RxCross2 } from "react-icons/rx";
+import Swal from "sweetalert2";
 
 const Cart = () => {
   const [cartItems, setCartItems] = useState([
@@ -32,9 +33,26 @@ const Cart = () => {
     );
   };
 
-  // Handle item removal
   const removeItem = (id) => {
-    setCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
+    console.log(id);
+    Swal.fire({
+      title: "Are you sure?",
+      text: "Are you sure you want to delete this item?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#e62245",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, remove it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        //  condition
+        Swal.fire(
+          "Removed!",
+          "The item has been removed from the cart.",
+          "success"
+        );
+      }
+    });
   };
 
   // Calculate totals
@@ -117,13 +135,13 @@ const Cart = () => {
                   </td>
                   {/* Total */}
                   <td className="text-right">
-                    <div className="flex items-center justify-end gap-1">
+                    <div className="flex items-center justify-end gap-3">
                       <p>£{(item.price * item.quantity).toFixed(2)}</p>
                       <button
                         onClick={() => removeItem(item.id)}
-                        className="text-red-500 rounded-full ml-1"
+                        className="p-[2px] bg-gray-300 text-red-500 rounded-full flex items-center justify-center"
                       >
-                        <TiDeleteOutline className="text-lg" />
+                        <RxCross2 className="text-[16px]" />
                       </button>
                     </div>
                   </td>
