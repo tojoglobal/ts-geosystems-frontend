@@ -44,6 +44,7 @@ import UpdateProductForm from "./Dashboard/Products/EditProducts";
 import ProductTable from "./Dashboard/Products/ProductsPage";
 import Cart from "./Pages/NavComponents/Cart";
 import Checkout from "./Pages/NavComponents/Checkout";
+import Softwar from "./Dashboard/Softwar/softwar";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -99,6 +100,7 @@ const AppLayout = () => {
           <Route path="update-product/:id" element={<UpdateProductForm />} />
           <Route path="add-categorys" element={<Categorys />} />
           <Route path="add-brands" element={<Brands />} />
+          <Route path="add-softwar" element={<Softwar />} />
         </Route>
 
         <Route path="*" element={<Error />} />

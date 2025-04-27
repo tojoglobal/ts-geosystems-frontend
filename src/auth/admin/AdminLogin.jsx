@@ -53,6 +53,7 @@ const AdminLogin = () => {
           timer: 1500,
         });
       } else {
+        console.log("Login failed:", data.message);
         Swal.fire({
           position: "top-end",
           icon: "error",
