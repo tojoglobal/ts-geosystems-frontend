@@ -99,28 +99,39 @@ const MainNavContainer = () => {
               }`}
             ></span>
           </div>
-
           {/* Right side */}
           {!isSticky ? (
             <div className="flex gap-6 text-base font-semibold text-charcoal">
-              <span className="cursor-pointer hover:text-crimson-red transition-colors duration-300  py-2.5">
-                <Link to="/used">USED EQUIPMENT</Link>
-              </span>
-              <span className="cursor-pointer hover:text-crimson-red transition-colors duration-300  py-2.5">
-                <Link to="/clearance">CLEARANCE</Link>
-              </span>
-              <span className="cursor-pointer hover:text-crimson-red transition-colors duration-300  py-2.5">
-                <Link to="/hire">HIRE</Link>
-              </span>
-              <span className="cursor-pointer hover:text-crimson-red transition-colors duration-300  py-2.5">
-                <Link to="/service">SERVICE</Link>
-              </span>
+              <Link
+                to="/used"
+                className="cursor-pointer hover:text-crimson-red transition-colors duration-300 py-2.5"
+              >
+                USED EQUIPMENT
+              </Link>
+              <Link
+                to="/clearance"
+                className="cursor-pointer hover:text-crimson-red transition-colors duration-300 py-2.5"
+              >
+                CLEARANCE
+              </Link>
+              <Link
+                to="/hire"
+                className="cursor-pointer hover:text-crimson-red transition-colors duration-300 py-2.5"
+              >
+                HIRE
+              </Link>
+              <Link
+                to="/service"
+                className="cursor-pointer hover:text-crimson-red transition-colors duration-300 py-2.5"
+              >
+                SERVICE
+              </Link>
               {/* Dropdown Wrapper */}
-              <div className="relative group cursor-pointer py-2.5">
-                <span className="flex items-center gap-1 hover:text-crimson-red transition-colors duration-300">
+              <div className="relative group py-2.5">
+                <div className="flex items-center gap-1 hover:text-crimson-red transition-colors duration-300 cursor-pointer">
                   <Link to="/support">SUPPORT</Link>
-                  <MdOutlineKeyboardArrowDown className="text-xl"></MdOutlineKeyboardArrowDown>
-                </span>
+                  <MdOutlineKeyboardArrowDown className="text-xl" />
+                </div>
                 {/* Dropdown Menu */}
                 <div className="absolute -left-10 top-full w-50 bg-white rounded-sm border border-slightly-dark shadow-lg pl-4 py-2 hidden group-hover:block z-50">
                   <ul className="space-y-1 text-sm text-charcoal">
@@ -139,18 +150,30 @@ const MainNavContainer = () => {
                   </ul>
                 </div>
               </div>
-              <span className="cursor-pointer hover:text-crimson-red transition-colors duration-300  py-2.5">
-                <Link to="/trade-in">TRADE IN</Link>
-              </span>
-              <span className="cursor-pointer hover:text-crimson-red transition-colors duration-300  py-2.5">
-                <Link to="/g2-blog">G2 BLOG</Link>
-              </span>
-              <span className="cursor-pointer hover:text-crimson-red transition-colors duration-300 py-2.5">
-                <Link to="/about-us">ABOUT US</Link>
-              </span>
-              <span className="cursor-pointer hover:text-crimson-red transition-colors duration-300 py-2.5">
-                <Link to="/contact-us">CONTACT US</Link>
-              </span>
+              <Link
+                to="/trade-in"
+                className="cursor-pointer hover:text-crimson-red transition-colors duration-300 py-2.5"
+              >
+                TRADE IN
+              </Link>
+              <Link
+                to="/g2-blog"
+                className="cursor-pointer hover:text-crimson-red transition-colors duration-300 py-2.5"
+              >
+                G2 BLOG
+              </Link>
+              <Link
+                to="/about-us"
+                className="cursor-pointer hover:text-crimson-red transition-colors duration-300 py-2.5"
+              >
+                ABOUT US
+              </Link>
+              <Link
+                to="/contact-us"
+                className="cursor-pointer hover:text-crimson-red transition-colors duration-300 py-2.5"
+              >
+                CONTACT US
+              </Link>
             </div>
           ) : (
             <>
@@ -182,7 +205,6 @@ const MainNavContainer = () => {
             </>
           )}
         </div>
-
         <>
           {/* Backdrop Overlay inside relative wrapper */}
           {isDropdownOpen && (
@@ -191,7 +213,6 @@ const MainNavContainer = () => {
               onClick={toggleDropdown}
             ></div>
           )}
-
           {/* Dropdown Menu */}
           {isDropdownOpen && (
             <div className="absolute left-[98px] top-[45px] z-50">
