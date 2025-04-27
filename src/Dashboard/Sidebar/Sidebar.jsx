@@ -14,10 +14,11 @@ import {
   Users,
   Layers,
   Drum,
+  MonitorCogIcon,
 } from "lucide-react";
 import SidebarProfileDropdown from "./SidebarProfileDropdown/SidebarProfileDropdown";
-import logo from "/public/TS-WEB-LOGO.png";
-import smallLogo from "/public/favicon.png";
+import logo from "/TS-WEB-LOGO.png";
+import smallLogo from "/favicon.png";
 import { MdCategory, MdOutlineShoppingCart } from "react-icons/md";
 const menuItems = [
   {
@@ -28,12 +29,12 @@ const menuItems = [
   {
     label: "Product",
     icon: <MdOutlineShoppingCart size={20} />,
-    to: "/dashboard/add-product",
+    to: "/dashboard/product",
   },
   {
-    label: "update Product",
-    icon: <MdOutlineShoppingCart size={20} />,
-    to: "/dashboard/update-product",
+    label: "Add Softwar",
+    icon: <MonitorCogIcon size={20} />,
+    to: "/dashboard/add-softwar",
   },
   {
     label: "Add categorys",

@@ -27,13 +27,6 @@ const ProductTable = () => {
     }
   };
 
-  console.log(products);
-
-  const handleEdit = (id) => {
-    // Redirect to Edit Page with product id
-    window.location.href = `/update-product/${id}`;
-  };
-
   const handleDelete = async (id, imageUrls) => {
     const confirm = await Swal.fire({
       title: "Are you sure?",
@@ -64,7 +57,18 @@ const ProductTable = () => {
 
   return (
     <div className="p-6 bg-gray-100 dark:bg-gray-900 min-h-screen">
+      <h1 className="text-2xl font-bold mb-4 text-gray-800 dark:text-gray-200">
+        Products List
+      </h1>
       <div className="overflow-x-auto">
+        <div className="flex justify-end mb-3">
+          <Link to="/dashboard/add-product">
+            <button className="bg-teal-600 text-white py-2 px-4 rounded-md hover:bg-teal-700 transition duration-200">
+              Add Product
+            </button>
+          </Link>
+        </div>
+
         <table className="w-full text-sm text-left text-gray-700 dark:text-gray-300">
           <thead className="text-xs uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
             <tr>

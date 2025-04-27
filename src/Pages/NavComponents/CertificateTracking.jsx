@@ -1,7 +1,18 @@
+import { useState } from "react";
 import { CiHome } from "react-icons/ci";
 import { Link } from "react-router-dom";
 
 const CertificateTracking = () => {
+  const [formData, setFormData] = useState({
+    trackingNumber: "",
+    serialNumber: "",
+  });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(formData);
+  };
+
   return (
     <div className="max-w-7xl mx-auto p-5">
       <div className="flex gap-1 text-sm mb-2 text-gray-500">
@@ -11,9 +22,11 @@ const CertificateTracking = () => {
         / <span className="text-red-600 font-medium">Support</span> /{" "}
         <span className="text-red-600 font-medium">Certificate Tracking</span>
       </div>
+
       <h1 className="text-3xl font-bold text-red-600 mb-4 uppercase">
         Certificate Tracking
       </h1>
+
       <p className="text-center text-gray-700 mb-1 max-w-3xl mx-auto">
         G2 Survey will always make every effort to offer the full solution for
         our clients. It’s not enough to just hire or sell surveying equipment
@@ -31,15 +44,31 @@ const CertificateTracking = () => {
           Tracking information of your Total Station, Auto Level, Digital Level,
           Theodolite, RTK
         </p>
-        <form className="flex flex-col md:flex-row justify-center gap-2 max-w-5xl mx-auto">
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col md:flex-row justify-center gap-2 max-w-5xl mx-auto"
+        >
           <input
             type="text"
-            placeholder="Tacking Number"
+            name="trackingNumber"
+            placeholder="Tracking Number"
+            value={formData.trackingNumber}
+            onChange={(e) =>
+              setFormData((prev) => ({
+                ...prev,
+                trackingNumber: e.target.value,
+              }))
+            }
             className="border border-gray-300 rounded px-4 py-2 w-full md:w-1/3"
           />
           <input
             type="text"
+            name="serialNumber"
             placeholder="Equipment Serial Number"
+            value={formData.serialNumber}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, serialNumber: e.target.value }))
+            }
             className="border border-gray-300 rounded px-4 py-2 w-full md:w-1/3"
           />
           <button
@@ -50,9 +79,9 @@ const CertificateTracking = () => {
           </button>
         </form>
       </div>
-      <div className="flex justify-center">
+      <div className="flex justify-center my-8">
         <img
-          src="/images/certificate-equipment.png"
+          src="https://cdn11.bigcommerce.com/s-ew2v2d3jn1/product_images/uploaded_images/banner-hire-page-a.jpg"
           alt="Certificate Equipment"
           className="rounded max-w-4xl w-full"
         />

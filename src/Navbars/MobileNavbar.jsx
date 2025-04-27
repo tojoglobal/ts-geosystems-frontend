@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { FiMenu, FiSearch, FiUser, FiShoppingCart, FiX } from "react-icons/fi";
+// import { FiMenu, FiSearch, FiUser, FiShoppingCart, FiX } from "react-icons/fi";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { IoSearchOutline } from "react-icons/io5";
 import { LuUserRound } from "react-icons/lu";

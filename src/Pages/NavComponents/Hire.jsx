@@ -62,24 +62,14 @@ const Hire = () => {
     console.log("Submitting data:", JSON.stringify(submissionData, null, 2));
 
     try {
-      setFormData({
-        name: "",
-        company: "",
-        email: "",
-        phone: "",
-        existingCustomer: "",
-        equipment: [],
-        hireDate: "",
-        hirePeriod: "",
-        comments: "",
-      });
+      // logic
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   };
 
   return (
-    <div className="p-4">
+    <div className="p-3">
       <div className="flex items-center gap-2 text-sm mb-4">
         <Link to="/" className="text-[#e62245] hover:underline">
           Home

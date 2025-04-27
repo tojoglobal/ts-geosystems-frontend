@@ -1,5 +1,5 @@
 import React from "react";
-import { HiOutlineShoppingCart } from "react-icons/hi";
+// import { HiOutlineShoppingCart } from "react-icons/hi";
 import { IoSearchOutline } from "react-icons/io5";
 import { LuUserRound } from "react-icons/lu";
 import { PiShoppingCart } from "react-icons/pi";
@@ -13,15 +13,14 @@ const HeaderContainer = () => {
     <div className="max-w-[1380px] mx-auto align-middle">
       <div className="flex justify-between items-center py-5">
         {/* ts-geosystems logo */}
-        <div>
+        <Link to="/">
           <img
             class=" w-full"
             src="https://cdn11.bigcommerce.com/s-ew2v2d3jn1/images/stencil/250x64/g2-survey-logo_1611121872__30054.original.png"
             alt="G2 Survey"
             title="G2 Survey"
           ></img>
-        </div>
-
+        </Link>
         <div className="flex items-center gap-4">
           {/* Search Bar */}
           <div
@@ -35,12 +34,10 @@ const HeaderContainer = () => {
             />
             <IoSearchOutline className="text-[#e62245] text-[28px] absolute right-6" />
           </div>
-
           {/* User Icon */}
           <Link to="/login">
             <LuUserRound className="text-[36px] text-davy-gray hover:text-crimson-red font-medium cursor-pointer duration-300 ease-in" />
           </Link>
-
           {/* Cart Icon with badge */}
           <div className="relative">
             <PiShoppingCart className="text-[36px] text-davy-gray hover:text-crimson-red cursor-pointer duration-300 ease-in font-medium" />
@@ -48,7 +45,6 @@ const HeaderContainer = () => {
               0
             </span>
           </div>
-
           {/* Search Overlay */}
           <SearchOverlay
             isOpen={showSearch}

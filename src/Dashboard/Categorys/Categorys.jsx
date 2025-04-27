@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
+import Categor from "./redux";
 
 const generateSlug = (text) =>
   text
@@ -186,34 +187,34 @@ const Categorys = () => {
     setValueSubCategory("main_category_id", sub.main_category_id);
   };
 
-  const confirmDelete = (type, id) => {
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        if (type === "category") {
-          await axiosPublicurl.delete(`/api/category/${id}`);
-          Swal.fire("Deleted!", "Your category has been deleted.", "success");
-          setCategories(categories.filter((c) => c.id !== id));
-        } else {
-          await axiosPublicurl.delete(`/api/subcategory/${id}`);
-          Swal.fire(
-            "Deleted!",
-            "Your subcategory has been deleted.",
-            "success"
-          );
-          setSubCategories(subCategories.filter((sc) => sc.id !== id));
-        }
-        Swal.fire("Deleted!", "Your item has been deleted.", "success");
-      }
-    });
-  };
+  // const confirmDelete = (type, id) => {
+  //   Swal.fire({
+  //     title: "Are you sure?",
+  //     text: "You won't be able to revert this!",
+  //     icon: "warning",
+  //     showCancelButton: true,
+  //     confirmButtonColor: "#3085d6",
+  //     cancelButtonColor: "#d33",
+  //     confirmButtonText: "Yes, delete it!",
+  //   }).then(async (result) => {
+  //     if (result.isConfirmed) {
+  //       if (type === "category") {
+  //         await axiosPublicurl.delete(`/api/category/${id}`);
+  //         Swal.fire("Deleted!", "Your category has been deleted.", "success");
+  //         setCategories(categories.filter((c) => c.id !== id));
+  //       } else {
+  //         await axiosPublicurl.delete(`/api/subcategory/${id}`);
+  //         Swal.fire(
+  //           "Deleted!",
+  //           "Your subcategory has been deleted.",
+  //           "success"
+  //         );
+  //         setSubCategories(subCategories.filter((sc) => sc.id !== id));
+  //       }
+  //       Swal.fire("Deleted!", "Your item has been deleted.", "success");
+  //     }
+  //   });
+  // };
 
   useEffect(() => {
     const subscription = watchCategory((value, { name }) => {
@@ -244,217 +245,226 @@ const Categorys = () => {
   }, [watchSubCategory]);
 
   return (
-    <div className="min-h-screen bg-[#f1f4ff] dark:bg-gray-800 p-4 text-gray-900 dark:text-gray-100">
-      <h2 className="text-xl font-bold mb-4">Add Categories & Subcategories</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div>
-          <h2 className="text-base font-bold mb-2">Categories</h2>
-          <form
-            onSubmit={handleSubmitCategory(addCategory)}
-            className="space-y-4"
-          >
-            <input
-              {...registerCategory("category_name", { required: true })}
-              placeholder="Category Name"
-              className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
-            />
-            <input
-              value={generateSlug(watchCategoryName)}
-              readOnly
-              placeholder="Slug"
-              className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
-            />
-            <input
-              {...registerCategory("serialNumber", { required: true })}
-              type="number"
-              placeholder="Order"
-              className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
-            />
-            <input
-              type="file"
-              accept="image/*"
-              className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
-              onChange={(e) => {
-                const file = e.target.files[0];
-                setValueCategory("photo", [file]);
-              }}
-            />
-            {imagePreview && (
-              <img
-                src={imagePreview}
-                alt="Preview"
-                className="w-20 h-20 object-cover rounded"
-              />
-            )}
-            <input
-              {...registerCategory("metaKeyword")}
-              placeholder="Meta Keywords comma separated"
-              className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
-            />
-            <textarea
-              {...registerCategory("meta_description")}
-              placeholder="Meta Description"
-              className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
-            ></textarea>
-            <label className="flex items-center space-x-2">
-              <input type="checkbox" {...registerCategory("is_feature")} />
-              <span>Is Feature</span>
-            </label>
-            <input type="hidden" value={1} {...registerCategory("status")} />
-            <button
-              type="submit"
-              className="bg-teal-600 text-white px-4 py-2 rounded hover:bg-teal-700"
+    <>
+      {/* <Categor /> */}
+      <div className="min-h-screen bg-[#f1f4ff] dark:bg-gray-800 p-4 text-gray-900 dark:text-gray-100">
+        <h2 className="text-xl font-bold mb-4">
+          Add Categories & Subcategories
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div>
+            <h2 className="text-base font-bold mb-2">Categories</h2>
+            <form
+              onSubmit={handleSubmitCategory(addCategory)}
+              className="space-y-4"
             >
-              {editingCategory ? "Update Category" : "Add Category"}
-            </button>
-          </form>
+              <input
+                {...registerCategory("category_name", { required: true })}
+                placeholder="Category Name"
+                className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
+              />
+              <input
+                value={generateSlug(watchCategoryName)}
+                readOnly
+                placeholder="Slug"
+                className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
+              />
+              <input
+                {...registerCategory("serialNumber", { required: true })}
+                type="number"
+                placeholder="Order"
+                className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
+              />
+              <input
+                type="file"
+                accept="image/*"
+                className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
+                onChange={(e) => {
+                  const file = e.target.files[0];
+                  setValueCategory("photo", [file]);
+                }}
+              />
+              {imagePreview && (
+                <img
+                  src={imagePreview}
+                  alt="Preview"
+                  className="w-20 h-20 object-cover rounded"
+                />
+              )}
+              <input
+                {...registerCategory("metaKeyword")}
+                placeholder="Meta Keywords comma separated"
+                className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
+              />
+              <textarea
+                {...registerCategory("meta_description")}
+                placeholder="Meta Description"
+                className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
+              ></textarea>
+              <label className="flex items-center space-x-2">
+                <input type="checkbox" {...registerCategory("is_feature")} />
+                <span>Is Feature</span>
+              </label>
+              <input type="hidden" value={1} {...registerCategory("status")} />
+              <button
+                type="submit"
+                className="bg-teal-600 text-white px-4 py-2 rounded hover:bg-teal-700"
+              >
+                {editingCategory ? "Update Category" : "Add Category"}
+              </button>
+            </form>
 
-          <table className="w-full mt-6 border dark:border-gray-700">
-            <thead>
-              <tr className="bg-gray-200 dark:bg-gray-700">
-                <th className="p-2 text-left">Category</th>
-                <th className="p-2 text-left">Order</th>
-                <th className="p-2 text-left">Image</th>
-                <th className="p-2">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {categories.map((cat) => (
-                <tr key={cat.id} className="border-t dark:border-gray-600">
-                  <td className="p-2">{cat.category_name}</td>
-                  <td className="p-2">{cat.serialNumber}</td>
-                  <td className="p-2">
-                    <img
-                      src={`${import.meta.env.VITE_OPEN_APIURL}/uploads/${
-                        cat.photo
-                      }`}
-                      alt={cat.category_name}
-                      className="w-16 h-16 object-cover rounded"
-                    />
-                  </td>
-                  <td className="p-2 space-x-2 text-center">
-                    <button
-                      onClick={() => handleEditCategory(cat)}
-                      className="text-blue-600 hover:underline"
-                    >
-                      <FaEdit />
-                    </button>
-                    {/* <button
+            <table className="w-full mt-6 border dark:border-gray-700">
+              <thead>
+                <tr className="bg-gray-200 dark:bg-gray-700">
+                  <th className="p-2 text-left">Category</th>
+                  <th className="p-2 text-left">Order</th>
+                  <th className="p-2 text-left">Image</th>
+                  <th className="p-2">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {categories.map((cat) => (
+                  <tr key={cat.id} className="border-t dark:border-gray-600">
+                    <td className="p-2">{cat.category_name}</td>
+                    <td className="p-2">{cat.serialNumber}</td>
+                    <td className="p-2">
+                      <img
+                        src={`${import.meta.env.VITE_OPEN_APIURL}/uploads/${
+                          cat.photo
+                        }`}
+                        alt={cat.category_name}
+                        className="w-16 h-16 object-cover rounded"
+                      />
+                    </td>
+                    <td className="p-2 space-x-2 text-center">
+                      <button
+                        onClick={() => handleEditCategory(cat)}
+                        className="text-blue-600 hover:underline"
+                      >
+                        <FaEdit />
+                      </button>
+                      {/* <button
                       onClick={() => confirmDelete("category", cat.id)}
                       className="text-red-600 hover:underline"
                     >
                       <FaTrash />
                     </button> */}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
 
-        {/* sub category */}
-        <div>
-          <h2 className="text-base font-bold mb-2">Sub Categories</h2>
-          <form
-            onSubmit={handleSubmitSubCategory(addSubCategory)}
-            className="space-y-4"
-          >
-            <input
-              {...registerSubCategory("name", { required: true })}
-              placeholder="Subcategory Name"
-              className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
-            />
-            <input
-              value={generateSlug(watchSubCategoryName || "")}
-              readOnly
-              placeholder="Slug"
-              className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
-            />
-            <select
-              {...registerSubCategory("main_category_id", { required: true })}
-              className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
+          {/* sub category */}
+          <div>
+            <h2 className="text-base font-bold mb-2">Sub Categories</h2>
+            <form
+              onSubmit={handleSubmitSubCategory(addSubCategory)}
+              className="space-y-4"
             >
-              <option value="">Select Category</option>
-              {categories.map((cat) => (
-                <option key={cat.id} value={cat.id}>
-                  {cat.category_name}
-                </option>
-              ))}
-            </select>
-
-            <input
-              type="file"
-              accept="image/*"
-              className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
-              onChange={(e) => {
-                const file = e.target.files[0];
-                setValueSubCategory("photo", [file]);
-              }}
-            />
-            {imagePreviewSubCatergory && (
-              <img
-                src={imagePreviewSubCatergory}
-                alt="Preview"
-                className="w-20 h-20 object-cover rounded"
+              <input
+                {...registerSubCategory("name", { required: true })}
+                placeholder="Subcategory Name"
+                className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
               />
-            )}
-            <input type="hidden" value={1} {...registerSubCategory("status")} />
-            <br />
-            <button
-              type="submit"
-              className="bg-teal-600 text-white px-4 py-2 rounded hover:bg-teal-700"
-            >
-              {editingSubCategory ? "Update Subcategory" : "Add Subcategory"}
-            </button>
-          </form>
+              <input
+                value={generateSlug(watchSubCategoryName || "")}
+                readOnly
+                placeholder="Slug"
+                className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
+              />
+              <select
+                {...registerSubCategory("main_category_id", { required: true })}
+                className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
+              >
+                <option value="">Select Category</option>
+                {categories.map((cat) => (
+                  <option key={cat.id} value={cat.id}>
+                    {cat.category_name}
+                  </option>
+                ))}
+              </select>
 
-          <table className="w-full mt-6 border dark:border-gray-700">
-            <thead>
-              <tr className="bg-gray-200 dark:bg-gray-700">
-                <th className="p-2 text-left">Subcategory</th>
-                <th className="p-2 text-left">Category</th>
-                <th className="p-2">Image</th>
-                <th className="p-2">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {subCategories.map((sub) => (
-                <tr key={sub.id} className="border-t dark:border-gray-600">
-                  <td className="p-2">{sub.name}</td>
-                  <td className="p-2">
-                    {categories.find((cat) => cat.id === sub.main_category_id)
-                      ?.category_name || "N/A"}
-                  </td>
-                  <td className="p-2">
-                    <img
-                      src={`${import.meta.env.VITE_OPEN_APIURL}/uploads/${
-                        sub.photo
-                      }`}
-                      alt={sub.name}
-                      className="w-16 h-16 object-cover rounded"
-                    />
-                  </td>
-                  <td className="p-2 space-x-2 text-center">
-                    <button
-                      onClick={() => handleEditSubCategory(sub)}
-                      className="text-blue-600 hover:underline"
-                    >
-                      <FaEdit />
-                    </button>
-                    {/* <button
+              <input
+                type="file"
+                accept="image/*"
+                className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
+                onChange={(e) => {
+                  const file = e.target.files[0];
+                  setValueSubCategory("photo", [file]);
+                }}
+              />
+              {imagePreviewSubCatergory && (
+                <img
+                  src={imagePreviewSubCatergory}
+                  alt="Preview"
+                  className="w-20 h-20 object-cover rounded"
+                />
+              )}
+              <input
+                type="hidden"
+                value={1}
+                {...registerSubCategory("status")}
+              />
+              <br />
+              <button
+                type="submit"
+                className="bg-teal-600 text-white px-4 py-2 rounded hover:bg-teal-700"
+              >
+                {editingSubCategory ? "Update Subcategory" : "Add Subcategory"}
+              </button>
+            </form>
+
+            <table className="w-full mt-6 border dark:border-gray-700">
+              <thead>
+                <tr className="bg-gray-200 dark:bg-gray-700">
+                  <th className="p-2 text-left">Subcategory</th>
+                  <th className="p-2 text-left">Category</th>
+                  <th className="p-2">Image</th>
+                  <th className="p-2">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {subCategories.map((sub) => (
+                  <tr key={sub.id} className="border-t dark:border-gray-600">
+                    <td className="p-2">{sub.name}</td>
+                    <td className="p-2">
+                      {categories.find((cat) => cat.id === sub.main_category_id)
+                        ?.category_name || "N/A"}
+                    </td>
+                    <td className="p-2">
+                      <img
+                        src={`${import.meta.env.VITE_OPEN_APIURL}/uploads/${
+                          sub.photo
+                        }`}
+                        alt={sub.name}
+                        className="w-16 h-16 object-cover rounded"
+                      />
+                    </td>
+                    <td className="p-2 space-x-2 text-center">
+                      <button
+                        onClick={() => handleEditSubCategory(sub)}
+                        className="text-blue-600 hover:underline"
+                      >
+                        <FaEdit />
+                      </button>
+                      {/* <button
                       onClick={() => confirmDelete("subcategory", sub.id)}
                       className="text-red-600 hover:underline"
                     >
                       <FaTrash />
                     </button> */}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import Slider from "react-slick";
-import { FaShoppingCart } from "react-icons/fa";
+// import { FaShoppingCart } from "react-icons/fa";
 import {
   IoCloseOutline,
   IoSearchOutline,
@@ -8,7 +8,7 @@ import {
 } from "react-icons/io5";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { MdOutlineKeyboardVoice } from "react-icons/md";
+import { MdAddShoppingCart, MdOutlineKeyboardVoice } from "react-icons/md";
 import { RxCross1 } from "react-icons/rx";
 import PrevArrow from "../Components/PrevArrow";
 import NextArrow from "../Components/NextArrow";
@@ -215,7 +215,7 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                         {product.price}
                       </p>
                       <button className="bg-crimson-red p-2 rounded text-white">
-                        <FaShoppingCart className="text-sm" />
+                        <MdAddShoppingCart className="text-lg" />
                       </button>
                     </div>
                   </div>

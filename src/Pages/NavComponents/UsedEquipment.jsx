@@ -4,6 +4,57 @@ import { BsGrid3X3GapFill } from "react-icons/bs";
 import { FaThList } from "react-icons/fa";
 import Swal from "sweetalert2";
 
+const equipmentCategories = [
+  {
+    title: "Used Laser Scanners",
+    image:
+      "https://cdn11.bigcommerce.com/s-ew2v2d3jn1/images/stencil/original/e/used-category-scanners__95474.original.jpg",
+    link: "/used-equipment/laser-scanners",
+  },
+  {
+    title: "Used Total Stations",
+    image:
+      "https://cdn11.bigcommerce.com/s-ew2v2d3jn1/images/stencil/original/n/used-category-robotic-total-stations__71261.original.jpg",
+    link: "/used-equipment/total-stations",
+  },
+  {
+    title: "Used GNSS/GPS",
+    image:
+      "https://cdn11.bigcommerce.com/s-ew2v2d3jn1/images/stencil/original/m/used-category-gnss__59353.original.jpg",
+    link: "/used-equipment/gnss-gps",
+  },
+  {
+    title: "Used Controllers",
+    image:
+      "https://cdn11.bigcommerce.com/s-ew2v2d3jn1/images/stencil/original/q/used-category-controllers__43564.original.jpg",
+    link: "/used-equipment/controllers",
+  },
+  {
+    title: "Used Lasers",
+    image:
+      "https://cdn11.bigcommerce.com/s-ew2v2d3jn1/images/stencil/original/y/used-category-construction-lasers__49199.original.jpg",
+    link: "/used-equipment/lasers",
+  },
+  {
+    title: "Used Levels",
+    image:
+      "https://cdn11.bigcommerce.com/s-ew2v2d3jn1/images/stencil/original/z/used-category-digital-levels__91752.original.jpg",
+    link: "/used-equipment/levels",
+  },
+  {
+    title: "Used Location Detection",
+    image:
+      "https://cdn11.bigcommerce.com/s-ew2v2d3jn1/images/stencil/original/e/used-category-cable-locators__45605.original.jpg",
+    link: "/used-equipment/location-detection",
+  },
+  {
+    title: "Used Accessories",
+    image:
+      "https://cdn11.bigcommerce.com/s-ew2v2d3jn1/images/stencil/original/h/used-category-accessories__70873.original.jpg",
+    link: "/used-equipment/accessories",
+  },
+];
+
 const fakeProducts = [
   {
     id: 1,
@@ -120,7 +171,7 @@ const sortOptions = [
   "PRICE: DESCENDING",
 ];
 
-const Clearance = () => {
+const UsedEquipment = () => {
   const [viewMode, setViewMode] = useState("grid");
   const [sortBy, setSortBy] = useState("FEATURED ITEMS");
   const [hoveredProductId, setHoveredProductId] = useState(null);
@@ -161,7 +212,6 @@ const Clearance = () => {
       navigate(`/compare/${sortedIds.join(",")}`);
     }
   };
-
   return (
     <div className="p-3">
       <div className="flex items-center gap-2 text-sm mb-4">
@@ -169,10 +219,34 @@ const Clearance = () => {
           Home
         </Link>
         <span>/</span>
-        <span className="text-[#e62245]">Clearance</span>
+        <span className="text-[#e62245]">Used Surveying Equipment</span>
       </div>
-      <h1 className="text-4xl font-bold mb-6">CLEARANCE</h1>
-      <section>
+      <h1 className="text-4xl font-bold mb-6 uppercase">
+        Used Surveying Equipment
+      </h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 border-b pb-10">
+        {equipmentCategories.map((category, index) => (
+          <Link
+            key={index}
+            to={category.link}
+            className="group relative bg-white rounded-lg overflow-hidden transition-shadow"
+          >
+            <div className="relative h-48 bg-[#f5f5f5]">
+              <img
+                src={category.image}
+                alt={category.title}
+                className="w-full h-full object-contain p-4"
+              />
+            </div>
+            <div className="p-2 text-center">
+              <h2 className="text-lg font-medium group-hover:text-[#e62245] transition-colors">
+                {category.title}
+              </h2>
+            </div>
+          </Link>
+        ))}
+      </div>
+      <section className="mt-2">
         <div className="flex items-center justify-between md:justify-normal md:gap-52 mb-6">
           {/* View Mode Buttons */}
           <div className="flex gap-2">
@@ -348,65 +422,134 @@ const Clearance = () => {
             </div>
           ))}
         </div>
-      </section>
-      {/* Pagination */}
-      <div className="flex items-center justify-between mt-10">
-        <div className="flex items-center">
-          {/* Previous button (only show if not on page 1) */}
-          {currentPage > 1 ? (
+        {/* Pagination */}
+        <div className="flex items-center justify-between mt-10">
+          <div className="flex items-center">
+            {/* Previous button (only show if not on page 1) */}
+            {currentPage > 1 ? (
+              <button
+                onClick={() => setCurrentPage(currentPage - 1)}
+                className="border px-3 py-1 rounded hover:bg-gray-100 transition text-sm"
+              >
+                ← Previous
+              </button>
+            ) : (
+              <div></div>
+            )}
+            {/* Page numbers */}
+            <div className="flex gap-2">
+              {Array.from({ length: totalPages }).map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setCurrentPage(idx + 1)}
+                  className={`border px-3 py-1 rounded text-sm ${
+                    currentPage === idx + 1
+                      ? "bg-gray-200"
+                      : "hover:bg-gray-100"
+                  }`}
+                >
+                  {idx + 1}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Next button */}
+          {currentPage < totalPages ? (
             <button
-              onClick={() => setCurrentPage(currentPage - 1)}
+              onClick={() => setCurrentPage(currentPage + 1)}
               className="border px-3 py-1 rounded hover:bg-gray-100 transition text-sm"
             >
-              ← Previous
+              Next →
             </button>
           ) : (
             <div></div>
           )}
-          {/* Page numbers */}
-          <div className="flex gap-2">
-            {Array.from({ length: totalPages }).map((_, idx) => (
-              <button
-                key={idx}
-                onClick={() => setCurrentPage(idx + 1)}
-                className={`border px-3 py-1 rounded text-sm ${
-                  currentPage === idx + 1 ? "bg-gray-200" : "hover:bg-gray-100"
-                }`}
-              >
-                {idx + 1}
+        </div>
+        <div className="mt-8 flex justify-end">
+          <div className="mt-8 flex justify-end">
+            <button
+              onClick={handleCompareSelected}
+              className={`${
+                compareItems.length >= 2
+                  ? "bg-[#e62245] hover:bg-[#d41d3f] text-white"
+                  : "bg-gray-200 hover:bg-gray-300"
+              } text-xs font-semibold px-6 py-2 rounded transition-colors`}
+            >
+              COMPARE SELECTED
+            </button>
+          </div>
+        </div>{" "}
+      </section>
+      <section className="mt-12">
+        <img
+          src="https://cdn11.bigcommerce.com/s-ew2v2d3jn1/product_images/uploaded_images/banner-used-equipment.jpg"
+          alt=""
+        />
+        <div className="space-y-6 text-center mt-5">
+          <p>
+            G2 Survey offer a wide range of reconditioned and used surveying
+            equipment at very competitive prices, providing excellent value for
+            money.
+          </p>
+          <p>
+            All of our pre-owned used Total Stations, GNSS/GPS Systems, 3D Laser
+            Scanners, Laser Levels, Levels, and other used surveying equipment
+            are fully serviced, certified and come with a minimum 3 month
+            warranty for both parts and labour.
+          </p>
+          <p>
+            With an extensive range of used Total Stations, used 3D Laser
+            Scanners and used GNSS/GPS Systems and more, we're guaranteed to
+            find the right equipment for you, whatever the budget.
+          </p>
+          {/* Highlighted box */}
+          <div className="bg-gray-100 p-8 rounded-lg space-y-6">
+            <h2 className="text-xl text-[#e62245] uppercase">
+              Used Surveying Equipment Benefits
+            </h2>
+            <p>
+              Cost Effective - Substantial Savings Over Buying New Equipment
+            </p>
+            <p>Serviced / Calibrated by Leica Trained Technicians</p>
+            <p>6 Month Extended Warranty Available on Many Instruments</p>
+            <p>
+              Leading Brands - Whether it be a Used{" "}
+              <a href="#" className="underline">
+                Leica TS15
+              </a>{" "}
+              Total Station or a{" "}
+              <a href="#" className="underline">
+                Leica BLK360
+              </a>{" "}
+              Used Laser Scanner you're after, we've got you covered
+            </p>
+            <p className="italic font-semibold">Worldwide Shipping</p>
+            <p className="text-[#e62245] font-semibold">
+              DEMAND IS HIGH FOR PRE-OWNED EQUIPMENT, AND OUR STOCK IS
+              CONSTANTLY CHANGING.
+            </p>
+            <p className="text-[#e62245] font-semibold">
+              IF YOU CAN'T FIND THE SPECIFIC KIT YOU REQUIRE PLEASE CONTACT US
+              AND WE WILL SOURCE IT.
+            </p>
+
+            <div className="flex justify-center">
+              <button className="bg-[#e62245] text-white px-6 py-2 rounded-md hover:bg-[#c81e3b] transition">
+                Contact Us
               </button>
-            ))}
+            </div>
+
+            <div>
+              <a href="#" className="text-[#e62245] underline text-sm">
+                G2 Survey Reconditioned Surveying Equipment Brochure
+              </a>
+            </div>
           </div>
         </div>
-
-        {/* Next button */}
-        {currentPage < totalPages ? (
-          <button
-            onClick={() => setCurrentPage(currentPage + 1)}
-            className="border px-3 py-1 rounded hover:bg-gray-100 transition text-sm"
-          >
-            Next →
-          </button>
-        ) : (
-          <div></div>
-        )}
-      </div>
-      <div className="mt-8 flex justify-end">
-        <div className="mt-8 flex justify-end">
-          <button
-            onClick={handleCompareSelected}
-            className={`${
-              compareItems.length >= 2
-                ? "bg-[#e62245] hover:bg-[#d41d3f] text-white"
-                : "bg-gray-200 hover:bg-gray-300"
-            } text-xs font-semibold px-6 py-2 rounded transition-colors`}
-          >
-            COMPARE SELECTED ({compareItems.length})
-          </button>
-        </div>
-      </div>
+      </section>
     </div>
   );
 };
 
-export default Clearance;
+export default UsedEquipment;

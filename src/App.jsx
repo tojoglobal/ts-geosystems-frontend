@@ -11,7 +11,7 @@ import "slick-carousel/slick/slick-theme.css";
 import { AppProvider } from "./context/AppContext";
 import Footer from "./Footer/Footer";
 import MainHome from "./Pages/HomePage/MainHome";
-import Erro from "./Err/Erro";
+import Error from "./Err/Error";
 import AdminLogin from "./auth/admin/AdminLogin";
 import Dashboard from "./Dashboard/Dashboard";
 import ProtectedRoute from "./utils/ProtectedRoute";
@@ -37,9 +37,14 @@ import UserManuals from "./Pages/NavComponents/UserManuals";
 import G2Blog from "./Pages/NavComponents/G2Blog";
 import Clearance from "./Pages/NavComponents/Clearance";
 import Categorys from "./Dashboard/Categorys/Categorys";
+import Compare from "./Pages/NavComponents/Compare";
+import UsedEquipment from "./Pages/NavComponents/UsedEquipment";
 import Brands from "./Dashboard/Brands/Brands";
 import UpdateProductForm from "./Dashboard/Products/EditProducts";
 import ProductTable from "./Dashboard/Products/ProductsPage";
+import Cart from "./Pages/NavComponents/Cart";
+import Checkout from "./Pages/NavComponents/Checkout";
+import Softwar from "./Dashboard/Softwar/softwar";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -56,10 +61,13 @@ const AppLayout = () => {
         <Route path="/create_account" element={<Register />} />
         <Route path="/cc" element={<CertificateTracking />} />
         <Route path="/remote-support" element={<RemoteSupport />} />
+        <Route path="/checkout" element={<Checkout />} />
 
         <Route element={<ProductLayout />}>
           <Route path="/products/:id" element={<ProductDetails />} />
           <Route path="/clearance" element={<Clearance />} />
+          <Route path="/compare/:ids" element={<Compare />} />
+          <Route path="/used" element={<UsedEquipment />} />
           <Route path="/hire" element={<Hire />} />
           <Route path="/service" element={<Service />} />
           <Route path="/support" element={<Support />} />
@@ -70,6 +78,7 @@ const AppLayout = () => {
           <Route path="/about-us" element={<AboutUs />} />
           <Route path="/contact-us" element={<ContactUs />} />
           <Route path="/user-manuals" element={<UserManuals />} />
+          <Route path="/cart" element={<Cart />} />
         </Route>
 
         {/* Admin Routes */}
@@ -85,14 +94,16 @@ const AppLayout = () => {
           <Route index element={<Dashboard />} />
           <Route path="viewprofile" element={<ViewProfile />} />
           <Route path="update-profile" element={<UpdateProfile />} />
+          {/* <Route path="add-product" element={<ProductAddForm />} /> */}
           <Route path="product" element={<ProductTable />} />
           <Route path="add-product" element={<ProductAddForm />} />
           <Route path="update-product/:id" element={<UpdateProductForm />} />
           <Route path="add-categorys" element={<Categorys />} />
           <Route path="add-brands" element={<Brands />} />
+          <Route path="add-softwar" element={<Softwar />} />
         </Route>
 
-        <Route path="*" element={<Erro />} />
+        <Route path="*" element={<Error />} />
       </Routes>
       {!hideNavFooter && <Footer />}
     </>
