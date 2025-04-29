@@ -45,6 +45,7 @@ import ProductTable from "./Dashboard/Products/ProductsPage";
 import Cart from "./Pages/NavComponents/Cart";
 import Checkout from "./Pages/NavComponents/Checkout";
 import Softwar from "./Dashboard/Softwar/softwar";
+import CategoryProduct from "./Pages/CategoryProduct";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -64,6 +65,7 @@ const AppLayout = () => {
         <Route path="/checkout" element={<Checkout />} />
 
         <Route element={<ProductLayout />}>
+          <Route path="/:category/:subcategory" element={<CategoryProduct />} />
           <Route path="/products/:id" element={<ProductDetails />} />
           <Route path="/clearance" element={<Clearance />} />
           <Route path="/compare/:ids" element={<Compare />} />

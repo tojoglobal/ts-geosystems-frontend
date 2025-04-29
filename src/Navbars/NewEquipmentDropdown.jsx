@@ -211,7 +211,6 @@ export default function NewEquipmentDropdown() {
           >
             Shop All
           </li>
-
           {Object.keys(categories).map((category) => (
             <li
               key={category}
@@ -239,7 +238,6 @@ export default function NewEquipmentDropdown() {
             </li>
           ))}
         </ul>
-
         <h3 className="font-bold text-base mt-6 mb-3 text-charcoal underline">
           SHOP BY BRAND
         </h3>
@@ -259,7 +257,6 @@ export default function NewEquipmentDropdown() {
           ))}
         </ul>
       </div>
-
       {/* Product Preview */}
       {hoveredCategory && (
         <div className="flex-1 p-4 border-r-[1px] border-slightly-dark shadow-lg bg-white animate-fadeIn">
@@ -272,14 +269,12 @@ export default function NewEquipmentDropdown() {
                 {hoveredCategory}
               </div>
             </div>
-
             <span
               className={`absolute left-0 bottom-0 h-[4px] w-full bg-[#e62245] ${
                 animateLine ? "animate-growLine" : ""
               }`}
             />
           </div>
-
           <div className="grid grid-cols-4 gap-4">
             {categories[hoveredCategory].map((product, index) => (
               <div className="flex flex-col group">

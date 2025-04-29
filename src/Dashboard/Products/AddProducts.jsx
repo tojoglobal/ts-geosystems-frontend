@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { Editor } from "@tinymce/tinymce-react";
@@ -182,9 +183,8 @@ const ProductAddForm = () => {
             ))}
           </div>
         </div>
-
         {/* Second Column */}
-        <div className="col-span-2 space-y-4 grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="col-span-2 text-white space-y-4 grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="col-span-1 space-y-4">
             <input
               {...register("productName", { required: true })}
@@ -249,7 +249,6 @@ const ProductAddForm = () => {
               className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
             />
           </div>
-
           {/* Third Column */}
           <div className="col-span-1 space-y-4">
             <input

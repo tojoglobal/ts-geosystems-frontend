@@ -188,8 +188,8 @@ const Banner = () => {
                         slide === slides[2] ||
                         slide === slides[3]
                           ? "text-[#e62245]"
-                          : "text-white"
-                      } inline-block border-2 border-[#e62245] px-5 py-2 hover:bg-[#e62245] transition rounded`}
+                          : "text-white hover:bg-[#e62245]"
+                      } inline-block border-2 border-[#e62245] px-5 py-2 transition rounded`}
                     >
                       {slide.button.label}
                     </a>
