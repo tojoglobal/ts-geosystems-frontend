@@ -1,8 +1,9 @@
 /* eslint-disable no-useless-escape */
 import { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { BsGrid3X3GapFill } from "react-icons/bs";
 import { FaThList } from "react-icons/fa";
+import Swal from "sweetalert2";
 import { useQuery } from "@tanstack/react-query";
 import { useAxiospublic } from "../Hooks/useAxiospublic";
 
@@ -23,8 +24,11 @@ const CategoryProduct = () => {
   const [sortBy, setSortBy] = useState("FEATURED ITEMS");
   const [hoveredProductId, setHoveredProductId] = useState(null);
   console.log(hoveredProductId);
+  const [currentPage, setCurrentPage] = useState(1);
   const [compareItems, setCompareItems] = useState([]);
+  const navigate = useNavigate();
   const { category, subcategory } = useParams();
+  const productsPerPage = 8;
 
   const { data: productsData = [], isLoading } = useQuery({
     queryKey: ["products"],
@@ -41,13 +45,11 @@ const CategoryProduct = () => {
       const productSubCategory = JSON.parse(product.sub_category);
 
       if (subcategory) {
-        // Match both category and subcategory
         return (
           productCategory.cat === category &&
           productSubCategory.slug === subcategory
         );
       } else {
-        // Match only category
         return productCategory.cat === category;
       }
     } catch (error) {
@@ -55,6 +57,38 @@ const CategoryProduct = () => {
       return false;
     }
   });
+
+  // Pagination logic
+  const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = filteredProducts.slice(
+    indexOfFirstProduct,
+    indexOfLastProduct
+  );
+
+  const toggleCompare = (productId) => {
+    setCompareItems((prev) =>
+      prev.includes(productId)
+        ? prev.filter((id) => id !== productId)
+        : [...prev, productId]
+    );
+  };
+
+  const handleCompareSelected = () => {
+    if (compareItems.length < 2) {
+      Swal.fire({
+        title: "Comparison Error",
+        text: "You must select at least two products to compare",
+        icon: "error",
+        confirmButtonColor: "#e62245",
+        confirmButtonText: "OK",
+      });
+    } else {
+      const sortedIds = [...compareItems].sort((a, b) => a - b);
+      navigate(`/compare/${sortedIds.join(",")}`);
+    }
+  };
 
   if (isLoading) return <div>Loading...</div>;
 
@@ -120,25 +154,23 @@ const CategoryProduct = () => {
               : "grid-cols-1"
           } gap-6`}
         >
-          {filteredProducts.map((product) => {
+          {currentProducts.map((product) => {
             // Parse image URLs
             let imageUrl = "";
             try {
               const images = JSON.parse(product.image_urls);
-              // Take the first image and construct full URL
               const firstImage = images[0] || "";
-              // Remove any surrounding quotes or brackets if present
               const cleanImagePath = firstImage.replace(/^["\[]+|["\]]+$/g, "");
               imageUrl = `${import.meta.env.VITE_OPEN_APIURL}${cleanImagePath}`;
             } catch (error) {
               console.log("Error parsing image URLs:", error);
-              // Fallback to direct URL if parsing fails
               const cleanImagePath = (product.image_urls || "").replace(
                 /^["\[]+|["\]]+$/g,
                 ""
               );
               imageUrl = `${import.meta.env.VITE_OPEN_APIURL}${cleanImagePath}`;
             }
+
             return (
               <div
                 key={product.id}
@@ -226,20 +258,21 @@ const CategoryProduct = () => {
                       <button className="bg-[#e62245] uppercase text-white px-6 py-2 hover:bg-[#d41d3f] transition-colors duration-200 text-sm font-semibold rounded-sm">
                         Add to Cart
                       </button>
-                      <button
-                        onClick={() => {
-                          setCompareItems((prev) =>
-                            prev.includes(product.id)
-                              ? prev.filter((id) => id !== product.id)
-                              : [...prev, product.id]
-                          );
-                        }}
-                        className="uppercase border border-gray-400 px-6 py-2 text-sm font-semibold rounded-sm hover:bg-gray-100"
-                      >
-                        {compareItems.includes(product.id)
-                          ? "Remove"
-                          : "Compare"}
-                      </button>
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="checkbox"
+                          id={`compare-${product.id}`}
+                          className="accent-[#0075ff]"
+                          checked={compareItems.includes(product.id)}
+                          onChange={() => toggleCompare(product.id)}
+                        />
+                        <label
+                          htmlFor={`compare-${product.id}`}
+                          className="text-sm cursor-pointer"
+                        >
+                          COMPARE
+                        </label>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -248,6 +281,53 @@ const CategoryProduct = () => {
           })}
         </div>
       </section>
+      {/* Pagination */}
+      <div className="flex items-center justify-between mt-10">
+        <div className="flex items-center">
+          {currentPage > 1 && (
+            <button
+              onClick={() => setCurrentPage(currentPage - 1)}
+              className="border px-3 py-1 rounded hover:bg-gray-100 transition text-sm"
+            >
+              ← Previous
+            </button>
+          )}
+          <div className="flex gap-2">
+            {Array.from({ length: totalPages }).map((_, idx) => (
+              <button
+                key={idx}
+                onClick={() => setCurrentPage(idx + 1)}
+                className={`border px-3 py-1 rounded text-sm ${
+                  currentPage === idx + 1 ? "bg-gray-200" : "hover:bg-gray-100"
+                }`}
+              >
+                {idx + 1}
+              </button>
+            ))}
+          </div>
+        </div>
+        {currentPage < totalPages && (
+          <button
+            onClick={() => setCurrentPage(currentPage + 1)}
+            className="border px-3 py-1 rounded hover:bg-gray-100 transition text-sm"
+          >
+            Next →
+          </button>
+        )}
+      </div>
+      {/* Compare Selected Button */}
+      <div className="mt-8 flex justify-end">
+        <button
+          onClick={handleCompareSelected}
+          className={`${
+            compareItems.length >= 2
+              ? "bg-[#e62245] hover:bg-[#d41d3f] text-white"
+              : "bg-gray-200 hover:bg-gray-300"
+          } text-xs font-semibold px-6 py-2 rounded transition-colors`}
+        >
+          COMPARE SELECTED
+        </button>
+      </div>
     </div>
   );
 };
