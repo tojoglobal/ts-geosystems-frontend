@@ -209,7 +209,7 @@ const CategoryProduct = () => {
                 >
                   SALE
                 </div>
-                <Link to={`/product/${product.id}`}>
+                <Link to={`/products/${product.id}`}>
                   <div
                     onMouseEnter={() => setHoveredProductId(product.id)}
                     onMouseLeave={() => setHoveredProductId(null)}
@@ -232,7 +232,7 @@ const CategoryProduct = () => {
                     <div className="text-xs text-gray-600">
                       {product.brand_name} | Sku: {product.sku}
                     </div>
-                    <Link to={`/product/${product.id}`}>
+                    <Link to={`/products/${product.id}`}>
                       <h3
                         className={`${
                           viewMode === "list"
