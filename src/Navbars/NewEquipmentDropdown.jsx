@@ -2,17 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { MdArrowForwardIos } from "react-icons/md";
 import { useAxiospublic } from "../Hooks/useAxiospublic";
 import { useQuery } from "@tanstack/react-query";
-
-const brands = [
-  "Leica Geosystems",
-  "Radiodetection",
-  "Rothbucher Systeme",
-  "Chartwell",
-  "Nedo",
-  "Survipod",
-  "PIX4D",
-  "Vivax Metrotech",
-];
+import { Link } from "react-router-dom";
 
 export default function NewEquipmentDropdown() {
   const axiosPublicUrl = useAxiospublic();
@@ -46,6 +36,22 @@ export default function NewEquipmentDropdown() {
     },
   });
 
+  // Fetch brands
+  const {
+    data: brandsData,
+    isLoading: brandsLoading,
+    error: brandsError,
+  } = useQuery({
+    queryKey: ["brands"],
+    queryFn: async () => {
+      const res = await axiosPublicUrl.get("/api/brands");
+      return res?.data?.map((brand) => ({
+        name: brand.brands_name,
+        slug: brand.slug,
+      }));
+    },
+  });
+
   useEffect(() => {
     setAnimateLine(false);
     const timeout = setTimeout(() => setAnimateLine(true), 10);
@@ -71,12 +77,12 @@ export default function NewEquipmentDropdown() {
     );
   };
 
-  if (categoriesLoading || subcategoriesLoading) {
+  if (categoriesLoading || subcategoriesLoading || brandsLoading) {
     // add better design if want to
     return <div>Loading...</div>;
   }
 
-  if (categoriesError || subcategoriesError) {
+  if (categoriesError || subcategoriesError || brandsError) {
     // add better design if want to
     return <div>Error loading data</div>;
   }
@@ -110,7 +116,8 @@ export default function NewEquipmentDropdown() {
               className="cursor-pointer pr-6"
             >
               <div className="flex justify-between items-center font-normal">
-                <span
+                <Link
+                  to={category.slug_name}
                   className="capitalize text-[13px]"
                   style={{
                     color: hoveredCategory?.id === category.id ? "#e62245" : "",
@@ -122,7 +129,7 @@ export default function NewEquipmentDropdown() {
                   }}
                 >
                   {category.category_name}
-                </span>
+                </Link>
                 <span className="text-xs">
                   <MdArrowForwardIos />
                 </span>
@@ -134,17 +141,20 @@ export default function NewEquipmentDropdown() {
           SHOP BY BRAND
         </h3>
         <ul className="space-y-1 text-sm text-gray-600">
-          {brands.map((brand) => (
+          {brandsData?.map((brand) => (
             <li
-              key={brand}
+              key={brand.slug}
               onMouseEnter={() => {
                 handleMouseEnterCategory(null);
               }}
               className="cursor-pointer text-[13px] transition-all duration-[0.2s] ease-in-out group"
             >
-              <span className="group-hover:text-[#e62245] group-hover:tracking-wide group-hover:mr-[5px]">
-                {brand}
-              </span>
+              <Link
+                to={`/${brand.slug}`}
+                className="group-hover:text-[#e62245] group-hover:tracking-wide group-hover:mr-[5px]"
+              >
+                {brand.name}
+              </Link>
             </li>
           ))}
         </ul>
@@ -173,24 +183,29 @@ export default function NewEquipmentDropdown() {
             {getSubcategoriesForCategory(hoveredCategory.id).map(
               (subcategory) => (
                 <div key={subcategory.id} className="flex flex-col group">
-                  <div className="relative group h-[180px] overflow-hidden rounded-lg shadow-md cursor-pointer bg-white border-[1px] border-slightly-dark">
-                    <div className="w-full h-full overflow-hidden">
-                      {subcategory.photo && (
-                        <img
-                          src={`${import.meta.env.VITE_OPEN_APIURL}/uploads/${
-                            subcategory.photo
-                          }`}
-                          alt={subcategory.name}
-                          className="w-full h-full object-contain transform transition-transform duration-500 ease-in-out group-hover:scale-110"
-                        />
-                      )}
+                  <Link
+                    to={`/${hoveredCategory.slug_name}/${subcategory.slug}`}
+                    className="relative group"
+                  >
+                    <div className="relative group h-[180px] overflow-hidden rounded-lg shadow-md cursor-pointer bg-white border-[1px] border-slightly-dark">
+                      <div className="w-full h-full overflow-hidden">
+                        {subcategory.photo && (
+                          <img
+                            src={`${import.meta.env.VITE_OPEN_APIURL}/uploads/${
+                              subcategory.photo
+                            }`}
+                            alt={subcategory.name}
+                            className="w-full h-full object-contain transform transition-transform duration-500 ease-in-out group-hover:scale-110"
+                          />
+                        )}
+                      </div>
                     </div>
-                  </div>
-                  <div className="text-center mt-2 transition-all duration-[0.2s] ease-in-out">
-                    <h4 className="capitalize font-bold text-base hover:text-crimson-red group-hover:underline cursor-pointer">
-                      {subcategory.name}
-                    </h4>
-                  </div>
+                    <div className="text-center mt-2 transition-all duration-[0.2s] ease-in-out">
+                      <h4 className="capitalize font-bold text-base hover:text-crimson-red group-hover:underline cursor-pointer">
+                        {subcategory.name}
+                      </h4>
+                    </div>
+                  </Link>
                 </div>
               )
             )}

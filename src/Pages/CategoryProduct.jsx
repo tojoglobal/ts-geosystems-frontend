@@ -100,7 +100,6 @@ const CategoryProduct = () => {
             </select>
           </div>
         </div>
-
         {/* === Updated only this section below === */}
         <div
           className={`grid ${
