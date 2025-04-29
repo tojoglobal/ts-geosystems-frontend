@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
 
 const SoftwareDownloads = () => {
   const axiosPublicUrl = useAxiospublic();
+  const ITEMS_PER_PAGE = 12;
+  const [currentPage, setCurrentPage] = useState(1);
 
   const {
     data: softwareData = [],
@@ -19,13 +21,26 @@ const SoftwareDownloads = () => {
   });
 
   if (isLoading) {
-    // add loading
     return <div>Loading...</div>;
   }
 
   if (error) {
     return <div>Error fetching software data</div>;
   }
+
+  // Calculate the data to display for the current page
+  const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIdx = startIdx + ITEMS_PER_PAGE;
+  const currentData = softwareData.slice(startIdx, endIdx);
+
+  // Calculate the total number of pages
+  const totalPages = Math.ceil(softwareData.length / ITEMS_PER_PAGE);
+
+  const handlePageChange = (page) => {
+    if (page > 0 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  };
 
   return (
     <div className="p-4">
@@ -45,9 +60,8 @@ const SoftwareDownloads = () => {
         G2 Survey 3D Laser Scanner Quick Guides
       </h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {softwareData.map((software) => (
-          <Link
-            to={software.slug}
+        {currentData.map((software) => (
+          <div
             key={software.id}
             className="border rounded-lg p-4 flex flex-col items-center"
           >
@@ -68,22 +82,46 @@ const SoftwareDownloads = () => {
             >
               DOWNLOAD
             </button>
-          </Link>
+          </div>
         ))}
       </div>
-      {/* Pagination demo/ will connect later */}
+      {/* Pagination */}
       <div className="flex justify-between items-center mt-8">
+        <button
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+          className={`px-3 py-1 border flex items-center gap-1 ${
+            currentPage === 1
+              ? "cursor-not-allowed text-gray-400"
+              : "hover:border-[#e62245] hover:text-[#e62245]"
+          }`}
+        >
+          <span>&lt;</span> Previous
+        </button>
         <div className="flex gap-2">
-          {[1, 2, 3].map((page) => (
+          {Array.from({ length: totalPages }, (_, index) => (
             <button
-              key={page}
-              className="px-3 py-1 border hover:border-[#e62245] hover:text-[#e62245]"
+              key={index + 1}
+              onClick={() => handlePageChange(index + 1)}
+              className={`px-3 py-1 border ${
+                currentPage === index + 1
+                  ? "bg-[#e62245] text-white"
+                  : "hover:border-[#e62245] hover:text-[#e62245]"
+              }`}
             >
-              {page}
+              {index + 1}
             </button>
           ))}
         </div>
-        <button className="px-3 py-1 border hover:border-[#e62245] hover:text-[#e62245] flex items-center gap-1">
+        <button
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          className={`px-3 py-1 border flex items-center gap-1 ${
+            currentPage === totalPages
+              ? "cursor-not-allowed text-gray-400"
+              : "hover:border-[#e62245] hover:text-[#e62245]"
+          }`}
+        >
           Next <span>&gt;</span>
         </button>
       </div>

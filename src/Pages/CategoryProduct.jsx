@@ -62,7 +62,6 @@ const CategoryProduct = () => {
     });
   };
 
-
   // Filter products based on category and subcategory
   const filteredProducts = productsData.filter((product) => {
     try {
