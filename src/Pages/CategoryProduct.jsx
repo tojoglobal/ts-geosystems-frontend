@@ -6,6 +6,8 @@ import { FaThList } from "react-icons/fa";
 import Swal from "sweetalert2";
 import { useQuery } from "@tanstack/react-query";
 import { useAxiospublic } from "../Hooks/useAxiospublic";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../features/AddToCart/AddToCart";
 
 const sortOptions = [
   "FEATURED ITEMS",
@@ -20,6 +22,7 @@ const sortOptions = [
 
 const CategoryProduct = () => {
   const axiosPublicUrl = useAxiospublic();
+  const dispatch = useDispatch();
   const [viewMode, setViewMode] = useState("grid");
   const [sortBy, setSortBy] = useState("FEATURED ITEMS");
   const [hoveredProductId, setHoveredProductId] = useState(null);
@@ -37,6 +40,28 @@ const CategoryProduct = () => {
       return res?.data?.products;
     },
   });
+
+  const handleAddToCart = (product) => {
+    const itemToAdd = {
+      id: product.id,
+      product_name: product.product_name,
+      price: parseFloat(product.price),
+      quantity: 1,
+      // image: product.image_urls, /
+      // optional, if you want to display it in cart
+    };
+
+    dispatch(addToCart(itemToAdd));
+
+    Swal.fire({
+      title: "Added to Cart",
+      text: `${product.product_name} has been added to your cart.`,
+      icon: "success",
+      timer: 2000,
+      showConfirmButton: false,
+    });
+  };
+
 
   // Filter products based on category and subcategory
   const filteredProducts = productsData.filter((product) => {
@@ -255,7 +280,10 @@ const CategoryProduct = () => {
                         viewMode === "list" ? "flex-row" : "flex-col"
                       }`}
                     >
-                      <button className="bg-[#e62245] uppercase text-white px-6 py-2 hover:bg-[#d41d3f] transition-colors duration-200 text-sm font-semibold rounded-sm">
+                      <button
+                        onClick={() => handleAddToCart(product)}
+                        className="bg-[#e62245] uppercase text-white px-6 py-2 hover:bg-[#d41d3f] transition-colors duration-200 text-sm font-semibold rounded-sm"
+                      >
                         Add to Cart
                       </button>
                       <div className="flex items-center gap-2">
