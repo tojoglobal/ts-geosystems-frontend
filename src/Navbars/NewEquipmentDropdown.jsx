@@ -117,7 +117,7 @@ export default function NewEquipmentDropdown() {
             >
               <div className="flex justify-between items-center font-normal">
                 <Link
-                  to={category.slug_name}
+                  to={`/${category.slug_name}`}
                   className="capitalize text-[13px]"
                   style={{
                     color: hoveredCategory?.id === category.id ? "#e62245" : "",

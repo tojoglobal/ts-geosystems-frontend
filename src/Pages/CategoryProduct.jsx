@@ -1,8 +1,8 @@
+/* eslint-disable no-useless-escape */
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { BsGrid3X3GapFill } from "react-icons/bs";
 import { FaThList } from "react-icons/fa";
-import Swal from "sweetalert2";
 import { useQuery } from "@tanstack/react-query";
 import { useAxiospublic } from "../Hooks/useAxiospublic";
 
@@ -27,22 +27,35 @@ const CategoryProduct = () => {
   const { category, subcategory } = useParams();
 
   const { data: productsData = [], isLoading } = useQuery({
-    queryKey: ["products", category, subcategory],
+    queryKey: ["products"],
     queryFn: async () => {
       const res = await axiosPublicUrl.get("/api/products");
-      const products = res?.data?.products;
-
-      return products.filter((product) => {
-        if (subcategory) {
-          return (
-            product.category.toLowerCase() === category.toLowerCase() &&
-            product.sub_category.toLowerCase() === subcategory.toLowerCase()
-          );
-        }
-        return product.category.toLowerCase() === category.toLowerCase();
-      });
+      return res?.data?.products;
     },
   });
+
+  // Filter products based on category and subcategory
+  const filteredProducts = productsData.filter((product) => {
+    try {
+      const productCategory = JSON.parse(product.category);
+      const productSubCategory = JSON.parse(product.sub_category);
+
+      if (subcategory) {
+        // Match both category and subcategory
+        return (
+          productCategory.cat === category &&
+          productSubCategory.slug === subcategory
+        );
+      } else {
+        // Match only category
+        return productCategory.cat === category;
+      }
+    } catch (error) {
+      console.error("Error parsing category/subcategory:", error);
+      return false;
+    }
+  });
+
   if (isLoading) return <div>Loading...</div>;
 
   return (
@@ -100,7 +113,6 @@ const CategoryProduct = () => {
             </select>
           </div>
         </div>
-        {/* === Updated only this section below === */}
         <div
           className={`grid ${
             viewMode === "grid"
@@ -108,8 +120,25 @@ const CategoryProduct = () => {
               : "grid-cols-1"
           } gap-6`}
         >
-          {productsData.map((product) => {
-            const image = JSON.parse(product.image_urls || "[]")[0];
+          {filteredProducts.map((product) => {
+            // Parse image URLs
+            let imageUrl = "";
+            try {
+              const images = JSON.parse(product.image_urls);
+              // Take the first image and construct full URL
+              const firstImage = images[0] || "";
+              // Remove any surrounding quotes or brackets if present
+              const cleanImagePath = firstImage.replace(/^["\[]+|["\]]+$/g, "");
+              imageUrl = `${import.meta.env.VITE_OPEN_APIURL}${cleanImagePath}`;
+            } catch (error) {
+              console.log("Error parsing image URLs:", error);
+              // Fallback to direct URL if parsing fails
+              const cleanImagePath = (product.image_urls || "").replace(
+                /^["\[]+|["\]]+$/g,
+                ""
+              );
+              imageUrl = `${import.meta.env.VITE_OPEN_APIURL}${cleanImagePath}`;
+            }
             return (
               <div
                 key={product.id}
@@ -130,7 +159,7 @@ const CategoryProduct = () => {
                     onMouseLeave={() => setHoveredProductId(null)}
                   >
                     <img
-                      src={image}
+                      src={imageUrl}
                       alt={product.product_name}
                       className="w-full h-72 object-contain transition-all duration-300 ease-in-out"
                     />

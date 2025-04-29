@@ -65,6 +65,7 @@ const AppLayout = () => {
         <Route path="/checkout" element={<Checkout />} />
 
         <Route element={<ProductLayout />}>
+          <Route path="/:category" element={<CategoryProduct />} />
           <Route path="/:category/:subcategory" element={<CategoryProduct />} />
           <Route path="/products/:id" element={<ProductDetails />} />
           <Route path="/clearance" element={<Clearance />} />
