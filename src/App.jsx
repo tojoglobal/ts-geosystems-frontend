@@ -48,6 +48,7 @@ import Software from "./Dashboard/Software/Software";
 import CategoryProduct from "./Pages/CategoryProduct";
 import OrderTable from "./Dashboard/Orders/OrderTable";
 import HomePageControl from "./Dashboard/WebsiteControll/HomePageControl";
+import ClientMessages from "./Dashboard/DBComponents/ClientMessages";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -114,6 +115,7 @@ const AppLayout = () => {
           <Route path="orders" element={<OrderTable />} />
           {/* hoem page controll */}
           <Route path="home-page" element={<HomePageControl />} />
+          <Route path="client-messages" element={<ClientMessages />} />
         </Route>
 
         <Route path="*" element={<Error />} />
