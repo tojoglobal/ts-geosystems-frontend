@@ -14,6 +14,7 @@ import {
   Layers,
   Drum,
   MonitorCogIcon,
+  PackageCheck,
 } from "lucide-react";
 import SidebarProfileDropdown from "./SidebarProfileDropdown/SidebarProfileDropdown";
 import logo from "/TS-WEB-LOGO.png";
@@ -29,6 +30,11 @@ const menuItems = [
     label: "Product",
     icon: <MdOutlineShoppingCart size={20} />,
     to: "/dashboard/product",
+  },
+  {
+    label: "Orders",
+    icon: <PackageCheck size={20} />,
+    to: "/dashboard/orders",
   },
   {
     label: "Add Software",

@@ -50,9 +50,7 @@ const CategoryProduct = () => {
       // image: product.image_urls, /
       // optional, if you want to display it in cart
     };
-
     dispatch(addToCart(itemToAdd));
-
     Swal.fire({
       title: "Added to Cart",
       text: `${product.product_name} has been added to your cart.`,

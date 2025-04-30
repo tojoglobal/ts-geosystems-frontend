@@ -47,7 +47,6 @@ export default function Dashboard() {
           />
         </CardContent>
       </Card>
-
       <div className="col-span-4">
         <DashboardCharts />
       </div>
