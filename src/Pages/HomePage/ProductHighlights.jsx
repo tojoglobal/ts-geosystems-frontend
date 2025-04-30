@@ -271,7 +271,7 @@ const ProductHighlights = () => {
               slidesPerView: 4,
               slidesPerGroup: 4,
             },
-            1600: {
+            1536: {
               slidesPerView: 5,
               slidesPerGroup: 5,
             },
