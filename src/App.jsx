@@ -44,7 +44,7 @@ import UpdateProductForm from "./Dashboard/Products/EditProducts";
 import ProductTable from "./Dashboard/Products/ProductsPage";
 import Cart from "./Pages/NavComponents/Cart";
 import Checkout from "./Pages/NavComponents/Checkout";
-import Softwar from "./Dashboard/Softwar/softwar";
+import Software from "./Dashboard/Software/software";
 import CategoryProduct from "./Pages/CategoryProduct";
 
 const AppLayout = () => {
@@ -103,7 +103,7 @@ const AppLayout = () => {
           <Route path="update-product/:id" element={<UpdateProductForm />} />
           <Route path="add-categorys" element={<Categorys />} />
           <Route path="add-brands" element={<Brands />} />
-          <Route path="add-softwar" element={<Softwar />} />
+          <Route path="add-software" element={<Software />} />
         </Route>
 
         <Route path="*" element={<Error />} />

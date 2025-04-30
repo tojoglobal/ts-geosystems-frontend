@@ -20,6 +20,7 @@ const HomePageControl = () => {
 
   const [enabledComponents, setEnabledComponents] = useState({});
   const [loading, setLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
 
   // Fetch initial component states
   useEffect(() => {
@@ -29,7 +30,8 @@ const HomePageControl = () => {
         if (res.data.success) {
           setEnabledComponents(res.data.components);
         } else {
-          // If no data exists, set all to true by default for now
+          // If no data exists, set all to true by default for now, delete later after
+          // adding into database
           setEnabledComponents(
             COMPONENTS.reduce((acc, component) => {
               acc[component] = true;
@@ -56,6 +58,8 @@ const HomePageControl = () => {
   };
 
   const handleSave = async () => {
+    if (isSaving) return;
+    setIsSaving(true);
     try {
       const res = await axiosPublicUrl.put("/api/homepage-control", {
         components: enabledComponents,
@@ -64,11 +68,16 @@ const HomePageControl = () => {
       if (res.data.success) {
         toast.success("Settings saved successfully!");
       } else {
-        toast.error("Failed to save settings");
+        toast.error(res.data.message || "Failed to save settings");
       }
     } catch (error) {
-      console.log(error);
-      toast.error("An error occurred while saving settings");
+      console.error(error);
+      toast.error(
+        error.response?.data?.message ||
+          "An error occurred while saving settings"
+      );
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -121,9 +130,10 @@ const HomePageControl = () => {
       <div className="flex justify-center mt-8 space-x-3">
         <button
           onClick={handleSave}
-          className="px-6 py-2 bg-[#0b6d7f] text-white font-bold rounded transition hover:bg-[#095666]"
+          disabled={isSaving}
+          className="px-6 py-2 bg-[#0b6d7f] text-white font-bold rounded transition hover:bg-[#095666] disabled:bg-gray-400"
         >
-          Save Settings
+          {isSaving ? "Saving..." : "Save Settings"}
         </button>
         <button
           onClick={handleResetAll}
