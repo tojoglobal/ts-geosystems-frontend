@@ -10,6 +10,7 @@ import { Card, CardContent } from "@/Components/ui/card";
 import DashboardCharts from "./DBComponents/DashboardCharts";
 import DashboardWidgets from "./DBComponents/DashboardWidgets";
 import LatestTransactions from "./DBComponents/LatestTransactions";
+import HomePageControl from "./Control/HomePageControl";
 
 export default function Dashboard() {
   return (
@@ -54,9 +55,11 @@ export default function Dashboard() {
       <div className="col-span-4">
         <DashboardWidgets />
       </div>
-
       <div className="col-span-4">
         <LatestTransactions />
+      </div>
+      <div className="col-span-4">
+        <HomePageControl />
       </div>
     </div>
   );
