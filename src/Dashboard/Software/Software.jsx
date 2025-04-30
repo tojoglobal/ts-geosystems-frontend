@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaEdit, FaTrash } from "react-icons/fa";
@@ -9,7 +10,7 @@ const generateSlug = (text) =>
     .replace(/\s+/g, "-")
     .replace(/[^a-z0-9-]/g, "");
 
-const Softwar = () => {
+const Software = () => {
   const axiosPublicUrl = useAxiospublic();
   const [imagePreview, setImagePreview] = useState(null);
   const [softwar, setSoftwar] = useState([]);
@@ -237,4 +238,4 @@ const Softwar = () => {
   );
 };
 
-export default Softwar;
+export default Software;

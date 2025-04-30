@@ -44,7 +44,9 @@ import UpdateProductForm from "./Dashboard/Products/EditProducts";
 import ProductTable from "./Dashboard/Products/ProductsPage";
 import Cart from "./Pages/NavComponents/Cart";
 import Checkout from "./Pages/NavComponents/Checkout";
-import Softwar from "./Dashboard/Softwar/softwar";
+import Software from "./Dashboard/Software/Software";
+import CategoryProduct from "./Pages/CategoryProduct";
+import OrderTable from "./Dashboard/Orders/OrderTable";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -64,6 +66,8 @@ const AppLayout = () => {
         <Route path="/checkout" element={<Checkout />} />
 
         <Route element={<ProductLayout />}>
+          <Route path="/:category" element={<CategoryProduct />} />
+          <Route path="/:category/:subcategory" element={<CategoryProduct />} />
           <Route path="/products/:id" element={<ProductDetails />} />
           <Route path="/clearance" element={<Clearance />} />
           <Route path="/compare/:ids" element={<Compare />} />
@@ -100,7 +104,8 @@ const AppLayout = () => {
           <Route path="update-product/:id" element={<UpdateProductForm />} />
           <Route path="add-categorys" element={<Categorys />} />
           <Route path="add-brands" element={<Brands />} />
-          <Route path="add-softwar" element={<Softwar />} />
+          <Route path="add-software" element={<Software />} />
+          <Route path="orders" element={<OrderTable />} />
         </Route>
 
         <Route path="*" element={<Error />} />

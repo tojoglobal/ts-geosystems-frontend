@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaEdit, FaTrash } from "react-icons/fa";
@@ -119,7 +120,6 @@ const Brands = () => {
               placeholder="Enter brand name"
             />
           </div>
-
           <div className="mb-4">
             <label className="block text-sm font-semibold mb-1">Slug</label>
             <input
@@ -129,7 +129,6 @@ const Brands = () => {
               className="w-full input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
             />
           </div>
-
           <div className="mb-4">
             <label className="block text-sm font-semibold mb-1">
               Brand Logo
@@ -140,7 +139,6 @@ const Brands = () => {
               {...register("photo")}
               className="w-full input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
             />
-
             {imagePreview && (
               <img
                 src={

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { useLocation, NavLink } from "react-router-dom";
 import {
   Menu,
   X,
@@ -10,11 +10,11 @@ import {
   ChevronUp,
   MessageCircle,
   File,
-  FileText,
   Users,
   Layers,
   Drum,
   MonitorCogIcon,
+  PackageCheck,
 } from "lucide-react";
 import SidebarProfileDropdown from "./SidebarProfileDropdown/SidebarProfileDropdown";
 import logo from "/TS-WEB-LOGO.png";
@@ -32,9 +32,14 @@ const menuItems = [
     to: "/dashboard/product",
   },
   {
-    label: "Add Softwar",
+    label: "Orders",
+    icon: <PackageCheck size={20} />,
+    to: "/dashboard/orders",
+  },
+  {
+    label: "Add Software",
     icon: <MonitorCogIcon size={20} />,
-    to: "/dashboard/add-softwar",
+    to: "/dashboard/add-software",
   },
   {
     label: "Add categorys",
@@ -99,6 +104,7 @@ const Sidebar = ({
   toggleMobileSidebar,
 }) => {
   const [openSubmenus, setOpenSubmenus] = useState({});
+  const location = useLocation();
 
   const toggleSubmenu = (label) => {
     setOpenSubmenus((prev) => ({
@@ -161,10 +167,11 @@ const Sidebar = ({
             <div key={label} className="relative group">
               {!submenu ? (
                 <NavLink
+                  key={label}
                   to={to}
                   className={({ isActive }) =>
                     `flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition ${
-                      isActive
+                      isActive && location.pathname === to
                         ? "bg-teal-600 text-white"
                         : "text-gray-300 hover:bg-teal-700 hover:text-white"
                     }`

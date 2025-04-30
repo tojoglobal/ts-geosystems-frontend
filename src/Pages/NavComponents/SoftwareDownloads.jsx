@@ -1,81 +1,46 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { useAxiospublic } from "../../Hooks/useAxiospublic";
 
 const SoftwareDownloads = () => {
-  const guides = [
-    {
-      id: 1,
-      name: 'Leica FlexLine TS07 5" R500 Manual Total Station',
-      image: "https://ts-geosystems.com.bd/assets/images/JMqcf5wY.png",
-      downloadLink: "#",
+  const axiosPublicUrl = useAxiospublic();
+  const ITEMS_PER_PAGE = 12;
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const {
+    data: softwareData = [],
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["software"],
+    queryFn: async () => {
+      const res = await axiosPublicUrl.get("/api/softwar");
+      return res?.data;
     },
-    {
-      id: 2,
-      name: 'Leica FlexLine TS07 1" R500 Manual Total Station',
-      image: "https://ts-geosystems.com.bd/assets/images/JMqcf5wY.png",
-      downloadLink: "#",
-    },
-    {
-      id: 3,
-      name: 'Leica FlexLine TS03 5" R500 Manual Total Station',
-      image: "https://ts-geosystems.com.bd/assets/images/JMqcf5wY.png",
-      downloadLink: "#",
-    },
-    {
-      id: 4,
-      name: 'Leica FlexLine TS10 5" R500 Manual Total Station',
-      image: "https://ts-geosystems.com.bd/assets/images/JMqcf5wY.png",
-      downloadLink: "#",
-    },
-    {
-      id: 5,
-      name: 'Leica FlexLine TS07 5" R500 Manual Total Station',
-      image: "https://ts-geosystems.com.bd/assets/images/JMqcf5wY.png",
-      downloadLink: "#",
-    },
-    {
-      id: 6,
-      name: 'Leica FlexLine TS07 1" R500 Manual Total Station',
-      image: "https://ts-geosystems.com.bd/assets/images/JMqcf5wY.png",
-      downloadLink: "#",
-    },
-    {
-      id: 7,
-      name: 'Leica FlexLine TS03 5" R500 Manual Total Station',
-      image: "https://ts-geosystems.com.bd/assets/images/JMqcf5wY.png",
-      downloadLink: "#",
-    },
-    {
-      id: 8,
-      name: 'Leica FlexLine TS10 5" R500 Manual Total Station',
-      image: "https://ts-geosystems.com.bd/assets/images/JMqcf5wY.png",
-      downloadLink: "#",
-    },
-    {
-      id: 9,
-      name: 'Leica FlexLine TS07 5" R500 Manual Total Station',
-      image: "https://ts-geosystems.com.bd/assets/images/JMqcf5wY.png",
-      downloadLink: "#",
-    },
-    {
-      id: 10,
-      name: 'Leica FlexLine TS07 1" R500 Manual Total Station',
-      image: "https://ts-geosystems.com.bd/assets/images/JMqcf5wY.png",
-      downloadLink: "#",
-    },
-    {
-      id: 11,
-      name: 'Leica FlexLine TS03 5" R500 Manual Total Station',
-      image: "https://ts-geosystems.com.bd/assets/images/JMqcf5wY.png",
-      downloadLink: "#",
-    },
-    {
-      id: 12,
-      name: 'Leica FlexLine TS10 5" R500 Manual Total Station',
-      image: "https://ts-geosystems.com.bd/assets/images/JMqcf5wY.png",
-      downloadLink: "#",
-    },
-  ];
+  });
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error fetching software data</div>;
+  }
+
+  // Calculate the data to display for the current page
+  const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIdx = startIdx + ITEMS_PER_PAGE;
+  const currentData = softwareData.slice(startIdx, endIdx);
+
+  // Calculate the total number of pages
+  const totalPages = Math.ceil(softwareData.length / ITEMS_PER_PAGE);
+
+  const handlePageChange = (page) => {
+    if (page > 0 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  };
 
   return (
     <div className="p-4">
@@ -95,20 +60,24 @@ const SoftwareDownloads = () => {
         G2 Survey 3D Laser Scanner Quick Guides
       </h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {guides.map((guide) => (
+        {currentData.map((software) => (
           <div
-            key={guide.id}
+            key={software.id}
             className="border rounded-lg p-4 flex flex-col items-center"
           >
             <img
-              src={guide.image}
-              alt={guide.name}
+              src={`${import.meta.env.VITE_OPEN_APIURL}/uploads/${
+                software.photo
+              }`}
+              alt={software.softwar_name}
               className="w-full h-auto object-contain mb-4"
             />
             <div className="border-b w-full mb-4"></div>
-            <h3 className="text-center text-sm mb-4">{guide.name}</h3>
+            <h3 className="text-center text-sm mb-4">
+              {software.softwar_name}
+            </h3>
             <button
-              onClick={() => window.open(guide.downloadLink, "_blank")}
+              onClick={() => window.open(software.softwarlink, "_blank")}
               className="bg-[#e62245] text-white px-6 py-1 rounded hover:bg-[#d41d3f] transition-colors w-full"
             >
               DOWNLOAD
@@ -118,17 +87,41 @@ const SoftwareDownloads = () => {
       </div>
       {/* Pagination */}
       <div className="flex justify-between items-center mt-8">
+        <button
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+          className={`px-3 py-1 border flex items-center gap-1 ${
+            currentPage === 1
+              ? "cursor-not-allowed text-gray-400"
+              : "hover:border-[#e62245] hover:text-[#e62245]"
+          }`}
+        >
+          <span>&lt;</span> Previous
+        </button>
         <div className="flex gap-2">
-          {[1, 2, 3, 4, 5, 6].map((page) => (
+          {Array.from({ length: totalPages }, (_, index) => (
             <button
-              key={page}
-              className="px-3 py-1 border hover:border-[#e62245] hover:text-[#e62245]"
+              key={index + 1}
+              onClick={() => handlePageChange(index + 1)}
+              className={`px-3 py-1 border ${
+                currentPage === index + 1
+                  ? "bg-[#e62245] text-white"
+                  : "hover:border-[#e62245] hover:text-[#e62245]"
+              }`}
             >
-              {page}
+              {index + 1}
             </button>
           ))}
         </div>
-        <button className="px-3 py-1 border hover:border-[#e62245] hover:text-[#e62245] flex items-center gap-1">
+        <button
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          className={`px-3 py-1 border flex items-center gap-1 ${
+            currentPage === totalPages
+              ? "cursor-not-allowed text-gray-400"
+              : "hover:border-[#e62245] hover:text-[#e62245]"
+          }`}
+        >
           Next <span>&gt;</span>
         </button>
       </div>

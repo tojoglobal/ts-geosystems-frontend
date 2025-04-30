@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
@@ -68,7 +69,6 @@ const ProductTable = () => {
             </button>
           </Link>
         </div>
-
         <table className="w-full text-sm text-left text-gray-700 dark:text-gray-300">
           <thead className="text-xs uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
             <tr>
