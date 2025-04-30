@@ -3,25 +3,29 @@ import { Menu, X } from "lucide-react";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import { IoSearchOutline } from "react-icons/io5";
 import { LuUserRound } from "react-icons/lu";
-import { PiShoppingCart } from "react-icons/pi";
 import NewEquipmentDropdown from "./NewEquipmentDropdown";
 import { useAppContext } from "../context/useAppContext";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Popover } from "@headlessui/react";
+import CartWithPopover from "./CartWithPopover";
+import { setSticky } from "../features/Sticky/Sticky";
 
 const MainNavContainer = () => {
+  const { isSticky } = useSelector((state) => state.sticky);
   const { setShowSearch } = useAppContext();
   const [isDropdownOpen, setDropdownOpen] = useState(false);
-  const [isSticky, setSticky] = useState(false);
   const [menuIcon, setMenuIcon] = useState(false);
   const [shouldAnimateSticky, setShouldAnimateSticky] = useState(false);
   const dropdownRef = useRef(null);
+  const dispatch = useDispatch();
 
   const handleScroll = () => {
     if (window.scrollY > 100) {
-      setSticky(true);
+      dispatch(setSticky(true));
       setShouldAnimateSticky(true);
     } else {
-      setSticky(false);
+      dispatch(setSticky(false));
       setShouldAnimateSticky(false);
     }
   };
@@ -101,7 +105,7 @@ const MainNavContainer = () => {
           </div>
           {/* Right side */}
           {!isSticky ? (
-            <div className="flex gap-6 text-base font-semibold text-charcoal">
+            <div className="flex gap-6 text-base font-semibold text-charcoal relative">
               <Link
                 to="/used"
                 className="cursor-pointer hover:text-crimson-red transition-colors duration-300 py-2.5"
@@ -177,7 +181,7 @@ const MainNavContainer = () => {
             </div>
           ) : (
             <>
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-4 relative">
                 {/* Search Bar */}
                 <div
                   className="flex items-center px-1 w-[495px] relative"
@@ -193,12 +197,8 @@ const MainNavContainer = () => {
                 {/* User Icon */}
                 <LuUserRound className="text-[25px] text-davy-gray hover:text-crimson-red font-medium cursor-pointer duration-300 ease-in" />
                 {/* Cart Icon with badge */}
-                <div className="relative">
-                  <PiShoppingCart className="text-[25px] text-davy-gray hover:text-crimson-red cursor-pointer duration-300 ease-in font-medium" />
-                  <span className="absolute -top-1 -right-2.5 bg-[#e62245] text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
-                    0
-                  </span>
-                </div>
+                {/* Cart with Popover */}
+                <CartWithPopover />
               </div>
             </>
           )}

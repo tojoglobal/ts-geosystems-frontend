@@ -2,8 +2,16 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import { RxCross2 } from "react-icons/rx";
 import Swal from "sweetalert2";
+import { useDispatch, useSelector } from "react-redux";
 
 const Cart = () => {
+  const { items, totalQuantity, totalPrice } = useSelector(
+    (state) => state.cart
+  );
+  console.log("Cart", items, totalQuantity);
+
+  const dispatch = useDispatch();
+
   const [cartItems, setCartItems] = useState([
     {
       id: 1,
