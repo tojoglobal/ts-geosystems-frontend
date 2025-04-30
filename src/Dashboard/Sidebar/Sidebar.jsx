@@ -15,6 +15,7 @@ import {
   Drum,
   MonitorCogIcon,
   PackageCheck,
+  MessageSquareText,
 } from "lucide-react";
 import SidebarProfileDropdown from "./SidebarProfileDropdown/SidebarProfileDropdown";
 import logo from "/TS-WEB-LOGO.png";
@@ -35,6 +36,11 @@ const menuItems = [
     label: "Orders",
     icon: <PackageCheck size={20} />,
     to: "/dashboard/orders",
+  },
+  {
+    label: "Client Messages",
+    icon: <MessageSquareText size={20} />,
+    to: "/dashboard/client-messages",
   },
   {
     label: "Add Software",

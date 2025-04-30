@@ -8,9 +8,13 @@ import { Navigation, Autoplay } from "swiper/modules";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import "swiper/css";
 import "swiper/css/navigation";
+import { useAxiospublic } from "../../Hooks/useAxiospublic";
+import { toast } from "react-toastify";
 
 const ContactUs = () => {
-  const handleSubmit = (e) => {
+  const axiosPublicUrl = useAxiospublic();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const form = e.target;
@@ -20,20 +24,19 @@ const ContactUs = () => {
       lastName: formData.get("lastName") || "",
       email: formData.get("email") || "",
       phone: formData.get("phone") || "",
-      message: formData.get("message") || "",
+      message: formData.get("message") || ""
     };
 
-    console.log(data);
-
-    // later you can easily send "data" to your backend, example:
-    // axios('/api/contact', {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify(data)
-    // })
-    // .then(response => response.json())
-    // .then(result => console.log(result))
-    // .catch(error => console.error('Error:', error));
+    try {
+      const response = await axiosPublicUrl.post("/api/contact", data);
+      if (response.data.success) {
+        toast.success("Message sent successfully!");
+        form.reset();
+      }
+    } catch (error) {
+      console.error("Error sending message:", error);
+      toast.error("Failed to send message. Please try again.");
+    }
   };
 
   return (

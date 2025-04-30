@@ -47,6 +47,7 @@ import Checkout from "./Pages/NavComponents/Checkout";
 import Software from "./Dashboard/Software/Software";
 import CategoryProduct from "./Pages/CategoryProduct";
 import OrderTable from "./Dashboard/Orders/OrderTable";
+import ClientMessages from "./Dashboard/DBComponents/ClientMessages";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -106,6 +107,7 @@ const AppLayout = () => {
           <Route path="add-brands" element={<Brands />} />
           <Route path="add-software" element={<Software />} />
           <Route path="orders" element={<OrderTable />} />
+          <Route path="client-messages" element={<ClientMessages />} />
         </Route>
 
         <Route path="*" element={<Error />} />
