@@ -72,7 +72,7 @@ const HeaderContainer = () => {
               ) : (
                 <>
                   {cartItems.map((item, index) => (
-                    <div key={item.id} className="py-2">
+                    <div key={item.id} className="py-3">
                       <div className="flex items-start gap-4">
                         <img
                           src={item.image}
@@ -96,10 +96,6 @@ const HeaderContainer = () => {
                       )}
                     </div>
                   ))}
-                  <button className="mb-5 flex items-center justify-center gap-2 w-full bg-[#ffc439] text-black font-semibold py-2 rounded my-3">
-                    <img src="/paypal.svg" className="w-16" alt="" />
-                    Checkout
-                  </button>
                   <div className="flex gap-3 pt-5 border-t">
                     <Link to="/checkout" className="w-1/2">
                       <button className="w-full bg-crimson-red text-sm text-white font-semibold py-2 rounded">
