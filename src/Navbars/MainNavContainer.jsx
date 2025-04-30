@@ -53,7 +53,7 @@ const MainNavContainer = () => {
 
   return (
     <div
-      className={`border-y border-crimson-red bg-white z-50 w-full ${
+      className={`border-y border-crimson-red bg-white z-10 w-full ${
         shouldAnimateSticky
           ? "transition-transform duration-[900ms] ease-in-out"
           : ""
@@ -190,10 +190,8 @@ const MainNavContainer = () => {
                   />
                   <IoSearchOutline className="text-[#e62245] text-[20px] absolute right-5" />
                 </div>
-
                 {/* User Icon */}
                 <LuUserRound className="text-[25px] text-davy-gray hover:text-crimson-red font-medium cursor-pointer duration-300 ease-in" />
-
                 {/* Cart Icon with badge */}
                 <div className="relative">
                   <PiShoppingCart className="text-[25px] text-davy-gray hover:text-crimson-red cursor-pointer duration-300 ease-in font-medium" />
