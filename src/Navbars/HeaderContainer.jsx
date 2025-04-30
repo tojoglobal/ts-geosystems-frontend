@@ -8,7 +8,6 @@ import { useAppContext } from "../context/useAppContext";
 
 const HeaderContainer = () => {
   const { showSearch, setShowSearch } = useAppContext();
-
   const cartItems = [
     {
       id: 1,
@@ -29,7 +28,7 @@ const HeaderContainer = () => {
   ];
 
   return (
-    <div className="max-w-[1380px] mx-auto z-50">
+    <div className="container mx-auto z-50">
       <div className="flex justify-between items-center py-5">
         {/* Logo */}
         <Link to="/">
