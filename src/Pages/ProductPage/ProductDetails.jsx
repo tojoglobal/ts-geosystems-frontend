@@ -6,14 +6,19 @@ import Recommended from "./Recommended";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
+import { useDispatch } from "react-redux";
+import Swal from "sweetalert2";
+import { addToCart } from "../../features/AddToCart/AddToCart";
 
 const ProductDetails = () => {
   const { id } = useParams();
   const axiosPublicUrl = useAxiospublic();
+  const dispatch = useDispatch();
   const [selectedImage, setSelectedImage] = useState("");
   const [activeTab, setActiveTab] = useState("OVERVIEW");
   const overviewRef = useRef(null);
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+  const [quantity, setQuantity] = useState(1);
 
   const {
     data: product = {},
@@ -26,7 +31,39 @@ const ProductDetails = () => {
       return res.data;
     },
   });
-  console.log(product);
+
+  // Quantity handlers
+  const incrementQuantity = () => {
+    setQuantity((prev) => prev + 1);
+  };
+
+  const decrementQuantity = () => {
+    if (quantity > 1) {
+      setQuantity((prev) => prev - 1);
+    }
+  };
+
+  // Add to cart handler
+  const handleAddToCart = () => {
+    const itemToAdd = {
+      id: product.id,
+      product_name: product.product_name,
+      price: parseFloat(product.price),
+      quantity: quantity,
+      image: product.image_urls ? JSON.parse(product.image_urls)[0] : null,
+    };
+
+    dispatch(addToCart(itemToAdd));
+
+    Swal.fire({
+      title: "Added to Cart",
+      text: `${product.product_name} has been added to your cart.`,
+      icon: "success",
+      timer: 2000,
+      showConfirmButton: false,
+    });
+  };
+
   // Parse the image URLs from the product data
   const imageUrls = product?.image_urls ? JSON.parse(product.image_urls) : [];
   // Parse video URLs if available
@@ -35,10 +72,6 @@ const ProductDetails = () => {
   const productOptions = product?.product_options
     ? JSON.parse(product.product_options)
     : [];
-  // Parse software options if available
-  // const softwareOptions = product?.software_options
-  //   ? JSON.parse(product.software_options)
-  //   : [];
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -193,18 +226,27 @@ const ProductDetails = () => {
             <div className="flex items-center gap-4 mb-6">
               <label className="text-gray-600 font-medium">Quantity:</label>
               <div className="flex items-center border border-gray-300 rounded">
-                <button className="px-4 py-2 text-gray-600 hover:bg-gray-100 transition-colors">
+                <button
+                  onClick={decrementQuantity}
+                  className="px-4 py-2 text-gray-600 hover:bg-gray-100 transition-colors"
+                >
                   -
                 </button>
                 <span className="px-6 py-2 border-x border-gray-300 text-gray-600">
-                  1
+                  {quantity}
                 </span>
-                <button className="px-4 py-2 text-gray-600 hover:bg-gray-100 transition-colors">
+                <button
+                  onClick={incrementQuantity}
+                  className="px-4 py-2 text-gray-600 hover:bg-gray-100 transition-colors"
+                >
                   +
                 </button>
               </div>
             </div>
-            <button className="relative overflow-hidden group text-white px-12 font-semibold py-[11px] rounded bg-[#e62245]">
+            <button
+              onClick={handleAddToCart}
+              className="relative overflow-hidden group text-white px-12 font-semibold py-[11px] rounded bg-[#e62245]"
+            >
               <span className="absolute left-0 top-0 h-full w-0 bg-black transition-all duration-500 ease-out group-hover:w-full z-0"></span>
               <span className="relative z-10">ADD TO CART</span>
             </button>

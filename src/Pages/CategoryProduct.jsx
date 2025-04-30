@@ -241,7 +241,7 @@ const CategoryProduct = () => {
                         } font-medium hover:text-[#e62245] cursor-pointer`}
                       >
                         {product.product_name}
-                      </h3>
+                    </h3>
                     </Link>
                     {viewMode === "list" && (
                       <p className="text-sm text-[#2f2f2b] mt-2 line-clamp-4">
