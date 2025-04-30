@@ -130,7 +130,7 @@ const AdminLogin = () => {
             <p>or login with social platforms </p>
             <div>
               <a href="">
-                <FcGoogle className="pt-6" />{" "}
+                <FcGoogle />{" "}
               </a>
               <a href="">
                 <FaFacebook className="text-[#1877F2]" />

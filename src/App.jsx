@@ -47,6 +47,7 @@ import Checkout from "./Pages/NavComponents/Checkout";
 import Software from "./Dashboard/Software/Software";
 import CategoryProduct from "./Pages/CategoryProduct";
 import OrderTable from "./Dashboard/Orders/OrderTable";
+import HomePageControl from "./Dashboard/WebsiteControll/HomePageControl";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -98,14 +99,21 @@ const AppLayout = () => {
           <Route index element={<Dashboard />} />
           <Route path="viewprofile" element={<ViewProfile />} />
           <Route path="update-profile" element={<UpdateProfile />} />
-          {/* <Route path="add-product" element={<ProductAddForm />} /> */}
+
+          {/* product route */}
           <Route path="product" element={<ProductTable />} />
           <Route path="add-product" element={<ProductAddForm />} />
           <Route path="update-product/:id" element={<UpdateProductForm />} />
+          {/* category add */}
           <Route path="add-categorys" element={<Categorys />} />
+          {/* add brand */}
           <Route path="add-brands" element={<Brands />} />
+          {/* add software  */}
           <Route path="add-software" element={<Software />} />
+          {/* order route */}
           <Route path="orders" element={<OrderTable />} />
+          {/* hoem page controll */}
+          <Route path="home-page" element={<HomePageControl />} />
         </Route>
 
         <Route path="*" element={<Error />} />

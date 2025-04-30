@@ -13,7 +13,6 @@ const ProtectedRoute = ({ children }) => {
       .then(() => setIsAuth(true))
       .catch(() => setIsAuth(false));
   }, []);
-  // console.log(isAuth);
 
   // if (isAuth === null) return <p>Loading...</p>;
   if (isAuth === null)

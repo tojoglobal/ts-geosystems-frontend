@@ -19,7 +19,11 @@ import {
 import SidebarProfileDropdown from "./SidebarProfileDropdown/SidebarProfileDropdown";
 import logo from "/TS-WEB-LOGO.png";
 import smallLogo from "/favicon.png";
-import { MdCategory, MdOutlineShoppingCart } from "react-icons/md";
+import {
+  MdCategory,
+  MdOutlineShoppingCart,
+  MdWebStories,
+} from "react-icons/md";
 const menuItems = [
   {
     label: "Dashboard",
@@ -50,6 +54,15 @@ const menuItems = [
     label: "Add Brands",
     icon: <Drum size={20} />,
     to: "/dashboard/add-brands",
+  },
+  {
+    label: "Website Controll",
+    icon: <MdWebStories size={20} />,
+    submenu: [
+      { label: "Home Page", to: "/dashboard/home-page" },
+      { label: "Sent", to: "/dashboard/email/sent" },
+    ],
+    // to: "/dashboard/add-brands",
   },
   {
     label: "Email",
