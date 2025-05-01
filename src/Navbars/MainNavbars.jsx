@@ -15,7 +15,6 @@ const MainNavbars = () => {
         <MainNavContainer />
         <HeaderBottom />
       </div>
-
       {/* Mobile only */}
       <div className="md:hidden">
         <MobileNavbar />

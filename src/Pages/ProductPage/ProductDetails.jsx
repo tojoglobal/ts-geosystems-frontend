@@ -1,3 +1,4 @@
+import Swal from "sweetalert2";
 import { useState, useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Thumbs } from "swiper/modules";
@@ -7,7 +8,6 @@ import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import { useDispatch } from "react-redux";
-import Swal from "sweetalert2";
 import { addToCart } from "../../features/AddToCart/AddToCart";
 
 const ProductDetails = () => {
@@ -215,7 +215,7 @@ const ProductDetails = () => {
                       <label className="block mb-2 text-gray-600 font-medium">
                         {option.label}
                       </label>
-                      <select className="w-full border border-gray-300 rounded py-2 px-3 text-gray-600 focus:outline-none focus:border-[#e62245]">
+                      <select className="w-full appearance-none border border-gray-300 rounded py-[6px] px-3 text-gray-600 focus:outline-none focus:border-[#e62245]">
                         <option>{option.value}</option>
                       </select>
                     </div>
