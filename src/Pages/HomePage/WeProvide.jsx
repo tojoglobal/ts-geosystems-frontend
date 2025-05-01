@@ -33,16 +33,16 @@ const WeProvide = () => {
   ];
 
   return (
-    <div className="py-16 bg-white">
+    <div className="py-5 md:py-16 bg-white">
       <div className="max-w-[1300px] mx-auto px-4">
-        <div className="flex items-center justify-center gap-4 mb-12">
+        <div className="flex items-center justify-center gap-4 mb-7 md:mb-12">
           <div className="flex-1 h-0.5 bg-[#e62245]"></div>
           <h2 className="text-center text-xl sm:text-2xl md:text-4xl font-bold text-[#e62245] whitespace-nowrap">
             WE PROVIDE
           </h2>
           <div className="flex-1 h-0.5 bg-[#e62245]"></div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8 text-center">
           {services.map((service, index) => (
             <div
               key={index}

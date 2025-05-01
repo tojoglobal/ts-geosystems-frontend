@@ -45,7 +45,7 @@ const services = [
 
 const OurAdServices = () => {
   return (
-    <div className="py-16 px-4">
+    <div className="py-7 md:py-16 px-4">
       <div className="max-w-[1300px] mx-auto">
         {/* Title */}
         <div className="flex items-center justify-center gap-4 mb-12">
@@ -56,11 +56,11 @@ const OurAdServices = () => {
           <div className="flex-1 h-0.5 bg-[#e62245]"></div>
         </div>
         {/* Services Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
           {services.map((item, index) => (
             <div
               key={index}
-              className="border border-gray-200 rounded-lg p-5 flex gap-4 items-start"
+              className="border border-gray-200 rounded-lg p-3 md:p-5 flex gap-4 items-start"
             >
               <FaCheckCircle className="text-[#61b961] text-2xl mt-1" />
               <div>

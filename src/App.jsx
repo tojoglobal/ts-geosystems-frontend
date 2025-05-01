@@ -50,7 +50,6 @@ import OrderTable from "./Dashboard/Orders/OrderTable";
 import HomePageControl from "./Dashboard/WebsiteControll/HomePageControl";
 import ClientMessages from "./Dashboard/DBComponents/ClientMessages";
 import SupportPage from "./Pages/NavComponents/SupportPage";
-import Brand from "./Pages/ProductPage/Brand";
 
 const AppLayout = () => {
   const location = useLocation();

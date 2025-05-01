@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useRef } from "react";
 import { Menu, X } from "lucide-react";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
@@ -7,7 +8,6 @@ import NewEquipmentDropdown from "./NewEquipmentDropdown";
 import { useAppContext } from "../context/useAppContext";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { Popover } from "@headlessui/react";
 import CartWithPopover from "./CartWithPopover";
 import { setSticky } from "../features/Sticky/Sticky";
 import { PiShoppingCart } from "react-icons/pi";
@@ -79,9 +79,10 @@ const MainNavContainer = () => {
             <div
               className="relative cursor-pointer py-2.5"
               onClick={toggleDropdown}
+              ref={dropdownRef}
             >
               <div
-                className={`flex items-center gap-2.5 transition-all duration-500 ease-in-out  relative ${
+                className={`flex items-center gap-2.5 transition-all duration-500 ease-in-out relative ${
                   isDropdownOpen ? "translate-x-5" : ""
                 }`}
               >
@@ -94,7 +95,7 @@ const MainNavContainer = () => {
                   {menuIcon ? <X size={20} /> : <Menu size={20} />}
                 </button>
                 <button
-                  className={`relative overflow-hidden  font-semibold cursor-pointer transition-all duration-500 ease-in-out ${
+                  className={`relative overflow-hidden font-semibold cursor-pointer transition-all duration-500 ease-in-out ${
                     isDropdownOpen ? "text-crimson-red" : "text-charcoal"
                   }`}
                 >
@@ -108,6 +109,11 @@ const MainNavContainer = () => {
                   isDropdownOpen ? "w-[12.2rem]" : "w-0"
                 }`}
               ></span>
+              {isDropdownOpen && (
+                <div className="absolute top-[86%] left-0 mt-2 z-50">
+                  <NewEquipmentDropdown />
+                </div>
+              )}
             </div>
             {/* Right side */}
             {!isSticky ? (
@@ -201,7 +207,9 @@ const MainNavContainer = () => {
                     <IoSearchOutline className="text-[#e62245] text-[20px] absolute right-5" />
                   </div>
                   {/* User Icon */}
-                  <LuUserRound className="text-[25px] text-davy-gray hover:text-crimson-red font-medium cursor-pointer duration-300 ease-in" />
+                  <Link to="/login">
+                    <LuUserRound className="text-[25px] text-davy-gray hover:text-crimson-red font-medium cursor-pointer duration-300 ease-in" />
+                  </Link>
                   {/* Cart Icon with badge */}
                   {/* Cart with Popover */}
                   <div onClick={() => dispatch(toggleCart())}>
@@ -218,18 +226,16 @@ const MainNavContainer = () => {
         </div>
         <>
           {/* Backdrop Overlay inside relative wrapper */}
-          {isDropdownOpen && (
-            <div
-              className="absolute top-[45px] w-full inset-0 z-[40] bg-black/40 bg-opacity-50 transition-all h-lvw duration-300"
-              onClick={toggleDropdown}
-            ></div>
-          )}
+          <div
+            className="fixed inset-0 top-[90px] z-[40] bg-black/40 transition-all duration-300"
+            onClick={toggleDropdown}
+          />
           {/* Dropdown Menu */}
-          {isDropdownOpen && (
+          {/* {isDropdownOpen && (
             <div className="absolute left-[98px] top-[45px] z-50">
               <NewEquipmentDropdown />
             </div>
-          )}
+          )} */}
         </>
       </div>
     </div>

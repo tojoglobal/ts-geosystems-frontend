@@ -200,8 +200,8 @@ const ProductHighlights = () => {
   return (
     <div className="max-w-[1300px] mx-auto rounded-md px-3 md:px-0 py-6 md:py-12 bg-white relative">
       {/* Tab Header */}
-      <div className="flex items-center justify-between border border-gray-200">
-        <div className="flex gap-3 sm:gap-6 px-3 py-1">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between border border-gray-200 relative">
+        <div className="flex flex-col md:flex-row gap-3 sm:gap-6 px-3 py-1">
           {tabOptions.map((tab) => (
             <div
               key={tab.key}
@@ -220,25 +220,22 @@ const ProductHighlights = () => {
           ))}
         </div>
         {/* Custom Arrows */}
-        <div className="flex gap-2 pr-4">
-          <div
-            className={`swiper-button-prev-custom cursor-pointer ${
-              isBeginning
-                ? "text-gray-200 cursor-not-allowed"
-                : "text-gray-400 hover:text-gray-600"
-            }`}
+        {/* Custom Arrows */}
+        <div className="flex items-center gap-2 md:gap-3 px-3 md:px-6 py-2 md:py-0 absolute right-2 top-2 md:static">
+          <button
+            onClick={() => swiperRef.current?.slidePrev()}
+            className="p-2 bg-gray-200 rounded-full hover:bg-[#e62245] hover:text-white transition disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={isBeginning}
           >
-            <IoIosArrowBack size={22} />
-          </div>
-          <div
-            className={`swiper-button-next-custom cursor-pointer ${
-              isEnd
-                ? "text-gray-200 cursor-not-allowed"
-                : "text-gray-400 hover:text-gray-600"
-            }`}
+            <IoIosArrowBack size={20} />
+          </button>
+          <button
+            onClick={() => swiperRef.current?.slideNext()}
+            className="p-2 bg-gray-200 rounded-full hover:bg-[#e62245] hover:text-white transition disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={isEnd}
           >
-            <IoIosArrowForward size={22} />
-          </div>
+            <IoIosArrowForward size={20} />
+          </button>
         </div>
       </div>
       {/* Swiper */}
@@ -260,12 +257,12 @@ const ProductHighlights = () => {
           }}
           breakpoints={{
             320: {
-              slidesPerView: 2,
-              slidesPerGroup: 2,
+              slidesPerView: 1,
+              slidesPerGroup: 1,
             },
             640: {
-              slidesPerView: 3,
-              slidesPerGroup: 3,
+              slidesPerView: 2,
+              slidesPerGroup: 2,
             },
             1024: {
               slidesPerView: 4,
