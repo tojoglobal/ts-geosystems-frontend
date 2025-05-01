@@ -1,4 +1,4 @@
-import Banner from "./Banner";
+import Banner from "./HomeBanner/Banner";
 import ExperienceCenter from "./ExperienceCenter";
 import OurAchievements from "./OurAchievements";
 import OurAdServices from "./OurAdServices";
@@ -8,21 +8,23 @@ import ProductHighlights from "./ProductHighlights";
 import TopClients from "./TopClients";
 import TotalStation from "./TotalStation";
 import WeProvide from "./WeProvide";
+import BannerSlider from "./HomeBanner/BannerSlider";
 const MainHome = () => {
-   return (
-      <>
-         <Banner />
-         <ProductHighlights />
-         <ExperienceCenter />
-         <TotalStation />
-         <WeProvide />
-         <OurAchievements />
-         <TopClients />
-         <OurAdServices />
-         <PopularBrands />
-         <OurYoutube />
-      </>
-   );
+  return (
+    <>
+      <BannerSlider />
+      <Banner />
+      <ProductHighlights />
+      <ExperienceCenter />
+      <TotalStation />
+      <WeProvide />
+      <OurAchievements />
+      <TopClients />
+      <OurAdServices />
+      <PopularBrands />
+      <OurYoutube />
+    </>
+  );
 };
 
 export default MainHome;

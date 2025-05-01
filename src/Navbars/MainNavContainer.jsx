@@ -84,7 +84,7 @@ const MainNavContainer = () => {
                 {menuIcon ? <X size={20} /> : <Menu size={20} />}
               </button>
               <button
-                className={`relative overflow-hidden  font-semibold cursor-pointer transition-all duration-500 ease-in-out ${
+                className={`relative overflow-hidden font-semibold cursor-pointer transition-all duration-500 ease-in-out ${
                   isDropdownOpen ? "text-crimson-red" : "text-charcoal"
                 }`}
               >

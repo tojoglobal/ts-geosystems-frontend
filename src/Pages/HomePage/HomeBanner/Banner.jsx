@@ -4,17 +4,15 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/effect-fade";
-
+import { useEffect } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
-import banner1 from "../../assets/banner/g21.webp";
-import banner2 from "../../assets/banner/g22.webp";
-import banner3 from "../../assets/banner/g23.webp";
-import banner4 from "../../assets/banner/g24.webp";
-import banner5 from "../../assets/banner/g25.webp";
-import banner6 from "../../assets/banner/g26.webp";
-
-import { useEffect } from "react";
+import banner1 from "../../../assets/banner/g21.webp";
+import banner2 from "../../../assets/banner/g22.webp";
+import banner3 from "../../../assets/banner/g23.webp";
+import banner4 from "../../../assets/banner/g24.webp";
+import banner5 from "../../../assets/banner/g25.webp";
+import banner6 from "../../../assets/banner/g26.webp";
 
 const slides = [
   {

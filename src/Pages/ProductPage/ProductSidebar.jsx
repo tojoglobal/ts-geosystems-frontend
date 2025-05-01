@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { FaChevronRight, FaChevronDown } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { SlArrowDown, SlArrowUp } from "react-icons/sl";
 
 const sidebarData = [
   { label: "Shop All", link: "/shop-all", children: null },
@@ -95,9 +95,9 @@ const ProductSidebar = () => {
                 >
                   <span>{item.label}</span>
                   {openSections[item.label] ? (
-                    <FaChevronDown />
+                    <SlArrowUp size={14} />
                   ) : (
-                    <FaChevronRight />
+                    <SlArrowDown size={14} />
                   )}
                 </button>
                 {openSections[item.label] && item.children.length > 0 && (
