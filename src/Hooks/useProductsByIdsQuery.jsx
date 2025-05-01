@@ -15,7 +15,7 @@ const useProductsByIdsQuery = (ids) => {
       try {
         setLoading(true);
         const query = ids.join(",");
-        const res = await axiosUrlPublic.get(`/api/products?ids=${query}`);
+        const res = await axiosUrlPublic.get(`/api/productsids?ids=${query}`);
         setProducts(res.data.products || []);
       } catch (err) {
         console.error("Error fetching products:", err);
