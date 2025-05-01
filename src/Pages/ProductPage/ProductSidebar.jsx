@@ -1,70 +1,71 @@
-import { useState } from "react";
-import { FaChevronRight, FaChevronDown } from "react-icons/fa";
-import { Link } from "react-router-dom";
-
-const sidebarData = [
-  { label: "Shop All", link: "/shop-all", children: null },
-  { label: "Campaign", link: "/campaign", children: null },
-  {
-    label: "Auto Levels",
-    children: ["Geomax", "Pentax", "Bosch", "Topcon", "Sokkia"],
-  },
-  {
-    label: "3D Laser Scanner",
-    children: [],
-  },
-  {
-    label: "Echo Sounder",
-    children: [],
-  },
-  {
-    label: "LiDAR",
-    children: [],
-  },
-  {
-    label: "Total Station",
-    children: ["Hi-Target", "Leica", "Kolida", "Sokkia", "Topcon"],
-  },
-  {
-    label: "Accessories",
-    children: [
-      "Battery",
-      "Charger",
-      "Pole",
-      "Prism",
-      "Mini Tripod",
-      "Tripod",
-      "Charger",
-      "Staff",
-    ],
-  },
-  {
-    label: "Robotic Total Station",
-    children: ["Bike", "Car"],
-  },
-  {
-    label: "Distance Meters",
-    children: ["Leica"],
-  },
-  // Added gap with a spacer object
-  { label: "", type: "spacer", height: "20px" },
-  {
-    label: "Shop by Brand",
-    children: [
-      "Sokkia",
-      "Kolida",
-      "Topcon",
-      "ts",
-      "Leica",
-      "Hi-Target",
-      "Geomax",
-      "Bosch",
-    ],
-  },
-];
+import { useState, useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
+import { SlArrowDown, SlArrowUp } from "react-icons/sl";
+import { useAxiospublic } from "../../Hooks/useAxiospublic";
+import { useQuery } from "@tanstack/react-query";
 
 const ProductSidebar = () => {
+  const { category, subcategory } = useParams();
+  const axiosPublicUrl = useAxiospublic();
   const [openSections, setOpenSections] = useState({});
+
+  // Fetch categories
+  const {
+    data: categoriesData,
+    isLoading: categoriesLoading,
+    error: categoriesError,
+  } = useQuery({
+    queryKey: ["categories"],
+    queryFn: async () => {
+      const res = await axiosPublicUrl.get("/api/category");
+      return res?.data;
+    },
+  });
+
+  // Fetch subcategories
+  const {
+    data: subcategoriesData,
+    isLoading: subcategoriesLoading,
+    error: subcategoriesError,
+  } = useQuery({
+    queryKey: ["subcategories"],
+    queryFn: async () => {
+      const res = await axiosPublicUrl.get("/api/subcategory");
+      return res?.data;
+    },
+  });
+
+  // Fetch brands
+  const {
+    data: brandsData,
+    isLoading: brandsLoading,
+    error: brandsError,
+  } = useQuery({
+    queryKey: ["brands"],
+    queryFn: async () => {
+      const res = await axiosPublicUrl.get("/api/brands");
+      return res?.data?.map((brand) => ({
+        name: brand.brands_name,
+        slug: brand.slug,
+      }));
+    },
+  });
+  console.log(brandsData);
+
+  useEffect(() => {
+    // Automatically open the section if category is in URL params
+    if (category && categoriesData?.categories) {
+      const foundCategory = categoriesData.categories.find(
+        (cat) => cat.slug_name === category
+      );
+      if (foundCategory) {
+        setOpenSections((prev) => ({
+          ...prev,
+          [foundCategory.category_name]: true,
+        }));
+      }
+    }
+  }, [category, categoriesData]);
 
   const toggleSection = (label) => {
     setOpenSections((prev) => ({
@@ -73,9 +74,48 @@ const ProductSidebar = () => {
     }));
   };
 
+  // Get subcategories for a category
+  const getSubcategoriesForCategory = (categoryId) => {
+    if (!subcategoriesData?.subcategories) return [];
+    return subcategoriesData.subcategories.filter(
+      (subcat) => subcat.main_category_id === categoryId
+    );
+  };
+
+  if (categoriesLoading || subcategoriesLoading || brandsLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (categoriesError || subcategoriesError || brandsError) {
+    return <div>Error loading data</div>;
+  }
+
+  // Create sidebar data structure dynamically
+  const dynamicSidebarData = [
+    { label: "Shop All", link: "/shop-all", children: null },
+    ...(categoriesData?.categories?.map((category) => ({
+      label: category.category_name,
+      children: getSubcategoriesForCategory(category.id).map((subcat) => ({
+        name: subcat.name,
+        slug: subcat.slug,
+        categorySlug: category.slug_name,
+      })),
+      categoryId: category.id,
+      categorySlug: category.slug_name,
+    })) || []),
+    { label: "", type: "spacer", height: "20px" },
+    {
+      label: "Shop by Brand",
+      children: brandsData?.map((brand) => ({
+        name: brand.name,
+        slug: brand.slug,
+      })),
+    },
+  ];
+
   return (
     <div className="w-full">
-      {sidebarData.map((item, index) =>
+      {dynamicSidebarData.map((item, index) =>
         item.type === "spacer" ? (
           <div key={index} style={{ height: item.height }} />
         ) : (
@@ -83,32 +123,45 @@ const ProductSidebar = () => {
             key={item.label}
             className={`bg-[#ebebeb] text-black ${index !== 0 ? "mt-1" : ""}`}
           >
-            {item.children !== null ? (
+            {item.children !== null && item.children.length > 0 ? (
               <div>
                 <button
                   onClick={() => toggleSection(item.label)}
-                  className={`w-full hover:text-[#e62245] flex items-center justify-between font-medium text-left p-3 ${
+                  className={`w-full capitalize hover:text-[#e62245] flex items-center justify-between font-medium text-left p-3 ${
                     openSections[item.label]
                       ? "border-b-2 border-[#e62245]"
+                      : ""
+                  } ${
+                    category === item.categorySlug
+                      ? "text-[#e62245] font-bold"
                       : ""
                   }`}
                 >
                   <span>{item.label}</span>
                   {openSections[item.label] ? (
-                    <FaChevronDown />
+                    <SlArrowUp size={14} />
                   ) : (
-                    <FaChevronRight />
+                    <SlArrowDown size={14} />
                   )}
                 </button>
                 {openSections[item.label] && item.children.length > 0 && (
                   <div className="bg-white">
                     {item.children.map((child) => (
                       <Link
-                        key={child}
-                        to={`/${child.toLowerCase().replace(/\s+/g, "-")}`}
-                        className="block px-5 py-3 text-sm hover:bg-gray-50 border-t border-[#ebebeb]"
+                        key={child.slug || child.name}
+                        to={
+                          item.label === "Shop by Brand"
+                            ? `/${child.slug}`
+                            : `/${item.categorySlug}/${child.slug}`
+                        }
+                        className={`capitalize block px-5 py-3 text-sm hover:bg-gray-50 border-t border-[#ebebeb] ${
+                          subcategory === child.slug &&
+                          category === item.categorySlug
+                            ? "text-[#e62245] font-bold"
+                            : ""
+                        }`}
                       >
-                        {child}
+                        {child.name}
                       </Link>
                     ))}
                   </div>
@@ -117,7 +170,9 @@ const ProductSidebar = () => {
             ) : (
               <Link
                 to={item.link}
-                className="block p-3 hover:text-[#e62245] font-medium hover:underline"
+                className={`block p-3 hover:text-[#e62245] font-medium hover:underline ${
+                  item.link === `/${category}` ? "text-[#e62245] font-bold" : ""
+                }`}
               >
                 {item.label}
               </Link>

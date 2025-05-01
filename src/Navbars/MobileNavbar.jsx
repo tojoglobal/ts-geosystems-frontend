@@ -100,7 +100,6 @@ const MobileNavbar = () => {
                 }`}
               />
             </button>
-
             {/* Center: Phone Number */}
             <a
               href="tel:+443330232200"

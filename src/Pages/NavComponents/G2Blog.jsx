@@ -145,14 +145,16 @@ const G2Blog = () => {
         </Link>
         <span>/</span>
         <Link to="/support" className="text-[#e62245]">
-          G2 BLOG
+          G2 Blog
         </Link>
       </div>
       <h1 className="text-3xl mt-2 text-[#e62245] mb-2">G2 BLOG</h1>
       <section className="mt-12">
         {activeTab !== "All" && (
           <div className="text-center mb-8">
-            <h2 className="text-3xl text-[#e62245] font-semibold">{activeTab}</h2>
+            <h2 className="text-3xl text-[#e62245] font-semibold">
+              {activeTab}
+            </h2>
           </div>
         )}
         <div className="border-t border-b py-4 flex justify-center items-center gap-6 text-[#db7084] font-medium">
@@ -183,11 +185,7 @@ const G2Blog = () => {
               to={post.url}
               className="relative border rounded-lg overflow-hidden transition-all hover:bg-gray-100"
             >
-              <img
-                src={post.image}
-                alt="post"
-                className="w-full"
-              />
+              <img src={post.image} alt="post" className="w-full" />
               <img
                 src={post.logo}
                 alt="logo"

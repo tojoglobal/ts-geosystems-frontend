@@ -26,7 +26,7 @@ const CategoryProduct = () => {
   const [viewMode, setViewMode] = useState("grid");
   const [sortBy, setSortBy] = useState("FEATURED ITEMS");
   const [hoveredProductId, setHoveredProductId] = useState(null);
-  console.log(hoveredProductId);
+  // console.log(hoveredProductId);
   const [currentPage, setCurrentPage] = useState(1);
   const [compareItems, setCompareItems] = useState([]);
   const navigate = useNavigate();

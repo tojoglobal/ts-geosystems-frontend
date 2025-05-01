@@ -85,7 +85,7 @@ const QuickGuides = () => {
         </Link>
         <span>/</span>
         <Link to="/support" className="text-[#e62245]">
-          SUPPORT
+          Support
         </Link>
         <span>/</span>
         <span className="text-[#e62245]">Quick Guides</span>

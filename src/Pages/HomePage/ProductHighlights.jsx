@@ -198,7 +198,7 @@ const ProductHighlights = () => {
   };
 
   return (
-    <div className="container mx-auto rounded-md px-3 md:px-0 py-6 md:py-16 bg-white relative">
+    <div className="container mx-auto rounded-md px-3 md:px-0 py-6 md:py-12 bg-white relative">
       {/* Tab Header */}
       <div className="flex items-center justify-between border border-gray-200">
         <div className="flex gap-3 sm:gap-6 px-3 py-1">
