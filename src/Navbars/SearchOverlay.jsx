@@ -111,25 +111,21 @@ const SearchOverlay = ({ isOpen, onClose }) => {
           isOpen ? "translate-y-0" : "-translate-y-full"
         }`}
       >
-        {/* top Section */}
         <div className="flex max-w-[99%] z-50 mx-auto items-center pt-6 p-4">
-          {/* logo */}
           <img
             src="https://cdn11.bigcommerce.com/s-ew2v2d3jn1/images/stencil/250x64/g2-survey-logo_1611121872__30054.original.png"
             className="w-[200px] h-full mr-4"
             alt="G2 Survey"
           />
-
-          {/* Search Bar */}
           <form
             onSubmit={handleSearchSubmit}
-            className="relative flex items-center w-full ml-5  mx-auto border-b border-[#c5ccd3] bg-white  rounded"
+            className="relative flex items-center w-full ml-5 mx-auto border-b border-[#c5ccd3] bg-white rounded"
           >
             <IoSearchSharp className="ml-7 mr-3 font-extrabold text-xl text-charcoal-black" />
             <input
               type="text"
               placeholder="Search..."
-              className="flex-1 px-3 py-4  text-2xl outline-none focus:outline-none"
+              className="flex-1 px-3 py-4 text-2xl outline-none focus:outline-none"
               value={searchText}
               onChange={(e) => setSearchText(e.target.value)}
             />
@@ -141,13 +137,11 @@ const SearchOverlay = ({ isOpen, onClose }) => {
               Submit
             </button>
           </form>
-
           {/* Close Icon */}
           <button onClick={onClose} className="ml-4 cursor-pointer ">
             <RxCross1 className="text-4xl text-[#626263]" />
           </button>
         </div>
-
         {/* Latest Search Section */}
         <div className="px-6 py-4 flex max-w-[70%] items-center mx-auto ">
           <h2 className="text-gray-700 font-medium mr-2">Latest searches:</h2>
@@ -166,7 +160,6 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                 </button>
               </div>
             ))}
-
             {latestSearches.length > 0 && (
               <button
                 onClick={handleClearAll}
@@ -178,11 +171,11 @@ const SearchOverlay = ({ isOpen, onClose }) => {
           </div>
         </div>
         {/* Bottom Section */}
-        <div className="flex px-12 pb-6">
+        <div className="flex px-12 pb-12">
           {/* Left - Popular Searches */}
-          <div className="w-4/9  p-5  bg-white">
+          <div className="w-4/9 p-5 bg-white">
             <h3 className="font-semibold text-lg mb-2">Popular searches</h3>
-            <ul className="text-sm text-gray-700 space-y-2">
+            <ul className="text-sm text-gray-700 space-y-3">
               {POPULAR_SEARCHES.map((search, i) => (
                 <li key={i} className="hover:text-[#e62245] cursor-pointer">
                   {search}
@@ -190,15 +183,13 @@ const SearchOverlay = ({ isOpen, onClose }) => {
               ))}
             </ul>
           </div>
-
           {/* Right - Product Slider */}
-          <div className="w-7/9  pl-10">
+          <div className="w-7/9 pl-10">
             <h3 className="font-semibold text-lg mb-4">
               {searchText
                 ? `Results for "${searchText}"`
                 : "Recommended products"}
             </h3>
-
             {/* <div className="relative w-full"> */}
             <Slider {...settings}>
               {RECOMMENDED_PRODUCTS.map((product, index) => (
@@ -229,7 +220,7 @@ const SearchOverlay = ({ isOpen, onClose }) => {
       {/* Backdrop Overlay inside relative wrapper */}
       {isOpen && (
         <div
-          className={`absolute top-0 w-full inset-0 z-[30] bg-black/85 bg-opacity-50  h-lvw  transition-transform duration-500 ease-in-out transform ${
+          className={`fixed top-0 left-0 right-0 bottom-0 w-full h-full z-[30] bg-black/85 transition-transform duration-500 ease-in-out transform ${
             isOpen ? "translate-y-0" : "-translate-y-full"
           }`}
           onClick={onClose}
