@@ -18,11 +18,8 @@ const BannerSlider = () => {
           disableOnInteraction: false,
         }}
         loop={true}
-        pagination={{
-          clickable: true,
-          el: ".custom-pagination",
-        }}
-        className="w-full h-[150px] md:h-[400px] rounded-lg"
+        pagination={{ clickable: true }}
+        className="w-full h-[150px] md:h-[400px] rounded-lg relative"
       >
         {images.map((img, index) => (
           <SwiperSlide key={index}>
@@ -34,21 +31,7 @@ const BannerSlider = () => {
           </SwiperSlide>
         ))}
       </Swiper>
-      <div className="custom-pagination absolute bottom-3 left-40 flex gap-2 z-10"></div>
-      <style jsx>{`
-        .custom-pagination .swiper-pagination-bullet {
-          width: 10px;
-          height: 10px;
-          background-color: white;
-          opacity: 0.6;
-          border-radius: 50%;
-          transition: opacity 0.3s;
-        }
-        .custom-pagination .swiper-pagination-bullet-active {
-          opacity: 1;
-          background-color: #fff;
-        }
-      `}</style>
+      <div className="custom-pagination absolute bottom-3 left-1/2 transform -translate-x-1/2 flex gap-2 z-10"></div>
     </div>
   );
 };

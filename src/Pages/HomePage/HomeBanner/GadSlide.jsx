@@ -21,10 +21,7 @@ const GadSlide = () => {
               disableOnInteraction: false,
             }}
             loop={true}
-            pagination={{
-              clickable: true,
-              el: ".gad-pagination",
-            }}
+            pagination={{ clickable: true }}
             className="w-full h-[150px] md:h-[325px] rounded-lg"
           >
             {images.map((img, index) => (
@@ -37,8 +34,9 @@ const GadSlide = () => {
               </SwiperSlide>
             ))}
           </Swiper>
-          <div className="gad-pagination absolute bottom-3 left-10 md:left-36 flex gap-2 z-10"></div>
+          <div className="custom-pagination absolute bottom-3 left-1/2 transform -translate-x-1/2 flex gap-2 z-10"></div>
         </div>
+        {/* Right: Static Image */}
         <div className="w-full md:w-[33%] overflow-hidden rounded-lg group">
           <img
             src="https://ts-geosystems.com.bd/assets/images/RsKp91pyTWS-COLLECTIONS.jpg"
@@ -47,20 +45,6 @@ const GadSlide = () => {
           />
         </div>
       </div>
-      <style jsx>{`
-        .gad-pagination .swiper-pagination-bullet {
-          width: 10px;
-          height: 10px;
-          background-color: white;
-          opacity: 0.6;
-          border-radius: 50%;
-          transition: opacity 0.3s;
-        }
-        .gad-pagination .swiper-pagination-bullet-active {
-          opacity: 1;
-          background-color: #fff;
-        }
-      `}</style>
     </div>
   );
 };

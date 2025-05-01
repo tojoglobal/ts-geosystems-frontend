@@ -403,16 +403,3 @@ div.right div div a {
     @apply bg-background text-foreground;
   }
 }
-
-.custom-pagination .swiper-pagination-bullet {
-  width: 6px;
-  height: 6px;
-  background-color: rgba(255, 255, 255, 0.5);
-}
-
-.custom-pagination .swiper-pagination-bullet-active {
-  width: 8px;
-  height: 8px;
-  background-color: white;
-  opacity: 1;
-}
