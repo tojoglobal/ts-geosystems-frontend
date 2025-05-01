@@ -1,205 +1,217 @@
-import React, { useState, useEffect } from "react";
-import { useForm, Controller } from "react-hook-form";
-import { Editor } from "@tinymce/tinymce-react";
-import Select from "react-select";
-import Dropzone from "react-dropzone";
+import { Link } from "react-router-dom";
+import { useState } from "react";
+import { RxCross2 } from "react-icons/rx";
+import Swal from "sweetalert2";
+import { useDispatch, useSelector } from "react-redux";
 
-const ProductAddForm = () => {
-  const [images, setImages] = useState([]);
-  const [subCategories, setSubCategories] = useState([]);
+const Cart = () => {
+  const { items, totalQuantity, totalPrice } = useSelector(
+    (state) => state.cart
+  );
+  console.log("Cart", items, totalQuantity);
 
-  const {
-    register,
-    handleSubmit,
-    control,
-    setValue,
-    watch,
-    formState: { errors },
-  } = useForm();
+  const dispatch = useDispatch();
 
-  const watchCategory = watch("category");
+  const [cartItems, setCartItems] = useState([
+    {
+      id: 1,
+      name: "Leica iCON iCG70 GNSS RTK Rover Package",
+      price: 11994.0,
+      quantity: 1,
+      image:
+        "https://cdn11.bigcommerce.com/s-ew2v2d3jn1/images/stencil/100x100/products/788/4467/leica-icon-icg70-antenna__78227.1723046790.jpg?c=1",
+    },
+    {
+      id: 2,
+      name: "Leica GS05T RTK GPS 4G Rover + CS20",
+      price: 11994.0,
+      quantity: 1,
+      image:
+        "https://cdn11.bigcommerce.com/s-ew2v2d3jn1/images/stencil/100x100/products/800/4611/leica-gs05-gnss-antenna__20101.1727199027.jpg?c=1",
+    },
+  ]);
 
-  useEffect(() => {
-    if (watchCategory) {
-      // Fetch subcategories based on selected category
-      setSubCategories([
-        { value: "camera", label: "Camera" },
-        { value: "lens", label: "Lens" },
-      ]);
-    }
-  }, [watchCategory]);
-
-  const onDrop = (acceptedFiles) => {
-    setImages([...images, ...acceptedFiles.slice(0, 20)]);
+  const updateQuantity = (id, amount) => {
+    setCartItems((prevItems) =>
+      prevItems.map((item) =>
+        item.id === id
+          ? { ...item, quantity: Math.max(item.quantity + amount, 1) }
+          : item
+      )
+    );
   };
 
-  const onSubmit = (data) => {
-    console.log({ ...data, images });
+  const removeItem = (id) => {
+    console.log(id);
+    Swal.fire({
+      title: "Are you sure?",
+      text: "Are you sure you want to delete this item?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#e62245",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, remove it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        //  condition
+        Swal.fire(
+          "Removed!",
+          "The item has been removed from the cart.",
+          "success"
+        );
+      }
+    });
   };
+
+  // Calculate totals
+  const subTotal = cartItems.reduce(
+    (total, item) => total + item.price * item.quantity,
+    0
+  );
+  const vat = subTotal * 0.2; // Example VAT at 20%
+  const grandTotal = subTotal + vat;
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="p-6 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 grid grid-cols-1 md:grid-cols-3 gap-6"
-    >
-      {/* Image Upload Column */}
-      <div className="col-span-1">
-        <label className="block mb-2 font-medium">Upload Images</label>
-        <Dropzone onDrop={onDrop} multiple maxFiles={20}>
-          {({ getRootProps, getInputProps }) => (
-            <div
-              {...getRootProps()}
-              className="border-2 border-dashed border-gray-300 rounded-md p-6 text-center cursor-pointer hover:border-teal-500"
-            >
-              <input {...getInputProps()} />
-              <p>Drag & drop or click to select images</p>
-            </div>
-          )}
-        </Dropzone>
-        <div className="mt-4 grid grid-cols-3 gap-2">
-          {images.map((file, index) => (
-            <img
-              key={index}
-              src={URL.createObjectURL(file)}
-              alt="preview"
-              className="h-20 w-full object-cover rounded"
-            />
-          ))}
+    <div className="p-3">
+      {/* Breadcrumb */}
+      <div className="flex items-center gap-2 text-xs mb-4">
+        <Link to="/" className="hover:text-[#e62245]">
+          Home
+        </Link>
+        <span>/</span>
+        <span className="text-[#e62245]">Your Cart</span>
+      </div>
+      {cartItems.length === 0 ? (
+        <div>
+          <h1 className="text-3xl text-gray-800 mb-2">Your Cart (0 Items)</h1>
+          <p className="text-gray-500 mt-3">Your cart is empty</p>
         </div>
-      </div>
-
-      {/* Second Column */}
-      <div className="col-span-1 space-y-4">
-        <input
-          {...register("productName", { required: true })}
-          placeholder="Product Name"
-          className="input"
-        />
-
-        <select {...register("category", { required: true })} className="input">
-          <option value="">Select Category</option>
-          <option value="electronics">Electronics</option>
-          <option value="cameras">Cameras</option>
-        </select>
-
-        <select
-          {...register("subCategory", { required: true })}
-          className="input"
-        >
-          <option value="">Select Sub Category</option>
-          {subCategories.map((sub) => (
-            <option key={sub.value} value={sub.value}>
-              {sub.label}
-            </option>
-          ))}
-        </select>
-
-        <input
-          {...register("sku", { required: true })}
-          placeholder="SKU / Unique Code"
-          className="input"
-        />
-
-        <select
-          {...register("condition", { required: true })}
-          className="input"
-        >
-          <option value="">Condition</option>
-          <option value="new">New</option>
-          <option value="used">Used</option>
-          <option value="old">Old</option>
-        </select>
-      </div>
-
-      {/* Third Column */}
-      <div className="col-span-1 space-y-4">
-        <Controller
-          name="productOptions"
-          control={control}
-          render={({ field }) => (
-            <Select
-              {...field}
-              isMulti
-              options={[
-                { value: "wifi", label: "WiFi" },
-                { value: "bluetooth", label: "Bluetooth" },
-              ]}
-              className="text-black"
-              placeholder="Product Options"
-            />
-          )}
-        />
-
-        <Controller
-          name="softwareOptions"
-          control={control}
-          render={({ field }) => (
-            <Select
-              {...field}
-              isMulti
-              options={[
-                { value: "photoshop", label: "Photoshop" },
-                { value: "lightroom", label: "Lightroom" },
-              ]}
-              className="text-black"
-              placeholder="Software Options"
-            />
-          )}
-        />
-
-        <input
-          {...register("brandName", { required: true })}
-          placeholder="Brand Name"
-          className="input"
-        />
-
-        <label>Product Overview</label>
-        <Controller
-          name="productOverview"
-          control={control}
-          render={({ field }) => (
-            <Editor
-              apiKey="your-tinymce-api-key"
-              value={field.value}
-              init={{
-                height: 200,
-                menubar: false,
-                plugins: "link image code",
-                toolbar:
-                  "undo redo | formatselect | bold italic | alignleft aligncenter alignright | code",
-              }}
-              onEditorChange={(content) => field.onChange(content)}
-            />
-          )}
-        />
-
-        <input
-          {...register("videoUrls")}
-          placeholder="YouTube Video URLs (comma separated)"
-          className="input"
-        />
-
-        <textarea
-          {...register("warrantyInfo")}
-          placeholder="Warranty Information"
-          className="input"
-        />
-
-        <button
-          type="submit"
-          className="w-full bg-teal-600 text-white py-2 px-4 rounded-md hover:bg-teal-700 transition"
-        >
-          Submit Product
-        </button>
-      </div>
-    </form>
+      ) : (
+        <div>
+          {/* Title */}
+          <h1 className="text-3xl mb-2">
+            Your Cart ({cartItems.length} Items)
+          </h1>
+          {/* Table */}
+          <table className="w-full border-collapse mb-6">
+            <thead>
+              <tr className="border-b text-left">
+                <th className="py-2">Item</th>
+                <th className="py-2">Price</th>
+                <th className="py-2">Quantity</th>
+                <th className="py-2 text-right">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              {cartItems.map((item) => (
+                <tr key={item.id} className="border-b">
+                  {/* Item */}
+                  <td className="flex items-center gap-4 py-4">
+                    <img
+                      src={item.image}
+                      alt={item.name}
+                      className="w-20 h-20"
+                    />
+                    <div>
+                      <p>Leica Geosystems</p>
+                      <Link className="font-medium text-[#e62245] underline">
+                        {item.name}
+                      </Link>
+                    </div>
+                  </td>
+                  {/* Price */}
+                  <td>£{item.price.toFixed(2)}</td>
+                  {/* Quantity */}
+                  <td>
+                    <div className="flex items-center">
+                      <button
+                        onClick={() => updateQuantity(item.id, -1)}
+                        className="px-2 border rounded hover:bg-gray-200"
+                      >
+                        -
+                      </button>
+                      <span className="px-2 border rounded">
+                        {item.quantity}
+                      </span>
+                      <button
+                        onClick={() => updateQuantity(item.id, 1)}
+                        className="px-2 border rounded hover:bg-gray-200"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </td>
+                  {/* Total */}
+                  <td className="text-right">
+                    <div className="flex items-center justify-end gap-3">
+                      <p>£{(item.price * item.quantity).toFixed(2)}</p>
+                      <button
+                        onClick={() => removeItem(item.id)}
+                        className="p-[2px] bg-gray-300 text-red-500 rounded-full flex items-center justify-center"
+                      >
+                        <RxCross2 className="text-[16px]" />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          {/* Summary */}
+          <div className="max-w-lg ml-auto p-4 rounded">
+            <div className="flex justify-between mb-3 border-b pb-3">
+              <span>Subtotal:</span>
+              <span>£{subTotal.toFixed(2)}</span>
+            </div>
+            <div className="flex justify-between mb-3 border-b pb-3">
+              <span>Shipping:</span>
+              <span>Estimate Shipping</span>
+            </div>
+            <div className="flex justify-between mb-3 border-b pb-3">
+              <span>VAT:</span>
+              <span>£{vat.toFixed(2)}</span>
+            </div>
+            <div className="flex justify-between mb-3 border-b pb-3">
+              <span>Coupon Code:</span>
+              <button className="text-blue-500 hover:underline">
+                Add Coupon
+              </button>
+            </div>
+            <div className="flex justify-between text-lg mt-4">
+              <span>Grand Total:</span>
+              <span>£{grandTotal.toFixed(2)}</span>
+            </div>
+            <div className="flex justify-end mt-7">
+              <Link to="/checkout">
+                <button className="bg-[#e62245] text-white py-[6px] px-6 rounded mb-4">
+                  CHECKOUT
+                </button>
+              </Link>
+            </div>
+            <div className="text-sm text-right text-gray-500 mb-4">
+              -- or use --
+            </div>
+            <div className="flex flex-col w-3/5 ml-auto items-center mt-4">
+              <button className="flex items-center justify-center gap-1 bg-yellow-400 text-black py-[6px] px-6 rounded w-full mb-2">
+                <img src="/paypal.svg" className="w-16" alt="" />
+                Checkout
+              </button>
+              <button className="bg-[#f3a847] text-black py-[6px] px-6 rounded w-full">
+                <img
+                  src="https://m.media-amazon.com/images/G/02/AmazonPay/Maxo/PWA_dark-en_US._CB620220074_.svg"
+                  alt=""
+                  className="w-36 mx-auto"
+                />
+              </button>
+              <p className="uppercase font-semibold text-sm">
+                use your amazon account
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
   );
 };
 
-export default ProductAddForm;
-
-// Tailwind common input class
-const inputClass = `block w-full rounded-md border border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 p-2 text-sm bg-white dark:bg-gray-800 dark:text-white`;
-const style = document.createElement("style");
-style.innerHTML = `.input { ${inputClass} }`;
-document.head.appendChild(style);
+export default Cart;

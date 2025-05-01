@@ -47,6 +47,7 @@ import Checkout from "./Pages/NavComponents/Checkout";
 import Software from "./Dashboard/Software/Software";
 import CategoryProduct from "./Pages/CategoryProduct";
 import OrderTable from "./Dashboard/Orders/OrderTable";
+import HomePageControl from "./Dashboard/WebsiteControll/HomePageControl";
 import ClientMessages from "./Dashboard/DBComponents/ClientMessages";
 import SupportPage from "./Pages/NavComponents/SupportPage";
 import Brand from "./Pages/ProductPage/Brand";
@@ -71,9 +72,7 @@ const AppLayout = () => {
         <Route element={<ProductLayout />}>
           <Route path="/:category" element={<CategoryProduct />} />
           <Route path="/:category/:subcategory" element={<CategoryProduct />} />
-          {/* <Route path="/brand" element={<Brand />} />
-          <Route path="/brand/:brand_name" element={<Brand />} /> */}
-          <Route path="/products/:id" element={<ProductDetails />} />
+          <Route path="/products/:id/:slug" element={<ProductDetails />} />
           <Route path="/clearance" element={<Clearance />} />
           <Route path="/compare/:ids" element={<Compare />} />
           <Route path="/used" element={<UsedEquipment />} />
@@ -104,14 +103,21 @@ const AppLayout = () => {
           <Route index element={<Dashboard />} />
           <Route path="viewprofile" element={<ViewProfile />} />
           <Route path="update-profile" element={<UpdateProfile />} />
-          {/* <Route path="add-product" element={<ProductAddForm />} /> */}
+
+          {/* product route */}
           <Route path="product" element={<ProductTable />} />
           <Route path="add-product" element={<ProductAddForm />} />
           <Route path="update-product/:id" element={<UpdateProductForm />} />
+          {/* category add */}
           <Route path="add-categorys" element={<Categorys />} />
+          {/* add brand */}
           <Route path="add-brands" element={<Brands />} />
+          {/* add software  */}
           <Route path="add-software" element={<Software />} />
+          {/* order route */}
           <Route path="orders" element={<OrderTable />} />
+          {/* hoem page controll */}
+          <Route path="home-page" element={<HomePageControl />} />
           <Route path="client-messages" element={<ClientMessages />} />
         </Route>
 

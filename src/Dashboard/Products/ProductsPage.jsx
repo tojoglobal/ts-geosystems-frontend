@@ -6,17 +6,59 @@ import Modal from "react-modal";
 import { FaEdit, FaTrash, FaEye } from "react-icons/fa";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import { Link } from "react-router-dom";
+import DOMPurify from "dompurify";
 
 Modal.setAppElement("#root"); // Important for accessibility
 
 const ProductTable = () => {
   const axiosPublicUrl = useAxiospublic();
   const [products, setProducts] = useState([]);
+  const [productCategory, setProductCategory] = useState([]);
+  const [productSubCategory, setProductSubCategory] = useState([]);
+  const [productBrands, setProductBrans] = useState([]);
   const [viewProduct, setViewProduct] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     fetchProducts();
+  }, []);
+
+  // fetch the product category
+  useEffect(() => {
+    const fetchProductCategory = async () => {
+      try {
+        const res = await axiosPublicUrl.get("/api/category");
+        setProductCategory(res.data?.categories);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchProductCategory();
+  }, []);
+  // fetch the product subcategory
+  useEffect(() => {
+    const fetchProductCategory = async () => {
+      try {
+        const res = await axiosPublicUrl.get("/api/subcategory");
+        setProductSubCategory(res.data?.subcategories);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchProductCategory();
+  }, []);
+
+  // fetch the product Brand name
+  useEffect(() => {
+    const fetchProductCategory = async () => {
+      try {
+        const res = await axiosPublicUrl.get("/api/brands");
+        setProductBrans(res.data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchProductCategory();
   }, []);
 
   const fetchProducts = async () => {
@@ -55,6 +97,28 @@ const ProductTable = () => {
     setViewProduct(product);
     setIsModalOpen(true);
   };
+  console.log(products);
+  console.log(viewProduct);
+
+  const getCategoryName = (id) => {
+    const converparse = JSON.parse(id);
+    return (
+      productCategory.find((cat) => cat.id === converparse.id)?.category_name ||
+      "N/A"
+    );
+  };
+
+  const getSubCategoryName = (id) => {
+    const converparse = JSON.parse(id);
+    return (
+      productSubCategory.find((sub) => sub.id === converparse.id)?.name || "N/A"
+    );
+  };
+  const getBrandName = (id) => {
+    return (
+      productBrands.find((brand) => brand.slug === id)?.brands_name || "N/A"
+    );
+  };
 
   return (
     <div className="p-6 bg-gray-100 dark:bg-gray-900 min-h-screen">
@@ -73,6 +137,7 @@ const ProductTable = () => {
           <thead className="text-xs uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
             <tr>
               <th className="py-3 px-6">Product Name</th>
+              <th className="py-3 px-6">price ৳</th>
               <th className="py-3 px-6">Category</th>
               <th className="py-3 px-6">Sub Category</th>
               <th className="py-3 px-6">SKU</th>
@@ -89,24 +154,26 @@ const ProductTable = () => {
                   className="bg-white dark:bg-gray-800 border-b dark:border-gray-700"
                 >
                   <td className="py-4 px-6">{product.product_name}</td>
-                  <td className="py-4 px-6">{product.category}</td>
-                  <td className="py-4 px-6">{product.sub_category}</td>
+                  <td className="py-4 px-6 text-nowrap">৳ {product.price}</td>
+                  <td className="py-4 px-6">
+                    {getCategoryName(product.category)}
+                  </td>
+                  <td className="py-4 px-6">
+                    {getSubCategoryName(product.sub_category)}
+                  </td>
+
                   <td className="py-4 px-6">{product.sku}</td>
                   <td className="py-4 px-6">{product.product_condition}</td>
-                  <td className="py-4 px-6">{product.brand_name}</td>
+                  <td className="py-4 px-6">
+                    {getBrandName(product.brand_name)}
+                  </td>
                   <td className="py-4 px-6 flex justify-center items-center gap-4">
                     <Link to={`/dashboard/update-product/${product.id}`}>
                       <button className="text-blue-500 hover:text-blue-700">
                         <FaEdit size={18} />
                       </button>
                     </Link>
-                    {/* <button
-                      onClick={() => handleEdit(product.id)}
-                      className="text-blue-500 hover:text-blue-700"
-                      title="Edit"
-                    >
-                      <FaEdit size={18} />
-                    </button> */}
+
                     <button
                       onClick={() =>
                         handleDelete(product.id, product.image_urls)
@@ -145,8 +212,8 @@ const ProductTable = () => {
         isOpen={isModalOpen}
         onRequestClose={() => setIsModalOpen(false)}
         contentLabel="Product Details"
-        className="bg-white dark:bg-gray-800 p-8 rounded-md shadow-lg max-w-2xl mx-auto my-20"
-        overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
+        className="bg-white dark:bg-gray-800 p-8 rounded-md shadow-lg max-w-2xl mx-auto my-20 max-h-[80vh] overflow-y-auto"
+        overlayClassName="fixed inset-0 bg-black  bg-opacity-60 flex justify-center items-center"
       >
         {viewProduct && (
           <div className="text-gray-700 dark:text-gray-300 space-y-4">
@@ -154,10 +221,14 @@ const ProductTable = () => {
               {viewProduct.product_name}
             </h2>
             <p>
-              <strong>Category:</strong> {viewProduct.category}
+              <strong>price:</strong> ৳ {viewProduct.price}
             </p>
             <p>
-              <strong>Sub Category:</strong> {viewProduct.sub_category}
+              <strong>Category:</strong> {getCategoryName(viewProduct.category)}
+            </p>
+            <p>
+              <strong>Sub Category:</strong>{" "}
+              {getSubCategoryName(viewProduct.sub_category)}
             </p>
             <p>
               <strong>SKU:</strong> {viewProduct.sku}
@@ -166,13 +237,26 @@ const ProductTable = () => {
               <strong>Condition:</strong> {viewProduct.product_condition}
             </p>
             <p>
-              <strong>Brand:</strong> {viewProduct.brand_name}
+              <strong>Brand:</strong>
+              {getBrandName(viewProduct.brand_name)}
             </p>
+            <div>
+              <strong>Overview:</strong>{" "}
+              <article
+                dangerouslySetInnerHTML={{
+                  __html: DOMPurify.sanitize(viewProduct.product_overview),
+                }}
+                className="prose max-w-none prose-base text-base md:text-lg md:text-justify leading-relaxed bg-white px-2"
+              ></article>
+            </div>
             <p>
-              <strong>Overview:</strong> {viewProduct.product_overview}
-            </p>
-            <p>
-              <strong>Warranty Info:</strong> {viewProduct.warranty_info}
+              <strong>Warranty Info:</strong>
+              <article
+                dangerouslySetInnerHTML={{
+                  __html: DOMPurify.sanitize(viewProduct.warranty_info),
+                }}
+                className="prose max-w-none prose-base text-base md:text-lg md:text-justify leading-relaxed dark:text-white"
+              ></article>
             </p>
             {viewProduct.video_urls && (
               <p>

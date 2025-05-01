@@ -58,6 +58,8 @@ const HomePageControl = () => {
   };
 
   const handleSave = async () => {
+    console.log(enabledComponents);
+
     if (isSaving) return;
     setIsSaving(true);
     try {

@@ -99,7 +99,7 @@ const AdminLogin = () => {
               value={formData.useremail}
               onChange={handleChange}
               name="useremail"
-              id=""
+              id="useremail"
               placeholder="Write your email"
             />
             <span className="material-symbols-outlined person">
@@ -115,6 +115,7 @@ const AdminLogin = () => {
               value={formData.password}
               onChange={handleChange}
             />
+
             <span
               onClick={togglePassword}
               className="material-symbols-outlined cursor-pointer lock"
@@ -129,7 +130,7 @@ const AdminLogin = () => {
             <p>or login with social platforms </p>
             <div>
               <a href="">
-                <FcGoogle className="pt-6" />{" "}
+                <FcGoogle />{" "}
               </a>
               <a href="">
                 <FaFacebook className="text-[#1877F2]" />
