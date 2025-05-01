@@ -1,79 +1,84 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
 import { RxCross2 } from "react-icons/rx";
 import Swal from "sweetalert2";
 import { useDispatch, useSelector } from "react-redux";
+import { useMemo, useState } from "react";
+import useProductsByIdsQuery from "../../Hooks/useProductsByIdsQuery";
+import {
+  removeFromCart,
+  updateQuantity,
+} from "../../features/AddToCart/AddToCart";
 
 const Cart = () => {
-  const { items, totalQuantity, totalPrice } = useSelector(
-    (state) => state.cart
-  );
-  console.log("Cart", items, totalQuantity);
-
   const dispatch = useDispatch();
+  const { items } = useSelector((state) => state.cart);
+  const [shippingCost, setShippingCost] = useState(5.99);
+  const [showCouponInput, setShowCouponInput] = useState(false);
+  const [showShippingForm, setShowShippingForm] = useState(false);
+  const [shippingInfo, setShippingInfo] = useState({
+    country: "",
+    city: "",
+    zip: "",
+  });
+  const [couponInput, setCouponInput] = useState("");
+  const [coupon, setCoupon] = useState("");
 
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 1,
-      name: "Leica iCON iCG70 GNSS RTK Rover Package",
-      price: 11994.0,
-      quantity: 1,
-      image:
-        "https://cdn11.bigcommerce.com/s-ew2v2d3jn1/images/stencil/100x100/products/788/4467/leica-icon-icg70-antenna__78227.1723046790.jpg?c=1",
-    },
-    {
-      id: 2,
-      name: "Leica GS05T RTK GPS 4G Rover + CS20",
-      price: 11994.0,
-      quantity: 1,
-      image:
-        "https://cdn11.bigcommerce.com/s-ew2v2d3jn1/images/stencil/100x100/products/800/4611/leica-gs05-gnss-antenna__20101.1727199027.jpg?c=1",
-    },
-  ]);
-
-  const updateQuantity = (id, amount) => {
-    setCartItems((prevItems) =>
-      prevItems.map((item) =>
-        item.id === id
-          ? { ...item, quantity: Math.max(item.quantity + amount, 1) }
-          : item
-      )
-    );
+  const estimateShippingCost = () => {
+    if (shippingInfo.country && shippingInfo.zip) {
+      setShippingCost(190.79); // Example from your screenshot
+      Swal.fire("Shipping Estimated", "Estimated cost: £190.79", "success");
+    }
   };
 
-  const removeItem = (id) => {
-    console.log(id);
+  const productIds = useMemo(() => items.map((item) => item.id), [items]);
+  const { products, loading } = useProductsByIdsQuery(productIds);
+
+  const mergedCart = items
+    .map((item) => {
+      const product = products.find((p) => p.id === item.id);
+      const rawPrice = product?.price || "0";
+      const numericPrice = Number(rawPrice.toString().replace(/,/g, "")); // Clean commas
+      return product
+        ? {
+            ...product,
+            quantity: item.quantity,
+            price: numericPrice,
+          }
+        : null;
+    })
+    .filter(Boolean);
+
+  const handleQuantityChange = (id, delta) => {
+    dispatch(updateQuantity({ id, amount: delta }));
+  };
+
+  const handleRemove = (id) => {
     Swal.fire({
       title: "Are you sure?",
-      text: "Are you sure you want to delete this item?",
+      text: "This item will be removed from your cart.",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#e62245",
-      cancelButtonColor: "#d33",
+      cancelButtonColor: "#aaa",
       confirmButtonText: "Yes, remove it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        //  condition
-        Swal.fire(
-          "Removed!",
-          "The item has been removed from the cart.",
-          "success"
-        );
+        dispatch(removeFromCart(id));
+        Swal.fire("Removed!", "Item removed from cart.", "success");
       }
     });
   };
 
-  // Calculate totals
-  const subTotal = cartItems.reduce(
+  const subTotal = mergedCart.reduce(
     (total, item) => total + item.price * item.quantity,
     0
   );
-  const vat = subTotal * 0.2; // Example VAT at 20%
-  const grandTotal = subTotal + vat;
+  const vat = subTotal * 0.2;
+  const discount = coupon === "DISCOUNT10" ? subTotal * 0.1 : 0; // example
+  const grandTotal = subTotal + vat + shippingCost - discount;
 
   return (
     <div className="p-3">
-      {/* Breadcrumb */}
       <div className="flex items-center gap-2 text-xs mb-4">
         <Link to="/" className="hover:text-[#e62245]">
           Home
@@ -81,18 +86,14 @@ const Cart = () => {
         <span>/</span>
         <span className="text-[#e62245]">Your Cart</span>
       </div>
-      {cartItems.length === 0 ? (
-        <div>
-          <h1 className="text-3xl text-gray-800 mb-2">Your Cart (0 Items)</h1>
-          <p className="text-gray-500 mt-3">Your cart is empty</p>
-        </div>
+
+      {mergedCart.length === 0 ? (
+        <p className="text-xl">Your cart is empty.</p>
       ) : (
-        <div>
-          {/* Title */}
-          <h1 className="text-3xl mb-2">
-            Your Cart ({cartItems.length} Items)
+        <>
+          <h1 className="text-3xl mb-4">
+            Your Cart ({mergedCart.length} Items)
           </h1>
-          {/* Table */}
           <table className="w-full border-collapse mb-6">
             <thead>
               <tr className="border-b text-left">
@@ -103,53 +104,50 @@ const Cart = () => {
               </tr>
             </thead>
             <tbody>
-              {cartItems.map((item) => (
+              {mergedCart.map((item) => (
                 <tr key={item.id} className="border-b">
-                  {/* Item */}
                   <td className="flex items-center gap-4 py-4">
                     <img
-                      src={item.image}
-                      alt={item.name}
-                      className="w-20 h-20"
+                      src={
+                        item.image_urls
+                          ? `${import.meta.env.VITE_OPEN_APIURL}${
+                              JSON.parse(item.image_urls)[0]
+                            }`
+                          : "/placeholder.jpg"
+                      }
+                      alt={item.product_name}
+                      className="w-20 h-20 object-contain"
                     />
                     <div>
-                      <p>Leica Geosystems</p>
-                      <Link className="font-medium text-[#e62245] underline">
-                        {item.name}
-                      </Link>
+                      <p className="font-medium">{item.product_name}</p>
                     </div>
                   </td>
-                  {/* Price */}
-                  <td>£{item.price.toFixed(2)}</td>
-                  {/* Quantity */}
+                  <td>£{item?.price.toFixed(2)}</td>
                   <td>
                     <div className="flex items-center">
                       <button
-                        onClick={() => updateQuantity(item.id, -1)}
+                        onClick={() => handleQuantityChange(item.id, -1)}
                         className="px-2 border rounded hover:bg-gray-200"
                       >
                         -
                       </button>
-                      <span className="px-2 border rounded">
-                        {item.quantity}
-                      </span>
+                      <span className="px-3">{item.quantity}</span>
                       <button
-                        onClick={() => updateQuantity(item.id, 1)}
+                        onClick={() => handleQuantityChange(item.id, 1)}
                         className="px-2 border rounded hover:bg-gray-200"
                       >
                         +
                       </button>
                     </div>
                   </td>
-                  {/* Total */}
                   <td className="text-right">
                     <div className="flex items-center justify-end gap-3">
                       <p>£{(item.price * item.quantity).toFixed(2)}</p>
                       <button
-                        onClick={() => removeItem(item.id)}
-                        className="p-[2px] bg-gray-300 text-red-500 rounded-full flex items-center justify-center"
+                        onClick={() => handleRemove(item.id)}
+                        className="text-red-500"
                       >
-                        <RxCross2 className="text-[16px]" />
+                        <RxCross2 />
                       </button>
                     </div>
                   </td>
@@ -157,58 +155,158 @@ const Cart = () => {
               ))}
             </tbody>
           </table>
-          {/* Summary */}
-          <div className="max-w-lg ml-auto p-4 rounded">
-            <div className="flex justify-between mb-3 border-b pb-3">
+
+          {/* Coupon and Shipping */}
+          <div className="max-w-lg ml-auto p-4 rounded space-y-4">
+            {/* Totals */}
+            <div className="flex justify-between mb-2 border-b pb-2">
               <span>Subtotal:</span>
               <span>£{subTotal.toFixed(2)}</span>
             </div>
-            <div className="flex justify-between mb-3 border-b pb-3">
-              <span>Shipping:</span>
-              <span>Estimate Shipping</span>
+            {/* Coupon Section */}
+            <div className="mb-2 border-b pb-2">
+              <label className="mb-1 text-base font-medium flex justify-between cursor-pointer">
+                Coupon Code:
+                {!showCouponInput ? (
+                  <button
+                    onClick={() => setShowCouponInput(true)}
+                    className="text-[#e62245] ml-2 underline text-sm"
+                  >
+                    Show Coupon
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => setShowCouponInput(false)}
+                    className="text-gray-500 ml-2 underline text-sm"
+                  >
+                    Cancel
+                  </button>
+                )}
+              </label>
+              {showCouponInput && (
+                <>
+                  <div className="flex justify-between gap-3">
+                    <input
+                      type="text"
+                      value={couponInput}
+                      onChange={(e) => setCouponInput(e.target.value)}
+                      placeholder="Enter your coupon code"
+                      className="w-full px-3 py-2 border rounded mt-2"
+                    />
+                    <button
+                      onClick={() => setCoupon(couponInput)} // Apply coupon on click
+                      className="bg-[#e62245] text-white py-2 px-3 mt-2 rounded"
+                    >
+                      APPLY
+                    </button>
+                  </div>
+
+                  {coupon === "DISCOUNT10" && (
+                    <p className="text-green-600 text-sm mt-1">
+                      Coupon applied: 10% off
+                    </p>
+                  )}
+                  {coupon !== "DISCOUNT10" && coupon !== "" && (
+                    <p className="text-red-600 text-sm mt-1">
+                      Invalid coupon code
+                    </p>
+                  )}
+                </>
+              )}
             </div>
-            <div className="flex justify-between mb-3 border-b pb-3">
-              <span>VAT:</span>
+
+            {/* Shipping Section */}
+
+            {/* <div className="mb-2 border-b pb-2">
+              <label className="mb-1 text-base font-medium flex justify-between cursor-pointer">
+                Shipping:
+                {!showShippingForm ? (
+                  <button
+                    onClick={() => setShowShippingForm(true)}
+                    className="text-[#e62245] ml-2 underline text-sm"
+                  >
+                    Estimate Shipping
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => setShowShippingForm(false)}
+                    className="text-gray-500 ml-2 underline text-sm"
+                  >
+                    Cancel
+                  </button>
+                )}
+              </label>
+
+              {showShippingForm && (
+                <div className="space-y-2 mt-2">
+                  <input
+                    type="text"
+                    placeholder="Country"
+                    className="w-full px-3 py-2 border rounded"
+                    value={shippingInfo.country}
+                    onChange={(e) =>
+                      setShippingInfo({
+                        ...shippingInfo,
+                        country: e.target.value,
+                      })
+                    }
+                  />
+                  <input
+                    type="text"
+                    placeholder="City"
+                    className="w-full px-3 py-2 border rounded"
+                    value={shippingInfo.city}
+                    onChange={(e) =>
+                      setShippingInfo({ ...shippingInfo, city: e.target.value })
+                    }
+                  />
+                  <input
+                    type="text"
+                    placeholder="Zip Code"
+                    className="w-full px-3 py-2 border rounded"
+                    value={shippingInfo.zip}
+                    onChange={(e) =>
+                      setShippingInfo({ ...shippingInfo, zip: e.target.value })
+                    }
+                  />
+                  <button
+                    onClick={estimateShippingCost}
+                    className="bg-[#e62245] text-white py-2 px-4 rounded"
+                  >
+                    Estimate Shipping
+                  </button>
+                </div>
+              )}
+            </div> */}
+
+            <div className="flex justify-between mb-2 border-b pb-2">
+              <span>VAT (20%):</span>
               <span>£{vat.toFixed(2)}</span>
             </div>
-            <div className="flex justify-between mb-3 border-b pb-3">
-              <span>Coupon Code:</span>
-              <button className="text-blue-500 hover:underline">
-                Add Coupon
-              </button>
+            <div className="flex justify-between mb-2 border-b pb-2">
+              <span>Shipping:</span>
+              <span>£{shippingCost.toFixed(2)}</span>
             </div>
-            <div className="flex justify-between text-lg mt-4">
+            {discount > 0 && (
+              <div className="flex justify-between mb-2 border-b pb-2 text-green-600">
+                <span>Discount:</span>
+                <span>-£{discount.toFixed(2)}</span>
+              </div>
+            )}
+            <div className="flex justify-between text-lg font-semibold">
               <span>Grand Total:</span>
               <span>£{grandTotal.toFixed(2)}</span>
             </div>
-            <div className="flex justify-end mt-7">
+
+            <div className="flex justify-end mt-5">
               <Link to="/checkout">
-                <button className="bg-[#e62245] text-white py-[6px] px-6 rounded mb-4">
+                <button className="bg-[#e62245] text-white py-2 px-6 rounded">
                   CHECKOUT
                 </button>
               </Link>
             </div>
-            <div className="text-sm text-right text-gray-500 mb-4">
-              -- or use --
-            </div>
-            <div className="flex flex-col w-3/5 ml-auto items-center mt-4">
-              <button className="flex items-center justify-center gap-1 bg-yellow-400 text-black py-[6px] px-6 rounded w-full mb-2">
-                <img src="/paypal.svg" className="w-16" alt="" />
-                Checkout
-              </button>
-              <button className="bg-[#f3a847] text-black py-[6px] px-6 rounded w-full">
-                <img
-                  src="https://m.media-amazon.com/images/G/02/AmazonPay/Maxo/PWA_dark-en_US._CB620220074_.svg"
-                  alt=""
-                  className="w-36 mx-auto"
-                />
-              </button>
-              <p className="uppercase font-semibold text-sm">
-                use your amazon account
-              </p>
-            </div>
           </div>
-        </div>
+        </>
       )}
     </div>
   );

@@ -70,7 +70,7 @@ const AppLayout = () => {
         <Route element={<ProductLayout />}>
           <Route path="/:category" element={<CategoryProduct />} />
           <Route path="/:category/:subcategory" element={<CategoryProduct />} />
-          <Route path="/products/:id" element={<ProductDetails />} />
+          <Route path="/products/:id/:slug" element={<ProductDetails />} />
           <Route path="/clearance" element={<Clearance />} />
           <Route path="/compare/:ids" element={<Compare />} />
           <Route path="/used" element={<UsedEquipment />} />

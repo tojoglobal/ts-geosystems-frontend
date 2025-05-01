@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import counterSlice from "./features/Counters/CounterSlice";
 import CartSlice from "./features/AddToCart/AddToCart";
 import StickySlice from "./features/Sticky/Sticky";
+import cartToggleReducer from "./features/CartToggleSlice/CartToggleSlice";
 
 // utils to persist state
 const loadState = () => {
@@ -31,6 +32,7 @@ const store = configureStore({
     counter: counterSlice,
     cart: CartSlice,
     sticky: StickySlice,
+    cartToggle: cartToggleReducer,
   },
   preloadedState: {
     cart: preloadedCartState || {

@@ -8,6 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useAxiospublic } from "../Hooks/useAxiospublic";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../features/AddToCart/AddToCart";
+import { slugify } from "../utils/slugify";
 
 const sortOptions = [
   "FEATURED ITEMS",
@@ -207,7 +208,12 @@ const CategoryProduct = () => {
                 >
                   SALE
                 </div>
-                <Link to={`/products/${product.id}`}>
+                <Link
+                  // to={`/products/${product.id}`}
+                  to={`/products/${product.id}/${slugify(
+                    product.product_name || ""
+                  )}`}
+                >
                   <div
                     onMouseEnter={() => setHoveredProductId(product.id)}
                     onMouseLeave={() => setHoveredProductId(null)}
@@ -239,7 +245,7 @@ const CategoryProduct = () => {
                         } font-medium hover:text-[#e62245] cursor-pointer`}
                       >
                         {product.product_name}
-                    </h3>
+                      </h3>
                     </Link>
                     {viewMode === "list" && (
                       <p className="text-sm text-[#2f2f2b] mt-2 line-clamp-4">
