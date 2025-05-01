@@ -14,7 +14,7 @@ const HeaderContainer = () => {
   const dispatch = useDispatch();
 
   return (
-    <div className="container mx-auto z-50">
+    <div className="max-w-[1300px] mx-auto z-50">
       <div className="flex justify-between items-center py-5">
         {/* Logo */}
         <Link to="/">

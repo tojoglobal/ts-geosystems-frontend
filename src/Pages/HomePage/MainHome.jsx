@@ -5,7 +5,7 @@ import OurYoutube from "./OurYoutube";
 import PopularBrands from "./PopularBrands";
 import ProductHighlights from "./ProductHighlights";
 import TopClients from "./TopClients";
-import TotalStation from "./TotalStation";
+// import TotalStation from "./TotalStation";
 import WeProvide from "./WeProvide";
 import HomeBanner from "./HomeBanner/HomeBanner";
 const MainHome = () => {
@@ -14,7 +14,7 @@ const MainHome = () => {
       <HomeBanner />
       <ProductHighlights />
       <ExperienceCenter />
-      <TotalStation />
+      {/* <TotalStation /> */}
       <WeProvide />
       <OurAchievements />
       <TopClients />

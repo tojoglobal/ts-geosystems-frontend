@@ -74,7 +74,7 @@ const MainNavContainer = () => {
     >
       <div className="relative" ref={dropdownRef}>
         <div className="relative">
-          <div className="container mx-auto flex justify-between items-center">
+          <div className="max-w-[1300px] mx-auto flex justify-between items-center">
             {/* Left side */}
             <div
               className="relative cursor-pointer py-2.5"

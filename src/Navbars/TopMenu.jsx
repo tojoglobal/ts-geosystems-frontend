@@ -1,6 +1,6 @@
 const TopMenu = () => {
   return (
-    <div className="border-b border-slightly-dark h-[32px]">
+    <div className="max-w-[1300px] mx-auto border-b border-slightly-dark h-[32px]">
       <div className="container pt-[6px] mx-auto align-middle">
         <a
           href="tel:+443330232200"

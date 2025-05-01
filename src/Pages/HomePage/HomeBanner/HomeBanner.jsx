@@ -1,5 +1,5 @@
 import React from "react";
-import BannerSlider from "./BannerSlider";
+import BannerMobiles from "./BannerMobiles";
 import GadSlide from "./GadSlide";
 import Banner from "./Banner";
 import GoHighBanner from "./GoHighBanner";
@@ -7,7 +7,7 @@ const HomeBanner = () => {
   return (
     <>
       <Banner />
-      <BannerSlider />
+      <BannerMobiles />
       <GadSlide />
       <GoHighBanner />
     </>

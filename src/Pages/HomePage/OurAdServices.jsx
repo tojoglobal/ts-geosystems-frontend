@@ -46,7 +46,7 @@ const services = [
 const OurAdServices = () => {
   return (
     <div className="py-16 px-4">
-      <div className="container mx-auto">
+      <div className="max-w-[1300px] mx-auto">
         {/* Title */}
         <div className="flex items-center justify-center gap-4 mb-12">
           <div className="flex-1 h-0.5 bg-[#e62245]"></div>

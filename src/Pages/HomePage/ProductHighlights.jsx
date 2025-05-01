@@ -198,7 +198,7 @@ const ProductHighlights = () => {
   };
 
   return (
-    <div className="container mx-auto rounded-md px-3 md:px-0 py-6 md:py-12 bg-white relative">
+    <div className="max-w-[1300px] mx-auto rounded-md px-3 md:px-0 py-6 md:py-12 bg-white relative">
       {/* Tab Header */}
       <div className="flex items-center justify-between border border-gray-200">
         <div className="flex gap-3 sm:gap-6 px-3 py-1">
@@ -245,7 +245,7 @@ const ProductHighlights = () => {
       <div className="mt-4">
         <Swiper
           modules={[Navigation]}
-          spaceBetween={20}
+          spaceBetween={17}
           slidesPerView={4}
           slidesPerGroup={4}
           onSwiper={(swiper) => {
