@@ -5,12 +5,13 @@ import { PiShoppingCart } from "react-icons/pi";
 import { Link } from "react-router-dom";
 import SearchOverlay from "./SearchOverlay";
 import { useAppContext } from "../context/useAppContext";
-import { useSelector } from "react-redux";
-import CartWithPopover from "./CartWithPopover";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleCart } from "../features/CartToggleSlice/CartToggleSlice";
 
 const HeaderContainer = () => {
   const { totalQuantity } = useSelector((state) => state.cart);
   const { showSearch, setShowSearch } = useAppContext();
+  const dispatch = useDispatch();
 
   return (
     <div className="container mx-auto z-50">
@@ -41,16 +42,13 @@ const HeaderContainer = () => {
             <LuUserRound className="text-[36px] text-davy-gray hover:text-crimson-red cursor-pointer" />
           </Link>
           {/* Cart with Popover */}
-          {/* <Popover className="relative">
-            <Popover.Button className="relative focus:outline-none">
-              <PiShoppingCart className="text-[36px] text-davy-gray hover:text-crimson-red cursor-pointer" />
-              <span className="absolute -top-1 -right-1 bg-[#e62245] text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
-                {totalQuantity}
-              </span>
-            </Popover.Button>
-            <CartWithPopover />
-          </Popover> */}
-          <CartWithPopover />
+          <div className="relative" onClick={() => dispatch(toggleCart())}>
+            <PiShoppingCart className="text-[36px] text-davy-gray hover:text-crimson-red cursor-pointer" />
+            <span className="absolute -top-1 -right-1 bg-[#e62245] text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
+              {totalQuantity}
+            </span>
+          </div>
+          {/* <CartWithPopover /> */}
           {/* Search Overlay */}
           <SearchOverlay
             isOpen={showSearch}
