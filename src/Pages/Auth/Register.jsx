@@ -346,7 +346,7 @@ const Register = () => {
             {/* reCAPTCHA - Full Width */}
             <div className="col-span-full">
               <ReCAPTCHA
-                sitekey="YOUR_RECAPTCHA_SITE_KEY"
+                sitekey="6LeKvyorAAAAAKGd6v6jMwiNuMqHazF0OoFqdqtT"
                 onChange={handleCaptchaChange}
               />
             </div>
