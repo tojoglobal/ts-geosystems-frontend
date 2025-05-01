@@ -1,28 +1,60 @@
-import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useMemo, useState } from "react";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import useProductsByIdsQuery from "../../Hooks/useProductsByIdsQuery";
 
 const Checkout = () => {
-  const dispatch = useDispatch();
-  const { items } = useSelector((state) => state.cart);
+  const { items, totalQuantity } = useSelector((state) => state.cart);
   const [step, setStep] = useState(1);
   const [coupon, setCoupon] = useState("");
+  const [shippingCost, setShippingCost] = useState(5.99);
   const [couponApplied, setCouponApplied] = useState(false);
-
+  const [orderPlaced, setOrderPlaced] = useState(false);
+  const [orderId, setOrderId] = useState(null);
   const [formData, setFormData] = useState({
     email: "",
     newsletter: false,
+    shippingName: "",
     shippingAddress: "",
+    shippingCity: "",
+    shippingZip: "",
+    shippingPhone: "",
+    shippingComments: "",
+    billingSameAsShipping: true,
     billingAddress: "",
     paymentMethod: "",
   });
 
-  console.log(items);
+  // get a cart product
+  const productIds = useMemo(() => items.map((item) => item.id), [items]);
+  const { products } = useProductsByIdsQuery(productIds);
 
-  const subtotal = 50754;
-  const vat = 8459;
+  console.log(products);
+
+  const mergedCart = items
+    .map((item) => {
+      const product = products.find((p) => p.id === item.id);
+      const rawPrice = product?.price || "0";
+      const numericPrice = Number(rawPrice.toString().replace(/,/g, "")); // Clean commas
+      return product
+        ? {
+            ...product,
+            quantity: item.quantity,
+            price: numericPrice,
+          }
+        : null;
+    })
+    .filter(Boolean);
+
+  console.log(mergedCart);
+
+  const subtotal = mergedCart.reduce(
+    (total, item) => total + item.price * item.quantity,
+    0
+  );
+  const vat = subtotal * 0.2;
   const discount = coupon === "DISCOUNT10" ? 0.1 * subtotal : 0;
-  const total = subtotal - discount;
+  const total = subtotal + vat + shippingCost - discount;
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -35,11 +67,55 @@ const Checkout = () => {
   const handleContinue = (currentStep) => {
     if (currentStep === 1 && formData.email) setStep(2);
     if (currentStep === 2 && formData.shippingAddress) setStep(3);
-    if (currentStep === 3 && formData.billingAddress) setStep(4);
+    if (currentStep === 3) {
+      if (formData.billingSameAsShipping) {
+        setFormData((prev) => ({
+          ...prev,
+          billingAddress: `${prev.shippingAddress}, ${prev.shippingCity}, ${prev.shippingZip}`,
+        }));
+      }
+      setStep(4);
+    }
+
+    // if (currentStep === 3 && formData.billingAddress) setStep(4);
   };
 
   const applyCoupon = () => {
     setCouponApplied(coupon === "DISCOUNT10");
+  };
+
+  const handlePlaceOrder = async () => {
+    const newOrderId = "TSGB" + Date.now();
+    setOrderId(newOrderId);
+
+    const orderData = {
+      order_id: newOrderId,
+      email: formData.email,
+      shippingName: formData.shippingName,
+      shippingAddress: formData.shippingAddress,
+      shippingCity: formData.shippingCity,
+      shippingZip: formData.shippingZip,
+      shippingPhone: formData.shippingPhone,
+      shippingComments: formData.shippingComments,
+      billingAddress: formData.billingSameAsShipping
+        ? `${formData.shippingAddress}, ${formData.shippingCity}, ${formData.shippingZip}`
+        : formData.billingAddress,
+      paymentMethod: formData.paymentMethod,
+      items: mergedCart,
+      total,
+    };
+
+    const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/orders`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(orderData),
+    });
+
+    if (res.ok) {
+      setOrderPlaced(true);
+    } else {
+      alert("Failed to place order.");
+    }
   };
 
   return (
@@ -78,7 +154,9 @@ const Checkout = () => {
           {/* Step 1: Customer */}
           {step >= 1 && (
             <div>
-              <h2 className="text-2xl font-semibold mb-2">Customer</h2>
+              <h2 className="text-2xl text-charcoal font-normal mb-2">
+                Customer
+              </h2>
               <div className="flex w-2/3 gap-4 mb-3">
                 <input
                   type="email"
@@ -112,72 +190,190 @@ const Checkout = () => {
               </p>
             </div>
           )}
-
+          <hr className="flex-grow border-gray-300" />
           {/* Step 2: Shipping */}
-          {step >= 2 && (
-            <div>
-              <h2 className="text-2xl font-semibold mb-2">Shipping</h2>
-              <textarea
-                name="shippingAddress"
-                value={formData.shippingAddress}
-                onChange={handleInputChange}
-                placeholder="Enter your shipping address"
-                className="border p-2 rounded w-full mb-2"
-              />
-              {step === 2 && (
+          <div>
+            <h2 className="text-2xl  text-charcoal font-normal mb-2">
+              Shipping
+            </h2>
+            {/* Step 2: Shipping Info */}
+            {step >= 2 && (
+              <>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+                  <input
+                    type="text"
+                    name="shippingName"
+                    value={formData.shippingName}
+                    onChange={handleInputChange}
+                    placeholder="Full Name"
+                    className="border p-2 rounded"
+                  />
+                  <input
+                    type="text"
+                    name="shippingPhone"
+                    value={formData.shippingPhone}
+                    onChange={handleInputChange}
+                    placeholder="Phone Number"
+                    className="border p-2 rounded"
+                  />
+                  <input
+                    type="text"
+                    name="shippingAddress"
+                    value={formData.shippingAddress}
+                    onChange={handleInputChange}
+                    placeholder="Address"
+                    className="border p-2 rounded"
+                  />
+                  <input
+                    type="text"
+                    name="shippingCity"
+                    value={formData.shippingCity}
+                    onChange={handleInputChange}
+                    placeholder="City"
+                    className="border p-2 rounded"
+                  />
+                  <input
+                    type="text"
+                    name="shippingZip"
+                    value={formData.shippingZip}
+                    onChange={handleInputChange}
+                    placeholder="Zip Code"
+                    className="border p-2 rounded"
+                  />
+                </div>
+
+                <textarea
+                  name="shippingComments"
+                  value={formData.shippingComments}
+                  onChange={handleInputChange}
+                  placeholder="Order Comments"
+                  className="border p-2 rounded w-full mb-4"
+                />
+
                 <button
                   onClick={() => handleContinue(2)}
                   className="bg-[#e62245] text-white px-4 py-2 rounded"
                 >
                   CONTINUE
                 </button>
-              )}
-            </div>
-          )}
-
+              </>
+            )}
+          </div>
+          <hr className="flex-grow border-gray-300" />
           {/* Step 3: Billing */}
-          {step >= 3 && (
-            <div>
-              <h2 className="text-2xl font-semibold mb-2">Billing</h2>
-              <textarea
-                name="billingAddress"
-                value={formData.billingAddress}
-                onChange={handleInputChange}
-                placeholder="Enter your billing address"
-                className="border p-2 rounded w-full mb-2"
-              />
-              {step === 3 && (
+          <div>
+            <h2 className="text-2xl  text-charcoal font-normal mb-2">
+              Billing
+            </h2>
+            {step >= 3 && (
+              <>
+                <div className="mb-2">
+                  <label className="flex items-center gap-2 text-sm">
+                    <input
+                      type="checkbox"
+                      name="billingSameAsShipping"
+                      checked={formData.billingSameAsShipping}
+                      onChange={handleInputChange}
+                    />
+                    Billing address is same as shipping address
+                  </label>
+                </div>
+
+                {!formData.billingSameAsShipping && (
+                  <textarea
+                    name="billingAddress"
+                    value={formData.billingAddress}
+                    onChange={handleInputChange}
+                    placeholder="Enter your billing address"
+                    className="border p-2 rounded w-full mb-2"
+                  />
+                )}
+
+                {step === 3 && (
+                  <button
+                    onClick={() => handleContinue(3)}
+                    className="bg-[#e62245] text-white px-4 py-2 rounded"
+                  >
+                    CONTINUE
+                  </button>
+                )}
+              </>
+            )}
+          </div>
+          <hr className="flex-grow border-gray-300" />
+          {/* Step 4: Payment */}
+          <div>
+            <h2 className="text-2xl  text-charcoal font-normal mb-2">
+              Payment
+            </h2>
+            {step >= 4 && !orderPlaced && (
+              <>
+                <select
+                  name="paymentMethod"
+                  value={formData.paymentMethod}
+                  onChange={handleInputChange}
+                  className="border p-2 rounded w-full mb-4"
+                >
+                  <option value="">Select Payment Method</option>
+                  <option value="sslcommerz">SSLCOMMERZ Payment Gateway</option>
+                  <option value="bank">Bank Deposit</option>
+                </select>
+
                 <button
-                  onClick={() => handleContinue(3)}
+                  onClick={() => {
+                    const newOrderId = "TSGB" + Date.now();
+                    setOrderId(newOrderId);
+                    setOrderPlaced(true);
+                  }}
                   className="bg-[#e62245] text-white px-4 py-2 rounded"
                 >
-                  CONTINUE
+                  Place Order
                 </button>
-              )}
-            </div>
-          )}
+              </>
+            )}
+          </div>
 
-          {/* Step 4: Payment */}
-          {step >= 4 && (
-            <div>
-              <h2 className="text-2xl font-semibold mb-2">Payment</h2>
-              <select
-                name="paymentMethod"
-                value={formData.paymentMethod}
-                onChange={handleInputChange}
-                className="border p-2 rounded w-full"
-              >
-                <option value="">Select Payment Method</option>
-                <option value="paypal">PayPal</option>
-                <option value="credit-card">Credit Card</option>
-                <option value="amazon-pay">Amazon Pay</option>
-              </select>
+          {orderPlaced && (
+            <div className="border p-4 mt-4 bg-green-50 rounded">
+              <h2 className="text-2xl font-bold text-green-700 mb-2">
+                Thank you for your order!
+              </h2>
+              <p className="mb-2">
+                Order ID: <strong>{orderId}</strong>
+              </p>
+
+              {formData.paymentMethod === "sslcommerz" && (
+                <div className="space-y-2">
+                  <p>Payment completed via SSLCOMMERZ.</p>
+                  <button
+                    onClick={() => window.print()}
+                    className="bg-blue-600 text-white px-3 py-2 rounded"
+                  >
+                    Print Invoice
+                  </button>
+                </div>
+              )}
+
+              {formData.paymentMethod === "bank" && (
+                <div className="space-y-2">
+                  <p>Please deposit to the following bank account:</p>
+                  <ul className="text-sm list-disc pl-5">
+                    <li>Bank: ABC Bank Ltd.</li>
+                    <li>Account Name: MyCompany Ltd.</li>
+                    <li>Account Number: 123456789</li>
+                    <li>Branch: Banani, Dhaka</li>
+                  </ul>
+                  <p className="text-red-600">
+                    Make sure to mention your Order ID as payment reference.
+                  </p>
+                </div>
+              )}
             </div>
           )}
         </div>
 
         {/* RIGHT COLUMN: Order Summary */}
-        <div className="border rounded shadow-xl p-4 space-y-4">
+        <div className="border  rounded shadow-xl p-4 space-y-4">
           <div className="flex justify-between items-center border-b pb-4">
             <h2 className="text-lg font-semibold">Order Summary</h2>
             <Link to="/cart" className="text-[#e62245] text-sm font-semibold">
@@ -185,41 +381,49 @@ const Checkout = () => {
             </Link>
           </div>
 
-          <h3 className="font-medium">2 Items</h3>
-          {[
-            {
-              img: "https://cdn11.bigcommerce.com/s-ew2v2d3jn1/images/stencil/100x100/products/788/4467/leica-icon-icg70-antenna__78227.1723046790.jpg?c=1",
-              name: "1 x Leica iCON iCG70 GNSS RTK Rover Package",
-              price: "£11,994.00",
-            },
-            {
-              img: "https://cdn11.bigcommerce.com/s-ew2v2d3jn1/products/832/images/4995/recon-leica-rtc360-5__65988.1697695898.1280.1280__50334.1743025571.220.290.jpg?c=1",
-              name: "1 x Leica RTC360 3D Laser Scanner 2021 - Used",
-              price: "£38,760.00",
-            },
-          ].map((item, index) => (
-            <div key={index} className="flex gap-4">
-              <img
-                src={item.img}
-                alt="Product"
-                className="w-20 h-20 object-cover"
-              />
-              <div className="flex flex-col justify-between text-sm">
-                <p className="font-semibold">{item.name}</p>
-                <p>{item.price}</p>
-              </div>
-            </div>
-          ))}
+          <h3 className="font-medium">{totalQuantity} Items</h3>
+          {mergedCart.length === 0 ? (
+            <p className="text-xl">Your cart is empty.</p>
+          ) : (
+            <>
+              {mergedCart.map((item, index) => (
+                <div key={index} className="flex gap-3 ">
+                  <img
+                    src={
+                      item.image_urls
+                        ? `${import.meta.env.VITE_OPEN_APIURL}${
+                            JSON.parse(item.image_urls)[0]
+                          }`
+                        : "/placeholder.jpg"
+                    }
+                    alt={item.product_name}
+                    className="w-20 h-20 object-cover"
+                  />
+                  <div className="flex flex-col justify-between text-sm">
+                    <p className="font-semibold text-charcoal">
+                      <span>{item.quantity}</span>{" "}
+                      <span className="px-1">x</span> {item.product_name}
+                    </p>
+                  </div>
+                  <p>{item.price}</p>
+                </div>
+              ))}
+            </>
+          )}
 
           <hr />
-          <div className="space-y-1 text-sm">
+          <div className="space-y-3 text-sm">
             <div className="flex justify-between">
               <span>Subtotal</span>
               <span>£{subtotal.toLocaleString()}</span>
             </div>
             <div className="flex justify-between">
               <span>Shipping</span>
-              <span>--</span>
+              <span>£{shippingCost}</span>
+            </div>
+            <div className="flex justify-between">
+              <span>VAT(20%)</span>
+              <span>£{vat.toLocaleString()}</span>
             </div>
 
             {/* Coupon */}
@@ -249,7 +453,7 @@ const Checkout = () => {
 
           <hr />
           <div className="flex justify-between text-xl font-semibold">
-            <span>Total (GBP)</span>
+            <span>Total</span>
             <span>
               £{total.toLocaleString(undefined, { maximumFractionDigits: 2 })}
             </span>
@@ -259,7 +463,7 @@ const Checkout = () => {
           <div className="text-sm">
             <p className="font-semibold mb-1">TAX INCLUDED IN TOTAL:</p>
             <div className="flex justify-between">
-              <span>VAT</span>
+              <span>VAT(20%)</span>
               <span>£{vat.toLocaleString()}</span>
             </div>
           </div>

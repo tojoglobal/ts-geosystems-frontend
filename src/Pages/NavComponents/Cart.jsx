@@ -77,6 +77,7 @@ const Cart = () => {
   const discount = coupon === "DISCOUNT10" ? subTotal * 0.1 : 0; // example
   const grandTotal = subTotal + vat + shippingCost - discount;
 
+  console.log(products);
   return (
     <div className="p-3">
       <div className="flex items-center gap-2 text-xs mb-4">
