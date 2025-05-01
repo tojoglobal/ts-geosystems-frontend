@@ -48,6 +48,7 @@ import Software from "./Dashboard/Software/Software";
 import CategoryProduct from "./Pages/CategoryProduct";
 import OrderTable from "./Dashboard/Orders/OrderTable";
 import ClientMessages from "./Dashboard/DBComponents/ClientMessages";
+import SupportPage from "./Pages/NavComponents/SupportPage";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -76,6 +77,7 @@ const AppLayout = () => {
           <Route path="/hire" element={<Hire />} />
           <Route path="/service" element={<Service />} />
           <Route path="/support" element={<Support />} />
+          <Route path="/support-page" element={<SupportPage />} />
           <Route path="/quick-guides" element={<QuickGuides />} />
           <Route path="/software-downloads" element={<SoftwareDownloads />} />
           <Route path="/trade-in" element={<TradeIn />} />

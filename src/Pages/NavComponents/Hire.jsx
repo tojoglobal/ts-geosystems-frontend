@@ -75,7 +75,7 @@ const Hire = () => {
           Home
         </Link>
         <span>/</span>
-        <span className="text-[#e62245]">HIRE</span>
+        <span className="text-[#e62245]">Hire</span>
       </div>
       <h1 className="text-4xl text-[#e62245] mb-8">HIRE</h1>
       <div className="max-w-2xl mx-auto flex flex-col md:flex-row justify-between gap-6 mb-5">

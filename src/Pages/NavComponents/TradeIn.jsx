@@ -60,7 +60,7 @@ const TradeIn = () => {
         </Link>
         <span>/</span>
         <Link to="/Service" className="text-[#e62245]">
-          TRADE IN
+          Trade In
         </Link>
       </div>
       <p className="text-[#e62245] uppercase text-3xl mt-1 mb-6">TRADE IN</p>

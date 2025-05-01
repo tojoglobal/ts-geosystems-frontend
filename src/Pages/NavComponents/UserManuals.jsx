@@ -96,12 +96,11 @@ const UserManuals = () => {
         </Link>
         <span>/</span>
         <Link to="/support" className="text-[#e62245]">
-          SUPPORT
+          Support
         </Link>
         <span>/</span>
         <span className="text-[#e62245]">User Manuals</span>
       </div>
-
       <p className="text-[#e62245] mb-6 text-2xl mt-2">User Manuals</p>
       <h1 className="text-[#e62245] font-bold text-xl mb-8">
         G2 Survey 3D Laser Scanner User Manuals

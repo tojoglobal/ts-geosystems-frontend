@@ -145,6 +145,9 @@ const MainNavContainer = () => {
                       <Link to="/user-manuals">User Manuals</Link>
                     </li>
                     <li className="hover:text-crimson-red cursor-pointer transition-colors duration-300">
+                      <Link to="/support-page">Support Page</Link>
+                    </li>
+                    <li className="hover:text-crimson-red cursor-pointer transition-colors duration-300">
                       <Link to="/remote-support">Remote Support</Link>
                     </li>
                   </ul>

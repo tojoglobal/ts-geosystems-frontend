@@ -14,7 +14,7 @@ const AboutUs = () => {
           Home
         </Link>
         <span>/</span>
-        <span className="text-[#e62245]">ABOUT US</span>
+        <span className="text-[#e62245]">About Us</span>
       </div>
       <p className="text-[#e62245] text-3xl mb-6">ABOUT US</p>
       <div className="mb-8">

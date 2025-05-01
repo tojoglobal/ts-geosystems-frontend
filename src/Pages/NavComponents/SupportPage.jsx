@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
 
-const Support = () => {
+const SupportPage = () => {
   const [formData, setFormData] = useState({
     name: "",
     company: "",
@@ -68,7 +68,7 @@ const Support = () => {
     console.log(submissionData);
 
     try {
-      // logic here 
+      // logic here
     } catch (error) {
       console.error(error);
     }
@@ -365,4 +365,4 @@ const Support = () => {
   );
 };
 
-export default Support;
+export default SupportPage;

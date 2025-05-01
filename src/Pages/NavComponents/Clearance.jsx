@@ -165,7 +165,7 @@ const Clearance = () => {
   return (
     <div className="p-3">
       <div className="flex items-center gap-2 text-sm mb-4">
-        <Link to="/" className="hover:text-[#e62245]">
+        <Link to="/" className="text-[#e62245]">
           Home
         </Link>
         <span>/</span>
