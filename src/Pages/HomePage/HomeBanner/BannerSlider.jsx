@@ -10,7 +10,7 @@ const images = [
 
 const BannerSlider = () => {
   return (
-    <div className="w-full container mx-auto relative my-5">
+    <div className="md:w-full md:relative my-3 md:my-5 mx-3 md:container md:mx-auto">
       <Swiper
         modules={[Autoplay, Pagination]}
         autoplay={{
@@ -22,7 +22,7 @@ const BannerSlider = () => {
           clickable: true,
           el: ".custom-pagination",
         }}
-        className="w-full h-[400px] rounded-lg"
+        className="w-full h-[150px] md:h-[400px] rounded-lg"
       >
         {images.map((img, index) => (
           <SwiperSlide key={index}>
