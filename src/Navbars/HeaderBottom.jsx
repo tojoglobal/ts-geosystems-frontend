@@ -1,5 +1,3 @@
-import React from "react";
-
 const HeaderBottom = () => {
   return (
     <div className="bg-dark-slate py-2 md:px-2 text-center">
