@@ -24,7 +24,7 @@ const ContactUs = () => {
       lastName: formData.get("lastName") || "",
       email: formData.get("email") || "",
       phone: formData.get("phone") || "",
-      message: formData.get("message") || ""
+      message: formData.get("message") || "",
     };
 
     try {
@@ -175,11 +175,13 @@ const ContactUs = () => {
         </div>
         <div className="w-full md:w-[60%]">
           <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3650.7604173961134!2d90.39794271429645!3d23.791899392582496!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755c7f197ffb3ed%3A0x648f5b8dbb902a6d!2sTS%20Geosystems%20Bangladesh!5e0!3m2!1sen!2sbd!4v1684227981375!5m2!1sen!2sbd"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d645.5947958153943!2d90.39336324225314!3d23.746107591039063!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755b8be6eec9b99%3A0xbcb3b2d0ca3c69fa!2sTS%20Geosystems%20Bangladesh!5e0!3m2!1sen!2sbd!4v1746101609630!5m2!1sen!2sbd"
             width="100%"
             height="500"
+            style={{ border: 0 }}
             allowFullScreen=""
             loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
             className="border rounded shadow"
           ></iframe>
         </div>
