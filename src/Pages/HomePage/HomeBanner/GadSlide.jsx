@@ -4,11 +4,11 @@ import "swiper/css";
 import "swiper/css/pagination";
 
 const images = [
-  "https://ts-geosystems.com.bd/assets/images/17441130261726590713img2.jpg",
-  "https://ts-geosystems.com.bd/assets/images/1726590513img1.jpg",
+  "https://ts-geosystems.com.bd/assets/images/1727116478Acer_Nitro_V15.jpg",
+  "https://ts-geosystems.com.bd/assets/images/1727116649Pixel_9_Series_Available.jpg",
 ];
 
-const BannerSlider = () => {
+const GadSlide = () => {
   return (
     <div className="w-full container mx-auto relative my-5">
       <Swiper
@@ -20,7 +20,7 @@ const BannerSlider = () => {
         loop={true}
         pagination={{
           clickable: true,
-          el: ".custom-pagination",
+          el: ".gad-pagination",
         }}
         className="w-full h-[400px] rounded-lg"
       >
@@ -34,9 +34,10 @@ const BannerSlider = () => {
           </SwiperSlide>
         ))}
       </Swiper>
-      <div className="custom-pagination absolute bottom-3 left-40 flex gap-2 z-10"></div>
+      {/* Unique Pagination Container */}
+      <div className="gad-pagination absolute bottom-3 left-44 flex gap-2 z-10"></div>
       <style jsx>{`
-        .custom-pagination .swiper-pagination-bullet {
+        .gad-pagination .swiper-pagination-bullet {
           width: 10px;
           height: 10px;
           background-color: white;
@@ -44,7 +45,7 @@ const BannerSlider = () => {
           border-radius: 50%;
           transition: opacity 0.3s;
         }
-        .custom-pagination .swiper-pagination-bullet-active {
+        .gad-pagination .swiper-pagination-bullet-active {
           opacity: 1;
           background-color: #fff;
         }
@@ -53,4 +54,4 @@ const BannerSlider = () => {
   );
 };
 
-export default BannerSlider;
+export default GadSlide;

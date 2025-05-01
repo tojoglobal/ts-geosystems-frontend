@@ -1,4 +1,3 @@
-import Banner from "./HomeBanner/Banner";
 import ExperienceCenter from "./ExperienceCenter";
 import OurAchievements from "./OurAchievements";
 import OurAdServices from "./OurAdServices";
@@ -8,12 +7,11 @@ import ProductHighlights from "./ProductHighlights";
 import TopClients from "./TopClients";
 import TotalStation from "./TotalStation";
 import WeProvide from "./WeProvide";
-import BannerSlider from "./HomeBanner/BannerSlider";
+import HomeBanner from "./HomeBanner/HomeBanner";
 const MainHome = () => {
   return (
     <>
-      <BannerSlider />
-      <Banner />
+      <HomeBanner />
       <ProductHighlights />
       <ExperienceCenter />
       <TotalStation />
