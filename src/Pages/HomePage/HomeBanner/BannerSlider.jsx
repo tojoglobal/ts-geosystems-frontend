@@ -19,7 +19,7 @@ const BannerSlider = () => {
         }}
         loop={true}
         pagination={{ clickable: true }}
-        className="w-full h-[150px] md:h-[400px] rounded-lg relative"
+        className="w-full h-[150px] md:h-[410px] rounded-lg relative"
       >
         {images.map((img, index) => (
           <SwiperSlide key={index}>
