@@ -1,5 +1,5 @@
+/* eslint-disable react-refresh/only-export-components */
 import { createContext, useEffect, useMemo, useState } from "react";
-import PropTypes from "prop-types";
 
 export const AppContext = createContext(null);
 
@@ -42,8 +42,4 @@ export const AppProvider = ({ children }) => {
   );
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
-};
-
-AppProvider.propTypes = {
-  children: PropTypes.node.isRequired,
 };

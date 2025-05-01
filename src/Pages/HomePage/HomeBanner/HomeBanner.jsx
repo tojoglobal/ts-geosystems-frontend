@@ -6,10 +6,10 @@ import GoHighBanner from "./GoHighBanner";
 const HomeBanner = () => {
   return (
     <>
+      <Banner />
       <BannerSlider />
       <GadSlide />
       <GoHighBanner />
-      <Banner />
     </>
   );
 };

@@ -53,25 +53,26 @@ const MainNavContainer = () => {
 
   return (
     <div
-      className={`border-y border-crimson-red bg-white z-10 w-full ${
+      className={`border-y border-crimson-red bg-white z-50 w-full ${
         shouldAnimateSticky
           ? "transition-transform duration-[900ms] ease-in-out"
           : ""
       } ${
         isSticky
-          ? "fixed top-0 translate-y-0 shadow-md"
+          ? "fixed top-0 translate-y-0 shadow-md py-[3px]"
           : "relative top-12 -translate-y-full"
       }`}
     >
       <div className="relative" ref={dropdownRef}>
-        <div className="container mx-auto flex justify-between items-center">
+        <div
+          className={`container mx-auto flex justify-between items-center ${
+            isSticky && "h-[40px]"
+          }`}
+        >
           {/* Left side */}
-          <div
-            className="relative cursor-pointer py-2.5"
-            onClick={toggleDropdown}
-          >
+          <div className="relative cursor-pointer" onClick={toggleDropdown}>
             <div
-              className={`flex items-center gap-2.5 transition-all duration-500 ease-in-out  relative ${
+              className={`flex items-center gap-2.5 transition-all duration-500 ease-in-out relative ${
                 isDropdownOpen ? "translate-x-5" : ""
               }`}
             >
@@ -126,13 +127,11 @@ const MainNavContainer = () => {
               >
                 SERVICE
               </Link>
-              {/* Dropdown Wrapper */}
               <div className="relative group py-2.5">
                 <div className="flex items-center gap-1 hover:text-crimson-red transition-colors duration-300 cursor-pointer">
                   <Link to="/support">SUPPORT</Link>
                   <MdOutlineKeyboardArrowDown className="text-xl" />
                 </div>
-                {/* Dropdown Menu */}
                 <div className="absolute -left-10 top-full w-50 bg-white rounded-sm border border-slightly-dark shadow-lg pl-4 py-2 hidden group-hover:block z-50">
                   <ul className="space-y-1 text-sm text-charcoal">
                     <li className="hover:text-crimson-red cursor-pointer transition-colors duration-300">
@@ -179,31 +178,29 @@ const MainNavContainer = () => {
               </Link>
             </div>
           ) : (
-            <>
-              <div className="flex items-center gap-4">
-                {/* Search Bar */}
-                <div
-                  className="flex items-center px-1 w-[495px] relative"
-                  onClick={() => setShowSearch(true)}
-                >
-                  <input
-                    type="text"
-                    placeholder="Search"
-                    className="input text-[13px] placeholder:italic w-full h-7 focus:outline-none focus:ring-0 border border-slightly-dark focus:border-slightly-dark bg-transparent rounded-[4px]"
-                  />
-                  <IoSearchOutline className="text-[#e62245] text-[20px] absolute right-5" />
-                </div>
-                {/* User Icon */}
-                <LuUserRound className="text-[25px] text-davy-gray hover:text-crimson-red font-medium cursor-pointer duration-300 ease-in" />
-                {/* Cart Icon with badge */}
-                <div className="relative">
-                  <PiShoppingCart className="text-[25px] text-davy-gray hover:text-crimson-red cursor-pointer duration-300 ease-in font-medium" />
-                  <span className="absolute -top-1 -right-2.5 bg-[#e62245] text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
-                    0
-                  </span>
-                </div>
+            <div className="flex items-center gap-4 h-full">
+              {/* Search Bar */}
+              <div
+                className="flex items-center px-1 w-[495px] h-full relative"
+                onClick={() => setShowSearch(true)}
+              >
+                <input
+                  type="text"
+                  placeholder="Search"
+                  className="input text-[13px] placeholder:italic w-full h-full focus:outline-none focus:ring-0 border border-slightly-dark focus:border-slightly-dark bg-transparent rounded-[4px]"
+                />
+                <IoSearchOutline className="text-[#e62245] text-[20px] absolute right-5" />
               </div>
-            </>
+              {/* User Icon */}
+              <LuUserRound className="text-[25px] text-davy-gray hover:text-crimson-red font-medium cursor-pointer duration-300 ease-in" />
+              {/* Cart Icon with badge */}
+              <div className="relative">
+                <PiShoppingCart className="text-[25px] text-davy-gray hover:text-crimson-red cursor-pointer duration-300 ease-in font-medium" />
+                <span className="absolute -top-1 -right-2.5 bg-[#e62245] text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
+                  0
+                </span>
+              </div>
+            </div>
           )}
         </div>
         <>

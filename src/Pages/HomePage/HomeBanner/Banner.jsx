@@ -84,7 +84,6 @@ const Banner = () => {
 
   return (
     <div className="relative w-full">
-      {/* Custom Arrows */}
       <div className="custom-prev absolute top-1/2 left-4 transform -translate-y-1/2 bg-[#e62245] text-white p-2 rounded-full cursor-pointer z-10">
         <FaChevronLeft />
       </div>
