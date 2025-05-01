@@ -49,6 +49,7 @@ import CategoryProduct from "./Pages/CategoryProduct";
 import OrderTable from "./Dashboard/Orders/OrderTable";
 import ClientMessages from "./Dashboard/DBComponents/ClientMessages";
 import SupportPage from "./Pages/NavComponents/SupportPage";
+import Brand from "./Pages/ProductPage/Brand";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -70,6 +71,8 @@ const AppLayout = () => {
         <Route element={<ProductLayout />}>
           <Route path="/:category" element={<CategoryProduct />} />
           <Route path="/:category/:subcategory" element={<CategoryProduct />} />
+          {/* <Route path="/brand" element={<Brand />} />
+          <Route path="/brand/:brand_name" element={<Brand />} /> */}
           <Route path="/products/:id" element={<ProductDetails />} />
           <Route path="/clearance" element={<Clearance />} />
           <Route path="/compare/:ids" element={<Compare />} />
