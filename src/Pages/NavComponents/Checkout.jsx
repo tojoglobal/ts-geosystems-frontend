@@ -2,8 +2,10 @@ import { useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import useProductsByIdsQuery from "../../Hooks/useProductsByIdsQuery";
+import { useAxiospublic } from "../../Hooks/useAxiospublic";
 
 const Checkout = () => {
+  const axiosPublicUrl = useAxiospublic();
   const { items, totalQuantity } = useSelector((state) => state.cart);
   const [step, setStep] = useState(1);
   const [coupon, setCoupon] = useState("");
@@ -27,24 +29,42 @@ const Checkout = () => {
 
   // get a cart product
   const productIds = useMemo(() => items.map((item) => item.id), [items]);
-  const { products } = useProductsByIdsQuery(productIds);
+  const { products, loading, error } = useProductsByIdsQuery(productIds);
 
   console.log(products);
 
-  const mergedCart = items
-    .map((item) => {
-      const product = products.find((p) => p.id === item.id);
-      const rawPrice = product?.price || "0";
-      const numericPrice = Number(rawPrice.toString().replace(/,/g, "")); // Clean commas
-      return product
-        ? {
-            ...product,
-            quantity: item.quantity,
-            price: numericPrice,
-          }
-        : null;
-    })
-    .filter(Boolean);
+  // const mergedCart = items
+  //   .map((item) => {
+  //     const product = products.find((p) => p.id === item.id);
+  //     const rawPrice = product?.price || "0";
+  //     const numericPrice = Number(rawPrice.toString().replace(/,/g, "")); // Clean commas
+  //     return product
+  //       ? {
+  //           ...product,
+  //           quantity: item.quantity,
+  //           price: numericPrice,
+  //         }
+  //       : null;
+  //   })
+  //   .filter(Boolean);
+
+  const mergedCart =
+    !loading && products.length > 0
+      ? items
+          .map((item) => {
+            const product = products.find((p) => p.id === item.id);
+            const rawPrice = product?.price || "0";
+            const numericPrice = Number(rawPrice.toString().replace(/,/g, ""));
+            return product
+              ? {
+                  ...product,
+                  quantity: item.quantity,
+                  price: numericPrice,
+                }
+              : null;
+          })
+          .filter(Boolean)
+      : [];
 
   console.log(mergedCart);
 
@@ -101,23 +121,74 @@ const Checkout = () => {
         ? `${formData.shippingAddress}, ${formData.shippingCity}, ${formData.shippingZip}`
         : formData.billingAddress,
       paymentMethod: formData.paymentMethod,
+      paymentStatus: "pending", // initial status
       items: mergedCart,
       total,
     };
 
-    const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/orders`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(orderData),
-    });
+    console.log("orderData", orderData);
 
-    if (res.ok) {
-      setOrderPlaced(true);
-    } else {
-      alert("Failed to place order.");
+    if (formData.paymentMethod === "sslcommerz") {
+      try {
+        // Save order with status "pending"
+        const saveRes = await axiosPublicUrl.post("/api/orderdata", orderData);
+
+        if (saveRes.status === 200 || saveRes.status === 201) {
+          // Trigger SSLCommerz payment
+          const paymentInitRes = await axiosPublicUrl.post(
+            "/api/ssl-payment/init",
+            {
+              total_amount: total,
+              order_id: newOrderId,
+              customer_name: formData.shippingName,
+              customer_email: formData.email,
+              customer_phone: formData.shippingPhone,
+              shipping_address: formData.shippingAddress,
+              shipping_city: formData.shippingCity,
+              shipping_zip: formData.shippingZip,
+              items: mergedCart,
+            }
+          );
+
+          if (paymentInitRes.data?.GatewayPageURL) {
+            window.location.href = paymentInitRes.data.GatewayPageURL; // Redirect to payment gateway
+          } else {
+            alert("Failed to initiate payment");
+          }
+        } else {
+          alert("Failed to save order before payment");
+        }
+      } catch (err) {
+        console.error("SSLCommerz Payment Error:", err);
+        alert("An error occurred while starting payment.");
+      }
+    } else if (formData.paymentMethod === "bank") {
+      try {
+        const res = await axiosPublicUrl.post("/api/orderdata", orderData);
+        if (res.status === 200 || res.status === 201) {
+          setOrderPlaced(true); // Show thank-you page etc.
+        } else {
+          alert("Failed to place order.");
+        }
+      } catch (error) {
+        console.error("Bank payment order error:", error);
+        alert("An error occurred while placing the order.");
+      }
     }
   };
 
+  console.log("items", items);
+  console.log("productIds", productIds);
+  console.log("products", products);
+  console.log("mergedCart", mergedCart);
+
+  // if (loading) {
+  //   return <div>Loading products...</div>;
+  // }
+
+  // if (error) {
+  //   return <div>Error loading products.</div>;
+  // }
   return (
     <div className="max-w-[1300px] mx-auto py-6 mb-5">
       <div className="grid md:grid-cols-3 gap-6">
@@ -320,11 +391,12 @@ const Checkout = () => {
                 </select>
 
                 <button
-                  onClick={() => {
-                    const newOrderId = "TSGB" + Date.now();
-                    setOrderId(newOrderId);
-                    setOrderPlaced(true);
-                  }}
+                  // onClick={() => {
+                  //   const newOrderId = "TSGB" + Date.now();
+                  //   setOrderId(newOrderId);
+                  //   setOrderPlaced(true);
+                  // }}
+                  onClick={handlePlaceOrder}
                   className="bg-[#e62245] text-white px-4 py-2 rounded"
                 >
                   Place Order
