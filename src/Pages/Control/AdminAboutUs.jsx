@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { useDropzone } from "react-dropzone";
-import { AiOutlinePlus } from "react-icons/ai";
+import { FiPlus } from "react-icons/fi";
 import Button from "../../Dashboard/Button/Button";
 
 const AdminAboutUs = () => {
   const { register, handleSubmit, control } = useForm({
     defaultValues: {
       section1: { title: "", description: "" },
-      section2: [""],
+      section2Title: "What We Do",
+      section2: [""], // Default with one point field
       section3: { title: "", description: "" },
       section4to9: Array(6).fill({ title: "", description: "" }),
       sliderImages: [],
@@ -53,12 +54,10 @@ const AdminAboutUs = () => {
           <h2 className="text-xl font-semibold mb-4">Section 1 (Snapshot)</h2>
           <input
             type="text"
-            placeholder="Title"
             {...register("section1.title")}
             className="w-full border border-gray-700 bg-gray-700 rounded-md p-2 mb-4 text-white"
           />
           <textarea
-            placeholder="Description"
             {...register("section1.description")}
             className="w-full border border-gray-700 bg-gray-700 rounded-md p-2 text-white"
             rows={4}
@@ -68,23 +67,28 @@ const AdminAboutUs = () => {
         {/* Section 2 */}
         <div className="bg-gray-800 p-4 rounded shadow">
           <h2 className="text-xl font-semibold mb-4">Section 2 (What We Do)</h2>
-          {section2Fields.map((field, index) => (
-            <div key={field.id} className="flex items-center space-x-4 mb-4">
+          <div className="flex items-center gap-2 mb-4">
+            <input
+              type="text"
+              {...register("section2Title")}
+              className="w-full border border-gray-700 bg-gray-700 rounded-md p-2 text-white"
+            />
+            <FiPlus
+              onClick={() => append("")}
+              className="text-teal-500 cursor-pointer text-xl hover:text-teal-600"
+              title="Add more"
+            />
+          </div>
+          <div className="space-y-2">
+            {section2Fields.map((field, index) => (
               <input
+                key={field.id}
                 type="text"
-                placeholder={`Key ${index + 1}`}
                 {...register(`section2.${index}`)}
-                className="flex-1 border border-gray-700 bg-gray-700 rounded-md p-2 text-white"
+                className="w-full border border-gray-700 bg-gray-700 rounded-md p-2 text-white"
               />
-              <button
-                type="button"
-                onClick={() => append("")}
-                className="bg-teal-500 text-white px-2 py-1 rounded-md hover:bg-teal-600"
-              >
-                <AiOutlinePlus size={16} />
-              </button>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
 
         {/* Section 3 */}
@@ -94,12 +98,10 @@ const AdminAboutUs = () => {
           </h2>
           <input
             type="text"
-            placeholder="Title"
             {...register("section3.title")}
             className="w-full border border-gray-700 bg-gray-700 rounded-md p-2 mb-4 text-white"
           />
           <textarea
-            placeholder="Description"
             {...register("section3.description")}
             className="w-full border border-gray-700 bg-gray-700 rounded-md p-2 text-white"
             rows={4}
@@ -117,15 +119,13 @@ const AdminAboutUs = () => {
                 </h2>
                 <input
                   type="text"
-                  placeholder="Title"
                   {...register(`section4to9.${index}.title`)}
                   className="w-full border border-gray-700 bg-gray-700 rounded-md p-2 mb-4 text-white"
                 />
                 <textarea
-                  placeholder="Description"
                   {...register(`section4to9.${index}.description`)}
                   className="w-full border border-gray-700 bg-gray-700 rounded-md p-2 text-white"
-                  rows={4}
+                  rows={3}
                 />
               </div>
             ))}
