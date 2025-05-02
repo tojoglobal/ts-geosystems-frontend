@@ -52,6 +52,7 @@ import ClientMessages from "./Dashboard/DBComponents/ClientMessages";
 import SupportPage from "./Pages/NavComponents/SupportPage";
 import AdminAboutUs from "./Pages/Control/AdminAboutUs";
 import AdminContactUs from "./Pages/Control/AdminContactUs";
+import AdminHire from "./Pages/Control/AdminHire";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -122,6 +123,7 @@ const AppLayout = () => {
           <Route path="client-messages" element={<ClientMessages />} />
           <Route path="about-us" element={<AdminAboutUs />} />
           <Route path="contact-us" element={<AdminContactUs />} />
+          <Route path="hire" element={<AdminHire />} />
         </Route>
 
         <Route path="*" element={<Error />} />
