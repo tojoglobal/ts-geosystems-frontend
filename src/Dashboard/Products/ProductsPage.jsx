@@ -127,10 +127,11 @@ const ProductTable = () => {
       </h1>
       <div className="overflow-x-auto">
         <div className="flex justify-end mb-3">
-          <Link to="/dashboard/add-product">
-            <button className="bg-teal-600 text-white py-2 px-4 rounded-md hover:bg-teal-700 transition duration-200">
-              Add Product
-            </button>
+          <Link
+            to="/dashboard/add-product"
+            className="bg-teal-600 text-white py-2 px-4 rounded-md hover:bg-teal-700 transition duration-200"
+          >
+            Add Product
           </Link>
         </div>
         <table className="w-full text-sm text-left text-gray-700 dark:text-gray-300">
