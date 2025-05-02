@@ -50,7 +50,6 @@ const ProductSidebar = () => {
       }));
     },
   });
-  console.log(brandsData);
 
   useEffect(() => {
     // Automatically open the section if category is in URL params

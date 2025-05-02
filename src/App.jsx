@@ -34,7 +34,7 @@ import TradeIn from "./Pages/NavComponents/TradeIn";
 import ProductAddForm from "./Dashboard/Products/AddProducts";
 import RemoteSupport from "./Pages/NavComponents/RemoteSupport";
 import UserManuals from "./Pages/NavComponents/UserManuals";
-import G2Blog from "./Pages/NavComponents/G2Blog";
+import G2Blog from "./Pages/NavComponents/Blog/G2Blog";
 import Clearance from "./Pages/NavComponents/Clearance";
 import Categorys from "./Dashboard/Categorys/Categorys";
 import Compare from "./Pages/NavComponents/Compare";
@@ -54,6 +54,7 @@ import AdminUpdateAboutUs from "./Pages/Control/AdminUpdateAboutUs";
 import AdminUpdateContactUs from "./Pages/Control/AdminUpdateContactUs";
 import AdminUpdateHire from "./Pages/Control/AdminUpdateHire";
 import AdminUpdateService from "./Pages/Control/AdminUpdateService";
+import BlogDetails from "./Pages/NavComponents/Blog/BlogDetails";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -87,6 +88,7 @@ const AppLayout = () => {
           <Route path="/software-downloads" element={<SoftwareDownloads />} />
           <Route path="/trade-in" element={<TradeIn />} />
           <Route path="/g2-blog" element={<G2Blog />} />
+          <Route path="/g2-blog/:id" element={<BlogDetails />} />
           <Route path="/about-us" element={<AboutUs />} />
           <Route path="/contact-us" element={<ContactUs />} />
           <Route path="/user-manuals" element={<UserManuals />} />

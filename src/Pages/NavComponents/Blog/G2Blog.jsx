@@ -12,7 +12,6 @@ const fakeData = [
     meta: "Leica Geosystems . Jun 2nd 2024 - 5 minute read",
     title: "G2 Survey Become Pix4D Official Reseller",
     type: "Announcements",
-    url: "/g2-blog/?p=release-of-the-new-leica-gs05-gnss-smart-antenna",
   },
   {
     id: 2,
@@ -22,7 +21,6 @@ const fakeData = [
     meta: "Leica Geosystems . Jun 2nd 2024 - 5 minute read",
     title: "G2 Survey Become Pix4D Official Reseller",
     type: "Tips",
-    url: "/g2-blog/?p=release-of-the-new-leica-gs05-gnss-smart-antenna",
   },
   {
     id: 3,
@@ -32,7 +30,6 @@ const fakeData = [
     meta: "Leica Geosystems . Jun 2nd 2024 - 5 minute read",
     title: "G2 Survey Become Pix4D Official Reseller",
     type: "Features",
-    url: "/g2-blog/?p=release-of-the-new-leica-gs05-gnss-smart-antenna",
   },
   {
     id: 4,
@@ -41,7 +38,6 @@ const fakeData = [
     meta: "Leica Geosystems . Jun 2nd 2024 - 5 minute read",
     title: "G2 Survey Become Pix4D Official Reseller",
     type: "Events",
-    url: "/g2-blog/?p=release-of-the-new-leica-gs05-gnss-smart-antenna",
   },
   {
     id: 5,
@@ -51,7 +47,6 @@ const fakeData = [
     meta: "Leica Geosystems . Jun 2nd 2024 - 5 minute read",
     title: "G2 Survey Become Pix4D Official Reseller",
     type: "Tips",
-    url: "/g2-blog/?p=release-of-the-new-leica-gs05-gnss-smart-antenna",
   },
   {
     id: 6,
@@ -61,7 +56,6 @@ const fakeData = [
     meta: "Leica Geosystems . Jun 2nd 2024 - 5 minute read",
     title: "G2 Survey Become Pix4D Official Reseller",
     type: "Features",
-    url: "/g2-blog/?p=release-of-the-new-leica-gs05-gnss-smart-antenna",
   },
   {
     id: 7,
@@ -71,7 +65,6 @@ const fakeData = [
     meta: "Leica Geosystems . Jun 2nd 2024 - 5 minute read",
     title: "G2 Survey Become Pix4D Official Reseller",
     type: "Announcements",
-    url: "/g2-blog/?p=release-of-the-new-leica-gs05-gnss-smart-antenna",
   },
   {
     id: 8,
@@ -81,7 +74,6 @@ const fakeData = [
     meta: "Leica Geosystems . Jun 2nd 2024 - 5 minute read",
     title: "G2 Survey Become Pix4D Official Reseller",
     type: "Tips",
-    url: "/g2-blog/?p=release-of-the-new-leica-gs05-gnss-smart-antenna",
   },
   {
     id: 9,
@@ -91,7 +83,6 @@ const fakeData = [
     meta: "Leica Geosystems . Jun 2nd 2024 - 5 minute read",
     title: "G2 Survey Become Pix4D Official Reseller",
     type: "Features",
-    url: "/g2-blog/?p=release-of-the-new-leica-gs05-gnss-smart-antenna",
   },
   {
     id: 10,
@@ -100,7 +91,6 @@ const fakeData = [
     meta: "Leica Geosystems . Jun 2nd 2024 - 5 minute read",
     title: "G2 Survey Become Pix4D Official Reseller",
     type: "Events",
-    url: "/g2-blog/?p=release-of-the-new-leica-gs05-gnss-smart-antenna",
   },
   {
     id: 11,
@@ -110,7 +100,6 @@ const fakeData = [
     meta: "Leica Geosystems . Jun 2nd 2024 - 5 minute read",
     title: "G2 Survey Become Pix4D Official Reseller",
     type: "Tips",
-    url: "/g2-blog/?p=release-of-the-new-leica-gs05-gnss-smart-antenna",
   },
   {
     id: 12,
@@ -120,7 +109,6 @@ const fakeData = [
     meta: "Leica Geosystems . Jun 2nd 2024 - 5 minute read",
     title: "G2 Survey Become Pix4D Official Reseller",
     type: "Features",
-    url: "/g2-blog/?p=release-of-the-new-leica-gs05-gnss-smart-antenna",
   },
 ];
 
@@ -182,7 +170,7 @@ const G2Blog = () => {
           {currentPosts.map((post, index) => (
             <Link
               key={index}
-              to={post.url}
+              to={`/g2-blog/${post.id}`}
               className="relative border rounded-lg overflow-hidden transition-all hover:bg-gray-100"
             >
               <img src={post.image} alt="post" className="w-full" />
