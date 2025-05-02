@@ -51,6 +51,7 @@ import HomePageControl from "./Dashboard/WebsiteControll/HomePageControl";
 import ClientMessages from "./Dashboard/DBComponents/ClientMessages";
 import SupportPage from "./Pages/NavComponents/SupportPage";
 import AdminAboutUs from "./Pages/Control/AdminAboutUs";
+import AdminContactUs from "./Pages/Control/AdminContactUs";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -120,6 +121,7 @@ const AppLayout = () => {
           <Route path="home-page" element={<HomePageControl />} />
           <Route path="client-messages" element={<ClientMessages />} />
           <Route path="about-us" element={<AdminAboutUs />} />
+          <Route path="contact-us" element={<AdminContactUs />} />
         </Route>
 
         <Route path="*" element={<Error />} />

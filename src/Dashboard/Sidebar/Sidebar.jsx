@@ -68,6 +68,7 @@ const menuItems = [
       { label: "Home Page", to: "/dashboard/home-page" },
       { label: "Sent", to: "/dashboard/email/sent" },
       { label: "About Us", to: "/dashboard/about-us" },
+      { label: "Contact Us", to: "/dashboard/contact-us" },
     ],
   },
   {
