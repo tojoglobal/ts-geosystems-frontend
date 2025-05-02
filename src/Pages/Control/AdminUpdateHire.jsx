@@ -3,7 +3,7 @@ import { useForm, Controller } from "react-hook-form";
 import { Editor } from "@tinymce/tinymce-react";
 import Button from "../../Dashboard/Button/Button";
 
-const AdminHire = () => {
+const AdminUpdateHire = () => {
   const { register, control, handleSubmit } = useForm({
     defaultValues: {
       title: "", // Default title
@@ -68,4 +68,4 @@ const AdminHire = () => {
   );
 };
 
-export default AdminHire;
+export default AdminUpdateHire;

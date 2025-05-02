@@ -1,7 +1,7 @@
 import { useForm, useFieldArray } from "react-hook-form";
 import Button from "../../Dashboard/Button/Button";
 
-const AdminContactUs = () => {
+const AdminUpdateContactUs = () => {
   const {
     register,
     control,
@@ -38,9 +38,7 @@ const AdminContactUs = () => {
 
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">
-        Admin - Update Contact Us
-      </h1>
+      <h1 className="text-2xl font-bold mb-4">Admin - Update Contact Us</h1>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
         {/* Contact Section */}
         <div>
@@ -152,4 +150,4 @@ const AdminContactUs = () => {
   );
 };
 
-export default AdminContactUs;
+export default AdminUpdateContactUs;

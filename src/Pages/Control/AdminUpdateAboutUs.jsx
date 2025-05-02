@@ -4,7 +4,7 @@ import { useDropzone } from "react-dropzone";
 import { FiPlus } from "react-icons/fi";
 import Button from "../../Dashboard/Button/Button";
 
-const AdminAboutUs = () => {
+const AdminUpdateAboutUs = () => {
   const { register, handleSubmit, control } = useForm({
     defaultValues: {
       section1: { title: "", description: "" },
@@ -186,4 +186,4 @@ const AdminAboutUs = () => {
   );
 };
 
-export default AdminAboutUs;
+export default AdminUpdateAboutUs;

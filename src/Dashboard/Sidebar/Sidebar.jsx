@@ -70,6 +70,7 @@ const menuItems = [
       { label: "About Us", to: "/dashboard/about-us" },
       { label: "Contact Us", to: "/dashboard/contact-us" },
       { label: "Hire", to: "/dashboard/hire" },
+      { label: "Service", to: "/dashboard/service" },
     ],
   },
   {
