@@ -8,7 +8,7 @@ const images = [
   "https://ts-geosystems.com.bd/assets/images/1726590513img1.jpg",
 ];
 
-const BannerMobiles = () => {
+const MobilesBanner = () => {
   return (
     <div className="md:w-full md:relative my-3 md:my-5 mx-3 md:max-w-[1300px] md:mx-auto">
       <Swiper
@@ -36,4 +36,4 @@ const BannerMobiles = () => {
   );
 };
 
-export default BannerMobiles;
+export default MobilesBanner;

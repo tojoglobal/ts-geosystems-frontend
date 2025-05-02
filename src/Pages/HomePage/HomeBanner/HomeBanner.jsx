@@ -1,14 +1,13 @@
-import React from "react";
-import BannerMobiles from "./BannerMobiles";
-import GadSlide from "./GadSlide";
-import Banner from "./Banner";
+import MainBanner from "./MainBanner";
+import MobilesBanner from "./MobilesBanner";
+import GadgetBanner from "./GadgetBanner";
 import GoHighBanner from "./GoHighBanner";
 const HomeBanner = () => {
   return (
     <>
-      <Banner />
-      <BannerMobiles />
-      <GadSlide />
+      <MainBanner />
+      <MobilesBanner />
+      <GadgetBanner />
       <GoHighBanner />
     </>
   );

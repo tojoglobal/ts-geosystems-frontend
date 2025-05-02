@@ -34,7 +34,7 @@ import TradeIn from "./Pages/NavComponents/TradeIn";
 import ProductAddForm from "./Dashboard/Products/AddProducts";
 import RemoteSupport from "./Pages/NavComponents/RemoteSupport";
 import UserManuals from "./Pages/NavComponents/UserManuals";
-import G2Blog from "./Pages/NavComponents/G2Blog";
+import G2Blog from "./Pages/NavComponents/Blog/G2Blog";
 import Clearance from "./Pages/NavComponents/Clearance";
 import Categorys from "./Dashboard/Categorys/Categorys";
 import Compare from "./Pages/NavComponents/Compare";
@@ -56,6 +56,11 @@ import PaymentFail from "./Pages/payment/PaymentFail";
 import PaymentCancel from "./Pages/payment/PaymentCancel";
 import PaymentIpn from "./Pages/payment/PaymentIpn";
 import PromoCodeManager from "./Dashboard/PromoCodeManager/PromoCodeManager";
+import AdminUpdateAboutUs from "./Pages/Control/AdminUpdateAboutUs";
+import AdminUpdateContactUs from "./Pages/Control/AdminUpdateContactUs";
+import AdminUpdateHire from "./Pages/Control/AdminUpdateHire";
+import AdminUpdateService from "./Pages/Control/AdminUpdateService";
+import BlogDetails from "./Pages/NavComponents/Blog/BlogDetails";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -89,6 +94,7 @@ const AppLayout = () => {
           <Route path="/software-downloads" element={<SoftwareDownloads />} />
           <Route path="/trade-in" element={<TradeIn />} />
           <Route path="/g2-blog" element={<G2Blog />} />
+          <Route path="/g2-blog/:id" element={<BlogDetails />} />
           <Route path="/about-us" element={<AboutUs />} />
           <Route path="/contact-us" element={<ContactUs />} />
           <Route path="/user-manuals" element={<UserManuals />} />
@@ -132,6 +138,10 @@ const AppLayout = () => {
           <Route path="client-messages" element={<ClientMessages />} />
           {/* promoCode */}
           <Route path="promocodemanager" element={<PromoCodeManager />} />
+          <Route path="about-us" element={<AdminUpdateAboutUs />} />
+          <Route path="contact-us" element={<AdminUpdateContactUs />} />
+          <Route path="hire" element={<AdminUpdateHire />} />
+          <Route path="service" element={<AdminUpdateService />} />
         </Route>
 
         <Route path="*" element={<Error />} />

@@ -8,7 +8,7 @@ const images = [
   "https://ts-geosystems.com.bd/assets/images/1727116649Pixel_9_Series_Available.jpg",
 ];
 
-const GadSlide = () => {
+const GadgetBanner = () => {
   return (
     <div className="md:w-full my-3 md:my-5 mx-3 md:max-w-[1300px] md:mx-auto">
       <div className="flex flex-col md:flex-row gap-3 md:gap-4">
@@ -49,4 +49,4 @@ const GadSlide = () => {
   );
 };
 
-export default GadSlide;
+export default GadgetBanner;
