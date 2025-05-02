@@ -67,8 +67,8 @@ const menuItems = [
     submenu: [
       { label: "Home Page", to: "/dashboard/home-page" },
       { label: "Sent", to: "/dashboard/email/sent" },
+      { label: "About Us", to: "/dashboard/about-us" },
     ],
-    // to: "/dashboard/add-brands",
   },
   {
     label: "Email",
@@ -122,8 +122,21 @@ const Sidebar = ({
   mobileOpen,
   toggleMobileSidebar,
 }) => {
-  const [openSubmenus, setOpenSubmenus] = useState({});
   const location = useLocation();
+  const [openSubmenus, setOpenSubmenus] = useState({});
+
+  // useEffect(() => {
+  //   const activeSubmenus = {};
+  //   menuItems.forEach((item) => {
+  //     if (
+  //       item.submenu &&
+  //       item.submenu.some((sub) => location.pathname.startsWith(sub.to))
+  //     ) {
+  //       activeSubmenus[item.label] = true;
+  //     }
+  //   });
+  //   setOpenSubmenus(activeSubmenus);
+  // }, [location.pathname]);
 
   const toggleSubmenu = (label) => {
     setOpenSubmenus((prev) => ({

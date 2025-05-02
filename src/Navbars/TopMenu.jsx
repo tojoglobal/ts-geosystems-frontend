@@ -1,7 +1,7 @@
 const TopMenu = () => {
   return (
-    <div className="max-w-[1300px] mx-auto border-b border-slightly-dark h-[32px]">
-      <div className="container pt-[6px] mx-auto align-middle">
+    <div className="border-b border-slightly-dark h-[32px]">
+      <div className="max-w-[1300px] mx-auto pt-[6px] align-middle">
         <a
           href="tel:+443330232200"
           className="text-left text-burgundy text-[16px]"
