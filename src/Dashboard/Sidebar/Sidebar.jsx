@@ -22,6 +22,7 @@ import logo from "/TS-WEB-LOGO.png";
 import smallLogo from "/favicon.png";
 import {
   MdCategory,
+  MdLocalOffer,
   MdOutlineShoppingCart,
   MdWebStories,
 } from "react-icons/md";
@@ -55,6 +56,11 @@ const menuItems = [
     label: "Add categorys",
     icon: <MdCategory size={20} />,
     to: "/dashboard/add-categorys",
+  },
+  {
+    label: "Promo Code",
+    icon: <MdLocalOffer size={20} />,
+    to: "/dashboard/promocodemanager",
   },
   {
     label: "Add Brands",

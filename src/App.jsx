@@ -50,6 +50,12 @@ import OrderTable from "./Dashboard/Orders/OrderTable";
 import HomePageControl from "./Dashboard/WebsiteControll/HomePageControl";
 import ClientMessages from "./Dashboard/DBComponents/ClientMessages";
 import SupportPage from "./Pages/NavComponents/SupportPage";
+import ThankYou from "./Pages/ThankYou/ThankYou";
+import PaymentSuccess from "./Pages/payment/PaymentSuccess";
+import PaymentFail from "./Pages/payment/PaymentFail";
+import PaymentCancel from "./Pages/payment/PaymentCancel";
+import PaymentIpn from "./Pages/payment/PaymentIpn";
+import PromoCodeManager from "./Dashboard/PromoCodeManager/PromoCodeManager";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -87,6 +93,12 @@ const AppLayout = () => {
           <Route path="/contact-us" element={<ContactUs />} />
           <Route path="/user-manuals" element={<UserManuals />} />
           <Route path="/cart" element={<Cart />} />
+          {/* payment */}
+          <Route path="/payment/success" element={<PaymentSuccess />} />
+          <Route path="/payment/fail" element={<PaymentFail />} />
+          <Route path="/payment/cancel" element={<PaymentCancel />} />
+          <Route path="/payment/ipn" element={<PaymentIpn />} />
+          <Route path="/thank-you" element={<ThankYou />} />
         </Route>
 
         {/* Admin Routes */}
@@ -118,6 +130,8 @@ const AppLayout = () => {
           {/* hoem page controll */}
           <Route path="home-page" element={<HomePageControl />} />
           <Route path="client-messages" element={<ClientMessages />} />
+          {/* promoCode */}
+          <Route path="promocodemanager" element={<PromoCodeManager />} />
         </Route>
 
         <Route path="*" element={<Error />} />

@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { useAxiospublic } from "./useAxiospublic";
 
 const useProductsByIdsQuery = (ids) => {
