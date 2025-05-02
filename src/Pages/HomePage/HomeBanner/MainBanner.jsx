@@ -72,7 +72,7 @@ const slides = [
   },
 ];
 
-const Banner = () => {
+const MainBanner = () => {
   useEffect(() => {
     const prev = document.querySelector(".custom-prev");
     const next = document.querySelector(".custom-next");
@@ -201,4 +201,4 @@ const Banner = () => {
   );
 };
 
-export default Banner;
+export default MainBanner;

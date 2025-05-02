@@ -6,10 +6,12 @@ import { toast } from "react-toastify";
 const HomePageControl = () => {
   const axiosPublicUrl = useAxiospublic();
   const COMPONENTS = [
-    "Banner",
+    "MainBanner",
+    "MobilesBanner",
+    "GadgetBanner",
+    "GoHighBanner",
     "ProductHighlights",
     "ExperienceCenter",
-    "TotalStation",
     "WeProvide",
     "OurAchievements",
     "TopClients",
