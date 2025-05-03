@@ -24,6 +24,7 @@ import {
   MdCategory,
   MdLocalOffer,
   MdOutlineShoppingCart,
+  MdPercent,
   MdWebStories,
 } from "react-icons/md";
 const menuItems = [
@@ -56,6 +57,11 @@ const menuItems = [
     label: "Add categorys",
     icon: <MdCategory size={20} />,
     to: "/dashboard/add-categorys",
+  },
+  {
+    label: "taxes",
+    icon: <MdPercent size={20} />,
+    to: "/dashboard/taxesmanager",
   },
   {
     label: "Promo Code",

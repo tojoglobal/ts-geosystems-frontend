@@ -21,6 +21,7 @@ const UpdateProductForm = () => {
   const [brands, setBrands] = useState([]);
   const [productOptions, setProductOptions] = useState([]);
   const [softwareOptions, setSoftwareOptions] = useState([]);
+  const [taxes, setTaxes] = useState([]);
 
   const { register, handleSubmit, setValue, control, watch, reset } = useForm({
     defaultValues: {
@@ -103,6 +104,14 @@ const UpdateProductForm = () => {
     }
   }, [watchCategory, axiosPublicUrl]);
 
+  // Fetch taxes
+  useEffect(() => {
+    axiosPublicUrl
+      .get("/api/taxes")
+      .then((res) => setTaxes(res.data))
+      .catch((err) => console.error("Fetch error:", err));
+  }, []);
+
   // Fetch product details for updating
   useEffect(() => {
     const fetchProductData = async () => {
@@ -155,6 +164,7 @@ const UpdateProductForm = () => {
           : [],
         priceShowHide: productData.priceShowHide || 0,
         productOptionShowHide: productData.productOptionShowHide || 0,
+        tax: productData.tax || null,
       });
 
       setImages(
@@ -238,6 +248,7 @@ const UpdateProductForm = () => {
       softwareOptions: data.softwareOptions || [],
       priceShowHide: parseInt(data.priceShowHide),
       productOptionShowHide: parseInt(data.productOptionShowHide),
+      tax: data.tax ? JSON.parse(data.tax) : productData.tax || null,
     };
 
     const formData = new FormData();
@@ -553,6 +564,22 @@ const UpdateProductForm = () => {
               <option value="new">New</option>
               <option value="used">Used</option>
               <option value="old">Old</option>
+            </select>
+
+            {/* Tax selection */}
+            <select
+              {...register("tax")}
+              className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
+            >
+              <option value="">Select Tax</option>
+              {taxes.map((tax) => (
+                <option
+                  key={tax.id}
+                  value={JSON.stringify({ id: tax.id, value: tax.value })}
+                >
+                  {tax.name} ({tax.value}%)
+                </option>
+              ))}
             </select>
           </div>
           <div className="col-span-2 space-y-4">

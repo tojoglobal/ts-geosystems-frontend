@@ -184,17 +184,9 @@ const Checkout = () => {
   };
 
   console.log("items", items);
-  console.log("productIds", productIds);
   console.log("products", products);
   console.log("mergedCart", mergedCart);
 
-  // if (loading) {
-  //   return <div>Loading products...</div>;
-  // }
-
-  // if (error) {
-  //   return <div>Error loading products.</div>;
-  // }
   return (
     <div className="max-w-[1300px] mx-auto py-6 mb-5">
       <div className="grid md:grid-cols-3 gap-6">
@@ -397,11 +389,6 @@ const Checkout = () => {
                 </select>
 
                 <button
-                  // onClick={() => {
-                  //   const newOrderId = "TSGB" + Date.now();
-                  //   setOrderId(newOrderId);
-                  //   setOrderPlaced(true);
-                  // }}
                   onClick={handlePlaceOrder}
                   className="bg-[#e62245] text-white px-4 py-2 rounded"
                 >

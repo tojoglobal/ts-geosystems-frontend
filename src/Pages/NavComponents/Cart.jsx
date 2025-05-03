@@ -8,8 +8,10 @@ import {
   removeFromCart,
   updateQuantity,
 } from "../../features/AddToCart/AddToCart";
+import { useAxiospublic } from "../../Hooks/useAxiospublic";
 
 const Cart = () => {
+  const axiosPublicUrl = useAxiospublic();
   const dispatch = useDispatch();
   const { items } = useSelector((state) => state.cart);
   const [shippingCost, setShippingCost] = useState(5.99);
@@ -69,12 +71,44 @@ const Cart = () => {
     });
   };
 
+  const handleApplyCoupon = async () => {
+    try {
+      const res = await axiosPublicUrl.post("api/promocode", {
+        code_name: couponInput.trim(),
+      });
+
+      if (!res.data) {
+        const error = await res.json();
+        Swal.fire("Invalid", error.message, "Your Coupon is in valid");
+        setCoupon("");
+        return;
+      }
+      const data = res.data;
+      console.log(data);
+      setCoupon(data);
+      Swal.fire("Success", `Coupon "${data.code_name}" applied!`, "success");
+    } catch (err) {
+      console.error(err);
+      setCoupon("");
+      // Swal.fire("Error", "Your Coupon is invalid", "error");
+    }
+  };
+
   const subTotal = mergedCart.reduce(
     (total, item) => total + item.price * item.quantity,
     0
   );
   const vat = subTotal * 0.2;
-  const discount = coupon === "DISCOUNT10" ? subTotal * 0.1 : 0; // example
+  // const discount = coupon === "DISCOUNT10" ? subTotal * 0.1 : 0;
+  let discount = 0;
+  if (coupon && coupon.code_name) {
+    if (coupon.type === "percentage") {
+      discount = (subTotal * coupon.discount) / 100;
+    } else if (coupon.type === "flat") {
+      discount = coupon.discount;
+    }
+  }
+
   const grandTotal = subTotal + vat + shippingCost - discount;
 
   console.log(products);
@@ -195,22 +229,28 @@ const Cart = () => {
                       className="w-full px-3 py-2 border rounded mt-2"
                     />
                     <button
-                      onClick={() => setCoupon(couponInput)} // Apply coupon on click
+                      // onClick={() => setCoupon(couponInput)}
+                      onClick={handleApplyCoupon}
                       className="bg-[#e62245] text-white py-2 px-3 mt-2 rounded"
                     >
                       APPLY
                     </button>
                   </div>
-
-                  {coupon === "DISCOUNT10" && (
-                    <p className="text-green-600 text-sm mt-1">
-                      Coupon applied: 10% off
-                    </p>
-                  )}
-                  {coupon !== "DISCOUNT10" && coupon !== "" && (
-                    <p className="text-red-600 text-sm mt-1">
-                      Invalid coupon code
-                    </p>
+                  {couponInput && (
+                    <>
+                      {coupon && coupon.code_name === couponInput.trim() ? (
+                        <p className="text-green-600 text-sm mt-1">
+                          Valid coupon code:{" "}
+                          {coupon.type === "percentage"
+                            ? `${coupon.discount}% off`
+                            : `£${coupon.discount} off`}
+                        </p>
+                      ) : (
+                        <p className="text-red-600 text-sm mt-1">
+                          Invalid coupon code
+                        </p>
+                      )}
+                    </>
                   )}
                 </>
               )}
