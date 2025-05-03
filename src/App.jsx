@@ -128,7 +128,7 @@ const AppLayout = () => {
           {/* category add */}
           <Route path="add-categorys" element={<Categorys />} />
           {/* add brand */}
-          <Route path="add-brands" element={<Brands />} />
+          <Route path="add-" element={<Brands />} />
           {/* add software  */}
           <Route path="add-software" element={<Software />} />
           {/* order route */}
