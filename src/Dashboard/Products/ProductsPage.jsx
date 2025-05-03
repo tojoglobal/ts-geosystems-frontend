@@ -85,7 +85,7 @@ const ProductTable = () => {
       try {
         await axios.delete(`/api/products/${id}`, { data: { imageUrls } }); // 🔥 Pass image URLs for unlink
         Swal.fire("Deleted!", "Your product has been deleted.", "success");
-        fetchProducts(); // Refresh after delete
+        fetchProducts();
       } catch (err) {
         console.error(err);
         Swal.fire("Error!", "Something went wrong.", "error");

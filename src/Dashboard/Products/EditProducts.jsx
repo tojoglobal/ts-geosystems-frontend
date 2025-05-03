@@ -269,10 +269,19 @@ const UpdateProductForm = () => {
           },
         }
       );
-      alert(response.data.message);
+      Swal.fire({
+        icon: "success",
+        title: "Product update successfully!",
+        // text: response.data.message,
+        confirmButtonColor: "#14b8a6",
+      });
     } catch (error) {
       console.error("Update failed:", error);
-      alert("Failed to update product.");
+      Swal.fire({
+        icon: "error",
+        text: "Failed to update product.",
+        confirmButtonColor: "#ef4444",
+      });
     }
   };
 

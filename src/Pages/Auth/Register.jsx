@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import ReCAPTCHA from "react-google-recaptcha";
 import { Country, State, City } from "country-state-city";
+import { toast } from "react-toastify";
 
 const Register = () => {
   const [countries, setCountries] = useState([]);
@@ -61,7 +62,7 @@ const Register = () => {
 
   const onSubmit = (data) => {
     if (!captchaToken) {
-      alert("Please verify the reCAPTCHA");
+      toast.error("Please verify the reCAPTCHA");
       return;
     }
     const payload = { ...data, captchaToken };

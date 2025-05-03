@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { Editor } from "@tinymce/tinymce-react";
@@ -207,11 +208,18 @@ const UpdateProductForm = () => {
           },
         }
       );
-
-      alert(response.data.message);
+      Swal.fire({
+        icon: "Success",
+        text: response.data.message,
+        confirmButtonColor: "#14b8a6",
+      });
     } catch (error) {
       console.error("Update failed:", error);
-      alert("Failed to update product.");
+      Swal.fire({
+        icon: "error",
+        text: "Failed to update product.",
+        confirmButtonColor: "#ef4444",
+      });
     }
   };
 

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
+import Swal from "sweetalert2";
+import { toast } from "react-toastify";
 
 const UpdateProfile = () => {
   const [userData, setUserData] = useState(null);
@@ -63,14 +65,17 @@ const UpdateProfile = () => {
     }
 
     try {
-      const response = await axios.put("/api/admin/profile", formData, {
+      await axios.put("/api/admin/profile", formData, {
         headers: { "Content-Type": "multipart/form-data" },
         withCredentials: true,
       });
-      alert("Profile updated successfully!");
-    } catch (error) {
-      console.error("Error updating profile:", error);
-      alert("Failed to update profile.");
+      Swal.fire({
+        icon: "Success",
+        text: "Profile updated successfully!",
+        confirmButtonColor: "#14b8a6",
+      });
+    } catch (err) {
+      toast.error("Failed to update profile.");
     }
   };
 

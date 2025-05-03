@@ -6,6 +6,7 @@ import Select from "react-select";
 import { useDropzone } from "react-dropzone";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import Button from "../Button/Button";
+import Swal from "sweetalert2";
 
 const ProductAddForm = () => {
   const axiosPublicUrl = useAxiospublic();
@@ -145,10 +146,19 @@ const ProductAddForm = () => {
         },
       });
 
-      alert(response.data.message);
+      Swal.fire({
+        icon: "success",
+        title: "Product added successfully!",
+        // text: response.data.message,
+        confirmButtonColor: "#14b8a6",
+      });
     } catch (error) {
       console.error("Upload failed:", error);
-      alert("Failed to upload product.");
+      Swal.fire({
+        icon: "error",
+        text: "Failed to upload product. Please try again.",
+        confirmButtonColor: "#ef4444",
+      });
     }
   };
 

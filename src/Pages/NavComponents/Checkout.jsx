@@ -3,6 +3,8 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import useProductsByIdsQuery from "../../Hooks/useProductsByIdsQuery";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
+import { toast } from "react-toastify";
+import Swal from "sweetalert2";
 
 const Checkout = () => {
   const axiosPublicUrl = useAxiospublic();
@@ -153,14 +155,18 @@ const Checkout = () => {
           if (paymentInitRes.data?.GatewayPageURL) {
             window.location.href = paymentInitRes.data.GatewayPageURL; // Redirect to payment gateway
           } else {
-            alert("Failed to initiate payment");
+            toast.error("Failed to initiate payment");
           }
         } else {
-          alert("Failed to save order before payment");
+          toast.error("Failed to save order before payment");
         }
       } catch (err) {
-        console.error("SSLCommerz Payment Error:", err);
-        alert("An error occurred while starting payment.");
+       console.error("SSLCommerz Payment Error:", err);
+       Swal.fire({
+         icon: "error",
+         text: "An error occurred while starting payment.",
+         confirmButtonColor: "#ef4444",
+       });
       }
     } else if (formData.paymentMethod === "bank") {
       try {
