@@ -1,10 +1,14 @@
 import { useForm, Controller } from "react-hook-form";
 import { Editor } from "@tinymce/tinymce-react";
-import Button from "../../Dashboard/Button/Button";
 import { useState, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
+import { useAxiospublic } from "../../Hooks/useAxiospublic";
+import { toast } from "react-toastify";
 
 const AdminUpdateServicePage = () => {
+  const axiosPublicUrl = useAxiospublic();
+  const [isLoading, setIsLoading] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -39,18 +43,23 @@ const AdminUpdateServicePage = () => {
       multiple: false,
     });
 
-  const onSubmit = (data) => {
-    const formData = {
-      title: data.title,
-      description: data.description,
-      image1: image1 ? image1.name : null,
-      image2: image2 ? image2.name : null,
-    };
+  const onSubmit = async (data) => {
+    setIsLoading(true);
+    try {
+      const formData = new FormData();
+      formData.append("title", data.title);
+      formData.append("description", data.description);
+      if (image1) formData.append("image1", image1);
+      if (image2) formData.append("image2", image2);
 
-    console.log("✅ Ready JSON for backend:", formData);
-    console.log("📁 image1 file object:", image1);
-    console.log("📁 image2 file object:", image2);
-    // You can now use image1/image2 along with formData in a FormData payload
+      await axiosPublicUrl.put("/api/service", formData);
+
+      toast.success("Service content updated successfully!");
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -143,11 +152,13 @@ const AdminUpdateServicePage = () => {
             </div>
           )}
         </div>
-
-        {/* Submit Button */}
-        <div className="flex justify-start">
-          <Button text={"Save Changes"} />
-        </div>
+        <button
+          type="submit"
+          className="w-full bg-teal-600 text-white py-2 px-4 rounded-md hover:bg-teal-700 transition"
+          disabled={isLoading}
+        >
+          {isLoading ? "Saving..." : "Save Changes"}
+        </button>
       </form>
     </div>
   );

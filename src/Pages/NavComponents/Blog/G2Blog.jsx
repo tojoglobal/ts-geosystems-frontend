@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { IoSearch } from "react-icons/io5";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
+import { slugify } from "../../../utils/slugify";
 const tabs = ["Features", "Tips", "Announcements", "Events"];
 const fakeData = [
   {
@@ -170,7 +171,7 @@ const G2Blog = () => {
           {currentPosts.map((post, index) => (
             <Link
               key={index}
-              to={`/g2-blog/${post.id}`}
+              to={`/g2-blog/${post.id}/${slugify(post.title || "")}`}
               className="relative border rounded-lg overflow-hidden transition-all hover:bg-gray-100"
             >
               <img src={post.image} alt="post" className="w-full" />

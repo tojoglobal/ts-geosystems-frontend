@@ -95,7 +95,7 @@ const AppLayout = () => {
           <Route path="/software-downloads" element={<SoftwareDownloads />} />
           <Route path="/trade-in" element={<TradeIn />} />
           <Route path="/g2-blog" element={<G2Blog />} />
-          <Route path="/g2-blog/:id" element={<BlogDetails />} />
+          <Route path="/g2-blog/:id/:slug" element={<BlogDetails />} />
           <Route path="/about-us" element={<AboutUs />} />
           <Route path="/contact-us" element={<ContactUs />} />
           <Route path="/user-manuals" element={<UserManuals />} />
@@ -129,7 +129,7 @@ const AppLayout = () => {
           {/* category add */}
           <Route path="add-categorys" element={<Categorys />} />
           {/* add brand */}
-          {/* <Route path="add-brands" element={<Brands />} /> */}
+          <Route path="add-brands" element={<Brands />} />
           {/* add software  */}
           <Route path="add-software" element={<Software />} />
           {/* order route */}

@@ -236,7 +236,11 @@ const CategoryProduct = () => {
                     <div className="text-xs text-gray-600">
                       {product.brand_name} | Sku: {product.sku}
                     </div>
-                    <Link to={`/products/${product.id}`}>
+                    <Link
+                      to={`/products/${product.id}/${slugify(
+                        product.product_name || ""
+                      )}`}
+                    >
                       <h3
                         className={`${
                           viewMode === "list"
