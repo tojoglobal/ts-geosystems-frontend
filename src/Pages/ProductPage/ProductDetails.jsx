@@ -9,6 +9,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../../features/AddToCart/AddToCart";
+import { parsePrice } from "../../utils/parsePrice";
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -48,11 +49,9 @@ const ProductDetails = () => {
     const itemToAdd = {
       id: product.id,
       product_name: product.product_name,
-      price: parseFloat(product.price),
+      price: parsePrice(product.price),
       quantity: quantity,
-      image: product.image_urls ? JSON.parse(product.image_urls)[0] : null,
     };
-
     dispatch(addToCart(itemToAdd));
 
     Swal.fire({
@@ -161,11 +160,11 @@ const ProductDetails = () => {
             <div className="flex items-center gap-2">
               {!!product.priceShowHide && (
                 <div className="mb-2 text-xl line-through text-gray-400">
-                  ৳{parseInt(product.price) + 20000}.00
+                  ৳{parsePrice(product.price)}.00
                 </div>
               )}
               <div className="mb-4 text-3xl text-[#e62245] font-bold">
-                ৳{product.price}.00
+                ৳{parsePrice(product.price)}.00
               </div>
             </div>
             <p className="text-[#8d7f90] text-lg mb-4">

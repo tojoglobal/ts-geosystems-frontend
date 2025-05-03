@@ -44,6 +44,7 @@
     "react-slick": "^0.30.3",
     "react-toastify": "^11.0.5",
     "recharts": "^2.15.3",
+    "reselect": "^5.1.1",
     "slick-carousel": "^1.8.1",
     "sweetalert2": "^11.19.1",
     "sweetalert2-react-content": "^5.1.0",

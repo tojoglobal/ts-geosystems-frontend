@@ -5,14 +5,15 @@ import useProductsByIdsQuery from "../../Hooks/useProductsByIdsQuery";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
+import { selectMergedCart } from "../../utils/selectMergedCart";
 
 const Checkout = () => {
   const axiosPublicUrl = useAxiospublic();
-  const { items, totalQuantity } = useSelector((state) => state.cart);
+  const { items, coupon, totalQuantity } = useSelector((state) => state.cart);
   const [step, setStep] = useState(1);
-  const [coupon, setCoupon] = useState("");
+  // const [coupon, setCoupon] = useState("");
   const [shippingCost, setShippingCost] = useState(5.99);
-  const [couponApplied, setCouponApplied] = useState(false);
+  // const [couponApplied, setCouponApplied] = useState(false);
   const [orderPlaced, setOrderPlaced] = useState(false);
   const [orderId, setOrderId] = useState(null);
   const [formData, setFormData] = useState({
@@ -33,49 +34,22 @@ const Checkout = () => {
   const productIds = useMemo(() => items.map((item) => item.id), [items]);
   const { products, loading, error } = useProductsByIdsQuery(productIds);
 
-  console.log(products);
-
-  // const mergedCart = items
-  //   .map((item) => {
-  //     const product = products.find((p) => p.id === item.id);
-  //     const rawPrice = product?.price || "0";
-  //     const numericPrice = Number(rawPrice.toString().replace(/,/g, "")); // Clean commas
-  //     return product
-  //       ? {
-  //           ...product,
-  //           quantity: item.quantity,
-  //           price: numericPrice,
-  //         }
-  //       : null;
-  //   })
-  //   .filter(Boolean);
-
-  const mergedCart =
-    !loading && products.length > 0
-      ? items
-          .map((item) => {
-            const product = products.find((p) => p.id === item.id);
-            const rawPrice = product?.price || "0";
-            const numericPrice = Number(rawPrice.toString().replace(/,/g, ""));
-            return product
-              ? {
-                  ...product,
-                  quantity: item.quantity,
-                  price: numericPrice,
-                }
-              : null;
-          })
-          .filter(Boolean)
-      : [];
-
-  console.log(mergedCart);
+  const mergedCart = useSelector((state) => selectMergedCart(state, products));
 
   const subtotal = mergedCart.reduce(
     (total, item) => total + item.price * item.quantity,
     0
   );
-  const vat = subtotal * 0.2;
-  const discount = coupon === "DISCOUNT10" ? 0.1 * subtotal : 0;
+
+  const vat = mergedCart.reduce((total, item) => total + item.totalVat, 0);
+  let discount = 0;
+  if (coupon && coupon.code_name) {
+    if (coupon.type === "percentage") {
+      discount = (subtotal * coupon.discount) / 100;
+    } else if (coupon.type === "flat") {
+      discount = coupon.discount;
+    }
+  }
   const total = subtotal + vat + shippingCost - discount;
 
   const handleInputChange = (e) => {
@@ -100,10 +74,6 @@ const Checkout = () => {
     }
 
     // if (currentStep === 3 && formData.billingAddress) setStep(4);
-  };
-
-  const applyCoupon = () => {
-    setCouponApplied(coupon === "DISCOUNT10");
   };
 
   const handlePlaceOrder = async () => {
@@ -161,12 +131,12 @@ const Checkout = () => {
           toast.error("Failed to save order before payment");
         }
       } catch (err) {
-       console.error("SSLCommerz Payment Error:", err);
-       Swal.fire({
-         icon: "error",
-         text: "An error occurred while starting payment.",
-         confirmButtonColor: "#ef4444",
-       });
+        console.error("SSLCommerz Payment Error:", err);
+        Swal.fire({
+          icon: "error",
+          text: "An error occurred while starting payment.",
+          confirmButtonColor: "#ef4444",
+        });
       }
     } else if (formData.paymentMethod === "bank") {
       try {
@@ -182,10 +152,21 @@ const Checkout = () => {
       }
     }
   };
-
-  console.log("items", items);
-  console.log("products", products);
-  console.log("mergedCart", mergedCart);
+  if (!items || items.length === 0) {
+    return (
+      <div className="text-center py-20">
+        <p className="text-xl font-semibold text-gray-700 mb-4">
+          Your cart is empty.
+        </p>
+        <Link
+          to="/shop"
+          className="inline-block bg-[#e62245] text-white px-6 py-2 rounded"
+        >
+          Browse Products
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-[1300px] mx-auto py-6 mb-5">
@@ -486,13 +467,19 @@ const Checkout = () => {
               <span>Shipping</span>
               <span>£{shippingCost}</span>
             </div>
-            <div className="flex justify-between">
-              <span>VAT(20%)</span>
+            {/* <div className="flex justify-between">
+              <span>VAT</span>
               <span>£{vat.toLocaleString()}</span>
-            </div>
+            </div> */}
+            {coupon && (
+              <div className="flex justify-between text-green-600">
+                <span>Discount:({coupon?.code_name})</span>
+                <span>-£{discount.toFixed(2)}</span>
+              </div>
+            )}
 
             {/* Coupon */}
-            <div className="mt-2">
+            {/* <div className="mt-2">
               <div className="flex gap-2">
                 <input
                   type="text"
@@ -502,7 +489,8 @@ const Checkout = () => {
                   className="border p-1 rounded flex-1"
                 />
                 <button
-                  onClick={applyCoupon}
+                  // onClick={applyCoupon}
+                  onClick={handleApplyCoupon}
                   className="bg-[#e62245] text-white px-2 py-1 rounded"
                 >
                   Apply
@@ -513,7 +501,7 @@ const Checkout = () => {
                   Coupon applied: 10% off
                 </p>
               )}
-            </div>
+            </div> */}
           </div>
 
           <hr />
@@ -528,7 +516,7 @@ const Checkout = () => {
           <div className="text-sm">
             <p className="font-semibold mb-1">TAX INCLUDED IN TOTAL:</p>
             <div className="flex justify-between">
-              <span>VAT(20%)</span>
+              <span>VAT</span>
               <span>£{vat.toLocaleString()}</span>
             </div>
           </div>

@@ -1,8 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getFirstImage } from "../../utils/getFirstImage";
+
+const saveCartToLocalStorage = (cart) => {
+  try {
+    const serializedCart = JSON.stringify(cart);
+    localStorage.setItem("cart", serializedCart);
+  } catch (e) {
+    console.error("Could not save cart to localStorage", e);
+  }
+};
 
 const initialState = {
   items: [],
+  coupon: {},
   totalQuantity: 0,
   totalPrice: 0,
 };
@@ -14,38 +23,19 @@ const CartSlice = createSlice({
     addToCart(state, action) {
       const newItem = action.payload;
       const existingItem = state.items.find((item) => item.id === newItem.id);
-
-      // Remove commas from price and convert to number
-      const numericPrice = Number(newItem.price.toString().replace(/,/g, ""));
-      const taxRate = newItem.tax?.value || 0;
-      console.log(taxRate, newItem);
-
-      // Calculate VAT
-      const vat = numericPrice * taxRate;
-      const totalVat = vat * newItem.quantity;
-      const totalPriceWithVat = (numericPrice + vat) * newItem.quantity;
-
       if (existingItem) {
         existingItem.quantity += newItem.quantity;
         existingItem.totalPrice += newItem.price * newItem.quantity;
       } else {
         state.items.push({
-          // ...newItem,
-          id: newItem.id,
-          product_name: newItem.product_name,
-          product_image: getFirstImage(newItem.image_urls),
-          price: numericPrice,
-          quantity: newItem.quantity,
-          totalPrice: totalPriceWithVat,
-          vat: vat,
-          totalVat: totalVat,
-          totalPrice_old: newItem.price * newItem.quantity,
+          ...newItem,
+          totalPrice: newItem.price * newItem.quantity,
         });
       }
 
       state.totalQuantity += newItem.quantity;
-      // state.totalPrice += newItem.price * newItem.quantity;
-      state.totalPrice += totalPriceWithVat;
+      state.totalPrice += newItem.price * newItem.quantity;
+      saveCartToLocalStorage(state.items);
     },
     updateQuantity(state, action) {
       const { id, amount } = action.payload;
@@ -56,20 +46,13 @@ const CartSlice = createSlice({
 
         if (newQuantity < 1) return;
 
-        // const pricePerUnit = item.totalPrice / item.quantity;
-        const pricePerUnit = item.price;
-        const vat = item.vat;
-        const newTotalPrice = (pricePerUnit + vat) * newQuantity;
-        const newTotalVat = vat * newQuantity;
+        const pricePerUnit = item.totalPrice / item.quantity;
 
         state.totalQuantity += amount;
-        // state.totalPrice += pricePerUnit * amount;
-        state.totalPrice += newTotalPrice - item.totalPrice;
+        state.totalPrice += pricePerUnit * amount;
 
         item.quantity = newQuantity;
-        // item.totalPrice = pricePerUnit * newQuantity;
-        item.totalPrice = newTotalPrice;
-        item.totalVat = newTotalVat;
+        item.totalPrice = pricePerUnit * newQuantity;
       }
     },
     removeFromCart(state, action) {
@@ -82,6 +65,12 @@ const CartSlice = createSlice({
         state.items = state.items.filter((item) => item.id !== id);
       }
     },
+    setCoupon: (state, action) => {
+      state.coupon = action.payload; // Set coupon
+    },
+    clearCoupon: (state) => {
+      state.coupon = {};
+    },
     clearCart(state) {
       state.items = [];
       state.totalQuantity = 0;
@@ -90,6 +79,12 @@ const CartSlice = createSlice({
   },
 });
 
-export const { addToCart, removeFromCart, updateQuantity, clearCart } =
-  CartSlice.actions;
+export const {
+  addToCart,
+  removeFromCart,
+  updateQuantity,
+  clearCart,
+  setCoupon,
+  clearCoupon,
+} = CartSlice.actions;
 export default CartSlice.reducer;

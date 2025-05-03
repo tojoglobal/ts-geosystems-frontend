@@ -5,15 +5,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { useMemo, useState } from "react";
 import useProductsByIdsQuery from "../../Hooks/useProductsByIdsQuery";
 import {
+  clearCoupon,
   removeFromCart,
+  setCoupon,
   updateQuantity,
 } from "../../features/AddToCart/AddToCart";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
+import { selectMergedCart } from "../../utils/selectMergedCart";
 
 const Cart = () => {
   const axiosPublicUrl = useAxiospublic();
   const dispatch = useDispatch();
-  const { items } = useSelector((state) => state.cart);
+  const { items, coupon } = useSelector((state) => state.cart);
   const [shippingCost, setShippingCost] = useState(5.99);
   const [showCouponInput, setShowCouponInput] = useState(false);
   const [showShippingForm, setShowShippingForm] = useState(false);
@@ -23,7 +26,6 @@ const Cart = () => {
     zip: "",
   });
   const [couponInput, setCouponInput] = useState("");
-  const [coupon, setCoupon] = useState("");
 
   const estimateShippingCost = () => {
     if (shippingInfo.country && shippingInfo.zip) {
@@ -33,22 +35,11 @@ const Cart = () => {
   };
 
   const productIds = useMemo(() => items.map((item) => item.id), [items]);
-  const { products, loading } = useProductsByIdsQuery(productIds);
+  const { products } = useProductsByIdsQuery(productIds);
 
-  const mergedCart = items
-    .map((item) => {
-      const product = products.find((p) => p.id === item.id);
-      const rawPrice = product?.price || "0";
-      const numericPrice = Number(rawPrice.toString().replace(/,/g, "")); // Clean commas
-      return product
-        ? {
-            ...product,
-            quantity: item.quantity,
-            price: numericPrice,
-          }
-        : null;
-    })
-    .filter(Boolean);
+  const mergedCart = useSelector((state) => selectMergedCart(state, products));
+
+  console.log(mergedCart);
 
   const handleQuantityChange = (id, delta) => {
     dispatch(updateQuantity({ id, amount: delta }));
@@ -80,17 +71,20 @@ const Cart = () => {
       if (!res.data) {
         const error = await res.json();
         Swal.fire("Invalid", error.message, "Your Coupon is in valid");
-        setCoupon("");
+        dispatch(clearCoupon());
         return;
       }
       const data = res.data;
-      console.log(data);
-      setCoupon(data);
+      dispatch(setCoupon(data));
       Swal.fire("Success", `Coupon "${data.code_name}" applied!`, "success");
     } catch (err) {
       console.error(err);
-      setCoupon("");
-      // Swal.fire("Error", "Your Coupon is invalid", "error");
+      dispatch(clearCoupon());
+      Swal.fire(
+        "Error",
+        "An error occurred while applying the coupon",
+        "error"
+      );
     }
   };
 
@@ -98,8 +92,7 @@ const Cart = () => {
     (total, item) => total + item.price * item.quantity,
     0
   );
-  const vat = subTotal * 0.2;
-  // const discount = coupon === "DISCOUNT10" ? subTotal * 0.1 : 0;
+  const vat = mergedCart.reduce((total, item) => total + item.totalVat, 0);
   let discount = 0;
   if (coupon && coupon.code_name) {
     if (coupon.type === "percentage") {
@@ -111,7 +104,6 @@ const Cart = () => {
 
   const grandTotal = subTotal + vat + shippingCost - discount;
 
-  console.log(products);
   return (
     <div className="p-3">
       <div className="flex items-center gap-2 text-xs mb-4">
@@ -132,9 +124,11 @@ const Cart = () => {
           <table className="w-full border-collapse mb-6">
             <thead>
               <tr className="border-b text-left">
-                <th className="py-2">Item</th>
+                <th className="py-2">Image</th>
+                <th className="py-2">Item Name</th>
                 <th className="py-2">Price</th>
                 <th className="py-2">Quantity</th>
+                <th className="py-2">Vat</th>
                 <th className="py-2 text-right">Total</th>
               </tr>
             </thead>
@@ -153,11 +147,13 @@ const Cart = () => {
                       alt={item.product_name}
                       className="w-20 h-20 object-contain"
                     />
-                    <div>
-                      <p className="font-medium">{item.product_name}</p>
-                    </div>
+                    {/* <div></div> */}
+                  </td>
+                  <td className="w-2xs">
+                    <p className="font-medium pr-3">{item.product_name}</p>
                   </td>
                   <td>£{item?.price.toFixed(2)}</td>
+
                   <td>
                     <div className="flex items-center">
                       <button
@@ -175,6 +171,8 @@ const Cart = () => {
                       </button>
                     </div>
                   </td>
+
+                  <td>£{item?.totalVat.toFixed(2)}</td>
                   <td className="text-right">
                     <div className="flex items-center justify-end gap-3">
                       <p>£{(item.price * item.quantity).toFixed(2)}</p>
@@ -229,7 +227,6 @@ const Cart = () => {
                       className="w-full px-3 py-2 border rounded mt-2"
                     />
                     <button
-                      // onClick={() => setCoupon(couponInput)}
                       onClick={handleApplyCoupon}
                       className="bg-[#e62245] text-white py-2 px-3 mt-2 rounded"
                     >
@@ -321,7 +318,7 @@ const Cart = () => {
             </div> */}
 
             <div className="flex justify-between mb-2 border-b pb-2">
-              <span>VAT (20%):</span>
+              <span>VAT:</span>
               <span>£{vat.toFixed(2)}</span>
             </div>
             <div className="flex justify-between mb-2 border-b pb-2">
