@@ -1,7 +1,10 @@
 import { useForm, useFieldArray } from "react-hook-form";
 import Button from "../../Dashboard/Button/Button";
+import Swal from "sweetalert2";
+import { useAxiospublic } from "../../Hooks/useAxiospublic";
 
 const AdminUpdateContactUs = () => {
+  const axiosPublicUrl = useAxiospublic();
   const {
     register,
     control,
@@ -30,10 +33,24 @@ const AdminUpdateContactUs = () => {
     name: "officeAddresses",
   });
 
-  const onSubmit = (data) => {
-    console.log("Form data submitted:", data);
-    // Handle form submission logic here
-    // Example: send data to an API
+  const onSubmit = async (data) => {
+    try {
+      const response = await axiosPublicUrl.put("/api/admin-contact-us", data);
+      Swal.fire({
+        icon: "success",
+        title: "Success!",
+        text: "Contact information updated successfully",
+      });
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text:
+          error.response?.data?.error || "Failed to update contact information",
+      });
+    }
   };
 
   return (
