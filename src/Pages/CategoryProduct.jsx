@@ -9,6 +9,7 @@ import { useAxiospublic } from "../Hooks/useAxiospublic";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../features/AddToCart/AddToCart";
 import { slugify } from "../utils/slugify";
+import { parsePrice } from "../utils/parsePrice";
 
 const sortOptions = [
   "FEATURED ITEMS",
@@ -46,11 +47,12 @@ const CategoryProduct = () => {
     const itemToAdd = {
       id: product.id,
       product_name: product.product_name,
-      price: parseFloat(product.price),
+      price: parsePrice(product.price),
       quantity: 1,
-      // image: product.image_urls, /
-      // optional, if you want to display it in cart
     };
+
+    console.log(itemToAdd);
+
     dispatch(addToCart(itemToAdd));
     Swal.fire({
       title: "Added to Cart",
@@ -262,7 +264,7 @@ const CategoryProduct = () => {
                       <div className="flex items-center gap-1">
                         <p className="font-bold text-lg">
                           {viewMode === "list" && "Price"} £
-                          {parseFloat(product.price).toFixed(2)}
+                          {parsePrice(product.price).toFixed(2)}
                         </p>
                         <p className="text-sm text-gray-500 underline">
                           (Ex. VAT)
