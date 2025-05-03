@@ -13,6 +13,7 @@ const ProductAddForm = () => {
   const [Categories, setCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
   const [brands, setBrands] = useState([]);
+  const [taxes, setTaxes] = useState([]);
 
   const [productOptions, setProductOptions] = useState([]);
   const [softwareOptions, setSoftwareOptions] = useState([]);
@@ -98,6 +99,14 @@ const ProductAddForm = () => {
     }
   }, [watchCategory]);
 
+  // Fetch taxes
+  useEffect(() => {
+    axiosPublicUrl
+      .get("/api/taxes")
+      .then((res) => setTaxes(res.data))
+      .catch((err) => console.error("Fetch error:", err));
+  }, []);
+
   // Dropzone for image upload
   const onDrop = (acceptedFiles) => {
     const newFiles = acceptedFiles.slice(0, 20);
@@ -119,6 +128,7 @@ const ProductAddForm = () => {
       ...data,
       category: data.category ? JSON.parse(data.category) : null,
       subCategory: data.subCategory ? JSON.parse(data.subCategory) : null,
+      tax: data.tax ? JSON.parse(data.tax) : null,
     };
 
     console.log({ ...parsedData, images });
@@ -153,10 +163,10 @@ const ProductAddForm = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#f1f4ff] dark:bg-gray-800 p-4 text-gray-900 dark:text-gray-100">
+    <div className="min-h-screen bg-[#f1f4ff] dark:bg-gray-800 p-4">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="p-6 grid grid-cols-1 md:grid-cols-3 gap-6"
+        className="p-6 grid grid-cols-1 md:grid-cols-3 gap-6  text-gray-900 dark:text-gray-100"
       >
         {/* Image Upload Column */}
         <div className="col-span-1">
@@ -184,7 +194,7 @@ const ProductAddForm = () => {
           </div>
         </div>
         {/* Second Column */}
-        <div className="col-span-2 text-white space-y-4 grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="col-span-2 space-y-4 grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="col-span-1 space-y-4">
             <input
               {...register("productName", { required: true })}
@@ -413,6 +423,22 @@ const ProductAddForm = () => {
               <option value="new">New</option>
               <option value="used">Used</option>
               <option value="old">Old</option>
+            </select>
+
+            {/* Tax selection field */}
+            <select
+              {...register("tax", { required: true })}
+              className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
+            >
+              <option value="">Select Tax</option>
+              {taxes.map((tax) => (
+                <option
+                  key={tax.id}
+                  value={JSON.stringify({ id: tax.id, value: tax.value })}
+                >
+                  {tax.name} ({tax.value}%)
+                </option>
+              ))}
             </select>
           </div>
           <div className="col-span-2 space-y-4">

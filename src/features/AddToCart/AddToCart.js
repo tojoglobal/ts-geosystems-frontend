@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { getFirstImage } from "../../utils/getFirstImage";
 
 const initialState = {
   items: [],
@@ -14,18 +15,37 @@ const CartSlice = createSlice({
       const newItem = action.payload;
       const existingItem = state.items.find((item) => item.id === newItem.id);
 
+      // Remove commas from price and convert to number
+      const numericPrice = Number(newItem.price.toString().replace(/,/g, ""));
+      const taxRate = newItem.tax?.value || 0;
+      console.log(taxRate, newItem);
+
+      // Calculate VAT
+      const vat = numericPrice * taxRate;
+      const totalVat = vat * newItem.quantity;
+      const totalPriceWithVat = (numericPrice + vat) * newItem.quantity;
+
       if (existingItem) {
         existingItem.quantity += newItem.quantity;
         existingItem.totalPrice += newItem.price * newItem.quantity;
       } else {
         state.items.push({
-          ...newItem,
-          totalPrice: newItem.price * newItem.quantity,
+          // ...newItem,
+          id: newItem.id,
+          product_name: newItem.product_name,
+          product_image: getFirstImage(newItem.image_urls),
+          price: numericPrice,
+          quantity: newItem.quantity,
+          totalPrice: totalPriceWithVat,
+          vat: vat,
+          totalVat: totalVat,
+          totalPrice_old: newItem.price * newItem.quantity,
         });
       }
 
       state.totalQuantity += newItem.quantity;
-      state.totalPrice += newItem.price * newItem.quantity;
+      // state.totalPrice += newItem.price * newItem.quantity;
+      state.totalPrice += totalPriceWithVat;
     },
     updateQuantity(state, action) {
       const { id, amount } = action.payload;
@@ -36,13 +56,20 @@ const CartSlice = createSlice({
 
         if (newQuantity < 1) return;
 
-        const pricePerUnit = item.totalPrice / item.quantity;
+        // const pricePerUnit = item.totalPrice / item.quantity;
+        const pricePerUnit = item.price;
+        const vat = item.vat;
+        const newTotalPrice = (pricePerUnit + vat) * newQuantity;
+        const newTotalVat = vat * newQuantity;
 
         state.totalQuantity += amount;
-        state.totalPrice += pricePerUnit * amount;
+        // state.totalPrice += pricePerUnit * amount;
+        state.totalPrice += newTotalPrice - item.totalPrice;
 
         item.quantity = newQuantity;
-        item.totalPrice = pricePerUnit * newQuantity;
+        // item.totalPrice = pricePerUnit * newQuantity;
+        item.totalPrice = newTotalPrice;
+        item.totalVat = newTotalVat;
       }
     },
     removeFromCart(state, action) {

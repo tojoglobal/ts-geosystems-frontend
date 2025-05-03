@@ -61,6 +61,7 @@ import AdminUpdateContactUs from "./Pages/Control/AdminUpdateContactUs";
 import AdminUpdateHire from "./Pages/Control/AdminUpdateHire";
 import AdminUpdateService from "./Pages/Control/AdminUpdateService";
 import BlogDetails from "./Pages/NavComponents/Blog/BlogDetails";
+import TaxManager from "./Dashboard/TaxManager/TaxManager";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -138,6 +139,9 @@ const AppLayout = () => {
           <Route path="client-messages" element={<ClientMessages />} />
           {/* promoCode */}
           <Route path="promocodemanager" element={<PromoCodeManager />} />
+          {/* add taxesmanager */}
+          <Route path="taxesmanager" element={<TaxManager />} />
+          {/* dynamic about page */}
           <Route path="about-us" element={<AdminUpdateAboutUs />} />
           <Route path="contact-us" element={<AdminUpdateContactUs />} />
           <Route path="hire" element={<AdminUpdateHire />} />
