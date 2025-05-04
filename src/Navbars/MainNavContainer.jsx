@@ -63,7 +63,9 @@ const MainNavContainer = () => {
   return (
     <>
       <div
-        className={`border-y border-crimson-red bg-white z-50 w-full ${
+        className={`border-y border-crimson-red bg-white ${
+          isDropdownOpen ? "z-50" : "z-20"
+        } w-full ${
           shouldAnimateSticky
             ? "transition-transform duration-[900ms] ease-in-out"
             : ""
@@ -230,7 +232,7 @@ const MainNavContainer = () => {
       </div>
       {isDropdownOpen && (
         <div
-          className={`fixed ${!isSticky && "top-40"} inset-0 bg-black/50 z-40`}
+          className={`fixed ${!isSticky && "top-44"} inset-0 bg-black/50 z-40`}
           onClick={toggleDropdown}
         />
       )}
