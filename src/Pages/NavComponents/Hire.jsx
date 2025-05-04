@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 import { FaFileAlt } from "react-icons/fa";
 import { FaRegFileLines } from "react-icons/fa6";
+import { useAxiospublic } from "../../Hooks/useAxiospublic";
 
 const Hire = () => {
+  const axiosPublicUrl = useAxiospublic();
   const [formData, setFormData] = useState({
     name: "",
     company: "",
@@ -23,6 +26,27 @@ const Hire = () => {
       [name]: value,
     }));
   };
+
+  const {
+    data: hireContent,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["hireContent"],
+    queryFn: async () => {
+      const { data } = await axiosPublicUrl.get("/api/hire");
+      return data.data;
+    },
+  });
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
+  if (isError) {
+    // you can use error.messgae/add error beside isError in useQuery
+    return <p>Error loading data...</p>;
+  }
 
   const handleCheckboxChange = (e) => {
     const { value, checked } = e.target;
@@ -95,68 +119,21 @@ const Hire = () => {
         </Link>
       </div>
       <div className="space-y-6 text-gray-700 border-t pt-6">
-        <h2 className="text-xl font-semibold">G2 Survey Hire Fleet</h2>
-        <p>
-          Our hire fleet features a comprehensive range of the latest Leica
-          Geosystems surveying equipment, including 3D laser scanners, robotic
-          and manual total stations, GNSS/GPS solutions, digital and automatic
-          levels, rotating lasers, pipe lasers, and utility avoidance tools.
-        </p>
-        <p>
-          All equipment is less than two years old, fully configured, and
-          delivered with all necessary accessories - ready to use straight out
-          of the box.
-        </p>
-        <p>
-          We pride ourselves on delivering exceptional technical and logistical
-          support, ensuring you receive the right equipment, exactly when and
-          where you need it.
-        </p>
-        <p>
-          Our team is on hand throughout the hire period to provide ongoing
-          assistance and support whenever you need it.
-        </p>
-        <p>
-          Hiring can be a cost-effective alternative to purchasing, helping you
-          avoid upfront investment and ongoing maintenance costs. We also offer
-          competitive rates for long-term rentals.
-        </p>
-        <p>
-          If your own instrument is undergoing calibration, repair, or servicing
-          with us, we can provide a fixed-rate replacement to keep your work
-          moving.
-        </p>
-        <p className="font-semibold">Nationwide next-day delivery available.</p>
+        <h2 className="text-xl font-semibold">{hireContent?.title}</h2>
+        <div
+          dangerouslySetInnerHTML={{ __html: hireContent?.description }}
+        ></div>
       </div>
-      <div className="bg-[#ebedf1] mt-12 p-8 text-center rounded-lg">
-        <p className="text-[#e62245] italic font-semibold mb-6">
-          Estimated prices shown above are per week unless stated otherwise.
-        </p>
-        <div className="space-y-4 text-gray-700">
-          <p>
-            All the required accessories, such as prism, detail pole, tripod,
-            batteries, charger, and staff are included with the above
-            instrumentation.
-          </p>
-          <p>Standard delivery and collection £12.50 each way.</p>
-          <p>All prices quoted are subject to VAT.</p>
-          <p>
-            Please don't hesitate to contact us with any enquiries you may have.
-          </p>
-          <Link
-            to="/terms"
-            className="text-[#e62245] border-b border-[#e62245] mt-4"
-          >
-            Terms & Conditions of Sale, Hire, Service & Repair
-          </Link>
-        </div>
-      </div>
+      <div
+        className="bg-[#ebedf1] mt-12 p-8 text-center rounded-lg"
+        dangerouslySetInnerHTML={{ __html: hireContent?.infoBox }}
+      ></div>
       <div className="max-w-3xl mx-auto my-12">
         <h2 className="text-2xl font-semibold mb-2">Hire Enquiry Form</h2>
         <p className="mb-6">
           Please fill in the form, together with your any specific requirements,
           <br />
-          and we will reply with a customize quote. For queries please{" "}
+          and we will reply with a customized quote. For queries please{" "}
           <Link to="/contact-us" className="text-[#e62245] underline">
             contact us...
           </Link>
@@ -466,10 +443,13 @@ const Hire = () => {
           </div>
         </form>
       </div>
-      <img
-        src="https://cdn11.bigcommerce.com/s-ew2v2d3jn1/product_images/uploaded_images/banner-hire-page-a.jpg"
-        alt=""
-      />
+      {hireContent.imageUrl && (
+        <img
+          src={`${import.meta.env.VITE_OPEN_APIURL}${hireContent?.imageUrl}`}
+          alt="Hire Banner"
+          className="max-w-full h-auto mt-8 rounded"
+        />
+      )}
     </div>
   );
 };
