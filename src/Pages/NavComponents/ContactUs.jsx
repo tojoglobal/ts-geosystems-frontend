@@ -10,9 +10,21 @@ import "swiper/css";
 import "swiper/css/navigation";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import { toast } from "react-toastify";
+import { useQuery } from "@tanstack/react-query";
 
 const ContactUs = () => {
   const axiosPublicUrl = useAxiospublic();
+  const {
+    data: contactInfo,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["contactInfo"],
+    queryFn: async () => {
+      const response = await axiosPublicUrl.get("/api/admin-contact-us");
+      return response.data;
+    },
+  });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -38,6 +50,14 @@ const ContactUs = () => {
       toast.error("Failed to send message. Please try again.");
     }
   };
+
+  if (isLoading) {
+    return <div className="p-3">Loading contact information...</div>;
+  }
+
+  if (isError) {
+    return <div className="p-3">Error loading contact information</div>;
+  }
 
   return (
     <div className="p-3">
@@ -118,26 +138,20 @@ const ContactUs = () => {
               <span className="absolute bottom-0 left-0 w-20 h-0.5 bg-[#e62245]"></span>
             </h2>
             <ul className="space-y-2 text-gray-600">
-              <li className="flex items-center gap-2">
-                <FaPhoneAlt />
-                +88 01819 146 605 (Sales)
-              </li>
-              <li className="flex items-center gap-2">
-                <FaPhoneAlt />
-                +88 01819 146 605 (Sales)
-              </li>
-              <li className="flex items-center gap-2">
-                <FaPhoneAlt />
-                +88 01819 146 605 (Service & Support)
-              </li>
-              <li className="flex items-center gap-2">
-                <FaEnvelope />
-                info@ts-geosystems.com.bd
-              </li>
-              <li className="flex items-center gap-2">
-                <FaEnvelope />
-                infos@ts-geosystems.com.bd
-              </li>
+              {/* Dynamic Phone Numbers */}
+              {contactInfo?.phoneNumbers?.map((phone, index) => (
+                <li key={index} className="flex items-center gap-2">
+                  <FaPhoneAlt />
+                  {phone.value}
+                </li>
+              ))}
+              {/* Dynamic Emails */}
+              {contactInfo?.emails?.map((email, index) => (
+                <li key={index} className="flex items-center gap-2">
+                  <FaEnvelope />
+                  {email.value}
+                </li>
+              ))}
             </ul>
           </div>
           <div>
@@ -146,16 +160,18 @@ const ContactUs = () => {
               <span className="absolute bottom-0 left-0 w-20 h-0.5 bg-[#e62245]"></span>
             </h2>
             <ul className="space-y-2 text-gray-600">
-              <li className="flex items-start gap-2">
-                <FaMapMarkerAlt className="mt-1" />
-                Banglamotor, Rasul View 65 Mymensingh Road (7th <br /> Floor)
-                Dhaka - 1000. Bangladesh.
-              </li>
-              <li className="flex items-start gap-2">
-                <FaMapMarkerAlt className="mt-1" />
-                Banglamotor, Rasul View 65 Mymensingh Road (7th <br /> Floor)
-                Dhaka - 1000. Bangladesh.
-              </li>
+              {/* Dynamic Office Addresses */}
+              {contactInfo?.officeAddresses?.map((address, index) => (
+                <li key={index} className="flex items-start gap-2">
+                  <FaMapMarkerAlt className="mt-1" />
+                  {address.value.split("\n").map((line, i) => (
+                    <span key={i}>
+                      {line}
+                      <br />
+                    </span>
+                  ))}
+                </li>
+              ))}
             </ul>
           </div>
           <div className="flex space-x-4 pt-2">
@@ -225,7 +241,6 @@ const ContactUs = () => {
               name: "Chartwell",
               image:
                 "https://files.elfsightcdn.com/8b8376a3-dcd2-4125-b325-6f12bad45143/a7832d91-6d86-4b77-947a-ff429aa6fc12.png",
-
               link: "/chartwell",
             },
             {

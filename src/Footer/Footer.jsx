@@ -79,7 +79,7 @@ const Footer = () => {
       <hr className="border-gray-400 pt-2 mb-4" />
       <div className="max-w-[85%] mx-auto flex flex-col md:flex-row justify-between items-center text-sm pb-6">
         <p>TS Geosystem © All rights reserved | Sitemap</p>
-        {/* <div className="bg-[#585c5d] text-white text-center">
+        <div className="bg-[#585c5d] text-white text-center">
           <p>
             Provided by{" "}
             <a
@@ -91,7 +91,7 @@ const Footer = () => {
               TOJO Global
             </a>
           </p>
-        </div> */}
+        </div>
         <div className="flex gap-4 mt-4 md:mt-0">
           <img
             src="https://ts-geosystems.com.bd/assets/images/16305963101621960148credit-cards-footer.png"

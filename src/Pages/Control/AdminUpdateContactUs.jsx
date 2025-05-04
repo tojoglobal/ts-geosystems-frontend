@@ -2,13 +2,48 @@ import { useForm, useFieldArray } from "react-hook-form";
 import Button from "../../Dashboard/Button/Button";
 import Swal from "sweetalert2";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useEffect } from "react";
 
 const AdminUpdateContactUs = () => {
   const axiosPublicUrl = useAxiospublic();
+  const queryClient = useQueryClient();
+
+  // Fetch contact data using TanStack Query
+  const { data: contactData, isLoading } = useQuery({
+    queryKey: ["contactInfo"],
+    queryFn: async () => {
+      const response = await axiosPublicUrl.get("/api/admin-contact-us");
+      return response.data;
+    },
+  });
+
+  // Mutation for updating contact data
+  const updateContactMutation = useMutation({
+    mutationFn: (data) => axiosPublicUrl.put("/api/admin-contact-us", data),
+    onSuccess: () => {
+      queryClient.invalidateQueries(["contactInfo"]);
+      Swal.fire({
+        icon: "success",
+        title: "Success!",
+        text: "Contact information updated successfully",
+      });
+    },
+    onError: (error) => {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text:
+          error.response?.data?.error || "Failed to update contact information",
+      });
+    },
+  });
+
   const {
     register,
     control,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -18,40 +53,100 @@ const AdminUpdateContactUs = () => {
     },
   });
 
-  const { fields: phoneFields, append: addPhone } = useFieldArray({
+  // Reset form with fetched data when it's available
+  useEffect(() => {
+    if (contactData) {
+      reset({
+        phoneNumbers:
+          contactData.phoneNumbers.length > 0
+            ? contactData.phoneNumbers
+            : [{ value: "" }],
+        emails:
+          contactData.emails.length > 0 ? contactData.emails : [{ value: "" }],
+        officeAddresses:
+          contactData.officeAddresses.length > 0
+            ? contactData.officeAddresses
+            : [{ value: "" }],
+      });
+    }
+  }, [contactData, reset]);
+
+  const {
+    fields: phoneFields,
+    append: addPhone,
+    remove: removePhone,
+  } = useFieldArray({
     control,
     name: "phoneNumbers",
+    rules: { minLength: 1 },
   });
 
-  const { fields: emailFields, append: addEmail } = useFieldArray({
+  const {
+    fields: emailFields,
+    append: addEmail,
+    remove: removeEmail,
+  } = useFieldArray({
     control,
     name: "emails",
+    rules: { minLength: 1 },
   });
 
-  const { fields: addressFields, append: addAddress } = useFieldArray({
+  const {
+    fields: addressFields,
+    append: addAddress,
+    remove: removeAddress,
+  } = useFieldArray({
     control,
     name: "officeAddresses",
+    rules: { minLength: 1 },
   });
 
   const onSubmit = async (data) => {
-    try {
-      const response = await axiosPublicUrl.put("/api/admin-contact-us", data);
-      Swal.fire({
-        icon: "success",
-        title: "Success!",
-        text: "Contact information updated successfully",
-      });
-      console.log(response);
-    } catch (error) {
-      console.error(error);
+    // Validate at least one entry in each field
+    if (
+      data.phoneNumbers.length === 0 ||
+      data.emails.length === 0 ||
+      data.officeAddresses.length === 0
+    ) {
       Swal.fire({
         icon: "error",
-        title: "Oops...",
-        text:
-          error.response?.data?.error || "Failed to update contact information",
+        title: "Validation Error",
+        text: "Please provide at least one entry for each field",
       });
+      return;
     }
+
+    // Filter out empty values
+    const filteredData = {
+      phoneNumbers: data.phoneNumbers.filter(
+        (item) => item.value.trim() !== ""
+      ),
+      emails: data.emails.filter((item) => item.value.trim() !== ""),
+      officeAddresses: data.officeAddresses.filter(
+        (item) => item.value.trim() !== ""
+      ),
+    };
+
+    // Ensure at least one entry remains after filtering
+    if (
+      filteredData.phoneNumbers.length === 0 ||
+      filteredData.emails.length === 0 ||
+      filteredData.officeAddresses.length === 0
+    ) {
+      Swal.fire({
+        icon: "error",
+        title: "Validation Error",
+        text: "Please provide at least one valid entry for each field",
+      });
+      return;
+    }
+
+    updateContactMutation.mutate(filteredData);
   };
+
+  if (isLoading) {
+    return <div className="p-4">Loading contact information...</div>;
+  }
 
   return (
     <div className="p-4">
@@ -73,6 +168,15 @@ const AdminUpdateContactUs = () => {
                     errors.phoneNumbers?.[index]?.value ? "border-red-500" : ""
                   }`}
                 />
+                {phoneFields.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => removePhone(index)}
+                    className="bg-red-500 text-white px-2 py-1 rounded"
+                  >
+                    Remove
+                  </button>
+                )}
               </div>
             ))}
             <button
@@ -84,7 +188,8 @@ const AdminUpdateContactUs = () => {
             </button>
             {errors.phoneNumbers && (
               <p className="text-red-500 text-sm">
-                At least one phone number is required
+                {errors.phoneNumbers.message ||
+                  "At least one phone number is required"}
               </p>
             )}
           </div>
@@ -106,6 +211,15 @@ const AdminUpdateContactUs = () => {
                     errors.emails?.[index]?.value ? "border-red-500" : ""
                   }`}
                 />
+                {emailFields.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => removeEmail(index)}
+                    className="bg-red-500 text-white px-2 py-1 rounded"
+                  >
+                    Remove
+                  </button>
+                )}
               </div>
             ))}
             <button
@@ -117,7 +231,8 @@ const AdminUpdateContactUs = () => {
             </button>
             {errors.emails && (
               <p className="text-red-500 text-sm">
-                At least one email address is required
+                {errors.emails.message ||
+                  "At least one email address is required"}
               </p>
             )}
           </div>
@@ -141,6 +256,15 @@ const AdminUpdateContactUs = () => {
                   }`}
                   rows={2}
                 ></textarea>
+                {addressFields.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => removeAddress(index)}
+                    className="bg-red-500 text-white px-2 py-1 rounded"
+                  >
+                    Remove
+                  </button>
+                )}
               </div>
             ))}
             <button
@@ -152,7 +276,8 @@ const AdminUpdateContactUs = () => {
             </button>
             {errors.officeAddresses && (
               <p className="text-red-500 text-sm">
-                At least one office address is required
+                {errors.officeAddresses.message ||
+                  "At least one office address is required"}
               </p>
             )}
           </div>
@@ -160,7 +285,10 @@ const AdminUpdateContactUs = () => {
 
         {/* Submit Button */}
         <div className="col-span-1 space-y-4">
-          <Button text={"Submit Contact Us"} />
+          <Button
+            text={"Submit Contact Us"}
+            disabled={updateContactMutation.isPending}
+          />
         </div>
       </form>
     </div>
