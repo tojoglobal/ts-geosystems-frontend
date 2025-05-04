@@ -41,7 +41,7 @@ const fakeProducts = [
   },
   {
     id: 4,
-    name: "Leica GEB321 Li-Ion Battery",
+    name: "Leica GEB321 Li-Ion Battery Package",
     sku: "898414",
     brand: "Leica Geosystems",
     price: 80.0,
@@ -86,7 +86,7 @@ const fakeProducts = [
   },
   {
     id: 8,
-    name: "Leica GEB321 Li-Ion Battery",
+    name: "Leica GEB321 Li-Ion Battery Package",
     sku: "898414",
     brand: "Leica Geosystems",
     price: 80.0,
@@ -267,10 +267,10 @@ const Clearance = () => {
                 className={`${
                   viewMode === "list"
                     ? "w-2/3 flex flex-col justify-between"
-                    : "space-y-2 pt-2"
+                    : "space-y-2 border-t pt-3"
                 }`}
               >
-                <div className="border-t pt-3">
+                <div>
                   <div className="text-xs text-gray-600">
                     {product.brand} | Sku: {product.sku}
                   </div>
