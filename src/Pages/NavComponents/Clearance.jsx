@@ -226,20 +226,23 @@ const Clearance = () => {
           {currentProducts.map((product) => (
             <div
               key={product.id}
-              className={`${
-                viewMode === "list" ? "flex gap-6 p-4" : "p-4"
-              } relative`}
+              className={`relative ${
+                viewMode === "list" ? "flex gap-6" : "flex flex-col h-full"
+              }`}
             >
               {/* SALE badge */}
               <div
                 className={`absolute ${
-                  viewMode === "list" ? "top-5 left-52" : "top-4 right-4"
+                  viewMode === "list" ? "top-6 left-64" : "top-5 right-4"
                 } bg-[#e62245] text-white px-2 py-[1px] font-semibold rounded-sm text-sm`}
               >
                 SALE
               </div>
               {/* Product Image */}
-              <Link to={product.url}>
+              <Link
+                to={product.url}
+                className={viewMode === "list" ? "w-1/3" : "flex-grow"}
+              >
                 <div
                   onMouseEnter={() => setHoveredProductId(product.id)}
                   onMouseLeave={() => setHoveredProductId(null)}
@@ -251,7 +254,11 @@ const Clearance = () => {
                         : product.image
                     }
                     alt={product.name}
-                    className="w-full h-72 object-contain transition-all duration-300 ease-in-out"
+                    className={`${
+                      viewMode === "list"
+                        ? "w-full h-64 object-contain"
+                        : "w-full h-72 object-contain"
+                    } transition-all duration-300 ease-in-out`}
                   />
                 </div>
               </Link>
@@ -259,11 +266,11 @@ const Clearance = () => {
               <div
                 className={`${
                   viewMode === "list"
-                    ? "w-3/4 flex flex-col justify-between"
-                    : "space-y-2 border-t pt-2"
+                    ? "w-2/3 flex flex-col justify-between"
+                    : "space-y-2 pt-2"
                 }`}
               >
-                <div>
+                <div className="border-t pt-3">
                   <div className="text-xs text-gray-600">
                     {product.brand} | Sku: {product.sku}
                   </div>
@@ -279,7 +286,7 @@ const Clearance = () => {
                     </h3>
                   </Link>
                   {viewMode === "list" && (
-                    <p className="text-sm text-[#2f2f2b] mt-2">
+                    <p className="text-sm text-[#2f2f2b] mt-1">
                       Ex Demo - As New GNSS Antenna iCON iCG70 UHF Performance
                       AntennaGEB334 Li-Ion Battery x2GNSS Rover Container
                       Controller iCON CC170 Field ControllerGEB260 Li-Ion
@@ -288,7 +295,7 @@ const Clearance = () => {
                     </p>
                   )}
                 </div>
-                <div className="mt-auto">
+                <div>
                   <div className="flex flex-col">
                     {viewMode === "list" && (
                       <div className="text-[#2f2f2b] text-lg font-semibold">
@@ -324,7 +331,7 @@ const Clearance = () => {
                       viewMode === "list" ? "flex-row" : "flex-col"
                     }`}
                   >
-                    <button className="bg-[#e62245] text-white px-6 py-2 hover:bg-[#d41d3f] transition-colors">
+                    <button className="bg-[#e62245] text-white px-6 py-[6px] rounded-sm hover:bg-[#d41d3f] transition-colors">
                       ADD TO CART
                     </button>
                     <div className="flex items-center gap-2">
@@ -378,7 +385,6 @@ const Clearance = () => {
             ))}
           </div>
         </div>
-
         {/* Next button */}
         {currentPage < totalPages ? (
           <button
