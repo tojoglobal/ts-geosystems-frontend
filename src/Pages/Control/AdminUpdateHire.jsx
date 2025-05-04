@@ -13,7 +13,6 @@ const AdminUpdateHire = () => {
   const [files, setFiles] = useState([]);
   const [isUploading, setIsUploading] = useState(false);
 
-  // Fetch existing hire content
   const { data: hireContent, isLoading } = useQuery({
     queryKey: ["hireContent"],
     queryFn: async () => {
@@ -22,7 +21,7 @@ const AdminUpdateHire = () => {
     },
   });
 
-  const { register, control, handleSubmit, reset, watch } = useForm({
+  const { register, control, handleSubmit, reset } = useForm({
     defaultValues: {
       title: "",
       description: "",
@@ -31,10 +30,9 @@ const AdminUpdateHire = () => {
     },
   });
 
-  // Dropzone configuration
   const onDrop = useCallback((acceptedFiles) => {
     if (acceptedFiles?.length) {
-      setFiles(acceptedFiles); // Update the files state for preview and upload
+      setFiles(acceptedFiles);
     }
   }, []);
 
@@ -46,7 +44,6 @@ const AdminUpdateHire = () => {
     maxFiles: 1,
   });
 
-  // Reset form when data is loaded
   useEffect(() => {
     if (hireContent) {
       reset({
@@ -62,13 +59,12 @@ const AdminUpdateHire = () => {
     try {
       setIsUploading(true);
 
-      // Prepare form data for submission
       const formData = new FormData();
       if (files.length > 0) {
-        formData.append("image", files[0]); // Add new image file, if uploaded
+        formData.append("image", files[0]);
       }
       Object.entries(data).forEach(([key, value]) => {
-        formData.append(key, value); // Add other form fields
+        formData.append(key, value);
       });
 
       const response = await axiosPublicUrl.put("/api/hire", formData, {
@@ -98,24 +94,67 @@ const AdminUpdateHire = () => {
   };
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Admin - Update Hire Page</h1>
+    <div className="p-5">
+      <h1 className="text-xl font-bold mb-4">Admin - Update Hire Page</h1>
       {isLoading ? (
         <p>Loading...</p>
       ) : (
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
-          {/* Title Section */}
-          <div className="space-y-3">
-            <label htmlFor="title" className="block font-medium">
-              Title
-            </label>
-            <input
-              type="text"
-              id="title"
-              {...register("title", { required: "Title is required" })}
-              className="w-full border border-gray-300 rounded p-2 focus:outline-none focus:ring focus:ring-[#e62245]"
-              placeholder="Enter page title"
-            />
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-7">
+          {/* Image and Title Side by Side */}
+          <div className="flex flex-col md:flex-row gap-6 items-start">
+            {/* Image Upload Section */}
+            <div className="w-full md:w-1/2 space-y-3">
+              <label className="block font-medium">Banner Image</label>
+              <div
+                {...getRootProps()}
+                className={`border-2 border-dashed rounded-md p-6 text-center cursor-pointer ${
+                  isDragActive
+                    ? "border-teal-500 bg-teal-50"
+                    : "border-gray-300"
+                }`}
+              >
+                <input {...getInputProps()} />
+                {isUploading ? (
+                  <p>Uploading image...</p>
+                ) : (
+                  <p>
+                    Drag & drop or{" "}
+                    <span className="underline text-teal-500">browse</span> to
+                    upload a new banner image
+                  </p>
+                )}
+              </div>
+              {(files.length > 0 || hireContent.imageUrl) && (
+                <div className="mt-4">
+                  <p className="text-sm text-gray-600 mb-2">Current Banner:</p>
+                  <img
+                    src={
+                      files.length > 0
+                        ? URL.createObjectURL(files[0])
+                        : `${import.meta.env.VITE_OPEN_APIURL}${
+                            hireContent.imageUrl
+                          }`
+                    }
+                    alt="Banner preview"
+                    className="h-28 w-full object-cover rounded"
+                  />
+                </div>
+              )}
+            </div>
+
+            {/* Title Input */}
+            <div className="w-full md:w-1/2 space-y-3">
+              <label htmlFor="title" className="block font-medium">
+                Title
+              </label>
+              <input
+                type="text"
+                id="title"
+                {...register("title", { required: "Title is required" })}
+                className="w-full border border-gray-300 rounded p-2 focus:outline-none focus:ring focus:ring-[#e62245]"
+                placeholder="Enter page title"
+              />
+            </div>
           </div>
 
           {/* Description Section */}
@@ -166,45 +205,6 @@ const AdminUpdateHire = () => {
                 />
               )}
             />
-          </div>
-
-          {/* Image Upload Section */}
-          <div className="space-y-3">
-            <label className="block font-medium">Banner Image</label>
-            <div
-              {...getRootProps()}
-              className={`border-2 border-dashed rounded-md p-6 text-center cursor-pointer ${
-                isDragActive ? "border-teal-500 bg-teal-50" : "border-gray-300"
-              }`}
-            >
-              <input {...getInputProps()} />
-              {isUploading ? (
-                <p>Uploading image...</p>
-              ) : (
-                <p>
-                  Drag & drop or{" "}
-                  <span className="underline text-teal-500">browse</span> to
-                  upload a new banner image
-                </p>
-              )}
-            </div>
-            {/* Image Preview */}
-            {(files.length > 0 || hireContent.imageUrl) && (
-              <div className="mt-4">
-                <p className="text-sm text-gray-600 mb-2">Current Banner:</p>
-                <img
-                  src={
-                    files.length > 0
-                      ? URL.createObjectURL(files[0])
-                      : `${import.meta.env.VITE_OPEN_APIURL}${
-                          hireContent.imageUrl
-                        }`
-                  }
-                  alt="Banner preview"
-                  className="h-32 w-56 object-cover rounded"
-                />
-              </div>
-            )}
           </div>
 
           {/* Submit Button */}

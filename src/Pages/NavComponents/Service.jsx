@@ -1,7 +1,10 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useAxiospublic } from "../../Hooks/useAxiospublic";
 
 const Service = () => {
+  const axiosPublicUrl = useAxiospublic();
   const [formData, setFormData] = useState({
     name: "",
     company: "",
@@ -18,7 +21,26 @@ const Service = () => {
     files: null,
   });
 
-  // Handle form input changes
+  const {
+    data: serviceContent,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["serviceContent"],
+    queryFn: async () => {
+      const { data } = await axiosPublicUrl.get("/api/service");
+      return data.data;
+    },
+  });
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
+  if (isError) {
+    return <p>Error loading data...</p>;
+  }
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -27,7 +49,6 @@ const Service = () => {
     }));
   };
 
-  // Handle checkbox changes
   const handleCheckboxChange = (e) => {
     const { name, checked } = e.target;
     setFormData((prev) => ({
@@ -39,7 +60,6 @@ const Service = () => {
     }));
   };
 
-  // Handle file upload
   const handleFileChange = (e) => {
     setFormData((prev) => ({
       ...prev,
@@ -47,7 +67,6 @@ const Service = () => {
     }));
   };
 
-  // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Form data to be submitted:", formData);
@@ -66,78 +85,56 @@ const Service = () => {
       </div>
       <p className="text-[#e62245] uppercase text-3xl mt-1 mb-6">Service</p>
       <h1 className="text-lg mt-2 text-[#e62245] mb-2 font-bold">
-        Surveying Equipment Service, Calibration & Repairs
+        {serviceContent?.title ||
+          "Surveying Equipment Service, Calibration & Repairs"}
       </h1>
+
       {/* Service Description */}
-      <div className="text-gray-700 space-y-4 mb-8">
-        <p>
-          At G2 Survey, we understand that the precision of your project relies
-          heavily on the accuracy of your surveying equipment. As a fully
-          authorised service partner of Leica Geosystems, we provide top-notch
-          service, calibration, and repair solutions for a wide range of survey
-          equipment.
-        </p>
-        <p>
-          Our state-of-the-art facility specialises in servicing Total Stations,
-          replete with the latest high-precision collimation and tooling,
-          ensuring your instruments receive the best care possible.
-        </p>
-        <p>
-          Rest assured, all works within the G2 facility are executed in a
-          controlled environment by our Leica certified technicians. Our
-          comprehensive stock of spare parts ensures swift, efficient service,
-          reducing downtime and getting your instruments back into the field as
-          soon as possible.
-        </p>
-      </div>
-      <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-        {[1, 2, 3, 4].map((index) => (
-          <div key={index}>
+      <div
+        className="text-gray-700 space-y-4 mb-8"
+        dangerouslySetInnerHTML={{ __html: serviceContent?.description }}
+      />
+
+      {/* Grid Images */}
+      {serviceContent?.image_grid && (
+        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+          {[1, 2, 3, 4].map((index) => (
+            <div key={index}>
+              <img
+                src={`${import.meta.env.VITE_OPEN_APIURL}${
+                  serviceContent.image_grid
+                }`}
+                alt="Service grid image"
+                className="w-full h-auto"
+              />
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Info After Images */}
+      {serviceContent?.info_after_images && (
+        <div
+          className="space-y-4 mb-8"
+          dangerouslySetInnerHTML={{ __html: serviceContent.info_after_images }}
+        />
+      )}
+
+      {/* Banner Images */}
+      {serviceContent?.image_banner && (
+        <div className="space-y-6 mb-12">
+          {[1, 2].map((index) => (
             <img
-              src={`https://cdn11.bigcommerce.com/s-ew2v2d3jn1/product_images/uploaded_images/brand-leica-adsp-l.jpg`}
-              alt="Leica Authorized Distributor & Service Partner"
+              key={index}
+              src={`${import.meta.env.VITE_OPEN_APIURL}${
+                serviceContent.image_banner
+              }`}
+              alt="Service center"
+              className="w-full rounded-lg"
             />
-          </div>
-        ))}
-      </div>
-      <div className="space-y-4 mb-8">
-        <p>
-          In terms of cost, we strive to offer competitive pricing for our
-          services. While prices can vary depending on the service and type of
-          instrument, we ensure transparency at all stages—see standard service
-          pricelist below.
-        </p>
-        <p>
-          G2 Survey isn't just a local service—our reputation extends far and
-          wide. We're proud to offer our calibration and repair services to both
-          national and international clients, ensuring high-quality,
-          precision-based service to all.
-        </p>
-        <p>
-          Our preventative maintenance program is a key part of our offering.
-          Regularly scheduled maintenance can extend the life of your equipment,
-          prevent costly damages, and ensure the accuracy of your survey
-          results.
-        </p>
-        <p>
-          At G2 Survey, we believe in more than just providing a service. We're
-          committed to forming lasting partnerships with our clients, based on
-          trust, quality, and unrivalled expertise in the surveying sector.
-          Reach out to us today and experience the G2 difference.
-        </p>
-      </div>
-      <div className="space-y-6 mb-12">
-        <img
-          src="https://cdn11.bigcommerce.com/s-ew2v2d3jn1/product_images/uploaded_images/banner-service-page-workshop.jpg"
-          alt="Service Center"
-          className="w-full rounded-lg"
-        />
-        <img
-          src="https://cdn11.bigcommerce.com/s-ew2v2d3jn1/product_images/uploaded_images/banner-service-page-workshop.jpg"
-          alt="Service Center"
-          className="w-full rounded-lg"
-        />
-      </div>
+          ))}
+        </div>
+      )}
       <div className="max-w-3xl mx-auto mb-12">
         <h2 className="text-2xl font-semibold mb-4">Service Enquiry Form</h2>
         <p className="mb-6">
