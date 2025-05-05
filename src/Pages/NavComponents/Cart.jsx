@@ -39,8 +39,6 @@ const Cart = () => {
 
   const mergedCart = useSelector((state) => selectMergedCart(state, products));
 
-  console.log(mergedCart);
-
   const handleQuantityChange = (id, delta) => {
     dispatch(updateQuantity({ id, amount: delta }));
   };

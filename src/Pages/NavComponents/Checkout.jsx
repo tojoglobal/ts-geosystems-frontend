@@ -72,8 +72,6 @@ const Checkout = () => {
       }
       setStep(4);
     }
-
-    // if (currentStep === 3 && formData.billingAddress) setStep(4);
   };
 
   const handlePlaceOrder = async () => {
@@ -93,12 +91,32 @@ const Checkout = () => {
         ? `${formData.shippingAddress}, ${formData.shippingCity}, ${formData.shippingZip}`
         : formData.billingAddress,
       paymentMethod: formData.paymentMethod,
-      paymentStatus: "pending", // initial status
+      paymentStatus: "pending",
       items: mergedCart,
+      coupon: coupon?.code_name || null,
       total,
     };
 
     console.log("orderData", orderData);
+    const sslPaymentInfo = {
+      total_amount: total,
+      shippingCost: shippingCost,
+      order_id: newOrderId,
+      productIds: productIds,
+      customer_name: formData.shippingName,
+      customer_email: formData.email,
+      customer_phone: formData.shippingPhone,
+      shipping_address: formData.shippingAddress,
+      shipping_city: formData.shippingCity,
+      shipping_zip: formData.shippingZip,
+      items: mergedCart.map((item) => ({
+        id: item.id,
+        price: item.price,
+        quantity: item.quantity,
+      })),
+      coupon: coupon || null,
+    };
+    console.log(sslPaymentInfo);
 
     if (formData.paymentMethod === "sslcommerz") {
       try {
@@ -109,21 +127,12 @@ const Checkout = () => {
           // Trigger SSLCommerz payment
           const paymentInitRes = await axiosPublicUrl.post(
             "/api/ssl-payment/init",
-            {
-              total_amount: total,
-              order_id: newOrderId,
-              customer_name: formData.shippingName,
-              customer_email: formData.email,
-              customer_phone: formData.shippingPhone,
-              shipping_address: formData.shippingAddress,
-              shipping_city: formData.shippingCity,
-              shipping_zip: formData.shippingZip,
-              items: mergedCart,
-            }
+            sslPaymentInfo
           );
 
           if (paymentInitRes.data?.GatewayPageURL) {
-            window.location.href = paymentInitRes.data.GatewayPageURL; // Redirect to payment gateway
+            console.log(paymentInitRes.data.GatewayPageURL);
+            window.location.href = paymentInitRes.data.GatewayPageURL;
           } else {
             toast.error("Failed to initiate payment");
           }
