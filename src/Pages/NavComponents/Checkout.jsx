@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useProductsByIdsQuery from "../../Hooks/useProductsByIdsQuery";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import { toast } from "react-toastify";
@@ -11,6 +11,7 @@ import { clearCart, clearCoupon } from "../../features/AddToCart/AddToCart";
 const Checkout = () => {
   const axiosPublicUrl = useAxiospublic();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { items, coupon, totalQuantity } = useSelector((state) => state.cart);
   const [step, setStep] = useState(1);
   // const [coupon, setCoupon] = useState("");
@@ -155,6 +156,7 @@ const Checkout = () => {
           // Order was successful
           dispatch(clearCart());
           dispatch(clearCoupon());
+          navigate("");
         } else {
           alert("Failed to place order.");
         }
@@ -484,7 +486,7 @@ const Checkout = () => {
               <span>VAT</span>
               <span>£{vat.toLocaleString()}</span>
             </div> */}
-            {coupon && (
+            {coupon?.code_name && (
               <div className="flex justify-between text-green-600">
                 <span>Discount:({coupon?.code_name})</span>
                 <span>-£{discount.toFixed(2)}</span>
