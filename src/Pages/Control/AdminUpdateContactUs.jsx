@@ -4,6 +4,7 @@ import Swal from "sweetalert2";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
+import Loader from "../../utils/Loader";
 
 const AdminUpdateContactUs = () => {
   const axiosPublicUrl = useAxiospublic();
@@ -144,9 +145,7 @@ const AdminUpdateContactUs = () => {
     updateContactMutation.mutate(filteredData);
   };
 
-  if (isLoading) {
-    return <div className="p-4">Loading contact information...</div>;
-  }
+  if (isLoading) return <Loader />;
 
   return (
     <div className="p-4">

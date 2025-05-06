@@ -3,6 +3,9 @@ import { Link, useNavigate } from "react-router-dom";
 import { BsGrid3X3GapFill } from "react-icons/bs";
 import { FaThList } from "react-icons/fa";
 import Swal from "sweetalert2";
+import { useDispatch } from "react-redux";
+import { parsePrice } from "../../utils/parsePrice";
+import { addToCart } from "../../features/AddToCart/AddToCart";
 
 const fakeProducts = [
   {
@@ -127,6 +130,7 @@ const Clearance = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [compareItems, setCompareItems] = useState([]);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const productsPerPage = 8;
   const totalPages = Math.ceil(fakeProducts.length / productsPerPage);
 
@@ -160,6 +164,26 @@ const Clearance = () => {
       const sortedIds = [...compareItems].sort((a, b) => a - b);
       navigate(`/compare/${sortedIds.join(",")}`);
     }
+  };
+
+  const handleAddToCart = (product) => {
+    const itemToAdd = {
+      id: product.id,
+      product_name: product.product_name,
+      price: parsePrice(product.price),
+      quantity: 1,
+    };
+
+    console.log(itemToAdd);
+
+    // dispatch(addToCart(itemToAdd));
+    Swal.fire({
+      title: "Added to Cart",
+      text: `${product.name} has been added to your cart.`,
+      icon: "success",
+      timer: 2000,
+      showConfirmButton: false,
+    });
   };
 
   return (
@@ -366,7 +390,10 @@ const Clearance = () => {
                       <span className="underline">(Inc. VAT)</span>
                     </div>
                     <div className="flex flex-col gap-2 mt-4">
-                      <button className="bg-[#e62245] text-white px-6 py-[6px] rounded-sm hover:bg-[#d41d3f] transition-colors">
+                      <button
+                        onClick={() => handleAddToCart(product)}
+                        className="bg-[#e62245] text-white px-6 py-[6px] rounded-sm hover:bg-[#d41d3f] transition-colors"
+                      >
                         ADD TO CART
                       </button>
                       <div className="flex items-center gap-2 mt-1">

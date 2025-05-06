@@ -6,6 +6,7 @@ import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import Swal from "sweetalert2";
 import Button from "../../Dashboard/Button/Button";
+import Loader from "../../utils/Loader";
 
 const AdminUpdateServicePage = () => {
   const axiosPublicUrl = useAxiospublic();
@@ -115,7 +116,7 @@ const AdminUpdateServicePage = () => {
     <div className="p-5">
       <h1 className="text-xl font-bold mb-4">Admin - Update Service Page</h1>
       {isLoading ? (
-        <p>Loading...</p>
+        <Loader />
       ) : (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-7">
           {/* Title Section */}
