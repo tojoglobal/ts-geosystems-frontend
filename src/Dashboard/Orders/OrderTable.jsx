@@ -1,47 +1,142 @@
 import React, { useEffect, useState } from "react";
-import { Edit, Trash } from "lucide-react";
-const demoOrders = [
-  {
-    id: "#ORD2540",
-    productName: "Sample Product",
-    quantity: 2,
-    customerName: "John Doe",
-    orderDate: "2024-01-20",
-    status: "Pending",
-    totalAmount: 299.99,
-    statusClass: "text-yellow-400 bg-yellow-900",
-  },
-  {
-    id: "#ORD2541",
-    productName: "Test Product",
-    quantity: 1,
-    customerName: "Jane Smith",
-    orderDate: "2024-01-19",
-    status: "Completed",
-    totalAmount: 199.99,
-    statusClass: "text-green-400 bg-green-900",
-  },
-];
+import { Edit, Eye, Trash } from "lucide-react";
+import { useAxiospublic } from "../../Hooks/useAxiospublic";
+import { parseItems } from "../../utils/parseItems";
+import { formatDate } from "../../utils/formatDate";
+import { FaFilePdf } from "react-icons/fa";
+import Swal from "sweetalert2";
+import { saveAs } from "file-saver";
+import { GenerateInvoicePdf } from "../../utils/generateInvoicePdf";
+
 const OrderTable = () => {
+  const axiospublic = useAxiospublic();
+
   const [orders, setOrders] = useState([]);
+  const [editStatusId, setEditStatusId] = useState(null);
+  // get by the all order data
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_BASE_URL}/api/orders`)
-      .then((res) => res.json())
-      .then(setOrders);
+    const fetchTheOrder = async () => {
+      try {
+        const res = await axiospublic.get("api/orderinfo");
+        if (res.status === 200) {
+          setOrders(res.data?.data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchTheOrder();
   }, []);
 
-  const updateStatus = async (orderId, status) => {
-    await fetch(
-      `${import.meta.env.VITE_API_BASE_URL}/api/orders/${orderId}/status`,
-      {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status }),
+  const handleDownloadInvoice = async (order) => {
+    const doc = await GenerateInvoicePdf(order);
+    window.open(doc.output("bloburl"), "_blank");
+  };
+
+  const handleEditStatus = async (orderId, newStatus) => {
+    // console.log(orderId, newStatus);
+
+    try {
+      const res = await axiospublic.put(`/api/orders/${orderId}/status`, {
+        status: newStatus,
+      });
+
+      if (res.status === 200) {
+        setOrders((prev) =>
+          prev.map((order) =>
+            order.order_id === orderId ? { ...order, status: newStatus } : order
+          )
+        );
+        setEditStatusId(null);
+        Swal.fire("Success", "Order status updated!", "success");
+      } else {
+        throw new Error("Failed to update status");
       }
-    );
-    setOrders((prev) =>
-      prev.map((o) => (o.order_id === orderId ? { ...o, status } : o))
-    );
+    } catch (error) {
+      Swal.fire("Error", error.message, "error");
+    }
+  };
+
+  const handleDeleteOrder = (order) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const res = await fetch(
+            `${import.meta.env.VITE_API_BASE_URL}/api/orders/${order.order_id}`,
+            {
+              method: "DELETE",
+            }
+          );
+          if (res.ok) {
+            setOrders((prev) =>
+              prev.filter((o) => o.order_id !== order.order_id)
+            );
+            Swal.fire("Deleted!", "Order has been deleted.", "success");
+          } else {
+            throw new Error("Failed to delete order");
+          }
+        } catch (error) {
+          Swal.fire("Error", error.message, "error");
+        }
+      }
+    });
+  };
+
+  // console.log(orders);
+
+  const handleShowOrderDetails = (order) => {
+    const items = parseItems(order?.items);
+    const html = `
+      <div style="text-align:left; max-height:300px; overflow-y:auto;">
+        <p><strong>Order ID:</strong> ${order.order_id}</p>
+        <p><strong>Name:</strong> ${order.shipping_name}</p>
+        <p><strong>Email:</strong> ${order.email}</p>
+        <p><strong>Billing Address:</strong> ${order.billing_address}</p>
+        <p><strong>Shipping Address:</strong> ${order.shipping_address}, ${
+      order.shipping_city
+    } - ${order.shipping_zip}</p>
+        <hr />
+        <h4>Items:</h4>
+        <ul>
+          ${items
+            .map(
+              (item) =>
+                `<li>${item.product_name} - Qty: ${item.quantity} - $${item.price}</li>`
+            )
+            .join("")}
+        </ul>
+      </div>
+    `;
+    Swal.fire({
+      title: `Order Details`,
+      html,
+      width: 600,
+      confirmButtonText: "Close",
+      showCloseButton: true,
+    });
+  };
+
+  const getStatusStyle = (status) => {
+    switch (status) {
+      case "pending":
+        return "text-yellow-500 bg-yellow-900";
+      case "completed":
+        return "text-green-500 bg-green-900";
+      case "cancelled":
+        return "text-[#ed5e49] bg-[rgba(237,94,73,0.18)]";
+      case "shipping":
+        return "text-[#f4ba40] bg-[rgba(244,186,64,0.18)]";
+      default:
+        return "text-white bg-slate-600";
+    }
   };
 
   return (
@@ -51,54 +146,6 @@ const OrderTable = () => {
         <div className="text-sm text-gray-400">Sort By: Latest</div>
       </div>
       <div className="overflow-x-auto">
-        {/* <table className="w-full border">
-          <thead>
-            <tr>
-              <th>Order ID</th>
-              <th>Email</th>
-              <th>Total</th>
-              <th>Status</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {orders.map((order) => (
-              <tr key={order.id} className="text-center border-t">
-                <td>{order.order_id}</td>
-                <td>{order.email}</td>
-                <td>£{order.total}</td>
-                <td>
-                  <span
-                    className={`px-2 py-1 rounded text-white ${
-                      order.status === "pending"
-                        ? "bg-yellow-500"
-                        : order.status === "completed"
-                        ? "bg-green-600"
-                        : "bg-red-600"
-                    }`}
-                  >
-                    {order.status}
-                  </span>
-                </td>
-                <td className="space-x-2">
-                  <button
-                    onClick={() => updateStatus(order.order_id, "completed")}
-                    className="text-green-600 font-semibold"
-                  >
-                    Complete
-                  </button>
-                  <button
-                    onClick={() => updateStatus(order.order_id, "cancelled")}
-                    className="text-red-600 font-semibold"
-                  >
-                    Cancel
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table> */}
-
         <table className="min-w-full text-sm text-gray-300">
           <thead className="text-xs text-gray-400 uppercase bg-slate-900">
             <tr>
@@ -106,8 +153,9 @@ const OrderTable = () => {
                 <input type="checkbox" />
               </th>
               <th className="px-4 py-2 text-left">Order ID</th>
-              <th className="px-4 py-2 text-left">Product Name</th>
-              <th className="px-4 py-2 text-left">Customer</th>
+              <th className="px-4 py-2 text-left">Name</th>
+              <th className="px-4 py-2 text-left">Payment Metod</th>
+              <th className="px-4 py-2 text-left">Payment Status</th>
               <th className="px-4 py-2 text-left">Quantity</th>
               <th className="px-4 py-2 text-left">Order Date</th>
               <th className="px-4 py-2 text-left">Total Amount</th>
@@ -116,40 +164,89 @@ const OrderTable = () => {
             </tr>
           </thead>
           <tbody>
-            {demoOrders.map((order, index) => (
-              <tr
-                key={index}
-                className="bg-slate-800 border-b border-slate-600"
-              >
-                <td className="px-4 py-2">
-                  <input type="checkbox" />
-                </td>
-                <td className="px-4 py-2">{order.id}</td>
-                <td className="px-4 py-2">{order.productName}</td>
-                <td className="px-4 py-2 flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-full bg-gray-600"></div>
-                  <span>{order.customerName}</span>
-                </td>
-                <td className="px-4 py-2">{order.quantity}</td>
-                <td className="px-4 py-2">{order.orderDate}</td>
-                <td className="px-4 py-2">${order.totalAmount}</td>
-                <td className="px-4 py-2">
-                  <span
-                    className={`px-2 py-1 rounded-full text-xs font-medium ${order.statusClass}`}
+            {orders.length > 0 &&
+              orders.map((order, index) => (
+                <tr
+                  key={index}
+                  className="bg-slate-800 border-b border-slate-600"
+                >
+                  <td className="px-4 py-2">
+                    <input type="checkbox" />
+                  </td>
+                  <td className="px-4 py-2">{order?.order_id}</td>
+                  <td className="px-4 py-2">{order?.shipping_name}</td>
+                  <td className="px-4 py-2">{order?.payment_method}</td>
+                  <td
+                    className={`px-4 py-2 ${
+                      order?.paymentStatus === "paid"
+                        ? "text-green-400"
+                        : "text-yellow-400"
+                    }`}
                   >
-                    {order.status}
-                  </span>
-                </td>
-                <td className="px-4 py-2 flex gap-2">
-                  <button className="text-green-400 bg-green-900 p-1 rounded hover:bg-green-700">
-                    <Edit size={16} />
-                  </button>
-                  <button className="text-red-400 bg-red-900 p-1 rounded hover:bg-red-700">
-                    <Trash size={16} />
-                  </button>
-                </td>
-              </tr>
-            ))}
+                    {order?.paymentStatus}
+                  </td>
+                  <td className="px-4 py-2">
+                    {parseItems(order?.items).length}
+                  </td>
+                  <td className="px-4 py-2">{formatDate(order?.created_at)}</td>
+                  <td className="px-4 py-2">${order?.total}</td>
+                  <td className="px-4 py-2">
+                    {editStatusId === order.order_id ? (
+                      <select
+                        value={order.status}
+                        onChange={(e) =>
+                          handleEditStatus(order.order_id, e.target.value)
+                        }
+                        className="bg-gray-800 text-white p-1 rounded"
+                      >
+                        <option value="pending">Pending</option>
+                        <option value="completed">Completed</option>
+                        <option value="cancelled">Cancelled</option>
+                        <option value="shipping">Shipping</option>
+                      </select>
+                    ) : (
+                      <span
+                        className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusStyle(
+                          order.status
+                        )}`}
+                      >
+                        {order.status}
+                      </span>
+                    )}
+                  </td>
+                  <td className="px-4 py-2 flex gap-2">
+                    <button
+                      onClick={() => handleDownloadInvoice(order)}
+                      className="text-blue-400 bg-blue-900 p-1 rounded hover:bg-blue-700"
+                    >
+                      <FaFilePdf size={16} />
+                    </button>
+                    <button
+                      onClick={() => handleShowOrderDetails(order)}
+                      className="text-yellow-400 bg-yellow-900 p-1 rounded hover:bg-yellow-700"
+                    >
+                      <Eye size={16} />
+                    </button>
+
+                    <button
+                      className="text-green-400 bg-green-900 p-1 rounded hover:bg-green-700"
+                      onClick={() =>
+                        setEditStatusId((prev) =>
+                          prev === order.order_id ? null : order.order_id
+                        )
+                      }
+                    >
+                      <Edit size={16} />
+                    </button>
+                    <button
+                      onClick={() => handleDeleteOrder(order)}
+                      className="text-red-400 bg-red-900 p-1 rounded hover:bg-red-700"
+                    >
+                      <Trash size={16} />
+                    </button>
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>

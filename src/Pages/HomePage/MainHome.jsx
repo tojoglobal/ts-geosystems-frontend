@@ -24,6 +24,8 @@ const MainHome = () => {
     },
   });
 
+  console.log(comp);
+
   if (isLoading) return null;
   if (isError) return <div>Error loading homepage settings.</div>;
 
@@ -37,7 +39,7 @@ const MainHome = () => {
       comp.GoHighBanner ? (
         <HomeBanner control={comp} />
       ) : null}
-      
+
       {comp.ProductHighlights && <ProductHighlights />}
       {comp.ExperienceCenter && <ExperienceCenter />}
       {comp.WeProvide && <WeProvide />}

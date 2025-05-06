@@ -38,7 +38,6 @@ const ThankYou = () => {
 
   const handlePrint = async () => {
     const doc = await GenerateInvoicePdf(order);
-
     window.open(doc.output("bloburl"), "_blank");
   };
 
