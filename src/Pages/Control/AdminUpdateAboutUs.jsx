@@ -1,250 +1,314 @@
-import React, { useState } from "react";
-import { useForm, useFieldArray } from "react-hook-form";
+import React, { useState, useEffect } from "react";
+import { useForm, Controller, useFieldArray } from "react-hook-form";
 import { useDropzone } from "react-dropzone";
-import { FiPlus, FiTrash2 } from "react-icons/fi";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useAxiospublic } from "../../Hooks/useAxiospublic";
+import { Editor } from "@tinymce/tinymce-react";
+import Swal from "sweetalert2";
 import Button from "../../Dashboard/Button/Button";
+import Loader from "../../utils/Loader";
 
 const AdminUpdateAboutUs = () => {
-  const { register, handleSubmit, control } = useForm({
-    defaultValues: {
-      section1: { title: "", description: "" },
-      section2Title: "",
-      section2: [""],
-      section3: { title: "", description: "" },
-      section4to9: Array(6).fill({ title: "", description: "" }),
-      sliderImages: [],
-      titleImage: null,
+  const axiosPublicUrl = useAxiospublic();
+  const queryClient = useQueryClient();
+  const [whoWeServeImage, setWhoWeServeImage] = useState(null);
+  const [bottomSectionImage, setBottomSectionImage] = useState(null);
+  const [existingImages, setExistingImages] = useState({
+    who_we_serve_image: null,
+    bottom_section_image: null,
+  });
+
+  const { data: aboutContent, isLoading } = useQuery({
+    queryKey: ["aboutContent"],
+    queryFn: async () => {
+      const response = await axiosPublicUrl.get("/api/about-us");
+      return response.data.data;
+    },
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: async (formData) => {
+      const response = await axiosPublicUrl.put("/api/about-us", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      return response.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["aboutContent"]);
+      Swal.fire({
+        icon: "success",
+        title: "Success!",
+        text: "About Us content updated successfully",
+      });
+    },
+    onError: (error) => {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: error.response?.data?.message || "Failed to update content",
+      });
     },
   });
 
   const {
-    fields: section2Fields,
-    append,
-    remove,
-  } = useFieldArray({
+    register,
+    handleSubmit,
     control,
-    name: "section2",
+    reset,
+    formState: { errors },
+  } = useForm();
+  console.log(errors);
+
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "section2_points",
   });
 
-  const [sliderImages, setSliderImages] = useState([]);
-  const [titleImage, setTitleImage] = useState(null);
+  useEffect(() => {
+    if (aboutContent) {
+      reset({
+        section1_title: aboutContent.section1_title || "",
+        section1_description: aboutContent.section1_description || "",
+        section2_title: aboutContent.section2_title || "",
+        section2_points: aboutContent.section2_points || [],
+        section3_title: aboutContent.section3_title || "",
+        section3_description: aboutContent.section3_description || "",
+        section4_title: aboutContent.section4_title || "",
+        section4_description: aboutContent.section4_description || "",
+        section5_title: aboutContent.section5_title || "",
+        section5_description: aboutContent.section5_description || "",
+        section6_title: aboutContent.section6_title || "",
+        section6_description: aboutContent.section6_description || "",
+        section7_title: aboutContent.section7_title || "",
+        section7_description: aboutContent.section7_description || "",
+        section8_title: aboutContent.section8_title || "",
+        section8_description: aboutContent.section8_description || "",
+        section9_title: aboutContent.section9_title || "",
+        section9_description: aboutContent.section9_description || "",
+      });
+      setExistingImages({
+        who_we_serve_image: aboutContent.who_we_serve_image,
+        bottom_section_image: aboutContent.bottom_section_image,
+      });
+    }
+  }, [aboutContent, reset]);
 
-  const onSubmit = (data) => {
-    const formData = {
-      ...data,
-      sliderImages,
-      titleImage,
-    };
-    console.log("Form Data:", formData);
-  };
-
-  const handleImageDrop = (acceptedFiles, setImageState) => {
-    if (acceptedFiles.length > 0) {
-      setImageState(acceptedFiles[0]);
+  const onDrop = (acceptedFiles, setImage) => {
+    if (acceptedFiles?.length) {
+      setImage(acceptedFiles[0]);
     }
   };
 
-  const handleSliderDrop = (acceptedFiles) => {
-    setSliderImages((prev) => [...prev, ...acceptedFiles]);
+  const {
+    getRootProps: getWhoWeServeProps,
+    getInputProps: getWhoWeServeInputProps,
+  } = useDropzone({
+    onDrop: (files) => onDrop(files, setWhoWeServeImage),
+    accept: { "image/*": [".jpeg", ".jpg", ".png", ".webp"] },
+    maxFiles: 1,
+  });
+
+  const {
+    getRootProps: getBottomSectionProps,
+    getInputProps: getBottomSectionInputProps,
+  } = useDropzone({
+    onDrop: (files) => onDrop(files, setBottomSectionImage),
+    accept: { "image/*": [".jpeg", ".jpg", ".png", ".webp"] },
+    maxFiles: 1,
+  });
+
+  // Function to strip HTML tags and send plain text
+  const stripHtml = (html) => {
+    if (!html) return ""; // Handle null or undefined cases
+    return html.replace(/<\/?[^>]+(>|$)/g, ""); // Removes all HTML tags
   };
 
-  const removeSliderImage = (index) => {
-    setSliderImages(sliderImages.filter((_, i) => i !== index));
+  const onSubmit = async (data) => {
+    const formData = new FormData();
+
+    // Append all text fields
+    Object.entries(data).forEach(([key, value]) => {
+      if (key === "section2_points") {
+        formData.append(key, JSON.stringify(value));
+      } else if (key.includes("_description")) {
+        formData.append(key, stripHtml(value));
+      } else {
+        formData.append(key, value);
+      }
+    });
+
+    // Only append new images if they exist
+    if (whoWeServeImage) {
+      formData.append("who_we_serve_image", whoWeServeImage);
+    } else if (existingImages.who_we_serve_image) {
+      // Send the existing path only if no new image is selected
+      formData.append(
+        "old_who_we_serve_image",
+        existingImages.who_we_serve_image
+      );
+    }
+
+    if (bottomSectionImage) {
+      formData.append("bottom_section_image", bottomSectionImage);
+    } else if (existingImages.bottom_section_image) {
+      formData.append(
+        "old_bottom_section_image",
+        existingImages.bottom_section_image
+      );
+    }
+
+    updateMutation.mutate(formData);
   };
+
+  if (isLoading) return <Loader />;
 
   return (
-    <div className="p-2">
-      <h1 className="text-xl font-bold mb-4">Admin - Update About Us</h1>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        {/* Section 1 */}
-        <div className="bg-gray-800 p-3 rounded shadow">
-          <h2 className="text-md font-medium mb-2 text-gray-300">
-            Section 1 (ex.Snapshot)
-          </h2>
-          <div className="space-y-2">
-            <input
-              type="text"
-              {...register("section1.title")}
-              placeholder="Section Title"
-              className="w-full border border-gray-700 bg-gray-700 rounded p-2 text-sm text-white"
-            />
-            <textarea
-              {...register("section1.description")}
-              placeholder="Section Description"
-              className="w-full border border-gray-700 bg-gray-700 rounded p-2 text-sm text-white"
-              rows={3}
-            />
-          </div>
-        </div>
-
-        {/* Section 2 */}
-        <div className="bg-gray-800 p-3 rounded shadow">
-          <h2 className="text-md font-medium mb-2 text-gray-300">
-            Section 2 (ex.What We Do)
-          </h2>
-          <div className="space-y-2">
-            <input
-              type="text"
-              {...register("section2Title")}
-              placeholder="Section Title"
-              className="w-full border border-gray-700 bg-gray-700 rounded p-2 text-sm text-white mb-2"
-            />
-            <div className="space-y-1">
-              {section2Fields.map((field, index) => (
-                <div key={field.id} className="flex items-center gap-2">
+    <div className="p-3 h-full overflow-y-auto">
+      <h1 className="text-lg font-semibold mb-2">Update About Us Page</h1>
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((sectionNum) => (
+            <div key={sectionNum} className="p-3 rounded">
+              <h2 className="text-base font-semibold mb-2">
+                Section {sectionNum}
+              </h2>
+              <div className="space-y-2">
+                <div>
+                  <label className="block text-sm mb-1">Title</label>
                   <input
-                    type="text"
-                    {...register(`section2.${index}.value`)}
-                    placeholder={`Point ${index + 1}`}
-                    className="flex-1 border border-gray-700 bg-gray-700 rounded p-2 text-sm text-white"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => remove(index)}
-                    className="text-red-400 hover:text-red-500 p-1"
-                  >
-                    <FiTrash2 size={16} />
-                  </button>
-                </div>
-              ))}
-            </div>
-            <button
-              type="button"
-              onClick={() => append({ value: "" })}
-              className="flex items-center gap-1 text-sm text-teal-400 hover:text-teal-300 mt-1"
-            >
-              <FiPlus size={14} /> Add Point
-            </button>
-          </div>
-        </div>
-
-        {/* Section 3 */}
-        <div className="bg-gray-800 p-3 rounded shadow">
-          <h2 className="text-md font-medium mb-2 text-gray-300">
-            Section 3 (ex.Who We Serve)
-          </h2>
-          <div className="space-y-2">
-            <input
-              type="text"
-              {...register("section3.title")}
-              placeholder="Section Title"
-              className="w-full border border-gray-700 bg-gray-700 rounded p-2 text-sm text-white"
-            />
-            <textarea
-              {...register("section3.description")}
-              placeholder="Section Description"
-              className="w-full border border-gray-700 bg-gray-700 rounded p-2 text-sm text-white"
-              rows={3}
-            />
-          </div>
-        </div>
-
-        {/* Slider Images */}
-        <div className="bg-gray-800 p-3 rounded shadow">
-          <h2 className="text-md font-medium mb-2 text-gray-300">
-            First Images
-          </h2>
-          <div
-            {...useDropzone({
-              onDrop: handleSliderDrop,
-              multiple: true,
-            }).getRootProps()}
-            className="border-2 border-dashed border-gray-700 rounded p-3 text-center cursor-pointer hover:border-teal-500"
-          >
-            <input {...useDropzone({}).getInputProps()} />
-            <p className="text-sm text-gray-400">
-              Drag & drop or <span className="text-teal-400">browse</span>{" "}
-              slider images
-            </p>
-          </div>
-          {sliderImages.length > 0 && (
-            <div className="mt-2 grid grid-cols-3 gap-2">
-              {sliderImages.map((file, index) => (
-                <div key={index} className="relative group">
-                  <img
-                    src={URL.createObjectURL(file)}
-                    alt={`preview-${index}`}
-                    className="h-20 w-full object-cover rounded"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => removeSliderImage(index)}
-                    className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
-                  >
-                    <FiTrash2 size={12} />
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Sections 4 to 9 */}
-        <div className="bg-gray-800 p-3 rounded shadow">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {Array(6)
-              .fill(null)
-              .map((_, index) => (
-                <div key={index} className="space-y-2">
-                  <h3 className="text-sm font-medium text-gray-400">
-                    Section {index + 4}
-                  </h3>
-                  <input
-                    type="text"
-                    {...register(`section4to9.${index}.title`)}
-                    placeholder="Title"
-                    className="w-full border border-gray-700 bg-gray-700 rounded p-2 text-sm text-white"
-                  />
-                  <textarea
-                    {...register(`section4to9.${index}.description`)}
-                    placeholder="Description"
-                    className="w-full border border-gray-700 bg-gray-700 rounded p-2 text-sm text-white"
-                    rows={2}
+                    {...register(`section${sectionNum}_title`)}
+                    className="w-full p-1.5 border rounded text-sm"
                   />
                 </div>
-              ))}
-          </div>
-        </div>
-
-        {/* Title Image Input */}
-        <div className="bg-gray-800 p-3 rounded shadow">
-          <h2 className="text-md font-medium mb-2 text-gray-300">
-            Second Image
-          </h2>
-          <div
-            {...useDropzone({
-              onDrop: (files) => handleImageDrop(files, setTitleImage),
-              maxFiles: 1,
-            }).getRootProps()}
-            className="border-2 border-dashed border-gray-700 rounded p-3 text-center cursor-pointer hover:border-teal-500"
-          >
-            <input {...useDropzone({}).getInputProps()} />
-            <p className="text-sm text-gray-400">
-              Drag & drop or <span className="text-teal-400">browse</span>{" "}
-              featured image
-            </p>
-          </div>
-          {titleImage && (
-            <div className="mt-2 flex justify-center">
-              <div className="relative group">
-                <img
-                  src={URL.createObjectURL(titleImage)}
-                  alt="preview"
-                  className="h-32 object-cover rounded"
-                />
-                <button
-                  type="button"
-                  onClick={() => setTitleImage(null)}
-                  className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
-                >
-                  <FiTrash2 size={12} />
-                </button>
+                {sectionNum === 2 ? (
+                  <div>
+                    <label className="block text-sm mb-1">Points</label>
+                    <div className="space-y-1">
+                      {fields.map((field, index) => (
+                        <div key={field.id} className="flex gap-1">
+                          <input
+                            {...register(`section2_points.${index}`)}
+                            className="flex-1 p-1.5 border rounded text-sm"
+                            placeholder="Enter point"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => remove(index)}
+                            className="text-red-500 hover:text-red-700"
+                          >
+                            ✕
+                          </button>
+                        </div>
+                      ))}
+                      <button
+                        type="button"
+                        onClick={() => append("")}
+                        className="text-blue-500 text-sm mt-1 hover:underline"
+                      >
+                        + Add Point
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <div>
+                    <label className="block text-sm mb-1">Description</label>
+                    <Controller
+                      name={`section${sectionNum}_description`}
+                      control={control}
+                      render={({ field }) => (
+                        <Editor
+                          apiKey={import.meta.env.VITE_TINY_APIKEY}
+                          value={field.value}
+                          onEditorChange={(content) => field.onChange(content)}
+                          init={{
+                            height: 150,
+                            menubar: false,
+                            plugins: ["link", "lists"],
+                            toolbar:
+                              "undo redo | bold italic | alignleft aligncenter alignright | bullist numlist",
+                          }}
+                        />
+                      )}
+                    />
+                  </div>
+                )}
               </div>
             </div>
-          )}
+          ))}
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="p-3 rounded">
+            <h2 className="text-base font-semibold mb-2">Who We Serve Image</h2>
+            <div
+              {...getWhoWeServeProps()}
+              className="border-2 border-dashed p-3 rounded text-center text-sm cursor-pointer"
+            >
+              <input {...getWhoWeServeInputProps()} />
+              <p>Click or drag image here</p>
+            </div>
+            {whoWeServeImage ? (
+              <div className="mt-2">
+                <img
+                  src={URL.createObjectURL(whoWeServeImage)}
+                  alt="Preview"
+                  className="max-h-32 mx-auto"
+                />
+              </div>
+            ) : (
+              existingImages.who_we_serve_image && (
+                <div className="mt-2">
+                  <img
+                    src={`${import.meta.env.VITE_OPEN_APIURL}${
+                      existingImages.who_we_serve_image
+                    }`}
+                    alt="Current"
+                    className="max-h-32 mx-auto"
+                  />
+                </div>
+              )
+            )}
+          </div>
+          <div className="p-3 rounded">
+            <h2 className="text-base font-semibold mb-2">
+              Bottom Section Image
+            </h2>
+            <div
+              {...getBottomSectionProps()}
+              className="border-2 border-dashed p-3 rounded text-center text-sm cursor-pointer"
+            >
+              <input {...getBottomSectionInputProps()} />
+              <p>Click or drag image here</p>
+            </div>
+            {bottomSectionImage ? (
+              <div className="mt-2">
+                <img
+                  src={URL.createObjectURL(bottomSectionImage)}
+                  alt="Preview"
+                  className="max-h-32 mx-auto"
+                />
+              </div>
+            ) : (
+              existingImages.bottom_section_image && (
+                <div className="mt-2">
+                  <img
+                    src={`${import.meta.env.VITE_OPEN_APIURL}${
+                      existingImages.bottom_section_image
+                    }`}
+                    alt="Current"
+                    className="max-h-32 mx-auto"
+                  />
+                </div>
+              )
+            )}
+          </div>
         </div>
         <div className="flex justify-end">
-          <Button text={"Save Changes"} className="px-6 py-2" />
+          <Button
+            text={"Update About Us"}
+            type="submit"
+            className="text-sm px-4 py-2"
+          />
         </div>
       </form>
     </div>

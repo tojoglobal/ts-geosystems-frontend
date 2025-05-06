@@ -5,8 +5,30 @@ import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import "swiper/css";
 import "swiper/css/navigation";
 import GoogleReview from "./GoogleReview";
+import { useQuery } from "@tanstack/react-query";
+import { useAxiospublic } from "../../../Hooks/useAxiospublic";
+import Loader from "../../../utils/Loader";
 
 const AboutUs = () => {
+  const axiosPublicUrl = useAxiospublic();
+
+  const {
+    data: aboutContent,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["aboutContent"],
+    queryFn: async () => {
+      const { data } = await axiosPublicUrl.get("/api/about-us");
+      return data.data;
+    },
+  });
+
+  if (isLoading) return <Loader />;
+  if (isError) return <p>Error loading data...</p>;
+
+  const section2Points = aboutContent?.section2_points || [];
+
   return (
     <div className="p-3">
       <div className="flex items-center gap-2 text-sm">
@@ -18,124 +40,94 @@ const AboutUs = () => {
       </div>
       <p className="text-[#e62245] text-3xl mb-6">ABOUT US</p>
       <div className="mb-8">
-        <h2 className="text-[#e62245] text-2xl font-semibold mb-4">Snapshot</h2>
-        <p className="text-gray-700">
-          To become Asia's No.1 "Surveyor's First" offering unique value
-          proposition to all its clients by delivering high-end equipment and
-          services that fits into the surveyor's daily duties and also ensure
-          maximum return on investment.
-        </p>
+        <h2 className="text-[#e62245] text-2xl font-semibold mb-4">
+          {aboutContent?.section1_title}
+        </h2>
+        <p className="text-gray-700">{aboutContent?.section1_description}</p>
       </div>
-      {/* Core Values Section */}
       <div className="mb-8 border-t pt-3">
         <h2 className="text-[#e62245] text-2xl font-semibold mb-4">
-          What we do
+          {aboutContent?.section2_title}
         </h2>
-        <ul className="list-disc text-gray-700 space-y-2">
-          <li>G2 survey operates on four pillars:</li>
-          <ul>
-            <li>
-              1.<span className="font-bold">Sales</span> of new and refurbished
-              surveying equipment
-            </li>
-            <li>
-              2.<span className="font-bold">Hire</span> of survey equipment
-            </li>
-            <li>
-              3.<span className="font-bold">Service</span> and calibration
-            </li>
-            <li>
-              3.<span className="font-bold">Support</span> and training
-            </li>
-          </ul>
+        <ul className="list-disc text-gray-700 space-y-1 pl-2">
+          {section2Points.length > 0 &&
+            section2Points.map((point, index) => (
+              <li key={index}>
+                {index + 1}. {point}
+              </li>
+            ))}
         </ul>
       </div>
-      {/* Who We Are Section */}
       <div className="mb-8 border-t pt-3">
         <h2 className="text-[#e62245] text-2xl font-semibold mb-4">
-          Who We Serve
+          {aboutContent?.section3_title}
         </h2>
         <p className="text-gray-700 mb-6">
-          We cater to surveying professionals, contractor, civil engineer,
-          utility providers, and entitities within the construction and
-          geospatial industries, ensuring high service levels syonomous with the
-          esteemed brands we represent. Whether it's scanning, measuring,
-          mapping, modelling, positioning, detecting, or monitoring, G2 survey
-          is eqipped with the expertise and solutions to help you realize your
-          objectives.
+          {aboutContent?.section3_description}
         </p>
-
-        {/* Image Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-          <img
-            src="https://cdn11.bigcommerce.com/s-ew2v2d3jn1/product_images/uploaded_images/g2-survey-office-logo.jpg"
-            alt="Office view 1"
-            className="w-full rounded-lg"
-          />
-          <img
-            src="https://cdn11.bigcommerce.com/s-ew2v2d3jn1/product_images/uploaded_images/g2-survey-office-logo.jpg"
-            alt="Office view 2"
-            className="w-full rounded-lg"
-          />
-          <img
-            src="https://cdn11.bigcommerce.com/s-ew2v2d3jn1/product_images/uploaded_images/g2-survey-office-logo.jpg"
-            alt="Office view 3"
-            className="w-full rounded-lg"
-          />
-          <img
-            src="https://cdn11.bigcommerce.com/s-ew2v2d3jn1/product_images/uploaded_images/g2-survey-office-logo.jpg"
-            alt="Office view 4"
-            className="w-full rounded-lg"
-          />
+          {aboutContent?.who_we_serve_image &&
+            Array(4)
+              .fill(null)
+              .map((_, index) => (
+                <img
+                  key={index}
+                  src={`${import.meta.env.VITE_OPEN_APIURL}${
+                    aboutContent.who_we_serve_image
+                  }`}
+                  alt={index + 1}
+                  className="w-full rounded-lg"
+                />
+              ))}
         </div>
       </div>
       <div className="space-y-5">
-        <section className="mt-12 border-b pb-4">
-          <h3 className="text-xl font-semibold text-red-600">Our Promise</h3>
-          <p className="mt-2">
-            Meeting current and future customer needs, supporting innovative
-            solutions, and upholding high ethical and quality standards in a
-            safe, environmentally responsible workplace.
-          </p>
-        </section>
         <section className="border-b pb-4">
-          <h3 className="text-xl font-semibold text-red-600">Our Services</h3>
-          <p className="mt-2">
-            National support, repair and calibration services, alongside
-            comprehensive technical support and training.
-          </p>
-        </section>
-        <section className="border-b pb-4">
-          <h3 className="text-xl font-semibold text-red-600">Our Journey</h3>
-          <p className="mt-2">
-            Originally Opti-cal Survey Equipment Ltd, we evolved into G2 Survey
-            post-acquisition by a FTSE100 company in 2016, continuing to lead
-            with e-commerce, support, and innovation.
-          </p>
-        </section>
-        <section className="border-b pb-4">
-          <h3 className="text-xl font-semibold text-red-600">Our Future</h3>
-          <p className="mt-2">
-            Catalysts in the industry, emphasizing innovation and sustainability
-            with world-class products and services.
-          </p>
-        </section>
-        <section className="border-b pb-4">
-          <h3 className="text-xl font-semibold text-red-600">
-            Why Choose G2 Survey?
+          <h3 className="text-xl font-semibold text-[#e62245]">
+            {aboutContent?.section4_title}
           </h3>
-          <p className="mt-2">
-            Unparalleled expertise and solutions in surveying and geosystems. We
-            value history, innovation, and relentless pursuit of excellence.
+          <p className="mt-2 text-gray-700">
+            {aboutContent?.section4_description}
           </p>
         </section>
         <section className="border-b pb-4">
-          <h3 className="text-xl font-semibold text-red-600">
-            Connect With Us
+          <h3 className="text-xl font-semibold text-[#e62245]">
+            {aboutContent?.section5_title || "Our Services"}
           </h3>
-          <p className="mt-2">
-            Let’s build a sustainable and technologically advanced future
-            together. Reach out for inquiries or collaborations.
+          <p className="mt-2 text-gray-700">
+            {aboutContent?.section5_description}
+          </p>
+        </section>
+        <section className="border-b pb-4">
+          <h3 className="text-xl font-semibold text-[#e62245]">
+            {aboutContent?.section6_title}
+          </h3>
+          <p className="mt-2 text-gray-700">
+            {aboutContent?.section6_description}
+          </p>
+        </section>
+        <section className="border-b pb-4">
+          <h3 className="text-xl font-semibold text-[#e62245]">
+            {aboutContent?.section7_title}
+          </h3>
+          <p className="mt-2 text-gray-700">
+            {aboutContent?.section7_description}
+          </p>
+        </section>
+        <section className="border-b pb-4">
+          <h3 className="text-xl font-semibold text-[#e62245]">
+            {aboutContent?.section8_title}
+          </h3>
+          <p className="mt-2 text-gray-700">
+            {aboutContent?.section8_description}
+          </p>
+        </section>
+        <section className="border-b pb-4">
+          <h3 className="text-xl font-semibold text-[#e62245]">
+            {aboutContent?.section9_title}
+          </h3>
+          <p className="mt-2 text-gray-700">
+            {aboutContent?.section9_description}
           </p>
         </section>
       </div>
@@ -170,7 +162,6 @@ const AboutUs = () => {
               name: "Chartwell",
               image:
                 "https://files.elfsightcdn.com/8b8376a3-dcd2-4125-b325-6f12bad45143/a7832d91-6d86-4b77-947a-ff429aa6fc12.png",
-
               link: "/chartwell",
             },
             {
@@ -224,15 +215,21 @@ const AboutUs = () => {
           <IoIosArrowForward size={24} className="text-gray-600" />
         </button>
       </section>
-      <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <img
-          src="https://cdn11.bigcommerce.com/s-ew2v2d3jn1/product_images/uploaded_images/g2-survey-office-interior-new.jpg"
-          alt=""
-        />
-        <img
-          src="https://cdn11.bigcommerce.com/s-ew2v2d3jn1/product_images/uploaded_images/g2-survey-office-interior-new.jpg"
-          alt=""
-        />
+      {/* Bottom Images */}
+      <section className="grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
+        {aboutContent?.bottom_section_image &&
+          Array(2)
+            .fill(null)
+            .map((_, index) => (
+              <img
+                key={index}
+                src={`${import.meta.env.VITE_OPEN_APIURL}${
+                  aboutContent.bottom_section_image
+                }`}
+                alt={`About us ${index + 1}`}
+                className="w-full rounded-lg"
+              />
+            ))}
       </section>
       <GoogleReview />
     </div>

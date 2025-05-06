@@ -6,6 +6,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import Swal from "sweetalert2";
 import Button from "../../Dashboard/Button/Button";
+import Loader from "../../utils/Loader";
 
 const AdminUpdateHire = () => {
   const axiosPublicUrl = useAxiospublic();
@@ -97,7 +98,7 @@ const AdminUpdateHire = () => {
     <div className="p-5">
       <h1 className="text-xl font-bold mb-4">Admin - Update Hire Page</h1>
       {isLoading ? (
-        <p>Loading...</p>
+        <Loader />
       ) : (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-7">
           {/* Image and Title Side by Side */}
@@ -206,7 +207,6 @@ const AdminUpdateHire = () => {
               )}
             />
           </div>
-
           {/* Submit Button */}
           <div className="flex justify-start">
             <Button text={"Save Changes"} disabled={isUploading} />
