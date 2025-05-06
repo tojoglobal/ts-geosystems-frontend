@@ -53,7 +53,7 @@ const TradeIn = () => {
   };
 
   return (
-    <div className="p-3">
+    <div className="p-2 md:p-3">
       <div className="flex items-center gap-2 text-sm">
         <Link to="/" className="flex items-center gap-1 text-[#e62245]">
           Home
@@ -194,7 +194,7 @@ const TradeIn = () => {
               <div>
                 <label className="block mb-1">Instrument Make *</label>
                 <select
-                  className="w-full border p-4 focus:outline-none focus:ring focus:ring-[#e62245]"
+                  className="w-full border appearance-none p-4 focus:outline-none focus:ring focus:ring-[#e62245]"
                   name="equipment"
                   value={formData.equipment}
                   onChange={handleChange}

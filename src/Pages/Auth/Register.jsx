@@ -261,7 +261,7 @@ const Register = () => {
                 Country<span className="text-red-600">*</span>
               </label>
               <select
-                className="w-full px-3 py-2 border border-gray-300 rounded-sm focus:outline-none focus:ring-1 focus:ring-[#e62245]"
+                className="w-full appearance-none px-3 py-2 border border-gray-300 rounded-sm focus:outline-none focus:ring-1 focus:ring-[#e62245]"
                 {...register("country", {
                   required: "Country is required",
                 })}

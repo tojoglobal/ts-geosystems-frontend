@@ -236,7 +236,7 @@ const Support = () => {
               <div>
                 <label className="block mb-1">Instrument Type *</label>
                 <select
-                  className="w-full border p-3 focus:outline-none focus:ring focus:ring-[#e62245]"
+                  className="w-full border p-3 appearance-none focus:outline-none focus:ring focus:ring-[#e62245]"
                   name="equipment"
                   value={formData.equipment}
                   onChange={handleInputChange}

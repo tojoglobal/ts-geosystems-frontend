@@ -127,7 +127,7 @@ const G2Blog = () => {
   const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
 
   return (
-    <div className="p-3">
+    <div className="p-2 md:p-3">
       <div className="flex items-center gap-2 text-sm">
         <Link to="/" className="flex items-center gap-1 text-[#e62245]">
           Home
@@ -146,9 +146,12 @@ const G2Blog = () => {
             </h2>
           </div>
         )}
-        <div className="border-t border-b py-4 flex justify-center items-center gap-6 text-[#db7084] font-medium">
+        <div className="border-t border-b py-4 flex flex-wrap justify-center items-center gap-4 text-[#db7084] font-medium">
           {activeTab !== "All" && (
-            <button onClick={() => setActiveTab("All")} className="text-sm">
+            <button
+              onClick={() => setActiveTab("All")}
+              className="text-sm w-full sm:w-auto text-center"
+            >
               Back to Blog
             </button>
           )}
