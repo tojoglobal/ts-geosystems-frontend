@@ -1,14 +1,16 @@
 import { useMemo, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import useProductsByIdsQuery from "../../Hooks/useProductsByIdsQuery";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import { selectMergedCart } from "../../utils/selectMergedCart";
+import { clearCart, clearCoupon } from "../../features/AddToCart/AddToCart";
 
 const Checkout = () => {
   const axiosPublicUrl = useAxiospublic();
+  const dispatch = useDispatch();
   const { items, coupon, totalQuantity } = useSelector((state) => state.cart);
   const [step, setStep] = useState(1);
   // const [coupon, setCoupon] = useState("");
@@ -32,7 +34,7 @@ const Checkout = () => {
 
   // get a cart product
   const productIds = useMemo(() => items.map((item) => item.id), [items]);
-  const { products, loading, error } = useProductsByIdsQuery(productIds);
+  const { products } = useProductsByIdsQuery(productIds);
 
   const mergedCart = useSelector((state) => selectMergedCart(state, products));
 
@@ -97,7 +99,6 @@ const Checkout = () => {
       total,
     };
 
-    console.log("orderData", orderData);
     const sslPaymentInfo = {
       total_amount: total,
       shippingCost: shippingCost,
@@ -116,7 +117,6 @@ const Checkout = () => {
       })),
       coupon: coupon || null,
     };
-    console.log(sslPaymentInfo);
 
     if (formData.paymentMethod === "sslcommerz") {
       try {
@@ -152,6 +152,9 @@ const Checkout = () => {
         const res = await axiosPublicUrl.post("/api/orderdata", orderData);
         if (res.status === 200 || res.status === 201) {
           setOrderPlaced(true); // Show thank-you page etc.
+          // Order was successful
+          dispatch(clearCart());
+          dispatch(clearCoupon());
         } else {
           alert("Failed to place order.");
         }
@@ -161,6 +164,7 @@ const Checkout = () => {
       }
     }
   };
+
   if (!items || items.length === 0) {
     return (
       <div className="text-center py-20">
