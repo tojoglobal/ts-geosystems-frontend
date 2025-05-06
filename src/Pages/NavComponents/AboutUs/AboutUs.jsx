@@ -49,7 +49,7 @@ const AboutUs = () => {
         <h2 className="text-[#e62245] text-2xl font-semibold mb-4">
           {aboutContent?.section2_title}
         </h2>
-        <ul className="list-disc text-gray-700 space-y-2 pl-2">
+        <ul className="list-disc text-gray-700 space-y-1 pl-2">
           {section2Points.length > 0 &&
             section2Points.map((point, index) => (
               <li key={index}>

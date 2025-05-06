@@ -13,6 +13,10 @@ const AdminUpdateAboutUs = () => {
   const queryClient = useQueryClient();
   const [whoWeServeImage, setWhoWeServeImage] = useState(null);
   const [bottomSectionImage, setBottomSectionImage] = useState(null);
+  const [existingImages, setExistingImages] = useState({
+    who_we_serve_image: null,
+    bottom_section_image: null,
+  });
 
   const { data: aboutContent, isLoading } = useQuery({
     queryKey: ["aboutContent"],
@@ -21,6 +25,7 @@ const AdminUpdateAboutUs = () => {
       return response.data.data;
     },
   });
+  console.log(aboutContent);
 
   const updateMutation = useMutation({
     mutationFn: async (formData) => {
@@ -82,6 +87,10 @@ const AdminUpdateAboutUs = () => {
         section9_title: aboutContent.section9_title || "",
         section9_description: aboutContent.section9_description || "",
       });
+      setExistingImages({
+        who_we_serve_image: aboutContent.who_we_serve_image,
+        bottom_section_image: aboutContent.bottom_section_image,
+      });
     }
   }, [aboutContent, reset]);
 
@@ -123,19 +132,30 @@ const AdminUpdateAboutUs = () => {
       if (key === "section2_points") {
         formData.append(key, JSON.stringify(value));
       } else if (key.includes("_description")) {
-        // Sanitize description fields to remove HTML tags
         formData.append(key, stripHtml(value));
       } else {
         formData.append(key, value);
       }
     });
 
-    // Append images if they exist
+    // Only append new images if they exist
     if (whoWeServeImage) {
       formData.append("who_we_serve_image", whoWeServeImage);
+    } else if (existingImages.who_we_serve_image) {
+      // Send the existing path only if no new image is selected
+      formData.append(
+        "old_who_we_serve_image",
+        existingImages.who_we_serve_image
+      );
     }
+
     if (bottomSectionImage) {
       formData.append("bottom_section_image", bottomSectionImage);
+    } else if (existingImages.bottom_section_image) {
+      formData.append(
+        "old_bottom_section_image",
+        existingImages.bottom_section_image
+      );
     }
 
     updateMutation.mutate(formData);
@@ -239,6 +259,7 @@ const AdminUpdateAboutUs = () => {
 
         {/* Image Upload Sections */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Who We Serve Image Section */}
           <div className="p-4 rounded-lg shadow">
             <h2 className="text-xl font-semibold mb-4">Who We Serve Image</h2>
             <div
@@ -248,17 +269,38 @@ const AdminUpdateAboutUs = () => {
               <input {...getWhoWeServeInputProps()} />
               <p>Drag & drop or click to select image</p>
             </div>
-            {whoWeServeImage && (
+            {/* Show preview of new image if selected */}
+            {whoWeServeImage ? (
               <div className="mt-4">
                 <img
                   src={URL.createObjectURL(whoWeServeImage)}
-                  alt="Who we serve preview"
+                  alt="New who we serve preview"
                   className="max-h-40 mx-auto"
                 />
+                <p className="text-sm text-gray-500 mt-2">
+                  New image to upload
+                </p>
               </div>
+            ) : (
+              /* Show existing image if no new image is selected */
+              existingImages.who_we_serve_image && (
+                <div className="mt-4">
+                  <img
+                    src={`${import.meta.env.VITE_OPEN_APIURL}${
+                      existingImages.who_we_serve_image
+                    }`}
+                    alt="Current who we serve image"
+                    className="max-h-40 mx-auto"
+                  />
+                  <p className="text-sm text-gray-500 mt-2">
+                    Current image (will be kept)
+                  </p>
+                </div>
+              )
             )}
           </div>
 
+          {/* Bottom Section Image */}
           <div className="p-4 rounded-lg shadow">
             <h2 className="text-xl font-semibold mb-4">Bottom Section Image</h2>
             <div
@@ -268,14 +310,34 @@ const AdminUpdateAboutUs = () => {
               <input {...getBottomSectionInputProps()} />
               <p>Drag & drop or click to select image</p>
             </div>
-            {bottomSectionImage && (
+            {/* Show preview of new image if selected */}
+            {bottomSectionImage ? (
               <div className="mt-4">
                 <img
                   src={URL.createObjectURL(bottomSectionImage)}
-                  alt="Bottom section preview"
+                  alt="New bottom section preview"
                   className="max-h-40 mx-auto"
                 />
+                <p className="text-sm text-gray-500 mt-2">
+                  New image to upload
+                </p>
               </div>
+            ) : (
+              /* Show existing image if no new image is selected */
+              existingImages.bottom_section_image && (
+                <div className="mt-4">
+                  <img
+                    src={`${import.meta.env.VITE_OPEN_APIURL}${
+                      existingImages.bottom_section_image
+                    }`}
+                    alt="Current bottom section image"
+                    className="max-h-40 mx-auto"
+                  />
+                  <p className="text-sm text-gray-500 mt-2">
+                    Current image (will be kept)
+                  </p>
+                </div>
+              )
             )}
           </div>
         </div>
