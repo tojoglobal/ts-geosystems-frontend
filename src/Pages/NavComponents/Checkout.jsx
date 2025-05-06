@@ -486,7 +486,7 @@ const Checkout = () => {
               <span>VAT</span>
               <span>£{vat.toLocaleString()}</span>
             </div> */}
-            {coupon && (
+            {coupon?.code_name && (
               <div className="flex justify-between text-green-600">
                 <span>Discount:({coupon?.code_name})</span>
                 <span>-£{discount.toFixed(2)}</span>
