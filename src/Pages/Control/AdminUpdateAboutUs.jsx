@@ -25,7 +25,6 @@ const AdminUpdateAboutUs = () => {
       return response.data.data;
     },
   });
-  console.log(aboutContent);
 
   const updateMutation = useMutation({
     mutationFn: async (formData) => {
@@ -164,185 +163,152 @@ const AdminUpdateAboutUs = () => {
   if (isLoading) return <Loader />;
 
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-6">Update About Us Page</h1>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((sectionNum) => (
-          <div key={sectionNum} className="p-4 rounded-lg shadow">
-            <h2 className="text-xl font-semibold mb-4">Section {sectionNum}</h2>
-            <div className="space-y-4">
-              <div>
-                <label className="block mb-2">Title</label>
-                <input
-                  {...register(`section${sectionNum}_title`)}
-                  className="w-full p-2 border rounded"
-                />
-              </div>
-              {sectionNum === 2 ? (
+    <div className="p-3 h-full overflow-y-auto">
+      <h1 className="text-lg font-semibold mb-2">Update About Us Page</h1>
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((sectionNum) => (
+            <div key={sectionNum} className="p-3 rounded">
+              <h2 className="text-base font-semibold mb-2">
+                Section {sectionNum}
+              </h2>
+              <div className="space-y-2">
                 <div>
-                  <label className="block mb-2">Points</label>
-                  <div className="space-y-2">
-                    {fields.map((field, index) => (
-                      <div key={field.id} className="flex gap-2">
-                        <input
-                          {...register(`section2_points.${index}`)}
-                          className="flex-1 p-2 border rounded"
-                          placeholder="Enter point"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => remove(index)}
-                          className="p-2 text-red-500 hover:bg-red-50 rounded"
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-5 w-5"
-                            viewBox="0 0 20 20"
-                            fill="currentColor"
-                          >
-                            <path
-                              fillRule="evenodd"
-                              d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
-                        </button>
-                      </div>
-                    ))}
-                    <button
-                      type="button"
-                      onClick={() => append("")}
-                      className="flex items-center gap-2 text-blue-500 hover:text-blue-600"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-5 w-5"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                      Add Point
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                <div>
-                  <label className="block mb-2">Description</label>
-                  <Controller
-                    name={`section${sectionNum}_description`}
-                    control={control}
-                    render={({ field }) => (
-                      <Editor
-                        apiKey={import.meta.env.VITE_TINY_APIKEY}
-                        value={field.value}
-                        onEditorChange={(content) => field.onChange(content)}
-                        init={{
-                          height: 200,
-                          menubar: false,
-                          plugins: ["link", "lists", "image"],
-                          toolbar:
-                            "undo redo | formatselect | bold italic | alignleft aligncenter alignright | bullist numlist",
-                        }}
-                      />
-                    )}
+                  <label className="block text-sm mb-1">Title</label>
+                  <input
+                    {...register(`section${sectionNum}_title`)}
+                    className="w-full p-1.5 border rounded text-sm"
                   />
                 </div>
-              )}
+                {sectionNum === 2 ? (
+                  <div>
+                    <label className="block text-sm mb-1">Points</label>
+                    <div className="space-y-1">
+                      {fields.map((field, index) => (
+                        <div key={field.id} className="flex gap-1">
+                          <input
+                            {...register(`section2_points.${index}`)}
+                            className="flex-1 p-1.5 border rounded text-sm"
+                            placeholder="Enter point"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => remove(index)}
+                            className="text-red-500 hover:text-red-700"
+                          >
+                            ✕
+                          </button>
+                        </div>
+                      ))}
+                      <button
+                        type="button"
+                        onClick={() => append("")}
+                        className="text-blue-500 text-sm mt-1 hover:underline"
+                      >
+                        + Add Point
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <div>
+                    <label className="block text-sm mb-1">Description</label>
+                    <Controller
+                      name={`section${sectionNum}_description`}
+                      control={control}
+                      render={({ field }) => (
+                        <Editor
+                          apiKey={import.meta.env.VITE_TINY_APIKEY}
+                          value={field.value}
+                          onEditorChange={(content) => field.onChange(content)}
+                          init={{
+                            height: 150,
+                            menubar: false,
+                            plugins: ["link", "lists"],
+                            toolbar:
+                              "undo redo | bold italic | alignleft aligncenter alignright | bullist numlist",
+                          }}
+                        />
+                      )}
+                    />
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
 
-        {/* Image Upload Sections */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Who We Serve Image Section */}
-          <div className="p-4 rounded-lg shadow">
-            <h2 className="text-xl font-semibold mb-4">Who We Serve Image</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="p-3 rounded">
+            <h2 className="text-base font-semibold mb-2">Who We Serve Image</h2>
             <div
               {...getWhoWeServeProps()}
-              className="border-2 border-dashed p-4 rounded-lg text-center cursor-pointer"
+              className="border-2 border-dashed p-3 rounded text-center text-sm cursor-pointer"
             >
               <input {...getWhoWeServeInputProps()} />
-              <p>Drag & drop or click to select image</p>
+              <p>Click or drag image here</p>
             </div>
-            {/* Show preview of new image if selected */}
             {whoWeServeImage ? (
-              <div className="mt-4">
+              <div className="mt-2">
                 <img
                   src={URL.createObjectURL(whoWeServeImage)}
-                  alt="New who we serve preview"
-                  className="max-h-40 mx-auto"
+                  alt="Preview"
+                  className="max-h-32 mx-auto"
                 />
-                <p className="text-sm text-gray-500 mt-2">
-                  New image to upload
-                </p>
               </div>
             ) : (
-              /* Show existing image if no new image is selected */
               existingImages.who_we_serve_image && (
-                <div className="mt-4">
+                <div className="mt-2">
                   <img
                     src={`${import.meta.env.VITE_OPEN_APIURL}${
                       existingImages.who_we_serve_image
                     }`}
-                    alt="Current who we serve image"
-                    className="max-h-40 mx-auto"
+                    alt="Current"
+                    className="max-h-32 mx-auto"
                   />
-                  <p className="text-sm text-gray-500 mt-2">
-                    Current image (will be kept)
-                  </p>
                 </div>
               )
             )}
           </div>
-
-          {/* Bottom Section Image */}
-          <div className="p-4 rounded-lg shadow">
-            <h2 className="text-xl font-semibold mb-4">Bottom Section Image</h2>
+          <div className="p-3 rounded">
+            <h2 className="text-base font-semibold mb-2">
+              Bottom Section Image
+            </h2>
             <div
               {...getBottomSectionProps()}
-              className="border-2 border-dashed p-4 rounded-lg text-center cursor-pointer"
+              className="border-2 border-dashed p-3 rounded text-center text-sm cursor-pointer"
             >
               <input {...getBottomSectionInputProps()} />
-              <p>Drag & drop or click to select image</p>
+              <p>Click or drag image here</p>
             </div>
-            {/* Show preview of new image if selected */}
             {bottomSectionImage ? (
-              <div className="mt-4">
+              <div className="mt-2">
                 <img
                   src={URL.createObjectURL(bottomSectionImage)}
-                  alt="New bottom section preview"
-                  className="max-h-40 mx-auto"
+                  alt="Preview"
+                  className="max-h-32 mx-auto"
                 />
-                <p className="text-sm text-gray-500 mt-2">
-                  New image to upload
-                </p>
               </div>
             ) : (
-              /* Show existing image if no new image is selected */
               existingImages.bottom_section_image && (
-                <div className="mt-4">
+                <div className="mt-2">
                   <img
                     src={`${import.meta.env.VITE_OPEN_APIURL}${
                       existingImages.bottom_section_image
                     }`}
-                    alt="Current bottom section image"
-                    className="max-h-40 mx-auto"
+                    alt="Current"
+                    className="max-h-32 mx-auto"
                   />
-                  <p className="text-sm text-gray-500 mt-2">
-                    Current image (will be kept)
-                  </p>
                 </div>
               )
             )}
           </div>
         </div>
         <div className="flex justify-end">
-          <Button type="submit">Update About Us</Button>
+          <Button
+            text={"Update About Us"}
+            type="submit"
+            className="text-sm px-4 py-2"
+          />
         </div>
       </form>
     </div>
