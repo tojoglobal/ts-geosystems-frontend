@@ -6,11 +6,14 @@ import {
   FaPinterestP,
   FaYoutube,
 } from "react-icons/fa";
-import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
+import { IoIosArrowDown } from "react-icons/io";
 import { IoSearchOutline } from "react-icons/io5";
 import { LuUserRound } from "react-icons/lu";
 import { PiShoppingCart } from "react-icons/pi";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { toggleCart } from "../features/CartToggleSlice/CartToggleSlice";
+import CartWithPopover from "./CartWithPopover";
 
 const categories = [
   { title: "Shop All" },
@@ -49,12 +52,15 @@ const mainMenu = [
 ];
 
 const MobileNavbar = () => {
+  const { totalQuantity } = useSelector((state) => state.cart);
   const submenuRef = useRef(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [openCategory, setOpenCategory] = useState(null);
   const [submenuHeight, setSubmenuHeight] = useState(0);
   const [animatingCategory, setAnimatingCategory] = useState(null);
+  const { isCartVisible } = useSelector((state) => state.cartToggle);
+  const dispatch = useDispatch();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -140,14 +146,14 @@ const MobileNavbar = () => {
             <button onClick={toggleSearch}>
               <IoSearchOutline className="text-2xl text-red-600" />
             </button>
-            <button>
+            <Link to="/login">
               <LuUserRound className="text-2xl text-red-600" />
-            </button>
+            </Link>
             {/* Cart Icon with badge */}
-            <button className="relative">
+            <button className="relative" onClick={() => dispatch(toggleCart())}>
               <PiShoppingCart className="text-2xl text-red-600" />
               <span className="absolute -top-1 -right-1 bg-[#e62245] text-white text-xs w-4 h-4 flex items-center justify-center rounded-full font-bold">
-                4
+                {totalQuantity}
               </span>
             </button>
           </div>
@@ -278,6 +284,7 @@ const MobileNavbar = () => {
           </div>
         </div>
       </div>
+      {isCartVisible && <CartWithPopover />}
     </div>
   );
 };
