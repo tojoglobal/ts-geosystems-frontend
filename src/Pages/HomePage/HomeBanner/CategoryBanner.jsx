@@ -34,7 +34,7 @@ const categories = [
 
 const CategoryBanner = () => {
   return (
-    <div className="max-w-[1300px] mt-10 mx-3 md:mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+    <div className="max-w-[1300px] mt-10 mx-3 md:mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 md:gap-4">
       {categories.map((category, index) => (
         <Link
           to={`/catalog?category=${category.slug}`}
@@ -45,10 +45,10 @@ const CategoryBanner = () => {
             <img
               src={category.image}
               alt={category.title}
-              className="w-full h-44 md:h-auto transition-transform duration-300 group-hover:scale-110"
+              className="w-full h-36 md:h-auto transition-transform duration-300 group-hover:scale-110"
             />
           </div>
-          <p className="mt-3 uppercase text-sm font-semibold transition-colors duration-300 group-hover:text-[#e62446]">
+          <p className="mt-1 md:mt-3 uppercase text-sm font-semibold transition-colors duration-300 group-hover:text-[#e62446]">
             {category.title}
           </p>
         </Link>

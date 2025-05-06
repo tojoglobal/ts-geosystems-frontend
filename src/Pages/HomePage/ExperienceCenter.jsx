@@ -15,7 +15,7 @@ const ExperienceCenter = () => {
               <img
                 src="https://ts-geosystems.com.bd/assets/images/bQiBB9xuUvXRTWS-COLLECTIONS.png"
                 alt=""
-                className="w-full h-44 md:h-64 object-cover transition-transform duration-300 hover:scale-105"
+                className="w-full h-40 md:h-64 object-cover transition-transform duration-300 hover:scale-105"
               />
             </div>
           ))}

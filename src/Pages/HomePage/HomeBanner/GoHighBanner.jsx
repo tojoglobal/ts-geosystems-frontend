@@ -1,6 +1,6 @@
 const GoHighBanner = () => {
   return (
-    <div className="mt-10 max-w-[1300px] md:mx-auto w-full overflow-hidden rounded-lg">
+    <div className="mt-6 md:mt-10 max-w-[1300px] mx-2 md:mx-auto overflow-hidden rounded-lg">
       <img
         src="https://ts-geosystems.com.bd/assets/images/UMIh5c9b11be38b01.jpg"
         alt="GoHighBanner"

@@ -78,13 +78,12 @@ const TopClients = () => {
           <div className="flex-1 h-0.5 bg-[#e62245]"></div>
         </div>
         <div className="relative">
-          <div className="custom-prev absolute top-1/2 left-4 transform -translate-y-1/2 hover:bg-[#e62245] p-2 rounded-full cursor-pointer z-10">
+          <div className="custom-prev absolute top-1/2 left-0 md:left-4 transform -translate-y-1/2 hover:bg-[#e62245] p-2 rounded-full cursor-pointer z-10">
             <FaChevronLeft size={20} />
           </div>
-          <div className="custom-next absolute top-1/2 right-4 transform -translate-y-1/2 hover:bg-[#e62245] p-2 rounded-full cursor-pointer z-10">
+          <div className="custom-next absolute top-1/2 right-0 md:right-4 transform -translate-y-1/2 hover:bg-[#e62245] p-2 rounded-full cursor-pointer z-10">
             <FaChevronRight size={20} />
           </div>
-
           <Swiper
             modules={[Navigation, Autoplay]}
             spaceBetween={30}

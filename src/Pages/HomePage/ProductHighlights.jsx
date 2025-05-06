@@ -209,7 +209,7 @@ const ProductHighlights = () => {
               className="relative group cursor-pointer"
             >
               <h2
-                className={`p-2 text-lg uppercase sm:text-xl font-semibold w-fit pr-3 border-r border-gray-200 ${
+                className={`p-2 text-base uppercase sm:text-xl font-semibold w-fit pr-3 border-r border-gray-200 ${
                   activeTab === tab.key ? "text-[#e62245]" : "text-gray-500"
                 }`}
               >

@@ -48,7 +48,7 @@ const OurAdServices = () => {
     <div className="py-7 md:py-16 px-4">
       <div className="max-w-[1300px] mx-auto">
         {/* Title */}
-        <div className="flex items-center justify-center gap-4 mb-12">
+        <div className="flex items-center justify-center gap-1 md:gap-4 mb-6 md:mb-12">
           <div className="flex-1 h-0.5 bg-[#e62245]"></div>
           <h2 className="text-xl sm:text-2xl md:text-4xl font-bold text-[#e62245] text-center">
             OUR ADVANTAGE & SERVICES
@@ -60,7 +60,7 @@ const OurAdServices = () => {
           {services.map((item, index) => (
             <div
               key={index}
-              className="border border-gray-200 rounded-lg p-3 md:p-5 flex gap-4 items-start"
+              className="border border-gray-200 rounded-lg p-3 md:p-5 flex gap-2 md:gap-4 items-start"
             >
               <FaCheckCircle className="text-[#61b961] text-2xl mt-1" />
               <div>

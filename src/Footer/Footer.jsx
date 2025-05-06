@@ -86,7 +86,7 @@ const Footer = () => {
               href="https://tojoglobal.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[#ce81f8] font-semibold hover:underline"
+              className="text-[#db7084] font-semibold hover:underline"
             >
               TOJO Global
             </a>
