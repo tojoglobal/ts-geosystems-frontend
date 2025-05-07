@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import { toast } from "react-toastify";
+import HomePageDynamic from "./HomePageDynamic";
 
 // Define the exact order of components as they appear on the homepage
 const COMPONENT_ORDER = [
@@ -37,6 +38,7 @@ const HomePageControl = () => {
       return res?.data?.components;
     },
   });
+
   // Set fetched data to local state
   useEffect(() => {
     if (data) {
@@ -123,8 +125,30 @@ const HomePageControl = () => {
           {isSaving ? "Saving..." : "Save Settings"}
         </button>
       </div>
+
+      <HomePageDynamic />
     </div>
   );
 };
 
 export default HomePageControl;
+
+// unique all name
+// {
+//   "hero_banner_slider_01": [...],
+//   "promo_product_banner_02": {...},
+//   "feature_highlight_banner_03_left_01": [...],
+//   "feature_highlight_banner_03_right_02": [...],
+//   "feature_highlight_banner_04_left_01": [...],
+//   "feature_highlight_banner_04_right_02": [...],
+//   "product_showcase_category_grid_05": [...],
+//   "product_higlight_banner_section_06": {...},
+//   "featured_products_grid_section_07": [...],
+//   "experienced_center_popular_products_slider_08": [...],
+//   "why_choose_us_09": [...],
+//   "achievements_stats_10": [...],
+//   "client_logo_carousel_11": [...],
+//   "advantages_list_12": [...],
+//   "popular_brands_row_13": [...],
+//   "youtube_promotion_section_14": [...],
+// }
