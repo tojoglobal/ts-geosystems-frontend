@@ -4,18 +4,20 @@ import { Link } from "react-router-dom";
 import ReCAPTCHA from "react-google-recaptcha";
 import { Country, State, City } from "country-state-city";
 import { toast } from "react-toastify";
+import axios from "axios";
 
 const Register = () => {
   const [countries, setCountries] = useState([]);
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
   const [captchaToken, setCaptchaToken] = useState(null);
-  
+
   const {
     register,
     handleSubmit,
     watch,
     setValue,
+    reset,
     formState: { errors },
   } = useForm();
 
@@ -65,27 +67,36 @@ const Register = () => {
       toast.error("Please verify the reCAPTCHA");
       return;
     }
-    try {
-      const response = await fetch(
-        `${import.meta.env.VITE_OPEN_APIURL}/add-user`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        }
-      );
 
-      if (response.ok) {
+    try {
+      const payload = {
+        email: data.email,
+        password: data.password,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        postcode: data.postcode,
+        phoneNumber: data.phoneNumber || null,
+        companyName: data.companyName || null,
+        addressLine1: data.addressLine1,
+        addressLine2: data.addressLine2 || null,
+        country: data.country,
+        state: data.state,
+        city: data.city,
+      };
+
+      const response = await axios.post(
+        `${import.meta.env.VITE_OPEN_APIURL}/api/add-user`,
+        payload
+      );
+      if (response.status === 201) {
         toast.success("Account created successfully");
-      } else {
-        const errorData = await response.json();
-        toast.error(errorData.message || "Failed to create account");
+        reset();
+        setCaptchaToken(null);
       }
     } catch (error) {
-      console.error("Error submitting form:", error);
-      toast.error("An error occurred. Please try again.");
+      toast.error(
+        error.response?.data?.message || "An error occurred. Please try again."
+      );
     }
   };
 
