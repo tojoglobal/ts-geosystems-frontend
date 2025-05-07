@@ -3,6 +3,24 @@ import { useQuery } from "@tanstack/react-query";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import { toast } from "react-toastify";
 
+// Define the exact order of components as they appear on the homepage
+const COMPONENT_ORDER = [
+  "MainBanner",
+  "MobilesBanner",
+  "GadgetBanner",
+  "GadgetGoHighBanner",
+  "CategoryBanner",
+  "GoHighBanner",
+  "ProductHighlights",
+  "ExperienceCenter",
+  "WeProvide",
+  "OurAchievements",
+  "TopClients",
+  "OurAdServices",
+  "PopularBrands",
+  "OurYoutube",
+];
+
 const HomePageControl = () => {
   const axiosPublicUrl = useAxiospublic();
   const [enabledComponents, setEnabledComponents] = useState({});
@@ -69,8 +87,6 @@ const HomePageControl = () => {
     );
   }
 
-  const componentKeys = Object.keys(enabledComponents);
-
   return (
     <div className="max-w-5xl mx-auto px-4 mt-7 mb-2">
       <div className="mb-5 text-center">
@@ -80,24 +96,22 @@ const HomePageControl = () => {
           visitors.
         </p>
       </div>
+
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
-        {componentKeys.map((component) => (
-          <label
-            key={component}
-            className={`flex items-center space-x-3 cursor-pointer select-none border rounded-md p-3 transition-all duration-200 ${
-              enabledComponents[component]
-                ? "border-[#0b6d7f] bg-[#0b6d7f]/10"
-                : "border-gray-500"
-            }`}
-          >
-            <input
-              type="checkbox"
-              checked={enabledComponents[component]}
-              onChange={() => handleToggle(component)}
-              className="w-4 h-4 accent-[#0b6d7f]"
-            />
-            <span className="text-base">{component}</span>
-          </label>
+        {COMPONENT_ORDER.map((component, idx) => (
+          <div key={component} className="border rounded-md p-3">
+            <label className="flex items-center space-x-3 cursor-pointer select-none">
+              <input
+                type="checkbox"
+                checked={enabledComponents[component] || false}
+                onChange={() => handleToggle(component)}
+                className="w-4 h-4 accent-[#0b6d7f]"
+              />
+              <span className="text-base font-medium">
+                {idx + 1}. {component}
+              </span>
+            </label>
+          </div>
         ))}
       </div>
       <div className="flex justify-center mt-8 space-x-3">
