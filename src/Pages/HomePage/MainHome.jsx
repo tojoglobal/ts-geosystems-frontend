@@ -9,6 +9,7 @@ import ProductHighlights from "./ProductHighlights";
 import TopClients from "./TopClients";
 import WeProvide from "./WeProvide";
 import HomeBanner from "./HomeBanner/HomeBanner";
+import Loader from "../../utils/Loader";
 
 const MainHome = () => {
   const axiosPublicUrl = useAxiospublic();
@@ -24,10 +25,13 @@ const MainHome = () => {
     },
   });
 
-  console.log(comp);
-
-  if (isLoading) return null;
-  if (isError) return <div>Error loading homepage settings.</div>;
+  if (isLoading) return <Loader />;
+  if (isError)
+    return (
+      <div className="min-h-[80vh] text-center my-16">
+        Error loading homepage settings.
+      </div>
+    );
 
   return (
     <>

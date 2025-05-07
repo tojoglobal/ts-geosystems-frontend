@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, NavLink } from "react-router-dom";
 import {
   Menu,
@@ -140,18 +140,18 @@ const Sidebar = ({
   const location = useLocation();
   const [openSubmenus, setOpenSubmenus] = useState({});
 
-  // useEffect(() => {
-  //   const activeSubmenus = {};
-  //   menuItems.forEach((item) => {
-  //     if (
-  //       item.submenu &&
-  //       item.submenu.some((sub) => location.pathname.startsWith(sub.to))
-  //     ) {
-  //       activeSubmenus[item.label] = true;
-  //     }
-  //   });
-  //   setOpenSubmenus(activeSubmenus);
-  // }, [location.pathname]);
+  useEffect(() => {
+    const activeSubmenus = {};
+    menuItems.forEach((item) => {
+      if (
+        item.submenu &&
+        item.submenu.some((sub) => location.pathname.startsWith(sub.to))
+      ) {
+        activeSubmenus[item.label] = true;
+      }
+    });
+    setOpenSubmenus(activeSubmenus);
+  }, [location.pathname]);
 
   const toggleSubmenu = (label) => {
     setOpenSubmenus((prev) => ({

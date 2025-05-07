@@ -1,30 +1,44 @@
 import { useState } from "react";
-import { Edit, Eye, Trash } from "lucide-react";
+import {
+  Edit,
+  Eye,
+  Trash,
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
+} from "lucide-react";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import { parseItems } from "../../utils/parseItems";
 import { formatDate } from "../../utils/formatDate";
 import { FaFilePdf } from "react-icons/fa";
 import Swal from "sweetalert2";
 import { useQuery } from "@tanstack/react-query";
-// import { saveAs } from "file-saver";
 import { GenerateInvoicePdf } from "../../utils/generateInvoicePdf";
+import Loader from "../../utils/Loader";
 
 const OrderTable = () => {
   const axiospublic = useAxiospublic();
   const [editStatusId, setEditStatusId] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   const {
-    data: orders = [],
+    data: orderData = {},
     isLoading,
     isError,
     refetch,
   } = useQuery({
-    queryKey: ["orders"],
+    queryKey: ["orders", currentPage, itemsPerPage],
     queryFn: async () => {
-      const res = await axiospublic.get("api/orderinfo");
-      return res.data?.data;
+      const res = await axiospublic.get(
+        `api/orderinfo?page=${currentPage}&limit=${itemsPerPage}`
+      );
+      return res?.data;
     },
   });
+
+  const { data: orders = [], pagination = {} } = orderData;
 
   const handleDownloadInvoice = async (order) => {
     const doc = await GenerateInvoicePdf(order);
@@ -32,7 +46,6 @@ const OrderTable = () => {
   };
 
   const handleEditStatus = async (orderId, newStatus) => {
-    // console.log(orderId, newStatus);
     try {
       const res = await axiospublic.put(`/api/orders/${orderId}/status`, {
         status: newStatus,
@@ -75,8 +88,6 @@ const OrderTable = () => {
       }
     });
   };
-
-  // console.log(orders);
 
   const handleShowOrderDetails = (order) => {
     const items = parseItems(order?.items);
@@ -125,14 +136,121 @@ const OrderTable = () => {
     }
   };
 
-  if (isLoading) return <div>Loading...</div>;
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  const handleItemsPerPageChange = (e) => {
+    setItemsPerPage(Number(e.target.value));
+    setCurrentPage(1); // Reset to first page when changing items per page
+  };
+
+  const renderPageNumbers = () => {
+    const pages = [];
+    const maxVisiblePages = 5;
+    const { totalPages } = pagination;
+
+    if (!totalPages) return null;
+
+    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+
+    if (endPage - startPage + 1 < maxVisiblePages) {
+      startPage = Math.max(1, endPage - maxVisiblePages + 1);
+    }
+
+    // First page
+    if (startPage > 1) {
+      pages.push(
+        <button
+          key={1}
+          onClick={() => handlePageChange(1)}
+          className={`px-3 py-1 rounded ${
+            1 === currentPage
+              ? "bg-blue-600 text-white"
+              : "bg-slate-700 hover:bg-slate-600"
+          }`}
+        >
+          1
+        </button>
+      );
+      if (startPage > 2) {
+        pages.push(
+          <span key="start-ellipsis" className="px-2">
+            ...
+          </span>
+        );
+      }
+    }
+
+    // Middle pages
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(
+        <button
+          key={i}
+          onClick={() => handlePageChange(i)}
+          className={`px-3 py-1 rounded ${
+            i === currentPage
+              ? "bg-blue-600 text-white"
+              : "bg-slate-700 hover:bg-slate-600"
+          }`}
+        >
+          {i}
+        </button>
+      );
+    }
+
+    // Last page
+    if (endPage < totalPages) {
+      if (endPage < totalPages - 1) {
+        pages.push(
+          <span key="end-ellipsis" className="px-2">
+            ...
+          </span>
+        );
+      }
+      pages.push(
+        <button
+          key={totalPages}
+          onClick={() => handlePageChange(totalPages)}
+          className={`px-3 py-1 rounded ${
+            totalPages === currentPage
+              ? "bg-blue-600 text-white"
+              : "bg-slate-700 hover:bg-slate-600"
+          }`}
+        >
+          {totalPages}
+        </button>
+      );
+    }
+
+    return pages;
+  };
+
+  if (isLoading) return <Loader />
   if (isError) return <div>Failed to load orders.</div>;
 
   return (
     <div className="bg-slate-800 text-white rounded-lg p-4 my-5">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold">Order Management</h2>
-        <div className="text-sm text-gray-400">Sort By: Latest</div>
+        <div className="flex items-center gap-2">
+          <span className="text-sm text-gray-400">Show:</span>
+          <select
+            value={itemsPerPage}
+            onChange={handleItemsPerPageChange}
+            className="bg-slate-700 appearance-none text-white text-sm rounded px-4 py-1"
+          >
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+          </select>
+          <span className="text-sm text-gray-400">
+            {pagination.total ? `Total: ${pagination.total} orders` : ""}
+          </span>
+        </div>
       </div>
       <div className="overflow-x-auto">
         <table className="min-w-full text-sm text-gray-300">
@@ -143,7 +261,7 @@ const OrderTable = () => {
               </th>
               <th className="px-4 py-2 text-left">Order ID</th>
               <th className="px-4 py-2 text-left">Name</th>
-              <th className="px-4 py-2 text-left">Payment Metod</th>
+              <th className="px-4 py-2 text-left">Payment Method</th>
               <th className="px-4 py-2 text-left">Payment Status</th>
               <th className="px-4 py-2 text-left">Quantity</th>
               <th className="px-4 py-2 text-left">Order Date</th>
@@ -153,7 +271,7 @@ const OrderTable = () => {
             </tr>
           </thead>
           <tbody>
-            {orders.length > 0 &&
+            {orders.length > 0 ? (
               orders.map((order, index) => (
                 <tr
                   key={index}
@@ -216,7 +334,6 @@ const OrderTable = () => {
                     >
                       <Eye size={16} />
                     </button>
-
                     <button
                       className="text-green-400 bg-green-900 p-1 rounded hover:bg-green-700"
                       onClick={() =>
@@ -235,10 +352,60 @@ const OrderTable = () => {
                     </button>
                   </td>
                 </tr>
-              ))}
+              ))
+            ) : (
+              <tr>
+                <td colSpan="10" className="py-4 text-center text-gray-400">
+                  No orders found
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>
+      {/* Pagination */}
+      {pagination?.totalPages > 1 && (
+        <div className="flex flex-col sm:flex-row items-center justify-between mt-4 gap-4">
+          <div className="text-sm text-gray-400">
+            Showing {(currentPage - 1) * itemsPerPage + 1} to{" "}
+            {Math.min(currentPage * itemsPerPage, pagination.total)} of{" "}
+            {pagination.total} entries
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => handlePageChange(1)}
+              disabled={currentPage === 1}
+              className="p-1 rounded bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-600"
+            >
+              <ChevronsLeft size={18} />
+            </button>
+            <button
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+              className="p-1 rounded bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-600"
+            >
+              <ChevronLeft size={18} />
+            </button>
+
+            <div className="flex gap-1">{renderPageNumbers()}</div>
+
+            <button
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === pagination.totalPages}
+              className="p-1 rounded bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-600"
+            >
+              <ChevronRight size={18} />
+            </button>
+            <button
+              onClick={() => handlePageChange(pagination.totalPages)}
+              disabled={currentPage === pagination.totalPages}
+              className="p-1 rounded bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-600"
+            >
+              <ChevronsRight size={18} />
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
