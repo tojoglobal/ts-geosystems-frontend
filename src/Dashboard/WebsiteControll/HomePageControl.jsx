@@ -5,20 +5,20 @@ import { toast } from "react-toastify";
 
 // Define the exact order of components as they appear on the homepage
 const COMPONENT_ORDER = [
-  "MainBanner",
-  "MobilesBanner",
-  "GadgetBanner",
-  "GadgetGoHighBanner",
-  "CategoryBanner",
-  "GoHighBanner",
-  "ProductHighlights",
-  "ExperienceCenter",
-  "WeProvide",
-  "OurAchievements",
-  "TopClients",
-  "OurAdServices",
-  "PopularBrands",
-  "OurYoutube",
+  "hero_banner_slider_01",
+  "promo_product_banner_02",
+  "feature_highlight_banner_03",
+  "feature_highlight_banner_04",
+  "product_showcase_category_grid_05",
+  "product_higlight_banner_section_06",
+  "featured_products_grid_section_07",
+  "experienced_center_popular_products_slider_08",
+  "why_choose_us_09",
+  "achievements_stats_10",
+  "client_logo_carousel_11",
+  "advantages_list_12",
+  "popular_brands_row_13",
+  "youtube_promotion_section_14",
 ];
 
 const HomePageControl = () => {
@@ -88,7 +88,7 @@ const HomePageControl = () => {
   }
 
   return (
-    <div className="max-w-5xl mx-auto px-4 mt-7 mb-2">
+    <div className="max-w-6xl mx-auto px-4 mt-7 mb-2">
       <div className="mb-5 text-center">
         <h2 className="text-2xl font-bold">Home Page Component Control</h2>
         <p className="text-gray-400 mt-1">
@@ -96,7 +96,6 @@ const HomePageControl = () => {
           visitors.
         </p>
       </div>
-
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
         {COMPONENT_ORDER.map((component, idx) => (
           <div key={component} className="border rounded-md p-3">
@@ -107,8 +106,8 @@ const HomePageControl = () => {
                 onChange={() => handleToggle(component)}
                 className="w-4 h-4 accent-[#0b6d7f]"
               />
-              <span className="text-base font-medium">
-                {idx + 1}. {component}
+              <span className="text-sm font-medium">
+                {idx + 1}. {component.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ').replace(/\d+/g, '')}
               </span>
             </label>
           </div>

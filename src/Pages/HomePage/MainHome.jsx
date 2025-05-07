@@ -33,25 +33,38 @@ const MainHome = () => {
       </div>
     );
 
+    const allComponentsDisabled = Object.values(comp).every(
+      (value) => value === false
+    );
+
+    if (allComponentsDisabled) {
+      return (
+        <div className="min-h-[85vh] flex items-center justify-center">
+          <div className="text-center">
+            <h2 className="text-2xl font-bold text-gray-800 mb-1">
+              Website Under Maintenance
+            </h2>
+            <p className="text-gray-600">
+              We're currently updating our website. Please check back later.
+            </p>
+          </div>
+        </div>
+      );
+    }
+
   return (
     <>
-      {comp.MainBanner ||
-      comp.MobilesBanner ||
-      comp.GadgetBanner ||
-      comp.GadgetGoHighBanner ||
-      comp.CategoryBanner ||
-      comp.GoHighBanner ? (
-        <HomeBanner control={comp} />
-      ) : null}
-
-      {comp.ProductHighlights && <ProductHighlights />}
-      {comp.ExperienceCenter && <ExperienceCenter />}
-      {comp.WeProvide && <WeProvide />}
-      {comp.OurAchievements && <OurAchievements />}
-      {comp.TopClients && <TopClients />}
-      {comp.OurAdServices && <OurAdServices />}
-      {comp.PopularBrands && <PopularBrands />}
-      {comp.OurYoutube && <OurYoutube />}
+      <HomeBanner control={comp} />
+      {comp.featured_products_grid_section_07 && <ProductHighlights />}
+      {comp.experienced_center_popular_products_slider_08 && (
+        <ExperienceCenter />
+      )}
+      {comp.why_choose_us_09 && <WeProvide />}
+      {comp.achievements_stats_10 && <OurAchievements />}
+      {comp.client_logo_carousel_11 && <TopClients />}
+      {comp.advantages_list_12 && <OurAdServices />}
+      {comp.popular_brands_row_13 && <PopularBrands />}
+      {comp.youtube_promotion_section_14 && <OurYoutube />}
     </>
   );
 };
