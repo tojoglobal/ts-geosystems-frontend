@@ -1,0 +1,214 @@
+import React, { useEffect, useState } from "react";
+import Swal from "sweetalert2";
+import {
+  DndContext,
+  closestCenter,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import { useAxiospublic } from "../../Hooks/useAxiospublic";
+import { useQuery } from "@tanstack/react-query";
+import { X } from "lucide-react";
+
+// Sortable image component
+const SortableImage = ({ image, onDelete }) => {
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id: image?.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      className="relative group border rounded overflow-hidden"
+    >
+      {/* Drag handle */}
+      <div
+        {...attributes}
+        {...listeners}
+        className="absolute top-2 left-2 z-40 bg-gray-200 text-gray-600 px-1 rounded cursor-grab"
+        title="Drag to reorder"
+      >
+        ⠿
+      </div>
+
+      {/* Image */}
+      <img
+        src={
+          image?.url || `${import.meta.env.VITE_OPEN_APIURL}${image?.photourl}`
+        }
+        alt="Uploaded"
+        className="w-full h-40 object-cover"
+      />
+
+      {/* Delete Button */}
+      <button
+        onClick={() => onDelete(image?.id)}
+        className="absolute top-2 right-2 z-50 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition"
+      >
+        <X className="w-4 h-4" />
+      </button>
+    </div>
+  );
+};
+
+const HomePageDynamic = () => {
+  const axiosPublicUrl = useAxiospublic();
+  const [images, setImages] = useState([]);
+
+  // Fetch images
+  const { data, isLoading, isError, refetch } = useQuery({
+    queryKey: ["promo_product_banner_02_image"],
+    queryFn: async () => {
+      const res = await axiosPublicUrl.get("/api/getupload-images");
+      return res?.data?.data;
+    },
+  });
+
+  useEffect(() => {
+    if (data?.length) {
+      const formatted = data.map((img) => ({
+        ...img,
+        id: img.id.toString(),
+      }));
+      setImages(formatted);
+    }
+  }, [data]);
+
+  const sensors = useSensors(useSensor(PointerSensor));
+
+  // Upload handler
+  const handleImageUpload = async (event) => {
+    const files = Array.from(event.target.files);
+    if (!files.length) return;
+
+    const formData = new FormData();
+    files.forEach((file) => formData.append("images", file));
+
+    try {
+      await axiosPublicUrl.post("/api/upload-images", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      await refetch(); // ✅ Refresh list after upload
+      Swal.fire("Success", "Images uploaded successfully", "success");
+    } catch (error) {
+      console.error("Upload failed:", error);
+      Swal.fire("Error", "Failed to upload images", "error");
+    }
+  };
+
+  // Delete handler
+  const handleDeleteImage = async (id) => {
+    const confirm = await Swal.fire({
+      title: "Are you sure?",
+      text: "Do you want to delete this image?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, delete it!",
+    });
+
+    if (confirm.isConfirmed) {
+      try {
+        await axiosPublicUrl.delete(`/api/delete-image/${id}`);
+        await refetch(); // ✅ Refresh list after deletion
+        Swal.fire("Deleted!", "Image has been removed.", "success");
+      } catch (error) {
+        console.error("Delete failed:", error);
+        Swal.fire("Error", "Failed to delete image", "error");
+      }
+    }
+  };
+
+  // Drag-and-drop reorder handler
+  const handleDragEnd = async ({ active, over }) => {
+    if (active.id !== over?.id) {
+      const oldIndex = images.findIndex((img) => img.id === active.id);
+      const newIndex = images.findIndex((img) => img.id === over.id);
+      const reordered = arrayMove(images, oldIndex, newIndex);
+
+      setImages(reordered); // Temporary local update for smooth UX
+
+      try {
+        await axiosPublicUrl.post("/api/update-image-order", {
+          images: reordered.map((img, index) => ({
+            id: img.id,
+            order: index,
+          })),
+        });
+        await refetch(); // ✅ Ensure backend and frontend stay in sync
+      } catch (error) {
+        console.error("Order update failed:", error);
+        Swal.fire("Error", "Failed to update image order", "error");
+      }
+    }
+  };
+
+  return (
+    <div className="p-5">
+      <div className="text-center mb-6">
+        <h2 className="text-2xl font-bold">Home Page Component Dynamic</h2>
+        <p className="text-gray-400">
+          Dynamic sections on the home page. Changes affect all visitors.
+        </p>
+      </div>
+
+      <div className="text-center mb-6">
+        <label
+          htmlFor="imageUpload"
+          className="cursor-pointer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+        >
+          Add Images
+        </label>
+        <input
+          id="imageUpload"
+          type="file"
+          multiple
+          accept="image/*"
+          className="hidden"
+          onChange={handleImageUpload}
+        />
+      </div>
+
+      {isLoading ? (
+        <p className="text-center text-gray-500">Loading images...</p>
+      ) : isError ? (
+        <p className="text-center text-red-500">Failed to load images</p>
+      ) : (
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
+        >
+          <SortableContext
+            items={images.map((img) => img.id)}
+            strategy={verticalListSortingStrategy}
+          >
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {images.map((image) => (
+                <SortableImage
+                  key={image.id}
+                  image={image}
+                  onDelete={handleDeleteImage}
+                />
+              ))}
+            </div>
+          </SortableContext>
+        </DndContext>
+      )}
+    </div>
+  );
+};
+
+export default HomePageDynamic;
