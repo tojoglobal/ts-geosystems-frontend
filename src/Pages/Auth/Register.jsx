@@ -10,7 +10,7 @@ const Register = () => {
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
   const [captchaToken, setCaptchaToken] = useState(null);
-
+  
   const {
     register,
     handleSubmit,
@@ -60,14 +60,33 @@ const Register = () => {
     setCaptchaToken(value);
   };
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     if (!captchaToken) {
       toast.error("Please verify the reCAPTCHA");
       return;
     }
-    const payload = { ...data, captchaToken };
-    console.log("Final Data:", payload);
-    // Add your form submission logic here
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_OPEN_APIURL}/add-user`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
+
+      if (response.ok) {
+        toast.success("Account created successfully");
+      } else {
+        const errorData = await response.json();
+        toast.error(errorData.message || "Failed to create account");
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      toast.error("An error occurred. Please try again.");
+    }
   };
 
   return (
