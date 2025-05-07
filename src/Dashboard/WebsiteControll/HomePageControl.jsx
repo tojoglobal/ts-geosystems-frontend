@@ -98,8 +98,8 @@ const HomePageControl = () => {
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
         {COMPONENT_ORDER.map((component, idx) => (
-          <div key={component} className="border rounded-md p-3">
-            <label className="flex items-center space-x-3 cursor-pointer select-none">
+          <label key={component} className="border rounded-md p-3 cursor-pointer select-none">
+            <div className="flex items-center space-x-3">
               <input
                 type="checkbox"
                 checked={enabledComponents[component] || false}
@@ -109,8 +109,8 @@ const HomePageControl = () => {
               <span className="text-sm font-medium">
                 {idx + 1}. {component.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ').replace(/\d+/g, '')}
               </span>
-            </label>
-          </div>
+            </div>
+          </label>
         ))}
       </div>
       <div className="flex justify-center mt-8 space-x-3">

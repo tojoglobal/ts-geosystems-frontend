@@ -176,7 +176,7 @@ const Cart = () => {
                       <p>£{(item.price * item.quantity).toFixed(2)}</p>
                       <button
                         onClick={() => handleRemove(item.id)}
-                        className="text-red-500"
+                        className="text-red-500 cursor-pointer"
                       >
                         <RxCross2 />
                       </button>
@@ -201,7 +201,7 @@ const Cart = () => {
                 {!showCouponInput ? (
                   <button
                     onClick={() => setShowCouponInput(true)}
-                    className="text-[#e62245] ml-2 underline text-sm"
+                    className="text-[#e62245] cursor-pointer ml-2 underline text-sm"
                   >
                     Show Coupon
                   </button>
@@ -333,10 +333,9 @@ const Cart = () => {
               <span>Grand Total:</span>
               <span>£{grandTotal.toFixed(2)}</span>
             </div>
-
             <div className="flex justify-end mt-5">
               <Link to="/checkout">
-                <button className="bg-[#e62245] text-white py-2 px-6 rounded">
+                <button className="bg-[#e62245] cursor-pointer text-white py-2 px-6 rounded">
                   CHECKOUT
                 </button>
               </Link>

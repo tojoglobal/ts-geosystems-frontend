@@ -233,7 +233,7 @@ const Checkout = () => {
                 />
                 <button
                   onClick={() => handleContinue(1)}
-                  className="bg-[#e62245] text-white px-4 py-2 rounded"
+                  className="bg-[#e62245] cursor-pointer text-white px-4 py-2 rounded"
                 >
                   CONTINUE
                 </button>
@@ -317,7 +317,7 @@ const Checkout = () => {
 
                 <button
                   onClick={() => handleContinue(2)}
-                  className="bg-[#e62245] text-white px-4 py-2 rounded"
+                  className="bg-[#e62245] cursor-pointer text-white px-4 py-2 rounded"
                 >
                   CONTINUE
                 </button>
@@ -357,7 +357,7 @@ const Checkout = () => {
                 {step === 3 && (
                   <button
                     onClick={() => handleContinue(3)}
-                    className="bg-[#e62245] text-white px-4 py-2 rounded"
+                    className="bg-[#e62245] cursor-pointer text-white px-4 py-2 rounded"
                   >
                     CONTINUE
                   </button>
