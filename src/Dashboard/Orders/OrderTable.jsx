@@ -1,32 +1,30 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import { Edit, Eye, Trash } from "lucide-react";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import { parseItems } from "../../utils/parseItems";
 import { formatDate } from "../../utils/formatDate";
 import { FaFilePdf } from "react-icons/fa";
 import Swal from "sweetalert2";
-import { saveAs } from "file-saver";
+import { useQuery } from "@tanstack/react-query";
+// import { saveAs } from "file-saver";
 import { GenerateInvoicePdf } from "../../utils/generateInvoicePdf";
 
 const OrderTable = () => {
   const axiospublic = useAxiospublic();
-
-  const [orders, setOrders] = useState([]);
   const [editStatusId, setEditStatusId] = useState(null);
-  // get by the all order data
-  useEffect(() => {
-    const fetchTheOrder = async () => {
-      try {
-        const res = await axiospublic.get("api/orderinfo");
-        if (res.status === 200) {
-          setOrders(res.data?.data);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchTheOrder();
-  }, []);
+
+  const {
+    data: orders = [],
+    isLoading,
+    isError,
+    refetch,
+  } = useQuery({
+    queryKey: ["orders"],
+    queryFn: async () => {
+      const res = await axiospublic.get("api/orderinfo");
+      return res.data?.data;
+    },
+  });
 
   const handleDownloadInvoice = async (order) => {
     const doc = await GenerateInvoicePdf(order);
@@ -35,18 +33,13 @@ const OrderTable = () => {
 
   const handleEditStatus = async (orderId, newStatus) => {
     // console.log(orderId, newStatus);
-
     try {
       const res = await axiospublic.put(`/api/orders/${orderId}/status`, {
         status: newStatus,
       });
 
       if (res.status === 200) {
-        setOrders((prev) =>
-          prev.map((order) =>
-            order.order_id === orderId ? { ...order, status: newStatus } : order
-          )
-        );
+        refetch();
         setEditStatusId(null);
         Swal.fire("Success", "Order status updated!", "success");
       } else {
@@ -57,7 +50,7 @@ const OrderTable = () => {
     }
   };
 
-  const handleDeleteOrder = (order) => {
+  const handleDeleteOrder = (order_id) => {
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -69,17 +62,10 @@ const OrderTable = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          const res = await fetch(
-            `${import.meta.env.VITE_API_BASE_URL}/api/orders/${order.order_id}`,
-            {
-              method: "DELETE",
-            }
-          );
-          if (res.ok) {
-            setOrders((prev) =>
-              prev.filter((o) => o.order_id !== order.order_id)
-            );
-            Swal.fire("Deleted!", "Order has been deleted.", "success");
+          const res = await axiospublic.delete(`/api/orders/${order_id}`);
+          if (res.status === 200) {
+            refetch();
+            Swal.fire("Deleted!", res?.data?.message, "success");
           } else {
             throw new Error("Failed to delete order");
           }
@@ -139,6 +125,9 @@ const OrderTable = () => {
     }
   };
 
+  if (isLoading) return <div>Loading...</div>;
+  if (isError) return <div>Failed to load orders.</div>;
+
   return (
     <div className="bg-slate-800 text-white rounded-lg p-4 my-5">
       <div className="flex justify-between items-center mb-4">
@@ -197,7 +186,7 @@ const OrderTable = () => {
                         onChange={(e) =>
                           handleEditStatus(order.order_id, e.target.value)
                         }
-                        className="bg-gray-800 text-white p-1 rounded"
+                        className="bg-gray-800 appearance-none text-white p-1 rounded"
                       >
                         <option value="pending">Pending</option>
                         <option value="completed">Completed</option>
@@ -239,7 +228,7 @@ const OrderTable = () => {
                       <Edit size={16} />
                     </button>
                     <button
-                      onClick={() => handleDeleteOrder(order)}
+                      onClick={() => handleDeleteOrder(order?.order_id)}
                       className="text-red-400 bg-red-900 p-1 rounded hover:bg-red-700"
                     >
                       <Trash size={16} />

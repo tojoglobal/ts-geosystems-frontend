@@ -13,7 +13,7 @@ import LatestTransactions from "./DBComponents/LatestTransactions";
 
 export default function Dashboard() {
   return (
-    <div className="p-4 pt-0 grid gap-4 grid-cols-1 xl:grid-cols-4">
+    <div className="p-3 pt-0 grid gap-4 grid-cols-1 xl:grid-cols-4">
       {/* Top Metrics */}
       <Card className="border-0 col-span-1 xl:col-span-4 bg-slate-900 text-white">
         <CardContent className="grid grid-cols-2 md:grid-cols-4 gap-4 p-4">
