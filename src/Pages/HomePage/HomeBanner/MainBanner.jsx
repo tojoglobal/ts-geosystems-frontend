@@ -101,11 +101,11 @@ const MainBanner = () => {
         loop={true}
         effect="fade"
         fadeEffect={{ crossFade: true }}
-        className="h-[500px] swiper-fade custom-swiper"
+        className="h-[540px] swiper-fade custom-swiper"
       >
         {slides.map((slide, i) => (
           <SwiperSlide key={i}>
-            <div className="relative w-full h-[500px]">
+            <div className="relative w-full h-[540px]">
               <img
                 src={slide.img}
                 alt={`Banner ${i + 1}`}

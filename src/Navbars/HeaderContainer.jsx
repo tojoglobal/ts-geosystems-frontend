@@ -15,7 +15,7 @@ const HeaderContainer = () => {
 
   return (
     <div className="max-w-[1370px] mx-auto z-50">
-      <div className="flex justify-between items-center py-5">
+      <div className="flex justify-between items-center py-4">
         {/* Logo */}
         <Link to="/">
           <img
@@ -27,15 +27,15 @@ const HeaderContainer = () => {
         <div className="flex items-center gap-4 relative">
           {/* Search */}
           <div
-            className="flex items-center mx-4 py-1 w-[395px] relative"
+            className="flex items-center mx-4 py-1 w-[350px] relative"
             onClick={() => setShowSearch(true)}
           >
             <input
               type="text"
               placeholder="Search"
-              className="input text-sm placeholder:italic w-full focus:outline-none border border-[#ebebeb] bg-transparent rounded-[4px]"
+              className="input text-sm text-black placeholder:italic w-full focus:outline-none border border-[#ebebeb] bg-transparent rounded-[4px]"
             />
-            <IoSearchOutline className="text-[#e62245] text-[28px] absolute right-6" />
+            <IoSearchOutline className="text-[#e62245] text-[28px] absolute right-2" />
           </div>
           {/* User */}
           <Link to="/login">

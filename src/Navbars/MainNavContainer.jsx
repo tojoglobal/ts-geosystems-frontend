@@ -80,12 +80,12 @@ const MainNavContainer = () => {
             <div className="max-w-[1370px] mx-auto flex justify-between items-center">
               {/* Left side */}
               <div
-                className="relative cursor-pointer py-2.5"
+                className="relative cursor-pointer py-2"
                 onClick={toggleDropdown}
                 ref={dropdownRef}
               >
                 <div
-                  className={`flex items-center gap-2.5 transition-all duration-500 ease-in-out relative ${
+                  className={`flex items-center gap-3 transition-all duration-500 ease-in-out relative ${
                     isDropdownOpen ? "translate-x-5" : ""
                   }`}
                 >
@@ -99,7 +99,7 @@ const MainNavContainer = () => {
                   </button>
                   <button
                     className={`relative overflow-hidden font-semibold cursor-pointer transition-all duration-500 ease-in-out ${
-                      isDropdownOpen ? "text-crimson-red" : "text-charcoal"
+                      isDropdownOpen ? "text-crimson-red" : "text-[#4d4d4a]"
                     }`}
                   >
                     <span className="relative block">
@@ -120,33 +120,33 @@ const MainNavContainer = () => {
               </div>
               {/* Right side */}
               {!isSticky ? (
-                <div className="flex gap-6 text-base font-semibold text-charcoal relative">
+                <div className="flex gap-7 text-base font-semibold text-charcoal relative">
                   <Link
                     to="/used"
-                    className="cursor-pointer hover:text-crimson-red transition-colors duration-300 py-2.5"
+                    className="cursor-pointer hover:text-crimson-red transition-colors duration-300 py-2"
                   >
                     USED EQUIPMENT
                   </Link>
                   <Link
                     to="/clearance"
-                    className="cursor-pointer hover:text-crimson-red transition-colors duration-300 py-2.5"
+                    className="cursor-pointer hover:text-crimson-red transition-colors duration-300 py-2"
                   >
                     CLEARANCE
                   </Link>
                   <Link
                     to="/hire"
-                    className="cursor-pointer hover:text-crimson-red transition-colors duration-300 py-2.5"
+                    className="cursor-pointer hover:text-crimson-red transition-colors duration-300 py-2"
                   >
                     HIRE
                   </Link>
                   <Link
                     to="/service"
-                    className="cursor-pointer hover:text-crimson-red transition-colors duration-300 py-2.5"
+                    className="cursor-pointer hover:text-crimson-red transition-colors duration-300 py-2"
                   >
                     SERVICE
                   </Link>
                   {/* Dropdown Wrapper */}
-                  <div className="relative group py-2.5">
+                  <div className="relative group py-2">
                     <div className="flex items-center gap-1 hover:text-crimson-red transition-colors duration-300 cursor-pointer">
                       <Link to="/support">SUPPORT</Link>
                       <MdOutlineKeyboardArrowDown className="text-xl" />
@@ -173,25 +173,25 @@ const MainNavContainer = () => {
                   </div>
                   <Link
                     to="/trade-in"
-                    className="cursor-pointer hover:text-crimson-red transition-colors duration-300 py-2.5"
+                    className="cursor-pointer hover:text-crimson-red transition-colors duration-300 py-2"
                   >
                     TRADE IN
                   </Link>
                   <Link
                     to="/g2-blog"
-                    className="cursor-pointer hover:text-crimson-red transition-colors duration-300 py-2.5"
+                    className="cursor-pointer hover:text-crimson-red transition-colors duration-300 py-2"
                   >
                     G2 BLOG
                   </Link>
                   <Link
                     to="/about-us"
-                    className="cursor-pointer hover:text-crimson-red transition-colors duration-300 py-2.5"
+                    className="cursor-pointer hover:text-crimson-red transition-colors duration-300 py-2"
                   >
                     ABOUT US
                   </Link>
                   <Link
                     to="/contact-us"
-                    className="cursor-pointer hover:text-crimson-red transition-colors duration-300 py-2.5"
+                    className="cursor-pointer hover:text-crimson-red transition-colors duration-300 py-2"
                   >
                     CONTACT US
                   </Link>
