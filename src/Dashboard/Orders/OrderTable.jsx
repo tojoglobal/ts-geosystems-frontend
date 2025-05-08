@@ -227,7 +227,7 @@ const OrderTable = () => {
     return pages;
   };
 
-  if (isLoading) return <Loader />
+  if (isLoading) return <Loader />;
   if (isError) return <div>Failed to load orders.</div>;
 
   return (
