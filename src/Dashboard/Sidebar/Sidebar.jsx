@@ -79,10 +79,11 @@ const menuItems = [
     submenu: [
       { label: "Home Page", to: "/dashboard/home-page" },
       { label: "Sent", to: "/dashboard/email/sent" },
-      { label: "About Us", to: "/dashboard/about-us" },
-      { label: "Contact Us", to: "/dashboard/contact-us" },
       { label: "Hire", to: "/dashboard/hire" },
       { label: "Service", to: "/dashboard/service" },
+      { label: "G2 Blog", to: "/dashboard/g2-blog" },
+      { label: "About Us", to: "/dashboard/about-us" },
+      { label: "Contact Us", to: "/dashboard/contact-us" },
     ],
   },
   {
