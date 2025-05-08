@@ -17,7 +17,7 @@ const Layout = () => {
         <aside
           className={`bg-gray-800 flex flex-col ${
             collapsed ? "md:w-16" : "md:w-64"
-          } h-screen sticky top-0`}
+          } h-screen sticky top-0 z-50`}
         >
           <Sidebar
             collapsed={collapsed}

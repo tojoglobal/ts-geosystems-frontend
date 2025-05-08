@@ -1,20 +1,21 @@
 import { useEffect, useState } from "react";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
+import { useQuery } from "@tanstack/react-query";
 import TaxForm from "./TaxForm";
 import TaxList from "./TaxList";
 
 export default function TaxManager() {
   const axiosPublicUrl = useAxiospublic();
-  const [taxes, setTaxes] = useState([]);
   const [editing, setEditing] = useState(null);
   const [resetFormTrigger, setResetFormTrigger] = useState(false);
 
-  useEffect(() => {
-    axiosPublicUrl
-      .get("/api/taxes")
-      .then((res) => setTaxes(res.data))
-      .catch((err) => console.error("Fetch error:", err));
-  }, []);
+  const { data: taxes = [], refetch } = useQuery({
+    queryKey: ["taxes"],
+    queryFn: async () => {
+      const res = await axiosPublicUrl.get("/api/taxes");
+      return res.data;
+    },
+  });
 
   useEffect(() => {
     if (!editing) setResetFormTrigger((prev) => !prev);
@@ -24,17 +25,12 @@ export default function TaxManager() {
     try {
       if (editing) {
         await axiosPublicUrl.put(`/api/taxes/${editing.id}`, data);
-        setTaxes((prev) =>
-          prev.map((item) =>
-            item.id === editing.id ? { ...item, ...data } : item
-          )
-        );
         setEditing(null);
       } else {
-        const res = await axiosPublicUrl.post("/api/taxes", data);
-        setTaxes((prev) => [...prev, { ...data, id: res.data.id }]);
+        await axiosPublicUrl.post("/api/taxes", data);
         setResetFormTrigger((prev) => !prev);
       }
+      refetch();
     } catch (err) {
       console.error("Save error:", err);
     }
@@ -43,7 +39,7 @@ export default function TaxManager() {
   const handleDelete = async (id) => {
     try {
       await axiosPublicUrl.delete(`/api/taxes/${id}`);
-      setTaxes((prev) => prev.filter((item) => item.id !== id));
+      refetch();
     } catch (err) {
       console.error("Delete error:", err);
     }

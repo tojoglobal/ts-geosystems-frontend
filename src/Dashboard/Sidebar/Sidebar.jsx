@@ -164,8 +164,8 @@ const Sidebar = ({
   return (
     <>
       <div
-        className={`bg-gray-800 flex flex-col justify-between fixed md:relative z-50 transition-all duration-300 ${
-          collapsed ? "w-20 pt-5 md:pt-0 h-full" : "w-64 h-[200vh] md:h-screen"
+        className={`bg-gray-800 flex flex-col justify-between fixed md:relative z-[60] transition-all duration-300 ${
+          collapsed ? "w-20 pt-5 md:pt-0 h-full" : "w-60 h-[200vh] md:h-screen"
         } ${
           mobileOpen ? "translate-x-0" : "-translate-x-full"
         } md:translate-x-0`}
@@ -297,6 +297,14 @@ const Sidebar = ({
         {/* Bottom Profile Section Fixed */}
         {!collapsed && <SidebarProfileDropdown collapsed={collapsed} />}
       </div>
+      
+      {/* Invisible overlay for handling outside clicks */}
+      {mobileOpen && (
+        <div 
+          className="fixed inset-0 z-50 md:hidden"
+          onClick={toggleMobileSidebar}
+        />
+      )}
     </>
   );
 };
