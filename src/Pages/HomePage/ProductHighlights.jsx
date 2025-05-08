@@ -241,94 +241,94 @@ const ProductHighlights = () => {
         </div>
       </div>
       {/* Swiper */}
-        <div className="mt-4">
-          <Swiper
-            modules={[Navigation]}
-            spaceBetween={10}
-            slidesPerView={4}
-            slidesPerGroup={4}
-            onSwiper={(swiper) => {
-              swiperRef.current = swiper;
-              setIsBeginning(swiper.isBeginning);
-              setIsEnd(swiper.isEnd);
-            }}
-            onSlideChange={handleSlideChange}
-            navigation={{
-              nextEl: ".swiper-button-next-custom",
-              prevEl: ".swiper-button-prev-custom",
-            }}
-            breakpoints={{
-              320: {
-                slidesPerView: 1,
-                slidesPerGroup: 1,
-              },
-              640: {
-                slidesPerView: 2,
-                slidesPerGroup: 2,
-              },
-              1024: {
-                slidesPerView: 4,
-                slidesPerGroup: 4,
-              },
-              1536: {
-                slidesPerView: 5,
-                slidesPerGroup: 5,
-              },
-            }}
-          >
-            {items.map((item, idx) => (
-              <SwiperSlide key={idx}>
-                <div className="relative flex flex-col items-center rounded-md shadow-sm bg-white">
-                  {activeTab !== "featured" && (
-                    <p className="absolute top-2 right-2 px-2 py-[2px] rounded-md text-white bg-[#e62245] z-50">
-                      SALE
-                    </p>
-                  )}
-                  <Link to={item?.productUrl}>
-                    <div className="relative group w-full max-w-[120px] sm:max-w-[140px] md:max-w-[260px] mx-auto">
-                      <img
-                        src={item?.img}
-                        alt={item.name}
-                        className="w-full h-auto transition-opacity duration-300 group-hover:opacity-0"
-                      />
-                      <img
-                        src={item?.img2}
-                        alt={`${item?.name} hover`}
-                        className="w-full h-auto absolute top-0 left-0 transition-opacity duration-300 opacity-0 group-hover:opacity-100"
-                      />
-                    </div>
-                  </Link>
-                  <div className="w-full border-t pt-3">
-                    <p className="text-xs text-gray-700">
-                      Total Station | Sku: 65dVv8Jr8fe
-                    </p>
-                    <Link
-                      to={item?.productUrl}
-                      className="font-semibold text-sm text-gray-600 mt-1"
-                    >
-                      {item.name}
-                    </Link>
-                    <div className="mt-2 space-x-2">
-                      <span className="text-sm font-bold text-[#222]">
-                        ৳{item.price}
-                      </span>
-                      <span className="text-xs line-through text-gray-400">
-                        ৳{item.discountPrice}
-                      </span>
-                    </div>
-                      <div className="flex items-center gap-1 text-sm text-[#b3b3b5] mt-1">
-                        £11994.00
-                        <span className="underline">(Inc. VAT)</span>
-                      </div>
-                    <button className="mt-1 bg-[#e62245] hover:bg-[#c91d3a] text-white text-sm font-semibold py-[6px] px-4 rounded w-full">
-                      ADD TO CART
-                    </button>
+      <div className="mt-4">
+        <Swiper
+          modules={[Navigation]}
+          spaceBetween={10}
+          slidesPerView={4}
+          slidesPerGroup={4}
+          onSwiper={(swiper) => {
+            swiperRef.current = swiper;
+            setIsBeginning(swiper.isBeginning);
+            setIsEnd(swiper.isEnd);
+          }}
+          onSlideChange={handleSlideChange}
+          navigation={{
+            nextEl: ".swiper-button-next-custom",
+            prevEl: ".swiper-button-prev-custom",
+          }}
+          breakpoints={{
+            320: {
+              slidesPerView: 1,
+              slidesPerGroup: 1,
+            },
+            640: {
+              slidesPerView: 2,
+              slidesPerGroup: 2,
+            },
+            1024: {
+              slidesPerView: 4,
+              slidesPerGroup: 4,
+            },
+            1536: {
+              slidesPerView: 5,
+              slidesPerGroup: 5,
+            },
+          }}
+        >
+          {items.map((item, idx) => (
+            <SwiperSlide key={idx}>
+              <div className="relative flex flex-col items-center rounded-md shadow-sm bg-white">
+                {activeTab !== "featured" && (
+                  <p className="absolute top-2 right-2 px-2 py-[2px] rounded-md text-white bg-[#e62245] z-50">
+                    SALE
+                  </p>
+                )}
+                <Link to={item?.productUrl}>
+                  <div className="relative group w-full max-w-[120px] sm:max-w-[140px] md:max-w-[260px] mx-auto">
+                    <img
+                      src={item?.img}
+                      alt={item.name}
+                      className="w-full h-auto transition-opacity duration-300 group-hover:opacity-0"
+                    />
+                    <img
+                      src={item?.img2}
+                      alt={`${item?.name} hover`}
+                      className="w-full h-auto absolute top-0 left-0 transition-opacity duration-300 opacity-0 group-hover:opacity-100"
+                    />
                   </div>
+                </Link>
+                <div className="w-full border-t pt-3">
+                  <p className="text-xs text-gray-700">
+                    Total Station | Sku: 65dVv8Jr8fe
+                  </p>
+                  <Link
+                    to={item?.productUrl}
+                    className="font-semibold text-sm text-gray-600 mt-1"
+                  >
+                    {item.name}
+                  </Link>
+                  <div className="mt-2 space-x-2">
+                    <span className="text-sm font-bold text-[#222]">
+                      ৳{item.price}
+                    </span>
+                    <span className="text-xs line-through text-gray-400">
+                      ৳{item.discountPrice}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-1 text-sm text-[#b3b3b5] mt-1">
+                    £11994.00
+                    <span className="underline">(Inc. VAT)</span>
+                  </div>
+                  <button className="mt-1 bg-[#e62245] hover:bg-[#c91d3a] text-white text-sm font-semibold py-[6px] px-4 rounded w-full">
+                    ADD TO CART
+                  </button>
                 </div>
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </div>
+              </div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      </div>
     </div>
   );
 };
