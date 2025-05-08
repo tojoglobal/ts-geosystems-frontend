@@ -128,7 +128,7 @@ const G2Blog = () => {
 
   return (
     <div className="p-2 md:p-3">
-      <div className="flex items-center gap-2 text-sm">
+      <div className="flex items-center gap-2 text-[10px]">
         <Link to="/" className="flex items-center gap-1 text-[#e62245]">
           Home
         </Link>
@@ -146,7 +146,7 @@ const G2Blog = () => {
             </h2>
           </div>
         )}
-        <div className="border-t border-b py-4 flex flex-wrap justify-center items-center gap-4 text-[#db7084] font-medium">
+        <div className="border-t border-b border-[#d5d8d9] py-3 flex flex-wrap justify-center items-center gap-4 text-[#db7084] font-medium">
           {activeTab !== "All" && (
             <button
               onClick={() => setActiveTab("All")}
@@ -175,7 +175,7 @@ const G2Blog = () => {
             <Link
               key={index}
               to={`/g2-blog/${post.id}/${slugify(post.title || "")}`}
-              className="relative border rounded-lg overflow-hidden transition-all hover:bg-gray-100"
+              className="relative border border-[#eaedef] rounded-sm overflow-hidden transition-all hover:bg-gray-100"
             >
               <img src={post.image} alt="post" className="w-full" />
               <img
@@ -183,7 +183,7 @@ const G2Blog = () => {
                 alt="logo"
                 className="absolute bottom-[128px] left-3 w-12 h-12 rounded-full"
               />
-              <div className="p-4 mt-1">
+              <div className="p-4 mt-1 bg-[#fafdff]">
                 <p className="text-xs text-gray-500 text-center mb-1">
                   {post.meta}
                 </p>

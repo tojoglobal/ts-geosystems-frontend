@@ -2,7 +2,6 @@ import React from "react";
 import TopMenu from "./TopMenu";
 import HeaderContainer from "./HeaderContainer";
 import MainNavContainer from "./MainNavContainer";
-import HeaderBottom from "./HeaderBottom";
 import MobileNavbar from "./MobileNavbar";
 
 const MainNavbars = () => {
@@ -13,12 +12,10 @@ const MainNavbars = () => {
         <TopMenu />
         <HeaderContainer />
         <MainNavContainer />
-        <HeaderBottom />
       </div>
       {/* Mobile only */}
       <div className="md:hidden">
         <MobileNavbar />
-        <HeaderBottom />
       </div>
     </>
   );

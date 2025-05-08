@@ -71,7 +71,7 @@ const MainNavContainer = () => {
             : ""
         } ${
           isSticky
-            ? "fixed top-0 translate-y-0 shadow-md py-[2px]"
+            ? "fixed top-0 translate-y-0 shadow-md py-[1px]"
             : "relative top-12 -translate-y-full"
         }`}
       >
@@ -148,12 +148,15 @@ const MainNavContainer = () => {
                   {/* Dropdown Wrapper */}
                   <div className="relative group py-2">
                     <div className="flex items-center gap-1 hover:text-crimson-red transition-colors duration-300 cursor-pointer">
-                      <Link to="/support">SUPPORT</Link>
+                      SUPPORT
                       <MdOutlineKeyboardArrowDown className="text-xl" />
                     </div>
                     {/* Dropdown Menu */}
                     <div className="absolute -left-10 top-full w-50 bg-white rounded-sm border border-slightly-dark shadow-lg pl-4 py-2 hidden group-hover:block z-50">
                       <ul className="space-y-1 text-sm text-charcoal">
+                        <li className="hover:text-crimson-red cursor-pointer transition-colors duration-300">
+                          <Link to="/support">Support</Link>
+                        </li>
                         <li className="hover:text-crimson-red cursor-pointer transition-colors duration-300">
                           <Link to="/software-downloads">
                             Software Downloads
@@ -198,10 +201,10 @@ const MainNavContainer = () => {
                 </div>
               ) : (
                 <>
-                  <div className="flex items-center gap-4 relative">
+                  <div className="flex items-center gap-3 relative">
                     {/* Search Bar */}
                     <div
-                      className="flex items-center px-1 w-[495px] relative"
+                      className="flex items-center px-1 w-[430px] text-black relative"
                       onClick={() => setShowSearch(true)}
                     >
                       <input
@@ -209,15 +212,15 @@ const MainNavContainer = () => {
                         placeholder="Search"
                         className="input text-[13px] placeholder:italic w-full h-7 focus:outline-none focus:ring-0 border border-slightly-dark focus:border-slightly-dark bg-transparent rounded-[4px]"
                       />
-                      <IoSearchOutline className="text-[#e62245] text-[20px] absolute right-5" />
+                      <IoSearchOutline className="text-[#e62245] text-[20px] absolute right-3" />
                     </div>
                     {/* User Icon */}
                     <Link to="/login">
-                      <LuUserRound className="text-[25px] text-davy-gray hover:text-crimson-red font-medium cursor-pointer duration-300 ease-in" />
+                      <LuUserRound className="text-[23px] text-davy-gray hover:text-crimson-red font-medium cursor-pointer duration-300 ease-in" />
                     </Link>
                     {/* Cart Icon with badge */}
                     <div onClick={() => dispatch(toggleCart())}>
-                      <PiShoppingCart className="text-[25px] text-davy-gray hover:text-crimson-red cursor-pointer duration-300 ease-in font-medium" />
+                      <PiShoppingCart className="text-[23px] text-davy-gray hover:text-crimson-red cursor-pointer duration-300 ease-in font-medium" />
                       <span className="absolute -top-1 -right-2.5 bg-[#e62245] text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
                         {totalQuantity}
                       </span>

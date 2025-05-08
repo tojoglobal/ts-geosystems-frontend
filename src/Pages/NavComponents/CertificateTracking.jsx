@@ -14,7 +14,7 @@ const CertificateTracking = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto p-5">
+    <div className="max-w-[1370px] mx-auto p-5">
       <div className="flex gap-1 text-sm mb-2 text-gray-500">
         <Link to="/" className="flex items-center gap-1">
           <CiHome className="text-base" /> Home

@@ -31,22 +31,22 @@ const AboutUs = () => {
 
   return (
     <div className="p-2 md:p-3">
-      <div className="flex items-center gap-2 text-sm">
+      <div className="flex items-center gap-2 text-[10px] mb-3">
         <Link to="/" className="text-[#e62245]">
           Home
         </Link>
         <span>/</span>
         <span className="text-[#e62245]">About Us</span>
       </div>
-      <p className="text-[#e62245] text-3xl mb-6">ABOUT US</p>
+      <p className="text-[#e62245] text-3xl mb-6 font-normal">ABOUT US</p>
       <div className="mb-8">
-        <h2 className="text-[#e62245] text-2xl font-semibold mb-4">
+        <h2 className="text-[#e62245] text-xl font-semibold mb-4">
           {aboutContent?.section1_title}
         </h2>
         <p className="text-gray-700">{aboutContent?.section1_description}</p>
       </div>
       <div className="mb-8 border-t pt-3">
-        <h2 className="text-[#e62245] text-2xl font-semibold mb-4">
+        <h2 className="text-[#e62245] text-xl font-semibold mb-4">
           {aboutContent?.section2_title}
         </h2>
         <ul className="list-disc text-gray-700 space-y-1 pl-2">
@@ -59,7 +59,7 @@ const AboutUs = () => {
         </ul>
       </div>
       <div className="mb-8 border-t pt-3">
-        <h2 className="text-[#e62245] text-2xl font-semibold mb-4">
+        <h2 className="text-[#e62245] text-xl font-semibold mb-4">
           {aboutContent?.section3_title}
         </h2>
         <p className="text-gray-700 mb-6">
@@ -92,7 +92,7 @@ const AboutUs = () => {
         </section>
         <section className="border-b pb-4">
           <h3 className="text-xl font-semibold text-[#e62245]">
-            {aboutContent?.section5_title || "Our Services"}
+            {aboutContent?.section5_title}
           </h3>
           <p className="mt-2 text-gray-700">
             {aboutContent?.section5_description}

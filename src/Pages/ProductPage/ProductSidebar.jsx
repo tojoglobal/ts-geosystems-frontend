@@ -113,20 +113,22 @@ const ProductSidebar = () => {
   ];
 
   return (
-    <div className="w-full">
+    <div className="w-full mt-3">
       {dynamicSidebarData.map((item, index) =>
         item.type === "spacer" ? (
           <div key={index} style={{ height: item.height }} />
         ) : (
           <div
             key={item.label}
-            className={`bg-[#ebebeb] text-black ${index !== 0 ? "mt-1" : ""}`}
+            className={`bg-[#ebebeb] font-bold rounded-[3px] text-[13px] text-black ${
+              index !== 0 ? "mt-[6px]" : ""
+            }`}
           >
             {item.children !== null && item.children.length > 0 ? (
               <div>
                 <button
                   onClick={() => toggleSection(item.label)}
-                  className={`w-full capitalize hover:text-[#e62245] flex items-center justify-between font-medium text-left p-3 ${
+                  className={`w-full text-xs capitalize hover:text-[#e62245] flex items-center justify-between font-medium text-left p-3 ${
                     openSections[item.label]
                       ? "border-b-2 border-[#e62245]"
                       : ""
@@ -153,7 +155,7 @@ const ProductSidebar = () => {
                             ? `/${child.slug}`
                             : `/${item.categorySlug}/${child.slug}`
                         }
-                        className={`capitalize block px-5 py-3 text-sm hover:bg-gray-50 border-t border-[#ebebeb] ${
+                        className={`capitalize block px-5 py-3 font-bold text-[13px] hover:bg-gray-50 border-t border-[#ebebeb] ${
                           subcategory === child.slug &&
                           category === item.categorySlug
                             ? "text-[#e62245] font-bold"
