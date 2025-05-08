@@ -92,8 +92,8 @@ const ProductDetails = () => {
 
   return (
     <div className="bg-white p-3">
-      <div className="max-w-[1370px] mx-auto px-4 pt-10">
-        <div className="flex flex-col md:flex-row gap-10">
+      <div className="max-w-[1370px] mx-auto pt-10">
+        <div className="flex flex-col md:flex-row gap-8">
           {/* Image Gallery */}
           <div className="flex flex-col items-start gap-4 relative">
             {/* Badges */}
@@ -102,11 +102,11 @@ const ProductDetails = () => {
                 <span className="bg-[#ffa000] text-white text-xs px-2 py-1 rounded">
                   Featured
                 </span>
-                {product.priceShowHide && (
+                {product.priceShowHide ? (
                   <span className="bg-[#daa520] text-white text-xs px-2 py-1 rounded">
                     -17%
                   </span>
-                )}
+                ) : null}
               </div>
             </div>
             <div className="w-[550px] h-[550px] border rounded-xl overflow-hidden">
@@ -244,7 +244,7 @@ const ProductDetails = () => {
             </div>
             <button
               onClick={handleAddToCart}
-              className="relative overflow-hidden group text-white px-12 font-semibold py-[11px] rounded bg-[#e62245]"
+              className="relative overflow-hidden group text-white px-16 font-semibold py-[6px] rounded-[3px] text-[17px] bg-[#e62245]"
             >
               <span className="absolute left-0 top-0 h-full w-0 bg-black transition-all duration-500 ease-out group-hover:w-full z-0"></span>
               <span className="relative z-10">ADD TO CART</span>
@@ -270,13 +270,13 @@ const ProductDetails = () => {
         </div>
         {/* Tabs */}
         <div className="mt-12" ref={overviewRef}>
-          <div className="flex gap-2 border border-gray-300 rounded-md overflow-hidden">
+          <div className="flex gap-2 border-t border-l border-r border-gray-300 rounded-[3px] overflow-hidden">
             {["OVERVIEW", "SPECIFICATIONS", "PRODUCT VIDEOS"].map(
               (tab, idx) => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
-                  className={`text-base sm:text-2xl font-semibold px-4 py-3 transition-colors duration-200 ${
+                  className={`text-base md:text-lg font-semibold px-4 py-2 transition-colors duration-200 ${
                     activeTab === tab
                       ? "text-[#e62245]"
                       : "text-gray-600 hover:text-[#e62245]"
@@ -287,7 +287,7 @@ const ProductDetails = () => {
               )
             )}
           </div>
-          <div className="border-2 border-[#e5e5e5] p-4">
+          <div className="border-2 border-[#e5e5e5] rounded-[3px] p-4">
             {activeTab === "OVERVIEW" && (
               <div
                 className="text-gray-700 leading-relaxed"

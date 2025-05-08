@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 
 const featured = [
   {
-    name: "Featured Product 1",
+    name: "Leica iCON iCG70 GNSS RTK Rover Leica iCON iCG70 GNSS RTK Rover",
     img: "https://ts-geosystems.com.bd/assets/images/f6ID2zYF.png",
     img2: "https://ts-geosystems.com.bd/assets/images/JMqcf5wY.png",
     price: "100,000",
@@ -200,8 +200,8 @@ const ProductHighlights = () => {
   return (
     <div className="max-w-[1370px] mx-auto rounded-md px-3 md:px-0 py-6 md:py-12 bg-white relative">
       {/* Tab Header */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between border border-gray-200 relative">
-        <div className="flex flex-col md:flex-row gap-3 sm:gap-6 px-3 py-1">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between border border-gray-200 rounded-l-[3px] relative">
+        <div className="flex flex-col md:flex-row gap-3 sm:gap-6 px-3 py-[2px]">
           {tabOptions.map((tab) => (
             <div
               key={tab.key}
@@ -210,7 +210,7 @@ const ProductHighlights = () => {
             >
               <h2
                 className={`p-2 text-base uppercase sm:text-xl font-semibold w-fit pr-3 border-r border-gray-200 ${
-                  activeTab === tab.key ? "text-[#e62245]" : "text-gray-500"
+                  activeTab === tab.key ? "text-[#e62245]" : "text-black"
                 }`}
               >
                 {tab.name}
@@ -219,30 +219,32 @@ const ProductHighlights = () => {
             </div>
           ))}
         </div>
-        {/* Custom Arrows */}
-        {/* Custom Arrows */}
-        <div className="flex items-center gap-2 md:gap-3 px-3 md:px-6 py-2 md:py-0 absolute right-2 top-2 md:static">
-          <button
-            onClick={() => swiperRef.current?.slidePrev()}
-            className="p-2 bg-gray-200 rounded-full hover:bg-[#e62245] hover:text-white transition disabled:opacity-50 disabled:cursor-not-allowed"
-            disabled={isBeginning}
+        <div className="flex gap-2 pr-4">
+          <div
+            className={`swiper-button-prev-custom cursor-pointer ${
+              isBeginning
+                ? "text-gray-200 cursor-not-allowed"
+                : "text-gray-400 hover:text-gray-600"
+            }`}
           >
-            <IoIosArrowBack size={20} />
-          </button>
-          <button
-            onClick={() => swiperRef.current?.slideNext()}
-            className="p-2 bg-gray-200 rounded-full hover:bg-[#e62245] hover:text-white transition disabled:opacity-50 disabled:cursor-not-allowed"
-            disabled={isEnd}
+            <IoIosArrowBack size={22} />
+          </div>
+          <div
+            className={`swiper-button-next-custom cursor-pointer ${
+              isEnd
+                ? "text-gray-200 cursor-not-allowed"
+                : "text-gray-400 hover:text-gray-600"
+            }`}
           >
-            <IoIosArrowForward size={20} />
-          </button>
+            <IoIosArrowForward size={22} />
+          </div>
         </div>
       </div>
       {/* Swiper */}
       <div className="mt-4">
         <Swiper
           modules={[Navigation]}
-          spaceBetween={17}
+          spaceBetween={10}
           slidesPerView={4}
           slidesPerGroup={4}
           onSwiper={(swiper) => {
@@ -276,7 +278,7 @@ const ProductHighlights = () => {
         >
           {items.map((item, idx) => (
             <SwiperSlide key={idx}>
-              <div className="relative flex flex-col items-center p-4 rounded-md shadow-sm bg-white">
+              <div className="relative flex flex-col items-center rounded-md shadow-sm bg-white">
                 {activeTab !== "featured" && (
                   <p className="absolute top-2 right-2 px-2 py-[2px] rounded-md text-white bg-[#e62245] z-50">
                     SALE
@@ -307,14 +309,18 @@ const ProductHighlights = () => {
                     {item.name}
                   </Link>
                   <div className="mt-2 space-x-2">
-                    <span className="text-lg font-bold text-[#222]">
+                    <span className="text-sm font-bold text-[#222]">
                       ৳{item.price}
                     </span>
-                    <span className="text-sm line-through text-gray-400">
+                    <span className="text-xs line-through text-gray-400">
                       ৳{item.discountPrice}
                     </span>
                   </div>
-                  <button className="mt-3 bg-[#e62245] hover:bg-[#c91d3a] text-white text-sm font-semibold py-2 px-4 rounded w-full">
+                  <div className="flex items-center gap-1 text-sm text-[#b3b3b5] mt-1">
+                    £11994.00
+                    <span className="underline">(Inc. VAT)</span>
+                  </div>
+                  <button className="mt-1 bg-[#e62245] hover:bg-[#c91d3a] text-white text-sm font-semibold py-[6px] px-4 rounded w-full">
                     ADD TO CART
                   </button>
                 </div>

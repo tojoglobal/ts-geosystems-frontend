@@ -12,7 +12,7 @@ const OurYoutube = () => {
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-8">
           <div className="youtube-video aspect-w-16 aspect-h-9">
             <iframe
-              className="w-full h-56"
+              className="w-full h-56 rounded-sm"
               src="https://www.youtube.com/embed/Mt4ILldx420?si=V0S_DdPTtR0UTQNb"
               title="YouTube video player"
               frameBorder="0"
@@ -23,7 +23,7 @@ const OurYoutube = () => {
           </div>
           <div className="youtube-video aspect-w-16 aspect-h-9">
             <iframe
-              className="w-full h-56"
+              className="w-full h-56 rounded-sm"
               src="https://www.youtube.com/embed/-iDZRbGZ-1s?si=BfiabgXkh4hXjpZR"
               title="YouTube video player"
               frameBorder="0"
@@ -34,7 +34,7 @@ const OurYoutube = () => {
           </div>
           <div className="youtube-video aspect-w-16 aspect-h-9">
             <iframe
-              className="w-full h-56"
+              className="w-full h-56 rounded-sm"
               src="https://www.youtube.com/embed/P_ytAXVOpHQ?si=Ug4N5w4bYZ4txGDp"
               title="YouTube video player"
               frameBorder="0"

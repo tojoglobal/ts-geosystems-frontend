@@ -166,7 +166,7 @@ const CategoryProduct = () => {
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="border py-1 pl-2 text-xs border-[#e1dcdc] rounded-[5px] pr-36 appearance-none bg-white cursor-pointer"
+                className="border py-1 pl-2 text-xs border-[#e1dcdc] rounded-[3px] pr-36 appearance-none bg-white cursor-pointer"
               >
                 {sortOptions.map((option) => (
                   <option key={option} value={option}>
@@ -236,7 +236,7 @@ const CategoryProduct = () => {
                     </div>
                   </Link>
                 ) : (
-                  <div className="w-full h-60 flex items-center justify-center bg-white">
+                  <div className="w-full h-56 flex items-center justify-center bg-white">
                     <Link
                       to={`/products/${product.id}/${slugify(
                         product.product_name || ""
@@ -251,7 +251,7 @@ const CategoryProduct = () => {
                         <img
                           src={imageUrl}
                           alt={product.product_name}
-                          className="w-auto h-60 object-contain transition-all duration-300 ease-in-out"
+                          className="w-auto h-56 object-contain transition-all duration-300 ease-in-out"
                         />
                       </div>
                     </Link>
@@ -310,9 +310,7 @@ const CategoryProduct = () => {
                           </p>
                         </div>
                         <div className="flex items-center gap-1 text-sm text-[#b3b3b5]">
-                          <p className="text-[#2f2f2b] font-semibold">
-                            Price:
-                          </p>
+                          <p className="text-[#2f2f2b] font-semibold">Price:</p>
                           £{(parseFloat(product.price) * 1.2).toFixed(2)}{" "}
                           <span className="underline">(Inc. VAT)</span>
                         </div>
