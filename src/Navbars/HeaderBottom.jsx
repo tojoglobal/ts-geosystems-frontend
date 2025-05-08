@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 const HeaderBottom = () => {
   return (
-    <div className="bg-dark-slate py-2 md:px-2 text-center">
+    <div className="bg-dark-slate pt-[10px] pb-[6px] flex items-center justify-center">
       <p className="text-sm text-white italic font-bold">
         We Offer Very Competitive Hire Rates On The Leica RTC360 3D Laser
         Scanner -{" "}

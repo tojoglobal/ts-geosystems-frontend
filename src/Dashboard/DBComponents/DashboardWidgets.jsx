@@ -28,44 +28,40 @@ const data = [
 
 export default function DashboardWidgets() {
   return (
-    <div className="grid grid-cols-11 md:grid-cols-10 gap-4">
-      {/* Sales Statistics */}
-      <Card className="bg-slate-800 col-span-5 border-0 text-white">
+    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-10 gap-4">
+      <Card className="bg-slate-800 col-span-1 sm:col-span-2 xl:col-span-5 border-0 text-white">
         <CardContent className="p-4">
           <div className="flex justify-between items-center pb-5">
             <div className="text-xl font-semibold">Sales Statistics</div>
             <div className="text-gray-400 text-sm">Today</div>
           </div>
-          <div className="text-xl font-bold text-white mt-1">725,800</div>
-          <div className="text-gray-400 text-sm mb-4">
-            <span className="text-green-400">+15.72% vs. previous month</span>
-          </div>
-          {/* <div className=""> */}
-          <table className="text-gray-300 w-full">
-            <thead className="text-sm text-gray-400 uppercase bg-slate-800">
-              <tr className="text-left">
-                <th className="py-2">Order Status</th>
-                <th className="px-2 py-2">Orders</th>
-                <th className="px-2 py-2">Returns</th>
-                <th className="px-2 py-2">Earnings</th>
-              </tr>
-            </thead>
-            <tbody className="w-full">
-              {data.map((item, index) => (
-                <tr
-                  key={index}
-                  className="bg-slate-800 border-b text-sm border-slate-700"
-                >
-                  <td className="text-nowrap py-2">{item.label}</td>
-                  <td className="px-2 py-2">{item.orders}</td>
-                  <td className="px-2 py-2">{item.returns}</td>
-                  <td className={`px-2 py-2 ${item.earningsClass}`}>
-                    {item.earnings}
-                  </td>
+          <div className="overflow-x-auto">
+            <table className="text-gray-300 min-w-full">
+              <thead className="text-sm text-gray-400 uppercase bg-slate-800">
+                <tr className="text-left">
+                  <th className="py-2">Order Status</th>
+                  <th className="px-2 py-2">Orders</th>
+                  <th className="px-2 py-2">Returns</th>
+                  <th className="px-2 py-2">Earnings</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {data.map((item, index) => (
+                  <tr
+                    key={index}
+                    className="bg-slate-800 border-b text-sm border-slate-700"
+                  >
+                    <td className="whitespace-nowrap py-2">{item.label}</td>
+                    <td className="px-2 py-2">{item.orders}</td>
+                    <td className="px-2 py-2">{item.returns}</td>
+                    <td className={`px-2 py-2 ${item.earningsClass}`}>
+                      {item.earnings}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
           {/* </div> */}
           {/* <SalesStat
               label="Product Pending"
@@ -94,7 +90,7 @@ export default function DashboardWidgets() {
       </Card>
 
       {/* Top Users */}
-      <Card className="bg-slate-800 border-0 text-white col-span-1 md:col-span-5">
+      <Card className="bg-slate-800 col-span-1 sm:col-span-2 xl:col-span-5 border-0 text-white">
         <CardContent className="p-4">
           <div className="flex justify-between items-center">
             <div className="text-xl font-semibold">Top Users</div>

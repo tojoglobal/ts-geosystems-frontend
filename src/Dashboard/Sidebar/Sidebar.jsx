@@ -79,10 +79,11 @@ const menuItems = [
     submenu: [
       { label: "Home Page", to: "/dashboard/home-page" },
       { label: "Sent", to: "/dashboard/email/sent" },
-      { label: "About Us", to: "/dashboard/about-us" },
-      { label: "Contact Us", to: "/dashboard/contact-us" },
       { label: "Hire", to: "/dashboard/hire" },
       { label: "Service", to: "/dashboard/service" },
+      { label: "G2 Blog", to: "/dashboard/g2-blog" },
+      { label: "About Us", to: "/dashboard/about-us" },
+      { label: "Contact Us", to: "/dashboard/contact-us" },
     ],
   },
   {
@@ -163,9 +164,9 @@ const Sidebar = ({
   return (
     <>
       <div
-        className={`bg-gray-800 flex flex-col justify-between fixed md:relative z-50 transition-all duration-300 ${
-          collapsed ? "w-20 pt-5 md:pt-0 h-full" : "w-64 h-[200vh] md:h-screen"
-        } ${
+        className={`bg-gray-800 flex flex-col justify-between fixed md:relative z-[60] transition-all duration-300 ${
+          collapsed ? "w-20 pt-5 md:pt-0" : "w-64"
+        } h-screen ${
           mobileOpen ? "translate-x-0" : "-translate-x-full"
         } md:translate-x-0`}
       >
@@ -173,9 +174,9 @@ const Sidebar = ({
         <div
           className={`${
             collapsed
-              ? "flex items-center justify-center "
-              : " flex items-center justify-between"
-          } px-4 py-4 border-b border-gray-700`}
+              ? "flex items-center justify-center"
+              : "flex items-center justify-between"
+          } px-4 py-4 border-b border-gray-700 shrink-0`}
         >
           <h2
             className={`text-xl font-bold transition-all ${
@@ -206,9 +207,7 @@ const Sidebar = ({
 
         {/* Scrollable Menu Section */}
         <div
-          className={`flex-1 ${
-            collapsed ? "" : "overflow-y-auto overflow-x-hidden"
-          }  px-2 py-2 space-y-1`}
+          className={`flex-1 overflow-y-auto overflow-x-hidden scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800 px-2 py-2 space-y-1`}
         >
           {menuItems.map(({ label, to, icon, submenu }) => (
             <div key={label} className="relative group">
@@ -294,8 +293,18 @@ const Sidebar = ({
         </div>
 
         {/* Bottom Profile Section Fixed */}
-        {!collapsed && <SidebarProfileDropdown collapsed={collapsed} />}
+        <div className="shrink-0">
+          {!collapsed && <SidebarProfileDropdown collapsed={collapsed} />}
+        </div>
       </div>
+      
+      {/* Invisible overlay for handling outside clicks */}
+      {mobileOpen && (
+        <div 
+          className="fixed inset-0 z-50 md:hidden"
+          onClick={toggleMobileSidebar}
+        />
+      )}
     </>
   );
 };

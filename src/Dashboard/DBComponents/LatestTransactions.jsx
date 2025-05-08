@@ -129,7 +129,7 @@ const LatestTransactions = () => {
   if (isError) return <div>Failed to load orders.</div>;
 
   return (
-    <div className="bg-slate-800 text-white rounded-lg p-4 my-5">
+    <div className="bg-slate-800 text-white rounded-lg p-4 my-4">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold">Latest Transactions</h2>
         <div className="text-sm text-gray-400">Sort By: Latest</div>
@@ -138,18 +138,18 @@ const LatestTransactions = () => {
         <table className="min-w-full text-sm text-gray-300">
           <thead className="text-xs text-gray-400 uppercase bg-slate-900">
             <tr>
-              <th className="px-4 py-2 text-left">
+              <th className="px-4 py-1 md:py-2 text-left">
                 <input type="checkbox" />
               </th>
-              <th className="px-4 py-2 text-left">Order ID</th>
-              <th className="px-4 py-2 text-left">Name</th>
-              <th className="px-4 py-2 text-left">Payment Metod</th>
-              <th className="px-4 py-2 text-left">Payment Status</th>
-              <th className="px-4 py-2 text-left">Quantity</th>
-              <th className="px-4 py-2 text-left">Order Date</th>
-              <th className="px-4 py-2 text-left">Total Amount</th>
-              <th className="px-4 py-2 text-left">Status</th>
-              <th className="px-4 py-2 text-left">Action</th>
+              <th className="px-4 py-1 md:py-2 text-left">Order ID</th>
+              <th className="px-4 py-1 md:py-2 text-left">Name</th>
+              <th className="px-4 py-1 md:py-2 text-left">Payment Metod</th>
+              <th className="px-4 py-1 md:py-2 text-left">Payment Status</th>
+              <th className="px-4 py-1 md:py-2 text-left">Quantity</th>
+              <th className="px-4 py-1 md:py-2 text-left">Order Date</th>
+              <th className="px-4 py-1 md:py-2 text-left">Total Amount</th>
+              <th className="px-4 py-1 md:py-2 text-left">Status</th>
+              <th className="px-4 py-1 md:py-2 text-left">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -159,14 +159,14 @@ const LatestTransactions = () => {
                   key={index}
                   className="bg-slate-800 border-b border-slate-600"
                 >
-                  <td className="px-4 py-2">
+                  <td className="px-4 py-1 md:py-2">
                     <input type="checkbox" />
                   </td>
-                  <td className="px-4 py-2">{order?.order_id}</td>
-                  <td className="px-4 py-2">{order?.shipping_name}</td>
-                  <td className="px-4 py-2">{order?.payment_method}</td>
+                  <td className="px-4 py-1 md:py-2">{order?.order_id}</td>
+                  <td className="px-4 py-1 md:py-2">{order?.shipping_name}</td>
+                  <td className="px-4 py-1 md:py-2">{order?.payment_method}</td>
                   <td
-                    className={`px-4 py-2 ${
+                    className={`px-4 py-1 md:py-2 ${
                       order?.paymentStatus === "paid"
                         ? "text-green-400"
                         : "text-yellow-400"
@@ -174,12 +174,12 @@ const LatestTransactions = () => {
                   >
                     {order?.paymentStatus}
                   </td>
-                  <td className="px-4 py-2">
+                  <td className="px-4 py-1 md:py-2">
                     {parseItems(order?.items).length}
                   </td>
-                  <td className="px-4 py-2">{formatDate(order?.created_at)}</td>
-                  <td className="px-4 py-2">${order?.total}</td>
-                  <td className="px-4 py-2">
+                  <td className="px-4 py-1 md:py-2">{formatDate(order?.created_at)}</td>
+                  <td className="px-4 py-1 md:py-2">${order?.total}</td>
+                  <td className="px-4 py-1 md:py-2">
                     {editStatusId === order.order_id ? (
                       <select
                         value={order.status}
@@ -203,7 +203,7 @@ const LatestTransactions = () => {
                       </span>
                     )}
                   </td>
-                  <td className="px-4 py-2 flex gap-2">
+                  <td className="px-4 py-1 md:py-2 flex gap-2">
                     <button
                       onClick={() => handleDownloadInvoice(order)}
                       className="text-blue-400 bg-blue-900 p-1 rounded hover:bg-blue-700"

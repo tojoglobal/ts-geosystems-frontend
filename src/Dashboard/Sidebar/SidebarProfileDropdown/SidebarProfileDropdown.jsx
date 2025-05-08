@@ -57,7 +57,7 @@ const SidebarProfileDropdown = () => {
 
       {/* Dropdown Menu */}
       {open && (
-        <div className="absolute bottom-14 left-3 w-64 bg-white shadow-lg rounded-lg z-50">
+        <div className="absolute bottom-14 left-3 w-56 md:w-60 bg-white shadow-lg rounded-lg z-50">
           <div className="p-2">
             <Link to="/dashboard/viewprofile">
               <DropdownItem icon={<User size={16} />} label="Profile" />

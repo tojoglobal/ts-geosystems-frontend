@@ -404,3 +404,33 @@ div.right div div a {
     @apply bg-background text-foreground;
   }
 }
+
+/* Add these media queries after the existing admin login styles */
+@media (max-width: 768px) {
+  #adminLogin {
+    width: 100%;
+    height: 100vh;
+    border-radius: 0;
+    background: #fff;
+  }
+
+  div.right {
+    width: 100%;
+    left: 0;
+    padding: 20px;
+  }
+
+  div.right div {
+    width: 100%;
+    padding: 0 20px;
+  }
+
+  div.right input {
+    margin: 15px 0;
+  }
+
+  div.right div div a {
+    width: 50px;
+    margin: 0 10px;
+  }
+}

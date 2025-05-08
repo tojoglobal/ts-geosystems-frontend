@@ -28,7 +28,7 @@ const Login = () => {
 
   return (
     <div className="flex justify-center items-center py-12 bg-white">
-      <div className="w-full max-w-[1300px] mx-auto flex items-stretch text-black rounded-lg overflow-hidden">
+      <div className="w-full max-w-[1370px] mx-auto flex items-stretch text-black rounded-lg overflow-hidden">
         <div className="w-1/2 p-8">
           <h2 className="text-2xl mb-6">Login</h2>
           <form onSubmit={handleSubmit(onSubmit)}>

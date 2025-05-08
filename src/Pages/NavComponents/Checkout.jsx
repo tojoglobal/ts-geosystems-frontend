@@ -184,7 +184,7 @@ const Checkout = () => {
   }
 
   return (
-    <div className="max-w-[1300px] mx-auto py-6 mb-5">
+    <div className="max-w-[1370px] mx-auto py-6 mb-5">
       <div className="grid md:grid-cols-3 gap-6">
         {/* LEFT COLUMN */}
         <div className="md:col-span-2 space-y-8">

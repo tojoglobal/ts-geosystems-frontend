@@ -27,7 +27,6 @@ ChartJS.register(
 );
 
 const DashboardCharts = () => {
-  // Bar Chart Data
   const barData = {
     labels: [
       "Jan",
@@ -64,62 +63,14 @@ const DashboardCharts = () => {
     },
   };
 
-  // Pie Chart Data
-  //   const pieData = {
-  //     labels: ["Active Users", "Inactive Users"],
-  //     datasets: [
-  //       {
-  //         label: "Total Value",
-  //         data: [75, 25],
-  //         backgroundColor: ["#0f766e", "#2dd4bf"],
-  //         hoverOffset: 4,
-  //       },
-  //     ],
-  //   };
-
-  //   const pieOptions = {
-  //     responsive: true,
-  //     plugins: {
-  //       legend: { position: "bottom" },
-  //     },
-  //   };
-
-  // Data for Pie Chart
-
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-      {/* Audiences Chart */}
-      <div className="col-span-2 bg-slate-800 text-white rounded-lg p-4">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+      <div className="col-span-1 md:col-span-2 bg-slate-800 text-white rounded-lg p-4">
         <div className="text-xl font-semibold mb-4">Audience Metrics</div>
         <Bar data={barData} options={barOptions} />
       </div>
 
-      {/* Source of Purchases */}
       <SourceOfPurchases />
-      {/* Pie Chart */}
-      {/* <div className="bg-slate-800 text-white rounded-lg p-4">
-        <div className="text-xl font-semibold mb-4">Total Value</div>
-        <Pie data={pieData} options={pieOptions} />
-      </div> */}
-
-      {/* Map Box */}
-      {/* <div className="bg-slate-900 text-white rounded-lg p-4 col-span-3">
-        <div className="text-xl font-semibold mb-4">Live Users by Country</div>
-        <Map
-          initialViewState={{
-            longitude: -100,
-            latitude: 40,
-            zoom: 2,
-          }}
-          style={{ width: "100%", height: "300px" }}
-          mapStyle="mapbox://styles/mapbox/streets-v11"
-          mapboxAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
-        >
-          <Marker longitude={-74.006} latitude={40.7128} color="#0f766e" />
-          <Marker longitude={2.3522} latitude={48.8566} color="#0f766e" />
-          <Marker longitude={139.6917} latitude={35.6895} color="#0f766e" />
-        </Map>
-      </div> */}
     </div>
   );
 };

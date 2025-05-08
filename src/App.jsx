@@ -41,7 +41,7 @@ import Compare from "./Pages/NavComponents/Compare";
 import UsedEquipment from "./Pages/NavComponents/UsedEquipment";
 import Brands from "./Dashboard/Brands/Brands";
 import UpdateProductForm from "./Dashboard/Products/EditProducts";
-import ProductTable from "./Dashboard/Products/ProductsPage";
+import ProductTable from "./Dashboard/Products/ProductTable";
 import Cart from "./Pages/NavComponents/Cart";
 import Checkout from "./Pages/NavComponents/Checkout";
 import Software from "./Dashboard/Software/Software";
@@ -62,6 +62,7 @@ import AdminUpdateHire from "./Pages/Control/AdminUpdateHire";
 import AdminUpdateService from "./Pages/Control/AdminUpdateService";
 import BlogDetails from "./Pages/NavComponents/Blog/BlogDetails";
 import TaxManager from "./Dashboard/TaxManager/TaxManager";
+import AdminBlogControl from "./Pages/Control/AdminBlogControl";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -142,10 +143,11 @@ const AppLayout = () => {
           {/* add taxesmanager */}
           <Route path="taxesmanager" element={<TaxManager />} />
           {/* dynamic about page */}
-          <Route path="about-us" element={<AdminUpdateAboutUs />} />
-          <Route path="contact-us" element={<AdminUpdateContactUs />} />
           <Route path="hire" element={<AdminUpdateHire />} />
           <Route path="service" element={<AdminUpdateService />} />
+          <Route path="g2-blog" element={<AdminBlogControl />} />
+          <Route path="about-us" element={<AdminUpdateAboutUs />} />
+          <Route path="contact-us" element={<AdminUpdateContactUs />} />
         </Route>
 
         <Route path="*" element={<Error />} />
