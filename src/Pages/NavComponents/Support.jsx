@@ -68,21 +68,21 @@ const Support = () => {
     console.log(submissionData);
 
     try {
-      // logic here 
+      // logic here
     } catch (error) {
       console.error(error);
     }
   };
 
   return (
-    <div className="p-3">
+    <div className="p-2 md:p-3">
       {/* Breadcrumb */}
-      <div className="flex items-center gap-2 text-sm">
+      <div className="flex items-center gap-2 text-[10px]">
         <Link to="/" className="flex items-center gap-1 text-[#e62245]">
           Home
         </Link>
         <span>/</span>
-        <Link to="/support" className="text-[#e62245]">
+        <Link to="/support" className="uppercase text-[#e62245]">
           Support
         </Link>
       </div>
@@ -93,10 +93,7 @@ const Support = () => {
         <Link to="/user-manuals">USER MANUALS</Link>
         <Link to="/remote-support">REMOTE SUPPORT</Link>
       </div>
-      <div className="max-w-4xl mx-auto relative bg-gradient-to-b from-[#f4f5f9] to-[#e6e7ec] rounded-md p-3 mb-6">
-        <div className="absolute -top-3 md:-top-4 right-4 md:right-11 text-[#e62245] text-base md:text-lg">
-          <Link to="/cc">Certificate Tracking</Link>
-        </div>
+      <div className="max-w-4xl mx-auto bg-gradient-to-b from-[#f4f5f9] to-[#e6e7ec] rounded-md p-3 mb-6">
         <div className="grid grid-cols-3 gap-2 md:flex md:justify-center md:gap-4">
           <Link
             to="/software-downloads"
@@ -123,10 +120,10 @@ const Support = () => {
             User Manuals
           </Link>
           <Link
-            to="/leica"
+            to="/cc"
             className="bg-[#e62245] text-sm md:text-base text-white px-2 md:px-4 py-2 rounded text-center"
           >
-            Leica MyWorld
+            Certificate Tracking
           </Link>
         </div>
       </div>

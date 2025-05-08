@@ -188,14 +188,12 @@ const Clearance = () => {
 
   return (
     <div className="p-2 md:p-3">
-      <div className="flex items-center gap-2 text-sm mb-4">
-        <Link to="/" className="text-[#e62245]">
-          Home
-        </Link>
+      <div className="flex items-center gap-2 text-[10px] mb-4">
+        <Link to="/">Home</Link>
         <span>/</span>
         <span className="text-[#e62245]">Clearance</span>
       </div>
-      <h1 className="text-4xl font-bold mb-6">CLEARANCE</h1>
+      <h1 className="text-3xl font-bold mb-4">CLEARANCE</h1>
       <section>
         <div className="flex items-center justify-between md:justify-normal md:gap-52 mb-6">
           {/* View Mode Buttons */}
@@ -223,12 +221,12 @@ const Clearance = () => {
           </div>
           {/* <div className="w-full flex justify-center mt-4 md:mt-0"> */}
           <div className="flex items-center gap-2">
-            <label className="text-sm">Sort By:</label>
+            <label className="text-xs">Sort By:</label>
             <div className="relative">
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="border p-1 rounded-sm pr-16 appearance-none bg-white cursor-pointer"
+                className="border py-1 pl-2 text-xs border-[#e1dcdc] rounded-[5px] pr-36 appearance-none bg-white cursor-pointer"
               >
                 {sortOptions.map((option) => (
                   <option key={option} value={option}>
@@ -241,7 +239,7 @@ const Clearance = () => {
         </div>
         {/* Products Grid/List */}
         <div
-          className={`grid ${
+          className={`grid mx-5 ${
             viewMode === "grid"
               ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-4 items-stretch"
               : "grid-cols-1 gap-7"
@@ -280,7 +278,7 @@ const Clearance = () => {
                   </div>
                 </Link>
               ) : (
-                <div className="w-full h-72 flex items-center justify-center bg-white">
+                <div className="w-full h-60 flex items-center justify-center bg-white">
                   <Link to={product.url} className="w-full h-full">
                     <div
                       onMouseEnter={() => setHoveredProductId(product.id)}
@@ -294,7 +292,7 @@ const Clearance = () => {
                             : product.image
                         }
                         alt={product.name}
-                        className="w-auto max-h-full object-contain transition-all duration-300 ease-in-out"
+                        className="w-auto h-60 object-contain transition-all duration-300 ease-in-out"
                       />
                     </div>
                   </Link>
@@ -345,7 +343,7 @@ const Clearance = () => {
                       </div>
                     </div>
                     <div className="flex gap-4 mt-2 flex-row">
-                      <button className="bg-[#e62245] text-white px-6 py-[6px] rounded-sm hover:bg-[#d41d3f] transition-colors">
+                      <button className="bg-[#e62245] text-white px-6 py-[5px] rounded-[3px] hover:bg-[#d41d3f] font-bold transition-colors">
                         ADD TO CART
                       </button>
                       <div className="flex items-center gap-2">
@@ -369,7 +367,7 @@ const Clearance = () => {
               ) : (
                 <div className="flex flex-col flex-grow border-t pt-3">
                   <div className="flex-grow">
-                    <div className="text-xs text-gray-600 mb-1">
+                    <div className="border-t border-gray-300 pt-2 text-xs text-gray-600 mb-1">
                       {product.brand} | Sku: {product.sku}
                     </div>
                     <Link to={product.url}>
@@ -389,10 +387,10 @@ const Clearance = () => {
                       £{product.priceExVat.toFixed(2)}{" "}
                       <span className="underline">(Inc. VAT)</span>
                     </div>
-                    <div className="flex flex-col gap-2 mt-4">
+                    <div className="flex flex-col gap-2 mt-2">
                       <button
                         onClick={() => handleAddToCart(product)}
-                        className="bg-[#e62245] text-white px-6 py-[6px] rounded-sm hover:bg-[#d41d3f] transition-colors"
+                        className="bg-[#e62245] text-white px-6 py-[5px] rounded-[3px] hover:bg-[#d41d3f] font-bold transition-colors"
                       >
                         ADD TO CART
                       </button>

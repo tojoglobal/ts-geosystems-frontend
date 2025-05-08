@@ -38,7 +38,7 @@ const Error = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto my-6 p-4 md:p-0">
+    <div className="max-w-[1370px] mx-auto my-6 p-4 md:p-0">
       <div className="flex items-center gap-2 text-sm mb-4">
         {pageData.breadcrumb.map((item, index) => (
           <div key={index} className="flex items-center gap-2">

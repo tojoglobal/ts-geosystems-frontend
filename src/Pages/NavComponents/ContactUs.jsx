@@ -1,4 +1,3 @@
-import { CiHome } from "react-icons/ci";
 import { Link } from "react-router-dom";
 import { FaPhoneAlt, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
 import { FaFacebookF, FaTwitter, FaYoutube, FaInstagram } from "react-icons/fa";
@@ -61,17 +60,17 @@ const ContactUs = () => {
 
   return (
     <div className="p-2 md:p-3">
-      <div className="flex items-center gap-2 text-sm">
+      <div className="flex items-center gap-2 text-[10px]">
         <Link to="/" className="flex items-center gap-1 text-[#e62245]">
-          <CiHome /> Home
+          Home
         </Link>
         <span>/</span>
         <Link to="/support" className="text-[#e62245]">
           Contact Us
         </Link>
       </div>
-      <h1 className="text-3xl mt-2 text-[#e62245] mb-2">CONTACT US</h1>
-      <div className="max-w-3xl mx-auto mb-10">
+      <h1 className="text-3xl mt-2 text-[#e62245] mb-5">CONTACT US</h1>
+      <div className="max-w-2xl mx-auto mb-10">
         <p className="text-gray-700 mb-8 max-w-2xl">
           We're happy to answer any questions about our products or services.
           Please fill out the form below if you need assistance.
@@ -82,38 +81,38 @@ const ContactUs = () => {
         >
           <input
             type="text"
-            name="firstName"
+            name="firstname"
             placeholder="First Name*"
-            className="border p-2 rounded"
+            className="border px-2 py-3 rounded border-gray-300 placeholder:text-black"
           />
           <input
             type="text"
-            name="lastName"
+            name="lastname"
             placeholder="Last Name*"
-            className="border p-2 rounded"
+            className="border px-2 py-3 rounded border-gray-300 placeholder:text-black"
           />
           <input
             type="email"
             name="email"
             placeholder="E-mail*"
-            className="border p-2 rounded"
+            className="border px-2 py-3 rounded border-gray-300 placeholder:text-black"
           />
           <input
             type="tel"
             name="phone"
             placeholder="Phone*"
-            className="border p-2 rounded"
+            className="border px-2 py-3 rounded border-gray-300 placeholder:text-black"
           />
           <textarea
             name="message"
             placeholder="Comments/Questions*"
-            className="border p-2 rounded md:col-span-2"
+            className="border px-2 py-3 rounded md:col-span-2 border-gray-300 placeholder:text-black"
             rows={4}
           ></textarea>
           <div className="flex justify-center md:col-span-2">
             <button
               type="submit"
-              className="bg-[#e62245] text-white py-2 px-6 rounded w-fit"
+              className="bg-[#e62245] text-white py-[6px] px-6 rounded w-fit"
             >
               Submit
             </button>
@@ -122,7 +121,7 @@ const ContactUs = () => {
       </div>
       <div className="flex flex-col md:flex-row gap-8">
         <div className="w-full md:w-[40%] space-y-6 text-sm">
-          <div>
+          <div className="text-black">
             <h2 className="text-lg font-bold pb-4 mb-4 relative border-b border-gray-200">
               Working Days
               <span className="absolute bottom-0 left-0 w-20 h-0.5 bg-[#e62245]"></span>

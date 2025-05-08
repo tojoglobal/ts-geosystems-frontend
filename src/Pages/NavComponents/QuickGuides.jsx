@@ -79,7 +79,7 @@ const QuickGuides = () => {
 
   return (
     <div className="p-4">
-      <div className="flex items-center gap-2 text-sm">
+      <div className="flex items-center gap-2 text-[10px]">
         <Link to="/" className="text-[#e62245]">
           Home
         </Link>

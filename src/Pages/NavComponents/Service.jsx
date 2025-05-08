@@ -74,7 +74,7 @@ const Service = () => {
 
   return (
     <div className="p-2 md:p-3">
-      <div className="flex items-center gap-2 text-sm">
+      <div className="flex items-center gap-2 text-[10px] mb-2">
         <Link to="/" className="flex items-center gap-1 text-[#e62245]">
           Home
         </Link>
@@ -83,7 +83,7 @@ const Service = () => {
           Service
         </Link>
       </div>
-      <p className="text-[#e62245] uppercase text-3xl mt-1 mb-6">Service</p>
+      <p className="text-[#e62245] uppercase text-3xl mt-1 mb-4">Service</p>
       <h1 className="text-lg mt-2 text-[#e62245] mb-2 font-bold">
         {serviceContent?.title ||
           "Surveying Equipment Service, Calibration & Repairs"}

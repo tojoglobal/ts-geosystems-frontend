@@ -94,7 +94,7 @@ const Hire = () => {
 
   return (
     <div className="p-2 md:p-3">
-      <div className="flex items-center gap-2 text-sm mb-4">
+      <div className="flex items-center gap-2 text-[10px] mb-4">
         <Link to="/" className="text-[#e62245] hover:underline">
           Home
         </Link>
