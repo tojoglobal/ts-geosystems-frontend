@@ -91,6 +91,8 @@ const Promo_product_banner_02 = () => {
 
   // Upload handler
   const handleImageUpload = async (event) => {
+    console.log("promo the fetcher");
+
     const files = Array.from(event.target.files);
     if (!files.length) return;
 

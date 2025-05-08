@@ -19,10 +19,9 @@ import { useQuery } from "@tanstack/react-query";
 import { X } from "lucide-react";
 
 // Sortable image component
-const SortableImage = ({ image, onDelete }) => {
+const FeatureSortableImage = ({ image, onDelete }) => {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id: image?.id });
-
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
@@ -70,9 +69,9 @@ const Feature_highlight_banner_03_left_01 = () => {
 
   // Fetch images
   const { data, isLoading, isError, refetch } = useQuery({
-    queryKey: ["promo_product_banner_02_image"],
+    queryKey: ["Feature_highlight_banner_03_left_01_image"],
     queryFn: async () => {
-      const res = await axiosPublicUrl.get("/api/getupload-images");
+      const res = await axiosPublicUrl.get("/api/feature-getupload-images");
       return res?.data?.data;
     },
   });
@@ -90,15 +89,17 @@ const Feature_highlight_banner_03_left_01 = () => {
   const sensors = useSensors(useSensor(PointerSensor));
 
   // Upload handler
-  const handleImageUpload = async (event) => {
+  const handleFeatureImageUpload = async (event) => {
     const files = Array.from(event.target.files);
     if (!files.length) return;
 
     const formData = new FormData();
-    files.forEach((file) => formData.append("images", file));
+    files.forEach((file) => formData.append("featureImages", file));
+
+    console.log(formData);
 
     try {
-      await axiosPublicUrl.post("/api/upload-images", formData, {
+      await axiosPublicUrl.post("/api/feature-upload-images", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       await refetch(); // ✅ Refresh list after upload
@@ -121,7 +122,7 @@ const Feature_highlight_banner_03_left_01 = () => {
 
     if (confirm.isConfirmed) {
       try {
-        await axiosPublicUrl.delete(`/api/delete-image/${id}`);
+        await axiosPublicUrl.delete(`/api/feature-delete-image/${id}`);
         await refetch(); // ✅ Refresh list after deletion
         Swal.fire("Deleted!", "Image has been removed.", "success");
       } catch (error) {
@@ -141,7 +142,7 @@ const Feature_highlight_banner_03_left_01 = () => {
       setImages(reordered); // Temporary local update for smooth UX
 
       try {
-        await axiosPublicUrl.post("/api/update-image-order", {
+        await axiosPublicUrl.post("/api/feature-update-image-order", {
           images: reordered.map((img, index) => ({
             id: img.id,
             order: index,
@@ -158,21 +159,23 @@ const Feature_highlight_banner_03_left_01 = () => {
   return (
     <div className="p-5">
       <div className="flex gap-10">
-        <h2 className="text-2xl text-teal-600">promo_product_banner_02</h2>
+        <h2 className="text-2xl text-teal-600">
+          Feature_highlight_banner_03_left_01
+        </h2>
         <div className="text-center mb-6">
           <label
-            htmlFor="imageUpload"
+            htmlFor="imageUpload2"
             className="cursor-pointer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
           >
             Add Images
           </label>
           <input
-            id="imageUpload"
+            id="imageUpload2"
             type="file"
             multiple
             accept="image/*"
             className="hidden"
-            onChange={handleImageUpload}
+            onChange={handleFeatureImageUpload}
           />
         </div>
       </div>
@@ -193,7 +196,7 @@ const Feature_highlight_banner_03_left_01 = () => {
           >
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {images.map((image) => (
-                <SortableImage
+                <FeatureSortableImage
                   key={image.id}
                   image={image}
                   onDelete={handleDeleteImage}
