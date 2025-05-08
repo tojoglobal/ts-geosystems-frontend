@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import { toast } from "react-toastify";
-import HomePageDynamic from "./HomePageDynamic";
+import Promo_product_banner_02 from "./Promo_product_banner_02";
 
 // Define the exact order of components as they appear on the homepage
 const COMPONENT_ORDER = [
@@ -100,7 +100,10 @@ const HomePageControl = () => {
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
         {COMPONENT_ORDER.map((component, idx) => (
-          <label key={component} className="border rounded-md p-3 cursor-pointer select-none">
+          <label
+            key={component}
+            className="border rounded-md p-3 cursor-pointer select-none"
+          >
             <div className="flex items-center space-x-3">
               <input
                 type="checkbox"
@@ -109,7 +112,12 @@ const HomePageControl = () => {
                 className="w-4 h-4 accent-[#0b6d7f]"
               />
               <span className="text-sm font-medium">
-                {idx + 1}. {component.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ').replace(/\d+/g, '')}
+                {idx + 1}.{" "}
+                {component
+                  .split("_")
+                  .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                  .join(" ")
+                  .replace(/\d+/g, "")}
               </span>
             </div>
           </label>
@@ -124,8 +132,16 @@ const HomePageControl = () => {
           {isSaving ? "Saving..." : "Save Settings"}
         </button>
       </div>
-
-      <HomePageDynamic />
+      {/* all dynamic routes */}
+      <div className="pt-5">
+        <div className="text-center mb-6">
+          <h2 className="text-2xl font-bold">Home Page Component Dynamic</h2>
+          <p className="text-gray-400">
+            Dynamic sections on the home page. Changes affect all visitors.
+          </p>
+        </div>
+        <Promo_product_banner_02 />
+      </div>
     </div>
   );
 };

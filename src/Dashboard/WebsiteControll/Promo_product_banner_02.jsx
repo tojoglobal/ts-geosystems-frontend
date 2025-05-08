@@ -64,7 +64,7 @@ const SortableImage = ({ image, onDelete }) => {
   );
 };
 
-const HomePageDynamic = () => {
+const Promo_product_banner_02 = () => {
   const axiosPublicUrl = useAxiospublic();
   const [images, setImages] = useState([]);
 
@@ -157,28 +157,24 @@ const HomePageDynamic = () => {
 
   return (
     <div className="p-5">
-      <div className="text-center mb-6">
-        <h2 className="text-2xl font-bold">Home Page Component Dynamic</h2>
-        <p className="text-gray-400">
-          Dynamic sections on the home page. Changes affect all visitors.
-        </p>
-      </div>
-
-      <div className="text-center mb-6">
-        <label
-          htmlFor="imageUpload"
-          className="cursor-pointer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-        >
-          Add Images
-        </label>
-        <input
-          id="imageUpload"
-          type="file"
-          multiple
-          accept="image/*"
-          className="hidden"
-          onChange={handleImageUpload}
-        />
+      <div className="flex gap-10">
+        <h2 className="text-2xl text-teal-600">promo_product_banner_02</h2>
+        <div className="text-center mb-6">
+          <label
+            htmlFor="imageUpload"
+            className="cursor-pointer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          >
+            Add Images
+          </label>
+          <input
+            id="imageUpload"
+            type="file"
+            multiple
+            accept="image/*"
+            className="hidden"
+            onChange={handleImageUpload}
+          />
+        </div>
       </div>
 
       {isLoading ? (
@@ -211,4 +207,4 @@ const HomePageDynamic = () => {
   );
 };
 
-export default HomePageDynamic;
+export default Promo_product_banner_02;
