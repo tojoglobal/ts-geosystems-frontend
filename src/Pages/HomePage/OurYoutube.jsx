@@ -1,7 +1,7 @@
 const OurYoutube = () => {
   return (
     <div className="py-6 md:py-16">
-      <div className="max-w-[1300px] mx-auto px-4">
+      <div className="max-w-[1370px] mx-auto px-4">
         <div className="flex items-center justify-center gap-2 md:gap-4 mb-9 md:mb-12">
           <div className="flex-1 h-0.5 bg-[#e62245]"></div>
           <h2 className="text-center text-xl sm:text-2xl md:text-4xl font-bold text-[#e62245] whitespace-nowrap">

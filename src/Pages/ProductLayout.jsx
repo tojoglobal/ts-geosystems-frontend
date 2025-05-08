@@ -3,7 +3,7 @@ import ProductSidebar from "./ProductPage/ProductSidebar";
 
 const ProductLayout = () => {
   return (
-    <div className="max-w-[1300px] mx-auto flex flex-col md:flex-row min-h-screen bg-white mt-4 mb-10">
+    <div className="max-w-[1370px] mx-auto flex flex-col md:flex-row min-h-screen bg-white mt-4 mb-10">
       <div className="hidden md:block w-full md:w-[20%]">
         <ProductSidebar />
       </div>

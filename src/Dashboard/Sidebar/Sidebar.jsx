@@ -165,7 +165,7 @@ const Sidebar = ({
     <>
       <div
         className={`bg-gray-800 flex flex-col justify-between fixed md:relative z-[60] transition-all duration-300 ${
-          collapsed ? "w-20 pt-5 md:pt-0" : "w-60"
+          collapsed ? "w-20 pt-5 md:pt-0" : "w-64"
         } h-screen ${
           mobileOpen ? "translate-x-0" : "-translate-x-full"
         } md:translate-x-0`}

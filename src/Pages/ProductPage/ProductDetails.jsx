@@ -92,7 +92,7 @@ const ProductDetails = () => {
 
   return (
     <div className="bg-white p-3">
-      <div className="max-w-[1300px] mx-auto px-4 pt-10">
+      <div className="max-w-[1370px] mx-auto px-4 pt-10">
         <div className="flex flex-col md:flex-row gap-10">
           {/* Image Gallery */}
           <div className="flex flex-col items-start gap-4 relative">

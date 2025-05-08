@@ -198,7 +198,7 @@ const ProductHighlights = () => {
   };
 
   return (
-    <div className="max-w-[1300px] mx-auto rounded-md px-3 md:px-0 py-6 md:py-12 bg-white relative">
+    <div className="max-w-[1370px] mx-auto rounded-md px-3 md:px-0 py-6 md:py-12 bg-white relative">
       {/* Tab Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between border border-gray-200 relative">
         <div className="flex flex-col md:flex-row gap-3 sm:gap-6 px-3 py-1">

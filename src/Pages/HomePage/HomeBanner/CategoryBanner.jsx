@@ -34,7 +34,7 @@ const categories = [
 
 const CategoryBanner = () => {
   return (
-    <div className="max-w-[1300px] mt-10 mx-3 md:mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 md:gap-4">
+    <div className="max-w-[1370px] mt-10 mx-3 md:mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 md:gap-4">
       {categories.map((category, index) => (
         <Link
           to={`/catalog?category=${category.slug}`}

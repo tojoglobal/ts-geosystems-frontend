@@ -10,7 +10,7 @@ const images = [
 
 const MobilesBanner = () => {
   return (
-    <div className="md:w-full md:relative my-3 md:my-5 mx-3 md:max-w-[1300px] md:mx-auto">
+    <div className="md:w-full md:relative my-3 md:my-5 mx-3 md:max-w-[1370px] md:mx-auto">
       <Swiper
         modules={[Autoplay, Pagination]}
         autoplay={{
