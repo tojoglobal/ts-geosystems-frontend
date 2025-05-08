@@ -41,7 +41,7 @@ const AdminLogin = () => {
         password: password,
       });
       const data = response.data;
-      console.log(data);
+      // console.log(data);
 
       if (data.success) {
         localStorage.setItem("userEmail", JSON.stringify({ useremail }));
@@ -73,76 +73,71 @@ const AdminLogin = () => {
   };
 
   return (
-    <>
-      {/* <!-- Login form --> */}
-      <form action="" method="post" id="adminLogin" onSubmit={handleSubmit}>
-        {/* <!-- Left section of the form --> */}
-        <div className="left">
-          <div className="w-[80%]">
-            {/* <!-- Welcome message and registration link  Very good works are--> */}
-            <p className="mb-2">Hello, Welcome!</p>
-            <p className="text-center text-gray-600">
-              waiting for you <span className="font-semibold">Login</span>
-            </p>
-          </div>
+    <form action="" method="post" id="adminLogin" onSubmit={handleSubmit}>
+      {/* <!-- Left section of the form --> */}
+      <div className="left hidden md:block">
+        <div className="w-[80%]">
+          {/* <!-- Welcome message and registration link --> */}
+          <p className="mb-2">Hello, Welcome!</p>
+          <p className="text-center text-gray-600">
+            waiting for you <span className="font-semibold">Login</span>
+          </p>
         </div>
+      </div>
 
-        {/* <!-- Right section of the form --> */}
-        <div className="right">
+      {/* <!-- Right section of the form --> */}
+      <div className="right md:w-1/2 w-full">
+        <div>
+          {/* <!-- Login heading --> */}
+          <h1>Login</h1>
+
+          {/* <!-- Username input field --> */}
+          <input
+            type="email"
+            value={formData.useremail}
+            onChange={handleChange}
+            name="useremail"
+            id="useremail"
+            placeholder="Write your email"
+          />
+          <span className="material-symbols-outlined person">
+            <MdEmail />
+          </span>
+
+          {/* <!-- Password input field --> */}
+          <input
+            type={showPassword ? "text" : "password"}
+            name="password"
+            placeholder="Password"
+            value={formData.password}
+            onChange={handleChange}
+          />
+          <span
+            onClick={togglePassword}
+            className="material-symbols-outlined cursor-pointer lock"
+          >
+            {showPassword ? <FaEyeSlash /> : <FaEye />}
+          </span>
+
+          {/* <!-- Login button --> */}
+          <button type="submit">Login</button>
+
+          {/* <!-- Social login options --> */}
+          <p>or login with social platforms</p>
           <div>
-            {/* <!-- Login heading --> */}
-            <h1>Login</h1>
-
-            {/* <!-- Username input field --> */}
-            <input
-              type="email"
-              value={formData.useremail}
-              onChange={handleChange}
-              name="useremail"
-              id="useremail"
-              placeholder="Write your email"
-            />
-            <span className="material-symbols-outlined person">
-              {" "}
-              <MdEmail />{" "}
-            </span>
-
-            {/* <!-- Password input field --> */}
-            <input
-              type={showPassword ? "text" : "password"}
-              name="password"
-              placeholder="Password"
-              value={formData.password}
-              onChange={handleChange}
-            />
-
-            <span
-              onClick={togglePassword}
-              className="material-symbols-outlined cursor-pointer lock"
-            >
-              {showPassword ? <FaEyeSlash /> : <FaEye />}
-            </span>
-
-            {/* <!-- Login button --> */}
-            <button type="submit">Login</button>
-
-            {/* <!-- Social login options --> */}
-            <p>or login with social platforms </p>
-            <div>
-              <a href="">
-                <FcGoogle />{" "}
-              </a>
-              <a href="">
-                <FaFacebook className="text-[#1877F2]" />
-              </a>
-              <a href="">
-                <FaLinkedin className="text-[#0A66C2]" />
-              </a>
-            </div>
+            <a href="">
+              <FcGoogle />
+            </a>
+            <a href="">
+              <FaFacebook className="text-[#1877F2]" />
+            </a>
+            <a href="">
+              <FaLinkedin className="text-[#0A66C2]" />
+            </a>
           </div>
         </div>
-      </form>
-    </>
+      </div>
+    </form>
   );
 };
 

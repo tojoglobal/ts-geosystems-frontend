@@ -41,7 +41,7 @@ import Compare from "./Pages/NavComponents/Compare";
 import UsedEquipment from "./Pages/NavComponents/UsedEquipment";
 import Brands from "./Dashboard/Brands/Brands";
 import UpdateProductForm from "./Dashboard/Products/EditProducts";
-import ProductTable from "./Dashboard/Products/ProductsPage";
+import ProductTable from "./Dashboard/Products/ProductTable";
 import Cart from "./Pages/NavComponents/Cart";
 import Checkout from "./Pages/NavComponents/Checkout";
 import Software from "./Dashboard/Software/Software";
