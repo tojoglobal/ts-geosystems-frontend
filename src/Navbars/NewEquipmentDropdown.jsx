@@ -187,7 +187,7 @@ export default function NewEquipmentDropdown() {
                     to={`/${hoveredCategory.slug_name}/${subcategory.slug}`}
                     className="relative group"
                   >
-                    <div className="relative group h-[180px] overflow-hidden rounded-lg shadow-md cursor-pointer bg-white border-[1px] border-slightly-dark">
+                    <div className="relative group h-[180px] overflow-hidden rounded-[3px] shadow-md cursor-pointer bg-white border-[1px] border-slightly-dark">
                       <div className="w-full h-full overflow-hidden">
                         {subcategory.photo && (
                           <img
@@ -201,7 +201,7 @@ export default function NewEquipmentDropdown() {
                       </div>
                     </div>
                     <div className="text-center mt-2 transition-all duration-[0.2s] ease-in-out">
-                      <h4 className="capitalize font-bold text-base hover:text-crimson-red group-hover:underline cursor-pointer">
+                      <h4 className="capitalize font-bold text-base text-black group-hover:underline cursor-pointer">
                         {subcategory.name}
                       </h4>
                     </div>
