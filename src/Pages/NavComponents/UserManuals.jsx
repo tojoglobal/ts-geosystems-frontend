@@ -89,23 +89,26 @@ const UserManuals = () => {
   }, []);
 
   return (
-    <div className="p-2 md:p-4">
-      <div className="flex items-center gap-2 text-[10px]">
+    <div className="p-2 md:p-3">
+      <div className="font-light flex items-center gap-2 text-[10px]">
         <Link to="/" className="text-[#e62245]">
           Home
         </Link>
         <span>/</span>
-        <Link to="/support" className="text-[#e62245]">
+        <Link to="/support" className="uppercase text-[#e62245]">
           Support
         </Link>
         <span>/</span>
-        <span className="text-[#e62245]">User Manuals</span>
+        <Link to="/user-manuals" className="text-[#e62245]">
+          User Manuals
+        </Link>
       </div>
-      <p className="text-[#e62245] mb-6 text-2xl mt-2">User Manuals</p>
+      <p className="text-[#e62245] font-light mt-3 mb-6 text-3xl">
+        User Manuals
+      </p>
       <h1 className="text-[#e62245] font-bold text-xl mb-8">
         G2 Survey 3D Laser Scanner User Manuals
       </h1>
-
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {manuals.map((guide) => (
           <div
@@ -128,7 +131,6 @@ const UserManuals = () => {
           </div>
         ))}
       </div>
-
       {/* Pagination */}
       <div className="flex justify-between items-center mt-8">
         <div className="flex gap-2">

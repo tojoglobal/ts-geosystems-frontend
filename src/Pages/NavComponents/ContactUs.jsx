@@ -60,16 +60,18 @@ const ContactUs = () => {
 
   return (
     <div className="p-2 md:p-3">
-      <div className="flex items-center gap-2 text-[10px]">
+      <div className="font-light flex items-center gap-2 text-[10px]">
         <Link to="/" className="flex items-center gap-1 text-[#e62245]">
           Home
         </Link>
         <span>/</span>
-        <Link to="/support" className="text-[#e62245]">
+        <Link to="/contact-us" className="uppercase text-[#e62245]">
           Contact Us
         </Link>
       </div>
-      <h1 className="text-3xl mt-2 text-[#e62245] mb-5">CONTACT US</h1>
+      <h1 className="text-3xl mt-2 font-light text-[#e62245] mb-5">
+        CONTACT US
+      </h1>
       <div className="max-w-2xl mx-auto mb-10">
         <p className="text-gray-700 mb-8 max-w-2xl">
           We're happy to answer any questions about our products or services.

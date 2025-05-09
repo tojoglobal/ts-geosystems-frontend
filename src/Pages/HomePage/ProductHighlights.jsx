@@ -278,7 +278,7 @@ const ProductHighlights = () => {
         >
           {items.map((item, idx) => (
             <SwiperSlide key={idx}>
-              <div className="relative flex flex-col items-center rounded-md shadow-sm bg-white">
+              <div className="relative flex flex-col h-full rounded-md shadow-sm bg-white">
                 {activeTab !== "featured" && (
                   <p className="absolute top-2 right-2 px-2 py-[2px] rounded-md text-white bg-[#e62245] z-50">
                     SALE
@@ -298,31 +298,35 @@ const ProductHighlights = () => {
                     />
                   </div>
                 </Link>
-                <div className="w-full border-t pt-3">
-                  <p className="text-xs text-gray-700">
-                    Total Station | Sku: 65dVv8Jr8fe
-                  </p>
-                  <Link
-                    to={item?.productUrl}
-                    className="font-semibold text-sm text-gray-600 mt-1"
-                  >
-                    {item.name}
-                  </Link>
-                  <div className="mt-2 space-x-2">
-                    <span className="text-sm font-bold text-[#222]">
-                      ৳{item.price}
-                    </span>
-                    <span className="text-xs line-through text-gray-400">
-                      ৳{item.discountPrice}
-                    </span>
+                <div className="flex flex-col flex-grow border-t pt-3">
+                  <div className="flex-grow">
+                    <p className="text-xs text-gray-700">
+                      Total Station | Sku: 65dVv8Jr8fe
+                    </p>
+                    <Link
+                      to={item?.productUrl}
+                      className="font-semibold text-sm text-gray-600 mt-1 hover:text-[#e62245] cursor-pointer leading-tight"
+                    >
+                      {item.name}
+                    </Link>
                   </div>
-                  <div className="flex items-center gap-1 text-sm text-[#b3b3b5] mt-1">
-                    £11994.00
-                    <span className="underline">(Inc. VAT)</span>
+                  <div className="mt-1">
+                    <div className="flex items-center gap-1">
+                      <span className="text-sm font-bold text-[#222]">
+                        ৳{item.price}
+                      </span>
+                      <span className="text-xs line-through text-gray-400">
+                        ৳{item.discountPrice}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-1 text-sm text-[#b3b3b5] mt-1">
+                      £11994.00
+                      <span className="underline">(Inc. VAT)</span>
+                    </div>
+                    <button className="mt-1 bg-[#e62245] hover:bg-[#c91d3a] text-white text-sm font-semibold py-[6px] px-4 rounded w-full">
+                      ADD TO CART
+                    </button>
                   </div>
-                  <button className="mt-1 bg-[#e62245] hover:bg-[#c91d3a] text-white text-sm font-semibold py-[6px] px-4 rounded w-full">
-                    ADD TO CART
-                  </button>
                 </div>
               </div>
             </SwiperSlide>

@@ -77,7 +77,7 @@ const Support = () => {
   return (
     <div className="p-2 md:p-3">
       {/* Breadcrumb */}
-      <div className="flex items-center gap-2 text-[10px]">
+      <div className="font-light flex items-center gap-2 text-[10px]">
         <Link to="/" className="flex items-center gap-1 text-[#e62245]">
           Home
         </Link>
@@ -86,7 +86,7 @@ const Support = () => {
           Support
         </Link>
       </div>
-      <h1 className="text-3xl mt-2 text-[#e62245] mb-6">SUPPORT</h1>
+      <h1 className="text-3xl font-light mt-2 text-[#e62245] mb-6">SUPPORT</h1>
       <div className="flex flex-col items-center text-center md:flex-row md:justify-center gap-2 md:gap-8 text-sm font-medium text-[#e62245] mb-12">
         <Link to="/software-downloads">SOFTWARE DOWNLOADS</Link>
         <Link to="/remote-support">QUICK GUIDES</Link>

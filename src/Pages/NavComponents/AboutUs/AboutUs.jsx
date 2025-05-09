@@ -31,14 +31,18 @@ const AboutUs = () => {
 
   return (
     <div className="p-2 md:p-3">
-      <div className="flex items-center gap-2 text-[10px] mb-3">
+      <div className="font-light flex items-center gap-2 text-[10px] mb-3">
         <Link to="/" className="text-[#e62245]">
           Home
         </Link>
         <span>/</span>
-        <span className="text-[#e62245]">About Us</span>
+        <Link to="/about-us" className="uppercase text-[#e62245]">
+          About Us
+        </Link>
       </div>
-      <p className="text-[#e62245] text-3xl mb-6 font-normal">ABOUT US</p>
+      <p className="text-[#e62245] font-light text-3xl mb-6">
+        ABOUT US
+      </p>
       <div className="mb-8">
         <h2 className="text-[#e62245] text-xl font-semibold mb-4">
           {aboutContent?.section1_title}

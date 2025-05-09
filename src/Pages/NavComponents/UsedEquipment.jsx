@@ -214,14 +214,16 @@ const UsedEquipment = () => {
   };
   return (
     <div className="p-2 md:p-3">
-      <div className="flex items-center gap-2 text-[10px] mb-4">
-        <Link to="/" className="text-[#e62245]">
+      <div className="font-normal flex items-center gap-2 text-[10px] mb-4">
+        <Link to="/" className="text-gray-500">
           Home
         </Link>
         <span>/</span>
-        <span className="text-[#e62245]">Used Surveying Equipment</span>
+        <Link to="/used" className="text-[#e62245]">
+          Used Surveying Equipment
+        </Link>
       </div>
-      <h1 className="text-4xl font-bold mb-6 uppercase">
+      <h1 className="text-3xl font-semibold mb-6 uppercase">
         Used Surveying Equipment
       </h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 border-b pb-10">
@@ -229,17 +231,17 @@ const UsedEquipment = () => {
           <Link
             key={index}
             to={category.link}
-            className="group relative bg-white rounded-lg overflow-hidden transition-shadow"
+            className="group relative rounded-lg overflow-hidden transition-shadow"
           >
-            <div className="relative h-48 bg-[#f5f5f5]">
+            <div className="relative w-52 border border-gray-300 rounded-md mx-auto bg-[#f5f5f5]">
               <img
                 src={category.image}
                 alt={category.title}
-                className="w-full h-full object-contain p-4"
+                className="w-full h-full object-contain"
               />
             </div>
-            <div className="p-2 text-center">
-              <h2 className="text-lg font-medium group-hover:text-[#e62245] transition-colors">
+            <div className="text-center">
+              <h2 className="text-base mt-1 font-medium group-hover:text-[#e62245] transition-colors">
                 {category.title}
               </h2>
             </div>
@@ -252,7 +254,7 @@ const UsedEquipment = () => {
           <div className="flex gap-2">
             <button
               onClick={() => setViewMode("grid")}
-              className={`p-3 ${
+              className={`p-2 ${
                 viewMode === "grid"
                   ? "bg-[#e62245] text-white rounded-sm"
                   : "text-gray-600 border"
@@ -262,7 +264,7 @@ const UsedEquipment = () => {
             </button>
             <button
               onClick={() => setViewMode("list")}
-              className={`p-3 ${
+              className={`p-2 ${
                 viewMode === "list"
                   ? "bg-[#e62245] text-white rounded-sm"
                   : "text-black border"
@@ -278,7 +280,7 @@ const UsedEquipment = () => {
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="border p-1 rounded-sm pr-16 appearance-none bg-white cursor-pointer"
+                className="border py-1 pl-2 text-xs border-[#e1dcdc] rounded-[3px] pr-36 appearance-none bg-white cursor-pointer"
               >
                 {sortOptions.map((option) => (
                   <option key={option} value={option}>
@@ -291,68 +293,77 @@ const UsedEquipment = () => {
         </div>
         {/* Products Grid/List */}
         <div
-          className={`grid ${
+          className={`grid mx-5 ${
             viewMode === "grid"
-              ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-4"
-              : "grid-cols-1"
-          } gap-6`}
+              ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-4 items-stretch"
+              : "grid-cols-1 gap-7"
+          } gap-4`}
         >
           {currentProducts.map((product) => (
             <div
               key={product.id}
-              className={`${
-                viewMode === "list" ? "flex gap-6 p-4" : "p-4"
-              } relative`}
+              className={`relative ${
+                viewMode === "list" ? "flex gap-8" : "flex flex-col h-full"
+              }`}
             >
               {/* SALE badge */}
               <div
                 className={`absolute ${
-                  viewMode === "list" ? "top-5 left-52" : "top-4 right-4"
+                  viewMode === "list" ? "top-3 left-[267px]" : "top-3 right-3"
                 } bg-[#e62245] text-white px-2 py-[1px] font-semibold rounded-sm text-sm`}
               >
                 SALE
               </div>
-              {/* Product Image */}
-              <Link to={product.url}>
-                <div
-                  onMouseEnter={() => setHoveredProductId(product.id)}
-                  onMouseLeave={() => setHoveredProductId(null)}
-                >
-                  <img
-                    src={
-                      hoveredProductId === product.id && product.img2
-                        ? product.img2
-                        : product.image
-                    }
-                    alt={product.name}
-                    className="w-full h-72 object-contain transition-all duration-300 ease-in-out"
-                  />
-                </div>
-              </Link>
-              {/* Product Details */}
-              <div
-                className={`${
-                  viewMode === "list"
-                    ? "w-3/4 flex flex-col justify-between"
-                    : "space-y-2 border-t pt-2"
-                }`}
-              >
-                <div>
-                  <div className="text-xs text-gray-600">
-                    {product.brand} | Sku: {product.sku}
+              {viewMode === "list" ? (
+                <Link to={product.url} className="w-1/3">
+                  <div
+                    onMouseEnter={() => setHoveredProductId(product.id)}
+                    onMouseLeave={() => setHoveredProductId(null)}
+                  >
+                    <img
+                      src={
+                        hoveredProductId === product.id && product.img2
+                          ? product.img2
+                          : product.image
+                      }
+                      alt={product.name}
+                      className="w-full h-64 object-contain transition-all duration-300 ease-in-out"
+                    />
                   </div>
-                  <Link to={product.url}>
-                    <h3
-                      className={`${
-                        viewMode === "list"
-                          ? "text-2xl text-[#545454]"
-                          : "text-[#54546f] text-lg"
-                      } font-medium hover:text-[#e62245] cursor-pointer`}
+                </Link>
+              ) : (
+                <div className="w-full h-56 flex items-center justify-center bg-white">
+                  <Link to={product.url} className="w-full h-full">
+                    <div
+                      onMouseEnter={() => setHoveredProductId(product.id)}
+                      onMouseLeave={() => setHoveredProductId(null)}
+                      className="w-full h-full flex items-center justify-center"
                     >
-                      {product.name}
-                    </h3>
+                      <img
+                        src={
+                          hoveredProductId === product.id && product.img2
+                            ? product.img2
+                            : product.image
+                        }
+                        alt={product.name}
+                        className="w-auto h-56 object-contain transition-all duration-300 ease-in-out"
+                      />
+                    </div>
                   </Link>
-                  {viewMode === "list" && (
+                </div>
+              )}
+              {/* Product Details - Different structure for list vs grid */}
+              {viewMode === "list" ? (
+                <div className="w-2/3 flex flex-col justify-between">
+                  <div>
+                    <div className="text-xs text-gray-600">
+                      {product.brand} | Sku: {product.sku}
+                    </div>
+                    <Link to={product.url}>
+                      <h3 className="text-xl text-gray-800 font-medium hover:text-[#e62245] cursor-pointer">
+                        {product.name}
+                      </h3>
+                    </Link>
                     <p className="text-sm text-[#2f2f2b] mt-2">
                       Ex Demo - As New GNSS Antenna iCON iCG70 UHF Performance
                       AntennaGEB334 Li-Ion Battery x2GNSS Rover Container
@@ -360,65 +371,102 @@ const UsedEquipment = () => {
                       BatteryGAT25 AntennaGEV288 Mains ChargerGHT63 Pole
                       ClampGHT81 Holder Plate Accessories GKL341...
                     </p>
-                  )}
-                </div>
-                <div className="mt-auto">
-                  <div className="flex flex-col">
-                    {viewMode === "list" && (
+                  </div>
+                  <div>
+                    <div className="flex flex-col">
                       <div className="text-[#2f2f2b] text-lg font-semibold">
                         Was: £16,661.67
                       </div>
-                    )}
+                      <div className="flex items-center gap-1">
+                        <p className="font-bold text-lg">
+                          Price £{product.price.toFixed(2)}
+                        </p>
+                        <p className="text-sm text-gray-500 underline">
+                          (Ex. VAT)
+                        </p>
+                      </div>
+                      <div className="text-[#2f2f2b] text-lg font-semibold">
+                        Was: £16,661.67
+                      </div>
+                      <div className="flex items-center gap-1 text-sm text-[#b3b3b5]">
+                        <p className="text-[#2f2f2b] text-lg font-semibold">
+                          Price:
+                        </p>
+                        £{product.priceExVat.toFixed(2)}{" "}
+                        <span className="underline">(Inc. VAT)</span>
+                      </div>
+                    </div>
+                    <div className="flex gap-4 mt-2 flex-row">
+                      <button className="bg-[#e62245] text-white px-6 py-[5px] rounded-[3px] hover:bg-[#d41d3f] font-bold transition-colors">
+                        ADD TO CART
+                      </button>
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="checkbox"
+                          id={`compare-${product.id}`}
+                          className="accent-[#0075ff]"
+                          checked={compareItems.includes(product.id)}
+                          onChange={() => toggleCompare(product.id)}
+                        />
+                        <label
+                          htmlFor={`compare-${product.id}`}
+                          className="text-sm cursor-pointer"
+                        >
+                          COMPARE
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="flex flex-col flex-grow border-t pt-3">
+                  <div className="flex-grow">
+                    <div className="border-t border-gray-300 pt-2 text-xs text-gray-600 mb-1">
+                      {product.brand} | Sku: {product.sku}
+                    </div>
+                    <Link to={product.url}>
+                      <h3 className="text-gray-800 font-medium hover:text-[#e62245] cursor-pointer leading-tight">
+                        {product.name}
+                      </h3>
+                    </Link>
+                  </div>
+                  <div className="mt-1">
                     <div className="flex items-center gap-1">
-                      <p className="font-bold text-lg">
-                        {viewMode === "list" && "Price"} £
-                        {product.price.toFixed(2)}
-                      </p>
+                      <p className="font-bold">£{product.price.toFixed(2)}</p>
                       <p className="text-sm text-gray-500 underline">
                         (Ex. VAT)
                       </p>
                     </div>
-                    {viewMode === "list" && (
-                      <div className="text-[#2f2f2b] text-lg mb-1 font-semibold">
-                        Was: £16,661.67
-                      </div>
-                    )}
-                    <div className="flex items-center gap-1 text-sm text-[#b3b3b5]">
-                      {viewMode === "list" && (
-                        <p className="text-[#2f2f2b] text-lg font-semibold">
-                          Price:
-                        </p>
-                      )}
+                    <div className="flex items-center gap-1 text-sm text-[#b3b3b5] mt-1">
                       £{product.priceExVat.toFixed(2)}{" "}
                       <span className="underline">(Inc. VAT)</span>
                     </div>
-                  </div>
-                  <div
-                    className={`flex gap-4 mt-4 ${
-                      viewMode === "list" ? "flex-row" : "flex-col"
-                    }`}
-                  >
-                    <button className="bg-[#e62245] text-white px-6 py-2 hover:bg-[#d41d3f] transition-colors">
-                      ADD TO CART
-                    </button>
-                    <div className="flex items-center gap-2">
-                      <input
-                        type="checkbox"
-                        id={`compare-${product.id}`}
-                        className="accent-[#0075ff]"
-                        checked={compareItems.includes(product.id)}
-                        onChange={() => toggleCompare(product.id)}
-                      />
-                      <label
-                        htmlFor={`compare-${product.id}`}
-                        className="text-sm cursor-pointer"
+                    <div className="flex flex-col gap-2 mt-2">
+                      <button
+                        // onClick={() => handleAddToCart(product)}
+                        className="bg-[#e62245] text-white px-6 py-[5px] rounded-[3px] hover:bg-[#d41d3f] font-bold transition-colors"
                       >
-                        COMPARE
-                      </label>
+                        ADD TO CART
+                      </button>
+                      <div className="flex items-center gap-2 mt-1">
+                        <input
+                          type="checkbox"
+                          id={`compare-${product.id}`}
+                          className="accent-[#0075ff]"
+                          checked={compareItems.includes(product.id)}
+                          onChange={() => toggleCompare(product.id)}
+                        />
+                        <label
+                          htmlFor={`compare-${product.id}`}
+                          className="text-sm cursor-pointer"
+                        >
+                          COMPARE
+                        </label>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              )}
             </div>
           ))}
         </div>
