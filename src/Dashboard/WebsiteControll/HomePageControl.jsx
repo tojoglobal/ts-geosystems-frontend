@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import Promo_product_banner_02 from "./Promo_product_banner_02";
 import Feature_highlight_banner_03_left_01 from "./feature_highlight_banner_03_left_01";
 import SingleImages from "./SingleImages";
+import SlideContorols from "./SlideContorols";
 
 // Define the exact order of components as they appear on the homepage
 const COMPONENT_ORDER = [
@@ -142,6 +143,8 @@ const HomePageControl = () => {
             Dynamic sections on the home page. Changes affect all visitors.
           </p>
         </div>
+        <div className="border" />
+        <SlideContorols />
         <div className="border" />
         <Promo_product_banner_02 key="1" />
         <div className="border" />
