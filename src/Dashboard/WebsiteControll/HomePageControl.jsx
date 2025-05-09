@@ -142,8 +142,11 @@ const HomePageControl = () => {
             Dynamic sections on the home page. Changes affect all visitors.
           </p>
         </div>
+        <div className="border" />
         <Promo_product_banner_02 key="1" />
+        <div className="border" />
         <Feature_highlight_banner_03_left_01 key="2" />
+        <div className="border" />
         <SingleImages />
       </div>
     </div>

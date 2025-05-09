@@ -165,7 +165,7 @@ const Feature_highlight_banner_03_left_01 = () => {
         <div className="text-center mb-6">
           <label
             htmlFor="imageUpload2"
-            className="cursor-pointer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            className="cursor-pointer px-6 py-2 bg-[#0b6d7f] text-white font-bold rounded transition hover:bg-[#095666] disabled:bg-gray-400"
           >
             Add Images
           </label>
@@ -181,7 +181,7 @@ const Feature_highlight_banner_03_left_01 = () => {
       </div>
 
       {isLoading ? (
-        <p className="text-center text-gray-500">Loading images...</p>
+        <p className="text-center  text-gray-500">Loading images...</p>
       ) : isError ? (
         <p className="text-center text-red-500">Failed to load images</p>
       ) : (
