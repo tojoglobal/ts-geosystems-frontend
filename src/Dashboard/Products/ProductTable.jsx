@@ -121,10 +121,8 @@ const ProductTable = () => {
   };
 
   return (
-    <div className="p-6 bg-gray-100 dark:bg-gray-900 min-h-screen">
-      <h1 className="text-2xl font-bold mb-4 text-gray-800 dark:text-gray-200">
-        Products List
-      </h1>
+    <div className="p-4 min-h-screen">
+      <h1 className="text-2xl font-bold mb-4">Products List</h1>
       <div className="overflow-x-auto">
         <div className="flex justify-end mb-3">
           <Link
@@ -134,11 +132,11 @@ const ProductTable = () => {
             Add Product
           </Link>
         </div>
-        <table className="w-full text-sm text-left text-gray-700 dark:text-gray-300">
-          <thead className="text-xs uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
+        <table className="w-full text-sm text-left text-white">
+          <thead className="text-xs uppercase bg-gray-800 text-gray-200">
             <tr>
               <th className="py-3 px-6">Product Name</th>
-              <th className="py-3 px-6">price ৳</th>
+              <th className="py-3 px-6">Price ৳</th>
               <th className="py-3 px-6">Category</th>
               <th className="py-3 px-6">Sub Category</th>
               <th className="py-3 px-6">SKU</th>
@@ -152,7 +150,7 @@ const ProductTable = () => {
               products.map((product) => (
                 <tr
                   key={product.id}
-                  className="bg-white dark:bg-gray-800 border-b dark:border-gray-700"
+                  className="bg-gray-900 border-b border-gray-700"
                 >
                   <td className="py-4 px-6">{product.product_name}</td>
                   <td className="py-4 px-6 text-nowrap">৳ {product.price}</td>
@@ -162,7 +160,6 @@ const ProductTable = () => {
                   <td className="py-4 px-6">
                     {getSubCategoryName(product.sub_category)}
                   </td>
-
                   <td className="py-4 px-6">{product.sku}</td>
                   <td className="py-4 px-6">{product.product_condition}</td>
                   <td className="py-4 px-6">
@@ -170,23 +167,22 @@ const ProductTable = () => {
                   </td>
                   <td className="py-4 px-6 flex justify-center items-center gap-4">
                     <Link to={`/dashboard/update-product/${product.id}`}>
-                      <button className="text-blue-500 hover:text-blue-700">
+                      <button className="text-blue-400 hover:text-blue-600">
                         <FaEdit size={18} />
                       </button>
                     </Link>
-
                     <button
                       onClick={() =>
                         handleDelete(product.id, product.image_urls)
                       }
-                      className="text-red-500 hover:text-red-700"
+                      className="text-red-400 hover:text-red-600"
                       title="Delete"
                     >
                       <FaTrash size={18} />
                     </button>
                     <button
                       onClick={() => handleView(product)}
-                      className="text-green-500 hover:text-green-700"
+                      className="text-green-400 hover:text-green-600"
                       title="View"
                     >
                       <FaEye size={18} />
@@ -197,8 +193,8 @@ const ProductTable = () => {
             ) : (
               <tr>
                 <td
-                  colSpan="7"
-                  className="bg-gray-300 dark:bg-gray-50 dark:text-black text-center p-4"
+                  colSpan="8"
+                  className="bg-gray-800 text-center p-4 text-white"
                 >
                   No Product found.
                 </td>
@@ -208,21 +204,21 @@ const ProductTable = () => {
         </table>
       </div>
 
-      {/* Modal for View Product */}
+      {/* Modal */}
       <Modal
         isOpen={isModalOpen}
         onRequestClose={() => setIsModalOpen(false)}
         contentLabel="Product Details"
-        className="bg-white dark:bg-gray-800 p-8 rounded-md shadow-lg max-w-2xl mx-auto my-20 max-h-[80vh] overflow-y-auto"
-        overlayClassName="fixed inset-0 bg-black  bg-opacity-60 flex justify-center items-center"
+        className="bg-gray-900 p-8 rounded-md shadow-lg max-w-2xl mx-auto my-20 max-h-[80vh] overflow-y-auto text-white"
+        overlayClassName="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center"
       >
         {viewProduct && (
-          <div className="text-gray-700 dark:text-gray-300 space-y-4">
+          <div className="space-y-4">
             <h2 className="text-2xl font-bold mb-4">
               {viewProduct.product_name}
             </h2>
             <p>
-              <strong>price:</strong> ৳ {viewProduct.price}
+              <strong>Price:</strong> ৳ {viewProduct.price}
             </p>
             <p>
               <strong>Category:</strong> {getCategoryName(viewProduct.category)}
@@ -238,11 +234,10 @@ const ProductTable = () => {
               <strong>Condition:</strong> {viewProduct.product_condition}
             </p>
             <p>
-              <strong>Brand:</strong>
-              {getBrandName(viewProduct.brand_name)}
+              <strong>Brand:</strong> {getBrandName(viewProduct.brand_name)}
             </p>
             <div>
-              <strong>Overview:</strong>{" "}
+              <strong>Overview:</strong>
               <article
                 dangerouslySetInnerHTML={{
                   __html: DOMPurify.sanitize(viewProduct.product_overview),
@@ -272,7 +267,6 @@ const ProductTable = () => {
                 </a>
               </p>
             )}
-            {/* Images */}
             <div className="grid grid-cols-2 gap-4 mt-4">
               {Array.isArray(viewProduct.image_urls) &&
                 viewProduct.image_urls.map((img, idx) => (
@@ -284,7 +278,6 @@ const ProductTable = () => {
                   />
                 ))}
             </div>
-
             <button
               onClick={() => setIsModalOpen(false)}
               className="mt-6 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"

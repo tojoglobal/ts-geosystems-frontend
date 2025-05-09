@@ -1,8 +1,8 @@
 export default function PromoCodeList({ data, onEdit, onDelete }) {
   return (
-    <table className="min-w-full text-sm text-left border mt-6">
-      <thead className="bg-gray-200">
-        <tr className="text-gray-800">
+    <table className="min-w-full text-sm text-left border border-gray-600 mt-6">
+      <thead>
+        <tr>
           <th className="px-4 py-2">Title</th>
           <th className="px-4 py-2">Code</th>
           <th className="px-4 py-2">Times</th>
@@ -14,7 +14,7 @@ export default function PromoCodeList({ data, onEdit, onDelete }) {
       </thead>
       <tbody>
         {data.map((promo) => (
-          <tr key={promo.id} className="border-t">
+          <tr key={promo.id} className="border-t border-gray-600">
             <td className="px-4 py-2">{promo.title}</td>
             <td className="px-4 py-2">{promo.code_name}</td>
             <td className="px-4 py-2">{promo.no_of_times}</td>

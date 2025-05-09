@@ -8,10 +8,10 @@ import {
   Sun,
   Moon,
 } from "lucide-react";
-import { useAppContext } from "../../context/useAppContext";
+// import { useAppContext } from "../../context/useAppContext";
 
 const TopMenuBar = ({ toggleMobileSidebar, collapsed, toggleSidebar }) => {
-  const { darkMode, toggleDarkMode } = useAppContext();
+  // const { darkMode, toggleDarkMode } = useAppContext();
   const handleFullscreen = () => {
     if (!document.fullscreenElement) {
       document.documentElement.requestFullscreen();
@@ -45,7 +45,7 @@ const TopMenuBar = ({ toggleMobileSidebar, collapsed, toggleSidebar }) => {
             <input
               type="text"
               placeholder="Search..."
-              className="bg-gray-700 dark:bg-gray-800 text-sm text-white dark:text-white px-3 py-1 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
+              className="bg-gray-700 w-52 dark:bg-gray-800 text-sm text-white dark:text-white px-3 py-1 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
             />
             <Search
               size={16}
@@ -56,7 +56,7 @@ const TopMenuBar = ({ toggleMobileSidebar, collapsed, toggleSidebar }) => {
 
         {/* Notification Icon */}
         <button className="relative text-gray-300 dark:text-gray-400 hover:text-white dark:hover:text-white">
-          <Bell size={20} />
+          <Bell size={22} />
           <span className="absolute top-0 right-0 inline-block w-2.5 h-2.5 bg-red-500 rounded-full"></span>
         </button>
 
@@ -65,20 +65,20 @@ const TopMenuBar = ({ toggleMobileSidebar, collapsed, toggleSidebar }) => {
           onClick={handleFullscreen}
           className="text-gray-300 dark:text-gray-400 hover:text-white dark:hover:text-white"
         >
-          <Maximize2 size={20} />
+          <Maximize2 size={22} />
         </button>
 
         {/* Dark Mode Toggle */}
-        <button
+        {/* <button
           onClick={toggleDarkMode}
           className="text-gray-300 dark:text-gray-400 hover:text-white dark:hover:text-white"
         >
           {darkMode ? <Sun size={20} /> : <Moon size={20} />}
-        </button>
+        </button> */}
 
         {/* Settings Icon */}
         <button className="text-gray-300 dark:text-gray-400 hover:text-white dark:hover:text-white">
-          <Settings size={20} />
+          <Settings size={23} />
         </button>
       </div>
     </div>

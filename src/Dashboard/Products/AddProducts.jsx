@@ -173,17 +173,17 @@ const ProductAddForm = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#f1f4ff] dark:bg-gray-800 p-4">
+    <div className="min-h-screen p-4">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="p-6 grid grid-cols-1 md:grid-cols-3 gap-6  text-gray-900 dark:text-gray-100"
+        className="p-6 grid grid-cols-1 md:grid-cols-3 gap-6"
       >
         {/* Image Upload Column */}
         <div className="col-span-1">
           <label className="block mb-2 font-medium">Upload Images</label>
           <div
             {...getRootProps()}
-            className="border-2 border-dashed border-gray-300 rounded-md p-6 text-center cursor-pointer hover:border-teal-500"
+            className="border-2 border-dashed border-gray-600 rounded-md p-6 text-center cursor-pointer hover:border-teal-500"
           >
             <input {...getInputProps()} />
             <p>
@@ -209,11 +209,11 @@ const ProductAddForm = () => {
             <input
               {...register("productName", { required: true })}
               placeholder="Product Name"
-              className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
+              className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
             />
             <select
               {...register("brandName", { required: true })}
-              className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
+              className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
             >
               <option value="" className="hover:bg-amber-200">
                 Select Brand
@@ -226,7 +226,7 @@ const ProductAddForm = () => {
             </select>
             <select
               {...register("category", { required: true })}
-              className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
+              className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
             >
               <option value="" className="hover:bg-amber-200">
                 Select Category
@@ -243,7 +243,7 @@ const ProductAddForm = () => {
 
             <select
               {...register("subCategory", { required: true })}
-              className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
+              className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
             >
               <option value="">Select Sub Category</option>
               {subCategories
@@ -261,12 +261,12 @@ const ProductAddForm = () => {
             <input
               {...register("sku", { required: true })}
               placeholder="SKU / Unique Code"
-              className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
+              className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
             />
             <input
               {...register("videoUrls")}
               placeholder="YouTube Video URLs (comma separated)"
-              className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
+              className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
             />
           </div>
           {/* Third Column */}
@@ -274,19 +274,17 @@ const ProductAddForm = () => {
             <input
               {...register("price", { required: true })}
               placeholder="price"
-              className="w-full input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
+              className="w-full input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
             />
 
-            {/* NEW FIELD: Price Show/Hide */}
+            {/* Price Show/Hide */}
             <div className="flex items-center gap-2">
               <input
                 type="checkbox"
-                // {...register("priceShowHide")}
                 checked={watch("priceShowHide") === 1}
                 onChange={(e) =>
                   setValue("priceShowHide", e.target.checked ? 1 : 0)
                 }
-                // value="1"
                 className="w-5 h-5 accent-teal-600"
               />
               <label>Hide Price</label>
@@ -311,7 +309,7 @@ const ProductAddForm = () => {
                       backgroundColor: "rgb(255, 255, 255)", // Tailwind: dark:bg-gray-800
                       borderColor: state.isFocused
                         ? "#14b8a6"
-                        : "rgb(75 85 99)", // Tailwind: focus:border-teal-500, dark:border-gray-600
+                        : "rgb(75 85 99)",
                       color: "white",
                       boxShadow: state.isFocused ? "0 0 0 1px #14b8a6" : "none",
                     }),
@@ -351,7 +349,8 @@ const ProductAddForm = () => {
                 />
               )}
             />
-            {/* NEW FIELD: Product Option Show/Hide */}
+
+            {/* Product Option Show/Hide */}
             <div className="flex items-center gap-2">
               <input
                 type="checkbox"
@@ -365,7 +364,8 @@ const ProductAddForm = () => {
               />
               <label>Hide Product Options</label>
             </div>
-            {/* softaware option */}
+
+            {/* software option */}
             <Controller
               name="softwareOptions"
               control={control}
@@ -384,7 +384,7 @@ const ProductAddForm = () => {
                       backgroundColor: "rgb(255, 255, 255)", // Tailwind: dark:bg-gray-800
                       borderColor: state.isFocused
                         ? "#14b8a6"
-                        : "rgb(75 85 99)", // Tailwind: focus:border-teal-500, dark:border-gray-600
+                        : "rgb(75 85 99)",
                       color: "white",
                       boxShadow: state.isFocused ? "0 0 0 1px #14b8a6" : "none",
                     }),
@@ -427,7 +427,7 @@ const ProductAddForm = () => {
 
             <select
               {...register("condition", { required: true })}
-              className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
+              className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
             >
               <option value="">Condition</option>
               <option value="new">New</option>
@@ -438,7 +438,7 @@ const ProductAddForm = () => {
             {/* Tax selection field */}
             <select
               {...register("tax", { required: true })}
-              className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
+              className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
             >
               <option value="">Select Tax</option>
               {taxes.map((tax) => (
@@ -490,12 +490,11 @@ const ProductAddForm = () => {
                 />
               )}
             />
-
             {/* <textarea
               {...register("warrantyInfo")}
               placeholder="Warranty Information"
-              className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
-            /> */}
+              className="input border border-gray-600 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
+            /> */}{" "}
           </div>
           <div className="col-span-1 space-y-4">
             <Button text={"Submit Product"} />
@@ -509,7 +508,7 @@ const ProductAddForm = () => {
 export default ProductAddForm;
 
 // Tailwind common input class
-const inputClass = `block w-full rounded-md border border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 p-2 text-sm bg-white dark:bg-gray-800 dark:text-white`;
+const inputClass = `block w-full rounded-md border border-gray-600 shadow-sm focus:border-teal-500 focus:ring-teal-500 p-2 text-sm`;
 const style = document.createElement("style");
 style.innerHTML = `.input { ${inputClass} }`;
 document.head.appendChild(style);

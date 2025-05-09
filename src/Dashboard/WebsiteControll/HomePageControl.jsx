@@ -105,7 +105,7 @@ const HomePageControl = () => {
         {COMPONENT_ORDER.map((component, idx) => (
           <label
             key={component}
-            className="border rounded-md p-3 cursor-pointer select-none"
+            className="border border-gray-600 rounded-md p-3 cursor-pointer select-none"
           >
             <div className="flex items-center space-x-3">
               <input
@@ -143,13 +143,13 @@ const HomePageControl = () => {
             Dynamic sections on the home page. Changes affect all visitors.
           </p>
         </div>
-        <div className="border" />
+        <div className="border border-gray-500" />
         <SlideContorols />
-        <div className="border" />
+        <div className="border border-gray-500" />
         <Promo_product_banner_02 key="1" />
-        <div className="border" />
+        <div className="border border-gray-500" />
         <Feature_highlight_banner_03_left_01 key="2" />
-        <div className="border" />
+        <div className="border border-gray-500" />
         <SingleImages />
       </div>
     </div>

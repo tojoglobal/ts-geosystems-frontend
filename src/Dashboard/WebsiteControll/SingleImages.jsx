@@ -68,7 +68,7 @@ const SingleImages = () => {
           images.map((image) => (
             <div
               key={image.id}
-              className="relative border p-4 rounded-md shadow-md bg-gray-800"
+              className="relative border border-gray-500 p-4 rounded-md shadow-md bg-gray-800"
             >
               <div className="absolute top-2 right-2">
                 <button
