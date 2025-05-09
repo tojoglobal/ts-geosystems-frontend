@@ -103,25 +103,25 @@ const Hire = () => {
           Hire
         </Link>
       </div>
-      <h1 className="text-4xl font-light text-[#e62245] mb-8">HIRE</h1>
-      <div className="max-w-2xl mx-auto flex flex-col md:flex-row justify-between gap-6 mb-5">
+      <h1 className="text-3xl font-light text-[#e62245] mb-[72px]">HIRE</h1>
+      <div className="flex flex-row justify-between mb-5">
         <Link
           to="/hire-enquiry"
-          className="bg-[#e62245] flex items-center gap-2 text-white px-6 py-2 rounded-md shadow-md hover:bg-[#c81e3c] transition"
+          className="ml-14 md:ml-56 bg-[#e62245] flex items-center gap-2 text-white px-[18.5px] py-[7.66667px] rounded-[4px] shadow-xl hover:bg-[#c81e3c] transition-all text-[13px] font-medium"
         >
           <FaRegFileLines />
           Hire Enquiry
         </Link>
         <Link
           to="/credit-application"
-          className="bg-[#e62245] flex items-center gap-2 text-white px-6 py-2 rounded-md shadow-md hover:bg-[#c81e3c] transition"
+          className="mr-14 md:mr-40 bg-[#e62245] flex items-center gap-2 text-white px-[18.5px] py-[7.66667px] rounded-[4px] shadow-xl hover:bg-[#c81e3c] transition-all text-[13px] font-medium"
         >
           <FaFileAlt />
           Credit Account Application
         </Link>
       </div>
-      <div className="space-y-6 text-gray-700 border-t pt-6">
-        <h2 className="text-xl font-semibold">{hireContent?.title}</h2>
+      <div className="space-y-6 text-gray-700 border-t pt-4 border-gray-200">
+        <h2 className="text-lg font-semibold">{hireContent?.title}</h2>
         <div
           dangerouslySetInnerHTML={{ __html: hireContent?.description }}
         ></div>
@@ -131,7 +131,7 @@ const Hire = () => {
         dangerouslySetInnerHTML={{ __html: hireContent?.infoBox }}
       ></div>
       <div className="max-w-3xl mx-auto my-12">
-        <h2 className="text-2xl font-semibold mb-2">Hire Enquiry Form</h2>
+        <h2 className="text-3xl font-semibold mb-2">Hire Enquiry Form</h2>
         <p className="mb-6">
           Please fill in the form, together with your any specific requirements,
           <br />
@@ -358,15 +358,35 @@ const Hire = () => {
                   >
                     Hire Start Date <span className="text-red-500">*</span>
                   </label>
-                  <input
-                    type="date"
-                    id="hireDate"
-                    name="hireDate"
-                    value={formData.hireDate}
-                    onChange={handleInputChange}
-                    className="w-full border border-gray-300 rounded p-2 focus:outline-none focus:ring focus:ring-[#e62245]"
-                    required
-                  />
+                  <div className="relative">
+                    <input
+                      type="date"
+                      id="hireDate"
+                      name="hireDate"
+                      value={formData.hireDate}
+                      onChange={handleInputChange}
+                      className="w-full border border-gray-300 rounded p-2 focus:outline-none focus:ring-2 focus:ring-[#e62245] focus:border-transparent bg-white cursor-pointer"
+                      required
+                      style={{
+                        colorScheme: 'light',
+                      }}
+                    />
+                    <div className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                      <svg
+                        className="h-5 w-5 text-gray-400"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                        />
+                      </svg>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Hire Period - Right Side */}
@@ -418,7 +438,7 @@ const Hire = () => {
               <div className="flex justify-center">
                 <button
                   type="submit"
-                  className="bg-[#e62245] text-white px-7 py-2 rounded hover:bg-[#d41d3f] transition-colors"
+                  className="bg-[#e62245] text-white px-[29px] py-[7px] rounded hover:bg-[#e62225] transition-colors"
                 >
                   Submit
                 </button>
