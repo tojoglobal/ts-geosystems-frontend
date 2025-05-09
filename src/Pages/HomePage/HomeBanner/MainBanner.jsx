@@ -91,13 +91,13 @@ const MainBanner = () => {
         <FaChevronRight />
       </div>
       <Swiper
-        modules={[Navigation, Pagination, Autoplay, EffectFade]}
+        modules={[Navigation, Pagination, EffectFade]}
         navigation={{
           prevEl: ".custom-prev",
           nextEl: ".custom-next",
         }}
         pagination={{ clickable: true }}
-        autoplay={{ delay: 10000 }}
+        // autoplay={{ delay: 10000 }}
         loop={true}
         effect="fade"
         fadeEffect={{ crossFade: true }}
