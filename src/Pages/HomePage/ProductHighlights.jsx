@@ -200,8 +200,8 @@ const ProductHighlights = () => {
   return (
     <div className="max-w-[1370px] mx-auto rounded-md px-3 md:px-0 py-6 md:py-12 bg-white relative">
       {/* Tab Header */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between border border-gray-200 rounded-l-[3px] relative">
-        <div className="flex flex-col md:flex-row gap-3 sm:gap-6 px-3 py-[2px]">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between border border-gray-200 rounded-l-[4px] relative">
+        <div className="flex flex-col md:flex-row gap-3 sm:gap-4 px-3 py-[2px]">
           {tabOptions.map((tab) => (
             <div
               key={tab.key}
@@ -209,13 +209,13 @@ const ProductHighlights = () => {
               className="relative group cursor-pointer"
             >
               <h2
-                className={`p-2 text-base uppercase sm:text-xl font-semibold w-fit pr-3 border-r border-gray-200 ${
+                className={`text-base py-1 uppercase text-[20px] font-semibold w-fit pr-4 border-r border-gray-200 ${
                   activeTab === tab.key ? "text-[#e62245]" : "text-black"
                 }`}
               >
                 {tab.name}
               </h2>
-              <span className="absolute -left-3 -bottom-[5px] h-[4px] bg-[#e62245] transition-all duration-300 w-0 group-hover:w-full" />
+              <span className="absolute -left-3 -bottom-[3px] h-[4px] bg-[#e62245] transition-all duration-300 w-0 group-hover:w-full" />
             </div>
           ))}
         </div>
@@ -278,7 +278,7 @@ const ProductHighlights = () => {
         >
           {items.map((item, idx) => (
             <SwiperSlide key={idx}>
-              <div className="relative flex flex-col items-center rounded-md shadow-sm bg-white">
+              <div className="relative flex flex-col items-center bg-white h-full">
                 {activeTab !== "featured" && (
                   <p className="absolute top-2 right-2 px-2 py-[2px] rounded-md text-white bg-[#e62245] z-50">
                     SALE
@@ -298,17 +298,19 @@ const ProductHighlights = () => {
                     />
                   </div>
                 </Link>
-                <div className="w-full border-t pt-3">
+                <div className="w-full border-t border-gray-200 pt-2 flex flex-col flex-grow">
                   <p className="text-xs text-gray-700">
                     Total Station | Sku: 65dVv8Jr8fe
                   </p>
-                  <Link
-                    to={item?.productUrl}
-                    className="font-semibold text-sm text-gray-600 mt-1"
-                  >
-                    {item.name}
-                  </Link>
-                  <div className="mt-2 space-x-2">
+                  <div className="min-h-[48px] flex items-start">
+                    <Link
+                      to={item?.productUrl}
+                      className="font-semibold text-sm text-gray-600"
+                    >
+                      {item.name}
+                    </Link>
+                  </div>
+                  <div className="space-x-2">
                     <span className="text-sm font-bold text-[#222]">
                       ৳{item.price}
                     </span>
@@ -316,9 +318,8 @@ const ProductHighlights = () => {
                       ৳{item.discountPrice}
                     </span>
                   </div>
-                  <div className="flex items-center gap-1 text-sm text-[#b3b3b5] mt-1">
-                    £11994.00
-                    <span className="underline">(Inc. VAT)</span>
+                  <div className="flex items-center gap-1 text-sm text-[#b3b3b5]">
+                    £11994.00 <span className="underline">(Inc. VAT)</span>
                   </div>
                   <button className="mt-1 bg-[#e62245] hover:bg-[#c91d3a] text-white text-sm font-semibold py-[6px] px-4 rounded w-full">
                     ADD TO CART
