@@ -28,7 +28,7 @@ const ProductDetails = () => {
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["product", id],
+    queryKey: ["productDetails", id],
     queryFn: async () => {
       const res = await axiosPublicUrl.get(`/api/products/${id}`);
       return res.data;
@@ -182,7 +182,6 @@ const ProductDetails = () => {
               </button>
             </p> */}
             <hr className="border-t border-gray-300 my-3" />
-
             <div className="text-sm text-[#222] mb-1">
               <strong>SKU:</strong>{" "}
               <span className="text-[#e62245]">{product.sku || "N/A"}</span>
@@ -193,12 +192,17 @@ const ProductDetails = () => {
                 {product.product_condition || "New"}
               </span>
             </div>
-            <div className="text-sm text-[#222] mb-3">
+            <div className="text-sm text-[#222] mb-1">
               <strong>Shipping:</strong>{" "}
               <span className="text-[#e62245]">Calculated at Checkout</span>
             </div>
-
-            <div className="flex items-center gap-4 mb-4">
+            <div className="text-sm text-[#222] mb-1">
+              <strong>Brand:</strong>{" "}
+              <span className="text-[#e62245]">
+                {product.brand_name || "N/A"}
+              </span>
+            </div>
+            <div className="flex items-center gap-4 my-5">
               <label className="text-sm text-[#111] font-medium">
                 Quantity:
               </label>
@@ -270,7 +274,7 @@ const ProductDetails = () => {
                   <span
                     className={`absolute ${
                       idx === 2 ? "-left-2" : "left-0"
-                    } -bottom-[3px] h-[5px] bg-[#e62245] transition-all duration-300 w-0 group-hover:w-full`}
+                    } -bottom-[3px] h-[6px] bg-[#e62245] transition-all duration-300 w-0 group-hover:w-full`}
                   />
                 </div>
               )
