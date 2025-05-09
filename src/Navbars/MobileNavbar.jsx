@@ -140,7 +140,7 @@ const MobileNavbar = () => {
             <button onClick={toggleSearch}>
               <IoSearchOutline className="text-2xl text-red-600" />
             </button>
-            <Link to="/login">
+            <Link to="/user/login">
               <LuUserRound className="text-2xl text-red-600" />
             </Link>
             {/* Cart Icon with badge */}

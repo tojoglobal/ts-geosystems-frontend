@@ -215,7 +215,7 @@ const MainNavContainer = () => {
                       <IoSearchOutline className="text-[#e62245] text-[20px] absolute right-3" />
                     </div>
                     {/* User Icon */}
-                    <Link to="/login">
+                    <Link to="/user/login">
                       <LuUserRound className="text-[23px] text-davy-gray hover:text-crimson-red font-medium cursor-pointer duration-300 ease-in" />
                     </Link>
                     {/* Cart Icon with badge */}

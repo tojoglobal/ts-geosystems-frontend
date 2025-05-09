@@ -141,7 +141,7 @@ const Login = () => {
             ))}
           </ul>
           <Link
-            to="/create-account"
+            to="/user/create_account"
             className="inline-block bg-[#e62245] text-white px-6 py-2 rounded hover:bg-[#d11a3b] text-sm"
           >
             CREATE ACCOUNT

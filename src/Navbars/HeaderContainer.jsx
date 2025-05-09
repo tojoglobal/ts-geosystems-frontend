@@ -38,7 +38,7 @@ const HeaderContainer = () => {
             <IoSearchOutline className="text-[#e62245] text-[28px] absolute right-2" />
           </div>
           {/* User */}
-          <Link to="/login">
+          <Link to="/user/login">
             <LuUserRound className="text-[36px] text-davy-gray hover:text-crimson-red cursor-pointer" />
           </Link>
           {/* Cart with Popover */}

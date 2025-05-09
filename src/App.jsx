@@ -75,8 +75,8 @@ const AppLayout = () => {
       <Routes location={location} key={location.pathname}>
         <Route path="/" element={<MainHome />} />
         {/* Auth Routes */}
-        <Route path="/login" element={<Login />} />
-        <Route path="/create_account" element={<Register />} />
+        <Route path="/user/login" element={<Login />} />
+        <Route path="/user/create_account" element={<Register />} />
         <Route path="/cc" element={<CertificateTracking />} />
         <Route path="/remote-support" element={<RemoteSupport />} />
         <Route path="/checkout" element={<Checkout />} />
