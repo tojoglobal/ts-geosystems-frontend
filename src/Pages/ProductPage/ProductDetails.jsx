@@ -8,6 +8,8 @@ import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import { useDispatch } from "react-redux";
+import { MdOutlineKeyboardArrowDown } from "react-icons/md";
+import { MdOutlineKeyboardArrowUp } from "react-icons/md";
 import { addToCart } from "../../features/AddToCart/AddToCart";
 import { parsePrice } from "../../utils/parsePrice";
 
@@ -26,7 +28,7 @@ const ProductDetails = () => {
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["product", id],
+    queryKey: ["productDetails", id],
     queryFn: async () => {
       const res = await axiosPublicUrl.get(`/api/products/${id}`);
       return res.data;
@@ -67,10 +69,6 @@ const ProductDetails = () => {
   const imageUrls = product?.image_urls ? JSON.parse(product.image_urls) : [];
   // Parse video URLs if available
   const videoUrls = product?.video_urls ? product.video_urls.split(",") : [];
-  // Parse product options if available
-  const productOptions = product?.product_options
-    ? JSON.parse(product.product_options)
-    : [];
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -85,19 +83,14 @@ const ProductDetails = () => {
     setSelectedImage(imageUrls[0]);
   }
 
-  const handleReadMoreClick = () => {
-    setActiveTab("OVERVIEW");
-    overviewRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
-
   return (
     <div className="bg-white p-3">
-      <div className="max-w-[1370px] mx-auto pt-10">
-        <div className="flex flex-col md:flex-row gap-8">
+      <div className="max-w-[1370px] mx-auto">
+        <div className="flex flex-col md:flex-row gap-5">
           {/* Image Gallery */}
-          <div className="flex flex-col items-start gap-4 relative">
+          <div className="flex flex-col items-start gap-2 relative">
             {/* Badges */}
-            <div className="absolute top-2 left-2 z-10">
+            {/* <div className="absolute top-2 left-2 z-10">
               <div className="flex flex-col gap-2">
                 <span className="bg-[#ffa000] text-white text-xs px-2 py-1 rounded">
                   Featured
@@ -108,8 +101,8 @@ const ProductDetails = () => {
                   </span>
                 ) : null}
               </div>
-            </div>
-            <div className="w-[550px] h-[550px] border rounded-xl overflow-hidden">
+            </div> */}
+            <div className="w-[550px] h-[550px] overflow-hidden">
               <Swiper
                 spaceBetween={0}
                 slidesPerView={1}
@@ -154,20 +147,29 @@ const ProductDetails = () => {
           </div>
           {/* Product Info */}
           <div className="flex-1">
-            <h1 className="text-3xl text-black font-semibold mb-4">
+            <h1 className="text-[28px] font-semibold text-[#333] mb-4">
               {product.product_name}
             </h1>
-            <div className="flex items-center gap-2">
-              {!!product.priceShowHide && (
-                <div className="mb-2 text-xl line-through text-gray-400">
-                  ৳{parsePrice(product.price)}.00
-                </div>
-              )}
-              <div className="mb-4 text-3xl text-[#e62245] font-bold">
-                ৳{parsePrice(product.price)}.00
+            <p className="text-[#d71a28] text-sm mb-2 capitalize">
+              {product.brand_name || "Brand"}
+            </p>
+            <div className="mb-2">
+              <div className="text-[24px] font-semibold text-[#222]">
+                Price:{" "}
+                <span className="text-[#111]">
+                  ৳{parsePrice(product.price)}.00{" "}
+                  <span className="text-sm text-gray-500">(Ex. VAT)</span>
+                </span>
+              </div>
+              <div className="text-[24px] font-semibold text-[#999] line-through">
+                Price:{" "}
+                <span className="text-[#999]">
+                  ৳{(parsePrice(product.price) * 1.2).toFixed(2)}{" "}
+                  <span className="text-sm text-gray-400">(Inc. VAT)</span>
+                </span>
               </div>
             </div>
-            <p className="text-[#8d7f90] text-lg mb-4">
+            {/* <p className="text-[#8d7f90] text-lg mb-4">
               {product.product_overview &&
                 product.product_overview
                   .replace(/<[^>]+>/g, "")
@@ -178,73 +180,53 @@ const ProductDetails = () => {
               >
                 Read more
               </button>
-            </p>
-            <div className="mb-2 text-[#8d7f90] border-t border-[#d3d3d3]">
+            </p> */}
+            <hr className="border-t border-gray-300 my-3" />
+            <div className="text-sm text-[#222] mb-1">
               <strong>SKU:</strong>{" "}
               <span className="text-[#e62245]">{product.sku || "N/A"}</span>
             </div>
-            <div className="mb-1 text-[#8d7f90]">
-              <strong>Brand:</strong>{" "}
-              <span className="text-[#e62245] capitalize">
-                {product.brand_name || "N/A"}
-              </span>
-            </div>
-            <div className="mb-1 text-[#8d7f90]">
-              <strong>Categories:</strong>
-              <span className="text-[#e62245] capitalize">
-                {" "}
-                {product.category ? JSON.parse(product.category).cat : "N/A"}
-                {product.sub_category
-                  ? JSON.parse(product.sub_category).cat
-                  : "N/A"}
-              </span>
-            </div>
-            <div className="mb-1 text-[#8d7f90]">
-              <strong>Condition:</strong>
-              <span className="text-[#e62245] capitalize">
+            <div className="text-sm text-[#222] mb-1">
+              <strong>Condition:</strong>{" "}
+              <span className="text-[#e62245]">
                 {product.product_condition || "New"}
               </span>
             </div>
-            {/* Product Options */}
-            {productOptions.length > 0 && (
-              <div className="mb-6 text-[#8d7f90] flex gap-4">
-                <div className="space-y-6">
-                  {productOptions.map((option, index) => (
-                    <div key={index} className="w-40">
-                      <label className="block mb-2 text-gray-600 font-medium">
-                        {option.label}
-                      </label>
-                      <select className="w-full appearance-none border border-gray-300 rounded py-[6px] px-3 text-gray-600 focus:outline-none focus:border-[#e62245]">
-                        <option>{option.value}</option>
-                      </select>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-            <div className="flex items-center gap-4 mb-6">
-              <label className="text-gray-600 font-medium">Quantity:</label>
+            <div className="text-sm text-[#222] mb-1">
+              <strong>Shipping:</strong>{" "}
+              <span className="text-[#e62245]">Calculated at Checkout</span>
+            </div>
+            <div className="text-sm text-[#222] mb-1">
+              <strong>Brand:</strong>{" "}
+              <span className="text-[#e62245]">
+                {product.brand_name || "N/A"}
+              </span>
+            </div>
+            <div className="flex items-center gap-4 my-5">
+              <label className="text-sm text-[#111] font-medium">
+                Quantity:
+              </label>
               <div className="flex items-center border border-gray-300 rounded">
                 <button
                   onClick={decrementQuantity}
-                  className="px-4 py-2 text-gray-600 hover:bg-gray-100 transition-colors"
+                  className="px-[5px] py-[2px] text-gray-600 hover:bg-gray-100 transition-colors"
                 >
-                  -
+                  <MdOutlineKeyboardArrowDown />
                 </button>
-                <span className="px-6 py-2 border-x border-gray-300 text-gray-600">
+                <span className="px-[5px] py-[2px] border-x border-gray-300 text-gray-600">
                   {quantity}
                 </span>
                 <button
                   onClick={incrementQuantity}
-                  className="px-4 py-2 text-gray-600 hover:bg-gray-100 transition-colors"
+                  className="px-[5px] py-[2px] text-gray-600 hover:bg-gray-100 transition-colors"
                 >
-                  +
+                  <MdOutlineKeyboardArrowUp />
                 </button>
               </div>
             </div>
             <button
               onClick={handleAddToCart}
-              className="relative overflow-hidden group text-white px-16 font-semibold py-[6px] rounded-[3px] text-[17px] bg-[#e62245]"
+              className="relative overflow-hidden group text-white px-16 font-semibold py-[5px] rounded-[3px] text-[17px] bg-[#e62245]"
             >
               <span className="absolute left-0 top-0 h-full w-0 bg-black transition-all duration-500 ease-out group-hover:w-full z-0"></span>
               <span className="relative z-10">ADD TO CART</span>
@@ -270,20 +252,31 @@ const ProductDetails = () => {
         </div>
         {/* Tabs */}
         <div className="mt-12" ref={overviewRef}>
-          <div className="flex gap-2 border-t border-l border-r border-gray-300 rounded-[3px] overflow-hidden">
+          <div className="flex gap-2 border-t border-l border-r border-gray-300 rounded-[4px] overflow-hidden">
             {["OVERVIEW", "SPECIFICATIONS", "PRODUCT VIDEOS"].map(
               (tab, idx) => (
-                <button
+                <div
                   key={tab}
+                  className={`relative group px-4 py-2 cursor-pointer ${
+                    idx === 1 ? "border-x border-gray-300" : ""
+                  }`}
                   onClick={() => setActiveTab(tab)}
-                  className={`text-base md:text-lg font-semibold px-4 py-2 transition-colors duration-200 ${
-                    activeTab === tab
-                      ? "text-[#e62245]"
-                      : "text-gray-600 hover:text-[#e62245]"
-                  } ${idx === 1 ? "border-x border-gray-300" : ""}`}
                 >
-                  {tab}
-                </button>
+                  <span
+                    className={`text-[20px] font-semibold transition-colors duration-200 ${
+                      activeTab === tab
+                        ? "text-[#e62245]"
+                        : "text-gray-600 group-hover:text-[#e62245]"
+                    }`}
+                  >
+                    {tab}
+                  </span>
+                  <span
+                    className={`absolute ${
+                      idx === 2 ? "-left-2" : "left-0"
+                    } -bottom-[3px] h-[6px] bg-[#e62245] transition-all duration-300 w-0 group-hover:w-full`}
+                  />
+                </div>
               )
             )}
           </div>

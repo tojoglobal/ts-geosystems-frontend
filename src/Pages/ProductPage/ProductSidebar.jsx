@@ -120,8 +120,8 @@ const ProductSidebar = () => {
         ) : (
           <div
             key={item.label}
-            className={`bg-[#ebebeb] font-bold rounded-[3px] text-[13px] text-black ${
-              index !== 0 ? "mt-[6px]" : ""
+            className={`bg-[#ebebeb] font-bold rounded-[4px] text-[13px] text-black ${
+              index !== 0 ? "mt-[5px]" : ""
             }`}
           >
             {item.children !== null && item.children.length > 0 ? (
@@ -171,7 +171,7 @@ const ProductSidebar = () => {
             ) : (
               <Link
                 to={item.link}
-                className={`block p-3 hover:text-[#e62245] font-medium hover:underline ${
+                className={`block p-[11px] hover:text-[#e62245] font-medium hover:underline ${
                   item.link === `/${category}` ? "text-[#e62245] font-bold" : ""
                 }`}
               >
@@ -181,11 +181,11 @@ const ProductSidebar = () => {
           </div>
         )
       )}
-      <div className="mt-6">
+      <div className="mt-6 overflow-hidden rounded-sm">
         <img
           src="https://ts-geosystems.com.bd/assets/images/6enPbrand-leica-adsp.png"
           alt="Leica Authorized Distributor"
-          className="w-full"
+          className="w-full transition-transform duration-1000 hover:scale-110"
         />
       </div>
     </div>

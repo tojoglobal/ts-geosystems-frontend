@@ -66,10 +66,10 @@ const Footer = () => {
           <div className="flex mb-4">
             <input
               type="email"
-              defaultValue="Your E-mail"
-              className="w-full p-2 text-black bg-white rounded-l-md"
+              placeholder="Your E-mail"
+              className="w-full p-2 placeholder:italic text-black bg-white rounded-l-sm"
             />
-            <button className="bg-[#af1334] px-4 py-2 rounded-r-md font-medium">
+            <button className="bg-[#af1334] px-4 py-2 rounded-r-sm font-medium">
               JOIN
             </button>
           </div>

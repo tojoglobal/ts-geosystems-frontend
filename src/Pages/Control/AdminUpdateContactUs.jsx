@@ -51,6 +51,12 @@ const AdminUpdateContactUs = () => {
       phoneNumbers: [{ value: "" }],
       emails: [{ value: "" }],
       officeAddresses: [{ value: "" }],
+      socialLinks: {
+        facebook: "",
+        twitter: "",
+        youtube: "",
+        instagram: "",
+      },
     },
   });
 
@@ -68,6 +74,12 @@ const AdminUpdateContactUs = () => {
           contactData.officeAddresses.length > 0
             ? contactData.officeAddresses
             : [{ value: "" }],
+        socialLinks: contactData.socialLinks || {
+          facebook: "",
+          twitter: "",
+          youtube: "",
+          instagram: "",
+        },
       });
     }
   }, [contactData, reset]);
@@ -126,6 +138,7 @@ const AdminUpdateContactUs = () => {
       officeAddresses: data.officeAddresses.filter(
         (item) => item.value.trim() !== ""
       ),
+      socialLinks: data.socialLinks, // Include socialLinks in the submitted data
     };
 
     // Ensure at least one entry remains after filtering
@@ -281,7 +294,47 @@ const AdminUpdateContactUs = () => {
             )}
           </div>
         </div>
-
+        <div>
+          <h2 className="text-lg font-semibold">Social Media Links</h2>
+          <div className="space-y-4">
+            <div className="flex items-center gap-4">
+              <label className="w-24">Facebook:</label>
+              <input
+                type="url"
+                {...register("socialLinks.facebook")}
+                placeholder="https://facebook.com/yourpage"
+                className="border p-2 rounded flex-1"
+              />
+            </div>
+            <div className="flex items-center gap-4">
+              <label className="w-24">Twitter:</label>
+              <input
+                type="url"
+                {...register("socialLinks.twitter")}
+                placeholder="https://twitter.com/yourpage"
+                className="border p-2 rounded flex-1"
+              />
+            </div>
+            <div className="flex items-center gap-4">
+              <label className="w-24">YouTube:</label>
+              <input
+                type="url"
+                {...register("socialLinks.youtube")}
+                placeholder="https://youtube.com/yourchannel"
+                className="border p-2 rounded flex-1"
+              />
+            </div>
+            <div className="flex items-center gap-4">
+              <label className="w-24">Instagram:</label>
+              <input
+                type="url"
+                {...register("socialLinks.instagram")}
+                placeholder="https://instagram.com/yourpage"
+                className="border p-2 rounded flex-1"
+              />
+            </div>
+          </div>
+        </div>
         {/* Submit Button */}
         <div className="col-span-1 space-y-4">
           <Button

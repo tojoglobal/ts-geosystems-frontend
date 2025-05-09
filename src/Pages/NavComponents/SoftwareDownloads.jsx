@@ -43,21 +43,25 @@ const SoftwareDownloads = () => {
   };
 
   return (
-  <div className="p-2 md:p-3">
-      <div className="flex items-center gap-2 text-[10px]">
+    <div className="p-2 md:p-3">
+      <div className="font-light flex items-center gap-2 text-[10px]">
         <Link to="/" className="text-[#e62245]">
           Home
         </Link>
         <span>/</span>
-        <Link to="/support" className="text-[#e62245]">
+        <Link to="/support" className="uppercase text-[#e62245]">
           Support
         </Link>
         <span>/</span>
-        <span className="text-[#e62245]">Quick Guides</span>
+        <Link to="/software-downloads" className="text-[#e62245]">
+          Software Downloads
+        </Link>
       </div>
-      <p className="text-[#e62245] mb-6 text-2xl">Quick Guides</p>
+      <p className="text-[#e62245] font-light mt-3 mb-6 text-3xl">
+        Software Downloads
+      </p>
       <h1 className="text-[#e62245] font-bold text-xl mb-8">
-        G2 Survey 3D Laser Scanner Quick Guides
+        G2 Survey 3D Laser Scanner Software Downloads
       </h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {currentData.map((software) => (

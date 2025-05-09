@@ -60,16 +60,18 @@ const ContactUs = () => {
 
   return (
     <div className="p-2 md:p-3">
-      <div className="flex items-center gap-2 text-[10px]">
+      <div className="font-light flex items-center gap-2 text-[10px]">
         <Link to="/" className="flex items-center gap-1 text-[#e62245]">
           Home
         </Link>
         <span>/</span>
-        <Link to="/support" className="text-[#e62245]">
+        <Link to="/contact-us" className="uppercase text-[#e62245]">
           Contact Us
         </Link>
       </div>
-      <h1 className="text-3xl mt-2 text-[#e62245] mb-5">CONTACT US</h1>
+      <h1 className="text-3xl mt-2 font-light text-[#e62245] mb-5">
+        CONTACT US
+      </h1>
       <div className="max-w-2xl mx-auto mb-10">
         <p className="text-gray-700 mb-8 max-w-2xl">
           We're happy to answer any questions about our products or services.
@@ -174,19 +176,47 @@ const ContactUs = () => {
             </ul>
           </div>
           <div className="flex space-x-4 pt-2">
-            <a href="#" className="rounded-full p-2 border">
-              <FaFacebookF />
-            </a>
-            <a href="#" className="rounded-full p-2 border">
-              <FaTwitter />
-            </a>
-            <a href="#" className="rounded-full p-2 border">
-              <FaYoutube />
-            </a>
-            <a href="#" className="rounded-full p-2 border">
-              <FaInstagram />
-            </a>
-          </div>
+            {contactInfo?.socialLinks?.facebook && (
+              <a
+                href={contactInfo.socialLinks.facebook}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-full p-2 border"
+              >
+                <FaFacebookF />
+              </a>
+            )}
+            {contactInfo?.socialLinks?.twitter && (
+              <a
+                href={contactInfo.socialLinks.twitter}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-full p-2 border"
+              >
+                <FaTwitter />
+              </a>
+            )}
+            {contactInfo?.socialLinks?.youtube && (
+              <a
+                href={contactInfo.socialLinks.youtube}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-full p-2 border"
+              >
+                <FaYoutube />
+              </a>
+            )}
+            {contactInfo?.socialLinks?.instagram && (
+              <a
+                href={contactInfo.socialLinks.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-full p-2 border"
+              >
+                <FaInstagram />
+              </a>
+            )}
+          </div>  
         </div>
         <div className="w-full md:w-[60%]">
           <iframe
@@ -286,11 +316,11 @@ const ContactUs = () => {
             </SwiperSlide>
           ))}
         </Swiper>
-        <button className="swiper-button-prev-custom absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white shadow-md rounded-full p-2 hover:bg-gray-100">
-          <IoIosArrowBack size={24} className="text-gray-600" />
+        <button className="swiper-button-prev-custom absolute -left-1 md:-left-5 top-[78%] -translate-y-1/2 z-10 bg-white shadow-md rounded-full p-2 hover:bg-gray-100">
+          <IoIosArrowBack size={18} className="text-gray-600" />
         </button>
-        <button className="swiper-button-next-custom absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white shadow-md rounded-full p-2 hover:bg-gray-100">
-          <IoIosArrowForward size={24} className="text-gray-600" />
+        <button className="swiper-button-next-custom absolute -right-1 md:-right-5 top-[78%] -translate-y-1/2 z-10 bg-white shadow-md rounded-full p-2 hover:bg-gray-100">
+          <IoIosArrowForward size={18} className="text-gray-600" />
         </button>
       </section>
     </div>
