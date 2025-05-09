@@ -69,10 +69,6 @@ const ProductDetails = () => {
   const imageUrls = product?.image_urls ? JSON.parse(product.image_urls) : [];
   // Parse video URLs if available
   const videoUrls = product?.video_urls ? product.video_urls.split(",") : [];
-  // Parse product options if available
-  const productOptions = product?.product_options
-    ? JSON.parse(product.product_options)
-    : [];
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -151,17 +147,26 @@ const ProductDetails = () => {
           </div>
           {/* Product Info */}
           <div className="flex-1">
-            <h1 className="text-[28px] text-black font-semibold mb-4">
+            <h1 className="text-[28px] font-semibold text-[#333] mb-4">
               {product.product_name}
             </h1>
-            <div className="flex items-center gap-2">
-              {!!product.priceShowHide && (
-                <div className="mb-2 text-xl line-through text-gray-400">
-                  ৳{parsePrice(product.price)}.00
-                </div>
-              )}
-              <div className="mb-4 text-3xl text-[#e62245] font-bold">
-                ৳{parsePrice(product.price)}.00
+            <p className="text-[#d71a28] text-sm mb-2 capitalize">
+              {product.brand_name || "Brand"}
+            </p>
+            <div className="mb-2">
+              <div className="text-[24px] font-semibold text-[#222]">
+                Price:{" "}
+                <span className="text-[#111]">
+                  ৳{parsePrice(product.price)}.00{" "}
+                  <span className="text-sm text-gray-500">(Ex. VAT)</span>
+                </span>
+              </div>
+              <div className="text-[24px] font-semibold text-[#999] line-through">
+                Price:{" "}
+                <span className="text-[#999]">
+                  ৳{(parsePrice(product.price) * 1.2).toFixed(2)}{" "}
+                  <span className="text-sm text-gray-400">(Inc. VAT)</span>
+                </span>
               </div>
             </div>
             {/* <p className="text-[#8d7f90] text-lg mb-4">
@@ -176,51 +181,27 @@ const ProductDetails = () => {
                 Read more
               </button>
             </p> */}
-            <div className="mb-2 text-[#8d7f90] border-t border-[#d3d3d3]">
+            <hr className="border-t border-gray-300 my-3" />
+
+            <div className="text-sm text-[#222] mb-1">
               <strong>SKU:</strong>{" "}
               <span className="text-[#e62245]">{product.sku || "N/A"}</span>
             </div>
-            <div className="mb-1 text-[#8d7f90]">
-              <strong>Brand:</strong>{" "}
-              <span className="text-[#e62245] capitalize">
-                {product.brand_name || "N/A"}
-              </span>
-            </div>
-            <div className="mb-1 text-[#8d7f90]">
-              <strong>Categories:</strong>
-              <span className="text-[#e62245] capitalize">
-                {" "}
-                {product.category ? JSON.parse(product.category).cat : "N/A"}
-                {product.sub_category
-                  ? JSON.parse(product.sub_category).cat
-                  : "N/A"}
-              </span>
-            </div>
-            <div className="mb-1 text-[#8d7f90]">
-              <strong>Condition:</strong>
-              <span className="text-[#e62245] capitalize">
+            <div className="text-sm text-[#222] mb-1">
+              <strong>Condition:</strong>{" "}
+              <span className="text-[#e62245]">
                 {product.product_condition || "New"}
               </span>
             </div>
-            {/* Product Options */}
-            {productOptions.length > 0 && (
-              <div className="mb-6 text-[#8d7f90] flex gap-4">
-                <div className="space-y-6">
-                  {productOptions.map((option, index) => (
-                    <div key={index} className="w-40">
-                      <label className="block mb-2 text-gray-600 font-medium">
-                        {option.label}
-                      </label>
-                      <select className="w-full appearance-none border border-gray-300 rounded py-[6px] px-3 text-gray-600 focus:outline-none focus:border-[#e62245]">
-                        <option>{option.value}</option>
-                      </select>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-            <div className="flex items-center gap-4 mb-6">
-              <label className="text-gray-600 font-medium">Quantity:</label>
+            <div className="text-sm text-[#222] mb-3">
+              <strong>Shipping:</strong>{" "}
+              <span className="text-[#e62245]">Calculated at Checkout</span>
+            </div>
+
+            <div className="flex items-center gap-4 mb-4">
+              <label className="text-sm text-[#111] font-medium">
+                Quantity:
+              </label>
               <div className="flex items-center border border-gray-300 rounded">
                 <button
                   onClick={decrementQuantity}
