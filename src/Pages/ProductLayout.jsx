@@ -7,7 +7,7 @@ const ProductLayout = () => {
       <div className="hidden md:block w-full md:w-[18%]">
         <ProductSidebar />
       </div>
-      <div className="w-full md:w-[82%]  overflow-y-auto px-3">
+      <div className="w-full md:w-[82%] overflow-y-auto px-3">
         <Outlet />
       </div>
     </div>

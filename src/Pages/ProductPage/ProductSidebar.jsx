@@ -181,11 +181,11 @@ const ProductSidebar = () => {
           </div>
         )
       )}
-      <div className="mt-6">
+      <div className="mt-6 overflow-hidden rounded-sm">
         <img
           src="https://ts-geosystems.com.bd/assets/images/6enPbrand-leica-adsp.png"
           alt="Leica Authorized Distributor"
-          className="w-full"
+          className="w-full transition-transform duration-1000 hover:scale-110"
         />
       </div>
     </div>

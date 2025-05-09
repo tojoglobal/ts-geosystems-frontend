@@ -202,7 +202,7 @@ const ProductHighlights = () => {
       {/* Tab Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between border border-gray-200 rounded-l-[4px] relative">
         <div className="flex flex-col md:flex-row gap-3 sm:gap-4 px-3 py-[2px]">
-          {tabOptions.map((tab) => (
+          {tabOptions.map((tab, idx) => (
             <div
               key={tab.key}
               onClick={() => setActiveTab(tab.key)}
@@ -215,7 +215,11 @@ const ProductHighlights = () => {
               >
                 {tab.name}
               </h2>
-              <span className="absolute -left-3 -bottom-[3px] h-[4px] bg-[#e62245] transition-all duration-300 w-0 group-hover:w-full" />
+              <span
+                className={`${
+                  idx !== 0 ? "-left-4" : "-left-3"
+                } absolute -left-3 -bottom-[3px] h-[4px] bg-[#e62245] transition-all duration-300 w-0 group-hover:w-full`}
+              />
             </div>
           ))}
         </div>
