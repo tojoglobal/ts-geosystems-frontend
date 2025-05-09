@@ -176,19 +176,47 @@ const ContactUs = () => {
             </ul>
           </div>
           <div className="flex space-x-4 pt-2">
-            <a href="#" className="rounded-full p-2 border">
-              <FaFacebookF />
-            </a>
-            <a href="#" className="rounded-full p-2 border">
-              <FaTwitter />
-            </a>
-            <a href="#" className="rounded-full p-2 border">
-              <FaYoutube />
-            </a>
-            <a href="#" className="rounded-full p-2 border">
-              <FaInstagram />
-            </a>
-          </div>
+            {contactInfo?.socialLinks?.facebook && (
+              <a
+                href={contactInfo.socialLinks.facebook}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-full p-2 border"
+              >
+                <FaFacebookF />
+              </a>
+            )}
+            {contactInfo?.socialLinks?.twitter && (
+              <a
+                href={contactInfo.socialLinks.twitter}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-full p-2 border"
+              >
+                <FaTwitter />
+              </a>
+            )}
+            {contactInfo?.socialLinks?.youtube && (
+              <a
+                href={contactInfo.socialLinks.youtube}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-full p-2 border"
+              >
+                <FaYoutube />
+              </a>
+            )}
+            {contactInfo?.socialLinks?.instagram && (
+              <a
+                href={contactInfo.socialLinks.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-full p-2 border"
+              >
+                <FaInstagram />
+              </a>
+            )}
+          </div>  
         </div>
         <div className="w-full md:w-[60%]">
           <iframe
