@@ -135,7 +135,7 @@ const AboutUs = () => {
           </p>
         </section>
       </div>
-      <section className="my-12 relative">
+      <section className="my-12 relative group">
         <Swiper
           modules={[Navigation, Autoplay]}
           spaceBetween={30}
@@ -212,11 +212,11 @@ const AboutUs = () => {
             </SwiperSlide>
           ))}
         </Swiper>
-        <button className="swiper-button-prev-custom absolute -left-1 md:-left-5 top-1/2 -translate-y-1/2 z-10 bg-white shadow-md rounded-full p-2 hover:bg-gray-100">
+        <button className="swiper-button-prev-custom hidden group-hover:block absolute -left-1 md:-left-5 top-1/2 -translate-y-1/2 z-10 bg-white shadow-md rounded-full p-2 hover:bg-gray-100">
           <IoIosArrowBack size={18} className="text-gray-600" />
         </button>
-        <button className="swiper-button-next-custom absolute -right-1 md:-right-5 top-1/2 -translate-y-1/2 z-10 bg-white shadow-md rounded-full p-2 hover:bg-gray-100">
-          <IoIosArrowForward size={24} className="text-gray-600" />
+        <button className="swiper-button-next-custom hidden group-hover:block absolute -right-1 md:-right-5 top-1/2 -translate-y-1/2 z-10 bg-white shadow-md rounded-full p-2 hover:bg-gray-100">
+          <IoIosArrowForward size={18} className="text-gray-600" />
         </button>
       </section>
       {/* Bottom Images */}

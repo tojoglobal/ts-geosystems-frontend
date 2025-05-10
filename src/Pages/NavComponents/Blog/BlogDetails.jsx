@@ -122,7 +122,7 @@ const BlogDetails = () => {
           </div>
         </div>
         <Link
-          to="/g2-blog"
+          to="/ts-blog"
           className="text-sm text-[#e62245] hover:underline block mt-4"
         >
           &laquo; Back to Blog

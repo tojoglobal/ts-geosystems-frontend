@@ -113,7 +113,7 @@ const fakeData = [
   },
 ];
 
-const G2Blog = () => {
+const TSBlog = () => {
   const [activeTab, setActiveTab] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 6;
@@ -133,12 +133,12 @@ const G2Blog = () => {
           Home
         </Link>
         <span>/</span>
-        <Link to="/g2-blog" className="uppercase text-[#e62245]">
-          G2 Blog
+        <Link to="/ts-blog" className="uppercase text-[#e62245]">
+          TS Blog
         </Link>
       </div>
       <h1 className="text-[28px] font-light mt-2 text-[#e62245] mb-2">
-        G2 BLOG
+        TS BLOG
       </h1>
       <section className="mt-12">
         {activeTab !== "All" && (
@@ -176,8 +176,8 @@ const G2Blog = () => {
           {currentPosts.map((post, index) => (
             <Link
               key={index}
-              to={`/g2-blog/${post.id}/${slugify(post.title || "")}`}
-              className="relative border border-[#eaedef] rounded-sm overflow-hidden transition-all hover:bg-gray-100"
+              to={`/ts-blog/${post.id}/${slugify(post.title || "")}`}
+              className="relative border border-[#eaedef] rounded-sm overflow-hidden hover:bg-gray-100 shadow-md hover:shadow-lg transition-shadow"
             >
               <img src={post.image} alt="post" className="w-full" />
               <img
@@ -229,4 +229,4 @@ const G2Blog = () => {
   );
 };
 
-export default G2Blog;
+export default TSBlog;

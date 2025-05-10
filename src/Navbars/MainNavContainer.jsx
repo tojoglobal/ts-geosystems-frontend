@@ -181,10 +181,10 @@ const MainNavContainer = () => {
                     TRADE IN
                   </Link>
                   <Link
-                    to="/g2-blog"
+                    to="/ts-blog"
                     className="cursor-pointer hover:text-crimson-red transition-colors duration-300 py-2"
                   >
-                    G2 BLOG
+                    TS BLOG
                   </Link>
                   <Link
                     to="/about-us"
