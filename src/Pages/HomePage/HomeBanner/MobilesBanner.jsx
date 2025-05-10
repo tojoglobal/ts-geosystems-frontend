@@ -5,20 +5,14 @@ import "swiper/css/pagination";
 import useDataQuery from "../../../utils/useDataQuery";
 
 const MobilesBanner = () => {
-  const { data=[], isLoading, error } = useDataQuery(
+  const { data = [], isLoading } = useDataQuery(
     ["mobilesBanner"],
     "/api/getupload-images"
   );
 
   const baseURL = import.meta.env.VITE_OPEN_APIURL;
-
-  if (isLoading) return <div className="text-center py-10">Loading...</div>;
-  if (error)
-    return (
-      <div className="text-center py-10 text-red-500">
-        Failed to load images.
-      </div>
-    );
+  if (isLoading)
+    return <div className="text-center py-10">Loading...</div>;
 
   return (
     <div className="md:w-full md:relative my-3 md:my-5 mx-3 md:max-w-[1370px] md:mx-auto">
