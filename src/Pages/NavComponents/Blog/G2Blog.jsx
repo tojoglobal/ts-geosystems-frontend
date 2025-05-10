@@ -128,7 +128,7 @@ const G2Blog = () => {
 
   return (
     <div className="p-2 md:p-3">
-      <div className="font-light flex items-center gap-2 text-[10px]">
+      <div className="flex items-center gap-2 text-[11px]">
         <Link to="/" className="flex items-center gap-1 text-[#e62245]">
           Home
         </Link>
@@ -137,7 +137,9 @@ const G2Blog = () => {
           G2 Blog
         </Link>
       </div>
-      <h1 className="text-3xl font-light mt-2 text-[#e62245] mb-2">G2 BLOG</h1>
+      <h1 className="text-[28px] font-light mt-2 text-[#e62245] mb-2">
+        G2 BLOG
+      </h1>
       <section className="mt-12">
         {activeTab !== "All" && (
           <div className="text-center mb-8">

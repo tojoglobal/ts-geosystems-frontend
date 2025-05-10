@@ -54,7 +54,7 @@ const TradeIn = () => {
 
   return (
     <div className="p-2 md:p-3">
-      <div className="font-light flex items-center gap-2 text-[10px]">
+      <div className="flex items-center gap-2 text-[11px]">
         <Link to="/" className="flex items-center gap-1 text-[#e62245]">
           Home
         </Link>
@@ -63,7 +63,7 @@ const TradeIn = () => {
           Trade In
         </Link>
       </div>
-      <p className="text-[#e62245] font-light mt-3 text-3xl mb-6">
+      <p className="text-[#e62245] font-light mt-3 text-[28px] mb-6">
         TRADE IN
       </p>
       <h1 className="text-2xl mt-2 text-[#e62245] mb-2 font-bold">

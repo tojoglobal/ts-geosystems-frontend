@@ -60,7 +60,7 @@ const ContactUs = () => {
 
   return (
     <div className="p-2 md:p-3">
-      <div className="font-light flex items-center gap-2 text-[10px]">
+      <div className="flex items-center gap-2 text-[11px]">
         <Link to="/" className="flex items-center gap-1 text-[#e62245]">
           Home
         </Link>
@@ -69,7 +69,7 @@ const ContactUs = () => {
           Contact Us
         </Link>
       </div>
-      <h1 className="text-3xl mt-2 font-light text-[#e62245] mb-5">
+      <h1 className="text-[28px] mt-2 font-light text-[#e62245] mb-5">
         CONTACT US
       </h1>
       <div className="max-w-2xl mx-auto mb-10">
@@ -181,7 +181,7 @@ const ContactUs = () => {
                 href={contactInfo.socialLinks.facebook}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="rounded-full p-2 border"
+                className="rounded-full p-2 border hover:bg-[#1877F2] hover:text-white transition"
               >
                 <FaFacebookF />
               </a>
@@ -191,7 +191,7 @@ const ContactUs = () => {
                 href={contactInfo.socialLinks.twitter}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="rounded-full p-2 border"
+                className="rounded-full p-2 border hover:bg-[#1DA1F2] hover:text-white transition"
               >
                 <FaTwitter />
               </a>
@@ -201,7 +201,7 @@ const ContactUs = () => {
                 href={contactInfo.socialLinks.youtube}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="rounded-full p-2 border"
+                className="rounded-full p-2 border hover:bg-[#FF0000] hover:text-white transition"
               >
                 <FaYoutube />
               </a>
@@ -211,12 +211,12 @@ const ContactUs = () => {
                 href={contactInfo.socialLinks.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="rounded-full p-2 border"
+                className="rounded-full p-2 border hover:bg-gradient-to-tr from-pink-500 via-red-500 to-yellow-500 hover:text-white transition"
               >
                 <FaInstagram />
               </a>
             )}
-          </div>  
+          </div>
         </div>
         <div className="w-full md:w-[60%]">
           <iframe
@@ -232,7 +232,7 @@ const ContactUs = () => {
         </div>
       </div>
       <GoogleReview />
-      <section className="my-12 relative">
+      <section className="my-12 relative group">
         <div className="flex items-center justify-center gap-4 my-12">
           <div className="flex-1 h-0.5 bg-[#e62245]"></div>
           <h2 className="text-xl uppercase md:text-2xl font-bold text-[#e62245] text-center">
@@ -316,10 +316,10 @@ const ContactUs = () => {
             </SwiperSlide>
           ))}
         </Swiper>
-        <button className="swiper-button-prev-custom absolute -left-1 md:-left-5 top-[78%] -translate-y-1/2 z-10 bg-white shadow-md rounded-full p-2 hover:bg-gray-100">
+        <button className="swiper-button-prev-custom hidden group-hover:block absolute -left-1 md:-left-5 top-[78%] -translate-y-1/2 z-10 bg-white shadow-md rounded-full p-2 hover:bg-gray-100">
           <IoIosArrowBack size={18} className="text-gray-600" />
         </button>
-        <button className="swiper-button-next-custom absolute -right-1 md:-right-5 top-[78%] -translate-y-1/2 z-10 bg-white shadow-md rounded-full p-2 hover:bg-gray-100">
+        <button className="swiper-button-next-custom hidden group-hover:block absolute -right-1 md:-right-5 top-[78%] -translate-y-1/2 z-10 bg-white shadow-md rounded-full p-2 hover:bg-gray-100">
           <IoIosArrowForward size={18} className="text-gray-600" />
         </button>
       </section>

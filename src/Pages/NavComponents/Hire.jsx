@@ -94,7 +94,7 @@ const Hire = () => {
 
   return (
     <div className="p-2 md:p-3">
-      <div className="font-normal flex items-center gap-2 text-[10px] mb-4">
+      <div className="flex items-center gap-2 text-[11px] mb-3">
         <Link to="/" className="text-[#e62245] hover:underline">
           Home
         </Link>
@@ -103,7 +103,7 @@ const Hire = () => {
           Hire
         </Link>
       </div>
-      <h1 className="text-3xl font-light text-[#e62245] mb-[72px]">HIRE</h1>
+      <h1 className="text-[28px] font-light text-[#e62245] mb-[72px]">HIRE</h1>
       <div className="flex flex-row justify-between mb-5">
         <Link
           to="/hire-enquiry"
@@ -368,7 +368,7 @@ const Hire = () => {
                       className="w-full border border-gray-300 rounded p-2 focus:outline-none focus:ring-2 focus:ring-[#e62245] focus:border-transparent bg-white cursor-pointer"
                       required
                       style={{
-                        colorScheme: 'light',
+                        colorScheme: "light",
                       }}
                     />
                     <div className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">

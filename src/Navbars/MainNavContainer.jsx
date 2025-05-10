@@ -103,7 +103,7 @@ const MainNavContainer = () => {
                     }`}
                   >
                     <span className="relative block">
-                      <span>NEW EQUIPMENT</span>
+                      <span className="text-[16px]">NEW EQUIPMENT</span>
                     </span>
                   </button>
                 </div>
@@ -120,7 +120,7 @@ const MainNavContainer = () => {
               </div>
               {/* Right side */}
               {!isSticky ? (
-                <div className="flex gap-7 text-base font-semibold text-charcoal relative">
+                <div className="flex gap-[35px] text-[15px] font-semibold text-charcoal relative">
                   <Link
                     to="/used"
                     className="cursor-pointer hover:text-crimson-red transition-colors duration-300 py-2"
@@ -147,7 +147,7 @@ const MainNavContainer = () => {
                   </Link>
                   {/* Dropdown Wrapper */}
                   <div className="relative group py-2">
-                    <div className="flex items-center gap-1 hover:text-crimson-red transition-colors duration-300 cursor-pointer">
+                    <div className="flex items-center hover:text-crimson-red transition-colors duration-300 cursor-pointer">
                       SUPPORT
                       <MdOutlineKeyboardArrowDown className="text-xl" />
                     </div>

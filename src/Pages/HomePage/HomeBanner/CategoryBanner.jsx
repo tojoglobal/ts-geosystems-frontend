@@ -3,7 +3,6 @@ import useDataQuery from "../../../utils/useDataQuery";
 
 const CategoryBanner = () => {
   const { data, isLoading } = useDataQuery(["category"], "/api/category");
-  console.log(data);
   if (isLoading)
     return (
       <div className="max-w-[1370px] mt-10 mx-3 md:mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 md:gap-4">
