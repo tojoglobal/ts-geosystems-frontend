@@ -2,13 +2,24 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
-
-const images = [
-  "https://ts-geosystems.com.bd/assets/images/17441130261726590713img2.jpg",
-  "https://ts-geosystems.com.bd/assets/images/1726590513img1.jpg",
-];
+import useDataQuery from "../../../utils/useDataQuery";
 
 const MobilesBanner = () => {
+  const { data=[], isLoading, error } = useDataQuery(
+    ["mobilesBanner"],
+    "/api/getupload-images"
+  );
+
+  const baseURL = import.meta.env.VITE_OPEN_APIURL;
+
+  if (isLoading) return <div className="text-center py-10">Loading...</div>;
+  if (error)
+    return (
+      <div className="text-center py-10 text-red-500">
+        Failed to load images.
+      </div>
+    );
+
   return (
     <div className="md:w-full md:relative my-3 md:my-5 mx-3 md:max-w-[1370px] md:mx-auto">
       <Swiper
@@ -19,12 +30,12 @@ const MobilesBanner = () => {
         }}
         loop={true}
         pagination={{ clickable: true }}
-        className="w-full h-[150px] md:h-[410px] rounded-lg relative"
+        className="w-full h-[150px] md:h-[410px] rounded-md relative"
       >
-        {images.map((img, index) => (
-          <SwiperSlide key={index}>
+        {data?.data?.map((img, index) => (
+          <SwiperSlide key={img.id || index}>
             <img
-              src={img}
+              src={`${baseURL}${img.photourl}`}
               alt={`Slide ${index + 1}`}
               className="w-full h-full object-cover"
             />
