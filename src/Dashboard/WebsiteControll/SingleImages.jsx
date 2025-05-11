@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import { useQuery } from "@tanstack/react-query";
 import { EditIcon } from "lucide-react";
@@ -55,27 +55,30 @@ const SingleImages = () => {
   };
 
   return isLoading ? (
-    <p className="text-center  text-gray-500"> Loading images...</p>
+    <div className="flex justify-center items-center h-40">
+      <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[#0b6d7f]"></div>
+    </div>
   ) : isError ? (
-    <p className="text-center text-red-500">Failed to load images</p>
+    <p className="text-center text-red-500 mt-4">Failed to load images</p>
   ) : (
-    <>
-      <h2 className=" mt-2  mb-2 text-2xl text-teal-600">
-        Dynamic Single Images{" "}
+    <div>
+      <h2 className="text-xl md:text-2xl text-teal-600 mb-4 sm:mb-6">
+        Dynamic Single Images
       </h2>
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
         {images.length > 0 &&
           images.map((image) => (
             <div
               key={image.id}
-              className="relative border border-gray-500 p-4 rounded-md shadow-md bg-gray-800"
+              className="relative border border-gray-500 p-3 sm:p-4 rounded-md shadow-md bg-gray-900 transition-shadow hover:shadow-lg"
             >
-              <div className="absolute top-2 right-2">
+              <div className="absolute top-2 right-2 z-10">
                 <button
                   onClick={() => handleEditClick(image?.id)}
-                  className="px-2 py-2 bg-[#0b6d7f] text-white font-bold rounded transition hover:bg-[#095666] disabled:bg-gray-400"
+                  className="p-2 sm:p-2.5 bg-[#0b6d7f] text-white rounded-full transition hover:bg-[#095666] disabled:bg-gray-400 active:scale-95 touch-manipulation"
+                  aria-label="Edit image"
                 >
-                  <EditIcon />
+                  <EditIcon className="w-4 h-4 sm:w-5 sm:h-5" />
                 </button>
                 <input
                   type="file"
@@ -85,20 +88,20 @@ const SingleImages = () => {
                   onChange={(e) => handleFileChange(image?.id, e)}
                 />
               </div>
-              <div className="h-50 w-full bg-gray-200 flex items-center justify-center">
+              <div className="relative  w-full h-40 md:h-50 bg-gray-200 rounded-sm overflow-hidden">
                 <img
                   src={import.meta.env.VITE_OPEN_APIURL + image?.imageUrl}
                   alt={image.name}
-                  className="h-full w-full object-cover"
+                  className="absolute inset-0 h-full w-full object-cover"
                 />
               </div>
-              <div className="mt-3 text-xl text-teal-600 text-center font-semibold">
+              <div className="mt-3 text-lg sm:text-xl text-teal-600 text-center font-semibold break-words">
                 {image?.uniqueName}
               </div>
             </div>
           ))}
       </div>
-    </>
+    </div>
   );
 };
 

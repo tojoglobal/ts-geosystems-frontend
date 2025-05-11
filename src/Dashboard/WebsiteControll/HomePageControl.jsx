@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import { toast } from "react-toastify";
 import Promo_product_banner_02 from "./Promo_product_banner_02";
-import Feature_highlight_banner_03_left_01 from "./feature_highlight_banner_03_left_01";
 import SingleImages from "./SingleImages";
 import SlideContorols from "./SlideContorols";
+import Feature_highlight_banner_03_left_01 from "./feature_highlight_banner_03_left_01";
 
 // Define the exact order of components as they appear on the homepage
 const COMPONENT_ORDER = [
@@ -93,10 +93,12 @@ const HomePageControl = () => {
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-4 mt-7 mb-2">
+    <div className="max-w-6xl mx-auto mb-2">
       <div className="mb-5 text-center">
-        <h2 className="text-2xl font-bold">Home Page Component Control</h2>
-        <p className="text-gray-400 mt-1">
+        <h2 className="text-xl md:text-2xl font-bold">
+          Home Page Component Control
+        </h2>
+        <p className="text-gray-400 text-sm md:text-base mt-1">
           Enable or disable sections on the home page. Changes will affect all
           visitors.
         </p>
@@ -138,18 +140,20 @@ const HomePageControl = () => {
       {/* all dynamic routes */}
       <div className="pt-5">
         <div className="text-center mb-6">
-          <h2 className="text-2xl font-bold">Home Page Component Dynamic</h2>
-          <p className="text-gray-400">
+          <h2 className="text-xl md:text-2xl font-bold">
+            Home Page Component Dynamic
+          </h2>
+          <p className="text-gray-400 text-sm md:text-base">
             Dynamic sections on the home page. Changes affect all visitors.
           </p>
         </div>
-        <div className="border border-gray-500" />
+        <div className="my-6 border-t border-gray-200/20" />
         <SlideContorols />
-        <div className="border border-gray-500" />
+        <div className="my-6 border-t border-gray-200/20" />
         <Promo_product_banner_02 key="1" />
-        <div className="border border-gray-500" />
+        <div className="my-6 border-t border-gray-200/20" />
         <Feature_highlight_banner_03_left_01 key="2" />
-        <div className="border border-gray-500" />
+        <div className="my-6 border-t border-gray-200/20" />
         <SingleImages />
       </div>
     </div>

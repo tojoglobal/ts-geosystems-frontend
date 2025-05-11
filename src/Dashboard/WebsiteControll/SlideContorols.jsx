@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Card, CardHeader, CardTitle, CardContent } from "@/Components/ui/card";
 import { Input } from "@/Components/ui/input";
@@ -31,7 +31,7 @@ const slideFieldsConfig = {
   6: ["productName", "productDescription", "image"],
 };
 
-const SliderEditor = () => {
+const SlideContorols = () => {
   const axiosPublicUrl = useAxiospublic();
   const [slides, setSlides] = useState(defaultSlides);
   const [currentSlideId, setCurrentSlideId] = useState(1);
@@ -107,9 +107,9 @@ const SliderEditor = () => {
   };
 
   return (
-    <div className="p-4 space-y-6">
-      <h2 className="text-2xl font-bold text-teal-600">Hero Banner Editor</h2>
-      <div className="flex gap-2 mb-4">
+    <div className="space-y-3 md:space-y-6">
+      <h2 className="text-xl md:text-2xl font-bold text-teal-600">Hero Banner Editor</h2>
+      <div className="flex flex-wrap gap-2 mb-4">
         {slides.map((slide) => (
           <Button
             key={slide.id}
@@ -170,11 +170,10 @@ const SliderEditor = () => {
                 )}
               </div>
             )}
-
             {fields.includes("image") && (
               <div>
                 <Label>Slide Image</Label>
-                <div className="relative border p-2 rounded-md">
+                <div className="relative rounded-md">
                   <div className="absolute top-2 right-2">
                     <label className="cursor-pointer flex items-center gap-1 text-sm text-blue-500">
                       <EditIcon size={16} />
@@ -187,7 +186,7 @@ const SliderEditor = () => {
                       Change
                     </label>
                   </div>
-                  <div className="h-48 flex items-center justify-center bg-muted rounded-md overflow-hidden">
+                  <div className="md:h-48 flex items-center justify-center bg-muted overflow-hidden">
                     {watch("image")?.[0] ? (
                       <img
                         src={URL.createObjectURL(watch("image")[0])}
@@ -211,7 +210,6 @@ const SliderEditor = () => {
             )}
           </CardContent>
         </Card>
-
         <div className="mt-4 flex justify-end">
           <Button type="submit">Update Slide {currentSlideId}</Button>
         </div>
@@ -220,4 +218,4 @@ const SliderEditor = () => {
   );
 };
 
-export default SliderEditor;
+export default SlideContorols;
