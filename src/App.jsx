@@ -62,7 +62,9 @@ import AdminUpdateHire from "./Pages/Control/AdminUpdateHire";
 import AdminUpdateService from "./Pages/Control/AdminUpdateService";
 import BlogDetails from "./Pages/NavComponents/Blog/BlogDetails";
 import TaxManager from "./Dashboard/TaxManager/TaxManager";
-import AdminBlogControl from "./Pages/Control/AdminBlogControl";
+import BlogCreate from "./Dashboard/Blog/BlogCreate";
+import BlogType from "./Dashboard/BlogType/BlogType";
+import AuthorManager from "./Dashboard/Author/AuthorMange";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -142,10 +144,16 @@ const AppLayout = () => {
           <Route path="promocodemanager" element={<PromoCodeManager />} />
           {/* add taxesmanager */}
           <Route path="taxesmanager" element={<TaxManager />} />
+          {/* blog routes */}
+          <Route path="ts-blog" element={<BlogCreate />} />
+          {/* author route */}
+          <Route path="author" element={<AuthorManager />} />
+          {/* Blog Type route */}
+          <Route path="blog-type" element={<BlogType />} />
+
           {/* dynamic about page */}
           <Route path="hire" element={<AdminUpdateHire />} />
           <Route path="service" element={<AdminUpdateService />} />
-          <Route path="ts-blog" element={<AdminBlogControl />} />
           <Route path="about-us" element={<AdminUpdateAboutUs />} />
           <Route path="contact-us" element={<AdminUpdateContactUs />} />
         </Route>

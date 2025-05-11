@@ -21,6 +21,7 @@ import SidebarProfileDropdown from "./SidebarProfileDropdown/SidebarProfileDropd
 import logo from "/TS-WEB-LOGO.png";
 import smallLogo from "/favicon.png";
 import {
+  MdArticle,
   MdCategory,
   MdLocalOffer,
   MdOutlineShoppingCart,
@@ -74,6 +75,15 @@ const menuItems = [
     to: "/dashboard/add-brands",
   },
   {
+    label: "Blog Controll",
+    icon: <MdArticle size={20} />,
+    submenu: [
+      { label: "TS Blog", to: "/dashboard/ts-blog" },
+      { label: "Author", to: "/dashboard/author" },
+      { label: "Blog Type", to: "/dashboard/blog-type" },
+    ],
+  },
+  {
     label: "Website Controll",
     icon: <MdWebStories size={20} />,
     submenu: [
@@ -81,7 +91,6 @@ const menuItems = [
       { label: "Sent", to: "/dashboard/email/sent" },
       { label: "Hire", to: "/dashboard/hire" },
       { label: "Service", to: "/dashboard/service" },
-      { label: "TS Blog", to: "/dashboard/ts-blog" },
       { label: "About Us", to: "/dashboard/about-us" },
       { label: "Contact Us", to: "/dashboard/contact-us" },
     ],
@@ -297,10 +306,10 @@ const Sidebar = ({
           {!collapsed && <SidebarProfileDropdown collapsed={collapsed} />}
         </div>
       </div>
-      
+
       {/* Invisible overlay for handling outside clicks */}
       {mobileOpen && (
-        <div 
+        <div
           className="fixed inset-0 z-50 md:hidden"
           onClick={toggleMobileSidebar}
         />

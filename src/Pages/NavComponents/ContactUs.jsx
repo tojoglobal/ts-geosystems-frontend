@@ -123,15 +123,15 @@ const ContactUs = () => {
       </div>
       <div className="flex flex-col md:flex-row gap-8">
         <div className="w-full md:w-[40%] space-y-6 text-sm">
-          <div className="text-black">
-            <h2 className="text-lg font-bold pb-4 mb-4 relative border-b border-gray-200">
+          <div className="">
+            <h2 className="text-lg font-bold pb-4 mb-4 relative border-b border-gray-200 text-black">
               Working Days
               <span className="absolute bottom-0 left-0 w-20 h-0.5 bg-[#e62245]"></span>
             </h2>
-            <p className="text-base-200 mb-1">
+            <p className=" mb-1 text-black">
               Saturday-Thursday: 9:27 PM - 9:27 PM
             </p>
-            <p className="text-base-200">Friday: Weekly Holiday</p>
+            <p className=" text-black">Friday: Weekly Holiday</p>
           </div>
           <div>
             <h2 className="text-lg font-bold pb-4 mb-4 relative border-b border-gray-200">

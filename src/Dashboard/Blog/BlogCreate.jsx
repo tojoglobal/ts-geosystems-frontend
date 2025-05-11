@@ -15,7 +15,7 @@ const fakeAuthors = [
   { id: 4, name: "Tech Team" },
 ];
 
-const AdminBlogControl = () => {
+const BlogCreate = () => {
   const [isUploading, setIsUploading] = useState(false);
   const [featuredImage, setFeaturedImage] = useState(null);
   const [audioFile, setAudioFile] = useState(null);
@@ -347,4 +347,4 @@ const AdminBlogControl = () => {
   );
 };
 
-export default AdminBlogControl;
+export default BlogCreate;

@@ -1,38 +1,18 @@
-import { useEffect, useState, useRef } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { FaCheckCircle, FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import "swiper/css";
+import { useEffect } from "react";
 
 const GoogleReview = () => {
-  // const axiospublicUrl = useAxiospublic;
-  const swiperRef = useRef(null);
-  const [reviews, setReviews] = useState([]);
-  const [activeIndex, setActiveIndex] = useState(0);
-
   useEffect(() => {
-    const fetchReviews = async () => {
-      try {
-        const res = await fetch(
-          `${import.meta.env.VITE_OPEN_APIURL}/api/reviews`
-        );
-        const data = await res.json();
-        const fetchedReviews = data.result?.reviews || [];
-        console.log(fetchedReviews);
+    // Load the Elfsight platform script only once
+    const script = document.createElement("script");
+    script.src = "https://static.elfsight.com/platform/platform.js";
+    script.async = true;
+    script.defer = true;
+    document.body.appendChild(script);
 
-        setReviews(fetchedReviews);
-      } catch (error) {
-        console.error("Failed to fetch Google reviews:", error);
-      }
+    return () => {
+      document.body.removeChild(script); // clean up when component unmounts
     };
-
-    fetchReviews();
   }, []);
-
-  const handleSlideChange = () => {
-    if (swiperRef.current) {
-      setActiveIndex(swiperRef.current.swiper.realIndex);
-    }
-  };
 
   return (
     <section className="pb-10">
@@ -44,89 +24,12 @@ const GoogleReview = () => {
         <div className="flex-1 h-0.5 bg-[#e62245]"></div>
       </div>
 
-      {/* Google Review Header */}
-      <div className="flex items-center justify-between bg-gray-100 p-6 rounded shadow">
-        <div>
-          <p className="text-2xl font-bold">
-            <span className="text-[#4285F4]">G</span>
-            <span className="text-[#EA4335]">o</span>
-            <span className="text-[#FBBC05]">o</span>
-            <span className="text-[#4285F4]">g</span>
-            <span className="text-[#34A853]">l</span>
-            <span className="text-[#EA4335]">e</span> Reviews
-          </p>
-          <p className="text-2xl font-bold mt-1 flex items-center gap-1">
-            4.8
-            {[...Array(5)].map((_, i) => (
-              <span key={i} className="text-[#e62245]">
-                ★
-              </span>
-            ))}
-          </p>
-        </div>
-        <button
-          className="px-4 py-2 font-bold border-[3px] border-[#e62245] text-[#e62245] rounded hover:bg-[#e62245] hover:text-white transition"
-          onClick={() =>
-            window.open(
-              "https://www.google.com/search?q=g2+survey+reviews",
-              "_blank"
-            )
-          }
-        >
-          Review us on Google
-        </button>
-      </div>
-
-      {/* Swiper Slider */}
-      <div className="relative max-w-6xl mx-auto mt-10">
-        {activeIndex > 0 && (
-          <button
-            className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-white p-2 rounded-full shadow"
-            onClick={() => swiperRef.current.swiper.slidePrev()}
-          >
-            <FaChevronLeft />
-          </button>
-        )}
-        {activeIndex < reviews.length - 4 && (
-          <button
-            className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-white p-2 rounded-full shadow"
-            onClick={() => swiperRef.current.swiper.slideNext()}
-          >
-            <FaChevronRight />
-          </button>
-        )}
-        <Swiper
-          ref={swiperRef}
-          spaceBetween={20}
-          slidesPerView={4}
-          onSlideChange={handleSlideChange}
-          breakpoints={{
-            320: { slidesPerView: 1 },
-            640: { slidesPerView: 2 },
-            768: { slidesPerView: 3 },
-            1024: { slidesPerView: 4 },
-          }}
-        >
-          {reviews.map((review, index) => (
-            <SwiperSlide key={index}>
-              <div className="bg-gray-100 border p-4 rounded shadow h-full">
-                <div className="flex items-center gap-2 mb-1">
-                  <div className="w-6 h-6 rounded-full bg-blue-200 flex items-center justify-center text-sm font-bold text-blue-800">
-                    {review.author_name[0]}
-                  </div>
-                  <p className="font-medium flex items-center gap-1">
-                    {review.author_name}
-                    <FaCheckCircle className="text-[#e62245] text-sm" />
-                  </p>
-                </div>
-                <div className="text-[#e62245] text-xl mb-1">
-                  {"★".repeat(review.rating)}
-                </div>
-                <p className="text-sm text-gray-700">{review.text}</p>
-              </div>
-            </SwiperSlide>
-          ))}
-        </Swiper>
+      {/* Elfsight Google Reviews Widget */}
+      <div className="max-w-6xl mx-auto mt-10">
+        <div
+          className="elfsight-app-1462e729-0744-469a-9b50-a939b862f195"
+          data-elfsight-app-lazy
+        ></div>
       </div>
     </section>
   );
