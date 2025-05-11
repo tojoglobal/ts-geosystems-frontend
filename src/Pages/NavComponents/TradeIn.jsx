@@ -325,7 +325,7 @@ const TradeIn = () => {
                       value="sell"
                       checked={formData.sellOrTrade === "sell"}
                       onChange={handleChange}
-                      className="w-5 h-5 appearance-none rounded-full border-[2px] border-gray-300 checked:border-[5px] checked:border-[#e62245] checked:bg-white bg-[#e7e7e7] transition-all duration-150"
+                      className="w-5 h-5 cursor-pointer appearance-none rounded-full border-[2px] border-gray-300 checked:border-[5px] checked:border-[#e62245] checked:bg-white bg-[#e7e7e7] transition-all duration-150"
                       required
                     />
                     <span className="text-sm">Sell</span>
@@ -337,7 +337,7 @@ const TradeIn = () => {
                       value="tradeIn"
                       checked={formData.sellOrTrade === "tradeIn"}
                       onChange={handleChange}
-                      className="w-5 h-5 appearance-none rounded-full border-[2px] border-gray-300 checked:border-[5px] checked:border-[#e62245] checked:bg-white bg-[#e7e7e7] transition-all duration-150"
+                      className="w-5 h-5 cursor-pointer appearance-none rounded-full border-[2px] border-gray-300 checked:border-[5px] checked:border-[#e62245] checked:bg-white bg-[#e7e7e7] transition-all duration-150"
                     />
                     <span className="text-sm">Trade In</span>
                   </label>

@@ -90,13 +90,11 @@ const Service = () => {
         {serviceContent?.title ||
           "Surveying Equipment Service, Calibration & Repairs"}
       </h1>
-
       {/* Service Description */}
       <div
-        className="text-gray-700 space-y-4 mb-8"
+        className="text-gray-700 space-y-4 text-sm font-normal mb-8"
         dangerouslySetInnerHTML={{ __html: serviceContent?.description }}
       />
-
       {/* Grid Images */}
       {serviceContent?.image_grid && (
         <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
@@ -107,21 +105,19 @@ const Service = () => {
                   serviceContent.image_grid
                 }`}
                 alt="Service grid image"
-                className="w-full h-auto"
+                className="w-full h-auto rounded-[4px]"
               />
             </div>
           ))}
         </div>
       )}
-
       {/* Info After Images */}
       {serviceContent?.info_after_images && (
         <div
-          className="space-y-4 mb-8"
+          className="space-y-4 mb-8 text-sm font-normal"
           dangerouslySetInnerHTML={{ __html: serviceContent.info_after_images }}
         />
       )}
-
       {/* Banner Images */}
       {serviceContent?.image_banner && (
         <div className="space-y-6 mb-12">
@@ -132,16 +128,15 @@ const Service = () => {
                 serviceContent.image_banner
               }`}
               alt="Service center"
-              className="w-full rounded-lg"
+              className="w-full rounded-sm"
             />
           ))}
         </div>
       )}
       <div className="max-w-3xl mx-auto mb-12">
         <h2 className="text-2xl font-semibold mb-4">Service Enquiry Form</h2>
-        <p className="mb-6">
-          Please fill in the form, together with your survey instrument details,{" "}
-          <br />
+        <p className="mb-6 text-sm">
+          Please fill in the form, together with your survey instrument details,
           and we will reply with a estimate. For queries please{" "}
           <Link to="/contact-us" className="text-[#e62245] underline">
             contact us...
@@ -269,11 +264,11 @@ const Service = () => {
                   <input
                     type="checkbox"
                     name={label}
-                    className="mr-2 w-4 h-4 text-[#e62245] accent-[#e62245] border-gray-300 rounded focus:ring-[#e62245]"
+                    className="w-4 h-4 appearance-none bg-[#e7e7e7] border border-gray-300 rounded checked:bg-[#e62245] checked:border-[#e62245] checked:bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22white%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M12.207%204.793a1%201%200%20010%201.414l-5%205a1%201%200%2001-1.414%200l-2-2a1%201%200%20011.414-1.414L6.5%209.086l4.293-4.293a1%201%200%20011.414%200z%22%2F%3E%3C%2Fsvg%3E')]"
                     checked={formData.requests[label.toLowerCase()]}
                     onChange={handleCheckboxChange}
                   />
-                  {label}
+                  <span className="text-sm ml-2">{label}</span>
                 </label>
               ))}
             </div>

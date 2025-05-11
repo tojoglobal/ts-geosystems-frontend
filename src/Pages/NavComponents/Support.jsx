@@ -88,41 +88,41 @@ const Support = () => {
       <h1 className="text-[28px] font-light mt-2 text-[#e62245] mb-6">
         SUPPORT
       </h1>
-      <div className="flex flex-col items-center text-center md:flex-row md:justify-center gap-2 md:gap-8 text-sm font-medium text-[#e62245] mb-12">
+      <div className="flex flex-col items-center text-center md:flex-row md:justify-center gap-2 md:gap-7 text-sm font-normal text-[#e62245] mb-16">
         <Link to="/software-downloads">SOFTWARE DOWNLOADS</Link>
         <Link to="/remote-support">QUICK GUIDES</Link>
         <Link to="/user-manuals">USER MANUALS</Link>
         <Link to="/remote-support">REMOTE SUPPORT</Link>
       </div>
       <div className="max-w-4xl mx-auto bg-gradient-to-b from-[#f4f5f9] to-[#e6e7ec] rounded-md p-3 mb-6">
-        <div className="grid grid-cols-3 gap-2 md:flex md:justify-center md:gap-4">
+        <div className="grid grid-cols-3 md:flex md:justify-center gap-[5px]">
           <Link
             to="/software-downloads"
-            className="bg-[#e62245] text-sm md:text-base text-white px-2 md:px-4 py-2 rounded text-center"
+            className="bg-[#e62245] text-[13px] text-white py-[7.66667px] px-[18.5px] rounded text-center"
           >
             Software Downloads
           </Link>
           <Link
             to="/remote-support"
-            className="bg-[#e62245] text-sm md:text-base text-white px-2 md:px-4 py-2 rounded text-center"
+            className="bg-[#e62245] text-[13px] text-white py-[7.66667px] px-[18.5px] rounded text-center"
           >
             Remote Support
           </Link>
           <Link
             to="/quick-guides"
-            className="bg-[#e62245] text-sm md:text-base text-white px-2 md:px-4 py-2 rounded text-center"
+            className="bg-[#e62245] text-[13px] text-white py-[7.66667px] px-[18.5px] rounded text-center"
           >
             Quick Guides
           </Link>
           <Link
             to="/user-manuals"
-            className="bg-[#e62245] text-sm md:text-base text-white px-2 md:px-4 py-2 rounded text-center"
+            className="bg-[#e62245] text-[13px] text-white py-[7.66667px] px-[18.5px] rounded text-center"
           >
             User Manuals
           </Link>
           <Link
             to="/cc"
-            className="bg-[#e62245] text-sm md:text-base text-white px-2 md:px-4 py-2 rounded text-center"
+            className="bg-[#e62245] text-[13px] text-white py-[7.66667px] px-[18.5px] rounded text-center"
           >
             Certificate Tracking
           </Link>
