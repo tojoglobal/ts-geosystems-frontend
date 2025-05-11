@@ -73,7 +73,7 @@ const ContactUs = () => {
         CONTACT US
       </h1>
       <div className="max-w-2xl mx-auto mb-10">
-        <p className="text-gray-700 text-[14px] mb-6 max-w-2xl">
+        <p className="text-gray-700 text-sm mb-6 max-w-2xl">
           We're happy to answer any questions about our products or services.
           Please fill out the form below if you need assistance.
         </p>

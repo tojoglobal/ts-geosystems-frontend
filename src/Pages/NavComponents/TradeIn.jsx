@@ -66,16 +66,18 @@ const TradeIn = () => {
       <p className="text-[#e62245] font-light mt-3 text-[28px] mb-6">
         TRADE IN
       </p>
-      <h1 className="text-2xl mt-2 text-[#e62245] mb-2 font-bold">
+      <h1 className="text-[26px] mt-2 text-[#e62245] mb-2 font-bold">
         Sell or Trade In Your Surveying Equipment
       </h1>
-      <p className="mb-4">
+      <p className="mb-4 text-sm">
         G2 Survey purchases Leica Geosystems survey equipment and will trade in
         Trimble, Topcon, and others against the purchase of new or used Leica
         surveying instruments.
       </p>
-      <h2 className="text-[#e62245] font-bold mb-1">Our Buying Process</h2>
-      <ol className="list-decimal list-inside mb-4">
+      <h2 className="text-[#e62245] font-bold text-[18px] mb-1">
+        Our Buying Process
+      </h2>
+      <ol className="list-decimal list-inside mb-4 text-sm">
         <li>
           1. To give you our best offer, we request you complete the form below
           as fully as possible, especially the make, model, serial number,
@@ -98,8 +100,8 @@ const TradeIn = () => {
           cost.
         </li>
       </ol>
-      <h2 className="text-[#e62245] font-bold mb-1">Trade-Ins</h2>
-      <p>
+      <h2 className="text-[#e62245] font-bold mb-1 text-[18px]">Trade-Ins</h2>
+      <p className="text-sm">
         Are you looking to trade in your survey equipment? The process is the
         same for buying your equipment! We will simply credit the offer amount
         towards the new equipment you want to purchase.

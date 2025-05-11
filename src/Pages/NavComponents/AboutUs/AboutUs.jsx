@@ -45,7 +45,7 @@ const AboutUs = () => {
         <h2 className="text-[#e62245] text-[18px] font-semibold mb-4">
           {aboutContent?.section1_title}
         </h2>
-        <p className="text-gray-700 text-[14px]">
+        <p className="text-gray-700 text-sm">
           {aboutContent?.section1_description}
         </p>
       </div>
@@ -53,7 +53,7 @@ const AboutUs = () => {
         <h2 className="text-[#e62245] text-[18px] font-semibold mb-4">
           {aboutContent?.section2_title}
         </h2>
-        <ul className="list-disc text-gray-700 space-y-1 pl-2 text-[14px]">
+        <ul className="list-disc text-gray-700 space-y-1 pl-2 text-sm">
           {section2Points.length > 0 &&
             section2Points.map((point, index) => (
               <li key={index}>
@@ -66,7 +66,7 @@ const AboutUs = () => {
         <h2 className="text-[#e62245] text-[18px] font-semibold mb-4">
           {aboutContent?.section3_title}
         </h2>
-        <p className="text-gray-700 mb-6 text-[14px]">
+        <p className="text-gray-700 mb-6 text-sm">
           {aboutContent?.section3_description}
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
@@ -90,7 +90,7 @@ const AboutUs = () => {
           <h3 className="text-[18px] font-semibold text-[#e62245]">
             {aboutContent?.section4_title}
           </h3>
-          <p className="mt-2 text-gray-700 text-[14px]">
+          <p className="mt-2 text-gray-700 text-sm">
             {aboutContent?.section4_description}
           </p>
         </section>
@@ -98,7 +98,7 @@ const AboutUs = () => {
           <h3 className="text-[18px] font-semibold text-[#e62245]">
             {aboutContent?.section5_title}
           </h3>
-          <p className="mt-2 text-gray-700 text-[14px]">
+          <p className="mt-2 text-gray-700 text-sm">
             {aboutContent?.section5_description}
           </p>
         </section>
@@ -106,7 +106,7 @@ const AboutUs = () => {
           <h3 className="text-[18px] font-semibold text-[#e62245]">
             {aboutContent?.section6_title}
           </h3>
-          <p className="mt-2 text-gray-700 text-[14px]">
+          <p className="mt-2 text-gray-700 text-sm">
             {aboutContent?.section6_description}
           </p>
         </section>
@@ -114,7 +114,7 @@ const AboutUs = () => {
           <h3 className="text-[18px] font-semibold text-[#e62245]">
             {aboutContent?.section7_title}
           </h3>
-          <p className="mt-2 text-gray-700 text-[14px]">
+          <p className="mt-2 text-gray-700 text-sm">
             {aboutContent?.section7_description}
           </p>
         </section>
@@ -122,7 +122,7 @@ const AboutUs = () => {
           <h3 className="text-[18px] font-semibold text-[#e62245]">
             {aboutContent?.section8_title}
           </h3>
-          <p className="mt-2 text-gray-700 text-[14px]">
+          <p className="mt-2 text-gray-700 text-sm">
             {aboutContent?.section8_description}
           </p>
         </section>
@@ -130,7 +130,7 @@ const AboutUs = () => {
           <h3 className="text-[18px] font-semibold text-[#e62245]">
             {aboutContent?.section9_title}
           </h3>
-          <p className="mt-2 text-gray-700 text-[14px]">
+          <p className="mt-2 text-gray-700 text-sm">
             {aboutContent?.section9_description}
           </p>
         </section>

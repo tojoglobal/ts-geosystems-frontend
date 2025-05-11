@@ -11,7 +11,10 @@ const BlogDetails = () => {
   const [activeTab, setActiveTab] = useState("All");
   const iconClass =
     "w-9 h-9 flex items-center justify-center rounded-md text-white";
-
+  const blogUrl = encodeURIComponent(
+    "https://yourwebsite.com/blog/your-dynamic-slug"
+  );
+  const blogTitle = encodeURIComponent("Check out this amazing blog from G2!");
   return (
     <div className="p-3">
       <div className="flex items-center gap-2 text-sm">
@@ -86,7 +89,7 @@ const BlogDetails = () => {
             controls
           />
         </div>
-        <div className="space-y-3 text-[14px]">
+        <div className="space-y-3 text-sm">
           <p>
             We're excited to exhibit at GEO Business when it returns to ExCeL
             London on 4–5 June 2025.
@@ -122,24 +125,63 @@ const BlogDetails = () => {
           <span>#MappingTheFuture</span>
         </div>
         <div className="flex gap-2 my-6">
-          <div className={`${iconClass} bg-[#3b5998]`}>
+          {/* Facebook */}
+          <a
+            href={`https://www.facebook.com/sharer/sharer.php?u=${blogUrl}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`${iconClass} bg-[#3b5998]`}
+          >
             <Facebook size={16} />
-          </div>
-          <div className={`${iconClass} bg-[#000000]`}>
+          </a>
+
+          {/* Twitter */}
+          <a
+            href={`https://twitter.com/intent/tweet?url=${blogUrl}&text=${blogTitle}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`${iconClass} bg-[#000000]`}
+          >
             <Twitter size={16} />
-          </div>
-          <div className={`${iconClass} bg-[#0077b5]`}>
+          </a>
+
+          {/* LinkedIn */}
+          <a
+            href={`https://www.linkedin.com/sharing/share-offsite/?url=${blogUrl}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`${iconClass} bg-[#0077b5]`}
+          >
             <Linkedin size={16} />
-          </div>
-          <div className={`${iconClass} bg-[#bd081c]`}>
+          </a>
+
+          {/* Reddit */}
+          <a
+            href={`https://www.reddit.com/submit?url=${blogUrl}&title=${blogTitle}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`${iconClass} bg-[#ff4500]`}
+          >
             <MessageSquare size={16} />
-          </div>
-          <div className={`${iconClass} bg-[#25d366]`}>
+          </a>
+
+          {/* WhatsApp */}
+          <a
+            href={`https://wa.me/?text=${blogTitle}%20${blogUrl}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`${iconClass} bg-[#25d366]`}
+          >
             <MessageSquare size={16} />
-          </div>
-          <div className={`${iconClass} bg-[#7b7b7b]`}>
+          </a>
+
+          {/* Email */}
+          <a
+            href={`mailto:?subject=${blogTitle}&body=${blogUrl}`}
+            className={`${iconClass} bg-[#7b7b7b]`}
+          >
             <Mail size={16} />
-          </div>
+          </a>
         </div>
         <Link
           to="/ts-blog"
