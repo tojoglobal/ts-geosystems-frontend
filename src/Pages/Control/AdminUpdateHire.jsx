@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { Editor } from "@tinymce/tinymce-react";
 import { useDropzone } from "react-dropzone";
@@ -28,6 +28,11 @@ const AdminUpdateHire = () => {
       description: "",
       infoBox: "",
       imageUrl: "",
+      links: {
+        contactUs: "",
+        privacyPolicy: "",
+        termsOfService: "",
+      },
     },
   });
 
@@ -52,6 +57,11 @@ const AdminUpdateHire = () => {
         description: hireContent.description || "",
         infoBox: hireContent.infoBox || "",
         imageUrl: hireContent.imageUrl || "",
+        links: hireContent.links || {
+          contactUs: "",
+          privacyPolicy: "",
+          termsOfService: "",
+        },
       });
     }
   }, [hireContent, reset]);
@@ -64,9 +74,15 @@ const AdminUpdateHire = () => {
       if (files.length > 0) {
         formData.append("image", files[0]);
       }
-      Object.entries(data).forEach(([key, value]) => {
-        formData.append(key, value);
-      });
+
+      // Append the simple fields
+      formData.append("title", data.title);
+      formData.append("description", data.description);
+      formData.append("infoBox", data.infoBox);
+      formData.append("imageUrl", data.imageUrl);
+
+      // Stringify and append the links object
+      formData.append("links", JSON.stringify(data.links));
 
       const response = await axiosPublicUrl.put("/api/hire", formData, {
         headers: {
@@ -78,7 +94,7 @@ const AdminUpdateHire = () => {
         Swal.fire({
           icon: "success",
           title: "Success!",
-          text: "Hire content updated successfully",
+          text: response?.data?.message || "Hire content updated successfully",
         });
         queryClient.invalidateQueries(["hireContent"]);
       }
@@ -139,7 +155,7 @@ const AdminUpdateHire = () => {
                   <p className="text-xs sm:text-sm text-gray-600 mb-2">
                     Current Banner:
                   </p>
-                  <div className="relative w-full h-40 md:h-52 rounded-sm overflow-hidden bg-gray-100">
+                  <div className="relative w-full h-40 md:h-48 rounded-sm overflow-hidden bg-gray-100">
                     <img
                       src={
                         files.length > 0
@@ -168,7 +184,7 @@ const AdminUpdateHire = () => {
                 type="text"
                 id="title"
                 {...register("title", { required: "Title is required" })}
-                className="w-full border border-gray-300 rounded-sm p-2.5 sm:p-3 text-base focus:outline-none focus:ring-2 focus:ring-[#e62245] transition"
+                className="w-full border border-gray-600 rounded-sm p-2.5 text-base focus:outline-none focus:ring-2 focus:ring-[#e62245] transition"
                 placeholder="Enter page title"
               />
             </div>
@@ -228,6 +244,48 @@ const AdminUpdateHire = () => {
                 />
               )}
             />
+          </div>
+          {/* Links Section */}
+          <div className="space-y-4 border-t border-gray-500 pt-4">
+            <h3 className="text-lg font-medium">Page Links</h3>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <label className="block font-medium text-sm sm:text-base mb-1">
+                  Contact Us Link
+                </label>
+                <input
+                  type="text"
+                  {...register("links.contactUs")}
+                  className="w-full border border-gray-600 rounded-sm p-2.5 text-base focus:outline-none focus:ring-2 focus:ring-[#e62245] transition"
+                  placeholder="/contact-us"
+                />
+              </div>
+
+              <div>
+                <label className="block font-medium text-sm sm:text-base mb-1">
+                  Privacy Policy Link
+                </label>
+                <input
+                  type="text"
+                  {...register("links.privacyPolicy")}
+                  className="w-full border border-gray-600 rounded-sm p-2.5 text-base focus:outline-none focus:ring-2 focus:ring-[#e62245] transition"
+                  placeholder="/privacy"
+                />
+              </div>
+
+              <div>
+                <label className="block font-medium text-sm sm:text-base mb-1">
+                  Terms of Service Link
+                </label>
+                <input
+                  type="text"
+                  {...register("links.termsOfService")}
+                  className="w-full border border-gray-600 rounded-sm p-2.5 text-base focus:outline-none focus:ring-2 focus:ring-[#e62245] transition"
+                  placeholder="/terms"
+                />
+              </div>
+            </div>
           </div>
 
           {/* Submit Button */}
