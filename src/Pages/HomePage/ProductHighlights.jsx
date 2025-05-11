@@ -248,7 +248,7 @@ const ProductHighlights = () => {
       <div className="mt-4">
         <Swiper
           modules={[Navigation]}
-          spaceBetween={10}
+          spaceBetween={8}
           slidesPerView={4}
           slidesPerGroup={4}
           onSwiper={(swiper) => {

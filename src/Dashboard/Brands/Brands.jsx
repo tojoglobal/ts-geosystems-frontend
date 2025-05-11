@@ -160,7 +160,6 @@ const Brands = () => {
             <span>Active</span>
           </label>
         </div>
-
         <button
           type="submit"
           className="w-full bg-teal-600 text-white py-[6px] px-4 rounded-sm hover:bg-teal-700 transition text-sm sm:text-base"

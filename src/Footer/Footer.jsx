@@ -90,7 +90,7 @@ const Footer = () => {
             <input
               type="email"
               placeholder="Your E-mail"
-              className="w-full p-2 placeholder:italic text-black bg-white rounded-l-sm"
+              className="w-full p-2 placeholder:italic text-black bg-white rounded-l-[4px]"
             />
             <button className="bg-[#af1334] px-4 py-2 rounded-r-sm font-medium">
               JOIN

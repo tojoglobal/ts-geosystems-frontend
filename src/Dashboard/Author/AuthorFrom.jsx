@@ -23,7 +23,7 @@ export default function AuthorFrom({
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="p-4 rounded shadow space-y-4"
+      className="rounded shadow space-y-4"
     >
       <div>
         <label className="block mb-1 font-medium">Tax Name</label>
@@ -66,7 +66,7 @@ export default function AuthorFrom({
           <button
             type="button"
             onClick={onCancel}
-            className="bg-gray-500 text-white px-4 py-2 rounded"
+            className="bg-gray-500 text-white px-4 py-[6px] rounded"
           >
             Cancel
           </button>
