@@ -4,8 +4,6 @@ import { generateBarcodeBase64 } from "./generateBarcodeBase64";
 import "./../../src/BanglaFront/Nikosh-normal";
 import { getCouponInfo } from "./getCouponInfo";
 
-import QRCode from "qrcode";
-
 export const GenerateInvoicePdf = async (order) => {
   const items = JSON.parse(order?.items || "[]");
 
@@ -282,48 +280,46 @@ export const GenerateInvoicePdf = async (order) => {
         { align: "right" }
       );
 
-      // === Notes / Terms ===
-      const termsStartY = 220;
-      doc.setFont("helvetica", "italic");
-      doc.setFontSize(10);
-      doc.text("Notes / Terms", 15, termsStartY);
+      // === Barcode and QR Code Above Terms ===
+      const barcodeY = 250; // 250mm from top (bottom area)
+      const barcodeX = pageWidth - 60; // Right side
+      doc.addImage(barcodeData, "PNG", barcodeX, barcodeY, 40, 20); // width: 40mm, height: 20mm
 
-      const terms = [
-        "* Please check and test instruments at the time of delivery.",
-        "* Do not remove the service sticker to claim warranty.",
-        "* No warranty for Battery, Charger & Data Cable.",
-        "* After receiving, if you don't collect the instrument within 30 days, we are not responsible for any damage or missing.",
-      ];
+      // Example QR code (you can generate real one or use a base64)
+      const qrImage = new Image();
+      qrImage.src = `https://chart.googleapis.com/chart?chs=100x100&cht=qr&chl=${order.order_id}`;
+      qrImage.crossOrigin = "Anonymous";
 
-      terms.forEach((line, i) => {
-        doc.text(line, 15, termsStartY + 6 + i * 5);
-      });
+      // When QR image loads, draw it and then resolve PDF
+      qrImage.onload = () => {
+        doc.addImage(qrImage, "PNG", 15, barcodeY, 30, 30); // QR left side
+        // === Notes / Terms ===
+        const terms = [
+          "* Please check and test instruments at the time of delivery.",
+          "* Do not remove the service sticker to claim warranty.",
+          "* No warranty for Battery, Charger & Data Cable.",
+          "* After receiving, if you don't collect the instrument within 30 days, we are not responsible for any damage or missing.",
+        ];
+        doc.setFont("helvetica", "italic");
+        doc.setFontSize(10);
+        doc.text("Notes / Terms", 15, barcodeY + 38);
+        terms.forEach((line, i) => doc.text(line, 15, barcodeY + 44 + i * 5));
 
-      // === Barcode and QR Code BELOW Terms ===
-      const barcodeY = termsStartY + 6 + terms.length * 5 + 10;
-      const barcodeX = pageWidth - 60;
+        // ✅ Watermark
+        doc.saveGraphicsState();
+        doc.setGState(new doc.GState({ opacity: 0.3 }));
+        doc.setFontSize(60);
+        doc.setTextColor(isPaid ? 0 : 200, isPaid ? 200 : 0, 0);
+        doc.setFont("helvetica", "bold");
+        doc.text(isPaid ? "PAID" : "UNPAID", 105, 150, {
+          align: "center",
+          angle: 40,
+        });
+        doc.restoreGraphicsState();
 
-      // ✅ Add Barcode
-      doc.addImage(barcodeData, "PNG", barcodeX, barcodeY, 40, 20); // Right side
-
-      // ✅ Generate and Add QR code
-      const qrDataUrl = await QRCode.toDataURL(order.order_id);
-      doc.addImage(qrDataUrl, "PNG", 15, barcodeY, 30, 30); // Left side
-
-      // ✅ Watermark
-      doc.saveGraphicsState();
-      doc.setGState(new doc.GState({ opacity: 0.3 }));
-      doc.setFontSize(60);
-      doc.setTextColor(isPaid ? 0 : 200, isPaid ? 200 : 0, 0);
-      doc.setFont("helvetica", "bold");
-      doc.text(isPaid ? "PAID" : "UNPAID", 105, 150, {
-        align: "center",
-        angle: 40,
-      });
-      doc.restoreGraphicsState();
-
-      // ✅ Finally, resolve
-      resolve(doc);
+        // ✅ Finally, resolve
+        resolve(doc);
+      };
     };
   });
 };

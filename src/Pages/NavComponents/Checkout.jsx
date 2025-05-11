@@ -97,6 +97,7 @@ const Checkout = () => {
       paymentStatus: "pending",
       items: mergedCart,
       coupon: coupon?.code_name || null,
+      shipping_cost: shippingCost || null,
       total,
     };
 
