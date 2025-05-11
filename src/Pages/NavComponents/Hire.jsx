@@ -38,6 +38,7 @@ const Hire = () => {
       return data.data;
     },
   });
+  console.log(hireContent);
 
   if (isLoading) {
     return <p>Loading...</p>;
@@ -450,17 +451,26 @@ const Hire = () => {
             <p className="text-[13px] text-gray-500 mt-4">
               Please fill in the form, together with your surveying instrument
               details, and we will reply with an estimate. For queries please{" "}
-              <Link to="/contact-us" className="text-[#e62245] underline">
+              <Link
+                to={hireContent?.links?.contactUs || "/contact-us"}
+                className="text-[#e62245] underline"
+              >
                 contact us...
               </Link>
             </p>
             <p className="text-[13px] text-gray-500">
               This site is protected by reCAPTCHA and the Google{" "}
-              <Link to="/privacy" className="text-[#e62245] underline">
+              <Link
+                to={hireContent?.links?.privacyPolicy || "/privacy"}
+                className="text-[#e62245] underline"
+              >
                 Privacy Policy
               </Link>{" "}
               and{" "}
-              <Link to="/terms" className="text-[#e62245] underline">
+              <Link
+                to={hireContent?.links?.termsOfService || "/terms"}
+                className="text-[#e62245] underline"
+              >
                 Terms of Service
               </Link>{" "}
               apply.

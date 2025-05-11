@@ -93,6 +93,7 @@ const menuItems = [
       { label: "Service", to: "/dashboard/service" },
       { label: "About Us", to: "/dashboard/about-us" },
       { label: "Contact Us", to: "/dashboard/contact-us" },
+      { label: "Certificate Tracking", to: "/dashboard/cc" },
     ],
   },
   {

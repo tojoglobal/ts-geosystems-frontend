@@ -120,7 +120,7 @@ const MainNavContainer = () => {
               </div>
               {/* Right side */}
               {!isSticky ? (
-                <div className="flex gap-[35px] text-[15px] font-semibold text-charcoal relative">
+                <div className="flex gap-10 text-[14px] font-bold text-charcoal relative">
                   <Link
                     to="/used"
                     className="cursor-pointer hover:text-crimson-red transition-colors duration-300 py-2"
