@@ -63,8 +63,8 @@ import AdminUpdateService from "./Pages/Control/AdminUpdateService";
 import BlogDetails from "./Pages/NavComponents/Blog/BlogDetails";
 import TaxManager from "./Dashboard/TaxManager/TaxManager";
 import BlogCreate from "./Dashboard/Blog/BlogCreate";
-import BlogType from "./Dashboard/BlogType/BlogType";
 import AuthorManager from "./Dashboard/Author/AuthorMange";
+import BlogTypeManage from "./Dashboard/BlogType/BlogTypeManage";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -149,7 +149,7 @@ const AppLayout = () => {
           {/* author route */}
           <Route path="author" element={<AuthorManager />} />
           {/* Blog Type route */}
-          <Route path="blog-type" element={<BlogType />} />
+          <Route path="blog-type" element={<BlogTypeManage />} />
 
           {/* dynamic about page */}
           <Route path="hire" element={<AdminUpdateHire />} />

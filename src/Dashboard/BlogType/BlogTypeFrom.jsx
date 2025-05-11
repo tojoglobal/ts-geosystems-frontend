@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
-export default function AuthorForm({
+export default function BlogTypeForm({
   onSubmit,
   initialData,
   isEditing,
@@ -21,15 +21,15 @@ export default function AuthorForm({
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="rounded shadow space-y-4"
+      className="p-4 rounded shadow space-y-4"
     >
       <div>
-        <label className="block mb-1 font-medium">Author Name</label>
+        <label className="block mb-1 font-medium">Blog Type Name</label>
         <input
           type="text"
           {...register("name")}
           className="w-full bg-gray-800 border border-gray-700 rounded p-2 text-sm md:text-base focus:outline-none focus:ring focus:ring-[#e62245] text-white"
-          placeholder="Enter author name"
+          placeholder="Enter blog type name"
         />
       </div>
 
@@ -38,13 +38,13 @@ export default function AuthorForm({
           type="submit"
           className="bg-teal-600 py-2 px-4 rounded-md hover:bg-teal-700 transition"
         >
-          {isEditing ? "Update Author" : "Add Author"}
+          {isEditing ? "Update Blog Type" : "Add Blog Type"}
         </button>
         {isEditing && (
           <button
             type="button"
             onClick={onCancel}
-            className="bg-gray-500 text-white px-4 py-[6px] rounded"
+            className="bg-gray-500 text-white px-4 py-2 rounded"
           >
             Cancel
           </button>
