@@ -317,27 +317,27 @@ const TradeIn = () => {
                 <label className="block mb-2 text-[15px]">
                   Sell or Trade In? *
                 </label>
-                <div className="grid grid-cols-2">
-                  <label className="flex items-center gap-2">
+                <div className="grid grid-cols-2 gap-4">
+                  <label className="flex items-center gap-2 cursor-pointer">
                     <input
                       type="radio"
                       name="sellOrTrade"
                       value="sell"
                       checked={formData.sellOrTrade === "sell"}
                       onChange={handleChange}
-                      className="w-4 h-4 appearance-none rounded-full border-2 border-gray-300 checked:border-4 checked:border-[#e62245] checked:bg-white bg-[#e7e7e7] relative"
+                      className="w-5 h-5 appearance-none rounded-full border-[2px] border-gray-300 checked:border-[5px] checked:border-[#e62245] checked:bg-white bg-[#e7e7e7] transition-all duration-150"
                       required
                     />
                     <span className="text-sm">Sell</span>
                   </label>
-                  <label className="flex items-center gap-2">
+                  <label className="flex items-center gap-2 cursor-pointer">
                     <input
                       type="radio"
                       name="sellOrTrade"
                       value="tradeIn"
                       checked={formData.sellOrTrade === "tradeIn"}
                       onChange={handleChange}
-                      className="w-4 h-4 appearance-none rounded-full border-2 border-gray-300 checked:border-4 checked:border-[#e62245] checked:bg-white bg-[#e7e7e7] relative"
+                      className="w-5 h-5 appearance-none rounded-full border-[2px] border-gray-300 checked:border-[5px] checked:border-[#e62245] checked:bg-white bg-[#e7e7e7] transition-all duration-150"
                     />
                     <span className="text-sm">Trade In</span>
                   </label>

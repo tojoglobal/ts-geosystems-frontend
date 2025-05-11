@@ -142,9 +142,8 @@ const Support = () => {
       </div>
       <div className="max-w-3xl mx-auto my-6">
         <h2 className="text-2xl font-semibold mb-2">Support Request Form</h2>
-        <p className="mb-6">
+        <p className="mb-6 text-[15px] font-normal">
           Please fill in the form, together with your survey instrument details,
-          <br />
           and and our support team will be in touch. For queries please{" "}
           <Link to="/contact-us" className="text-[#e62245] underline">
             contact us...
@@ -278,15 +277,18 @@ const Support = () => {
                     "Training",
                     "Other...",
                   ].map((label, index) => (
-                    <label key={index} className="flex items-center space-x-2">
+                    <label
+                      key={index}
+                      className="flex items-center space-x-2 cursor-pointer"
+                    >
                       <input
                         type="checkbox"
                         value={label}
                         checked={formData.supportIssues.includes(label)}
                         onChange={handleCheckboxChange}
-                        className="w-4 h-4 bg-gray-200 accent-[#e62245] rounded"
+                        className="w-4 h-4 appearance-none bg-[#e7e7e7] border border-gray-300 rounded checked:bg-[#e62245] checked:border-[#e62245] checked:bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22white%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M12.207%204.793a1%201%200%20010%201.414l-5%205a1%201%200%2001-1.414%200l-2-2a1%201%200%20011.414-1.414L6.5%209.086l4.293-4.293a1%201%200%20011.414%200z%22%2F%3E%3C%2Fsvg%3E')]"
                       />
-                      <span>{label}</span>
+                      <span className="text-sm">{label}</span>
                     </label>
                   ))}
                 </div>
