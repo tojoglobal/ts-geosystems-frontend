@@ -1,6 +1,6 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay } from "swiper/modules";
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import "swiper/css";
 import "swiper/css/navigation";
 import { Link } from "react-router-dom";
@@ -77,16 +77,10 @@ const TopClients = () => {
           </h2>
           <div className="flex-1 h-0.5 bg-[#e62245]"></div>
         </div>
-        <div className="relative">
-          <div className="custom-prev absolute top-1/2 left-1 md:-left-6 transform -translate-y-1/2 hover:bg-[#e62245] bg-white text-black hover:text-white p-2 rounded-full cursor-pointer z-10">
-            <FaChevronLeft size={15} />
-          </div>
-          <div className="custom-next absolute top-1/2 -right-1 md:-right-6 transform -translate-y-1/2 hover:bg-[#e62245] bg-white text-black hover:text-white shadow-xl p-2 rounded-full cursor-pointer z-10">
-            <FaChevronRight size={15} />
-          </div>
+        <div className="relative group">
           <Swiper
             modules={[Navigation, Autoplay]}
-            spaceBetween={30}
+            spaceBetween={15}
             slidesPerView={4}
             breakpoints={{
               0: {
@@ -124,6 +118,12 @@ const TopClients = () => {
               </SwiperSlide>
             ))}
           </Swiper>
+          <button className="cursor-pointer swiper-button-prev-custom hidden group-hover:block absolute -left-1 md:-left-5 top-[50%] -translate-y-1/2 z-10 bg-white shadow-md rounded-full p-2 hover:bg-gray-100">
+            <IoIosArrowBack size={18} className="text-gray-600" />
+          </button>
+          <button className="cursor-pointer swiper-button-next-custom hidden group-hover:block absolute -right-1 md:-right-5 top-[50%] -translate-y-1/2 z-10 bg-white shadow-md rounded-full p-2 hover:bg-gray-100">
+            <IoIosArrowForward size={18} className="text-gray-600" />
+          </button>
         </div>
       </div>
     </div>

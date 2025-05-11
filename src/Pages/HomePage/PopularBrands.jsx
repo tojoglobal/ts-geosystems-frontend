@@ -1,73 +1,20 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay } from "swiper/modules";
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import "swiper/css";
 import "swiper/css/navigation";
 import { Link } from "react-router-dom";
+import useDataQuery from "../../utils/useDataQuery";
+import Loader from "../../utils/Loader";
 
 const PopularBrands = () => {
-  const brands = [
-    {
-      id: 1,
-      name: "Leica",
-      image:
-        "https://ts-geosystems.com.bd/assets/images/MrWm6451596f6f2572643b59990f_logo%20(2).png",
-      url: "/catalog?brand=Leica",
-    },
-    {
-      id: 2,
-      name: "Hi-Target",
-      image:
-        "https://ts-geosystems.com.bd/assets/images/dWTSHorizontal%20Logo.png",
-      url: "/catalog?brand=Hi-Target",
-    },
-    {
-      id: 3,
-      name: "Geomax",
-      image: "https://ts-geosystems.com.bd/assets/images/bRwcimages%20(1).png",
-      url: "/catalog?brand=Geomax",
-    },
-    {
-      id: 4,
-      name: "Bosch",
-      image:
-        "https://ts-geosystems.com.bd/assets/images/kEwvpng-transparent-bosch-logo.png",
-      url: "/catalog?brand=Bosch",
-    },
-    {
-      id: 5,
-      name: "Bosch",
-      image:
-        "https://ts-geosystems.com.bd/assets/images/B9l5Pentax-Logo.wine.png",
-      url: "/catalog?brand=Bosch",
-    },
-    {
-      id: 6,
-      name: "Leica",
-      image:
-        "https://ts-geosystems.com.bd/assets/images/kEwvpng-transparent-bosch-logo.png",
-      url: "/catalog?brand=Leica",
-    },
-    {
-      id: 7,
-      name: "Hi-Target",
-      image: "https://ts-geosystems.com.bd/assets/images/7w2t5cf8bc5eb6f89.jpg",
-      url: "/catalog?brand=Hi-Target",
-    },
-    {
-      id: 8,
-      name: "Geomax",
-      image: "https://ts-geosystems.com.bd/assets/images/1737370495images.png",
-      url: "/catalog?brand=Geomax",
-    },
-    {
-      id: 9,
-      name: "Bosch",
-      image:
-        "https://ts-geosystems.com.bd/assets/images/0oG5kolida-logo-gm.png",
-      url: "/catalog?brand=Bosch",
-    },
-  ];
+  const { data = [], isLoading } = useDataQuery(
+    ["popularBrand"],
+    "/api/brands"
+  );
+  
+  if (isLoading) return <Loader />;
+  const brands = data.filter((brand) => brand.home_page_show === 1);
 
   return (
     <div className="py-5 md:py-16">
@@ -79,16 +26,10 @@ const PopularBrands = () => {
           </h2>
           <div className="flex-1 h-0.5 bg-[#e62245]"></div>
         </div>
-        <div className="relative">
-          <div className="custom-prev absolute top-1/2 -left-1 md:-left-6 transform -translate-y-1/2 hover:bg-[#e62245] bg-white text-black hover:text-white p-2 rounded-full cursor-pointer z-10">
-            <FaChevronLeft size={15} />
-          </div>
-          <div className="custom-next absolute top-1/2 -right-1 md:-right-6 transform -translate-y-1/2 hover:bg-[#e62245] bg-white shadow-xl text-black hover:text-white p-2 rounded-full cursor-pointer z-10">
-            <FaChevronRight size={15} />
-          </div>
+        <div className="relative group">
           <Swiper
             modules={[Navigation, Autoplay]}
-            spaceBetween={30}
+            spaceBetween={15}
             slidesPerView={4}
             breakpoints={{
               0: {
@@ -114,18 +55,26 @@ const PopularBrands = () => {
             {brands.map((brand) => (
               <SwiperSlide key={brand.id}>
                 <Link
-                  to={brand.url}
+                  to={`/catalog?brand=${brand.slug}`}
                   className="brand-card p-4 transition-all duration-300 hover:border-[#e62245] hover:border-2 rounded-lg h-32 flex items-center justify-center"
                 >
                   <img
-                    src={brand.image}
-                    alt={brand.name}
-                    className="max-w-full max-h-full object-contain"
+                    src={`${import.meta.env.VITE_OPEN_APIURL}/uploads/${
+                      brand.photo
+                    }`}
+                    alt={brand.brands_name}
+                    className="h-36 object-contain"
                   />
                 </Link>
               </SwiperSlide>
             ))}
           </Swiper>
+          <button className="cursor-pointer swiper-button-prev-custom hidden group-hover:block absolute -left-1 md:-left-4 top-[50%] -translate-y-1/2 z-10 bg-white shadow-md rounded-full p-2 hover:bg-gray-100">
+            <IoIosArrowBack size={18} className="text-gray-600" />
+          </button>
+          <button className="cursor-pointer swiper-button-next-custom hidden group-hover:block absolute -right-1 md:-right-4 top-[50%] -translate-y-1/2 z-10 bg-white shadow-md rounded-full p-2 hover:bg-gray-100">
+            <IoIosArrowForward size={18} className="text-gray-600" />
+          </button>
         </div>
       </div>
     </div>

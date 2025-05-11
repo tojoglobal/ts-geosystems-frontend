@@ -10,9 +10,15 @@ import "swiper/css/navigation";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import { toast } from "react-toastify";
 import { useQuery } from "@tanstack/react-query";
+import useDataQuery from "../../utils/useDataQuery";
 
 const ContactUs = () => {
   const axiosPublicUrl = useAxiospublic();
+  const { data = [], isLoading:loading } = useDataQuery(
+    ["popularBrand"],
+    "/api/brands"
+  );
+
   const {
     data: contactInfo,
     isLoading,
@@ -50,7 +56,9 @@ const ContactUs = () => {
     }
   };
 
-  if (isLoading) {
+  const brands = data.filter((brand) => brand.is_populer === 1);
+
+  if (isLoading || loading) {
     return <div className="p-3">Loading contact information...</div>;
   }
 
@@ -265,50 +273,15 @@ const ContactUs = () => {
             },
           }}
         >
-          {[
-            {
-              name: "Chartwell",
-              image:
-                "https://files.elfsightcdn.com/8b8376a3-dcd2-4125-b325-6f12bad45143/a7832d91-6d86-4b77-947a-ff429aa6fc12.png",
-              link: "/chartwell",
-            },
-            {
-              name: "SURVIPOD",
-              image:
-                "https://files.elfsightcdn.com/8b8376a3-dcd2-4125-b325-6f12bad45143/ec4238ba-3eba-4030-9963-67a42faf2e75.png",
-              link: "/chartwell",
-            },
-            {
-              name: "VIVAX METROTECH",
-              image:
-                "https://files.elfsightcdn.com/8b8376a3-dcd2-4125-b325-6f12bad45143/a791e65d-defd-4ec8-8f33-64539bbaaf1a/brand-vivax-metrotech.webp",
-              link: "/chartwell",
-            },
-            {
-              name: "Hundred 2024",
-              image:
-                "https://files.elfsightcdn.com/8b8376a3-dcd2-4125-b325-6f12bad45143/b67f54d0-e3c7-4031-8daa-75fc89ff512b.png",
-              link: "/chartwell",
-            },
-            {
-              name: "Partner 5",
-              image:
-                "https://files.elfsightcdn.com/8b8376a3-dcd2-4125-b325-6f12bad45143/ec4238ba-3eba-4030-9963-67a42faf2e75.png",
-              link: "/chartwell",
-            },
-            {
-              name: "Partner 6",
-              image:
-                "https://files.elfsightcdn.com/8b8376a3-dcd2-4125-b325-6f12bad45143/b67f54d0-e3c7-4031-8daa-75fc89ff512b.png",
-              link: "/chartwell",
-            },
-          ].map((partner, index) => (
+          {brands?.map((brand, index) => (
             <SwiperSlide key={index}>
               <div className="w-full h-12 rounded shadow flex items-center justify-center">
-                <Link to={partner.link}>
+                <Link to={brand.slug}>
                   <img
-                    src={partner.image}
-                    alt={partner.name}
+                    src={`${import.meta.env.VITE_OPEN_APIURL}/uploads/${
+                      brand.photo
+                    }`}
+                    alt={brand.name}
                     className="max-h-36 w-auto object-contain"
                   />
                 </Link>
@@ -316,10 +289,10 @@ const ContactUs = () => {
             </SwiperSlide>
           ))}
         </Swiper>
-        <button className="swiper-button-prev-custom hidden group-hover:block absolute -left-1 md:-left-5 top-[78%] -translate-y-1/2 z-10 bg-white shadow-md rounded-full p-2 hover:bg-gray-100">
+        <button className="cursor-pointer swiper-button-prev-custom hidden group-hover:block absolute -left-1 md:-left-4 top-[78%] -translate-y-1/2 z-10 bg-white shadow-md rounded-full p-2 hover:bg-gray-100">
           <IoIosArrowBack size={18} className="text-gray-600" />
         </button>
-        <button className="swiper-button-next-custom hidden group-hover:block absolute -right-1 md:-right-5 top-[78%] -translate-y-1/2 z-10 bg-white shadow-md rounded-full p-2 hover:bg-gray-100">
+        <button className="cursor-pointer swiper-button-next-custom hidden group-hover:block absolute -right-1 md:-right-4 top-[78%] -translate-y-1/2 z-10 bg-white shadow-md rounded-full p-2 hover:bg-gray-100">
           <IoIosArrowForward size={18} className="text-gray-600" />
         </button>
       </section>

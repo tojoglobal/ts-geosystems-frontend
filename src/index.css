@@ -90,7 +90,7 @@ select {
   background-size: 1rem;
 }
 
-.react-select__control {
+/* .react-select__control {
   @apply dark:bg-gray-800 dark:border-gray-600 text-white;
 }
 .react-select__menu {
@@ -101,7 +101,7 @@ select {
 }
 .react-select__option--is-focused {
   @apply bg-teal-800 text-white;
-}
+} */
 
 /* under line animation  */
 @keyframes growLine {
@@ -201,7 +201,7 @@ div.left div {
 }
 
 div.left div p {
-  color: #fff;
+  /* color: #fff; */
   font-size: 36px;
   margin: 0;
   font-weight: bolder;
@@ -209,7 +209,7 @@ div.left div p {
 
 div.left div a {
   display: block;
-  color: #fff;
+  /* color: #fff; */
   text-decoration: none;
   font-size: 14.5px;
 }
@@ -253,7 +253,7 @@ div.right h1 {
   opacity: 70%;
 }
 
-div.right input {
+/* div.right input {
   padding: 13px 50px 13px 20px;
   margin: 10px 0;
   background-color: #efefef;
@@ -261,7 +261,7 @@ div.right input {
   border-radius: 8px;
   width: 100%;
   font-size: 16px;
-}
+} */
 
 div.right input:focus {
   outline-color: transparent;
