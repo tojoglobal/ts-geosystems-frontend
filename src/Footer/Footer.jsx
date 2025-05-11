@@ -1,4 +1,3 @@
-import React from "react";
 import SocialButtons from "../Components/SocialButtons";
 import { Link } from "react-router-dom";
 
@@ -22,7 +21,7 @@ const Footer = () => {
             <img
               src="https://ts-geosystems.com.bd/assets/images/ISO-WHITE.png"
               alt="ISO"
-              className="h-8"
+              className="h-12"
             />
             {/* <img src="/ur.png" alt="UR" className="h-8" />
             <img src="/ea-jas.png" alt="EA-JAS" className="h-8" /> */}
@@ -33,13 +32,23 @@ const Footer = () => {
         <div>
           <h2 className="text-xl font-semibold mb-4">ACCOUNTS & ORDERS</h2>
           <ul className="space-y-2 text-sm">
-            <li>Login or SignUp</li>
-            <li>
-              <Link to="/admin/login">My Account</Link>
+            <li className="flex items-center gap-1">
+              <Link to="/user/login">Login</Link>
+              <span>or</span>
+              <Link to="/user/create_account">Sign Up</Link>
             </li>
-            <li>Order Status</li>
-            <li>Privacy Policy</li>
-            <li>Terms & Service</li>
+            <li>
+              <Link to="/my-account">My Account</Link>
+            </li>
+            <li>
+              <Link to="/order-status">Order Status</Link>
+            </li>
+            <li>
+              <Link to="/privacy-policy">Privacy Policy</Link>
+            </li>
+            <li>
+              <Link to="/terms">Terms & Service</Link>
+            </li>
           </ul>
         </div>
 
@@ -47,13 +56,27 @@ const Footer = () => {
         <div>
           <h2 className="text-xl font-semibold mb-4">NAVIGATE</h2>
           <ul className="space-y-2 text-sm">
-            <li>HIRE</li>
-            <li>SERVICE</li>
-            <li>SUPPORT</li>
-            <li>TRADE IN</li>
-            <li>BLOG</li>
-            <li>ABOUT US</li>
-            <li>CONTACT US</li>
+            <li>
+              <Link to="/hire">HIRE</Link>
+            </li>
+            <li>
+              <Link to="/service">SERVICE</Link>
+            </li>
+            <li>
+              <Link to="/support">SUPPORT</Link>
+            </li>
+            <li>
+              <Link to="/trade-in">TRADE IN</Link>
+            </li>
+            <li>
+              <Link to="/ts-blog">BLOG</Link>
+            </li>
+            <li>
+              <Link to="/about-us">ABOUT US</Link>
+            </li>
+            <li>
+              <Link to="/contact-us">CONTACT US</Link>
+            </li>
           </ul>
         </div>
         {/* Mailing List */}
@@ -78,7 +101,10 @@ const Footer = () => {
       </div>
       <hr className="border-gray-400 pt-2 mb-4" />
       <div className="max-w-[85%] mx-auto flex flex-col md:flex-row justify-between items-center text-sm pb-6">
-        <p>TS Geosystem © All rights reserved | Sitemap</p>
+        <p>
+          TS Geosystem © All rights reserved |{" "}
+          <Link to="/sitemap">Sitemap</Link>
+        </p>
         <div className="bg-[#585c5d] text-white text-center">
           <p>
             Provided by{" "}

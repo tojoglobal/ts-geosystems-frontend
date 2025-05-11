@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Card, CardHeader, CardTitle, CardContent } from "@/Components/ui/card";
@@ -105,12 +106,9 @@ const SliderEditor = () => {
     }
   };
 
-  console.log(slides);
-
   return (
     <div className="p-4 space-y-6">
       <h2 className="text-2xl font-bold text-teal-600">Hero Banner Editor</h2>
-
       <div className="flex gap-2 mb-4">
         {slides.map((slide) => (
           <Button
@@ -122,7 +120,6 @@ const SliderEditor = () => {
           </Button>
         ))}
       </div>
-
       <form onSubmit={handleSubmit(onSubmit)}>
         <Card>
           <CardHeader>

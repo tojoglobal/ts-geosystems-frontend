@@ -54,7 +54,7 @@ const TradeIn = () => {
 
   return (
     <div className="p-2 md:p-3">
-      <div className="font-light flex items-center gap-2 text-[10px]">
+      <div className="flex items-center gap-2 text-[11px]">
         <Link to="/" className="flex items-center gap-1 text-[#e62245]">
           Home
         </Link>
@@ -63,19 +63,21 @@ const TradeIn = () => {
           Trade In
         </Link>
       </div>
-      <p className="text-[#e62245] font-light mt-3 text-3xl mb-6">
+      <p className="text-[#e62245] font-light mt-3 text-[28px] mb-6">
         TRADE IN
       </p>
-      <h1 className="text-2xl mt-2 text-[#e62245] mb-2 font-bold">
+      <h1 className="text-[26px] mt-2 text-[#e62245] mb-2 font-bold">
         Sell or Trade In Your Surveying Equipment
       </h1>
-      <p className="mb-4">
+      <p className="mb-4 text-sm">
         G2 Survey purchases Leica Geosystems survey equipment and will trade in
         Trimble, Topcon, and others against the purchase of new or used Leica
         surveying instruments.
       </p>
-      <h2 className="text-[#e62245] font-bold mb-1">Our Buying Process</h2>
-      <ol className="list-decimal list-inside mb-4">
+      <h2 className="text-[#e62245] font-bold text-[18px] mb-1">
+        Our Buying Process
+      </h2>
+      <ol className="list-decimal list-inside mb-4 text-sm">
         <li>
           1. To give you our best offer, we request you complete the form below
           as fully as possible, especially the make, model, serial number,
@@ -98,8 +100,8 @@ const TradeIn = () => {
           cost.
         </li>
       </ol>
-      <h2 className="text-[#e62245] font-bold mb-1">Trade-Ins</h2>
-      <p>
+      <h2 className="text-[#e62245] font-bold mb-1 text-[18px]">Trade-Ins</h2>
+      <p className="text-sm">
         Are you looking to trade in your survey equipment? The process is the
         same for buying your equipment! We will simply credit the offer amount
         towards the new equipment you want to purchase.
@@ -284,7 +286,7 @@ const TradeIn = () => {
                   </label>
                 </div>
               </div>
-              <div className="">
+              <div className="font-semibold">
                 <div className="mb-4">
                   <label className="block mb-2">Equipment Condition *</label>
                   <div className="flex gap-2">
@@ -311,29 +313,31 @@ const TradeIn = () => {
                   </div>
                 </div>
               </div>
-              <div className="mb-4">
-                <label className="block mb-2">Sell or Trade In? *</label>
-                <div className="flex space-x-20 gap-2">
-                  <label className="flex items-center gap-2">
+              <div className="mb-4 font-semibold">
+                <label className="block mb-2 text-[15px]">
+                  Sell or Trade In? *
+                </label>
+                <div className="grid grid-cols-2 gap-4">
+                  <label className="flex items-center gap-2 cursor-pointer">
                     <input
                       type="radio"
                       name="sellOrTrade"
                       value="sell"
                       checked={formData.sellOrTrade === "sell"}
                       onChange={handleChange}
-                      className="w-4 h-4 text-[#e62245] bg-gray-200 border-gray-300 focus:ring-[#e62245] checked:bg-[#e62245] accent-[#e62245]"
+                      className="w-5 h-5 cursor-pointer appearance-none rounded-full border-[2px] border-gray-300 checked:border-[5px] checked:border-[#e62245] checked:bg-white bg-[#e7e7e7] transition-all duration-150"
                       required
                     />
                     <span className="text-sm">Sell</span>
                   </label>
-                  <label className="flex items-center gap-2">
+                  <label className="flex items-center gap-2 cursor-pointer">
                     <input
                       type="radio"
                       name="sellOrTrade"
                       value="tradeIn"
                       checked={formData.sellOrTrade === "tradeIn"}
                       onChange={handleChange}
-                      className="w-4 h-4 text-[#e62245] bg-gray-200 border-gray-300 focus:ring-[#e62245] checked:bg-[#e62245] accent-[#e62245]"
+                      className="w-5 h-5 cursor-pointer appearance-none rounded-full border-[2px] border-gray-300 checked:border-[5px] checked:border-[#e62245] checked:bg-white bg-[#e7e7e7] transition-all duration-150"
                     />
                     <span className="text-sm">Trade In</span>
                   </label>
@@ -356,7 +360,9 @@ const TradeIn = () => {
                 </label>
               </div>
               <div>
-                <p className="mb-2">Please attach photos if applicable:</p>
+                <p className="mb-2 font-semibold">
+                  Please attach photos if applicable:
+                </p>
                 <label className="border-2 border-dashed border-gray-300 rounded p-8 text-center text-sm text-black block cursor-pointer">
                   <span className="text-[#e62245]">Choose file</span> or drop
                   here

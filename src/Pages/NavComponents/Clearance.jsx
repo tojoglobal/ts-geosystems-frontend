@@ -188,14 +188,16 @@ const Clearance = () => {
 
   return (
     <div className="p-2 md:p-3">
-      <div className="font-normal flex items-center gap-2 text-[10px] mb-4">
-        <Link className="text-gray-500" to="/">Home</Link>
+      <div className="flex items-center gap-2 text-[11px] mb-4">
+        <Link className="text-gray-500" to="/">
+          Home
+        </Link>
         <span>/</span>
         <Link to="/clearance" className="text-[#e62245]">
           Clearance
         </Link>
       </div>
-      <h1 className="text-3xl font-bold mb-4">CLEARANCE</h1>
+      <h1 className="text-[30px] font-bold mb-4">CLEARANCE</h1>
       <section>
         <div className="flex items-center justify-between md:justify-normal md:gap-52 mb-6">
           {/* View Mode Buttons */}

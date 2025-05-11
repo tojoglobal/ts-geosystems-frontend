@@ -111,14 +111,14 @@ const AdminUpdateHire = () => {
                 className={`border-2 border-dashed rounded-md p-6 text-center cursor-pointer ${
                   isDragActive
                     ? "border-teal-500 bg-teal-50"
-                    : "border-gray-300"
+                    : "border-gray-600"
                 }`}
               >
                 <input {...getInputProps()} />
                 {isUploading ? (
-                  <p>Uploading image...</p>
+                  <p className="text-gray-900">Uploading image...</p>
                 ) : (
-                  <p>
+                  <p className="text-gray-900">
                     Drag & drop or{" "}
                     <span className="underline text-teal-500">browse</span> to
                     upload a new banner image
@@ -214,7 +214,7 @@ const AdminUpdateHire = () => {
         </form>
       )}
     </div>
-  );
+);
 };
 
 export default AdminUpdateHire;

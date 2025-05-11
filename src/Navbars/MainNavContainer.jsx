@@ -103,7 +103,7 @@ const MainNavContainer = () => {
                     }`}
                   >
                     <span className="relative block">
-                      <span>NEW EQUIPMENT</span>
+                      <span className="text-[16px]">NEW EQUIPMENT</span>
                     </span>
                   </button>
                 </div>
@@ -120,7 +120,7 @@ const MainNavContainer = () => {
               </div>
               {/* Right side */}
               {!isSticky ? (
-                <div className="flex gap-7 text-base font-semibold text-charcoal relative">
+                <div className="flex gap-[35px] text-[15px] font-semibold text-charcoal relative">
                   <Link
                     to="/used"
                     className="cursor-pointer hover:text-crimson-red transition-colors duration-300 py-2"
@@ -147,13 +147,13 @@ const MainNavContainer = () => {
                   </Link>
                   {/* Dropdown Wrapper */}
                   <div className="relative group py-2">
-                    <div className="flex items-center gap-1 hover:text-crimson-red transition-colors duration-300 cursor-pointer">
+                    <div className="flex items-center hover:text-crimson-red transition-colors duration-300 cursor-pointer">
                       SUPPORT
                       <MdOutlineKeyboardArrowDown className="text-xl" />
                     </div>
                     {/* Dropdown Menu */}
                     <div className="absolute -left-10 top-full w-50 bg-white rounded-sm border border-slightly-dark shadow-lg pl-4 py-2 hidden group-hover:block z-50">
-                      <ul className="space-y-1 text-sm text-charcoal">
+                      <ul className="space-y-1 font-normal text-[13px] text-charcoal">
                         <li className="hover:text-crimson-red cursor-pointer transition-colors duration-300">
                           <Link to="/support">Support</Link>
                         </li>
@@ -181,10 +181,10 @@ const MainNavContainer = () => {
                     TRADE IN
                   </Link>
                   <Link
-                    to="/g2-blog"
+                    to="/ts-blog"
                     className="cursor-pointer hover:text-crimson-red transition-colors duration-300 py-2"
                   >
-                    G2 BLOG
+                    TS BLOG
                   </Link>
                   <Link
                     to="/about-us"
@@ -215,7 +215,7 @@ const MainNavContainer = () => {
                       <IoSearchOutline className="text-[#e62245] text-[20px] absolute right-3" />
                     </div>
                     {/* User Icon */}
-                    <Link to="/login">
+                    <Link to="/user/login">
                       <LuUserRound className="text-[23px] text-davy-gray hover:text-crimson-red font-medium cursor-pointer duration-300 ease-in" />
                     </Link>
                     {/* Cart Icon with badge */}

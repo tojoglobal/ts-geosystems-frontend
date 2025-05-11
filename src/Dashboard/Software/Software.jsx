@@ -99,13 +99,10 @@ const Software = () => {
   //   console.log(softwar);
 
   return (
-    <div className="min-h-screen bg-[#f1f4ff] dark:bg-gray-900 p-4 text-gray-900 dark:text-gray-100">
+    <div className="min-h-screen p-4">
       <div className="max-w-4xl mx-auto">
         <h2 className="text-2xl font-bold mb-6">Add a Software</h2>
-        <form
-          className="p-6 bg-white dark:bg-gray-800 rounded shadow-md"
-          onSubmit={handleSubmit(onSubmit)}
-        >
+        <form className="p-5" onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-4">
             <label className="block text-sm font-semibold mb-1">
               Softwar Name
@@ -113,21 +110,19 @@ const Software = () => {
             <input
               type="text"
               {...register("softwarName", { required: true })}
-              className="w-full input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
+              className="w-full input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
               placeholder="Enter brand name"
             />
           </div>
-
           <div className="mb-4">
             <label className="block text-sm font-semibold mb-1">Slug</label>
             <input
               type="text"
               value={generateSlug(watchSoftwarName)}
               readOnly
-              className="w-full input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
+              className="w-full input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
             />
           </div>
-
           <div className="mb-4">
             <label className="block text-sm font-semibold mb-1">
               Softwar Logo
@@ -136,7 +131,7 @@ const Software = () => {
               type="file"
               accept="image/*"
               {...register("photo")}
-              className="w-full input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
+              className="w-full input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
             />
             {imagePreview && (
               <img
@@ -159,7 +154,7 @@ const Software = () => {
               <input
                 type="text"
                 {...register("softwarlink", { required: true })}
-                className="w-full input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
+                className="w-full input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
                 placeholder="Enter Softwar Link"
               />
             </div>
@@ -175,21 +170,32 @@ const Software = () => {
 
         {/* Brands Table */}
         <div className="mt-8 overflow-x-auto">
-          <table className="min-w-full bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 rounded shadow-md">
-            <thead>
-              <tr className="bg-gray-100 dark:bg-gray-700">
-                <th className="text-left p-3">Brand Name</th>
-                <th className="text-left p-3">Logo</th>
-                <th className="text-center p-3">softwarlink</th>
-                <th className="text-center p-3">Actions</th>
+          <table className="min-w-full border border-gray-600 rounded shadow-md">
+            <thead className="bg-gray-800 text-white">
+              <tr>
+                <th className="text-left p-3 border border-gray-600">
+                  Brand Name
+                </th>
+                <th className="text-left p-3 border border-gray-600">Logo</th>
+                <th className="text-center p-3 border border-gray-600">
+                  Softwar Link
+                </th>
+                <th className="text-center p-3 border border-gray-600">
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody>
               {Array.isArray(softwar) && softwar.length > 0 ? (
                 softwar.map((brand) => (
-                  <tr key={brand.id} className="border-b dark:border-gray-700">
-                    <td className="p-3">{brand.softwar_name}</td>
-                    <td className="p-3">
+                  <tr
+                    key={brand.id}
+                    className="border border-gray-600 bg-gray-900 text-white"
+                  >
+                    <td className="p-3 border border-gray-600">
+                      {brand.softwar_name}
+                    </td>
+                    <td className="p-3 border border-gray-600">
                       <img
                         src={`${import.meta.env.VITE_OPEN_APIURL}/uploads/${
                           brand.photo
@@ -198,11 +204,12 @@ const Software = () => {
                         className="w-10/12 h-12 object-cover rounded"
                       />
                     </td>
-                    <td className="text-center p-3">
+                    <td className="text-center p-3 border border-gray-600">
                       <a
                         href={brand.softwarlink}
                         target="_blank"
-                        className="                        text-blue-600 hover:text-blue-800"
+                        rel="noopener noreferrer"
+                        className="text-blue-400 hover:text-blue-500"
                       >
                         {brand.softwar_name.slice(0, 20)}
                       </a>
@@ -210,7 +217,7 @@ const Software = () => {
                     <td className="text-center p-3 flex justify-center gap-4">
                       <button
                         onClick={() => handleEdit(brand)}
-                        className="text-blue-600 hover:text-blue-800"
+                        className="text-blue-300 hover:text-blue-500"
                       >
                         <FaEdit />
                       </button>
@@ -224,9 +231,12 @@ const Software = () => {
                   </tr>
                 ))
               ) : (
-                <tr>
-                  <td colSpan="4" className="text-center p-4">
-                    No softwar found.
+                <tr className="border border-gray-600 bg-gray-900 text-white">
+                  <td
+                    colSpan="4"
+                    className="text-center p-4 border border-gray-600"
+                  >
+                    No software found.
                   </td>
                 </tr>
               )}

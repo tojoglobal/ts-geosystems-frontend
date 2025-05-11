@@ -94,7 +94,7 @@ const Hire = () => {
 
   return (
     <div className="p-2 md:p-3">
-      <div className="font-normal flex items-center gap-2 text-[10px] mb-4">
+      <div className="flex items-center gap-2 text-[11px] mb-3">
         <Link to="/" className="text-[#e62245] hover:underline">
           Home
         </Link>
@@ -103,7 +103,7 @@ const Hire = () => {
           Hire
         </Link>
       </div>
-      <h1 className="text-3xl font-light text-[#e62245] mb-[72px]">HIRE</h1>
+      <h1 className="text-[28px] font-light text-[#e62245] mb-[72px]">HIRE</h1>
       <div className="flex flex-row justify-between mb-5">
         <Link
           to="/hire-enquiry"
@@ -132,9 +132,8 @@ const Hire = () => {
       ></div>
       <div className="max-w-3xl mx-auto my-12">
         <h2 className="text-3xl font-semibold mb-2">Hire Enquiry Form</h2>
-        <p className="mb-6">
+        <p className="mb-6 text-sm">
           Please fill in the form, together with your any specific requirements,
-          <br />
           and we will reply with a customized quote. For queries please{" "}
           <Link to="/contact-us" className="text-[#e62245] underline">
             contact us...
@@ -176,7 +175,7 @@ const Hire = () => {
                 htmlFor="company"
                 className="absolute pl-2 left-2 top-2 text-gray-500 text-sm transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-2 peer-focus:text-xs peer-focus:text-black"
               >
-                Company Name
+                Company Name *
               </label>
             </div>
             <div className="relative w-full">
@@ -226,7 +225,7 @@ const Hire = () => {
                   value="yes"
                   checked={formData.existingCustomer === "yes"}
                   onChange={handleInputChange}
-                  className="w-4 h-4 text-[#e62245] border-gray-300 focus:ring-[#e62245]"
+                  className="w-5 h-5 cursor-pointer appearance-none rounded-full border-[2px] border-gray-300 checked:border-[5px] checked:border-[#e62245] checked:bg-white bg-[#e7e7e7] transition-all duration-150"
                 />
                 <span>Yes</span>
               </label>
@@ -237,7 +236,7 @@ const Hire = () => {
                   value="no"
                   checked={formData.existingCustomer === "no"}
                   onChange={handleInputChange}
-                  className="w-4 h-4 text-[#e62245] border-gray-300 focus:ring-[#e62245]"
+                  className="w-5 h-5 cursor-pointer appearance-none rounded-full border-[2px] border-gray-300 checked:border-[5px] checked:border-[#e62245] checked:bg-white bg-[#e7e7e7] transition-all duration-150"
                 />
                 <span>No</span>
               </label>
@@ -354,11 +353,16 @@ const Hire = () => {
                 <div className="w-full sm:w-1/3">
                   <label
                     htmlFor="hireDate"
-                    className="block text-sm font-medium text-gray-700 mb-1"
+                    className="block text-[15px] font-normal mb-1"
                   >
                     Hire Start Date <span className="text-red-500">*</span>
                   </label>
-                  <div className="relative">
+                  <div
+                    className="relative"
+                    onClick={() =>
+                      document.getElementById("hireDate").showPicker()
+                    }
+                  >
                     <input
                       type="date"
                       id="hireDate"
@@ -368,7 +372,7 @@ const Hire = () => {
                       className="w-full border border-gray-300 rounded p-2 focus:outline-none focus:ring-2 focus:ring-[#e62245] focus:border-transparent bg-white cursor-pointer"
                       required
                       style={{
-                        colorScheme: 'light',
+                        colorScheme: "light",
                       }}
                     />
                     <div className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
@@ -388,10 +392,9 @@ const Hire = () => {
                     </div>
                   </div>
                 </div>
-
                 {/* Hire Period - Right Side */}
                 <div className="w-full sm:w-2/3">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-[15px] font-normal mb-2">
                     Hire Period (approx) <span className="text-red-500">*</span>
                   </label>
                   <div className="grid grid-cols-2 gap-2">
@@ -407,7 +410,7 @@ const Hire = () => {
                             value={label}
                             checked={formData.hirePeriod === label}
                             onChange={handleInputChange}
-                            className="form-radio text-[#e62245] focus:ring-[#e62245]"
+                            className="w-5 h-5 cursor-pointer appearance-none rounded-full border-[2px] border-gray-300 checked:border-[5px] checked:border-[#e62245] checked:bg-white bg-[#e7e7e7] transition-all duration-150"
                           />
                           <span>{label}</span>
                         </label>
@@ -444,14 +447,14 @@ const Hire = () => {
                 </button>
               </div>
             </div>
-            <p className="text-sm text-gray-500 mt-4">
+            <p className="text-[13px] text-gray-500 mt-4">
               Please fill in the form, together with your surveying instrument
               details, and we will reply with an estimate. For queries please{" "}
               <Link to="/contact-us" className="text-[#e62245] underline">
                 contact us...
               </Link>
             </p>
-            <p className="text-sm text-gray-500">
+            <p className="text-[13px] text-gray-500">
               This site is protected by reCAPTCHA and the Google{" "}
               <Link to="/privacy" className="text-[#e62245] underline">
                 Privacy Policy

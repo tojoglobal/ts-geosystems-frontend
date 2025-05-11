@@ -102,13 +102,10 @@ const Brands = () => {
   }, [watch]);
 
   return (
-    <div className="min-h-screen bg-[#f1f4ff] dark:bg-gray-900 p-4 text-gray-900 dark:text-gray-100">
+    <div className="min-h-screen p-4">
       <div className="max-w-4xl mx-auto">
         <h2 className="text-2xl font-bold mb-6">Add a Brand</h2>
-        <form
-          className="p-6 bg-white dark:bg-gray-800 rounded shadow-md"
-          onSubmit={handleSubmit(onSubmit)}
-        >
+        <form className="p-5" onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-4">
             <label className="block text-sm font-semibold mb-1">
               Brand Name
@@ -116,7 +113,7 @@ const Brands = () => {
             <input
               type="text"
               {...register("brandName", { required: true })}
-              className="w-full input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
+              className="w-full input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
               placeholder="Enter brand name"
             />
           </div>
@@ -126,7 +123,7 @@ const Brands = () => {
               type="text"
               value={generateSlug(watchBrandName)}
               readOnly
-              className="w-full input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
+              className="w-full input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
             />
           </div>
           <div className="mb-4">
@@ -137,7 +134,7 @@ const Brands = () => {
               type="file"
               accept="image/*"
               {...register("photo")}
-              className="w-full input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
+              className="w-full input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
             />
             {imagePreview && (
               <img
@@ -181,21 +178,27 @@ const Brands = () => {
 
         {/* Brands Table */}
         <div className="mt-8 overflow-x-auto">
-          <table className="min-w-full bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 rounded shadow-md">
+          <table className="min-w-full border border-gray-600 rounded shadow-md">
             <thead>
-              <tr className="bg-gray-100 dark:bg-gray-700">
-                <th className="text-left p-3">Brand Name</th>
-                <th className="text-left p-3">Logo</th>
-                <th className="text-center p-3">Home Page</th>
-                <th className="text-center p-3">Actions</th>
+              <tr>
+                <th className="text-left p-3 border border-gray-600">
+                  Brand Name
+                </th>
+                <th className="text-left p-3 border border-gray-600">Logo</th>
+                <th className="text-center p-3 border border-gray-600">
+                  Home Page
+                </th>
+                <th className="text-center p-3 border border-gray-600">Actions</th>
               </tr>
             </thead>
             <tbody>
               {Array.isArray(brands) && brands.length > 0 ? (
                 brands.map((brand) => (
-                  <tr key={brand.id} className="border-b dark:border-gray-700">
-                    <td className="p-3">{brand.brands_name}</td>
-                    <td className="p-3">
+                  <tr key={brand.id} className="border border-gray-600 ">
+                    <td className="p-3 border border-gray-600">
+                      {brand.brands_name}
+                    </td>
+                    <td className="p-3 border border-gray-600">
                       <img
                         src={`${import.meta.env.VITE_OPEN_APIURL}/uploads/${
                           brand.photo
@@ -204,13 +207,13 @@ const Brands = () => {
                         className="w-10/12 h-12 object-cover rounded"
                       />
                     </td>
-                    <td className="text-center p-3">
+                    <td className="text-center p-3 border border-gray-600">
                       {brand.home_page_show === 1 ? (
-                        <span className="text-green-500 font-semibold">
+                        <span className="text-green-600 font-semibold">
                           Shown
                         </span>
                       ) : (
-                        <span className="text-red-500 font-semibold">
+                        <span className="text-red-600 font-semibold">
                           Hidden
                         </span>
                       )}
@@ -232,8 +235,11 @@ const Brands = () => {
                   </tr>
                 ))
               ) : (
-                <tr>
-                  <td colSpan="4" className="text-center p-4">
+                <tr className="border border-gray-600 ">
+                  <td
+                    colSpan="4"
+                    className="text-center p-4 border border-gray-600 text-black"
+                  >
                     No brands found.
                   </td>
                 </tr>

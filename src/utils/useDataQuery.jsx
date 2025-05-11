@@ -1,0 +1,17 @@
+import { useQuery } from "@tanstack/react-query";
+import { useAxiospublic } from "../Hooks/useAxiospublic";
+
+const useDataQuery = (key, url, enabled = true) => {
+  const axiospublic = useAxiospublic();
+  const { data, isLoading, error, refetch } = useQuery({
+    queryKey: key,
+    queryFn: async () => {
+      const res = await axiospublic.get(url);
+      return res.data;
+    },
+    enabled,
+  });
+  return { isLoading, data, error, refetch };
+};
+
+export default useDataQuery;

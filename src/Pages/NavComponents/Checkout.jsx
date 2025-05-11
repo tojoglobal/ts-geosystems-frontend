@@ -250,7 +250,7 @@ const Checkout = () => {
               </div>
               <p className="text-sm mt-2">
                 Already have an account?{" "}
-                <Link to="/login" className="text-[#e62245] font-semibold">
+                <Link to="/user/login" className="text-[#e62245] font-semibold">
                   Sign in now
                 </Link>
               </p>

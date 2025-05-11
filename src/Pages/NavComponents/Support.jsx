@@ -76,8 +76,7 @@ const Support = () => {
 
   return (
     <div className="p-2 md:p-3">
-      {/* Breadcrumb */}
-      <div className="font-light flex items-center gap-2 text-[10px]">
+      <div className="flex items-center gap-2 text-[11px]">
         <Link to="/" className="flex items-center gap-1 text-[#e62245]">
           Home
         </Link>
@@ -86,42 +85,44 @@ const Support = () => {
           Support
         </Link>
       </div>
-      <h1 className="text-3xl font-light mt-2 text-[#e62245] mb-6">SUPPORT</h1>
-      <div className="flex flex-col items-center text-center md:flex-row md:justify-center gap-2 md:gap-8 text-sm font-medium text-[#e62245] mb-12">
+      <h1 className="text-[28px] font-light mt-2 text-[#e62245] mb-6">
+        SUPPORT
+      </h1>
+      <div className="flex flex-col items-center text-center md:flex-row md:justify-center gap-2 md:gap-7 text-sm font-normal text-[#e62245] mb-16">
         <Link to="/software-downloads">SOFTWARE DOWNLOADS</Link>
         <Link to="/remote-support">QUICK GUIDES</Link>
         <Link to="/user-manuals">USER MANUALS</Link>
         <Link to="/remote-support">REMOTE SUPPORT</Link>
       </div>
       <div className="max-w-4xl mx-auto bg-gradient-to-b from-[#f4f5f9] to-[#e6e7ec] rounded-md p-3 mb-6">
-        <div className="grid grid-cols-3 gap-2 md:flex md:justify-center md:gap-4">
+        <div className="grid grid-cols-3 md:flex md:justify-center gap-[5px]">
           <Link
             to="/software-downloads"
-            className="bg-[#e62245] text-sm md:text-base text-white px-2 md:px-4 py-2 rounded text-center"
+            className="bg-[#e62245] text-[13px] text-white py-[7.66667px] px-[18.5px] rounded text-center"
           >
             Software Downloads
           </Link>
           <Link
             to="/remote-support"
-            className="bg-[#e62245] text-sm md:text-base text-white px-2 md:px-4 py-2 rounded text-center"
+            className="bg-[#e62245] text-[13px] text-white py-[7.66667px] px-[18.5px] rounded text-center"
           >
             Remote Support
           </Link>
           <Link
             to="/quick-guides"
-            className="bg-[#e62245] text-sm md:text-base text-white px-2 md:px-4 py-2 rounded text-center"
+            className="bg-[#e62245] text-[13px] text-white py-[7.66667px] px-[18.5px] rounded text-center"
           >
             Quick Guides
           </Link>
           <Link
             to="/user-manuals"
-            className="bg-[#e62245] text-sm md:text-base text-white px-2 md:px-4 py-2 rounded text-center"
+            className="bg-[#e62245] text-[13px] text-white py-[7.66667px] px-[18.5px] rounded text-center"
           >
             User Manuals
           </Link>
           <Link
             to="/cc"
-            className="bg-[#e62245] text-sm md:text-base text-white px-2 md:px-4 py-2 rounded text-center"
+            className="bg-[#e62245] text-[13px] text-white py-[7.66667px] px-[18.5px] rounded text-center"
           >
             Certificate Tracking
           </Link>
@@ -141,9 +142,8 @@ const Support = () => {
       </div>
       <div className="max-w-3xl mx-auto my-6">
         <h2 className="text-2xl font-semibold mb-2">Support Request Form</h2>
-        <p className="mb-6">
+        <p className="mb-6 text-[15px] font-normal">
           Please fill in the form, together with your survey instrument details,
-          <br />
           and and our support team will be in touch. For queries please{" "}
           <Link to="/contact-us" className="text-[#e62245] underline">
             contact us...
@@ -277,15 +277,18 @@ const Support = () => {
                     "Training",
                     "Other...",
                   ].map((label, index) => (
-                    <label key={index} className="flex items-center space-x-2">
+                    <label
+                      key={index}
+                      className="flex items-center space-x-2 cursor-pointer"
+                    >
                       <input
                         type="checkbox"
                         value={label}
                         checked={formData.supportIssues.includes(label)}
                         onChange={handleCheckboxChange}
-                        className="w-4 h-4 bg-gray-200 accent-[#e62245] rounded"
+                        className="w-4 h-4 appearance-none bg-[#e7e7e7] border border-gray-300 rounded checked:bg-[#e62245] checked:border-[#e62245] checked:bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22white%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M12.207%204.793a1%201%200%20010%201.414l-5%205a1%201%200%2001-1.414%200l-2-2a1%201%200%20011.414-1.414L6.5%209.086l4.293-4.293a1%201%200%20011.414%200z%22%2F%3E%3C%2Fsvg%3E')]"
                       />
-                      <span>{label}</span>
+                      <span className="text-sm">{label}</span>
                     </label>
                   ))}
                 </div>

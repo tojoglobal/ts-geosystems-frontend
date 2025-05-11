@@ -44,7 +44,7 @@ const SoftwareDownloads = () => {
 
   return (
     <div className="p-2 md:p-3">
-      <div className="font-light flex items-center gap-2 text-[10px]">
+      <div className="flex items-center gap-2 text-[11px]">
         <Link to="/" className="text-[#e62245]">
           Home
         </Link>
@@ -57,7 +57,7 @@ const SoftwareDownloads = () => {
           Software Downloads
         </Link>
       </div>
-      <p className="text-[#e62245] font-light mt-3 mb-6 text-3xl">
+      <p className="text-[#e62245] font-light mt-3 mb-6 text-[28px]">
         Software Downloads
       </p>
       <h1 className="text-[#e62245] font-bold text-xl mb-8">

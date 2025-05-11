@@ -246,8 +246,7 @@ const Categorys = () => {
 
   return (
     <>
-      {/* <Categor /> */}
-      <div className="min-h-screen bg-[#f1f4ff] dark:bg-gray-800 p-4 text-gray-900 dark:text-gray-100">
+      <div className="min-h-screen p-4">
         <h2 className="text-xl font-bold mb-4">
           Add Categories & Subcategories
         </h2>
@@ -256,29 +255,29 @@ const Categorys = () => {
             <h2 className="text-base font-bold mb-2">Categories</h2>
             <form
               onSubmit={handleSubmitCategory(addCategory)}
-              className="space-y-4"
+              className="space-y-4 space-x-2"
             >
               <input
                 {...registerCategory("category_name", { required: true })}
                 placeholder="Category Name"
-                className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
+                className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
               />
               <input
                 value={generateSlug(watchCategoryName)}
                 readOnly
                 placeholder="Slug"
-                className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
+                className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
               />
               <input
                 {...registerCategory("serialNumber", { required: true })}
                 type="number"
                 placeholder="Order"
-                className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
+                className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
               />
               <input
                 type="file"
                 accept="image/*"
-                className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
+                className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
                 onChange={(e) => {
                   const file = e.target.files[0];
                   setValueCategory("photo", [file]);
@@ -294,12 +293,12 @@ const Categorys = () => {
               <input
                 {...registerCategory("metaKeyword")}
                 placeholder="Meta Keywords comma separated"
-                className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
+                className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
               />
               <textarea
                 {...registerCategory("meta_description")}
                 placeholder="Meta Description"
-                className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
+                className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
               ></textarea>
               <label className="flex items-center space-x-2">
                 <input type="checkbox" {...registerCategory("is_feature")} />
@@ -314,9 +313,9 @@ const Categorys = () => {
               </button>
             </form>
 
-            <table className="w-full mt-6 border dark:border-gray-700">
+            <table className="w-full mt-6 border border-gray-600">
               <thead>
-                <tr className="bg-gray-200 dark:bg-gray-700">
+                <tr>
                   <th className="p-2 text-left">Category</th>
                   <th className="p-2 text-left">Order</th>
                   <th className="p-2 text-left">Image</th>
@@ -325,7 +324,7 @@ const Categorys = () => {
               </thead>
               <tbody>
                 {categories.map((cat) => (
-                  <tr key={cat.id} className="border-t dark:border-gray-600">
+                  <tr key={cat.id} className="border-t border-gray-600">
                     <td className="p-2">{cat.category_name}</td>
                     <td className="p-2">{cat.serialNumber}</td>
                     <td className="p-2">
@@ -362,22 +361,22 @@ const Categorys = () => {
             <h2 className="text-base font-bold mb-2">Sub Categories</h2>
             <form
               onSubmit={handleSubmitSubCategory(addSubCategory)}
-              className="space-y-4"
+              className="space-y-4 space-x-2"
             >
               <input
                 {...registerSubCategory("name", { required: true })}
                 placeholder="Subcategory Name"
-                className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
+                className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
               />
               <input
                 value={generateSlug(watchSubCategoryName || "")}
                 readOnly
                 placeholder="Slug"
-                className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
+                className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
               />
               <select
                 {...registerSubCategory("main_category_id", { required: true })}
-                className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
+                className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
               >
                 <option value="">Select Category</option>
                 {categories.map((cat) => (
@@ -390,7 +389,7 @@ const Categorys = () => {
               <input
                 type="file"
                 accept="image/*"
-                className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
+                className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
                 onChange={(e) => {
                   const file = e.target.files[0];
                   setValueSubCategory("photo", [file]);
@@ -416,10 +415,9 @@ const Categorys = () => {
                 {editingSubCategory ? "Update Subcategory" : "Add Subcategory"}
               </button>
             </form>
-
-            <table className="w-full mt-6 border dark:border-gray-700">
+            <table className="w-full mt-6 border border-gray-600">
               <thead>
-                <tr className="bg-gray-200 dark:bg-gray-700">
+                <tr>
                   <th className="p-2 text-left">Subcategory</th>
                   <th className="p-2 text-left">Category</th>
                   <th className="p-2">Image</th>
@@ -428,7 +426,7 @@ const Categorys = () => {
               </thead>
               <tbody>
                 {subCategories.map((sub) => (
-                  <tr key={sub.id} className="border-t dark:border-gray-600">
+                  <tr key={sub.id} className="border-t border-gray-600">
                     <td className="p-2">{sub.name}</td>
                     <td className="p-2">
                       {categories.find((cat) => cat.id === sub.main_category_id)

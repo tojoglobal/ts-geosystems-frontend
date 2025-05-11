@@ -162,98 +162,102 @@ const AdminUpdateContactUs = () => {
 
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Admin - Update Contact Us</h1>
+      <h1 className="text-2xl font-bold mb-3">Admin - Update Contact Us</h1>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
         {/* Contact Section */}
-        <div>
-          <h2 className="text-lg font-semibold">Contact</h2>
-          <div className="space-y-4">
-            {phoneFields.map((field, index) => (
-              <div key={field.id} className="flex items-center gap-4">
-                <input
-                  type="text"
-                  {...register(`phoneNumbers.${index}.value`, {
-                    required: "Phone number is required",
-                  })}
-                  placeholder="Enter phone number"
-                  className={`border p-2 rounded flex-1 ${
-                    errors.phoneNumbers?.[index]?.value ? "border-red-500" : ""
-                  }`}
-                />
-                {phoneFields.length > 1 && (
-                  <button
-                    type="button"
-                    onClick={() => removePhone(index)}
-                    className="bg-red-500 text-white px-2 py-1 rounded"
-                  >
-                    Remove
-                  </button>
-                )}
-              </div>
-            ))}
-            <button
-              type="button"
-              onClick={() => addPhone({ value: "" })}
-              className="bg-teal-600 text-white px-3 py-1 rounded"
-            >
-              + Add Phone Number
-            </button>
-            {errors.phoneNumbers && (
-              <p className="text-red-500 text-sm">
-                {errors.phoneNumbers.message ||
-                  "At least one phone number is required"}
-              </p>
-            )}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <h2 className="text-lg font-semibold mb-1">Contact</h2>
+            <div className="space-y-3">
+              {phoneFields.map((field, index) => (
+                <div key={field.id} className="flex items-center gap-4">
+                  <input
+                    type="text"
+                    {...register(`phoneNumbers.${index}.value`, {
+                      required: "Phone number is required",
+                    })}
+                    placeholder="Enter phone number"
+                    className={`border border-gray-700 p-2 rounded flex-1 ${
+                      errors.phoneNumbers?.[index]?.value
+                        ? "border-red-500"
+                        : ""
+                    }`}
+                  />
+                  {phoneFields.length > 1 && (
+                    <button
+                      type="button"
+                      onClick={() => removePhone(index)}
+                      className="bg-red-500 text-white px-2 py-1 rounded"
+                    >
+                      Remove
+                    </button>
+                  )}
+                </div>
+              ))}
+              <button
+                type="button"
+                onClick={() => addPhone({ value: "" })}
+                className="bg-teal-600 text-white px-3 py-1 rounded"
+              >
+                + Add Phone Number
+              </button>
+              {errors.phoneNumbers && (
+                <p className="text-red-500 text-sm">
+                  {errors.phoneNumbers.message ||
+                    "At least one phone number is required"}
+                </p>
+              )}
+            </div>
           </div>
-        </div>
 
-        {/* Email Section */}
-        <div>
-          <h2 className="text-lg font-semibold">Email</h2>
-          <div className="space-y-4">
-            {emailFields.map((field, index) => (
-              <div key={field.id} className="flex items-center gap-4">
-                <input
-                  type="email"
-                  {...register(`emails.${index}.value`, {
-                    required: "Email address is required",
-                  })}
-                  placeholder="Enter email address"
-                  className={`border p-2 rounded flex-1 ${
-                    errors.emails?.[index]?.value ? "border-red-500" : ""
-                  }`}
-                />
-                {emailFields.length > 1 && (
-                  <button
-                    type="button"
-                    onClick={() => removeEmail(index)}
-                    className="bg-red-500 text-white px-2 py-1 rounded"
-                  >
-                    Remove
-                  </button>
-                )}
-              </div>
-            ))}
-            <button
-              type="button"
-              onClick={() => addEmail({ value: "" })}
-              className="bg-teal-600 text-white px-3 py-1 rounded"
-            >
-              + Add Email Address
-            </button>
-            {errors.emails && (
-              <p className="text-red-500 text-sm">
-                {errors.emails.message ||
-                  "At least one email address is required"}
-              </p>
-            )}
+          {/* Email Section */}
+          <div>
+            <h2 className="text-lg font-semibold mb-1">Email</h2>
+            <div className="space-y-3">
+              {emailFields.map((field, index) => (
+                <div key={field.id} className="flex items-center gap-4">
+                  <input
+                    type="email"
+                    {...register(`emails.${index}.value`, {
+                      required: "Email address is required",
+                    })}
+                    placeholder="Enter email address"
+                    className={`border border-gray-700 p-2 rounded flex-1 ${
+                      errors.emails?.[index]?.value ? "border-red-500" : ""
+                    }`}
+                  />
+                  {emailFields.length > 1 && (
+                    <button
+                      type="button"
+                      onClick={() => removeEmail(index)}
+                      className="bg-red-500 text-white px-2 py-1 rounded"
+                    >
+                      Remove
+                    </button>
+                  )}
+                </div>
+              ))}
+              <button
+                type="button"
+                onClick={() => addEmail({ value: "" })}
+                className="bg-teal-600 text-white px-3 py-1 rounded"
+              >
+                + Add Email Address
+              </button>
+              {errors.emails && (
+                <p className="text-red-500 text-sm">
+                  {errors.emails.message ||
+                    "At least one email address is required"}
+                </p>
+              )}
+            </div>
           </div>
         </div>
 
         {/* Office Address Section */}
         <div>
-          <h2 className="text-lg font-semibold">Office Address</h2>
-          <div className="space-y-4">
+          <h2 className="text-lg font-semibold mb-1">Office Address</h2>
+          <div className="space-y-3">
             {addressFields.map((field, index) => (
               <div key={field.id} className="flex items-center gap-4">
                 <textarea
@@ -261,7 +265,7 @@ const AdminUpdateContactUs = () => {
                     required: "Office address is required",
                   })}
                   placeholder="Enter office address"
-                  className={`border p-2 rounded flex-1 ${
+                  className={`border border-gray-700 p-2 rounded flex-1 ${
                     errors.officeAddresses?.[index]?.value
                       ? "border-red-500"
                       : ""
@@ -295,15 +299,15 @@ const AdminUpdateContactUs = () => {
           </div>
         </div>
         <div>
-          <h2 className="text-lg font-semibold">Social Media Links</h2>
-          <div className="space-y-4">
+          <h2 className="text-lg font-semibold mb-1">Social Media Links</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             <div className="flex items-center gap-4">
               <label className="w-24">Facebook:</label>
               <input
                 type="url"
                 {...register("socialLinks.facebook")}
                 placeholder="https://facebook.com/yourpage"
-                className="border p-2 rounded flex-1"
+                className="border border-gray-700 p-2 rounded flex-1"
               />
             </div>
             <div className="flex items-center gap-4">
@@ -312,7 +316,7 @@ const AdminUpdateContactUs = () => {
                 type="url"
                 {...register("socialLinks.twitter")}
                 placeholder="https://twitter.com/yourpage"
-                className="border p-2 rounded flex-1"
+                className="border border-gray-700 p-2 rounded flex-1"
               />
             </div>
             <div className="flex items-center gap-4">
@@ -321,7 +325,7 @@ const AdminUpdateContactUs = () => {
                 type="url"
                 {...register("socialLinks.youtube")}
                 placeholder="https://youtube.com/yourchannel"
-                className="border p-2 rounded flex-1"
+                className="border border-gray-700 p-2 rounded flex-1"
               />
             </div>
             <div className="flex items-center gap-4">
@@ -330,7 +334,7 @@ const AdminUpdateContactUs = () => {
                 type="url"
                 {...register("socialLinks.instagram")}
                 placeholder="https://instagram.com/yourpage"
-                className="border p-2 rounded flex-1"
+                className="border border-gray-700 p-2 rounded flex-1"
               />
             </div>
           </div>

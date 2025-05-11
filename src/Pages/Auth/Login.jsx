@@ -23,7 +23,7 @@ const Login = () => {
 
   return (
     <div className="px-3 py-5 bg-white max-w-[1370px] text-gray-700 mx-auto">
-      <div className="flex items-center gap-2 text-[10px] mb-4">
+      <div className="flex items-center gap-2 text-[11px] mb-4">
         <Link to="/" className="hover:underline">
           Home
         </Link>
@@ -141,7 +141,7 @@ const Login = () => {
             ))}
           </ul>
           <Link
-            to="/create-account"
+            to="/user/create_account"
             className="inline-block bg-[#e62245] text-white px-6 py-2 rounded hover:bg-[#d11a3b] text-sm"
           >
             CREATE ACCOUNT

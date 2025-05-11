@@ -2,13 +2,21 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
-
-const images = [
-  "https://ts-geosystems.com.bd/assets/images/1727116478Acer_Nitro_V15.jpg",
-  "https://ts-geosystems.com.bd/assets/images/1727116649Pixel_9_Series_Available.jpg",
-];
+import useDataQuery from "../../../utils/useDataQuery";
 
 const GadgetBanner = () => {
+  const { data = {}, isLoading } = useDataQuery(
+    ["feature_highlight_banner_03_left"],
+    "/api/feature-getupload-images"
+  );
+  const { data: banner = [], isLoading: loading } = useDataQuery(
+    ["homepageSingleImages"],
+    "/api/get-homepage-single-images"
+  );
+  
+  if (isLoading || loading)
+    return <div className="text-center py-10">Loading...</div>;
+
   return (
     <div className="md:w-full my-3 md:my-5 mx-3 md:max-w-[1370px] md:mx-auto">
       <div className="flex flex-col md:flex-row gap-3 md:gap-4">
@@ -24,10 +32,10 @@ const GadgetBanner = () => {
             pagination={{ clickable: true }}
             className="w-full h-[150px] md:h-[325px] rounded-lg"
           >
-            {images.map((img, index) => (
+            {data.data.map((img, index) => (
               <SwiperSlide key={index}>
                 <img
-                  src={img}
+                  src={`${import.meta.env.VITE_OPEN_APIURL}${img?.photourl}`}
                   alt={`Slide ${index + 1}`}
                   className="w-full h-full object-cover"
                 />
@@ -39,7 +47,7 @@ const GadgetBanner = () => {
         {/* Right: Static Image */}
         <div className="w-full md:w-[33%] overflow-hidden rounded-lg group">
           <img
-            src="https://ts-geosystems.com.bd/assets/images/RsKp91pyTWS-COLLECTIONS.jpg"
+            src={`${import.meta.env.VITE_OPEN_APIURL}${banner?.data[0]?.imageUrl}`}
             alt="Right Side"
             className="w-full h-[150px] md:h-[325px] object-cover transition-transform duration-300 group-hover:scale-110"
           />

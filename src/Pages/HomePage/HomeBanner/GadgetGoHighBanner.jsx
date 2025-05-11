@@ -1,18 +1,29 @@
+import useDataQuery from "../../../utils/useDataQuery";
 const GadgetGoHighBanner = () => {
+  const { data=[], isLoading } = useDataQuery(
+    ["homepageSingleImages"],
+    "/api/get-homepage-single-images"
+  );
+  if (isLoading)
+    return <div className="text-center py-10">Loading...</div>;
   return (
     <div className="md:w-full my-3 md:my-5 mx-3 max-w-[1370px] md:mx-auto">
-      <div className="flex flex-col md:flex-row gap-3 md:gap-4">
-        <div className="w-full md:w-[33%] overflow-hidden rounded-lg group">
+      <div className="flex h-96 md:h-64 w-full flex-col md:flex-row gap-3 md:gap-4">
+        <div className="w-full md:w-[33%] overflow-hidden rounded-md group">
           <img
-            src="https://ts-geosystems.com.bd/assets/images/RsKp91pyTWS-COLLECTIONS.jpg"
-            alt="Right Side"
+            src={`${import.meta.env.VITE_OPEN_APIURL}${
+              data?.data[1]?.imageUrl
+            }`}
+            alt="feature_highlight_banner_04_left_01"
             className="w-full object-cover transition-transform duration-300 group-hover:scale-110"
           />
         </div>
-        <div className="w-full md:w-[67%] md:relative group overflow-hidden rounded-lg">
+        <div className="w-full md:w-[67%] md:relative group overflow-hidden rounded-md">
           <img
-            src="https://ts-geosystems.com.bd/assets/images/UMIh5c9b11be38b01.jpg"
-            alt=""
+            src={`${import.meta.env.VITE_OPEN_APIURL}${
+              data?.data[2]?.imageUrl
+            }`}
+            alt="feature_highlight_banner_04_right_02"
             className="transition-transform duration-300 group-hover:scale-110"
           />
         </div>

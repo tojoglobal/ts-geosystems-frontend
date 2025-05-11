@@ -34,7 +34,7 @@ import TradeIn from "./Pages/NavComponents/TradeIn";
 import ProductAddForm from "./Dashboard/Products/AddProducts";
 import RemoteSupport from "./Pages/NavComponents/RemoteSupport";
 import UserManuals from "./Pages/NavComponents/UserManuals";
-import G2Blog from "./Pages/NavComponents/Blog/G2Blog";
+import TSBlog from "./Pages/NavComponents/Blog/TSBlog";
 import Clearance from "./Pages/NavComponents/Clearance";
 import Categorys from "./Dashboard/Categorys/Categorys";
 import Compare from "./Pages/NavComponents/Compare";
@@ -75,8 +75,8 @@ const AppLayout = () => {
       <Routes location={location} key={location.pathname}>
         <Route path="/" element={<MainHome />} />
         {/* Auth Routes */}
-        <Route path="/login" element={<Login />} />
-        <Route path="/create_account" element={<Register />} />
+        <Route path="/user/login" element={<Login />} />
+        <Route path="/user/create_account" element={<Register />} />
         <Route path="/cc" element={<CertificateTracking />} />
         <Route path="/remote-support" element={<RemoteSupport />} />
         <Route path="/checkout" element={<Checkout />} />
@@ -95,8 +95,8 @@ const AppLayout = () => {
           <Route path="/quick-guides" element={<QuickGuides />} />
           <Route path="/software-downloads" element={<SoftwareDownloads />} />
           <Route path="/trade-in" element={<TradeIn />} />
-          <Route path="/g2-blog" element={<G2Blog />} />
-          <Route path="/g2-blog/:id/:slug" element={<BlogDetails />} />
+          <Route path="/ts-blog" element={<TSBlog />} />
+          <Route path="/ts-blog/:id/:slug" element={<BlogDetails />} />
           <Route path="/about-us" element={<AboutUs />} />
           <Route path="/contact-us" element={<ContactUs />} />
           <Route path="/user-manuals" element={<UserManuals />} />
@@ -145,7 +145,7 @@ const AppLayout = () => {
           {/* dynamic about page */}
           <Route path="hire" element={<AdminUpdateHire />} />
           <Route path="service" element={<AdminUpdateService />} />
-          <Route path="g2-blog" element={<AdminBlogControl />} />
+          <Route path="ts-blog" element={<AdminBlogControl />} />
           <Route path="about-us" element={<AdminUpdateAboutUs />} />
           <Route path="contact-us" element={<AdminUpdateContactUs />} />
         </Route>

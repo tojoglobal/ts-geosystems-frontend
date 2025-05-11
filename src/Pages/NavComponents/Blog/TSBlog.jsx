@@ -113,7 +113,7 @@ const fakeData = [
   },
 ];
 
-const G2Blog = () => {
+const TSBlog = () => {
   const [activeTab, setActiveTab] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 6;
@@ -128,16 +128,18 @@ const G2Blog = () => {
 
   return (
     <div className="p-2 md:p-3">
-      <div className="font-light flex items-center gap-2 text-[10px]">
+      <div className="flex items-center gap-2 text-[11px]">
         <Link to="/" className="flex items-center gap-1 text-[#e62245]">
           Home
         </Link>
         <span>/</span>
-        <Link to="/g2-blog" className="uppercase text-[#e62245]">
-          G2 Blog
+        <Link to="/ts-blog" className="uppercase text-[#e62245]">
+          TS Blog
         </Link>
       </div>
-      <h1 className="text-3xl font-light mt-2 text-[#e62245] mb-2">G2 BLOG</h1>
+      <h1 className="text-[28px] font-light mt-2 text-[#e62245] mb-2">
+        TS BLOG
+      </h1>
       <section className="mt-12">
         {activeTab !== "All" && (
           <div className="text-center mb-8">
@@ -174,8 +176,8 @@ const G2Blog = () => {
           {currentPosts.map((post, index) => (
             <Link
               key={index}
-              to={`/g2-blog/${post.id}/${slugify(post.title || "")}`}
-              className="relative border border-[#eaedef] rounded-sm overflow-hidden transition-all hover:bg-gray-100"
+              to={`/ts-blog/${post.id}/${slugify(post.title || "")}`}
+              className="relative border border-[#eaedef] rounded-sm overflow-hidden hover:bg-gray-100 shadow-md hover:shadow-lg transition-shadow"
             >
               <img src={post.image} alt="post" className="w-full" />
               <img
@@ -227,4 +229,4 @@ const G2Blog = () => {
   );
 };
 
-export default G2Blog;
+export default TSBlog;

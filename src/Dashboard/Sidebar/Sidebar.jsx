@@ -81,7 +81,7 @@ const menuItems = [
       { label: "Sent", to: "/dashboard/email/sent" },
       { label: "Hire", to: "/dashboard/hire" },
       { label: "Service", to: "/dashboard/service" },
-      { label: "G2 Blog", to: "/dashboard/g2-blog" },
+      { label: "TS Blog", to: "/dashboard/ts-blog" },
       { label: "About Us", to: "/dashboard/about-us" },
       { label: "Contact Us", to: "/dashboard/contact-us" },
     ],

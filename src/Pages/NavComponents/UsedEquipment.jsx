@@ -214,7 +214,7 @@ const UsedEquipment = () => {
   };
   return (
     <div className="p-2 md:p-3">
-      <div className="font-normal flex items-center gap-2 text-[10px] mb-4">
+      <div className="flex items-center gap-2 text-[11px] mb-4">
         <Link to="/" className="text-gray-500">
           Home
         </Link>
@@ -223,7 +223,7 @@ const UsedEquipment = () => {
           Used Surveying Equipment
         </Link>
       </div>
-      <h1 className="text-3xl font-semibold mb-6 uppercase">
+      <h1 className="text-[30px] font-semibold mb-6 uppercase">
         Used Surveying Equipment
       </h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 border-b pb-10">
