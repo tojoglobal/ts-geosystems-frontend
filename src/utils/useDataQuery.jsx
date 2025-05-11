@@ -9,7 +9,10 @@ const useDataQuery = (key, url, enabled = true) => {
       const res = await axiospublic.get(url);
       return res.data;
     },
-    enabled,
+    enabled:
+      typeof enabled === "function" || typeof enabled === "boolean"
+        ? enabled
+        : true,
   });
   return { isLoading, data, error, refetch };
 };
