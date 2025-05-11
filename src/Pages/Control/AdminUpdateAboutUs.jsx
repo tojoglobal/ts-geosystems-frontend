@@ -163,12 +163,12 @@ const AdminUpdateAboutUs = () => {
   if (isLoading) return <Loader />;
 
   return (
-    <div className="p-3 h-full overflow-y-auto">
+    <div className="overflow-y-auto">
       <h1 className="text-lg font-semibold mb-2">Update About Us Page</h1>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((sectionNum) => (
-            <div key={sectionNum} className="p-3 rounded">
+            <div key={sectionNum} className="rounded">
               <h2 className="text-base font-semibold mb-2">
                 Section {sectionNum}
               </h2>
