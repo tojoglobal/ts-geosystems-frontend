@@ -95,20 +95,27 @@ const AdminUpdateHire = () => {
   };
 
   return (
-    <div className="p-5">
-      <h1 className="text-xl font-bold mb-4">Admin - Update Hire Page</h1>
+    <div>
+      <h1 className="text-xl md:text-2xl font-bold mb-4">
+        Admin - Update Hire Page
+      </h1>
       {isLoading ? (
         <Loader />
       ) : (
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-7">
-          {/* Image and Title Side by Side */}
-          <div className="flex flex-col md:flex-row gap-6 items-start">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="space-y-5 sm:space-y-7"
+        >
+          {/* Image and Title Section */}
+          <div className="flex flex-col lg:flex-row gap-4 sm:gap-6">
             {/* Image Upload Section */}
-            <div className="w-full md:w-1/2 space-y-3">
-              <label className="block font-medium">Banner Image</label>
+            <div className="w-full lg:w-1/2 space-y-3">
+              <label className="block font-medium text-sm sm:text-base mb-1">
+                Banner Image
+              </label>
               <div
                 {...getRootProps()}
-                className={`border-2 border-dashed rounded-md p-6 text-center cursor-pointer ${
+                className={`border-2 border-dashed rounded-sm p-4 sm:p-6 text-center cursor-pointer transition-colors ${
                   isDragActive
                     ? "border-teal-500 bg-teal-50"
                     : "border-gray-600"
@@ -116,51 +123,63 @@ const AdminUpdateHire = () => {
               >
                 <input {...getInputProps()} />
                 {isUploading ? (
-                  <p className="text-gray-900">Uploading image...</p>
+                  <p className="text-gray-900 text-sm sm:text-base">
+                    Uploading image...
+                  </p>
                 ) : (
-                  <p className="text-gray-900">
+                  <p className="text-gray-900 text-sm sm:text-base">
                     Drag & drop or{" "}
                     <span className="underline text-teal-500">browse</span> to
                     upload a new banner image
                   </p>
                 )}
               </div>
-              {(files.length > 0 || hireContent.imageUrl) && (
-                <div className="mt-4">
-                  <p className="text-sm text-gray-600 mb-2">Current Banner:</p>
-                  <img
-                    src={
-                      files.length > 0
-                        ? URL.createObjectURL(files[0])
-                        : `${import.meta.env.VITE_OPEN_APIURL}${
-                            hireContent.imageUrl
-                          }`
-                    }
-                    alt="Banner preview"
-                    className="h-28 w-full object-cover rounded"
-                  />
+              {(files.length > 0 || hireContent?.imageUrl) && (
+                <div className="mt-3 sm:mt-4">
+                  <p className="text-xs sm:text-sm text-gray-600 mb-2">
+                    Current Banner:
+                  </p>
+                  <div className="relative w-full h-40 md:h-52 rounded-sm overflow-hidden bg-gray-100">
+                    <img
+                      src={
+                        files.length > 0
+                          ? URL.createObjectURL(files[0])
+                          : `${import.meta.env.VITE_OPEN_APIURL}${
+                              hireContent.imageUrl
+                            }`
+                      }
+                      alt="Banner preview"
+                      className="absolute inset-0 w-full h-full object-cover"
+                    />
+                  </div>
                 </div>
               )}
             </div>
 
             {/* Title Input */}
-            <div className="w-full md:w-1/2 space-y-3">
-              <label htmlFor="title" className="block font-medium">
+            <div className="w-full lg:w-1/2 space-y-2 sm:space-y-3">
+              <label
+                htmlFor="title"
+                className="block font-medium text-sm sm:text-base"
+              >
                 Title
               </label>
               <input
                 type="text"
                 id="title"
                 {...register("title", { required: "Title is required" })}
-                className="w-full border border-gray-300 rounded p-2 focus:outline-none focus:ring focus:ring-[#e62245]"
+                className="w-full border border-gray-300 rounded-sm p-2.5 sm:p-3 text-base focus:outline-none focus:ring-2 focus:ring-[#e62245] transition"
                 placeholder="Enter page title"
               />
             </div>
           </div>
 
           {/* Description Section */}
-          <div className="space-y-4">
-            <label htmlFor="description" className="block font-medium">
+          <div className="space-y-2 sm:space-y-4">
+            <label
+              htmlFor="description"
+              className="block font-medium text-sm sm:text-base"
+            >
               Description
             </label>
             <Controller
@@ -184,8 +203,11 @@ const AdminUpdateHire = () => {
           </div>
 
           {/* Info Box Section */}
-          <div className="space-y-4">
-            <label htmlFor="infoBox" className="block font-medium">
+          <div className="space-y-2 sm:space-y-4">
+            <label
+              htmlFor="infoBox"
+              className="block font-medium text-sm sm:text-base"
+            >
               Info Box Content
             </label>
             <Controller
@@ -207,6 +229,7 @@ const AdminUpdateHire = () => {
               )}
             />
           </div>
+
           {/* Submit Button */}
           <div className="flex justify-start">
             <Button text={"Save Changes"} disabled={isUploading} />
@@ -214,7 +237,7 @@ const AdminUpdateHire = () => {
         </form>
       )}
     </div>
-);
+  );
 };
 
 export default AdminUpdateHire;
