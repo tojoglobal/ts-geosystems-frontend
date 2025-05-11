@@ -21,7 +21,7 @@ const TopMenuBar = ({ toggleMobileSidebar, collapsed, toggleSidebar }) => {
   };
 
   return (
-    <div className="flex justify-between items-center px-4 py-3 bg-gray-800 dark:bg-gray-900 shadow sticky top-0 w-full z-50">
+    <div className="flex justify-between items-center px-4 py-[10px] shadow  w-full">
       {/* Left Side: Menu Icon and Dashboard Text */}
       <div className="flex items-center gap-3">
         <button onClick={toggleMobileSidebar} className="md:hidden">
@@ -45,7 +45,7 @@ const TopMenuBar = ({ toggleMobileSidebar, collapsed, toggleSidebar }) => {
             <input
               type="text"
               placeholder="Search..."
-              className="bg-gray-700 w-52 dark:bg-gray-800 text-sm text-white dark:text-white px-3 py-1 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
+              className="bg-gray-700 w-52 dark:bg-gray-800 text-sm text-white dark:text-white px-3 py-[5px] rounded-[4px] focus:outline-none focus:ring-2 focus:ring-teal-500"
             />
             <Search
               size={16}
@@ -53,21 +53,18 @@ const TopMenuBar = ({ toggleMobileSidebar, collapsed, toggleSidebar }) => {
             />
           </div>
         </div>
-
         {/* Notification Icon */}
         <button className="relative text-gray-300 dark:text-gray-400 hover:text-white dark:hover:text-white">
           <Bell size={22} />
           <span className="absolute top-0 right-0 inline-block w-2.5 h-2.5 bg-red-500 rounded-full"></span>
         </button>
-
         {/* Fullscreen Icon */}
         <button
           onClick={handleFullscreen}
           className="text-gray-300 dark:text-gray-400 hover:text-white dark:hover:text-white"
         >
-          <Maximize2 size={22} />
+          <Maximize2 size={21} />
         </button>
-
         {/* Dark Mode Toggle */}
         {/* <button
           onClick={toggleDarkMode}

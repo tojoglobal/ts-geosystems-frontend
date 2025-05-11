@@ -113,8 +113,10 @@ const AdminUpdateServicePage = () => {
   };
 
   return (
-    <div className="p-5">
-      <h1 className="text-xl font-bold mb-4">Admin - Update Service Page</h1>
+    <div>
+      <h1 className="text-xl md:text-2xl font-bold mb-5">
+        Admin - Update Service Page
+      </h1>
       {isLoading ? (
         <Loader />
       ) : (
@@ -193,7 +195,7 @@ const AdminUpdateServicePage = () => {
                           }`
                     }
                     alt="Grid preview"
-                    className="h-24 w-44 object-cover rounded"
+                    className="h-24 w-full md:w-44 object-cover rounded"
                   />
                 </div>
               )}
@@ -234,7 +236,7 @@ const AdminUpdateServicePage = () => {
                           }`
                     }
                     alt="Banner preview"
-                    className="h-24 w-44 object-cover rounded"
+                    className="h-24 w-full md:w-44 object-cover rounded"
                   />
                 </div>
               )}

@@ -99,149 +99,152 @@ const Software = () => {
   //   console.log(softwar);
 
   return (
-    <div className="min-h-screen p-4">
-      <div className="max-w-4xl mx-auto">
-        <h2 className="text-2xl font-bold mb-6">Add a Software</h2>
-        <form className="p-5" onSubmit={handleSubmit(onSubmit)}>
-          <div className="mb-4">
+    <div className="max-w-4xl mx-auto mb-3">
+      <h2 className="text-2xl font-bold mb-3 md:mb-5">Add a Software</h2>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="mb-4">
+          <label className="block text-sm font-semibold mb-1">
+            Softwar Name
+          </label>
+          <input
+            type="text"
+            {...register("softwarName", { required: true })}
+            className="w-full input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
+            placeholder="Enter brand name"
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-sm font-semibold mb-1">Slug</label>
+          <input
+            type="text"
+            value={generateSlug(watchSoftwarName)}
+            readOnly
+            className="w-full input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-sm font-semibold mb-1">
+            Softwar Logo
+          </label>
+          <input
+            type="file"
+            accept="image/*"
+            {...register("photo")}
+            className="w-full input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
+          />
+          {imagePreview && (
+            <img
+              src={
+                imagePreview.startsWith("data:")
+                  ? imagePreview
+                  : `${
+                      import.meta.env.VITE_OPEN_APIURL
+                    }/uploads/${imagePreview}`
+              }
+              alt="Preview"
+              className="w-4/12 h-24 object-cover mt-2 rounded"
+            />
+          )}
+          <div className="mt-4">
             <label className="block text-sm font-semibold mb-1">
-              Softwar Name
+              Softwar Link
             </label>
             <input
               type="text"
-              {...register("softwarName", { required: true })}
+              {...register("softwarlink", { required: true })}
               className="w-full input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
-              placeholder="Enter brand name"
+              placeholder="Enter Softwar Link"
             />
           </div>
-          <div className="mb-4">
-            <label className="block text-sm font-semibold mb-1">Slug</label>
-            <input
-              type="text"
-              value={generateSlug(watchSoftwarName)}
-              readOnly
-              className="w-full input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-sm font-semibold mb-1">
-              Softwar Logo
-            </label>
-            <input
-              type="file"
-              accept="image/*"
-              {...register("photo")}
-              className="w-full input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
-            />
-            {imagePreview && (
-              <img
-                src={
-                  imagePreview.startsWith("data:")
-                    ? imagePreview
-                    : `${
-                        import.meta.env.VITE_OPEN_APIURL
-                      }/uploads/${imagePreview}`
-                }
-                alt="Preview"
-                className="w-4/12 h-24 object-cover mt-2 rounded"
-              />
-            )}
-
-            <div className="mt-4">
-              <label className="block text-sm font-semibold mb-1">
-                Softwar Link
-              </label>
-              <input
-                type="text"
-                {...register("softwarlink", { required: true })}
-                className="w-full input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
-                placeholder="Enter Softwar Link"
-              />
+        </div>
+        <button
+          type="submit"
+          className="w-full bg-teal-600 text-white py-2 px-4 rounded-md hover:bg-teal-700 transition"
+        >
+          {editingBrand ? "Update Software" : "Add Software"}
+        </button>
+      </form>
+      {/* Brands Table */}
+      <div className="mt-8">
+        <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+          <div className="inline-block min-w-full align-middle">
+            <div className="overflow-hidden">
+              <table className="min-w-full border border-gray-600 table-auto">
+                <thead className="bg-gray-800 text-white">
+                  <tr>
+                    <th className="text-left p-2 sm:p-3 border border-gray-600 whitespace-nowrap">
+                      Brand Name
+                    </th>
+                    <th className="text-left p-2 sm:p-3 border border-gray-600 whitespace-nowrap">
+                      Logo
+                    </th>
+                    <th className="text-center p-2 sm:p-3 border border-gray-600 whitespace-nowrap">
+                      Softwar Link
+                    </th>
+                    <th className="text-center p-2 sm:p-3 border border-gray-600 whitespace-nowrap">
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {Array.isArray(softwar) && softwar.length > 0 ? (
+                    softwar.map((brand) => (
+                      <tr
+                        key={brand.id}
+                        className="border border-gray-600 bg-gray-900 text-white hover:bg-gray-800 transition-colors"
+                      >
+                        <td className="p-2 sm:p-3 border border-gray-600 whitespace-nowrap">
+                          {brand.softwar_name}
+                        </td>
+                        <td className="p-2 sm:p-3 border border-gray-600">
+                          <img
+                            src={`${import.meta.env.VITE_OPEN_APIURL}/uploads/${brand.photo}`}
+                            alt={brand.softwar_name}
+                            className="w-20 h-12 object-cover rounded"
+                          />
+                        </td>
+                        <td className="text-center p-2 sm:p-3 border border-gray-600 whitespace-nowrap">
+                          <a
+                            href={brand.softwarlink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-400 hover:text-blue-500"
+                          >
+                            {brand.softwar_name.slice(0, 20)}
+                          </a>
+                        </td>
+                        <td className="text-center p-2 sm:p-3 border border-gray-600 whitespace-nowrap">
+                          <div className="flex justify-center items-center gap-3">
+                            <button
+                              onClick={() => handleEdit(brand)}
+                              className="text-blue-300 hover:text-blue-500 p-1"
+                            >
+                              <FaEdit />
+                            </button>
+                            <button
+                              onClick={() => handleDelete(brand.id)}
+                              className="text-red-600 hover:text-red-800 p-1"
+                            >
+                              <FaTrash />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr className="border border-gray-600 bg-gray-900 text-white">
+                      <td
+                        colSpan="4"
+                        className="text-center p-3 border border-gray-600"
+                      >
+                        No software found.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
             </div>
           </div>
-
-          <button
-            type="submit"
-            className="w-full bg-teal-600 text-white py-2 px-4 rounded-md hover:bg-teal-700 transition"
-          >
-            {editingBrand ? "Update Software" : "Add Software"}
-          </button>
-        </form>
-
-        {/* Brands Table */}
-        <div className="mt-8 overflow-x-auto">
-          <table className="min-w-full border border-gray-600 rounded shadow-md">
-            <thead className="bg-gray-800 text-white">
-              <tr>
-                <th className="text-left p-3 border border-gray-600">
-                  Brand Name
-                </th>
-                <th className="text-left p-3 border border-gray-600">Logo</th>
-                <th className="text-center p-3 border border-gray-600">
-                  Softwar Link
-                </th>
-                <th className="text-center p-3 border border-gray-600">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {Array.isArray(softwar) && softwar.length > 0 ? (
-                softwar.map((brand) => (
-                  <tr
-                    key={brand.id}
-                    className="border border-gray-600 bg-gray-900 text-white"
-                  >
-                    <td className="p-3 border border-gray-600">
-                      {brand.softwar_name}
-                    </td>
-                    <td className="p-3 border border-gray-600">
-                      <img
-                        src={`${import.meta.env.VITE_OPEN_APIURL}/uploads/${
-                          brand.photo
-                        }`}
-                        alt={brand.softwar_name}
-                        className="w-10/12 h-12 object-cover rounded"
-                      />
-                    </td>
-                    <td className="text-center p-3 border border-gray-600">
-                      <a
-                        href={brand.softwarlink}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-400 hover:text-blue-500"
-                      >
-                        {brand.softwar_name.slice(0, 20)}
-                      </a>
-                    </td>
-                    <td className="text-center p-3 flex justify-center gap-4">
-                      <button
-                        onClick={() => handleEdit(brand)}
-                        className="text-blue-300 hover:text-blue-500"
-                      >
-                        <FaEdit />
-                      </button>
-                      <button
-                        onClick={() => handleDelete(brand.id)}
-                        className="text-red-600 hover:text-red-800"
-                      >
-                        <FaTrash />
-                      </button>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr className="border border-gray-600 bg-gray-900 text-white">
-                  <td
-                    colSpan="4"
-                    className="text-center p-4 border border-gray-600"
-                  >
-                    No software found.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
         </div>
       </div>
     </div>

@@ -23,7 +23,7 @@ export default function TaxForm({
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="p-4 rounded shadow space-y-4"
+      className="rounded shadow space-y-3 md:space-y-4"
     >
       <div>
         <label className="block mb-1 font-medium">
@@ -64,7 +64,7 @@ export default function TaxForm({
       <div className="flex gap-3">
         <button
           type="submit"
-          className="bg-teal-600 py-2 px-4 rounded-md hover:bg-teal-700 transition"
+          className="bg-teal-600 py-[6px] px-4 rounded-md hover:bg-teal-700 transition"
         >
           {isEditing ? "Update Tax" : "Add Tax"}
         </button>

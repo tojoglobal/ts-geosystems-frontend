@@ -24,7 +24,7 @@ export default function PromoCodeForm({
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="p-4 rounded shadow space-y-4"
+      className="rounded shadow space-y-4"
     >
       <input
         {...register("title")}
@@ -68,7 +68,7 @@ export default function PromoCodeForm({
       <div className="flex gap-4">
         <button
           type="submit"
-          className="bg-teal-600 text-white py-2 px-4 rounded-md hover:bg-teal-700 transition"
+          className="bg-teal-600 text-white py-[6px] px-4 rounded-md hover:bg-teal-700 transition"
         >
           {isEditing ? "Update" : "Create"} Promo
         </button>

@@ -121,28 +121,28 @@ const ProductTable = () => {
   };
 
   return (
-    <div className="p-4 min-h-screen">
-      <h1 className="text-2xl font-bold mb-4">Products List</h1>
+    <div>
+      <h1 className="text-xl md:text-2xl font-bold mb-4">Products List</h1>
       <div className="overflow-x-auto">
-        <div className="flex justify-end mb-3">
+        <div className="flex flex-col sm:flex-row sm:justify-end gap-2 mb-3">
           <Link
             to="/dashboard/add-product"
-            className="bg-teal-600 text-white py-2 px-4 rounded-md hover:bg-teal-700 transition duration-200"
+            className="bg-teal-600 text-white py-1 md:py-2 px-4 rounded-md hover:bg-teal-700 transition duration-200 text-center w-full sm:w-auto"
           >
             Add Product
           </Link>
         </div>
-        <table className="w-full text-sm text-left text-white">
+        <table className="w-full text-sm text-left text-white min-w-[800px]">
           <thead className="text-xs uppercase bg-gray-800 text-gray-200">
             <tr>
-              <th className="py-3 px-6">Product Name</th>
-              <th className="py-3 px-6">Price ৳</th>
-              <th className="py-3 px-6">Category</th>
-              <th className="py-3 px-6">Sub Category</th>
-              <th className="py-3 px-6">SKU</th>
-              <th className="py-3 px-6">Condition</th>
-              <th className="py-3 px-6">Brand</th>
-              <th className="py-3 px-6 text-center">Actions</th>
+              <th className="py-3 px-4 sm:px-6">Product Name</th>
+              <th className="py-3 px-4 sm:px-6">Price ৳</th>
+              <th className="py-3 px-4 sm:px-6">Category</th>
+              <th className="py-3 px-4 sm:px-6">Sub Category</th>
+              <th className="py-3 px-4 sm:px-6">SKU</th>
+              <th className="py-3 px-4 sm:px-6">Condition</th>
+              <th className="py-3 px-4 sm:px-6">Brand</th>
+              <th className="py-3 px-4 sm:px-6 text-center">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -152,20 +152,24 @@ const ProductTable = () => {
                   key={product.id}
                   className="bg-gray-900 border-b border-gray-700"
                 >
-                  <td className="py-4 px-6">{product.product_name}</td>
-                  <td className="py-4 px-6 text-nowrap">৳ {product.price}</td>
-                  <td className="py-4 px-6">
+                  <td className="py-4 px-4 sm:px-6">{product.product_name}</td>
+                  <td className="py-4 px-4 sm:px-6 whitespace-nowrap">
+                    ৳ {product.price}
+                  </td>
+                  <td className="py-4 px-4 sm:px-6">
                     {getCategoryName(product.category)}
                   </td>
-                  <td className="py-4 px-6">
+                  <td className="py-4 px-4 sm:px-6">
                     {getSubCategoryName(product.sub_category)}
                   </td>
-                  <td className="py-4 px-6">{product.sku}</td>
-                  <td className="py-4 px-6">{product.product_condition}</td>
-                  <td className="py-4 px-6">
+                  <td className="py-4 px-4 sm:px-6">{product.sku}</td>
+                  <td className="py-4 px-4 sm:px-6">
+                    {product.product_condition}
+                  </td>
+                  <td className="py-4 px-4 sm:px-6">
                     {getBrandName(product.brand_name)}
                   </td>
-                  <td className="py-4 px-6 flex justify-center items-center gap-4">
+                  <td className="py-4 px-4 sm:px-6 flex justify-center items-center gap-3 flex-wrap">
                     <Link to={`/dashboard/update-product/${product.id}`}>
                       <button className="text-blue-400 hover:text-blue-600">
                         <FaEdit size={18} />
@@ -209,12 +213,12 @@ const ProductTable = () => {
         isOpen={isModalOpen}
         onRequestClose={() => setIsModalOpen(false)}
         contentLabel="Product Details"
-        className="bg-gray-900 p-8 rounded-md shadow-lg max-w-2xl mx-auto my-20 max-h-[80vh] overflow-y-auto text-white"
+        className="bg-gray-900 p-4 sm:p-6 md:p-8 rounded-md shadow-lg w-[95%] sm:w-full max-w-2xl mx-auto my-10 max-h-[90vh] overflow-y-auto text-white"
         overlayClassName="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center"
       >
         {viewProduct && (
-          <div className="space-y-4">
-            <h2 className="text-2xl font-bold mb-4">
+          <div className="space-y-4 text-sm sm:text-base">
+            <h2 className="text-xl sm:text-2xl font-bold mb-4">
               {viewProduct.product_name}
             </h2>
             <p>
@@ -242,7 +246,7 @@ const ProductTable = () => {
                 dangerouslySetInnerHTML={{
                   __html: DOMPurify.sanitize(viewProduct.product_overview),
                 }}
-                className="prose max-w-none prose-base text-base md:text-lg md:text-justify leading-relaxed bg-white px-2"
+                className="prose max-w-none prose-sm sm:prose-base leading-relaxed bg-white text-black p-2"
               ></article>
             </div>
             <p>
@@ -251,7 +255,7 @@ const ProductTable = () => {
                 dangerouslySetInnerHTML={{
                   __html: DOMPurify.sanitize(viewProduct.warranty_info),
                 }}
-                className="prose max-w-none prose-base text-base md:text-lg md:text-justify leading-relaxed dark:text-white"
+                className="prose max-w-none prose-sm sm:prose-base leading-relaxed text-white"
               ></article>
             </p>
             {viewProduct.video_urls && (
@@ -267,7 +271,7 @@ const ProductTable = () => {
                 </a>
               </p>
             )}
-            <div className="grid grid-cols-2 gap-4 mt-4">
+            <div className="grid grid-cols-2 gap-3 sm:gap-4 mt-4">
               {Array.isArray(viewProduct.image_urls) &&
                 viewProduct.image_urls.map((img, idx) => (
                   <img
@@ -280,7 +284,7 @@ const ProductTable = () => {
             </div>
             <button
               onClick={() => setIsModalOpen(false)}
-              className="mt-6 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+              className="mt-6 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 w-full sm:w-auto"
             >
               Close
             </button>

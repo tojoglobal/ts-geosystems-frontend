@@ -129,7 +129,7 @@ const LatestTransactions = () => {
   if (isError) return <div>Failed to load orders.</div>;
 
   return (
-    <div className="bg-slate-800 text-white rounded-lg p-4 my-4">
+    <div className="bg-slate-800 text-white rounded-lg p-4 mt-4 mb-2">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold">Latest Transactions</h2>
         <div className="text-sm text-gray-400">Sort By: Latest</div>

@@ -60,7 +60,7 @@ const menuItems = [
     to: "/dashboard/add-categorys",
   },
   {
-    label: "taxes",
+    label: "Taxes",
     icon: <MdPercent size={20} />,
     to: "/dashboard/taxesmanager",
   },
@@ -174,7 +174,7 @@ const Sidebar = ({
     <>
       <div
         className={`bg-gray-800 flex flex-col justify-between fixed md:relative z-[60] transition-all duration-300 ${
-          collapsed ? "w-20 pt-5 md:pt-0" : "w-64"
+          collapsed ? "w-20 pt-5 md:pt-0" : "w-60 md:w-64"
         } h-screen ${
           mobileOpen ? "translate-x-0" : "-translate-x-full"
         } md:translate-x-0`}
@@ -185,7 +185,7 @@ const Sidebar = ({
             collapsed
               ? "flex items-center justify-center"
               : "flex items-center justify-between"
-          } px-4 py-4 border-b border-gray-700 shrink-0`}
+          } p-4 border-b border-gray-700 shrink-0`}
         >
           <h2
             className={`text-xl font-bold transition-all ${
@@ -225,7 +225,7 @@ const Sidebar = ({
                   key={label}
                   to={to}
                   className={({ isActive }) =>
-                    `flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition ${
+                    `flex items-center gap-3 px-1 md:px-3 py-2 rounded-md text-sm font-medium transition ${
                       isActive && location.pathname === to
                         ? "bg-teal-600 text-white"
                         : "text-gray-300 hover:bg-teal-700 hover:text-white"
@@ -239,7 +239,7 @@ const Sidebar = ({
                 <div>
                   <button
                     onClick={() => toggleSubmenu(label)}
-                    className="w-full flex items-center justify-between gap-2 px-3 py-2 rounded-md text-sm text-gray-300 hover:bg-teal-700 hover:text-white"
+                    className="w-full flex items-center justify-between gap-2 px-1 md:px-3 py-2 rounded-md text-sm text-gray-300 hover:bg-teal-700 hover:text-white"
                   >
                     <div className="flex items-center gap-3">
                       <span className="ml-1">{icon}</span>

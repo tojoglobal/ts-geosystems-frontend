@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import {
@@ -32,31 +33,30 @@ const SortableImage = ({ image, onDelete }) => {
     <div
       ref={setNodeRef}
       style={style}
-      className="relative group border rounded overflow-hidden"
+      className="relative group border rounded-sm overflow-hidden shadow-sm hover:shadow-md transition-shadow"
     >
       {/* Drag handle */}
       <div
         {...attributes}
         {...listeners}
-        className="absolute top-2 left-2 z-40 bg-gray-200 text-gray-600 px-1 rounded cursor-grab"
+        className="absolute top-2 left-2 z-40 bg-gray-200/80 backdrop-blur-sm text-gray-600 px-2 py-1 rounded-md cursor-grab touch-manipulation"
         title="Drag to reorder"
       >
         ⠿
       </div>
-
       {/* Image */}
       <img
         src={
           image?.url || `${import.meta.env.VITE_OPEN_APIURL}${image?.photourl}`
         }
         alt="Uploaded"
-        className="w-full h-40 object-cover"
+        className="w-full h-32 sm:h-40 object-cover"
       />
 
       {/* Delete Button */}
       <button
         onClick={() => onDelete(image?.id)}
-        className="absolute top-2 right-2 z-50 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition"
+        className="absolute top-2 right-2 z-50 bg-red-500 text-white p-1.5 rounded-full opacity-0 group-hover:opacity-100 sm:group-hover:opacity-100 transition active:scale-95 touch-manipulation"
       >
         <X className="w-4 h-4" />
       </button>
@@ -158,13 +158,13 @@ const Promo_product_banner_02 = () => {
   };
 
   return (
-    <div className="p-5">
-      <div className="flex gap-10">
-        <h2 className="text-2xl text-teal-600">promo_product_banner_02</h2>
-        <div className="text-center mb-6">
+    <div>
+      <div className="flex flex-col sm:flex-row sm:gap-10 gap-4">
+        <h2 className="text-xl md:text-2xl text-teal-600 capitalize">promo product banner_02</h2>
+        <div className="text-center">
           <label
             htmlFor="imageUpload"
-            className="cursor-pointer px-6 py-2 bg-[#0b6d7f] text-white font-bold rounded transition hover:bg-[#095666] disabled:bg-gray-400"
+            className="inline-block w-full sm:w-auto px-4 sm:px-6 py-2 bg-[#0b6d7f] text-white font-bold rounded transition hover:bg-[#095666] disabled:bg-gray-400"
           >
             Add Images
           </label>
@@ -178,11 +178,12 @@ const Promo_product_banner_02 = () => {
           />
         </div>
       </div>
-
       {isLoading ? (
-        <p className="text-center text-gray-500">Loading images...</p>
+        <div className="flex justify-center items-center h-40">
+          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[#0b6d7f]"></div>
+        </div>
       ) : isError ? (
-        <p className="text-center text-red-500">Failed to load images</p>
+        <p className="text-center text-red-500 mt-4">Failed to load images</p>
       ) : (
         <DndContext
           sensors={sensors}
@@ -193,7 +194,7 @@ const Promo_product_banner_02 = () => {
             items={images.map((img) => img.id)}
             strategy={verticalListSortingStrategy}
           >
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 mt-6">
               {images.map((image) => (
                 <SortableImage
                   key={image.id}
