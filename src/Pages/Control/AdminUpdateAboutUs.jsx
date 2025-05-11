@@ -236,9 +236,8 @@ const AdminUpdateAboutUs = () => {
             </div>
           ))}
         </div>
-
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="p-3 rounded">
+          <div className="rounded">
             <h2 className="text-base font-semibold mb-2">Who We Serve Image</h2>
             <div
               {...getWhoWeServeProps()}
@@ -269,7 +268,7 @@ const AdminUpdateAboutUs = () => {
               )
             )}
           </div>
-          <div className="p-3 rounded">
+          <div className="rounded">
             <h2 className="text-base font-semibold mb-2">
               Bottom Section Image
             </h2>
