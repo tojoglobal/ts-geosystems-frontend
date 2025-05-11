@@ -50,8 +50,8 @@ export default function TaxManager() {
   };
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
-      <h2 className="text-2xl font-bold mb-4">
+    <div className="max-w-4xl mx-auto">
+      <h2 className="text-xl md:text-2xl font-bold mb-4">
         {editing ? "Edit Tax" : "Create New Tax"}
       </h2>
       <TaxForm

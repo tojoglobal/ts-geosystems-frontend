@@ -245,224 +245,250 @@ const Categorys = () => {
   }, [watchSubCategory]);
 
   return (
-    <>
-      <div className="min-h-screen p-4">
-        <h2 className="text-xl font-bold mb-4">
-          Add Categories & Subcategories
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div>
-            <h2 className="text-base font-bold mb-2">Categories</h2>
-            <form
-              onSubmit={handleSubmitCategory(addCategory)}
-              className="space-y-4 space-x-2"
-            >
+    <div>
+      <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">
+        Add Categories & Subcategories
+      </h2>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-8">
+        <div className="space-y-4">
+          <h2 className="text-lg font-bold mb-2">Categories</h2>
+          <form
+            onSubmit={handleSubmitCategory(addCategory)}
+            className="flex flex-col space-y-4"
+          >
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <input
                 {...registerCategory("category_name", { required: true })}
                 placeholder="Category Name"
-                className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
+                className="w-full input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500 p-2"
               />
               <input
                 value={generateSlug(watchCategoryName)}
                 readOnly
                 placeholder="Slug"
-                className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
+                className="w-full input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500 p-2"
               />
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <input
                 {...registerCategory("serialNumber", { required: true })}
                 type="number"
                 placeholder="Order"
-                className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
+                className="w-full input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500 p-2"
               />
               <input
                 type="file"
                 accept="image/*"
-                className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
+                className="w-full input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500 p-2"
                 onChange={(e) => {
                   const file = e.target.files[0];
                   setValueCategory("photo", [file]);
                 }}
               />
-              {imagePreview && (
-                <img
-                  src={imagePreview}
-                  alt="Preview"
-                  className="w-20 h-20 object-cover rounded"
-                />
-              )}
-              <input
-                {...registerCategory("metaKeyword")}
-                placeholder="Meta Keywords comma separated"
-                className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
+            </div>
+            {imagePreview && (
+              <img
+                src={imagePreview}
+                alt="Preview"
+                className="w-20 h-20 object-cover rounded"
               />
-              <textarea
-                {...registerCategory("meta_description")}
-                placeholder="Meta Description"
-                className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
-              ></textarea>
-              <label className="flex items-center space-x-2">
-                <input type="checkbox" {...registerCategory("is_feature")} />
-                <span>Is Feature</span>
-              </label>
-              <input type="hidden" value={1} {...registerCategory("status")} />
-              <button
-                type="submit"
-                className="bg-teal-600 text-white px-4 py-2 rounded hover:bg-teal-700"
-              >
-                {editingCategory ? "Update Category" : "Add Category"}
-              </button>
-            </form>
-
-            <table className="w-full mt-6 border border-gray-600">
-              <thead>
-                <tr>
-                  <th className="p-2 text-left">Category</th>
-                  <th className="p-2 text-left">Order</th>
-                  <th className="p-2 text-left">Image</th>
-                  <th className="p-2">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {categories.map((cat) => (
-                  <tr key={cat.id} className="border-t border-gray-600">
-                    <td className="p-2">{cat.category_name}</td>
-                    <td className="p-2">{cat.serialNumber}</td>
-                    <td className="p-2">
-                      <img
-                        src={`${import.meta.env.VITE_OPEN_APIURL}/uploads/${
-                          cat.photo
-                        }`}
-                        alt={cat.category_name}
-                        className="w-16 h-16 object-cover rounded"
-                      />
-                    </td>
-                    <td className="p-2 space-x-2 text-center">
-                      <button
-                        onClick={() => handleEditCategory(cat)}
-                        className="text-blue-600 hover:underline"
-                      >
-                        <FaEdit />
-                      </button>
-                      {/* <button
-                      onClick={() => confirmDelete("category", cat.id)}
-                      className="text-red-600 hover:underline"
-                    >
-                      <FaTrash />
-                    </button> */}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          {/* sub category */}
-          <div>
-            <h2 className="text-base font-bold mb-2">Sub Categories</h2>
-            <form
-              onSubmit={handleSubmitSubCategory(addSubCategory)}
-              className="space-y-4 space-x-2"
+            )}
+            <input
+              {...registerCategory("metaKeyword")}
+              placeholder="Meta Keywords comma separated"
+              className="w-full input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500 p-2"
+            />
+            <textarea
+              {...registerCategory("meta_description")}
+              placeholder="Meta Description"
+              className="w-full input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500 p-2 min-h-[100px]"
+            ></textarea>
+            <label className="flex items-center space-x-2">
+              <input type="checkbox" {...registerCategory("is_feature")} />
+              <span>Is Feature</span>
+            </label>
+            <input type="hidden" value={1} {...registerCategory("status")} />
+            <button
+              type="submit"
+              className="bg-teal-600 text-white px-4 py-2 rounded hover:bg-teal-700 w-full sm:w-auto"
             >
+              {editingCategory ? "Update Category" : "Add Category"}
+            </button>
+          </form>
+
+          <div className="overflow-x-auto">
+            <div className="inline-block min-w-full align-middle">
+              <div className="overflow-hidden border border-gray-600 rounded-lg">
+                <table className="min-w-full divide-y divide-gray-600">
+                  <thead className="bg-gray-800">
+                    <tr>
+                      <th className="p-2 sm:p-3 text-left text-sm font-semibold">
+                        Category
+                      </th>
+                      <th className="p-2 sm:p-3 text-left text-sm font-semibold">
+                        Order
+                      </th>
+                      <th className="p-2 sm:p-3 text-left text-sm font-semibold">
+                        Image
+                      </th>
+                      <th className="p-2 sm:p-3 text-center text-sm font-semibold">
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-600">
+                    {categories.map((cat) => (
+                      <tr key={cat.id}>
+                        <td className="p-2 sm:p-3 whitespace-nowrap text-sm">
+                          {cat.category_name}
+                        </td>
+                        <td className="p-2 sm:p-3 whitespace-nowrap text-sm">
+                          {cat.serialNumber}
+                        </td>
+                        <td className="p-2 sm:p-3">
+                          <img
+                            src={`${import.meta.env.VITE_OPEN_APIURL}/uploads/${
+                              cat.photo
+                            }`}
+                            alt={cat.category_name}
+                            className="w-12 h-12 sm:w-16 sm:h-16 object-cover rounded"
+                          />
+                        </td>
+                        <td className="p-2 sm:p-3 text-center">
+                          <div className="flex justify-center space-x-2">
+                            <button
+                              onClick={() => handleEditCategory(cat)}
+                              className="text-blue-600 hover:text-blue-800 p-1"
+                            >
+                              <FaEdit size={16} />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Sub Categories Section */}
+        <div className="space-y-4">
+          <h2 className="text-lg font-bold mb-2">Sub Categories</h2>
+          <form
+            onSubmit={handleSubmitSubCategory(addSubCategory)}
+            className="flex flex-col space-y-4"
+          >
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <input
                 {...registerSubCategory("name", { required: true })}
                 placeholder="Subcategory Name"
-                className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
+                className="w-full input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500 p-2"
               />
               <input
                 value={generateSlug(watchSubCategoryName || "")}
                 readOnly
                 placeholder="Slug"
-                className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
+                className="w-full input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500 p-2"
               />
-              <select
-                {...registerSubCategory("main_category_id", { required: true })}
-                className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
-              >
-                <option value="">Select Category</option>
-                {categories.map((cat) => (
-                  <option key={cat.id} value={cat.id}>
-                    {cat.category_name}
-                  </option>
-                ))}
-              </select>
+            </div>
+            <select
+              {...registerSubCategory("main_category_id", { required: true })}
+              className="w-full input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500 p-2"
+            >
+              <option value="">Select Category</option>
+              {categories.map((cat) => (
+                <option key={cat.id} value={cat.id}>
+                  {cat.category_name}
+                </option>
+              ))}
+            </select>
+            <input
+              type="file"
+              accept="image/*"
+              className="w-full input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500 p-2"
+              onChange={(e) => {
+                const file = e.target.files[0];
+                setValueSubCategory("photo", [file]);
+              }}
+            />
+            {imagePreviewSubCatergory && (
+              <img
+                src={imagePreviewSubCatergory}
+                alt="Preview"
+                className="w-20 h-20 object-cover rounded"
+              />
+            )}
+            <input type="hidden" value={1} {...registerSubCategory("status")} />
+            <button
+              type="submit"
+              className="bg-teal-600 text-white px-4 py-2 rounded hover:bg-teal-700 w-full sm:w-auto"
+            >
+              {editingSubCategory ? "Update Subcategory" : "Add Subcategory"}
+            </button>
+          </form>
 
-              <input
-                type="file"
-                accept="image/*"
-                className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
-                onChange={(e) => {
-                  const file = e.target.files[0];
-                  setValueSubCategory("photo", [file]);
-                }}
-              />
-              {imagePreviewSubCatergory && (
-                <img
-                  src={imagePreviewSubCatergory}
-                  alt="Preview"
-                  className="w-20 h-20 object-cover rounded"
-                />
-              )}
-              <input
-                type="hidden"
-                value={1}
-                {...registerSubCategory("status")}
-              />
-              <br />
-              <button
-                type="submit"
-                className="bg-teal-600 text-white px-4 py-2 rounded hover:bg-teal-700"
-              >
-                {editingSubCategory ? "Update Subcategory" : "Add Subcategory"}
-              </button>
-            </form>
-            <table className="w-full mt-6 border border-gray-600">
-              <thead>
-                <tr>
-                  <th className="p-2 text-left">Subcategory</th>
-                  <th className="p-2 text-left">Category</th>
-                  <th className="p-2">Image</th>
-                  <th className="p-2">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {subCategories.map((sub) => (
-                  <tr key={sub.id} className="border-t border-gray-600">
-                    <td className="p-2">{sub.name}</td>
-                    <td className="p-2">
-                      {categories.find((cat) => cat.id === sub.main_category_id)
-                        ?.category_name || "N/A"}
-                    </td>
-                    <td className="p-2">
-                      <img
-                        src={`${import.meta.env.VITE_OPEN_APIURL}/uploads/${
-                          sub.photo
-                        }`}
-                        alt={sub.name}
-                        className="w-16 h-16 object-cover rounded"
-                      />
-                    </td>
-                    <td className="p-2 space-x-2 text-center">
-                      <button
-                        onClick={() => handleEditSubCategory(sub)}
-                        className="text-blue-600 hover:underline"
-                      >
-                        <FaEdit />
-                      </button>
-                      {/* <button
-                      onClick={() => confirmDelete("subcategory", sub.id)}
-                      className="text-red-600 hover:underline"
-                    >
-                      <FaTrash />
-                    </button> */}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div className="overflow-x-auto">
+            <div className="inline-block min-w-full align-middle">
+              <div className="overflow-hidden border border-gray-600 rounded-lg">
+                <table className="min-w-full divide-y divide-gray-600">
+                  <thead className="bg-gray-800">
+                    <tr>
+                      <th className="p-2 sm:p-3 text-left text-sm font-semibold">
+                        Subcategory
+                      </th>
+                      <th className="p-2 sm:p-3 text-left text-sm font-semibold">
+                        Category
+                      </th>
+                      <th className="p-2 sm:p-3 text-left text-sm font-semibold">
+                        Image
+                      </th>
+                      <th className="p-2 sm:p-3 text-center text-sm font-semibold">
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-600">
+                    {subCategories.map((sub) => (
+                      <tr key={sub.id}>
+                        <td className="p-2 sm:p-3 whitespace-nowrap text-sm">
+                          {sub.name}
+                        </td>
+                        <td className="p-2 sm:p-3 whitespace-nowrap text-sm">
+                          {categories.find(
+                            (cat) => cat.id === sub.main_category_id
+                          )?.category_name || "N/A"}
+                        </td>
+                        <td className="p-2 sm:p-3">
+                          <img
+                            src={`${import.meta.env.VITE_OPEN_APIURL}/uploads/${
+                              sub.photo
+                            }`}
+                            alt={sub.name}
+                            className="w-12 h-12 sm:w-16 sm:h-16 object-cover rounded"
+                          />
+                        </td>
+                        <td className="p-2 sm:p-3 text-center">
+                          <div className="flex justify-center space-x-2">
+                            <button
+                              onClick={() => handleEditSubCategory(sub)}
+                              className="text-blue-600 hover:text-blue-800 p-1"
+                            >
+                              <FaEdit size={16} />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
