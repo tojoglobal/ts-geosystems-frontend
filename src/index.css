@@ -263,6 +263,21 @@ div.right h1 {
   font-size: 16px;
 } */
 
+/* Apply zoom only to the first slide when active */
+.swiper-slide-first.swiper-slide-active .zoom-on-active {
+  animation: zoomSlow 10s ease-in-out forwards;
+}
+
+@keyframes zoomSlow {
+  0% {
+    transform: scale(1);
+  }
+
+  100% {
+    transform: scale(1.1);
+  }
+}
+
 div.right input:focus {
   outline-color: transparent;
 }

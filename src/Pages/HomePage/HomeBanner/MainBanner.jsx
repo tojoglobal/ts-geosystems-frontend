@@ -68,9 +68,8 @@ const MainBanner = () => {
       <div className="custom-next absolute top-1/2 right-4 transform -translate-y-1/2 bg-[#e62245] text-white p-2 rounded-full cursor-pointer z-10">
         <FaChevronRight />
       </div>
-
       <Swiper
-        modules={[Navigation, Pagination, EffectFade]}
+        modules={[Navigation, Autoplay, Pagination, EffectFade]}
         navigation={{
           prevEl: ".custom-prev",
           nextEl: ".custom-next",
@@ -79,17 +78,21 @@ const MainBanner = () => {
         // autoplay={{ delay: 10000 }}
         loop={true}
         effect="fade"
+        autoplay={{
+          delay: 10000,
+          disableOnInteraction: false,
+        }}
         fadeEffect={{ crossFade: true }}
         className="h-[540px] swiper-fade custom-swiper"
       >
         {/* First slide - dynamic image, static content */}
         {firstSlide && (
-          <SwiperSlide key="first-slide">
+          <SwiperSlide key="first-slide" className="swiper-slide-first">
             <div className="relative w-full h-[540px]">
               <img
                 src={`${baseURL}${firstSlide.image_url}`}
                 alt="Main Banner"
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover zoom-on-active"
               />
               <div className="absolute inset-0 text-white px-4 flex justify-center items-center text-center">
                 <div className="space-y-4 max-w-2xl">
