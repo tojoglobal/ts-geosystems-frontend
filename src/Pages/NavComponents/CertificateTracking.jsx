@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { CiHome } from "react-icons/ci";
 import { Link } from "react-router-dom";
+import useDataQuery from "../../utils/useDataQuery";
 
 const CertificateTracking = () => {
   const [formData, setFormData] = useState({
@@ -8,10 +9,20 @@ const CertificateTracking = () => {
     serialNumber: "",
   });
 
+  const { data: certificateData, isLoading } = useDataQuery(
+    ["certificateDescription"],
+    "/api/certificate-description"
+  );
+  console.log(certificateData);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(formData);
   };
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="max-w-[1370px] mx-auto p-5">
@@ -25,16 +36,14 @@ const CertificateTracking = () => {
       <h1 className="text-[30px] font-bold text-red-600 mb-4 uppercase">
         Certificate Tracking
       </h1>
-      <p className="text-center text-sm text-gray-700 mb-1 max-w-3xl mx-auto">
-        G2 Survey will always make every effort to offer the full solution for
-        our clients. It’s not enough to just hire or sell surveying equipment
-        and send you on your way.
-      </p>
-      <p className="text-center text-sm text-gray-700 mb-6 max-w-4xl mx-auto">
-        Our technical support team has over 100 years of combined experience, so
-        whether it takes a simple phone call, remote active assistance, or site
-        visits, we are here to provide world class support.
-      </p>
+      {certificateData?.description && (
+        <div className="text-center mb-6">
+          <div
+            className="text-sm text-gray-700 max-w-4xl mx-auto"
+            dangerouslySetInnerHTML={{ __html: certificateData.description }}
+          />
+        </div>
+      )}
       <hr className="my-8 border-gray-300" />
       <div className="text-center mb-10">
         <h2 className="text-2xl font-semibold mb-2">Tracking Information</h2>
@@ -49,7 +58,7 @@ const CertificateTracking = () => {
           <input
             type="text"
             name="trackingNumber"
-          placeholder="Tracking Number"
+            placeholder="Tracking Number"
             value={formData.trackingNumber}
             onChange={(e) =>
               setFormData((prev) => ({

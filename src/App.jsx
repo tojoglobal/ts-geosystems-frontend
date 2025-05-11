@@ -65,6 +65,7 @@ import TaxManager from "./Dashboard/TaxManager/TaxManager";
 import BlogCreate from "./Dashboard/Blog/BlogCreate";
 import AuthorManager from "./Dashboard/Author/AuthorMange";
 import BlogTypeManage from "./Dashboard/BlogType/BlogTypeManage";
+import AdminUpdateCertificateTracking from "./Pages/Control/AdminUpdateCertificateTracking";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -156,6 +157,7 @@ const AppLayout = () => {
           <Route path="service" element={<AdminUpdateService />} />
           <Route path="about-us" element={<AdminUpdateAboutUs />} />
           <Route path="contact-us" element={<AdminUpdateContactUs />} />
+          <Route path="cc" element={<AdminUpdateCertificateTracking />} />
         </Route>
 
         <Route path="*" element={<Error />} />
