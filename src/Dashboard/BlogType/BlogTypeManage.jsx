@@ -1,20 +1,20 @@
 import { useEffect, useState } from "react";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import { useQuery } from "@tanstack/react-query";
-import AuthorForm from "./AuthorFrom";
-import AuthorList from "./AuthorList";
+import BlogTypeList from "./BlogTypeList";
+import BlogTypeFrom from "./BlogTypeFrom";
 
-export default function AuthorManager() {
+export default function BlogTypeManage() {
   const axiosPublicUrl = useAxiospublic();
   const [editing, setEditing] = useState(null);
   const [resetFormTrigger, setResetFormTrigger] = useState(false);
 
-  const { data: authors = [], refetch } = useQuery({
-    queryKey: ["authors"],
+  const { data: blogTypes = [], refetch } = useQuery({
+    queryKey: ["blogTypes"],
     queryFn: async () => {
-      const res = await axiosPublicUrl.get("/api/authors");
-      console.log(res.data?.author);
-      return res.data?.author;
+      const res = await axiosPublicUrl.get("/api/blog-types");
+      console.log(res.data?.blogTypes);
+      return res.data?.blogTypes;
     },
   });
 
@@ -25,10 +25,10 @@ export default function AuthorManager() {
   const handleCreateOrUpdate = async (data) => {
     try {
       if (editing) {
-        await axiosPublicUrl.put(`/api/authors/${editing.id}`, data);
+        await axiosPublicUrl.put(`/api/blog-types/${editing.id}`, data);
         setEditing(null);
       } else {
-        await axiosPublicUrl.post("/api/authors", data);
+        await axiosPublicUrl.post("/api/blog-types", data);
         setResetFormTrigger((prev) => !prev);
       }
       refetch();
@@ -39,30 +39,34 @@ export default function AuthorManager() {
 
   const handleDelete = async (id) => {
     try {
-      await axiosPublicUrl.delete(`/api/authors/${id}`);
+      await axiosPublicUrl.delete(`/api/blog-types/${id}`);
       refetch();
     } catch (err) {
       console.error("Delete error:", err);
     }
   };
 
-  const handleEdit = (author) => {
-    setEditing(author);
+  const handleEdit = (type) => {
+    setEditing(type);
   };
 
   return (
     <div className="p-6 max-w-4xl mx-auto">
       <h2 className="text-2xl font-bold mb-4">
-        {editing ? "Edit Author" : "Create New Author"}
+        {editing ? "Edit Blog Type" : "Create New Blog Type"}
       </h2>
-      <AuthorForm
+      <BlogTypeFrom
         onSubmit={handleCreateOrUpdate}
         initialData={editing || {}}
         isEditing={!!editing}
         onCancel={() => setEditing(null)}
         resetTrigger={resetFormTrigger}
       />
-      <AuthorList data={authors} onEdit={handleEdit} onDelete={handleDelete} />
+      <BlogTypeList
+        data={blogTypes}
+        onEdit={handleEdit}
+        onDelete={handleDelete}
+      />
     </div>
   );
 }
