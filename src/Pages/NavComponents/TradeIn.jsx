@@ -286,7 +286,7 @@ const TradeIn = () => {
                   </label>
                 </div>
               </div>
-              <div className="">
+              <div className="font-semibold">
                 <div className="mb-4">
                   <label className="block mb-2">Equipment Condition *</label>
                   <div className="flex gap-2">
@@ -313,9 +313,11 @@ const TradeIn = () => {
                   </div>
                 </div>
               </div>
-              <div className="mb-4">
-                <label className="block mb-2">Sell or Trade In? *</label>
-                <div className="flex space-x-20 gap-2">
+              <div className="mb-4 font-semibold">
+                <label className="block mb-2 text-[15px]">
+                  Sell or Trade In? *
+                </label>
+                <div className="grid grid-cols-2">
                   <label className="flex items-center gap-2">
                     <input
                       type="radio"
@@ -323,7 +325,7 @@ const TradeIn = () => {
                       value="sell"
                       checked={formData.sellOrTrade === "sell"}
                       onChange={handleChange}
-                      className="w-4 h-4 text-[#e62245] bg-gray-200 border-gray-300 focus:ring-[#e62245] checked:bg-[#e62245] accent-[#e62245]"
+                      className="w-4 h-4 appearance-none rounded-full border-2 border-gray-300 checked:border-4 checked:border-[#e62245] checked:bg-white bg-[#e7e7e7] relative"
                       required
                     />
                     <span className="text-sm">Sell</span>
@@ -335,7 +337,7 @@ const TradeIn = () => {
                       value="tradeIn"
                       checked={formData.sellOrTrade === "tradeIn"}
                       onChange={handleChange}
-                      className="w-4 h-4 text-[#e62245] bg-gray-200 border-gray-300 focus:ring-[#e62245] checked:bg-[#e62245] accent-[#e62245]"
+                      className="w-4 h-4 appearance-none rounded-full border-2 border-gray-300 checked:border-4 checked:border-[#e62245] checked:bg-white bg-[#e7e7e7] relative"
                     />
                     <span className="text-sm">Trade In</span>
                   </label>
@@ -358,7 +360,9 @@ const TradeIn = () => {
                 </label>
               </div>
               <div>
-                <p className="mb-2">Please attach photos if applicable:</p>
+                <p className="mb-2 font-semibold">
+                  Please attach photos if applicable:
+                </p>
                 <label className="border-2 border-dashed border-gray-300 rounded p-8 text-center text-sm text-black block cursor-pointer">
                   <span className="text-[#e62245]">Choose file</span> or drop
                   here
