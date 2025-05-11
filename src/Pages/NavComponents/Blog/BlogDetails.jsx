@@ -41,11 +41,28 @@ const BlogDetails = () => {
         </button>
       </div>
       <section className="max-w-2xl mx-auto my-10">
-        <img
-          src="https://dropinblog.net/34252524/files/featured/geo-business-2025.jpg"
-          alt="GEO Business 2025"
-          className="mb-5"
-        />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+          <img
+            src="https://dropinblog.net/34252524/files/featured/geo-business-2025.jpg"
+            alt="GEO Business 2025"
+            className="rounded-md"
+          />
+          <img
+            src="https://dropinblog.net/34252524/files/featured/geo-business-2025.jpg"
+            alt="GEO Business 2025"
+            className="rounded-md"
+          />
+          <img
+            src="https://dropinblog.net/34252524/files/featured/geo-business-2025.jpg"
+            alt="GEO Business 2025"
+            className="rounded-md"
+          />
+          <img
+            src="https://dropinblog.net/34252524/files/featured/geo-business-2025.jpg"
+            alt="GEO Business 2025"
+            className="rounded-md"
+          />
+        </div>
         <h2 className="text-2xl font-bold text-[#e62245]">
           See us at GEO Business 2025 on stand G124
         </h2>
@@ -69,13 +86,13 @@ const BlogDetails = () => {
             controls
           />
         </div>
-        <div className="space-y-3">
+        <div className="space-y-3 text-[14px]">
           <p>
             We're excited to exhibit at GEO Business when it returns to ExCeL
             London on 4–5 June 2025.
           </p>
           <p>
-            The UK’s largest geospatial event features two days jam-packed with
+            The UK's largest geospatial event features two days jam-packed with
             inspiring content. Including an expo of the latest solutions, 150+
             speakers across 7 stages, 70 hours of CPD accredited education,
             networking drinks, live demos of the latest tech, and much more!
@@ -85,14 +102,17 @@ const BlogDetails = () => {
             geospatial, get inspired and connect with others in the profession.
           </p>
         </div>
-        <div className="text-center">
-          <Link
-            to="/"
-            href="#"
-            className="inline-block px-10 my-6 py-3 bg-[#e62245] text-white rounded font-semibold hover:bg-[#c51e3c] transition"
-          >
-            FREE Registration
-          </Link>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-8">
+          <img
+            src="https://dropinblog.net/34252524/files/featured/geo-business-2025.jpg"
+            alt="GEO Business 2025"
+            className="rounded-md"
+          />
+          <img
+            src="https://dropinblog.net/34252524/files/featured/geo-business-2025.jpg"
+            alt="GEO Business 2025"
+            className="rounded-md"
+          />
         </div>
         <div className="flex flex-wrap gap-1 underline text-sm text-[#e62245]">
           <span>#GeoBusiness</span>
@@ -125,7 +145,7 @@ const BlogDetails = () => {
           to="/ts-blog"
           className="text-sm text-[#e62245] hover:underline block mt-4"
         >
-          &laquo; Back to Blog
+          « Back to Blog
         </Link>
       </section>
       <div className="my-12">
