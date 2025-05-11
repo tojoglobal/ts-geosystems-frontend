@@ -13,7 +13,6 @@ export default function BlogTypeManage() {
     queryKey: ["blogTypes"],
     queryFn: async () => {
       const res = await axiosPublicUrl.get("/api/blog-types");
-      console.log(res.data?.blogTypes);
       return res.data?.blogTypes;
     },
   });

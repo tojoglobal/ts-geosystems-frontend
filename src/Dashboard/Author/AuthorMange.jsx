@@ -13,7 +13,6 @@ export default function AuthorManager() {
     queryKey: ["authors"],
     queryFn: async () => {
       const res = await axiosPublicUrl.get("/api/authors");
-      console.log(res.data?.author);
       return res.data?.author;
     },
   });

@@ -1,339 +1,289 @@
 import { useForm, Controller } from "react-hook-form";
 import { Editor } from "@tinymce/tinymce-react";
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import { useDropzone } from "react-dropzone";
 import Swal from "sweetalert2";
 import Button from "../../Dashboard/Button/Button";
-import AudioPlayer from "react-h5-audio-player";
-import "react-h5-audio-player/lib/styles.css";
+import { useAxiospublic } from "../../Hooks/useAxiospublic";
+import useDataQuery from "../../utils/useDataQuery";
 
-// Fake author data (will be replaced with real data from database later)
-const fakeAuthors = [
-  { id: 1, name: "G2 Survey Events" },
-  { id: 2, name: "John Doe" },
-  { id: 3, name: "Jane Smith" },
-  { id: 4, name: "Tech Team" },
+const availableTags = [
+  "#GeoBusiness",
+  "#GeospatialTech",
+  "#SeeYouThere",
+  "#ExCeLLondon",
+  "#MappingTheFuture",
 ];
 
 const BlogCreate = () => {
+  const axiosPublicUrl = useAxiospublic();
+  const { data: authors = [] } = useDataQuery(["authors"], "/api/authors");
+  const { data: blogTypes = [] } = useDataQuery(
+    ["blogTypes"],
+    "/api/blog-types"
+  );
+
   const [isUploading, setIsUploading] = useState(false);
-  const [featuredImage, setFeaturedImage] = useState(null);
-  const [audioFile, setAudioFile] = useState(null);
   const [selectedTags, setSelectedTags] = useState([]);
-  const [availableTags] = useState([
-    "#GeoBusiness",
-    "#GeospatialTech",
-    "#SeeYouThere",
-    "#ExCeLLondon",
-    "#MappingTheFuture",
+  const [images, setImages] = useState([
+    { file: null, show: true, order: 1 },
+    { file: null, show: true, order: 2 },
+    { file: null, show: true, order: 3 },
+    { file: null, show: true, order: 4 },
   ]);
 
-  const blogTypes = ["Features", "Tips", "Announcements", "Events"];
-
-  const { register, control, handleSubmit, reset, watch, setValue } = useForm({
+  const { register, handleSubmit, setValue, control, reset } = useForm({
     defaultValues: {
       title: "",
-      content: "",
       author: "",
       blogType: "",
-      readTime: "1 minute read",
+      content: "",
       tags: [],
     },
   });
 
-  const onDropFeaturedImage = useCallback((acceptedFiles) => {
-    setFeaturedImage(acceptedFiles[0]);
-  }, []);
-
-  const onDropAudio = useCallback((acceptedFiles) => {
-    setAudioFile(acceptedFiles[0]);
-  }, []);
-
-  const { getRootProps: getRootPropsImage, getInputProps: getInputPropsImage } =
-    useDropzone({
-      onDrop: onDropFeaturedImage,
-      accept: { "image/*": [".jpeg", ".jpg", ".png", ".webp"] },
-      maxFiles: 1,
-    });
-
-  const { getRootProps: getRootPropsAudio, getInputProps: getInputPropsAudio } =
-    useDropzone({
-      onDrop: onDropAudio,
-      accept: { "audio/*": [".mp3", ".wav", ".ogg"] },
-      maxFiles: 1,
-    });
-
   const handleTagSelect = (tag) => {
     if (!selectedTags.includes(tag)) {
-      setSelectedTags([...selectedTags, tag]);
-      setValue("tags", [...selectedTags, tag]);
+      const newTags = [...selectedTags, tag];
+      setSelectedTags(newTags);
+      setValue("tags", newTags);
     }
   };
 
   const removeTag = (tagToRemove) => {
-    const updatedTags = selectedTags.filter((tag) => tag !== tagToRemove);
-    setSelectedTags(updatedTags);
-    setValue("tags", updatedTags);
+    const newTags = selectedTags.filter((tag) => tag !== tagToRemove);
+    setSelectedTags(newTags);
+    setValue("tags", newTags);
+  };
+
+  const handleImageDrop = (index) => (acceptedFiles) => {
+    const newImages = [...images];
+    newImages[index].file = acceptedFiles[0];
+    setImages(newImages);
+  };
+
+  const handleImageToggle = (index) => {
+    const newImages = [...images];
+    newImages[index].show = !newImages[index].show;
+    setImages(newImages);
+  };
+
+  const handleOrderChange = (index, order) => {
+    const newImages = [...images];
+    newImages[index].order = order;
+    setImages(newImages);
   };
 
   const onSubmit = async (data) => {
     try {
       setIsUploading(true);
 
-      // In a real implementation, you would upload to your backend here
-      console.log("Form data:", data);
-      console.log("Featured image:", featuredImage);
-      console.log("Audio file:", audioFile);
+      const formData = new FormData();
+      formData.append("title", data.title);
+      formData.append("author", data.author);
+      formData.append("blogType", data.blogType);
+      formData.append("content", data.content);
+      formData.append("tags", JSON.stringify(selectedTags));
 
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-
-      Swal.fire({
-        icon: "success",
-        title: "Success!",
-        text: "Blog post created successfully",
+      images.forEach((img, idx) => {
+        if (img.file) {
+          formData.append(`images[${idx}][file]`, img.file);
+          formData.append(`images[${idx}][show]`, img.show);
+          formData.append(`images[${idx}][order]`, img.order);
+        }
       });
 
-      // Reset form
+      // Logging the form data
+      const formDataObject = {};
+      for (let [key, value] of formData.entries()) {
+        formDataObject[key] =
+          value instanceof Blob
+            ? { name: value.name, size: value.size, type: value.type }
+            : value;
+      }
+      console.log("FormData to be sent:", formDataObject);
+
+      await axiosPublicUrl.post("/api/blogs", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      Swal.fire("Success", "Blog post created!", "success");
       reset();
-      setFeaturedImage(null);
-      setAudioFile(null);
       setSelectedTags([]);
+      setImages(images.map((img) => ({ ...img, file: null })));
     } catch (error) {
-      console.error("Error creating blog post:", error);
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "Failed to create blog post",
-      });
+      console.error(error);
+      Swal.fire("Error", "Failed to create blog post", "error");
     } finally {
       setIsUploading(false);
     }
   };
 
   return (
-    <div className="mb-2">
-      <h1 className="text-xl md:text-2xl font-bold mb-4">Admin - Create Blog Post</h1>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 md:space-y-7">
-        {/* Title Section */}
-        <div className="space-y-2">
-          <label htmlFor="title" className="block font-medium text-sm md:text-base">
-            Title
-          </label>
+    <div className="p-4 max-w-5xl mx-auto">
+      <h1 className="text-2xl font-bold mb-6">Create Blog Post</h1>
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        {/* Title */}
+        <div>
+          <label className="block mb-1">Title</label>
           <input
-            type="text"
-            id="title"
-            {...register("title", { required: "Title is required" })}
-            className="w-full bg-gray-800 border border-gray-700 rounded p-2 text-sm md:text-base focus:outline-none focus:ring focus:ring-[#e62245] text-white"
+            {...register("title", { required: true })}
+            className="w-full p-2 bg-gray-800 border border-gray-600 text-white rounded"
             placeholder="Enter blog title"
           />
         </div>
-        {/* Author and Type Selection */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-5">
-          {/* Author Selection */}
-          <div className="space-y-2">
-            <label htmlFor="author" className="block font-medium text-sm md:text-base">
-              Author
-            </label>
+
+        {/* Author and Blog Type */}
+        <div className="grid md:grid-cols-2 gap-4">
+          <div>
+            <label className="block mb-1">Author</label>
             <select
-              id="author"
-              {...register("author", { required: "Author is required" })}
-              className="w-full appearance-none bg-gray-800 border border-gray-700 rounded p-2 text-sm md:text-base focus:outline-none text-white"
+              {...register("author", { required: true })}
+              className="w-full p-2 bg-gray-800 border border-gray-600 text-white rounded"
             >
-              <option value="" className="bg-gray-800">Select Author</option>
-              {fakeAuthors.map((author) => (
-                <option key={author.id} value={author.name} className="bg-gray-800">
-                  {author.name}
+              <option value="">Select author</option>
+              {authors?.author?.map((a) => (
+                <option key={a.id} value={a.name}>
+                  {a.name}
                 </option>
               ))}
             </select>
           </div>
-          {/* Blog Type Selection */}
-          <div className="space-y-2">
-            <label htmlFor="blogType" className="block font-medium text-sm md:text-base">
-              Blog Type
-            </label>
+          <div>
+            <label className="block mb-1">Blog Type</label>
             <select
-              id="blogType"
-              {...register("blogType", { required: "Blog type is required" })}
-              className="w-full appearance-none bg-gray-800 border border-gray-700 rounded p-2 text-sm md:text-base focus:outline-none focus:ring text-white"
+              {...register("blogType", { required: true })}
+              className="w-full p-2 bg-gray-800 border border-gray-600 text-white rounded"
             >
-              <option value="" className="bg-gray-800">Select Type</option>
-              {blogTypes.map((type) => (
-                <option key={type} value={type} className="bg-gray-800">
-                  {type}
+              <option value="">Select type</option>
+              {blogTypes?.blogTypes?.map((type) => (
+                <option key={type.id} value={type.name}>
+                  {type.name}
                 </option>
               ))}
             </select>
-          </div>
-        </div>
-        {/* Read Time */}
-        <div className="space-y-2">
-          <label htmlFor="readTime" className="block font-medium text-sm md:text-base">
-            Read Time
-          </label>
-          <input
-            type="text"
-            id="readTime"
-            {...register("readTime")}
-            className="w-full bg-gray-800 border border-gray-700 rounded p-2 text-sm md:text-base focus:outline-none focus:ring focus:ring-[#e62245] text-white"
-            placeholder="e.g. 1 minute read"
-          />
-        </div>
-        <div className="flex flex-col md:flex-row gap-4 md:gap-6">
-          {/* Featured Image Upload */}
-          <div className="w-full md:w-1/2 space-y-2">
-            <label className="block font-medium text-sm md:text-base">Featured Image</label>
-            <div
-              {...getRootPropsImage()}
-              className={`border-2 border-dashed rounded-md p-4 md:p-6 text-center cursor-pointer text-sm md:text-base ${
-                isUploading
-                  ? "border-gray-700"
-                  : "border-gray-600 hover:border-teal-500"
-              }`}
-            >
-              <input {...getInputPropsImage()} />
-              {isUploading ? (
-                <p>Uploading image...</p>
-              ) : (
-                <p>
-                  Drag & drop or{" "}
-                  <span className="underline text-teal-500">browse</span> to upload
-                  featured image
-                </p>
-              )}
-            </div>
-            {featuredImage && (
-              <div className="mt-4">
-                <p className="text-xs md:text-sm text-gray-400 mb-2">Selected Image:</p>
-                <img
-                  src={URL.createObjectURL(featuredImage)}
-                  alt="Featured preview"
-                  className="h-20 md:h-24 w-36 md:w-44 object-cover rounded"
-                />
-              </div>
-            )}
-          </div>
-          {/* Audio Upload and Preview */}
-          <div className="w-full md:w-1/2 space-y-2">
-            <label className="block font-medium text-sm md:text-base">Audio File (Optional)</label>
-            <div
-              {...getRootPropsAudio()}
-              className={`border-2 border-dashed rounded-md p-4 md:p-6 text-center cursor-pointer text-sm md:text-base ${
-                isUploading
-                  ? "border-gray-700"
-                  : "border-gray-600 hover:border-teal-500"
-              }`}
-            >
-              <input {...getInputPropsAudio()} />
-              {isUploading ? (
-                <p>Uploading audio...</p>
-              ) : (
-                <p>
-                  Drag & drop or{" "}
-                  <span className="underline text-teal-500">browse</span> to upload
-                  audio file
-                </p>
-              )}
-            </div>
-            {audioFile && (
-              <div className="mt-4">
-                <p className="text-xs md:text-sm text-gray-400 mb-2">Audio Preview:</p>
-                <AudioPlayer
-                  src={URL.createObjectURL(audioFile)}
-                  autoPlay={false}
-                  controls
-                  className="shadow-xl bg-gray-800 text-sm md:text-base"
-                />
-              </div>
-            )}
-          </div>
-        </div>
-        {/* Content Section */}
-        <div className="space-y-3 md:space-y-4">
-          <label htmlFor="content" className="block font-medium text-sm md:text-base">
-            Content
-          </label>
-          <div className="bg-white rounded">
-            <Controller
-              name="content"
-              control={control}
-              render={({ field }) => (
-                <Editor
-                  apiKey={import.meta.env.VITE_TINY_APIKEY}
-                  value={field.value}
-                  init={{
-                    height: 300,
-                    menubar: true,
-                    skin: "oxide-dark",
-                    content_css: "dark",
-                    plugins: [
-                      "advlist autolink lists link image charmap print preview anchor",
-                      "searchreplace visualblocks code fullscreen",
-                      "insertdatetime media table paste code help wordcount",
-                    ],
-                    toolbar:
-                      "undo redo | formatselect | bold italic backcolor | \
-                      alignleft aligncenter alignright alignjustify | \
-                      bullist numlist outdent indent | removeformat | help",
-                  }}
-                  onEditorChange={(content) => field.onChange(content)}
-                />
-              )}
-            />
           </div>
         </div>
 
-        {/* Tags Section */}
-        <div className="space-y-2 md:space-y-3">
-          <label className="block font-medium text-sm md:text-base">Tags</label>
-          <div className="flex flex-wrap gap-1.5 md:gap-2 mb-2 md:mb-3">
+        {/* Content */}
+        <div>
+          <label className="block mb-1">Content</label>
+          <Controller
+            name="content"
+            control={control}
+            render={({ field }) => (
+              <Editor
+                apiKey={import.meta.env.VITE_TINY_APIKEY}
+                {...field}
+                init={{
+                  height: 300,
+                  menubar: false,
+                  plugins: "link image code lists",
+                  toolbar:
+                    "undo redo | formatselect | bold italic | alignleft aligncenter alignright | code",
+                }}
+              />
+            )}
+          />
+        </div>
+
+        {/* Tags */}
+        <div>
+          <label className="block mb-1">Tags</label>
+          <div className="flex flex-wrap gap-2">
             {availableTags.map((tag) => (
               <button
                 key={tag}
                 type="button"
                 onClick={() => handleTagSelect(tag)}
-                className={`px-2 md:px-3 py-0.5 md:py-1 rounded text-xs md:text-sm ${
-                  selectedTags.includes(tag)
-                    ? "bg-[#e62245] text-white"
-                    : "bg-gray-700 hover:bg-gray-600 text-white"
-                }`}
+                className="px-3 py-1 bg-gray-700 rounded text-white text-sm"
               >
                 {tag}
               </button>
             ))}
           </div>
-          {selectedTags.length > 0 && (
-            <div>
-              <p className="text-xs md:text-sm text-gray-400 mb-1 md:mb-2">Selected Tags:</p>
-              <div className="flex flex-wrap gap-1.5 md:gap-2">
-                {selectedTags.map((tag) => (
-                  <div
-                    key={tag}
-                    className="flex items-center gap-1 bg-gray-700 px-2 py-0.5 md:py-1 rounded text-xs md:text-sm text-white"
-                  >
-                    <span>{tag}</span>
-                    <button
-                      type="button"
-                      onClick={() => removeTag(tag)}
-                      className="text-red-400 hover:text-red-300"
-                    >
-                      ×
-                    </button>
+          <div className="flex flex-wrap gap-2 mt-2">
+            {selectedTags.map((tag) => (
+              <span
+                key={tag}
+                className="bg-teal-600 px-3 py-1 rounded-full text-sm"
+              >
+                {tag}{" "}
+                <button type="button" onClick={() => removeTag(tag)}>
+                  x
+                </button>
+              </span>
+            ))}
+          </div>
+        </div>
+
+        {/* Image Uploads with show/hide and order */}
+        <div className="grid md:grid-cols-2 gap-4">
+          {images.map((img, idx) => {
+            const { getRootProps, getInputProps } = useDropzone({
+              onDrop: handleImageDrop(idx),
+              accept: { "image/*": [] },
+              maxFiles: 1,
+            });
+
+            return (
+              <div key={idx} className="border p-4 bg-gray-900 rounded">
+                <label className="block text-white mb-2">Image {idx + 1}</label>
+                <div
+                  {...getRootProps()}
+                  className="cursor-pointer bg-gray-800 text-white text-center py-4 rounded"
+                >
+                  <input {...getInputProps()} />
+                  <p>Drag & drop or click to select image</p>
+                </div>
+
+                {img.file && (
+                  <img
+                    src={URL.createObjectURL(img.file)}
+                    alt="Preview"
+                    className="mt-2 h-24 object-cover rounded"
+                  />
+                )}
+
+                <div className="mt-3 text-white space-y-2">
+                  <div>
+                    <label className="block text-sm">Display:</label>
+                    <input
+                      type="checkbox"
+                      checked={img.show}
+                      onChange={() => handleImageToggle(idx)}
+                      className="mr-2"
+                    />
+                    {img.show ? "Visible" : "Hidden"}
                   </div>
-                ))}
+
+                  <div>
+                    <label className="block text-sm">Order (1 to 4):</label>
+                    <input
+                      type="number"
+                      min="1"
+                      max="4"
+                      value={img.order}
+                      onChange={(e) =>
+                        handleOrderChange(idx, Number(e.target.value))
+                      }
+                      className="w-full p-1 bg-gray-700 border border-gray-600 rounded"
+                    />
+                  </div>
+                </div>
               </div>
-            </div>
-          )}
+            );
+          })}
         </div>
 
         {/* Submit Button */}
-        <div className="flex justify-start">
+        <div>
           <Button
-            text={isUploading ? "Publishing..." : "Publish Blog Post"}
             disabled={isUploading}
-            className="text-sm md:text-base"
-          />
+            text={isUploading ? "Uploading..." : "Create Blog Post"}
+          ></Button>
         </div>
       </form>
     </div>

@@ -62,9 +62,12 @@ import AdminUpdateHire from "./Pages/Control/AdminUpdateHire";
 import AdminUpdateService from "./Pages/Control/AdminUpdateService";
 import BlogDetails from "./Pages/NavComponents/Blog/BlogDetails";
 import TaxManager from "./Dashboard/TaxManager/TaxManager";
-import BlogCreate from "./Dashboard/Blog/BlogCreate";
 import AuthorManager from "./Dashboard/Author/AuthorMange";
 import BlogTypeManage from "./Dashboard/BlogType/BlogTypeManage";
+import BlogTable from "./Dashboard/Blog/BlogTable";
+import BlogCreate from "./Dashboard/Blog/BlogCreate";
+import BlogUpdate from "./Dashboard/Blog/BlogUpdate";
+import BlogView from "./Dashboard/Blog/BlogView";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -145,7 +148,10 @@ const AppLayout = () => {
           {/* add taxesmanager */}
           <Route path="taxesmanager" element={<TaxManager />} />
           {/* blog routes */}
-          <Route path="ts-blog" element={<BlogCreate />} />
+          <Route path="ts-blog" element={<BlogTable />} />
+          <Route path="ts-blog/create" element={<BlogCreate />} />
+          <Route path="ts-blog/edit/:id" element={<BlogUpdate />} />
+          <Route path="ts-blog/view/:id" element={<BlogView />} />
           {/* author route */}
           <Route path="author" element={<AuthorManager />} />
           {/* Blog Type route */}
