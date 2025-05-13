@@ -48,23 +48,39 @@ const RECOMMENDED_PRODUCTS = [
   },
 ];
 
+const CATEGORIES = [
+  "Surveying Accessories",
+  "Containers & Bags",
+  "3D Laser Scanning",
+  "Radiodetection"
+];
+
+const BRANDS = [
+  "Leica Geosystems",
+  "Nedo"
+];
+
+const SUGGESTIONS = [
+  "bag",
+  "carry bag", 
+  "mission bag",
+  "leica bag"
+];
+
 const SearchOverlay = ({ isOpen, onClose }) => {
   const [searchText, setSearchText] = useState("");
-  // const [latestSearches, setLatestSearches] = useState([]);
+  const [latestSearches, setLatestSearches] = useState([]);
+  const [viewAllProducts, setViewAllProducts] = useState(false);
+  const [sortBy, setSortBy] = useState("relevance");
   const overlayRef = useRef(null);
-  const [latestSearches, setLatestSearches] = useState([
-    "lecia",
-    "lecia d",
-    "lecia dedss",
-  ]);
 
   const handleRemoveSearch = (index) => {
     setLatestSearches(latestSearches.filter((_, i) => i !== index));
   };
 
-  const handleClearAll = () => {
-    setLatestSearches([]);
-  };
+  // const handleClearAll = () => {
+  //   setLatestSearches([]);
+  // };
 
   const saveToLocalStorage = (value) => {
     let updated = [
@@ -98,11 +114,27 @@ const SearchOverlay = ({ isOpen, onClose }) => {
     nextArrow: <NextArrow />,
   };
 
+  const handleViewAll = () => {
+    setViewAllProducts(true);
+  };
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpen]);
+
   return (
     <>
       <div
         ref={overlayRef}
-        className={`fixed inset-0 bg-gray-100 z-[100] h-10/12 transition-transform duration-500 ease-in-out transform ${
+        className={`fixed inset-0 bg-gray-100 z-[100] h-screen overflow-y-auto transition-transform duration-500 ease-in-out transform ${
           isOpen ? "translate-y-0" : "-translate-y-full"
         }`}
       >
@@ -137,66 +169,136 @@ const SearchOverlay = ({ isOpen, onClose }) => {
             <RxCross1 className="text-4xl text-[#626263]" />
           </button>
         </div>
-        {/* Latest Search Section */}
-        <div className="px-6 py-4 flex max-w-[70%] items-center mx-auto ">
-          <h2 className="text-gray-700 font-medium mr-2">Latest searches:</h2>
-          <div className="flex flex-wrap gap-2">
-            {latestSearches.map((item, i) => (
-              <div
-                key={i}
-                className="flex items-center bg-gray-200 text-sm px-3 py-1 rounded-full text-gray-700"
-              >
-                <span className="mr-2">{item}</span>
-                <button
-                  onClick={() => handleRemoveSearch(i)}
-                  className="text-gray-600 hover:text-black"
+        {/* Latest Search & Suggestions Section */}
+        <div className="px-6 py-4 flex max-w-[70%] flex-col mx-auto">
+          <div className="flex items-center mb-4">
+            <h2 className="text-gray-700 font-medium mr-2">Latest searches:</h2>
+            <div className="flex flex-wrap gap-2">
+              {latestSearches.map((item, i) => (
+                <div
+                  key={i}
+                  className="flex items-center bg-gray-200 text-sm px-3 py-1 rounded-full text-gray-700"
                 >
-                  <IoCloseOutline size={14} />
-                </button>
-              </div>
-            ))}
-            {latestSearches.length > 0 && (
-              <button
-                onClick={handleClearAll}
-                className="text-red-500 text-sm font-medium hover:underline ml-2 cursor-pointer"
-              >
-                Delete all
-              </button>
-            )}
+                  <span className="mr-2">{item}</span>
+                  <button
+                    onClick={() => handleRemoveSearch(i)}
+                    className="text-gray-600 hover:text-black"
+                  >
+                    <IoCloseOutline size={14} />
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex items-center">
+            <h2 className="text-gray-700 font-medium mr-2">Suggestions:</h2>
+            <div className="flex flex-wrap gap-2">
+              {SUGGESTIONS.map((item, i) => (
+                <div
+                  key={i}
+                  className="bg-gray-200 text-sm px-3 py-1 rounded-full text-gray-700"
+                >
+                  {item}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
-        {/* Bottom Section */}
+
+        {/* Main Content Section */}
         <div className="flex px-12 pb-12">
-          {/* Left - Popular Searches */}
-          <div className="w-4/9 p-5 bg-white">
-            <h3 className="font-semibold text-lg mb-2">Popular searches</h3>
-            <ul className="text-sm text-gray-700 space-y-3">
-              {POPULAR_SEARCHES.map((search, i) => (
-                <li key={i} className="hover:text-[#e62245] cursor-pointer">
-                  {search}
-                </li>
-              ))}
-            </ul>
+          {/* Left Sidebar */}
+          <div className="w-1/4 p-5 bg-white">
+            <div className="mb-8">
+              <h3 className="font-semibold text-lg mb-4">Categories</h3>
+              <ul className="text-sm text-gray-700 space-y-3">
+                {CATEGORIES.map((category, i) => (
+                  <li key={i} className="hover:text-[#e62245] cursor-pointer">
+                    {category}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="mb-8">
+              <h3 className="font-semibold text-lg mb-4">Brands</h3>
+              <ul className="text-sm text-gray-700 space-y-3">
+                {BRANDS.map((brand, i) => (
+                  <li key={i} className="hover:text-[#e62245] cursor-pointer">
+                    {brand}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="mb-8">
+              <h3 className="font-semibold text-lg mb-4">Condition</h3>
+              <ul className="text-sm text-gray-700 space-y-3">
+                <li className="hover:text-[#e62245] cursor-pointer">New</li>
+                <li className="hover:text-[#e62245] cursor-pointer">Used</li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="font-semibold text-lg mb-4">Price Range</h3>
+              <div className="space-y-2">
+                <input type="range" className="w-full" min="0" max="10000" />
+                <div className="flex justify-between text-sm text-gray-600">
+                  <span>£0</span>
+                  <span>£10,000</span>
+                </div>
+              </div>
+            </div>
           </div>
-          {/* Right - Product Slider */}
-          <div className="w-7/9 pl-10">
-            <h3 className="font-semibold text-lg mb-4">
-              {searchText
-                ? `Results for "${searchText}"`
-                : "Recommended products"}
-            </h3>
-            {/* <div className="relative w-full"> */}
-            <Slider {...settings}>
-              {RECOMMENDED_PRODUCTS.map((product, index) => (
-                <div key={index} className="px-2">
-                  <div className="h-full min-h-[350px] flex flex-col bg-white p-6 shadow-sm border-2 border-transparent hover:border-gray-300 transition-all duration-200">
+
+          {/* Right Content */}
+          <div className="w-3/4 pl-10">
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="font-semibold text-lg">
+                {searchText
+                  ? `50 results found for "${searchText}"`
+                  : "Recommended products"}
+              </h3>
+
+              {!viewAllProducts && (
+                <button
+                  onClick={handleViewAll}
+                  className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+                >
+                  View All
+                </button>
+              )}
+
+              {viewAllProducts && (
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                  className="px-4 py-1 appearance-none border rounded-sm border-gray-300 focus:outline-none"
+                >
+                  <option value="relevance">Relevance</option>
+                  <option value="price-high">Price: High to Low</option>
+                  <option value="price-low">Price: Low to High</option>
+                  <option value="a-z">A-Z</option>
+                  <option value="z-a">Z-A</option>
+                </select>
+              )}
+            </div>
+
+            {viewAllProducts ? (
+              <div className="grid grid-cols-5 gap-4">
+                {RECOMMENDED_PRODUCTS.map((product, index) => (
+                  <div
+                    key={index}
+                    className="bg-white p-4 border hover:border-gray-300 transition-all duration-200"
+                  >
                     <img
                       src={product.image}
                       alt={product.name}
-                      className="mx-auto h-44 object-contain mb-3"
+                      className="w-full h-32 object-contain mb-3"
                     />
                     <p className="text-sm font-medium mb-1">{product.name}</p>
-                    <div className="flex justify-between items-center mt-8">
+                    <div className="flex justify-between items-center mt-4">
                       <p className="text-sm font-semibold text-gray-800">
                         {product.price}
                       </p>
@@ -205,13 +307,36 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                       </button>
                     </div>
                   </div>
-                </div>
-              ))}
-            </Slider>
+                ))}
+              </div>
+            ) : (
+              <Slider {...settings}>
+                {RECOMMENDED_PRODUCTS.map((product, index) => (
+                  <div key={index} className="px-2">
+                    <div className="h-full min-h-[350px] flex flex-col bg-white p-6 shadow-sm border-2 border-transparent hover:border-gray-300 transition-all duration-200">
+                      <img
+                        src={product.image}
+                        alt={product.name}
+                        className="mx-auto h-44 object-contain mb-3"
+                      />
+                      <p className="text-sm font-medium mb-1">{product.name}</p>
+                      <div className="flex justify-between items-center mt-8">
+                        <p className="text-sm font-semibold text-gray-800">
+                          {product.price}
+                        </p>
+                        <button className="bg-crimson-red p-2 rounded text-white">
+                          <MdAddShoppingCart className="text-lg" />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </Slider>
+            )}
           </div>
         </div>
       </div>
-      {/* </div> */}
+
       {/* Backdrop Overlay inside relative wrapper */}
       {isOpen && (
         <div
