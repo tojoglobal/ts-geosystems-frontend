@@ -35,7 +35,17 @@ const BlogTable = () => {
 
   return (
     <div className="p-4 max-w-6xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">All Blogs</h1>
+      <div className="flex justify-between ">
+        <h1 className="text-2xl font-bold mb-4">All Blogs</h1>
+        <div className="flex flex-col sm:flex-row sm:justify-end gap-2 mb-3">
+          <Link
+            to="/dashboard/ts-blog/create"
+            className="bg-teal-600 text-white py-1 md:py-2 px-4 rounded-md hover:bg-teal-700 transition duration-200 text-center w-full sm:w-auto"
+          >
+            Add blog
+          </Link>
+        </div>
+      </div>
       <table className="w-full table-auto border-collapse bg-gray-900 text-white">
         <thead>
           <tr className="bg-gray-800">

@@ -123,16 +123,12 @@ const ProductAddForm = () => {
 
   // onChange handler for file input
   const onSubmit = async (data) => {
-    console.log(data);
-
     const parsedData = {
       ...data,
       category: data.category ? JSON.parse(data.category) : null,
       subCategory: data.subCategory ? JSON.parse(data.subCategory) : null,
       tax: data.tax ? JSON.parse(data.tax) : null,
     };
-
-    console.log({ ...parsedData, images });
 
     try {
       const formData = new FormData();

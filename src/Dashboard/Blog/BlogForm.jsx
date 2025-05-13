@@ -41,24 +41,41 @@ const BlogForm = () => {
     { file: null, show: true, order: 4 },
   ]);
 
-  const { register, handleSubmit, setValue, control, reset } = useForm({
-    defaultValues: {
-      title: "",
-      author: "",
-      blogType: "",
-      content: "",
-      tags: [],
-    },
-  });
+  const { register, handleSubmit, setValue, control, reset, formState } =
+    useForm({
+      defaultValues: {
+        title: "",
+        author: "",
+        blogType: "",
+        content: "",
+        tags: [],
+      },
+    });
 
   console.log(selectedTags);
 
   useEffect(() => {
+    // 🔄 When switching to create mode, reset everything
+    if (!existingBlog) {
+      reset({
+        title: "",
+        author: "",
+        blogType: "",
+        content: "",
+        tags: [],
+      });
+      setSelectedTags([]);
+      setImages([
+        { file: null, show: true, order: 1, previewUrl: "" },
+        { file: null, show: true, order: 2, previewUrl: "" },
+        { file: null, show: true, order: 3, previewUrl: "" },
+      ]);
+    }
+  }, [existingBlog, reset]);
+
+  // Existing hydration useEffect
+  useEffect(() => {
     if (existingBlog) {
-      setValue("title", existingBlog.title);
-      setValue("author", existingBlog.author);
-      setValue("blogType", existingBlog.blog_type);
-      setValue("content", existingBlog.content);
       const parsedTags =
         typeof existingBlog.tags === "string"
           ? JSON.parse(existingBlog.tags)
@@ -67,10 +84,18 @@ const BlogForm = () => {
           : [];
 
       setSelectedTags(parsedTags);
-      setValue("tags", parsedTags);
+
+      const resetData = {
+        title: existingBlog.title || "",
+        author: existingBlog.author || "",
+        blogType: existingBlog.blog_type || "",
+        content: existingBlog?.content || "",
+        tags: parsedTags,
+      };
+
+      reset(resetData);
 
       if (existingBlog.images) {
-        // Parse if it's a string
         let parsedImages =
           typeof existingBlog.images === "string"
             ? JSON.parse(existingBlog.images)
@@ -83,7 +108,7 @@ const BlogForm = () => {
                 file: null,
                 show: existing.show,
                 order: existing.order,
-                previewUrl: existing.filePath || existing.url, // adjust based on field name
+                previewUrl: existing.filePath || existing.url,
               }
             : img;
         });
@@ -92,6 +117,13 @@ const BlogForm = () => {
       }
     }
   }, [existingBlog]);
+
+  // ✅ Add this new effect
+  useEffect(() => {
+    if (existingBlog && existingBlog.content) {
+      setValue("content", existingBlog.content);
+    }
+  }, [existingBlog, setValue]);
 
   const handleTagSelect = (tag) => {
     if (!selectedTags.includes(tag)) {
@@ -134,27 +166,35 @@ const BlogForm = () => {
       formData.append("title", data.title);
       formData.append("author", data.author);
       formData.append("blogType", data.blogType);
-      formData.append("content", data.content);
+
+      const contentToSend = formState.dirtyFields.content
+        ? data.content
+        : existingBlog?.content || "";
+      formData.append("content", contentToSend);
+
       formData.append("tags", JSON.stringify(selectedTags));
 
       images.forEach((img, idx) => {
         if (img.file) {
           formData.append(`images[${idx}][file]`, img.file);
+        } else if (img.previewUrl?.startsWith("/uploads/")) {
+          formData.append(`images[${idx}][existingUrl]`, img.previewUrl);
         }
-        formData.append(`images[${idx}][show]`, img.show);
-        formData.append(`images[${idx}][order]`, img.order);
+
+        formData.append(`images[${idx}][show]`, img.show.toString());
+        formData.append(`images[${idx}][order]`, img.order.toString());
       });
 
-      if (isEdit) {
-        await axiosPublicUrl.put(`/api/blogs/${id}`, formData, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
-        Swal.fire("Updated!", "Blog post updated successfully.", "success");
-      } else {
-        await axiosPublicUrl.post("/api/blogs", formData, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
-        Swal.fire("Created!", "Blog post created successfully.", "success");
+      const url = isEdit ? `/api/blogs/${id}` : "/api/blogs";
+      const method = isEdit ? axiosPublicUrl.put : axiosPublicUrl.post;
+
+      await method(url, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      Swal.fire("Success", isEdit ? "Blog updated" : "Blog created", "success");
+
+      if (!isEdit) {
         reset();
         setSelectedTags([]);
         setImages(
@@ -174,6 +214,7 @@ const BlogForm = () => {
       <h1 className="text-2xl font-bold mb-6">
         {isEdit ? "Update Blog Post" : "Create Blog Post"}
       </h1>
+
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {/* Title */}
         <div>
@@ -220,13 +261,33 @@ const BlogForm = () => {
         {/* Content */}
         <div>
           <label className="block mb-1">Content</label>
-          <Controller
+          {/* <Controller
             name="content"
             control={control}
             render={({ field }) => (
               <Editor
                 apiKey={import.meta.env.VITE_TINY_APIKEY}
                 {...field}
+                init={{
+                  height: 300,
+                  menubar: false,
+                  plugins: "link image code lists",
+                  toolbar:
+                    "undo redo | formatselect | bold italic | alignleft aligncenter alignright | code",
+                }}
+              />
+            )}
+          /> */}
+
+          <Controller
+            name="content"
+            control={control}
+            defaultValue=""
+            render={({ field: { onChange, value } }) => (
+              <Editor
+                apiKey={import.meta.env.VITE_TINY_APIKEY}
+                value={value}
+                onEditorChange={onChange}
                 init={{
                   height: 300,
                   menubar: false,
@@ -291,9 +352,14 @@ const BlogForm = () => {
 
                 {img.previewUrl && (
                   <img
-                    src={`${import.meta.env.VITE_OPEN_APIURL} + ${
-                      img.previewUrl
-                    }`}
+                    // src={`${import.meta.env.VITE_OPEN_APIURL} + ${
+                    //   img.previewUrl
+                    // }`}
+                    src={
+                      img.previewUrl?.startsWith("blob:")
+                        ? img.previewUrl
+                        : `${import.meta.env.VITE_OPEN_APIURL}${img.previewUrl}`
+                    }
                     alt="Preview"
                     className="mt-2 h-24 object-cover rounded"
                   />
