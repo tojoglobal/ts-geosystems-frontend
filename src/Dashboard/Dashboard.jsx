@@ -16,7 +16,7 @@ export default function Dashboard() {
     <div className="p-1 md:p-3 pt-0 grid md:gap-4 grid-cols-1 xl:grid-cols-4">
       {/* Top Metrics */}
       <Card className="border-0 col-span-1 xl:col-span-4 bg-slate-900 text-white">
-        <CardContent className="px-0 grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+        <CardContent className="px-0 md:px-0 grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
           <MetricBox
             icon={<DollarSign />}
             title="Total Earnings"

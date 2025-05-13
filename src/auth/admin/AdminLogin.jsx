@@ -4,11 +4,11 @@ import { FcGoogle } from "react-icons/fc";
 import { MdEmail } from "react-icons/md";
 import { useNavigate } from "react-router";
 import Swal from "sweetalert2";
+import "./adminlogin.css";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
 
 const AdminLogin = () => {
   const axiosPublicUrl = useAxiospublic();
-  // const apiKey = import.meta.env.VITE_OPEN_APIURL;
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
 
@@ -41,7 +41,6 @@ const AdminLogin = () => {
         password: password,
       });
       const data = response.data;
-      // console.log(data);
 
       if (data.success) {
         localStorage.setItem("userEmail", JSON.stringify({ useremail }));
@@ -74,24 +73,17 @@ const AdminLogin = () => {
 
   return (
     <form action="" method="post" id="adminLogin" onSubmit={handleSubmit}>
-      {/* <!-- Left section of the form --> */}
       <div className="left hidden md:block">
         <div className="w-[80%]">
-          {/* <!-- Welcome message and registration link --> */}
           <p className="mb-2">Hello, Welcome!</p>
           <p className="text-center text-gray-600">
-            waiting for you <span className="font-semibold">Login</span>
+            waiting for your <span className="font-semibold">Login</span>
           </p>
         </div>
       </div>
-
-      {/* <!-- Right section of the form --> */}
       <div className="right md:w-1/2 w-full">
         <div>
-          {/* <!-- Login heading --> */}
           <h1>Login</h1>
-
-          {/* <!-- Username input field --> */}
           <input
             type="email"
             value={formData.useremail}
@@ -103,8 +95,6 @@ const AdminLogin = () => {
           <span className="material-symbols-outlined person">
             <MdEmail />
           </span>
-
-          {/* <!-- Password input field --> */}
           <input
             type={showPassword ? "text" : "password"}
             name="password"
@@ -118,11 +108,7 @@ const AdminLogin = () => {
           >
             {showPassword ? <FaEyeSlash /> : <FaEye />}
           </span>
-
-          {/* <!-- Login button --> */}
           <button type="submit">Login</button>
-
-          {/* <!-- Social login options --> */}
           <p>or login with social platforms</p>
           <div>
             <a href="">
