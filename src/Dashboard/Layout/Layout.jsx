@@ -11,7 +11,7 @@ const Layout = () => {
   const toggleMobileSidebar = () => setMobileOpen(!mobileOpen);
 
   return (
-    <div className="flex h-screen overflow-hidden bg-gray-900 text-white">
+    <div className="flex h-screen overflow-hidden bg-gray-900 text-white dashboard-dark">
       {/* Sidebar - Fixed position on mobile, sticky on desktop */}
       <aside
         className={`fixed md:sticky top-0 z-50 h-full bg-gray-800 flex flex-col ${

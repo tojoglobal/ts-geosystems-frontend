@@ -198,7 +198,9 @@ const Software = () => {
                         </td>
                         <td className="p-2 sm:p-3 border border-gray-600">
                           <img
-                            src={`${import.meta.env.VITE_OPEN_APIURL}/uploads/${brand.photo}`}
+                            src={`${import.meta.env.VITE_OPEN_APIURL}/uploads/${
+                              brand.photo
+                            }`}
                             alt={brand.softwar_name}
                             className="w-20 h-12 object-cover rounded"
                           />
