@@ -133,7 +133,7 @@ const CategoryProduct = () => {
         )}
       </div>
       <h1 className="text-3xl font-bold mb-4">
-        {subcategory ? subcategory.toUpperCase() : category.toUpperCase()}
+        {(subcategory || category).replace(/-/g, " ").toUpperCase()}
       </h1>
       <section>
         <div className="flex items-center justify-between md:justify-normal md:gap-52 mb-6">
@@ -220,7 +220,9 @@ const CategoryProduct = () => {
                 {/* SALE badge */}
                 <div
                   className={`absolute ${
-                    viewMode === "list" ? "top-3 left-[267px]" : "top-3 right-3"
+                    viewMode === "list"
+                      ? "top-3 left-[267px]"
+                      : "-top-1 right-4"
                   } bg-[#e62245] text-white px-2 py-[1px] font-semibold rounded-sm text-sm`}
                 >
                   SALE
