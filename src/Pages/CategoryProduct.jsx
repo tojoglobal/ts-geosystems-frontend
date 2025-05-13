@@ -36,13 +36,31 @@ const CategoryProduct = () => {
   const { category, subcategory } = useParams();
   const productsPerPage = 8;
 
-  const { data: productsData = [], isLoading } = useQuery({
-    queryKey: ["products"],
+  const isShopAll = category === "shop-all";
+  // Replace the current useQuery with this:
+  const { data: productsData = {}, isLoading } = useQuery({
+    queryKey: ["products", category, subcategory, currentPage],
     queryFn: async () => {
-      const res = await axiosPublicUrl.get("/api/products");
-      return res?.data?.products;
+      const endpoint =
+        category === "shop-all"
+          ? "/api/products"
+          : subcategory
+          ? `/api/category-products/${category}/${subcategory}`
+          : `/api/category-products/${category}`;
+
+      const res = await axiosPublicUrl.get(endpoint, {
+        params: {
+          page: currentPage,
+          limit: productsPerPage,
+        },
+      });
+      return res?.data;
     },
   });
+
+  // Destructure the response
+  const { products = [], total = 0, totalPages = 1 } = productsData;
+  console.log(productsData);
 
   const handleAddToCart = (product) => {
     const itemToAdd = {
@@ -61,35 +79,6 @@ const CategoryProduct = () => {
       showConfirmButton: false,
     });
   };
-
-  // Filter products based on category and subcategory
-  const filteredProducts = productsData.filter((product) => {
-    try {
-      const productCategory = JSON.parse(product.category);
-      const productSubCategory = JSON.parse(product.sub_category);
-
-      if (subcategory) {
-        return (
-          productCategory.cat === category &&
-          productSubCategory.slug === subcategory
-        );
-      } else {
-        return productCategory.cat === category;
-      }
-    } catch (error) {
-      console.error("Error parsing category/subcategory:", error);
-      return false;
-    }
-  });
-
-  // Pagination logic
-  const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
-  const indexOfLastProduct = currentPage * productsPerPage;
-  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = filteredProducts.slice(
-    indexOfFirstProduct,
-    indexOfLastProduct
-  );
 
   const toggleCompare = (productId) => {
     setCompareItems((prev) =>
@@ -186,7 +175,7 @@ const CategoryProduct = () => {
               : "grid-cols-1 gap-7"
           } gap-4`}
         >
-          {currentProducts.map((product) => {
+          {products.map((product) => {
             let images = [];
             try {
               images = JSON.parse(product.image_urls);
