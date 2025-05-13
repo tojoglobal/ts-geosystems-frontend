@@ -57,10 +57,8 @@ const BlogForm = () => {
     if (existingBlog) {
       setValue("title", existingBlog.title);
       setValue("author", existingBlog.author);
-      setValue("blogType", existingBlog.blogType);
+      setValue("blogType", existingBlog.blog_type);
       setValue("content", existingBlog.content);
-      //   setSelectedTags(existingBlog.tags || []);
-      //   setValue("tags", existingBlog.tags || []);
       const parsedTags =
         typeof existingBlog.tags === "string"
           ? JSON.parse(existingBlog.tags)
@@ -72,17 +70,24 @@ const BlogForm = () => {
       setValue("tags", parsedTags);
 
       if (existingBlog.images) {
+        // Parse if it's a string
+        let parsedImages =
+          typeof existingBlog.images === "string"
+            ? JSON.parse(existingBlog.images)
+            : existingBlog.images;
+
         const updatedImages = images.map((img, idx) => {
-          const existing = existingBlog.images[idx];
+          const existing = parsedImages[idx];
           return existing
             ? {
                 file: null,
                 show: existing.show,
                 order: existing.order,
-                previewUrl: existing.url,
+                previewUrl: existing.filePath || existing.url, // adjust based on field name
               }
             : img;
         });
+
         setImages(updatedImages);
       }
     }
@@ -286,7 +291,9 @@ const BlogForm = () => {
 
                 {img.previewUrl && (
                   <img
-                    src={img.previewUrl}
+                    src={`${import.meta.env.VITE_OPEN_APIURL} + ${
+                      img.previewUrl
+                    }`}
                     alt="Preview"
                     className="mt-2 h-24 object-cover rounded"
                   />
