@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { Editor } from "@tinymce/tinymce-react";
 import Select from "react-select";
@@ -19,10 +19,11 @@ const ProductAddForm = () => {
   const [productOptions, setProductOptions] = useState([]);
   const [softwareOptions, setSoftwareOptions] = useState([]);
 
-  const { register, handleSubmit, setValue, control, watch } = useForm({
+  const { register, handleSubmit, setValue, control, watch, reset } = useForm({
     defaultValues: {
       priceShowHide: 0,
       productOptionShowHide: 0,
+      clearance: false,
     },
   });
 
@@ -123,38 +124,56 @@ const ProductAddForm = () => {
 
   // onChange handler for file input
   const onSubmit = async (data) => {
-    const parsedData = {
-      ...data,
-      category: data.category ? JSON.parse(data.category) : null,
-      subCategory: data.subCategory ? JSON.parse(data.subCategory) : null,
-      tax: data.tax ? JSON.parse(data.tax) : null,
-    };
-
     try {
       const formData = new FormData();
 
+      // Append images
       images.forEach((file) => {
         formData.append("images", file);
       });
 
-      Object.entries(parsedData).forEach(([key, value]) => {
-        formData.append(
-          key,
-          typeof value === "object" && value !== null
-            ? JSON.stringify(value)
-            : value
-        );
-      });
+      // Append all other fields
+      formData.append("productName", data.productName);
+      formData.append("price", data.price);
+      formData.append("priceShowHide", data.priceShowHide);
+      formData.append("category", data.category);
+      formData.append("subCategory", data.subCategory);
+      formData.append("tax", data.tax);
+      formData.append("sku", data.sku);
+      formData.append("condition", data.condition);
+      formData.append("productOptionShowHide", data.productOptionShowHide);
+      formData.append("brandName", data.brandName);
+      formData.append("productOverview", data.productOverview);
+      formData.append("videoUrls", data.videoUrls || "");
+      formData.append("warrantyInfo", data.warrantyInfo || "");
+      formData.append("clearance", data.clearance ? "1" : "0");
+
+      // Handle arrays/objects
+      formData.append(
+        "productOptions",
+        JSON.stringify(data.productOptions || [])
+      );
+      formData.append(
+        "softwareOptions",
+        JSON.stringify(data.softwareOptions || [])
+      );
 
       await axiosPublicUrl.post("/api/products", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
+
+      // Reset the form after successful submission
+      reset();
+      setImages([]); // Clear the images
+      // In your onSubmit function after reset():
+      setValue("productOptions", []);
+      setValue("softwareOptions", []);
+
       Swal.fire({
         icon: "success",
         title: "Product added successfully!",
-        // text: response.data.message,
         confirmButtonColor: "#14b8a6",
       });
     } catch (error) {
@@ -265,9 +284,18 @@ const ProductAddForm = () => {
         </div>
         {/* Third Column */}
         <div className="col-span-1 space-y-3 sm:space-y-4">
+          {/* Clearance */}
+          <div className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              {...register("clearance")}
+              className="w-5 h-5 accent-teal-600"
+            />
+            <label>Clearance Item</label>
+          </div>
           <input
             {...register("price", { required: true })}
-            placeholder="price"
+            placeholder="Price"
             className="w-full input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
           />
 

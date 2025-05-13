@@ -29,8 +29,7 @@ const BlogForm = () => {
 
   const { data } = useDataQuery(["blogView", id], `/api/blogs/${id}`, !!id);
   const existingBlog = data?.blog;
-
-  console.log(existingBlog);
+  // console.log(existingBlog);
 
   const [isUploading, setIsUploading] = useState(false);
   const [selectedTags, setSelectedTags] = useState([]);
@@ -210,14 +209,18 @@ const BlogForm = () => {
   };
 
   return (
-    <div className="p-4 max-w-5xl mx-auto">
-      <h1 className="text-2xl font-bold mb-6">
+    <div className="max-w-5xl mx-auto">
+      <h1 className="text-2xl font-bold mb-5">
         {isEdit ? "Update Blog Post" : "Create Blog Post"}
       </h1>
+<<<<<<< HEAD
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+=======
+      <form onSubmit={handleSubmit(onSubmit)}>
+>>>>>>> dev
         {/* Title */}
-        <div>
+        <div className="mb-5">
           <label className="block mb-1">Title</label>
           <input
             {...register("title", { required: true })}
@@ -225,10 +228,9 @@ const BlogForm = () => {
             placeholder="Enter blog title"
           />
         </div>
-
         {/* Author and Blog Type */}
         <div className="grid md:grid-cols-2 gap-4">
-          <div>
+          <div className="mb-5">
             <label className="block mb-1">Author</label>
             <select
               {...register("author", { required: true })}
@@ -257,9 +259,8 @@ const BlogForm = () => {
             </select>
           </div>
         </div>
-
         {/* Content */}
-        <div>
+        <div className="mb-5">
           <label className="block mb-1">Content</label>
           {/* <Controller
             name="content"
@@ -301,7 +302,7 @@ const BlogForm = () => {
         </div>
 
         {/* Tags */}
-        <div>
+        <div className="mb-5">
           <label className="block mb-1">Tags</label>
           <div className="flex flex-wrap gap-2">
             {availableTags.map((tag) => (
@@ -397,7 +398,7 @@ const BlogForm = () => {
         </div>
 
         {/* Submit Button */}
-        <div>
+        <div className="mt-5">
           <Button
             disabled={isUploading}
             text={

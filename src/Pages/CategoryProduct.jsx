@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-useless-escape */
 import { useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
@@ -35,13 +36,31 @@ const CategoryProduct = () => {
   const { category, subcategory } = useParams();
   const productsPerPage = 8;
 
-  const { data: productsData = [], isLoading } = useQuery({
-    queryKey: ["products"],
+  const isShopAll = category === "shop-all";
+  // Replace the current useQuery with this:
+  const { data: productsData = {}, isLoading } = useQuery({
+    queryKey: ["products", category, subcategory, currentPage],
     queryFn: async () => {
-      const res = await axiosPublicUrl.get("/api/products");
-      return res?.data?.products;
+      const endpoint =
+        category === "shop-all"
+          ? "/api/products"
+          : subcategory
+          ? `/api/category-products/${category}/${subcategory}`
+          : `/api/category-products/${category}`;
+
+      const res = await axiosPublicUrl.get(endpoint, {
+        params: {
+          page: currentPage,
+          limit: productsPerPage,
+        },
+      });
+      return res?.data;
     },
   });
+
+  // Destructure the response
+  const { products = [], total = 0, totalPages = 1 } = productsData;
+  console.log(productsData);
 
   const handleAddToCart = (product) => {
     const itemToAdd = {
@@ -60,35 +79,6 @@ const CategoryProduct = () => {
       showConfirmButton: false,
     });
   };
-
-  // Filter products based on category and subcategory
-  const filteredProducts = productsData.filter((product) => {
-    try {
-      const productCategory = JSON.parse(product.category);
-      const productSubCategory = JSON.parse(product.sub_category);
-
-      if (subcategory) {
-        return (
-          productCategory.cat === category &&
-          productSubCategory.slug === subcategory
-        );
-      } else {
-        return productCategory.cat === category;
-      }
-    } catch (error) {
-      console.error("Error parsing category/subcategory:", error);
-      return false;
-    }
-  });
-
-  // Pagination logic
-  const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
-  const indexOfLastProduct = currentPage * productsPerPage;
-  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = filteredProducts.slice(
-    indexOfFirstProduct,
-    indexOfLastProduct
-  );
 
   const toggleCompare = (productId) => {
     setCompareItems((prev) =>
@@ -185,22 +175,29 @@ const CategoryProduct = () => {
               : "grid-cols-1 gap-7"
           } gap-4`}
         >
-          {currentProducts.map((product) => {
-            // Parse image URLs
-            let imageUrl = "";
+          {products.map((product) => {
+            let images = [];
             try {
-              const images = JSON.parse(product.image_urls);
-              const firstImage = images[0] || "";
-              const cleanImagePath = firstImage.replace(/^["\[]+|["\]]+$/g, "");
-              imageUrl = `${import.meta.env.VITE_OPEN_APIURL}${cleanImagePath}`;
-            } catch (error) {
-              console.log("Error parsing image URLs:", error);
-              const cleanImagePath = (product.image_urls || "").replace(
-                /^["\[]+|["\]]+$/g,
-                ""
-              );
-              imageUrl = `${import.meta.env.VITE_OPEN_APIURL}${cleanImagePath}`;
+              images = JSON.parse(product.image_urls);
+            } catch (e) {
+              images = [product.image_urls];
             }
+
+            const firstImage = images[0]
+              ? `${import.meta.env.VITE_OPEN_APIURL}${images[0].replace(
+                  /^["\[]+|["\]]+$/g,
+                  ""
+                )}`
+              : "";
+            const secondImage = images[1]
+              ? `${import.meta.env.VITE_OPEN_APIURL}${images[1].replace(
+                  /^["\[]+|["\]]+$/g,
+                  ""
+                )}`
+              : firstImage;
+
+            const isHovered = hoveredProductId === product.id;
+            const displayImage = isHovered ? secondImage : firstImage;
 
             return (
               <div
@@ -229,7 +226,7 @@ const CategoryProduct = () => {
                       onMouseLeave={() => setHoveredProductId(null)}
                     >
                       <img
-                        src={imageUrl}
+                        src={displayImage}
                         alt={product.product_name}
                         className="w-full h-64 object-contain transition-all duration-300 ease-in-out"
                       />
@@ -246,12 +243,12 @@ const CategoryProduct = () => {
                       <div
                         onMouseEnter={() => setHoveredProductId(product.id)}
                         onMouseLeave={() => setHoveredProductId(null)}
-                        className="w-full h-full flex items-center justify-center"
+                        className="w-full h-full flex items-center justify-center transition-opacity duration-500 ease-in-out"
                       >
                         <img
-                          src={imageUrl}
+                          src={displayImage}
                           alt={product.product_name}
-                          className="w-auto h-56 object-contain transition-all duration-300 ease-in-out"
+                          className="w-auto h-56 object-contain transition-opacity duration-500 ease-in-out"
                         />
                       </div>
                     </Link>
@@ -341,9 +338,9 @@ const CategoryProduct = () => {
                     </div>
                   </div>
                 ) : (
-                  <div className="flex flex-col flex-grow border-t pt-3">
+                  <div className="flex flex-col flex-grow border-t mt-4 pt-1">
                     <div className="flex-grow">
-                      <div className="border-t border-gray-300 pt-2 text-xs text-gray-600 mb-1">
+                      <div className="pt-2 text-xs text-gray-600 mb-1">
                         {product.brand_name} | Sku: {product.sku}
                       </div>
                       <Link
