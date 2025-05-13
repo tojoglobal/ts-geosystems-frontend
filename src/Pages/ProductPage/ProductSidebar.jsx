@@ -21,7 +21,6 @@ const ProductSidebar = () => {
       return res?.data;
     },
   });
-
   // Fetch subcategories
   const {
     data: subcategoriesData,
@@ -72,7 +71,7 @@ const ProductSidebar = () => {
       [label]: !prev[label],
     }));
   };
-
+  
   // Get subcategories for a category
   const getSubcategoriesForCategory = (categoryId) => {
     if (!subcategoriesData?.subcategories) return [];
@@ -88,7 +87,7 @@ const ProductSidebar = () => {
   if (categoriesError || subcategoriesError || brandsError) {
     return <div>Error loading data</div>;
   }
-
+  
   // Create sidebar data structure dynamically
   const dynamicSidebarData = [
     { label: "Shop All", link: "/shop-all", children: null },
@@ -111,7 +110,7 @@ const ProductSidebar = () => {
       })),
     },
   ];
-
+console.log(dynamicSidebarData);
   return (
     <div className="w-full mt-3">
       {dynamicSidebarData.map((item, index) =>
@@ -126,8 +125,8 @@ const ProductSidebar = () => {
           >
             {item.children !== null && item.children.length > 0 ? (
               <div>
-                <button
-                  onClick={() => toggleSection(item.label)}
+                <Link
+                  to={item?.categorySlug}
                   className={`w-full text-xs capitalize hover:text-[#e62245] flex items-center justify-between font-medium text-left p-3 ${
                     openSections[item.label]
                       ? "border-b-2 border-[#e62245]"
@@ -139,12 +138,17 @@ const ProductSidebar = () => {
                   }`}
                 >
                   <span>{item.label}</span>
-                  {openSections[item.label] ? (
-                    <SlArrowUp size={14} />
-                  ) : (
-                    <SlArrowDown size={14} />
-                  )}
-                </button>
+                  <button
+                    onClick={() => toggleSection(item.label)}
+                    className="cursor-pointer"
+                  >
+                    {openSections[item.label] ? (
+                      <SlArrowUp size={14} />
+                    ) : (
+                      <SlArrowDown size={14} />
+                    )}
+                  </button>
+                </Link>
                 {openSections[item.label] && item.children.length > 0 && (
                   <div className="bg-white">
                     {item.children.map((child) => (
