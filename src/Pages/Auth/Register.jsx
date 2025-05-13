@@ -4,9 +4,10 @@ import { Link } from "react-router-dom";
 import ReCAPTCHA from "react-google-recaptcha";
 import { Country, State, City } from "country-state-city";
 import { toast } from "react-toastify";
-import axios from "axios";
+import { useAxiospublic } from "../../Hooks/useAxiospublic";
 
 const Register = () => {
+  const axiosPUblic = useAxiospublic();
   const [countries, setCountries] = useState([]);
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
@@ -63,6 +64,8 @@ const Register = () => {
   };
 
   const onSubmit = async (data) => {
+    console.log(data);
+
     if (!captchaToken) {
       toast.error("Please verify the reCAPTCHA");
       return;
@@ -84,14 +87,33 @@ const Register = () => {
         city: data.city,
       };
 
-      const response = await axios.post(
-        `${import.meta.env.VITE_OPEN_APIURL}/api/add-user`,
-        payload
-      );
+      // const payload = {
+      //   email: data.email,
+      //   password: data.password,
+      //   confirmPassword: data.confirmPassword,
+      //   firstName: data.firstName,
+      //   lastName: data.lastName,
+      //   postcode: data.postcode,
+      //   phoneNumber: data.phoneNumber || null,
+      //   companyName: data.companyName || null,
+      //   addressLine1: data.addressLine1,
+      //   addressLine2: data.addressLine2 || null,
+      //   country: data.country,
+      //   state: data.state,
+      //   city: data.city,
+      // };
+
+      console.log("Payload being sent to backend:", payload);
+
+      const response = await axiosPUblic.post(`/api/add-user`, payload);
       if (response.status === 201) {
         toast.success("Account created successfully");
         reset();
         setCaptchaToken(null);
+      }
+      if (response.status === 400) {
+        console.log(response?.message);
+        toast.success(response?.message);
       }
     } catch (error) {
       toast.error(
@@ -384,7 +406,7 @@ const Register = () => {
             {/* reCAPTCHA - Full Width */}
             <div className="col-span-full">
               <ReCAPTCHA
-                sitekey="6LeKvyorAAAAAKGd6v6jMwiNuMqHazF0OoFqdqtT"
+                sitekey={import.meta.env.VITE_CAPTCH_KEY}
                 onChange={handleCaptchaChange}
               />
             </div>

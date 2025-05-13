@@ -69,7 +69,6 @@ import BlogCreate from "./Dashboard/Blog/BlogCreate";
 import BlogUpdate from "./Dashboard/Blog/BlogUpdate";
 import BlogView from "./Dashboard/Blog/BlogView";
 import AdminUpdateCertificateTracking from "./Pages/Control/AdminUpdateCertificateTracking";
-import BlogForm from "./Dashboard/Blog/BlogForm";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -154,8 +153,8 @@ const AppLayout = () => {
           <Route path="ts-blog/create" element={<BlogCreate />} />
           {/* <Route path="ts-blog/edit/:id" element={<BlogUpdate />} /> */}
           <Route path="ts-blog/view/:id" element={<BlogView />} />
-          <Route path="ts-blog/create" element={<BlogForm />} />
-          <Route path="ts-blog/edit/:id" element={<BlogForm />} />
+          <Route path="ts-blog/create" element={<BlogCreate />} />
+          <Route path="ts-blog/edit/:id" element={<BlogUpdate />} />
 
           {/* author route */}
           <Route path="author" element={<AuthorManager />} />

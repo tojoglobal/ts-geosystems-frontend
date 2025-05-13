@@ -176,7 +176,8 @@ const BlogCreate = () => {
             render={({ field }) => (
               <Editor
                 apiKey={import.meta.env.VITE_TINY_APIKEY}
-                {...field}
+                // {...field}
+                value={field.value}
                 init={{
                   height: 300,
                   menubar: false,
@@ -184,6 +185,7 @@ const BlogCreate = () => {
                   toolbar:
                     "undo redo | formatselect | bold italic | alignleft aligncenter alignright | code",
                 }}
+                onEditorChange={(content) => field.onChange(content)}
               />
             )}
           />

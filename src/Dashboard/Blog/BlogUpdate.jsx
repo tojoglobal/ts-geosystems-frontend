@@ -18,26 +18,27 @@ const availableTags = [
 
 const BlogUpdate = () => {
   const { id } = useParams();
-  console.log(id);
-
   const axiosPublicUrl = useAxiospublic();
+
   const { data: authors = [] } = useDataQuery(["authors"], "/api/authors");
   const { data: blogTypes = [] } = useDataQuery(
     ["blogTypes"],
     "/api/blog-types"
   );
-
-  const { data: blog = [] } = useDataQuery(["blogView"], `/api/blogs/${id}`);
-  console.log(blog);
+  const { data: { blog } = {} } = useDataQuery(
+    ["blogView", id],
+    `/api/blogs/${id}`
+  );
 
   const [isUploading, setIsUploading] = useState(false);
   const [selectedTags, setSelectedTags] = useState([]);
   const [images, setImages] = useState([
-    { file: null, show: true, order: 1 },
-    { file: null, show: true, order: 2 },
-    { file: null, show: true, order: 3 },
-    { file: null, show: true, order: 4 },
+    { file: null, show: true, order: 1, previewUrl: "" },
+    { file: null, show: true, order: 2, previewUrl: "" },
+    { file: null, show: true, order: 3, previewUrl: "" },
+    { file: null, show: true, order: 4, previewUrl: "" },
   ]);
+  const [originalImages, setOriginalImages] = useState([]);
 
   const { register, handleSubmit, setValue, control, reset } = useForm({
     defaultValues: {
@@ -50,48 +51,65 @@ const BlogUpdate = () => {
   });
 
   useEffect(() => {
-    if (existingBlog) {
-      setValue("title", existingBlog.title);
-      setValue("author", existingBlog.author);
-      setValue("blogType", existingBlog.blogType);
-      setValue("content", existingBlog.content);
-      setSelectedTags(existingBlog.tags || []);
-      setValue("tags", existingBlog.tags || []);
-      if (existingBlog.images) {
-        const updatedImages = images.map((img, idx) => {
-          const existing = existingBlog.images[idx];
-          return existing
-            ? {
-                file: null,
-                show: existing.show,
-                order: existing.order,
-                previewUrl: existing.url,
-              }
-            : img;
-        });
-        setImages(updatedImages);
+    if (blog?.id) {
+      const parsedTags = Array.isArray(blog.tags)
+        ? blog.tags
+        : typeof blog.tags === "string"
+        ? JSON.parse(blog.tags)
+        : [];
+
+      setSelectedTags(parsedTags);
+
+      reset({
+        title: blog.title || "",
+        author: blog.author || "",
+        blogType: blog.blog_type || "",
+        content: blog.content || "",
+        tags: parsedTags,
+      });
+
+      const parsedImages =
+        typeof blog.images === "string" ? JSON.parse(blog.images) : blog.images;
+
+      if (parsedImages) {
+        const newImages = parsedImages.map((img, idx) => ({
+          file: null,
+          show: img?.show,
+          order: img?.order,
+          previewUrl: img?.filePath || img?.url || "",
+        }));
+        setImages([...newImages, ...images.slice(newImages.length)]);
+        setOriginalImages(newImages);
       }
     }
-  }, [existingBlog]);
+  }, [blog, reset]);
+
+  console.log(originalImages);
 
   const handleTagSelect = (tag) => {
     if (!selectedTags.includes(tag)) {
-      const newTags = [...selectedTags, tag];
-      setSelectedTags(newTags);
-      setValue("tags", newTags);
+      const updatedTags = [...selectedTags, tag];
+      setSelectedTags(updatedTags);
+      setValue("tags", updatedTags);
     }
   };
 
   const removeTag = (tagToRemove) => {
-    const newTags = selectedTags.filter((tag) => tag !== tagToRemove);
-    setSelectedTags(newTags);
-    setValue("tags", newTags);
+    const updatedTags = selectedTags.filter((tag) => tag !== tagToRemove);
+    setSelectedTags(updatedTags);
+    setValue("tags", updatedTags);
   };
 
   const handleImageDrop = (index) => (acceptedFiles) => {
+    const file = acceptedFiles[0];
+    if (!file) return;
+
     const newImages = [...images];
-    newImages[index].file = acceptedFiles[0];
-    newImages[index].previewUrl = URL.createObjectURL(acceptedFiles[0]);
+    newImages[index] = {
+      ...newImages[index],
+      file,
+      previewUrl: URL.createObjectURL(file),
+    };
     setImages(newImages);
   };
 
@@ -118,21 +136,122 @@ const BlogUpdate = () => {
       formData.append("content", data.content);
       formData.append("tags", JSON.stringify(selectedTags));
 
+      // images.forEach((img, idx) => {
+      //   const original = originalImages[idx];
+      //   const hasFile = !!img.file;
+      //   const hasOrderChanged = img.order !== original?.order;
+      //   const hasVisibilityChanged = img.show !== original?.show;
+
+      //   if (hasFile || hasOrderChanged || hasVisibilityChanged) {
+      //     if (img.file) {
+      //       formData.append(`images[${idx}][file]`, img.file);
+      //     } else if (img.previewUrl) {
+      //       formData.append(`images[${idx}][existingUrl]`, img.previewUrl);
+      //     }
+
+      //     // formData.append(`images[${idx}][show]`, img.show);
+      //     formData.append(`images[${idx}][show]`, img.show ? "true" : "false");
+      //     formData.append(`images[${idx}][order]`, img.order);
+      //   }
+      // });
+
+      // Log FormData for debugging
+
+      // images.forEach((img, idx) => {
+      //   const original = originalImages[idx];
+      //   const hasFile = !!img.file;
+      //   // const hasVisibilityChanged = img.show !== original?.show;
+      //   // const hasOrderChanged = img.order !== original?.order;
+
+      //   // Normalize show values to booleans for accurate comparison
+      //   const currentShow = img.show === true || img.show === "true";
+      //   const originalShow =
+      //     original?.show === true || original?.show === "true";
+      //   const hasVisibilityChanged = currentShow !== originalShow;
+
+      //   const hasOrderChanged = img.order !== original?.order;
+
+      //   console.log("img.show:", img.show, "original.show:", original?.show);
+      //   console.log(
+      //     "hasFile:",
+      //     hasFile,
+      //     "hasVisibilityChanged:",
+      //     hasVisibilityChanged,
+      //     "hasOrderChanged:",
+      //     hasOrderChanged
+      //   );
+
+      //   const hasChanges = hasFile || hasOrderChanged || hasVisibilityChanged;
+
+      //   if (hasChanges) {
+      //     if (hasFile) {
+      //       formData.append(`images[${idx}][file]`, img.file); // NEW file
+      //     } else {
+      //       // No new image; send current image reference
+      //       formData.append(`images[${idx}][previewUrl]`, img.previewUrl);
+      //     }
+      //     // this is call
+      //     console.log("this is call 179");
+
+      //     formData.append(`images[${idx}][show]`, img.show ? "true" : "false");
+      //     formData.append(`images[${idx}][order]`, img.order);
+      //   }
+      // });
+
       images.forEach((img, idx) => {
-        if (img.file) {
-          formData.append(`images[${idx}][file]`, img.file);
+        const original = originalImages[idx];
+        const hasFile = !!img.file;
+
+        // Normalize 'show' values to booleans
+        const normalizeBool = (val) => val === true || val === "true";
+        const currentShow = normalizeBool(img.show);
+        const originalShow = normalizeBool(original?.show);
+        const hasVisibilityChanged = currentShow == originalShow;
+
+        const currentOrder = parseInt(img.order) || 0;
+        const originalOrder = parseInt(original?.order) || 0;
+        const hasOrderChanged = currentOrder == originalOrder;
+
+        console.log("img.show:", img.show, "original.show:", original?.show);
+        console.log(
+          "hasFile:",
+          hasFile,
+          "hasVisibilityChanged:",
+          hasVisibilityChanged,
+          "hasOrderChanged:",
+          hasOrderChanged
+        );
+
+        const hasChanges = hasFile || hasVisibilityChanged || hasOrderChanged;
+
+        if (hasChanges) {
+          if (hasFile) {
+            formData.append(`images[${idx}][file]`, img.file); // NEW file
+          } else {
+            // Send current image reference
+            formData.append(`images[${idx}][previewUrl]`, img.previewUrl);
+          }
+
+          console.log("✅ Changes detected for image index:", idx);
+
+          formData.append(
+            `images[${idx}][show]`,
+            currentShow ? "true" : "false"
+          );
+          formData.append(`images[${idx}][order]`, currentOrder);
         }
-        formData.append(`images[${idx}][show]`, img.show);
-        formData.append(`images[${idx}][order]`, img.order);
       });
 
-      await axiosPublicUrl.patch(`/api/blogs/${id}`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+      console.log("FormData Entries:");
+      for (let [key, value] of formData.entries()) {
+        console.log("Key", key, "value", value);
+      }
+
+      await axiosPublicUrl.put(`/api/updatedblogs/${id}`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
       });
 
-      Swal.fire("Success", "Blog post updated!", "success");
+      Swal.fire("Success", "Blog post updated successfully!", "success");
     } catch (error) {
       console.error(error);
       Swal.fire("Error", "Failed to update blog post", "error");
@@ -141,99 +260,86 @@ const BlogUpdate = () => {
     }
   };
 
+  console.log(images);
+
   return (
     <div className="p-4 max-w-5xl mx-auto">
       <h1 className="text-2xl font-bold mb-6">Update Blog Post</h1>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        {/* Title */}
         <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Title
-          </label>
+          <label className="block mb-1">Title</label>
           <input
             {...register("title", { required: true })}
-            type="text"
-            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 sm:text-sm"
+            className="w-full p-2 bg-gray-800 border border-gray-600 text-white rounded"
           />
         </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Author
-          </label>
-          <select
-            {...register("author", { required: true })}
-            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 sm:text-sm"
-          >
-            <option value="">Select an author</option>
-            {authors?.author?.map((author) => (
-              <option key={author.id} value={author.id}>
-                {author.name}
-              </option>
-            ))}
-          </select>
+        {/* Author and Blog Type */}
+        <div className="grid md:grid-cols-2 gap-4">
+          <div>
+            <label className="block mb-1">Author</label>
+            <select
+              {...register("author", { required: true })}
+              className="w-full p-2 bg-gray-800 border border-gray-600 text-white rounded"
+            >
+              <option value="">Select author</option>
+              {authors?.author?.map((a) => (
+                <option key={a.id} value={a.name}>
+                  {a.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="block mb-1">Blog Type</label>
+            <select
+              {...register("blogType", { required: true })}
+              className="w-full p-2 bg-gray-800 border border-gray-600 text-white rounded"
+            >
+              <option value="">Select type</option>
+              {blogTypes?.blogTypes?.map((type) => (
+                <option key={type.id} value={type.name}>
+                  {type.name}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
 
+        {/* Content */}
         <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Blog Type
-          </label>
-          <select
-            {...register("blogType", { required: true })}
-            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 sm:text-sm"
-          >
-            <option value="">Select a blog type</option>
-            {blogTypes?.blogTypes?.map((type) => (
-              <option key={type.id} value={type.id}>
-                {type.name}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Content
-          </label>
+          <label className="block mb-1">Content</label>
           <Controller
             name="content"
             control={control}
             render={({ field }) => (
               <Editor
-                {...field}
                 apiKey={import.meta.env.VITE_TINY_APIKEY}
+                value={field.value}
                 init={{
                   height: 300,
                   menubar: false,
-                  plugins: [
-                    "advlist autolink lists link image charmap print preview anchor",
-                    "searchreplace visualblocks code fullscreen",
-                    "insertdatetime media table paste code help wordcount",
-                  ],
+                  plugins: "link image code lists",
                   toolbar:
-                    "undo redo | formatselect | bold italic backcolor | \
-                    alignleft aligncenter alignright alignjustify | \
-                    bullist numlist outdent indent | removeformat | help",
+                    "undo redo | formatselect | bold italic | alignleft aligncenter alignright | code",
                 }}
+                onEditorChange={field.onChange}
               />
             )}
           />
         </div>
 
+        {/* Tags */}
         <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Tags
-          </label>
-          <div className="flex flex-wrap gap-2 mt-2">
+          <label className="block mb-1">Tags</label>
+          <div className="flex flex-wrap gap-2">
             {availableTags.map((tag) => (
               <button
-                type="button"
                 key={tag}
+                type="button"
                 onClick={() => handleTagSelect(tag)}
-                className={`px-3 py-1 rounded-full text-sm font-medium border ${
-                  selectedTags.includes(tag)
-                    ? "bg-teal-500 text-white"
-                    : "bg-gray-200 text-gray-700"
-                }`}
+                className="px-3 py-1 bg-gray-700 rounded text-white text-sm"
               >
                 {tag}
               </button>
@@ -243,66 +349,76 @@ const BlogUpdate = () => {
             {selectedTags.map((tag) => (
               <span
                 key={tag}
-                className="px-3 py-1 rounded-full text-sm font-medium bg-teal-100 text-teal-700 border border-teal-500"
+                className="bg-teal-600 px-3 py-1 rounded-full text-sm"
               >
-                {tag}
-                <button
-                  type="button"
-                  onClick={() => removeTag(tag)}
-                  className="ml-2 text-red-500"
-                >
-                  &times;
+                {tag}{" "}
+                <button type="button" onClick={() => removeTag(tag)}>
+                  x
                 </button>
               </span>
             ))}
           </div>
         </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Images
-          </label>
-          <div className="grid grid-cols-2 gap-4 mt-2">
-            {images.map((img, index) => (
-              <div key={index} className="relative border rounded-md p-2">
+        {/* Image Uploads */}
+        <div className="grid md:grid-cols-2 gap-4">
+          {images.map((img, idx) => {
+            const { getRootProps, getInputProps } = useDropzone({
+              onDrop: handleImageDrop(idx),
+              accept: { "image/*": [] },
+              maxFiles: 1,
+            });
+
+            return (
+              <div key={idx} className="border p-4 bg-gray-900 rounded">
+                <label className="block text-white mb-2">Image {idx + 1}</label>
+                <div
+                  {...getRootProps()}
+                  className="cursor-pointer bg-gray-800 text-white text-center py-4 rounded"
+                >
+                  <input {...getInputProps()} />
+                  <p>Drag & drop or click to select image</p>
+                </div>
+
                 {img.previewUrl && (
                   <img
                     src={img.previewUrl}
-                    alt={`Preview ${index + 1}`}
-                    className="w-full h-32 object-cover rounded-md"
+                    alt="Preview"
+                    className="mt-2 h-24 object-cover rounded"
                   />
                 )}
-                <div className="mt-2 flex items-center gap-2">
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => handleImageDrop(index)(e.target.files)}
-                    className="text-sm"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => handleImageToggle(index)}
-                    className="text-sm text-blue-500"
-                  >
-                    {img.show ? "Hide" : "Show"}
-                  </button>
-                </div>
-                <div className="mt-2">
-                  <label className="block text-sm font-medium text-gray-700">
-                    Order
-                  </label>
-                  <input
-                    type="number"
-                    value={img.order}
-                    onChange={(e) => handleOrderChange(index, e.target.value)}
-                    className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 sm:text-sm"
-                  />
+
+                <div className="mt-3 text-white space-y-2">
+                  <div>
+                    <label className="block text-sm">Display:</label>
+                    <input
+                      type="checkbox"
+                      checked={img.show}
+                      onChange={() => handleImageToggle(idx)}
+                      className="mr-2"
+                    />
+                    {img.show ? "Visible" : "Hidden"}
+                  </div>
+                  <div>
+                    <label className="block text-sm">Order (1 to 4):</label>
+                    <input
+                      type="number"
+                      min="1"
+                      max="4"
+                      value={img.order}
+                      onChange={(e) =>
+                        handleOrderChange(idx, Number(e.target.value))
+                      }
+                      className="w-full p-1 bg-gray-700 border border-gray-600 rounded"
+                    />
+                  </div>
                 </div>
               </div>
-            ))}
-          </div>
+            );
+          })}
         </div>
 
+        {/* Submit Button */}
         <div>
           <Button
             disabled={isUploading}

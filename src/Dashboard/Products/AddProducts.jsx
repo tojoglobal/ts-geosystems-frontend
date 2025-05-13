@@ -170,7 +170,7 @@ const ProductAddForm = () => {
       // In your onSubmit function after reset():
       setValue("productOptions", []);
       setValue("softwareOptions", []);
-      
+
       Swal.fire({
         icon: "success",
         title: "Product added successfully!",
