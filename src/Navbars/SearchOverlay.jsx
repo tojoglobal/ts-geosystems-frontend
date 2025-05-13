@@ -1,11 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Slider from "react-slick";
-// import { FaShoppingCart } from "react-icons/fa";
-import {
-  IoCloseOutline,
-  IoSearchOutline,
-  IoSearchSharp,
-} from "react-icons/io5";
+import { IoCloseOutline, IoSearchSharp } from "react-icons/io5";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { MdAddShoppingCart, MdOutlineKeyboardVoice } from "react-icons/md";
