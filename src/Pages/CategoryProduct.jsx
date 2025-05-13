@@ -60,7 +60,6 @@ const CategoryProduct = () => {
 
   // Destructure the response
   const { products = [], total = 0, totalPages = 1 } = productsData;
-  console.log(productsData);
 
   const handleAddToCart = (product) => {
     const itemToAdd = {
@@ -113,11 +112,23 @@ const CategoryProduct = () => {
           Home
         </Link>
         <span>/</span>
-        <span>{label}</span>
+        <Link
+          to={`/${category}`}
+          className={`${
+            subcategory ? "hover:text-[#e62245]" : "text-[#e62245]"
+          } capitalize`}
+        >
+          {label}
+        </Link>
         {subcategory && (
           <>
             <span>/</span>
-            <span className="text-[#e62245] capitalize">{subcategory}</span>
+            <Link
+              to={`/${category}/${subcategory}`}
+              className="text-[#e62245] capitalize"
+            >
+              {subcategory}
+            </Link>
           </>
         )}
       </div>
@@ -315,7 +326,7 @@ const CategoryProduct = () => {
                       <div className="flex gap-4 mt-2 flex-row">
                         <button
                           onClick={() => handleAddToCart(product)}
-                          className="bg-[#e62245] text-white px-6 py-[5px] rounded-[3px] hover:bg-[#d41d3f] font-bold transition-colors"
+                          className="bg-[#e62245] text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
                         >
                           ADD TO CART
                         </button>
@@ -355,7 +366,7 @@ const CategoryProduct = () => {
                     </div>
                     <div className="mt-1">
                       <div className="flex items-center gap-1">
-                        <p className="font-bold">
+                        <p className="text-sm font-bold">
                           £{parsePrice(product.price).toFixed(2)}
                         </p>
                         <p className="text-sm text-gray-500 underline">
@@ -369,7 +380,7 @@ const CategoryProduct = () => {
                       <div className="flex flex-col gap-2 mt-2">
                         <button
                           onClick={() => handleAddToCart(product)}
-                          className="bg-[#e62245] text-white px-6 py-[5px] rounded-[3px] hover:bg-[#d41d3f] font-bold transition-colors"
+                          className="bg-[#e62245] text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
                         >
                           ADD TO CART
                         </button>

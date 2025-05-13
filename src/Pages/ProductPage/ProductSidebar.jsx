@@ -71,7 +71,7 @@ const ProductSidebar = () => {
       [label]: !prev[label],
     }));
   };
-  
+
   // Get subcategories for a category
   const getSubcategoriesForCategory = (categoryId) => {
     if (!subcategoriesData?.subcategories) return [];
@@ -87,7 +87,7 @@ const ProductSidebar = () => {
   if (categoriesError || subcategoriesError || brandsError) {
     return <div>Error loading data</div>;
   }
-  
+
   // Create sidebar data structure dynamically
   const dynamicSidebarData = [
     { label: "Shop All", link: "/shop-all", children: null },
@@ -110,7 +110,7 @@ const ProductSidebar = () => {
       })),
     },
   ];
-console.log(dynamicSidebarData);
+
   return (
     <div className="w-full mt-3">
       {dynamicSidebarData.map((item, index) =>
@@ -119,7 +119,7 @@ console.log(dynamicSidebarData);
         ) : (
           <div
             key={item.label}
-            className={`bg-[#ebebeb] font-bold rounded-[4px] text-[13px] text-black ${
+            className={` bg-[#ebebeb] font-bold rounded-[4px] text-[13px] ${
               index !== 0 ? "mt-[5px]" : ""
             }`}
           >
@@ -127,7 +127,7 @@ console.log(dynamicSidebarData);
               <div>
                 <Link
                   to={item?.categorySlug}
-                  className={`w-full text-xs capitalize hover:text-[#e62245] flex items-center justify-between font-medium text-left p-3 ${
+                  className={`w-full text-xs capitalize hover:text-[#e62245] flex items-center justify-between bg-[#ebebeb] font-medium text-left p-3 ${
                     openSections[item.label]
                       ? "border-b-2 border-[#e62245]"
                       : ""
@@ -150,7 +150,7 @@ console.log(dynamicSidebarData);
                   </button>
                 </Link>
                 {openSections[item.label] && item.children.length > 0 && (
-                  <div className="bg-white">
+                  <div className="bg-[#f6f6f6]">
                     {item.children.map((child) => (
                       <Link
                         key={child.slug || child.name}
@@ -159,10 +159,10 @@ console.log(dynamicSidebarData);
                             ? `/${child.slug}`
                             : `/${item.categorySlug}/${child.slug}`
                         }
-                        className={`capitalize block px-5 py-3 font-bold text-[13px] hover:bg-gray-50 border-t border-[#ebebeb] ${
+                        className={`font-normal capitalize block px-5 py-3 text-[13px] hover:bg-gray-50 border-t border-[#ebebeb] ${
                           subcategory === child.slug &&
                           category === item.categorySlug
-                            ? "text-[#e62245] font-bold"
+                            ? "text-[#e62245]"
                             : ""
                         }`}
                       >

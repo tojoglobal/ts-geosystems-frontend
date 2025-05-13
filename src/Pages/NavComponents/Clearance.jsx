@@ -347,7 +347,7 @@ const Clearance = () => {
                       </div>
                     </div>
                     <div className="flex gap-4 mt-2 flex-row">
-                      <button className="bg-[#e62245] text-white px-6 py-[5px] rounded-[3px] hover:bg-[#d41d3f] font-bold transition-colors">
+                      <button className="bg-[#e62245] text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors">
                         ADD TO CART
                       </button>
                       <div className="flex items-center gap-2">
@@ -394,7 +394,7 @@ const Clearance = () => {
                     <div className="flex flex-col gap-2 mt-2">
                       <button
                         onClick={() => handleAddToCart(product)}
-                        className="bg-[#e62245] text-white px-6 py-[5px] rounded-[3px] hover:bg-[#d41d3f] font-bold transition-colors"
+                        className="bg-[#e62245] text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
                       >
                         ADD TO CART
                       </button>
