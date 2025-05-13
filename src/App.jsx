@@ -69,7 +69,6 @@ import BlogCreate from "./Dashboard/Blog/BlogCreate";
 import BlogUpdate from "./Dashboard/Blog/BlogUpdate";
 import BlogView from "./Dashboard/Blog/BlogView";
 import AdminUpdateCertificateTracking from "./Pages/Control/AdminUpdateCertificateTracking";
-import BlogForm from "./Dashboard/Blog/BlogForm";
 
 const AppLayout = () => {
   const location = useLocation();

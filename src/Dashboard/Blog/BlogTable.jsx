@@ -3,32 +3,54 @@ import { useEffect, useState } from "react";
 import { FaEdit, FaTrash, FaEye } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
+import Swal from "sweetalert2";
+import useDataQuery from "../../utils/useDataQuery";
 
 const BlogTable = () => {
   const axiosPublicUrl = useAxiospublic();
-  const [blogs, setBlogs] = useState([]);
+  // const [blogs, setBlogs] = useState([]);
 
-  useEffect(() => {
-    const fetchBlogs = async () => {
+  const { data: { blogs } = [], refetch } = useDataQuery(
+    ["AllblogView"],
+    `/api/blogs`
+  );
+
+  // const handleDelete = async (id) => {
+  //   if (confirm("Are you sure you want to delete this blog?")) {
+  //     try {
+  //       await axiosPublicUrl.delete(`/api/blogs/${id}`);
+  //       setBlogs(blogs.filter((b) => b.id !== id));
+  //       alert("Blog deleted successfully!");
+  //     } catch (err) {
+  //       console.error("Delete failed:", err);
+  //     }
+  //   }
+  // };
+
+  // console.log(blogs);
+
+  const handleDelete = async (blogId) => {
+    const result = await Swal.fire({
+      title: "Are you sure you want to delete this blog?",
+      text: "This blog and all its images will be permanently deleted.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
+    });
+
+    if (result.isConfirmed) {
       try {
-        const res = await axiosPublicUrl.get("/api/blogs");
-        setBlogs(res.data.blogs || []);
-      } catch (err) {
-        console.error("Failed to fetch blogs:", err);
-      }
-    };
+        await axiosPublicUrl.delete(`/api/blogs/${blogId}`);
+        Swal.fire("Deleted!", "The blog has been deleted.", "success");
 
-    fetchBlogs();
-  }, [axiosPublicUrl]);
-
-  const handleDelete = async (id) => {
-    if (confirm("Are you sure you want to delete this blog?")) {
-      try {
-        await axiosPublicUrl.delete(`/api/blogs/${id}`);
-        setBlogs(blogs.filter((b) => b.id !== id));
-        alert("Blog deleted successfully!");
-      } catch (err) {
-        console.error("Delete failed:", err);
+        // Refresh blog list or navigate
+        // e.g., refetch blogs or remove from state
+        refetch();
+      } catch (error) {
+        console.error("Delete error:", error);
+        Swal.fire("Error", "Failed to delete blog.", "error");
       }
     }
   };
@@ -56,8 +78,8 @@ const BlogTable = () => {
           </tr>
         </thead>
         <tbody>
-          {blogs.length > 0 &&
-            blogs.map((blog) => (
+          {blogs?.length > 0 &&
+            blogs?.map((blog) => (
               <tr key={blog.id}>
                 <td className="border px-4 py-2">{blog.title}</td>
                 <td className="border px-4 py-2">{blog.author}</td>
