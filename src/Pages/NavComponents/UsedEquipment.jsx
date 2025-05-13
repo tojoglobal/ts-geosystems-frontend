@@ -217,7 +217,7 @@ const UsedEquipment = () => {
                     className={`absolute ${
                       viewMode === "list"
                         ? "top-3 left-[267px]"
-                        : "top-3 right-3"
+                        : "-top-1 right-4"
                     } bg-[#e62245] text-white px-2 py-[1px] font-semibold rounded-sm text-sm`}
                   >
                     SALE

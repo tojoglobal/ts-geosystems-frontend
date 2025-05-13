@@ -1,130 +1,92 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import { IoSearch } from "react-icons/io5";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { slugify } from "../../../utils/slugify";
-const tabs = ["Features", "Tips", "Announcements", "Events"];
-const fakeData = [
-  {
-    id: 1,
-    image:
-      "https://dropinblog.net/34252524/files/featured/g2survey-pix4d-official-reseller.png",
-    logo: "https://dropinblog.net/34252524/authors/G213PNG.png",
-    meta: "Leica Geosystems . Jun 2nd 2024 - 5 minute read",
-    title: "G2 Survey Become Pix4D Official Reseller",
-    type: "Announcements",
-  },
-  {
-    id: 2,
-    image:
-      "https://dropinblog.net/34252524/files/featured/leica-gs18-captivate-firmware.jpg",
-    logo: "https://dropinblog.net/34252524/authors/G213PNG.png",
-    meta: "Leica Geosystems . Jun 2nd 2024 - 5 minute read",
-    title: "G2 Survey Become Pix4D Official Reseller",
-    type: "Tips",
-  },
-  {
-    id: 3,
-    image:
-      "https://dropinblog.net/34252524/files/featured/the-sunday-times-100-2024.png",
-    logo: "https://dropinblog.net/34252524/authors/G213PNG.png",
-    meta: "Leica Geosystems . Jun 2nd 2024 - 5 minute read",
-    title: "G2 Survey Become Pix4D Official Reseller",
-    type: "Features",
-  },
-  {
-    id: 4,
-    image: "https://dropinblog.net/34252524/files/featured/cices-burns.jpeg",
-    logo: "https://dropinblog.net/34252524/authors/G213PNG.png",
-    meta: "Leica Geosystems . Jun 2nd 2024 - 5 minute read",
-    title: "G2 Survey Become Pix4D Official Reseller",
-    type: "Events",
-  },
-  {
-    id: 5,
-    image:
-      "https://dropinblog.net/34252524/files/featured/g2-survey-road-expo-scotland-2024.jpg",
-    logo: "https://dropinblog.net/34252524/authors/G213PNG.png",
-    meta: "Leica Geosystems . Jun 2nd 2024 - 5 minute read",
-    title: "G2 Survey Become Pix4D Official Reseller",
-    type: "Tips",
-  },
-  {
-    id: 6,
-    image:
-      "https://dropinblog.net/34252524/files/featured/leica-gs05-gnss-antenna.jpg",
-    logo: "https://dropinblog.net/34252524/authors/G213PNG.png",
-    meta: "Leica Geosystems . Jun 2nd 2024 - 5 minute read",
-    title: "G2 Survey Become Pix4D Official Reseller",
-    type: "Features",
-  },
-  {
-    id: 7,
-    image:
-      "https://dropinblog.net/34252524/files/featured/g2survey-pix4d-official-reseller.png",
-    logo: "https://dropinblog.net/34252524/authors/G213PNG.png",
-    meta: "Leica Geosystems . Jun 2nd 2024 - 5 minute read",
-    title: "G2 Survey Become Pix4D Official Reseller",
-    type: "Announcements",
-  },
-  {
-    id: 8,
-    image:
-      "https://dropinblog.net/34252524/files/featured/leica-gs18-captivate-firmware.jpg",
-    logo: "https://dropinblog.net/34252524/authors/G213PNG.png",
-    meta: "Leica Geosystems . Jun 2nd 2024 - 5 minute read",
-    title: "G2 Survey Become Pix4D Official Reseller",
-    type: "Tips",
-  },
-  {
-    id: 9,
-    image:
-      "https://dropinblog.net/34252524/files/featured/the-sunday-times-100-2024.png",
-    logo: "https://dropinblog.net/34252524/authors/G213PNG.png",
-    meta: "Leica Geosystems . Jun 2nd 2024 - 5 minute read",
-    title: "G2 Survey Become Pix4D Official Reseller",
-    type: "Features",
-  },
-  {
-    id: 10,
-    image: "https://dropinblog.net/34252524/files/featured/cices-burns.jpeg",
-    logo: "https://dropinblog.net/34252524/authors/G213PNG.png",
-    meta: "Leica Geosystems . Jun 2nd 2024 - 5 minute read",
-    title: "G2 Survey Become Pix4D Official Reseller",
-    type: "Events",
-  },
-  {
-    id: 11,
-    image:
-      "https://dropinblog.net/34252524/files/featured/g2-survey-road-expo-scotland-2024.jpg",
-    logo: "https://dropinblog.net/34252524/authors/G213PNG.png",
-    meta: "Leica Geosystems . Jun 2nd 2024 - 5 minute read",
-    title: "G2 Survey Become Pix4D Official Reseller",
-    type: "Tips",
-  },
-  {
-    id: 12,
-    image:
-      "https://dropinblog.net/34252524/files/featured/leica-gs05-gnss-antenna.jpg",
-    logo: "https://dropinblog.net/34252524/authors/G213PNG.png",
-    meta: "Leica Geosystems . Jun 2nd 2024 - 5 minute read",
-    title: "G2 Survey Become Pix4D Official Reseller",
-    type: "Features",
-  },
-];
+import useDataQuery from "../../../utils/useDataQuery";
 
 const TSBlog = () => {
-  const [activeTab, setActiveTab] = useState("All");
+  const [searchParams] = useSearchParams();
+  const urlType = searchParams.get("type");
+
+  const [activeTab, setActiveTab] = useState(urlType || "All");
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 6;
 
-  const indexOfLastPost = currentPage * postsPerPage;
-  const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const filteredPosts = fakeData.filter(
-    (post) => activeTab === "All" || post.type === activeTab
+  // Fetch blog types
+  const { data: typeData = {} } = useDataQuery(
+    ["blogTypes"],
+    "/api/blog-types"
   );
-  const currentPosts = filteredPosts.slice(indexOfFirstPost, indexOfLastPost);
-  const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
+
+  // Update activeTab when URL changes
+  useEffect(() => {
+    if (urlType) {
+      setActiveTab(urlType);
+    } else {
+      setActiveTab("All");
+    }
+    setCurrentPage(1); // Reset to first page when changing tabs
+  }, [urlType]);
+
+  // Fetch data with pagination and filtering
+  const { data = {}, isLoading } = useDataQuery(
+    ["allBlogs", currentPage, activeTab],
+    `/api/blogs?page=${currentPage}&limit=${postsPerPage}${
+      activeTab !== "All" ? `&type=${encodeURIComponent(activeTab)}` : ""
+    }`
+  );
+
+  const { blogs = [], pagination } = data;
+  const { blogTypes = [] } = typeData;
+
+  // Create tabs - "All" + blog types
+  const tabs = ["All", ...blogTypes.map((type) => type.name)];
+
+  // Parse blog data with safe image handling
+  const parsedBlogs = blogs.map((blog) => {
+    try {
+      const images = JSON.parse(blog.images || "[]");
+      const firstImage = images[0];
+
+      return {
+        ...blog,
+        images,
+        tags: JSON.parse(blog.tags || "[]"),
+        image: firstImage?.filePath
+          ? `${import.meta.env.VITE_OPEN_APIURL}${firstImage.filePath}`
+          : "https://via.placeholder.com/400x300?text=No+Image",
+        meta: `${blog.author} • ${new Date(
+          blog.created_at
+        ).toLocaleDateString()} - 5 minute read`,
+        type: blog.blog_type || "Features",
+      };
+    } catch (error) {
+      console.error("Error parsing blog data:", error);
+      return {
+        ...blog,
+        images: [],
+        tags: [],
+        image: "https://via.placeholder.com/400x300?text=No+Image",
+        meta: `${blog.author} • ${new Date(
+          blog.created_at
+        ).toLocaleDateString()} - 5 minute read`,
+        type: blog.blog_type || "Features",
+      };
+    }
+  });
+
+  const totalPages = pagination?.totalPages || 1;
+
+  // const handleTabChange = (tab) => {
+  //   setActiveTab(tab);
+  //   setCurrentPage(1); // Reset to first page when changing tabs
+
+  //   // Update URL without page reload
+  //   const newUrl =
+  //     tab === "All" ? "/ts-blog" : `/ts-blog?type=${encodeURIComponent(tab)}`;
+  //   window.history.pushState({}, "", newUrl);
+  // };
 
   return (
     <div className="p-2 md:p-3">
@@ -144,86 +106,99 @@ const TSBlog = () => {
         {activeTab !== "All" && (
           <div className="text-center mb-8">
             <h2 className="text-3xl text-[#e62245] font-semibold">
-              {activeTab}
+              {activeTab.replace("_", " ")}
             </h2>
           </div>
         )}
         <div className="border-t border-b border-[#d5d8d9] py-3 flex flex-wrap justify-center items-center gap-4 text-[#db7084] font-medium">
-          {activeTab !== "All" && (
-            <button
-              onClick={() => setActiveTab("All")}
-              className="text-sm w-full sm:w-auto text-center"
-            >
-              Back to Blog
-            </button>
-          )}
           {tabs.map((tab) => (
-            <button
-              className={`hover:text-[#754e55] ${
+            <Link
+              to={
+                tab === "All"
+                  ? "/ts-blog"
+                  : `/ts-blog?type=${encodeURIComponent(tab)}`
+              }
+              key={tab}
+              className={`capitalize text-[14px] font-normal hover:text-[#754e55] ${
                 activeTab === tab ? "text-[#e62245] underline" : ""
               }`}
-              key={tab}
-              onClick={() => setActiveTab(tab)}
             >
-              {tab}
-            </button>
+              {tab.replace("_", " ")}
+            </Link>
           ))}
           <button className="hover:text-[#754e55]">
             <IoSearch className="w-5" />
           </button>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7 mt-10">
-          {currentPosts.map((post, index) => (
-            <Link
-              key={index}
-              to={`/ts-blog/${post.id}/${slugify(post.title || "")}`}
-              className="relative border border-[#eaedef] rounded-sm overflow-hidden hover:bg-gray-100 shadow-md hover:shadow-lg transition-shadow"
-            >
-              <img src={post.image} alt="post" className="w-full" />
-              <img
-                src={post.logo}
-                alt="logo"
-                className="absolute bottom-[128px] left-3 w-12 h-12 rounded-full"
-              />
-              <div className="p-4 mt-1 bg-[#fafdff]">
-                <p className="text-xs text-gray-500 text-center mb-1">
-                  {post.meta}
-                </p>
-                <h3 className="text-3xl text-center font-bold mb-2">
-                  {post.title}
-                </h3>
-                <p className="text-sm text-center text-gray-400 uppercase">
-                  {post.type}
-                </p>
+        {isLoading ? (
+          <div className="text-center py-10">Loading blogs...</div>
+        ) : (
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7 mt-10">
+              {parsedBlogs.map((post) => (
+                <Link
+                  key={post.id}
+                  to={`/ts-blog/${post.id}/${slugify(post.title || "")}`}
+                  className="relative border border-[#eaedef] rounded-sm pb-6 hover:shadow-md"
+                >
+                  <img
+                    src={post.image}
+                    alt={post.title}
+                    className="w-full h-80 object-cover"
+                  />
+                  <div className="p-2 mt-1 bg-[#fafdff]">
+                    <p className="text-xs text-gray-500 text-center mb-1">
+                      {post.meta}
+                    </p>
+                    <h3 className="text-[30px] font-bold text-center capitalize mb-2">
+                      {post.title}
+                    </h3>
+                    <p className="text-sm text-center text-gray-400 uppercase">
+                      {post.type.replace("_", " ")}
+                    </p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+
+            {/* Pagination Navigation */}
+            <div className="flex justify-between items-center mt-8 max-w-6xl mx-auto px-4">
+              <div>
+                {currentPage > 1 && (
+                  <Link
+                    to={`/ts-blog?page=${currentPage - 1}${
+                      activeTab !== "All"
+                        ? `&type=${encodeURIComponent(activeTab)}`
+                        : ""
+                    }`}
+                    className="flex items-center gap-2 text-[#e62245] hover:text-[#754e55]"
+                  >
+                    <IoIosArrowBack />
+                    Previous
+                  </Link>
+                )}
               </div>
-            </Link>
-          ))}
-        </div>
-        {/* Pagination Navigation */}
-        <div className="flex justify-between items-center mt-8 max-w-6xl mx-auto px-4">
-          <div>
-            {currentPage > 1 && (
-              <button
-                onClick={() => setCurrentPage(currentPage - 1)}
-                className="flex items-center gap-2 text-[#e62245] hover:text-[#754e55]"
-              >
-                <IoIosArrowBack />
-                {activeTab === "All" ? "Previous" : "Back to Blog"}
-              </button>
-            )}
-          </div>
-          <div>
-            {currentPage < totalPages && (
-              <button
-                onClick={() => setCurrentPage(currentPage + 1)}
-                className="flex items-center gap-2 text-[#e62245] hover:text-[#754e55]"
-              >
-                Next
-                <IoIosArrowForward />
-              </button>
-            )}
-          </div>
-        </div>
+              <div className="text-sm text-gray-600">
+                Page {currentPage} of {totalPages}
+              </div>
+              <div>
+                {currentPage < totalPages && (
+                  <Link
+                    to={`/ts-blog?page=${currentPage + 1}${
+                      activeTab !== "All"
+                        ? `&type=${encodeURIComponent(activeTab)}`
+                        : ""
+                    }`}
+                    className="flex items-center gap-2 text-[#e62245] hover:text-[#754e55]"
+                  >
+                    Next
+                    <IoIosArrowForward />
+                  </Link>
+                )}
+              </div>
+            </div>
+          </>
+        )}
       </section>
     </div>
   );

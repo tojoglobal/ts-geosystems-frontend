@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Menu, X } from "lucide-react";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import { IoSearchOutline } from "react-icons/io5";

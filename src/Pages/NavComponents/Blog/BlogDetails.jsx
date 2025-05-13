@@ -1,20 +1,62 @@
-import { useState } from "react";
 import { IoSearch } from "react-icons/io5";
-import { Link } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import AudioPlayer from "react-h5-audio-player";
 import "react-h5-audio-player/lib/styles.css";
 import { Facebook, Twitter, Linkedin, Mail, MessageSquare } from "lucide-react";
 import RelatedArticles from "./RelatedArticles";
+import useDataQuery from "../../../utils/useDataQuery";
 
-const tabs = ["Back to Blog", "Features", "Tips", "Announcements", "Events"];
 const BlogDetails = () => {
-  const [activeTab, setActiveTab] = useState("All");
+  const { id } = useParams();
+  const navigate = useNavigate();
+
+  const { data: blogData = {}, isLoading } = useDataQuery(
+    ["singleBlog", id],
+    `/api/blogs/${id}`,
+    !!id
+  );
+
+  const { data: typeData = {} } = useDataQuery(
+    ["blogTypes"],
+    "/api/blog-types"
+  );
+
+  const blog = blogData.blog || {};
+  const blogTypes = typeData.blogTypes || [];
+
+  // Parse images and tags
+  const images = JSON.parse(blog.images || "[]").filter((img) => img.show);
+  const tags = JSON.parse(blog.tags || "[]");
+
+  // Create tabs - "Back to Blog" + all blog types
+  const tabs = ["Back to Blog", ...blogTypes.map((type) => type.name)];
+
   const iconClass =
     "w-9 h-9 flex items-center justify-center rounded-md text-white";
-  const blogUrl = encodeURIComponent(
-    "https://yourwebsite.com/blog/your-dynamic-slug"
+
+  // Dynamic URL and title for sharing
+  const blogUrl = encodeURIComponent(window.location.href);
+  const blogTitle = encodeURIComponent(
+    blog.title || "Check out this amazing blog"
   );
-  const blogTitle = encodeURIComponent("Check out this amazing blog from G2!");
+
+  // Split images for display
+  const topImages = images.slice(0, 2);
+  const middleImages = images.slice(2, 4);
+  const bottomImages = images.slice(4, 6);
+
+  const handleTabClick = (tab) => {
+    if (tab === "Back to Blog") {
+      navigate("/ts-blog");
+    } else {
+      // Navigate to filtered blog list view
+      navigate(`/ts-blog?type=${encodeURIComponent(tab)}`);
+    }
+  };
+
+  if (isLoading) return <div className="p-3 text-center">Loading blog...</div>;
+  if (!blog.id) return <div className="p-3 text-center">Blog not found</div>;
+
   return (
     <div className="p-3">
       <div className="flex items-center gap-2 text-sm">
@@ -22,7 +64,7 @@ const BlogDetails = () => {
           Home
         </Link>
         <span>/</span>
-        <Link to="/support" className="text-[#e62245]">
+        <Link to="/ts-blog" className="text-[#e62245]">
           G2 Blog
         </Link>
       </div>
@@ -30,13 +72,13 @@ const BlogDetails = () => {
       <div className="border-t border-b py-4 mt-12 flex justify-center items-center gap-6 text-[#db7084] font-medium">
         {tabs.map((tab) => (
           <button
-            className={`hover:text-[#754e55] ${
-              activeTab === tab ? "text-[#e62245] underline" : ""
+            className={`capitalize cursor-pointer text-[14px] font-normal hover:text-[#754e55] ${
+              tab === blog.blog_type ? "text-[#e62245] underline" : ""
             }`}
             key={tab}
-            onClick={() => setActiveTab(tab)}
+            onClick={() => handleTabClick(tab)}
           >
-            {tab}
+            {tab.replace("_", " ")}
           </button>
         ))}
         <button className="hover:text-[#754e55]">
@@ -44,41 +86,37 @@ const BlogDetails = () => {
         </button>
       </div>
       <section className="max-w-2xl mx-auto my-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-          <img
-            src="https://dropinblog.net/34252524/files/featured/geo-business-2025.jpg"
-            alt="GEO Business 2025"
-            className="rounded-md"
-          />
-          <img
-            src="https://dropinblog.net/34252524/files/featured/geo-business-2025.jpg"
-            alt="GEO Business 2025"
-            className="rounded-md"
-          />
-          <img
-            src="https://dropinblog.net/34252524/files/featured/geo-business-2025.jpg"
-            alt="GEO Business 2025"
-            className="rounded-md"
-          />
-          <img
-            src="https://dropinblog.net/34252524/files/featured/geo-business-2025.jpg"
-            alt="GEO Business 2025"
-            className="rounded-md"
-          />
-        </div>
-        <h2 className="text-2xl font-bold text-[#e62245]">
-          See us at GEO Business 2025 on stand G124
+        {/* Top Images */}
+        {topImages.length > 0 && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+            {topImages.map((image, index) => (
+              <img
+                key={index}
+                src={`${import.meta.env.VITE_OPEN_APIURL}${image.filePath}`}
+                alt={blog.title}
+                className="rounded-md"
+              />
+            ))}
+          </div>
+        )}
+        <h2 className="text-2xl font-bold text-[#e62245] capitalize">
+          {blog.title}
         </h2>
         <div className="flex items-center gap-4 my-4">
           <img
-            src="https://dropinblog.net/34252524/files/featured/leica-gs18-captivate-firmware.jpg"
-            alt=""
+            src="https://dropinblog.net/34252524/authors/G213PNG.png"
+            alt="Author"
             className="w-10 rounded-full"
           />
           <div className="space-y-1">
-            <p className="text-[#e69ba9]">G2 Survey Events</p>
+            <p className="text-[#e69ba9]">{blog.author}</p>
             <p className="text-sm text-gray-500">
-              Apr 28th, 2025 · 1 minute read
+              {new Date(blog.created_at).toLocaleDateString("en-US", {
+                month: "short",
+                day: "numeric",
+                year: "numeric",
+              })}{" "}
+              · 5 minute read
             </p>
           </div>
         </div>
@@ -89,43 +127,44 @@ const BlogDetails = () => {
             controls
           />
         </div>
-        <div className="space-y-3 text-sm">
-          <p>
-            We're excited to exhibit at GEO Business when it returns to ExCeL
-            London on 4–5 June 2025.
-          </p>
-          <p>
-            The UK's largest geospatial event features two days jam-packed with
-            inspiring content. Including an expo of the latest solutions, 150+
-            speakers across 7 stages, 70 hours of CPD accredited education,
-            networking drinks, live demos of the latest tech, and much more!
-          </p>
-          <p>
-            Join us there, say Hi and discover the latest developments in
-            geospatial, get inspired and connect with others in the profession.
-          </p>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-8">
-          <img
-            src="https://dropinblog.net/34252524/files/featured/geo-business-2025.jpg"
-            alt="GEO Business 2025"
-            className="rounded-md"
-          />
-          <img
-            src="https://dropinblog.net/34252524/files/featured/geo-business-2025.jpg"
-            alt="GEO Business 2025"
-            className="rounded-md"
-          />
-        </div>
-        <div className="flex flex-wrap gap-1 underline text-sm text-[#e62245]">
-          <span>#GeoBusiness</span>
-          <span>#GeospatialTech</span>
-          <span>#SeeYouThere</span>
-          <span>#ExCeLLondon</span>
-          <span>#MappingTheFuture</span>
-        </div>
+        {middleImages.length > 0 && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-8">
+            {middleImages.map((image, index) => (
+              <img
+                key={index}
+                src={`${import.meta.env.VITE_OPEN_APIURL}${image.filePath}`}
+                alt={blog.title}
+                className="rounded-md"
+              />
+            ))}
+          </div>
+        )}
+        <div
+          className="space-y-3 text-sm blog-content"
+          dangerouslySetInnerHTML={{ __html: blog.content || "" }}
+        />
+        {bottomImages.length > 0 && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-8">
+            {bottomImages.map((image, index) => (
+              <img
+                key={index}
+                src={`${import.meta.env.VITE_OPEN_APIURL}${image.filePath}`}
+                alt={blog.title}
+                className="rounded-md"
+              />
+            ))}
+          </div>
+        )}
+        {/* Tags */}
+        {tags.length > 0 && (
+          <div className="flex flex-wrap gap-1 underline text-sm text-[#e62245]">
+            {tags.map((tag, index) => (
+              <span key={index}>#{tag}</span>
+            ))}
+          </div>
+        )}
+        {/* Social Sharing */}
         <div className="flex gap-2 my-6">
-          {/* Facebook */}
           <a
             href={`https://www.facebook.com/sharer/sharer.php?u=${blogUrl}`}
             target="_blank"
@@ -134,8 +173,6 @@ const BlogDetails = () => {
           >
             <Facebook size={16} />
           </a>
-
-          {/* Twitter */}
           <a
             href={`https://twitter.com/intent/tweet?url=${blogUrl}&text=${blogTitle}`}
             target="_blank"
@@ -144,8 +181,6 @@ const BlogDetails = () => {
           >
             <Twitter size={16} />
           </a>
-
-          {/* LinkedIn */}
           <a
             href={`https://www.linkedin.com/sharing/share-offsite/?url=${blogUrl}`}
             target="_blank"
@@ -154,8 +189,6 @@ const BlogDetails = () => {
           >
             <Linkedin size={16} />
           </a>
-
-          {/* Reddit */}
           <a
             href={`https://www.reddit.com/submit?url=${blogUrl}&title=${blogTitle}`}
             target="_blank"
@@ -164,8 +197,6 @@ const BlogDetails = () => {
           >
             <MessageSquare size={16} />
           </a>
-
-          {/* WhatsApp */}
           <a
             href={`https://wa.me/?text=${blogTitle}%20${blogUrl}`}
             target="_blank"
@@ -175,7 +206,6 @@ const BlogDetails = () => {
             <MessageSquare size={16} />
           </a>
 
-          {/* Email */}
           <a
             href={`mailto:?subject=${blogTitle}&body=${blogUrl}`}
             className={`${iconClass} bg-[#7b7b7b]`}
@@ -191,7 +221,10 @@ const BlogDetails = () => {
         </Link>
       </section>
       <div className="my-12">
-        <RelatedArticles />
+        <RelatedArticles
+          currentBlogType={blog.blog_type}
+          currentBlogId={blog.id}
+        />
       </div>
     </div>
   );

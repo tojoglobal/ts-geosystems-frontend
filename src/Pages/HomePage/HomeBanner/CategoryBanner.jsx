@@ -18,7 +18,7 @@ const CategoryBanner = () => {
           key={category.id}
           className="group text-center cursor-pointer"
         >
-          <div className="overflow-hidden rounded-md">
+          <div className="overflow-hidden border border-gray-200 rounded-[4px]">
             <img
               src={`${import.meta.env.VITE_OPEN_APIURL}/uploads/${
                 category.photo
@@ -27,7 +27,7 @@ const CategoryBanner = () => {
               className="w-full h-36 md:h-48 object-cover transition-transform duration-300 group-hover:scale-110"
             />
           </div>
-          <p className="mt-1 md:mt-3 uppercase text-sm font-semibold transition-colors duration-300 group-hover:text-[#e62446]">
+          <p className="mt-1 md:mt-2 uppercase text-sm font-semibold transition-colors duration-300 group-hover:text-[#e62446]">
             {category.category_name}
           </p>
         </Link>

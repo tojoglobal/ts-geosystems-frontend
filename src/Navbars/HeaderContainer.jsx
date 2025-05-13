@@ -1,4 +1,3 @@
-import { Popover } from "@headlessui/react";
 import { IoSearchOutline } from "react-icons/io5";
 import { LuUserRound } from "react-icons/lu";
 import { PiShoppingCart } from "react-icons/pi";
