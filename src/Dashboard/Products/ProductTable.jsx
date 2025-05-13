@@ -135,14 +135,14 @@ const ProductTable = () => {
         <table className="w-full text-sm text-left text-white min-w-[800px]">
           <thead className="text-xs uppercase bg-gray-800 text-gray-200">
             <tr>
-              <th className="py-3 px-4 sm:px-6">Product Name</th>
-              <th className="py-3 px-4 sm:px-6">Price ৳</th>
-              <th className="py-3 px-4 sm:px-6">Category</th>
-              <th className="py-3 px-4 sm:px-6">Sub Category</th>
-              <th className="py-3 px-4 sm:px-6">SKU</th>
-              <th className="py-3 px-4 sm:px-6">Condition</th>
-              <th className="py-3 px-4 sm:px-6">Brand</th>
-              <th className="py-3 px-4 sm:px-6 text-center">Actions</th>
+              <th className="py-3 px-4">Product Name</th>
+              <th className="py-3 px-4">Price ৳</th>
+              <th className="py-3 px-4">Category</th>
+              <th className="py-3 px-4">Sub Category</th>
+              <th className="py-3 px-4">SKU</th>
+              <th className="py-3 px-4">Condition</th>
+              <th className="py-3 px-4">Brand</th>
+              <th className="py-3 px-4 text-center">Actions</th>
             </tr>
           </thead>
           <tbody>
