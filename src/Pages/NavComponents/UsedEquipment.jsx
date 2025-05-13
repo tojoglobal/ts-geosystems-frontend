@@ -1,164 +1,12 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-useless-escape */
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { BsGrid3X3GapFill } from "react-icons/bs";
 import { FaThList } from "react-icons/fa";
 import Swal from "sweetalert2";
-
-const equipmentCategories = [
-  {
-    title: "Used Laser Scanners",
-    image:
-      "https://cdn11.bigcommerce.com/s-ew2v2d3jn1/images/stencil/original/e/used-category-scanners__95474.original.jpg",
-    link: "/used-equipment/laser-scanners",
-  },
-  {
-    title: "Used Total Stations",
-    image:
-      "https://cdn11.bigcommerce.com/s-ew2v2d3jn1/images/stencil/original/n/used-category-robotic-total-stations__71261.original.jpg",
-    link: "/used-equipment/total-stations",
-  },
-  {
-    title: "Used GNSS/GPS",
-    image:
-      "https://cdn11.bigcommerce.com/s-ew2v2d3jn1/images/stencil/original/m/used-category-gnss__59353.original.jpg",
-    link: "/used-equipment/gnss-gps",
-  },
-  {
-    title: "Used Controllers",
-    image:
-      "https://cdn11.bigcommerce.com/s-ew2v2d3jn1/images/stencil/original/q/used-category-controllers__43564.original.jpg",
-    link: "/used-equipment/controllers",
-  },
-  {
-    title: "Used Lasers",
-    image:
-      "https://cdn11.bigcommerce.com/s-ew2v2d3jn1/images/stencil/original/y/used-category-construction-lasers__49199.original.jpg",
-    link: "/used-equipment/lasers",
-  },
-  {
-    title: "Used Levels",
-    image:
-      "https://cdn11.bigcommerce.com/s-ew2v2d3jn1/images/stencil/original/z/used-category-digital-levels__91752.original.jpg",
-    link: "/used-equipment/levels",
-  },
-  {
-    title: "Used Location Detection",
-    image:
-      "https://cdn11.bigcommerce.com/s-ew2v2d3jn1/images/stencil/original/e/used-category-cable-locators__45605.original.jpg",
-    link: "/used-equipment/location-detection",
-  },
-  {
-    title: "Used Accessories",
-    image:
-      "https://cdn11.bigcommerce.com/s-ew2v2d3jn1/images/stencil/original/h/used-category-accessories__70873.original.jpg",
-    link: "/used-equipment/accessories",
-  },
-];
-
-const fakeProducts = [
-  {
-    id: 1,
-    name: "Leica iCON iCG70 GNSS Rover Package",
-    sku: "868636",
-    brand: "Leica Geosystems",
-    price: 9995.0,
-    priceExVat: 11994.0,
-    url: "/leica-icon-icg70-gnss-rtk-rover-package/",
-    image:
-      "https://cdn11.bigcommerce.com/s-ew2v2d3jn1/images/stencil/500x659/products/788/4467/leica-icon-icg70-antenna__78227.1723046790.jpg?c=1",
-    img2: "https://cdn11.bigcommerce.com/s-ew2v2d3jn1/images/stencil/500x659/products/788/4468/leica-icon-icg70-second__12345.1723046791.jpg?c=1",
-  },
-  {
-    id: 2,
-    name: "Leica GVP722 SmartPole & SmartStation Container",
-    sku: "817055",
-    brand: "Leica Geosystems",
-    price: 104.12,
-    priceExVat: 124.95,
-    url: "/leica-icon-icg70-gnss-rtk-rover-package/",
-    image:
-      "https://cdn11.bigcommerce.com/s-ew2v2d3jn1/images/stencil/500x659/products/538/3241/leica-gvp-container-generic__65969.1689823054.jpg?c=1",
-  },
-  {
-    id: 3,
-    name: "Leica GVP735 GNSS Container",
-    sku: "855307",
-    brand: "Leica Geosystems",
-    price: 104.12,
-    priceExVat: 124.95,
-    url: "/leica-icon-icg70-gnss-rtk-rover-package/",
-    image:
-      "https://cdn11.bigcommerce.com/s-ew2v2d3jn1/images/stencil/500x659/products/538/3241/leica-gvp-container-generic__65969.1689823054.jpg?c=1",
-  },
-  {
-    id: 4,
-    name: "Leica GEB321 Li-Ion Battery",
-    sku: "898414",
-    brand: "Leica Geosystems",
-    price: 80.0,
-    priceExVat: 96.0,
-    url: "/leica-icon-icg70-gnss-rtk-rover-package/",
-    image:
-      "https://cdn11.bigcommerce.com/s-ew2v2d3jn1/images/stencil/500x659/products/394/1923/leica-geb321-battery__34880.1659455123.jpg?c=1",
-  },
-  {
-    id: 5,
-    name: "Leica iCON iCG70 GNSS Rover Package",
-    sku: "868636",
-    brand: "Leica Geosystems",
-    price: 9995.0,
-    priceExVat: 11994.0,
-    url: "/leica-icon-icg70-gnss-rtk-rover-package/",
-    image:
-      "https://cdn11.bigcommerce.com/s-ew2v2d3jn1/images/stencil/500x659/products/725/3974/leica-gknl4m-staff__25248.1705485152.jpg?c=1",
-  },
-  {
-    id: 6,
-    name: "Leica GVP722 SmartPole & SmartStation Container",
-    sku: "817055",
-    brand: "Leica Geosystems",
-    price: 104.12,
-    priceExVat: 124.95,
-    url: "/leica-icon-icg70-gnss-rtk-rover-package/",
-    image:
-      "https://cdn11.bigcommerce.com/s-ew2v2d3jn1/images/stencil/500x659/products/255/1782/leica-disto-d510-b__27186.1659454649.jpg?c=1",
-    img2: "https://cdn11.bigcommerce.com/s-ew2v2d3jn1/images/stencil/500x659/products/255/1782/leica-disto-d510-b__27186.1659454649.jpg?c=1",
-  },
-  {
-    id: 7,
-    name: "Leica GVP735 GNSS Container",
-    sku: "855307",
-    brand: "Leica Geosystems",
-    price: 104.12,
-    priceExVat: 124.95,
-    url: "/leica-icon-icg70-gnss-rtk-rover-package/",
-    image:
-      "https://cdn11.bigcommerce.com/s-ew2v2d3jn1/images/stencil/500x659/products/839/5027/leica-sprinter-250m-digital-level-a__77897.1744323008.jpg?c=1",
-  },
-  {
-    id: 8,
-    name: "Leica GEB321 Li-Ion Battery",
-    sku: "898414",
-    brand: "Leica Geosystems",
-    price: 80.0,
-    priceExVat: 96.0,
-    url: "/leica-icon-icg70-gnss-rtk-rover-package/",
-    image:
-      "https://cdn11.bigcommerce.com/s-ew2v2d3jn1/images/stencil/500x659/products/838/5026/leica-black-container-799275__42061.1744323007.jpg?c=1",
-  },
-  {
-    id: 9,
-    name: "Leica iCON iCG70 GNSS Rover Package",
-    sku: "868636",
-    brand: "Leica Geosystems",
-    price: 9995.0,
-    priceExVat: 11994.0,
-    url: "/leica-icon-icg70-gnss-rtk-rover-package/",
-    image:
-      "https://cdn11.bigcommerce.com/s-ew2v2d3jn1/images/stencil/500x659/products/788/4467/leica-icon-icg70-antenna__78227.1723046790.jpg?c=1",
-    img2: "https://cdn11.bigcommerce.com/s-ew2v2d3jn1/images/stencil/500x659/products/788/4468/leica-icon-icg70-second__12345.1723046791.jpg?c=1",
-  },
-];
+import { useQuery } from "@tanstack/react-query";
+import { useAxiospublic } from "../../Hooks/useAxiospublic";
 
 const sortOptions = [
   "FEATURED ITEMS",
@@ -172,19 +20,34 @@ const sortOptions = [
 ];
 
 const UsedEquipment = () => {
+  const axiosPublicUrl = useAxiospublic();
   const [viewMode, setViewMode] = useState("grid");
   const [sortBy, setSortBy] = useState("FEATURED ITEMS");
   const [hoveredProductId, setHoveredProductId] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [compareItems, setCompareItems] = useState([]);
   const navigate = useNavigate();
-  const productsPerPage = 8;
-  const totalPages = Math.ceil(fakeProducts.length / productsPerPage);
+
+  const { data = {}, isLoading } = useQuery({
+    queryKey: ["usedProducts"],
+    queryFn: async () => {
+      const res = await axiosPublicUrl.get(
+        "/api/category-with-subcategories/2"
+      );
+      return res?.data;
+    },
+  });
+
+  // Extract subcategories and products from API response
+  const subcategories = data?.subcategories || [];
+  const products = data?.products || [];
 
   // Pagination logic
+  const productsPerPage = 8;
+  const totalPages = Math.ceil(products.length / productsPerPage);
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = fakeProducts.slice(
+  const currentProducts = products.slice(
     indexOfFirstProduct,
     indexOfLastProduct
   );
@@ -207,11 +70,22 @@ const UsedEquipment = () => {
         confirmButtonText: "OK",
       });
     } else {
-      // Sort the IDs to maintain consistent URL regardless of selection order
       const sortedIds = [...compareItems].sort((a, b) => a - b);
       navigate(`/compare/${sortedIds.join(",")}`);
     }
   };
+
+  // Helper function to parse JSON fields
+  const parseField = (field) => {
+    try {
+      return typeof field === "string" ? JSON.parse(field) : field;
+    } catch {
+      return field;
+    }
+  };
+  
+  if (isLoading) return <div>Loading...</div>;
+
   return (
     <div className="p-2 md:p-3">
       <div className="flex items-center gap-2 text-[11px] mb-4">
@@ -227,26 +101,31 @@ const UsedEquipment = () => {
         Used Surveying Equipment
       </h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 border-b pb-10">
-        {equipmentCategories.map((category, index) => (
-          <Link
-            key={index}
-            to={category.link}
-            className="group relative rounded-lg overflow-hidden transition-shadow"
-          >
-            <div className="relative w-52 border border-gray-300 rounded-md mx-auto bg-[#f5f5f5]">
-              <img
-                src={category.image}
-                alt={category.title}
-                className="w-full h-full object-contain"
-              />
-            </div>
-            <div className="text-center">
-              <h2 className="text-base mt-1 font-medium group-hover:text-[#e62245] transition-colors">
-                {category.title}
-              </h2>
-            </div>
-          </Link>
-        ))}
+        {subcategories.map((category) => {
+          const categorySlug = parseField(category.slug)?.slug || category.slug;
+          return (
+            <Link
+              key={category.id}
+              to={`/used-surveying-equipment/${categorySlug}`}
+              className="group relative rounded-lg overflow-hidden transition-shadow"
+            >
+              <div className="relative w-52 border border-gray-300 rounded-md mx-auto bg-[#f5f5f5]">
+                <img
+                  src={`${import.meta.env.VITE_OPEN_APIURL}/uploads/${
+                    category.photo
+                  }`}
+                  alt={category.name}
+                  className="w-full h-full object-contain"
+                />
+              </div>
+              <div className="text-center">
+                <h2 className="text-base mt-1 font-medium group-hover:text-[#e62245] transition-colors">
+                  {category.name}
+                </h2>
+              </div>
+            </Link>
+          );
+        })}
       </div>
       <section className="mt-2">
         <div className="flex items-center justify-between md:justify-normal md:gap-52 mb-6">
@@ -273,7 +152,6 @@ const UsedEquipment = () => {
               <FaThList size={20} />
             </button>
           </div>
-          {/* <div className="w-full flex justify-center mt-4 md:mt-0"> */}
           <div className="flex items-center gap-2">
             <label className="text-sm">Sort By:</label>
             <div className="relative">
@@ -299,240 +177,249 @@ const UsedEquipment = () => {
               : "grid-cols-1 gap-7"
           } gap-4`}
         >
-          {currentProducts.map((product) => (
-            <div
-              key={product.id}
-              className={`relative ${
-                viewMode === "list" ? "flex gap-8" : "flex flex-col h-full"
-              }`}
-            >
-              {/* SALE badge */}
+          {currentProducts.map((product) => {
+            let images = [];
+            try {
+              images = JSON.parse(product.image_urls);
+            } catch (e) {
+              images = [product.image_urls];
+            }
+
+            const firstImage = images[0]
+              ? `${import.meta.env.VITE_OPEN_APIURL}${images[0].replace(
+                  /^["\[]+|["\]]+$/g,
+                  ""
+                )}`
+              : "";
+            const secondImage = images[1]
+              ? `${import.meta.env.VITE_OPEN_APIURL}${images[1].replace(
+                  /^["\[]+|["\]]+$/g,
+                  ""
+                )}`
+              : firstImage;
+
+            const isHovered = hoveredProductId === product.id;
+            const displayImage = isHovered ? secondImage : firstImage;
+            const taxData = parseField(product.tax);
+            const price = parseFloat(product.price) || 0;
+            const priceExVat = price * (1 + (taxData?.value || 0) / 100);
+
+            return (
               <div
-                className={`absolute ${
-                  viewMode === "list" ? "top-3 left-[267px]" : "top-3 right-3"
-                } bg-[#e62245] text-white px-2 py-[1px] font-semibold rounded-sm text-sm`}
+                key={product.id}
+                className={`relative ${
+                  viewMode === "list" ? "flex gap-8" : "flex flex-col h-full"
+                }`}
               >
-                SALE
-              </div>
-              {viewMode === "list" ? (
-                <Link to={product.url} className="w-1/3">
+                {/* SALE badge */}
+                {product.clearance && (
                   <div
-                    onMouseEnter={() => setHoveredProductId(product.id)}
-                    onMouseLeave={() => setHoveredProductId(null)}
+                    className={`absolute ${
+                      viewMode === "list"
+                        ? "top-3 left-[267px]"
+                        : "top-3 right-3"
+                    } bg-[#e62245] text-white px-2 py-[1px] font-semibold rounded-sm text-sm`}
                   >
-                    <img
-                      src={
-                        hoveredProductId === product.id && product.img2
-                          ? product.img2
-                          : product.image
-                      }
-                      alt={product.name}
-                      className="w-full h-64 object-contain transition-all duration-300 ease-in-out"
-                    />
+                    SALE
                   </div>
-                </Link>
-              ) : (
-                <div className="w-full h-56 flex items-center justify-center bg-white">
-                  <Link to={product.url} className="w-full h-full">
+                )}
+                {viewMode === "list" ? (
+                  <Link to={`/product/${product.id}`} className="w-1/3">
                     <div
                       onMouseEnter={() => setHoveredProductId(product.id)}
                       onMouseLeave={() => setHoveredProductId(null)}
-                      className="w-full h-full flex items-center justify-center"
                     >
                       <img
-                        src={
-                          hoveredProductId === product.id && product.img2
-                            ? product.img2
-                            : product.image
-                        }
-                        alt={product.name}
-                        className="w-auto h-56 object-contain transition-all duration-300 ease-in-out"
+                        src={displayImage}
+                        alt={product.product_name}
+                        className="w-full h-64 object-contain transition-all duration-300 ease-in-out"
                       />
                     </div>
                   </Link>
-                </div>
-              )}
-              {/* Product Details - Different structure for list vs grid */}
-              {viewMode === "list" ? (
-                <div className="w-2/3 flex flex-col justify-between">
-                  <div>
-                    <div className="text-xs text-gray-600">
-                      {product.brand} | Sku: {product.sku}
-                    </div>
-                    <Link to={product.url}>
-                      <h3 className="text-xl text-gray-800 font-medium hover:text-[#e62245] cursor-pointer">
-                        {product.name}
-                      </h3>
-                    </Link>
-                    <p className="text-sm text-[#2f2f2b] mt-2">
-                      Ex Demo - As New GNSS Antenna iCON iCG70 UHF Performance
-                      AntennaGEB334 Li-Ion Battery x2GNSS Rover Container
-                      Controller iCON CC170 Field ControllerGEB260 Li-Ion
-                      BatteryGAT25 AntennaGEV288 Mains ChargerGHT63 Pole
-                      ClampGHT81 Holder Plate Accessories GKL341...
-                    </p>
-                  </div>
-                  <div>
-                    <div className="flex flex-col">
-                      <div className="text-[#2f2f2b] text-lg font-semibold">
-                        Was: £16,661.67
+                ) : (
+                  <div className="w-full h-56 flex items-center justify-center bg-white">
+                    <Link
+                      to={`/product/${product.id}`}
+                      className="w-full h-full"
+                    >
+                      <div
+                        onMouseEnter={() => setHoveredProductId(product.id)}
+                        onMouseLeave={() => setHoveredProductId(null)}
+                        className="w-full h-full flex items-center justify-center"
+                      >
+                        <img
+                          src={displayImage}
+                          alt={product.product_name}
+                          className="w-auto h-56 object-contain transition-all duration-300 ease-in-out"
+                        />
                       </div>
+                    </Link>
+                  </div>
+                )}
+                {/* Product Details */}
+                {viewMode === "list" ? (
+                  <div className="w-2/3 flex flex-col justify-between">
+                    <div>
+                      <div className="text-xs text-gray-600">
+                        {product.brand_name} | Sku: {product.sku}
+                      </div>
+                      <Link to={`/product/${product.id}`}>
+                        <h3 className="text-xl text-gray-800 font-medium hover:text-[#e62245] cursor-pointer">
+                          {product.product_name}
+                        </h3>
+                      </Link>
+                      <p className="text-sm text-[#2f2f2b] mt-2">
+                        {product.product_overview || "No description available"}
+                      </p>
+                    </div>
+                    <div>
+                      <div className="flex flex-col">
+                        <div className="flex items-center gap-1">
+                          <p className="font-bold text-lg">
+                            Price £{price.toFixed(2)}
+                          </p>
+                          <p className="text-sm text-gray-500 underline">
+                            (Ex. VAT)
+                          </p>
+                        </div>
+                        <div className="flex items-center gap-1 text-sm text-[#b3b3b5]">
+                          <p className="text-[#2f2f2b] text-lg font-semibold">
+                            Price:
+                          </p>
+                          £{priceExVat.toFixed(2)}{" "}
+                          <span className="underline">(Inc. VAT)</span>
+                        </div>
+                      </div>
+                      <div className="flex gap-4 mt-2 flex-row">
+                        <button className="bg-[#e62245] text-white px-6 py-[5px] rounded-[3px] hover:bg-[#d41d3f] font-bold transition-colors">
+                          ADD TO CART
+                        </button>
+                        <div className="flex items-center gap-2">
+                          <input
+                            type="checkbox"
+                            id={`compare-${product.id}`}
+                            className="accent-[#0075ff]"
+                            checked={compareItems.includes(product.id)}
+                            onChange={() => toggleCompare(product.id)}
+                          />
+                          <label
+                            htmlFor={`compare-${product.id}`}
+                            className="text-sm cursor-pointer"
+                          >
+                            COMPARE
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex flex-col flex-grow border-t pt-3">
+                    <div className="flex-grow">
+                      <div className="border-t border-gray-300 pt-2 text-xs text-gray-600 mb-1">
+                        {product.brand_name} | Sku: {product.sku}
+                      </div>
+                      <Link to={`/product/${product.id}`}>
+                        <h3 className="text-gray-800 font-medium hover:text-[#e62245] cursor-pointer leading-tight">
+                          {product.product_name}
+                        </h3>
+                      </Link>
+                    </div>
+                    <div className="mt-1">
                       <div className="flex items-center gap-1">
-                        <p className="font-bold text-lg">
-                          Price £{product.price.toFixed(2)}
-                        </p>
+                        <p className="font-bold">£{price.toFixed(2)}</p>
                         <p className="text-sm text-gray-500 underline">
                           (Ex. VAT)
                         </p>
                       </div>
-                      <div className="text-[#2f2f2b] text-lg font-semibold">
-                        Was: £16,661.67
-                      </div>
-                      <div className="flex items-center gap-1 text-sm text-[#b3b3b5]">
-                        <p className="text-[#2f2f2b] text-lg font-semibold">
-                          Price:
-                        </p>
-                        £{product.priceExVat.toFixed(2)}{" "}
+                      <div className="flex items-center gap-1 text-sm text-[#b3b3b5] mt-1">
+                        £{priceExVat.toFixed(2)}{" "}
                         <span className="underline">(Inc. VAT)</span>
                       </div>
-                    </div>
-                    <div className="flex gap-4 mt-2 flex-row">
-                      <button className="bg-[#e62245] text-white px-6 py-[5px] rounded-[3px] hover:bg-[#d41d3f] font-bold transition-colors">
-                        ADD TO CART
-                      </button>
-                      <div className="flex items-center gap-2">
-                        <input
-                          type="checkbox"
-                          id={`compare-${product.id}`}
-                          className="accent-[#0075ff]"
-                          checked={compareItems.includes(product.id)}
-                          onChange={() => toggleCompare(product.id)}
-                        />
-                        <label
-                          htmlFor={`compare-${product.id}`}
-                          className="text-sm cursor-pointer"
-                        >
-                          COMPARE
-                        </label>
+                      <div className="flex flex-col gap-2 mt-2">
+                        <button className="bg-[#e62245] text-white px-6 py-[5px] rounded-[3px] hover:bg-[#d41d3f] font-bold transition-colors">
+                          ADD TO CART
+                        </button>
+                        <div className="flex items-center gap-2 mt-1">
+                          <input
+                            type="checkbox"
+                            id={`compare-${product.id}`}
+                            className="accent-[#0075ff]"
+                            checked={compareItems.includes(product.id)}
+                            onChange={() => toggleCompare(product.id)}
+                          />
+                          <label
+                            htmlFor={`compare-${product.id}`}
+                            className="text-sm cursor-pointer"
+                          >
+                            COMPARE
+                          </label>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              ) : (
-                <div className="flex flex-col flex-grow border-t pt-3">
-                  <div className="flex-grow">
-                    <div className="border-t border-gray-300 pt-2 text-xs text-gray-600 mb-1">
-                      {product.brand} | Sku: {product.sku}
-                    </div>
-                    <Link to={product.url}>
-                      <h3 className="text-gray-800 font-medium hover:text-[#e62245] cursor-pointer leading-tight">
-                        {product.name}
-                      </h3>
-                    </Link>
-                  </div>
-                  <div className="mt-1">
-                    <div className="flex items-center gap-1">
-                      <p className="font-bold">£{product.price.toFixed(2)}</p>
-                      <p className="text-sm text-gray-500 underline">
-                        (Ex. VAT)
-                      </p>
-                    </div>
-                    <div className="flex items-center gap-1 text-sm text-[#b3b3b5] mt-1">
-                      £{product.priceExVat.toFixed(2)}{" "}
-                      <span className="underline">(Inc. VAT)</span>
-                    </div>
-                    <div className="flex flex-col gap-2 mt-2">
-                      <button
-                        // onClick={() => handleAddToCart(product)}
-                        className="bg-[#e62245] text-white px-6 py-[5px] rounded-[3px] hover:bg-[#d41d3f] font-bold transition-colors"
-                      >
-                        ADD TO CART
-                      </button>
-                      <div className="flex items-center gap-2 mt-1">
-                        <input
-                          type="checkbox"
-                          id={`compare-${product.id}`}
-                          className="accent-[#0075ff]"
-                          checked={compareItems.includes(product.id)}
-                          onChange={() => toggleCompare(product.id)}
-                        />
-                        <label
-                          htmlFor={`compare-${product.id}`}
-                          className="text-sm cursor-pointer"
-                        >
-                          COMPARE
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-          ))}
+                )}
+              </div>
+            );
+          })}
         </div>
         {/* Pagination */}
-        <div className="flex items-center justify-between mt-10">
-          <div className="flex items-center">
-            {/* Previous button (only show if not on page 1) */}
-            {currentPage > 1 ? (
-              <button
-                onClick={() => setCurrentPage(currentPage - 1)}
-                className="border px-3 py-1 rounded hover:bg-gray-100 transition text-sm"
-              >
-                ← Previous
-              </button>
-            ) : (
-              <div></div>
-            )}
-            {/* Page numbers */}
-            <div className="flex gap-2">
-              {Array.from({ length: totalPages }).map((_, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => setCurrentPage(idx + 1)}
-                  className={`border px-3 py-1 rounded text-sm ${
-                    currentPage === idx + 1
-                      ? "bg-gray-200"
-                      : "hover:bg-gray-100"
-                  }`}
-                >
-                  {idx + 1}
-                </button>
-              ))}
-            </div>
-          </div>
+        {products.length > 0 && (
+          <>
+            <div className="flex items-center justify-between mt-10">
+              <div className="flex items-center">
+                {currentPage > 1 && (
+                  <button
+                    onClick={() => setCurrentPage(currentPage - 1)}
+                    className="border px-3 py-1 rounded hover:bg-gray-100 transition text-sm"
+                  >
+                    ← Previous
+                  </button>
+                )}
+                <div className="flex gap-2">
+                  {Array.from({ length: totalPages }).map((_, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => setCurrentPage(idx + 1)}
+                      className={`border px-3 py-1 rounded text-sm ${
+                        currentPage === idx + 1
+                          ? "bg-gray-200"
+                          : "hover:bg-gray-100"
+                      }`}
+                    >
+                      {idx + 1}
+                    </button>
+                  ))}
+                </div>
+              </div>
 
-          {/* Next button */}
-          {currentPage < totalPages ? (
-            <button
-              onClick={() => setCurrentPage(currentPage + 1)}
-              className="border px-3 py-1 rounded hover:bg-gray-100 transition text-sm"
-            >
-              Next →
-            </button>
-          ) : (
-            <div></div>
-          )}
-        </div>
-        <div className="mt-8 flex justify-end">
-          <div className="mt-8 flex justify-end">
-            <button
-              onClick={handleCompareSelected}
-              className={`${
-                compareItems.length >= 2
-                  ? "bg-[#e62245] hover:bg-[#d41d3f] text-white"
-                  : "bg-gray-200 hover:bg-gray-300"
-              } text-xs font-semibold px-6 py-2 rounded transition-colors`}
-            >
-              COMPARE SELECTED
-            </button>
-          </div>
-        </div>{" "}
+              {currentPage < totalPages && (
+                <button
+                  onClick={() => setCurrentPage(currentPage + 1)}
+                  className="border px-3 py-1 rounded hover:bg-gray-100 transition text-sm"
+                >
+                  Next →
+                </button>
+              )}
+            </div>
+            <div className="mt-8 flex justify-end">
+              <button
+                onClick={handleCompareSelected}
+                className={`${
+                  compareItems.length >= 2
+                    ? "bg-[#e62245] hover:bg-[#d41d3f] text-white"
+                    : "bg-gray-200 hover:bg-gray-300"
+                } text-xs font-semibold px-6 py-2 rounded transition-colors`}
+              >
+                COMPARE SELECTED
+              </button>
+            </div>
+          </>
+        )}
       </section>
       <section className="mt-12">
         <img
           src="https://cdn11.bigcommerce.com/s-ew2v2d3jn1/product_images/uploaded_images/banner-used-equipment.jpg"
-          alt=""
+          alt="Used Equipment Banner"
         />
         <div className="space-y-6 text-center mt-5">
           <p>
