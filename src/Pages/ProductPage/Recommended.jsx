@@ -103,7 +103,7 @@ const Recommended = () => {
       <div className="flex items-center justify-between border border-gray-200">
         <div className="relative group px-3 py-1">
           <div className="relative">
-            <h2 className="text-[#e62245] p-2 text-base md:text-2xl font-semibold w-fit pr-3 border-r border-gray-200">
+            <h2 className="text-[#e62245] text-base py-1 uppercase text-[20px] font-semibold w-fit pr-3 border-r border-gray-200">
               RECOMMENDED
             </h2>
             <span className="absolute -left-3 -bottom-[6px] h-[4px] w-0 bg-[#e62245] transition-all duration-300 group-hover:w-full"></span>

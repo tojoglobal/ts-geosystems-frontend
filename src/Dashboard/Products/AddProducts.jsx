@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { Editor } from "@tinymce/tinymce-react";
 import Select from "react-select";
@@ -19,10 +19,11 @@ const ProductAddForm = () => {
   const [productOptions, setProductOptions] = useState([]);
   const [softwareOptions, setSoftwareOptions] = useState([]);
 
-  const { register, handleSubmit, setValue, control, watch } = useForm({
+  const { register, handleSubmit, setValue, control, watch, reset } = useForm({
     defaultValues: {
       priceShowHide: 0,
       productOptionShowHide: 0,
+      clearance: false,
     },
   });
 
@@ -162,6 +163,14 @@ const ProductAddForm = () => {
           "Content-Type": "multipart/form-data",
         },
       });
+
+      // Reset the form after successful submission
+      reset();
+      setImages([]); // Clear the images
+      // In your onSubmit function after reset():
+      setValue("productOptions", []);
+      setValue("softwareOptions", []);
+      
       Swal.fire({
         icon: "success",
         title: "Product added successfully!",

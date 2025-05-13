@@ -186,21 +186,28 @@ const CategoryProduct = () => {
           } gap-4`}
         >
           {currentProducts.map((product) => {
-            // Parse image URLs
-            let imageUrl = "";
+            let images = [];
             try {
-              const images = JSON.parse(product.image_urls);
-              const firstImage = images[0] || "";
-              const cleanImagePath = firstImage.replace(/^["\[]+|["\]]+$/g, "");
-              imageUrl = `${import.meta.env.VITE_OPEN_APIURL}${cleanImagePath}`;
-            } catch (error) {
-              console.log("Error parsing image URLs:", error);
-              const cleanImagePath = (product.image_urls || "").replace(
-                /^["\[]+|["\]]+$/g,
-                ""
-              );
-              imageUrl = `${import.meta.env.VITE_OPEN_APIURL}${cleanImagePath}`;
+              images = JSON.parse(product.image_urls);
+            } catch (e) {
+              images = [product.image_urls];
             }
+
+            const firstImage = images[0]
+              ? `${import.meta.env.VITE_OPEN_APIURL}${images[0].replace(
+                  /^["\[]+|["\]]+$/g,
+                  ""
+                )}`
+              : "";
+            const secondImage = images[1]
+              ? `${import.meta.env.VITE_OPEN_APIURL}${images[1].replace(
+                  /^["\[]+|["\]]+$/g,
+                  ""
+                )}`
+              : firstImage;
+
+            const isHovered = hoveredProductId === product.id;
+            const displayImage = isHovered ? secondImage : firstImage;
 
             return (
               <div
@@ -229,7 +236,7 @@ const CategoryProduct = () => {
                       onMouseLeave={() => setHoveredProductId(null)}
                     >
                       <img
-                        src={imageUrl}
+                        src={displayImage}
                         alt={product.product_name}
                         className="w-full h-64 object-contain transition-all duration-300 ease-in-out"
                       />
@@ -246,12 +253,12 @@ const CategoryProduct = () => {
                       <div
                         onMouseEnter={() => setHoveredProductId(product.id)}
                         onMouseLeave={() => setHoveredProductId(null)}
-                        className="w-full h-full flex items-center justify-center"
+                        className="w-full h-full flex items-center justify-center transition-opacity duration-500 ease-in-out"
                       >
                         <img
-                          src={imageUrl}
+                          src={displayImage}
                           alt={product.product_name}
-                          className="w-auto h-56 object-contain transition-all duration-300 ease-in-out"
+                          className="w-auto h-56 object-contain transition-opacity duration-500 ease-in-out"
                         />
                       </div>
                     </Link>
@@ -341,9 +348,9 @@ const CategoryProduct = () => {
                     </div>
                   </div>
                 ) : (
-                  <div className="flex flex-col flex-grow border-t pt-3">
+                  <div className="flex flex-col flex-grow border-t mt-4 pt-1">
                     <div className="flex-grow">
-                      <div className="border-t border-gray-300 pt-2 text-xs text-gray-600 mb-1">
+                      <div className="pt-2 text-xs text-gray-600 mb-1">
                         {product.brand_name} | Sku: {product.sku}
                       </div>
                       <Link
