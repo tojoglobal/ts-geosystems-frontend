@@ -1,6 +1,5 @@
-import { useState } from "react";
 import { IoSearch } from "react-icons/io5";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import AudioPlayer from "react-h5-audio-player";
 import "react-h5-audio-player/lib/styles.css";
 import { Facebook, Twitter, Linkedin, Mail, MessageSquare } from "lucide-react";
@@ -9,6 +8,8 @@ import useDataQuery from "../../../utils/useDataQuery";
 
 const BlogDetails = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
+
   const { data: blogData = {}, isLoading } = useDataQuery(
     ["singleBlog", id],
     `/api/blogs/${id}`,
@@ -30,7 +31,6 @@ const BlogDetails = () => {
   // Create tabs - "Back to Blog" + all blog types
   const tabs = ["Back to Blog", ...blogTypes.map((type) => type.name)];
 
-  const [activeTab, setActiveTab] = useState("All");
   const iconClass =
     "w-9 h-9 flex items-center justify-center rounded-md text-white";
 
@@ -40,10 +40,19 @@ const BlogDetails = () => {
     blog.title || "Check out this amazing blog"
   );
 
-  // Split images for display - first 2 for top, next 2 for middle, rest for bottom
+  // Split images for display
   const topImages = images.slice(0, 2);
   const middleImages = images.slice(2, 4);
   const bottomImages = images.slice(4, 6);
+
+  const handleTabClick = (tab) => {
+    if (tab === "Back to Blog") {
+      navigate("/ts-blog");
+    } else {
+      // Navigate to filtered blog list view
+      navigate(`/ts-blog?type=${encodeURIComponent(tab)}`);
+    }
+  };
 
   if (isLoading) return <div className="p-3 text-center">Loading blog...</div>;
   if (!blog.id) return <div className="p-3 text-center">Blog not found</div>;
@@ -63,13 +72,11 @@ const BlogDetails = () => {
       <div className="border-t border-b py-4 mt-12 flex justify-center items-center gap-6 text-[#db7084] font-medium">
         {tabs.map((tab) => (
           <button
-            className={`capitalize text-[14px] font-normal hover:text-[#754e55] ${
-              activeTab === tab ? "text-[#e62245] underline" : ""
+            className={`capitalize cursor-pointer text-[14px] font-normal hover:text-[#754e55] ${
+              tab === blog.blog_type ? "text-[#e62245] underline" : ""
             }`}
             key={tab}
-            onClick={() =>
-              tab === "Back to Blog" ? window.history.back() : setActiveTab(tab)
-            }
+            onClick={() => handleTabClick(tab)}
           >
             {tab.replace("_", " ")}
           </button>
@@ -79,7 +86,7 @@ const BlogDetails = () => {
         </button>
       </div>
       <section className="max-w-2xl mx-auto my-10">
-        {/* Top Images - Show if exists */}
+        {/* Top Images */}
         {topImages.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
             {topImages.map((image, index) => (
@@ -92,7 +99,9 @@ const BlogDetails = () => {
             ))}
           </div>
         )}
-        <h2 className="text-2xl font-bold text-[#e62245] capitalize">{blog.title}</h2>
+        <h2 className="text-2xl font-bold text-[#e62245] capitalize">
+          {blog.title}
+        </h2>
         <div className="flex items-center gap-4 my-4">
           <img
             src="https://dropinblog.net/34252524/authors/G213PNG.png"
@@ -134,7 +143,6 @@ const BlogDetails = () => {
           className="space-y-3 text-sm blog-content"
           dangerouslySetInnerHTML={{ __html: blog.content || "" }}
         />
-        {/* Bottom Images - Show if exists */}
         {bottomImages.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-8">
             {bottomImages.map((image, index) => (
@@ -147,16 +155,14 @@ const BlogDetails = () => {
             ))}
           </div>
         )}
-
         {/* Tags */}
         {tags.length > 0 && (
           <div className="flex flex-wrap gap-1 underline text-sm text-[#e62245]">
             {tags.map((tag, index) => (
-              <span key={index}>{tag}</span>
+              <span key={index}>#{tag}</span>
             ))}
           </div>
         )}
-
         {/* Social Sharing */}
         <div className="flex gap-2 my-6">
           <a
@@ -167,7 +173,6 @@ const BlogDetails = () => {
           >
             <Facebook size={16} />
           </a>
-
           <a
             href={`https://twitter.com/intent/tweet?url=${blogUrl}&text=${blogTitle}`}
             target="_blank"
@@ -176,7 +181,6 @@ const BlogDetails = () => {
           >
             <Twitter size={16} />
           </a>
-
           <a
             href={`https://www.linkedin.com/sharing/share-offsite/?url=${blogUrl}`}
             target="_blank"
@@ -185,7 +189,6 @@ const BlogDetails = () => {
           >
             <Linkedin size={16} />
           </a>
-
           <a
             href={`https://www.reddit.com/submit?url=${blogUrl}&title=${blogTitle}`}
             target="_blank"
@@ -194,7 +197,6 @@ const BlogDetails = () => {
           >
             <MessageSquare size={16} />
           </a>
-
           <a
             href={`https://wa.me/?text=${blogTitle}%20${blogUrl}`}
             target="_blank"
@@ -211,7 +213,6 @@ const BlogDetails = () => {
             <Mail size={16} />
           </a>
         </div>
-
         <Link
           to="/ts-blog"
           className="text-sm text-[#e62245] hover:underline block mt-4"
