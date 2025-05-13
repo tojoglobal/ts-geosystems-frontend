@@ -76,7 +76,7 @@ const AdminLogin = () => {
       <div className="left hidden md:block">
         <div className="w-[80%]">
           <p className="mb-2">Hello, Welcome!</p>
-          <p className="text-center text-gray-600">
+          <p className="text-center text-gray-200">
             waiting for your <span className="font-semibold">Login</span>
           </p>
         </div>
