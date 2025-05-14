@@ -119,22 +119,24 @@ const SearchOverlay = ({ isOpen, onClose }) => {
     setShowResultsView(false);
   };
 
-  if (showResultsView) {
-    return (
-      <SearchResultsView
-        products={displayProducts}
-        onClose={handleCloseResultsView}
-        searchText={searchText}
-      />
-    );
-  }
-
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     if (searchText.trim()) {
       saveToLocalStorage(searchText.trim());
     }
   };
+
+  if (showResultsView) {
+    return (
+      <SearchResultsView
+        products={displayProducts}
+        onClose={handleCloseResultsView}
+        searchText={searchText}
+        handleSearchSubmit={handleSearchSubmit}
+        setSearchText={setSearchText}
+      />
+    );
+  }
 
   const handleSort = (e) => {
     setSortOrder(e.target.value);
