@@ -1,5 +1,4 @@
 // BlogTable.jsx
-import { useEffect, useState } from "react";
 import { FaEdit, FaTrash, FaEye } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";

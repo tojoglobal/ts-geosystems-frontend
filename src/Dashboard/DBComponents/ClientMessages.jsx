@@ -1,23 +1,56 @@
-import { toast } from "react-toastify";
 import useDataQuery from "../../utils/useDataQuery";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
+import Swal from "sweetalert2";
 
 const ClientMessages = () => {
   const axiosPublic = useAxiospublic();
   const {
-    data={},
+    data = { messages: [] },
     isLoading,
     refetch,
   } = useDataQuery(["contactMessages"], "/api/contact-messages");
 
   const handleDelete = async (id) => {
-    try {
-      await axiosPublic.delete(`/api/contact-messages/${id}`);
-      toast.success("Message deleted successfully");
-      refetch();
-    } catch (error) {
-      console.error("Error deleting message:", error);
-      toast.error("Failed to delete message");
+    // Show confirmation dialog
+    const result = await Swal.fire({
+      title: "Delete Message?",
+      text: "This action cannot be undone!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "Cancel",
+      background: "#1e293b",
+      color: "#f8fafc",
+      confirmButtonColor: "#e11d48",
+      cancelButtonColor: "#64748b",
+    });
+    if (result.isConfirmed) {
+      try {
+        await axiosPublic.delete(`/api/contact-messages/${id}`);
+        refetch();
+
+        // Show success notification
+        Swal.fire({
+          title: "Deleted!",
+          text: "The message has been deleted.",
+          icon: "success",
+          background: "#1e293b",
+          color: "#f8fafc",
+          confirmButtonColor: "#e11d48",
+        });
+      } catch (error) {
+        console.error("Error deleting message:", error);
+
+        // Show error notification
+        Swal.fire({
+          title: "Error!",
+          text: "Failed to delete message",
+          icon: "error",
+          background: "#1e293b",
+          color: "#f8fafc",
+          confirmButtonColor: "#e11d48",
+        });
+      }
     }
   };
 
@@ -36,7 +69,7 @@ const ClientMessages = () => {
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold">Client Messages</h2>
         <div className="text-sm text-gray-400">
-          Total Messages: {data?.messages.length}
+          Total Messages: {data?.messages?.length || 0}
         </div>
       </div>
       <div className="overflow-x-auto">
@@ -56,13 +89,15 @@ const ClientMessages = () => {
             {data?.messages.map((message) => (
               <tr
                 key={message.id}
-                className="bg-slate-800 border-b border-slate-600"
+                className="bg-slate-800 border-b border-slate-600 hover:bg-slate-700"
               >
                 <td className="px-4 py-2">{`${message.first_name} ${message.last_name}`}</td>
                 <td className="px-4 py-2">{message.email}</td>
                 <td className="px-4 py-2">{message.phone}</td>
                 <td className="px-4 py-2">
-                  <div className="max-w-xs truncate">{message.message}</div>
+                  <div className="max-w-xs truncate hover:text-clip">
+                    {message.message}
+                  </div>
                 </td>
                 <td className="px-4 py-2">
                   {new Date(message.created_at).toLocaleDateString()}
@@ -81,7 +116,8 @@ const ClientMessages = () => {
                 <td className="px-4 py-2">
                   <button
                     onClick={() => handleDelete(message.id)}
-                    className="text-red-400 cursor-pointer hover:text-red-300"
+                    className="text-red-400 hover:text-red-300 transition-colors"
+                    title="Delete message"
                   >
                     Delete
                   </button>
