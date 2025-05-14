@@ -84,10 +84,10 @@ const AppLayout = () => {
         <Route path="/user/login" element={<Login />} />
         <Route path="/user/create_account" element={<Register />} />
         <Route path="/cc" element={<CertificateTracking />} />
-        <Route path="/remote-support" element={<RemoteSupport />} />
         <Route path="/checkout" element={<Checkout />} />
 
         <Route element={<ProductLayout />}>
+          <Route path="/remote-support" element={<RemoteSupport />} />
           <Route path="/:category" element={<CategoryProduct />} />
           <Route path="/:category/:subcategory" element={<CategoryProduct />} />
           <Route path="/products/:id/:slug" element={<ProductDetails />} />

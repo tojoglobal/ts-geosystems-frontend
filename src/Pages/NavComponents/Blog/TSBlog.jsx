@@ -95,7 +95,7 @@ const TSBlog = () => {
           Home
         </Link>
         <span>/</span>
-        <Link to="/ts-blog" className="uppercase text-[#e62245]">
+        <Link to="/ts-blog" className="capitalize text-[#e62245]">
           TS Blog
         </Link>
       </div>

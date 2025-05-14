@@ -100,7 +100,7 @@ const Hire = () => {
           Home
         </Link>
         <span>/</span>
-        <Link to="/hire" className="uppercase text-[#e62245]">
+        <Link to="/hire" className="capitalize text-[#e62245]">
           Hire
         </Link>
       </div>
@@ -122,13 +122,16 @@ const Hire = () => {
         </Link>
       </div>
       <div className="space-y-6 text-gray-700 border-t pt-4 border-gray-200">
-        <h2 className="text-lg font-semibold">{hireContent?.title}</h2>
+        <h2 className="text-[14px] font-bold">
+          {hireContent?.title}
+        </h2>
         <div
+          className="text-[14px] font-normal"
           dangerouslySetInnerHTML={{ __html: hireContent?.description }}
         ></div>
       </div>
       <div
-        className="bg-[#ebedf1] mt-12 p-8 text-center rounded-lg"
+        className="bg-[#ebedf1] mt-12 text-[14px] font-normal p-8 text-center rounded-lg"
         dangerouslySetInnerHTML={{ __html: hireContent?.infoBox }}
       ></div>
       <div className="max-w-3xl mx-auto my-12">

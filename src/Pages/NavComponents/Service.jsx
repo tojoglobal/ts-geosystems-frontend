@@ -79,7 +79,7 @@ const Service = () => {
           Home
         </Link>
         <span>/</span>
-        <Link to="/Service" className="uppercase text-[#e62245]">
+        <Link to="/Service" className="capitalize text-[#e62245]">
           Service
         </Link>
       </div>
@@ -330,6 +330,15 @@ const Service = () => {
             </p>
           </div>
         </form>
+      </div>
+      <div>
+        {/* make it dynamic */}
+        <img
+          src={`${
+            import.meta.env.VITE_OPEN_APIURL
+          }/uploads/hire/hire-banner-1746352683586.jpg`}
+          alt=""
+        />
       </div>
     </div>
   );

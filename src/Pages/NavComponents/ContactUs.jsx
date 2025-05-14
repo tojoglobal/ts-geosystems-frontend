@@ -14,7 +14,7 @@ import useDataQuery from "../../utils/useDataQuery";
 
 const ContactUs = () => {
   const axiosPublicUrl = useAxiospublic();
-  const { data = [], isLoading:loading } = useDataQuery(
+  const { data = [], isLoading: loading } = useDataQuery(
     ["popularBrand"],
     "/api/brands"
   );
@@ -74,7 +74,7 @@ const ContactUs = () => {
           Home
         </Link>
         <span>/</span>
-        <Link to="/contact-us" className="uppercase text-[#e62245]">
+        <Link to="/contact-us" className="capitalize text-[#e62245]">
           Contact Us
         </Link>
       </div>
@@ -295,11 +295,11 @@ const ContactUs = () => {
             </SwiperSlide>
           ))}
         </Swiper>
-        <button className="cursor-pointer swiper-button-prev-custom hidden group-hover:block absolute -left-1 md:-left-4 top-[78%] -translate-y-1/2 z-10 bg-white shadow-md rounded-full p-2 hover:bg-gray-100">
-          <IoIosArrowBack size={18} className="text-gray-600" />
+        <button className="cursor-pointer swiper-button-prev-custom hidden group-hover:block absolute -left-1 md:-left-4 top-[78%] -translate-y-1/2 z-10 bbg-[#696666e3] shadow-md rounded-full p-2 hover:bg-[#111111]">
+          <IoIosArrowBack size={18} className="text-white" />
         </button>
-        <button className="cursor-pointer swiper-button-next-custom hidden group-hover:block absolute -right-1 md:-right-4 top-[78%] -translate-y-1/2 z-10 bg-white shadow-md rounded-full p-2 hover:bg-gray-100">
-          <IoIosArrowForward size={18} className="text-gray-600" />
+        <button className="cursor-pointer swiper-button-next-custom hidden group-hover:block absolute -right-1 md:-right-4 top-[78%] -translate-y-1/2 z-10 bg-[#696666e3] shadow-md rounded-full p-2 hover:bg-[#111111]">
+          <IoIosArrowForward size={18} className="text-white" />
         </button>
       </section>
     </div>

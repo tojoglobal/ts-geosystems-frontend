@@ -185,7 +185,7 @@ const ProductSidebar = () => {
           </div>
         )
       )}
-      <div className="mt-6 overflow-hidden rounded-sm">
+      <div className="mt-6 overflow-hidden rounded-[4px]">
         <img
           src="https://ts-geosystems.com.bd/assets/images/6enPbrand-leica-adsp.png"
           alt="Leica Authorized Distributor"

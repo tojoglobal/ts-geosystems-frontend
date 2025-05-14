@@ -95,7 +95,7 @@ const UserManuals = () => {
           Home
         </Link>
         <span>/</span>
-        <Link to="/support" className="uppercase text-[#e62245]">
+        <Link to="/support" className="capitalize text-[#e62245]">
           Support
         </Link>
         <span>/</span>
