@@ -56,7 +56,7 @@ const ClientMessages = () => {
       html: `
         <div class="text-left">
           <p class="mb-2"><strong>Email:</strong> ${message.email}</p>
-          <p class="mb-2"><strong>Phone:</strong> ${message.phone}</p>
+          <p class="mb-2"><strong>Phone:</strong> ${message.phone || "N/A"}</p>
           <p class="mb-2"><strong>Date:</strong> ${new Date(
             message.created_at
           ).toLocaleString()}</p>
@@ -99,7 +99,7 @@ const ClientMessages = () => {
               <th className="px-4 py-2">Name</th>
               <th className="px-4 py-2">Email</th>
               <th className="px-4 py-2">Phone</th>
-              <th className="px-4 py-2">Message</th>
+              <th className="px-4 py-2">Message Preview</th>
               <th className="px-4 py-2">Date</th>
               <th className="px-4 py-2">Actions</th>
             </tr>
@@ -112,13 +112,13 @@ const ClientMessages = () => {
               >
                 <td className="px-4 py-2">{`${message.first_name} ${message.last_name}`}</td>
                 <td className="px-4 py-2">{message.email}</td>
-                <td className="px-4 py-2">{message.phone}</td>
+                <td className="px-4 py-2">{message.phone || "N/A"}</td>
                 <td
                   className="px-4 py-2 cursor-pointer"
                   onClick={() => showFullMessage(message)}
                 >
                   <div className="max-w-xs truncate hover:text-clip hover:text-white">
-                    {message.message}
+                    {message.message.substring(0, 50)}...
                   </div>
                 </td>
                 <td className="px-4 py-2">
@@ -127,14 +127,14 @@ const ClientMessages = () => {
                 <td className="px-4 py-2 space-x-2">
                   <button
                     onClick={() => showFullMessage(message)}
-                    className="text-blue-400 hover:text-blue-300 transition-colors"
+                    className="text-blue-400 hover:text-blue-300 transition-colors px-2 py-1 rounded"
                     title="View full message"
                   >
                     View
                   </button>
                   <button
                     onClick={() => handleDelete(message.id)}
-                    className="text-red-400 hover:text-red-300 transition-colors"
+                    className="text-red-400 hover:text-red-300 transition-colors cursor-pointer px-2 py-1 rounded"
                     title="Delete message"
                   >
                     Delete
