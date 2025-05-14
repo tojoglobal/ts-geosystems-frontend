@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 import { useEffect, useRef, useState } from "react";
 import Slider from "react-slick";
 import { IoCloseOutline, IoSearchSharp } from "react-icons/io5";
@@ -19,40 +20,40 @@ const POPULAR_SEARCHES = [
   "cloudworx",
   "cmp104",
   "cs20",
-  "disto"
+  "disto",
 ];
 
 const RECOMMENDED_PRODUCTS = [
   {
     name: "Leica GVP621 Soft Bag",
     price: "£35.40",
-    image: "/images/products/gvp621-soft-bag.jpg"
+    image: "/images/products/gvp621-soft-bag.jpg",
   },
   {
     name: "Leica GVP703 Soft Bag",
     price: "£39.60",
-    image: "/images/products/gvp703-soft-bag.jpg"
+    image: "/images/products/gvp703-soft-bag.jpg",
   },
   {
     name: "Leica GVP102 Soft Bag",
     price: "£64.80",
-    image: "/images/products/gvp102-soft-bag.jpg"
+    image: "/images/products/gvp102-soft-bag.jpg",
   },
   {
     name: "Radiodetection RD Carry Bag",
     price: "£156.00",
-    image: "/images/products/rd-carry-bag.jpg"
+    image: "/images/products/rd-carry-bag.jpg",
   },
   {
     name: "Leica BLK360 Mission Bag",
     price: "£164.95",
-    image: "/images/products/blk360-mission-bag.jpg"
+    image: "/images/products/blk360-mission-bag.jpg",
   },
   {
     name: "Radiodetection CAT & Genny Carry Bag",
     price: "£110.00",
-    image: "/images/products/cat-genny-bag.jpg"
-  }
+    image: "/images/products/cat-genny-bag.jpg",
+  },
 ];
 
 const SearchOverlay = ({ isOpen, onClose }) => {
@@ -63,7 +64,7 @@ const SearchOverlay = ({ isOpen, onClose }) => {
     "blog",
     "leica",
     "contact",
-    "ortact"
+    "ortact",
   ]);
 
   const { data: searchResults, isLoading } = useDataQuery(
@@ -74,7 +75,6 @@ const SearchOverlay = ({ isOpen, onClose }) => {
 
   // Add these lines before the return statement
   const displayProducts = searchResults?.products || RECOMMENDED_PRODUCTS;
-  const totalResults = searchResults?.total || RECOMMENDED_PRODUCTS.length;
 
   const handleRemoveSearch = (index) => {
     setLatestSearches(latestSearches.filter((_, i) => i !== index));
@@ -130,6 +130,7 @@ const SearchOverlay = ({ isOpen, onClose }) => {
       document.body.style.overflow = "unset";
     };
   }, [isOpen]);
+
   return (
     <>
       <div
@@ -171,7 +172,9 @@ const SearchOverlay = ({ isOpen, onClose }) => {
         </div>
         {/* Latest Search Section */}
         <div className="px-6 mt-2 mb-6 flex max-w-[75%] items-center mx-auto">
-          <h2 className="text-gray-700 text-sm font-semibold mr-2">Latest searches:</h2>
+          <h2 className="text-gray-700 text-sm font-semibold mr-2">
+            Latest searches:
+          </h2>
           <div className="flex flex-wrap gap-2">
             {latestSearches.map((item, i) => (
               <div
@@ -198,9 +201,9 @@ const SearchOverlay = ({ isOpen, onClose }) => {
           </div>
         </div>
         {/* Bottom Section */}
-        <div className="flex px-12 pb-12">
+        <div className="flex flex-col md:flex-row px-12 pb-12">
           {/* Left - Popular Searches */}
-          <div className="w-1/4 p-5 bg-white">
+          <div className="w-full md:w-[20%] p-5 bg-white">
             <h3 className="font-semibold text-lg mb-2">Popular searches</h3>
             <ul className="text-sm text-gray-700 space-y-3">
               {POPULAR_SEARCHES.map((search, i) => (
@@ -211,17 +214,19 @@ const SearchOverlay = ({ isOpen, onClose }) => {
             </ul>
           </div>
           {/* Right - Product Slider */}
-          <div className="w-3/4 pl-10">
+          <div className="w-full md:w-[80%] pl-10">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="font-semibold text-lg">
-                {searchText ? `${totalResults} results found` : "Recommended products"}
+              <h3 className="text-sm">
+                {searchText
+                  ? `${searchResults?.products?.length || 0} results found`
+                  : "Recommended products"}
               </h3>
               {searchText && (
                 <div className="flex items-center gap-4">
                   <div className="flex items-center gap-2">
                     <span className="text-sm text-gray-600">Sort by:</span>
-                    <select 
-                      className="text-sm border rounded px-2 py-1"
+                    <select
+                      className="appearance-none text-sm border rounded px-2 py-1"
                       value={sortOrder}
                       onChange={handleSort}
                     >
@@ -234,26 +239,35 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                 </div>
               )}
             </div>
-            
             {isLoading ? (
               <div className="text-center py-10">Loading...</div>
             ) : displayProducts.length <= 4 ? (
               <div className="grid grid-cols-4 gap-4">
                 {displayProducts.map((product, index) => (
-                  <div key={index} className="h-full min-h-[350px] flex flex-col bg-white p-6 shadow-sm border border-gray-200 hover:border-gray-300 transition-all duration-200">
+                  <div
+                    key={index}
+                    className="h-full min-h-[350px] flex flex-col bg-white p-6 shadow-sm border border-gray-200 hover:border-gray-300 transition-all duration-200"
+                  >
                     <img
-                      src={product.image_urls ? JSON.parse(product.image_urls)[0] : product.image}
+                      src={
+                        product.image_urls
+                          ? `${import.meta.env.VITE_OPEN_APIURL}${JSON.parse(
+                              product.image_urls
+                            )[0].replace(/^["\[]+|["\]]+$/g, "")}`
+                          : product.image
+                      }
                       alt={product.product_name || product.name}
                       className="mx-auto h-44 object-contain mb-3"
                     />
                     <p className="text-sm font-medium mb-1 hover:text-[#e62245] cursor-pointer">
                       {product.product_name || product.name}
                     </p>
-                    <p className="text-sm font-semibold mt-auto">{product.price}</p>
-                    <button className="mt-2 flex items-center justify-center gap-2 bg-[#e62245] text-white py-2 px-4 rounded hover:bg-[#d41f3f] transition-colors">
-                      <MdAddShoppingCart size={20} />
-                      Add to Cart
-                    </button>
+                    <div className="flex justify-between items-center mt-auto">
+                      <p className="font-semibold">{product.price}</p>
+                      <button className="mt-2 w-10 ml-auto p-[6px] flex items-center justify-center gap-2 bg-[#e62245] text-white rounded hover:bg-[#d41f3f] transition-colors">
+                        <MdAddShoppingCart size={27} />
+                      </button>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -263,7 +277,13 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                   <div key={index} className="px-2">
                     <div className="h-full min-h-[350px] flex flex-col bg-white p-6 shadow-sm border border-gray-200 hover:border-gray-300 transition-all duration-200">
                       <img
-                        src={product.image_urls ? JSON.parse(product.image_urls)[0] : product.image}
+                        src={
+                          product.image_urls
+                            ? `${import.meta.env.VITE_OPEN_APIURL}${JSON.parse(
+                                product.image_urls
+                              )[0].replace(/^["\[]+|["\]]+$/g, "")}`
+                            : product.image
+                        }
                         alt={product.product_name || product.name}
                         className="mx-auto h-44 object-contain mb-3"
                       />
@@ -271,9 +291,11 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                         {product.product_name || product.name}
                       </p>
                       <div className="flex justify-between items-center mt-auto pt-4">
-                        <p className="text-sm font-semibold text-gray-800">£{product.price}</p>
-                        <button className="bg-[#e62245] p-2 rounded text-white hover:bg-[#d41d3f]">
-                          <MdAddShoppingCart className="text-lg" />
+                        <p className="text-sm font-semibold text-gray-800">
+                          £{product.price}
+                        </p>
+                        <button className="bg-[#e62245] p-[6px] rounded text-white hover:bg-[#d41d3f]">
+                          <MdAddShoppingCart size={24} />
                         </button>
                       </div>
                     </div>
@@ -299,7 +321,6 @@ const SearchOverlay = ({ isOpen, onClose }) => {
 };
 
 export default SearchOverlay;
-
 
 // const SUGGESTIONS = [
 //   "bag",
