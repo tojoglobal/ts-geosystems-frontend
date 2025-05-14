@@ -9,6 +9,7 @@ import { RxCross1 } from "react-icons/rx";
 import PrevArrow from "../Components/PrevArrow";
 import NextArrow from "../Components/NextArrow";
 import useDataQuery from "../utils/useDataQuery";
+import SearchResultsView from "./SearchResultsView";
 
 const POPULAR_SEARCHES = [
   "rtc360",
@@ -59,6 +60,7 @@ const RECOMMENDED_PRODUCTS = [
 const SearchOverlay = ({ isOpen, onClose }) => {
   const [searchText, setSearchText] = useState("");
   const [sortOrder, setSortOrder] = useState("relevance");
+  const [showResultsView, setShowResultsView] = useState(false);
   const overlayRef = useRef(null);
   const [latestSearches, setLatestSearches] = useState([
     "blog",
@@ -73,51 +75,10 @@ const SearchOverlay = ({ isOpen, onClose }) => {
     { enabled: !!searchText }
   );
 
-  // Add these lines before the return statement
-  const displayProducts = searchResults?.products || RECOMMENDED_PRODUCTS;
-
-  const handleRemoveSearch = (index) => {
-    setLatestSearches(latestSearches.filter((_, i) => i !== index));
-  };
-
-  const handleClearAll = () => {
-    setLatestSearches([]);
-  };
-
-  const saveToLocalStorage = (value) => {
-    let updated = [
-      value,
-      ...latestSearches.filter((item) => item !== value),
-    ].slice(0, 5);
-    setLatestSearches(updated);
-    localStorage.setItem("latestSearches", JSON.stringify(updated));
-  };
-
-  const handleSearchSubmit = (e) => {
-    e.preventDefault();
-    if (searchText.trim()) {
-      saveToLocalStorage(searchText.trim());
-    }
-  };
-
-  const handleSort = (e) => {
-    setSortOrder(e.target.value);
-  };
-
   useEffect(() => {
     const saved = JSON.parse(localStorage.getItem("latestSearches")) || [];
     setLatestSearches(saved);
   }, []);
-
-  const settings = {
-    dots: false,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 5,
-    slidesToScroll: 1,
-    prevArrow: <PrevArrow />,
-    nextArrow: <NextArrow />,
-  };
 
   useEffect(() => {
     if (isOpen) {
@@ -130,6 +91,64 @@ const SearchOverlay = ({ isOpen, onClose }) => {
       document.body.style.overflow = "unset";
     };
   }, [isOpen]);
+
+  const displayProducts = searchResults?.products || RECOMMENDED_PRODUCTS;
+
+  const handleRemoveSearch = (index) => {
+    setLatestSearches(latestSearches.filter((_, i) => i !== index));
+  };
+
+  const handleClearAll = () => {
+    setLatestSearches([]);
+  };
+
+  const handleViewAll = () => {
+    setShowResultsView(true);
+  };
+
+  const saveToLocalStorage = (value) => {
+    let updated = [
+      value,
+      ...latestSearches.filter((item) => item !== value),
+    ].slice(0, 5);
+    setLatestSearches(updated);
+    localStorage.setItem("latestSearches", JSON.stringify(updated));
+  };
+
+  const handleCloseResultsView = () => {
+    setShowResultsView(false);
+  };
+
+  if (showResultsView) {
+    return (
+      <SearchResultsView
+        products={displayProducts}
+        onClose={handleCloseResultsView}
+        searchText={searchText}
+      />
+    );
+  }
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (searchText.trim()) {
+      saveToLocalStorage(searchText.trim());
+    }
+  };
+
+  const handleSort = (e) => {
+    setSortOrder(e.target.value);
+  };
+
+  const settings = {
+    dots: false,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 5,
+    slidesToScroll: 1,
+    prevArrow: <PrevArrow />,
+    nextArrow: <NextArrow />,
+  };
 
   return (
     <>
@@ -213,32 +232,42 @@ const SearchOverlay = ({ isOpen, onClose }) => {
               ))}
             </ul>
           </div>
+
           {/* Right - Product Slider */}
           <div className="w-full md:w-[80%] pl-10">
-            <div className="flex justify-between items-center mb-4">
+            <div className="flex justify-between items-center mb-4 mx-2">
               <h3 className="text-sm">
                 {searchText
                   ? `${searchResults?.products?.length || 0} results found`
                   : "Recommended products"}
               </h3>
-              {searchText && (
+              {searchText && displayProducts.length > 0 && (
                 <div className="flex items-center gap-4">
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm text-gray-600">Sort by:</span>
-                    <select
-                      className="appearance-none text-sm border rounded px-2 py-1"
-                      value={sortOrder}
-                      onChange={handleSort}
-                    >
-                      <option value="relevance">Relevance</option>
-                      <option value="price_asc">Price: Low to High</option>
-                      <option value="price_desc">Price: High to Low</option>
-                      <option value="name_asc">Name: A to Z</option>
-                    </select>
-                  </div>
+                  <button
+                    onClick={handleViewAll}
+                    className="text-sm cursor-pointer text-[#e62245] hover:underline"
+                  >
+                    View All
+                  </button>
+                  {showResultsView && (
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm text-gray-600">Sort by:</span>
+                      <select
+                        className="appearance-none text-sm border rounded px-2 py-1"
+                        value={sortOrder}
+                        onChange={handleSort}
+                      >
+                        <option value="relevance">Relevance</option>
+                        <option value="price_asc">Price: Low to High</option>
+                        <option value="price_desc">Price: High to Low</option>
+                        <option value="name_asc">Name: A to Z</option>
+                      </select>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
+
             {isLoading ? (
               <div className="text-center py-10">Loading...</div>
             ) : displayProducts.length <= 4 ? (
@@ -248,6 +277,7 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                     key={index}
                     className="h-full min-h-[350px] flex flex-col bg-white p-6 shadow-sm border border-gray-200 hover:border-gray-300 transition-all duration-200"
                   >
+                    {/* ... product display code ... */}
                     <img
                       src={
                         product.image_urls
@@ -306,8 +336,6 @@ const SearchOverlay = ({ isOpen, onClose }) => {
           </div>
         </div>
       </div>
-      {/* </div> */}
-      {/* Backdrop Overlay inside relative wrapper */}
       {isOpen && (
         <div
           className={`fixed top-0 left-0 right-0 bottom-0 w-full h-full z-[30] bg-black/85 transition-transform duration-500 ease-in-out transform ${
@@ -321,27 +349,3 @@ const SearchOverlay = ({ isOpen, onClose }) => {
 };
 
 export default SearchOverlay;
-
-// const SUGGESTIONS = [
-//   "bag",
-//   "single bay battery charger",
-//   "geb341 multi-bay battery",
-//   "geb312 single-bay battery",
-//   "geb311 single-bay battery"
-// ];
-
-// {/* Add suggestions section */}
-// <div className="px-6 mt-2 mb-4 max-w-[75%] mx-auto">
-//   <div className="flex flex-wrap gap-2">
-//     <span className="text-gray-700 text-sm font-semibold mr-2">Suggestions:</span>
-//     {SUGGESTIONS.map((suggestion, i) => (
-//       <button
-//         key={i}
-//         className="text-sm text-gray-700 hover:text-[#e62245]"
-//         onClick={() => setSearchText(suggestion)}
-//       >
-//         {suggestion}
-//       </button>
-//     ))}
-//   </div>
-// </div>
