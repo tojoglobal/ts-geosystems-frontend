@@ -28,6 +28,7 @@ const AdminUpdateHire = () => {
       description: "",
       infoBox: "",
       imageUrl: "",
+      show_buttons: true,
       links: {
         contactUs: "",
         privacyPolicy: "",
@@ -57,6 +58,7 @@ const AdminUpdateHire = () => {
         description: hireContent.description || "",
         infoBox: hireContent.infoBox || "",
         imageUrl: hireContent.imageUrl || "",
+        show_buttons: hireContent.show_buttons || "",
         links: hireContent.links || {
           contactUs: "",
           privacyPolicy: "",
@@ -80,6 +82,7 @@ const AdminUpdateHire = () => {
       formData.append("description", data.description);
       formData.append("infoBox", data.infoBox);
       formData.append("imageUrl", data.imageUrl);
+      formData.append("show_buttons", data.show_buttons); 
 
       // Stringify and append the links object
       formData.append("links", JSON.stringify(data.links));
@@ -119,6 +122,18 @@ const AdminUpdateHire = () => {
         <Loader />
       ) : (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+          <div className="space-y-2">
+            <label className="inline-flex items-center">
+              <input
+                type="checkbox"
+                {...register("show_buttons")}
+                className="form-checkbox h-5 w-5 text-[#e62245] rounded focus:ring-[#e62245] border-gray-300"
+              />
+              <span className="ml-2 text-sm">
+                Show Hire Enquiry & Credit Account Application Buttons
+              </span>
+            </label>
+          </div>
           {/* Image and Title Section */}
           <div className="flex flex-col lg:flex-row gap-4">
             {/* Image Upload Section */}
@@ -267,7 +282,6 @@ const AdminUpdateHire = () => {
               </div>
             </div>
           </div>
-
           {/* Submit Button */}
           <div className="flex justify-start pt-2">
             <Button text={"Save Changes"} disabled={isUploading} />

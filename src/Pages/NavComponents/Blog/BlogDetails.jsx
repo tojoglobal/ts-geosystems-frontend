@@ -120,13 +120,13 @@ const BlogDetails = () => {
             </p>
           </div>
         </div>
-        <div className="my-6 shadow-xl">
+        {/* <div className="my-6 shadow-xl">
           <AudioPlayer
             src="your-audio-file-url.mp3"
             autoPlay={false}
             controls
           />
-        </div>
+        </div> */}
         {middleImages.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-8">
             {middleImages.map((image, index) => (
