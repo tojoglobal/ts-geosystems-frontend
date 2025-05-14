@@ -5,8 +5,15 @@ import {
   DollarSign,
   ShoppingCart,
   CreditCard,
+  MoreVertical
 } from "lucide-react";
 import { Card, CardContent } from "@/Components/ui/card";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/Components/ui/dropdown-menu";
 import DashboardCharts from "./DBComponents/DashboardCharts";
 import DashboardWidgets from "./DBComponents/DashboardWidgets";
 import LatestTransactions from "./DBComponents/LatestTransactions";
@@ -65,11 +72,37 @@ export default function Dashboard() {
 function MetricBox({ icon, title, value, change, up = false }) {
   const ArrowIcon = up ? ArrowUpRight : ArrowDownRight;
   const arrowClass = up ? "text-green-400" : "text-red-400";
+  
+  const showDropdown = title === "Total Earnings" || title === "Total Orders";
+  
   return (
     <div className="bg-slate-800 rounded-xl p-3 md:p-4 flex flex-col gap-2">
       <div className="flex items-center justify-between">
         <div className="text-sm text-gray-400">{title}</div>
-        <div className="text-gray-300">{icon}</div>
+        <div className="flex items-center gap-1">
+          {showDropdown && (
+            <DropdownMenu>
+              <DropdownMenuTrigger className="focus:outline-none">
+                <MoreVertical className="h-5 w-5 text-gray-400 hover:text-gray-300 cursor-pointer" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="bg-slate-800 border-slate-700">
+                <DropdownMenuItem className="text-gray-300 hover:bg-slate-700 cursor-pointer">
+                  Yearly
+                </DropdownMenuItem>
+                <DropdownMenuItem className="text-gray-300 hover:bg-slate-700 cursor-pointer">
+                  Monthly
+                </DropdownMenuItem>
+                <DropdownMenuItem className="text-gray-300 hover:bg-slate-700 cursor-pointer">
+                  Weekly
+                </DropdownMenuItem>
+                <DropdownMenuItem className="text-gray-300 hover:bg-slate-700 cursor-pointer">
+                  Today
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
+          <div className="text-gray-300">{icon}</div>
+        </div>
       </div>
       <div className="text-base md:text-2xl font-bold">{value}</div>
       <div className={`flex items-center gap-1 text-sm ${arrowClass}`}>
