@@ -14,7 +14,7 @@ import MainHome from "./Pages/HomePage/MainHome";
 import Error from "./Err/Error";
 import AdminLogin from "./auth/admin/AdminLogin";
 import Dashboard from "./Dashboard/Dashboard";
-import ProtectedRoute from "./utils/ProtectedRoute";
+import ProtectedRoute from "./ProtectedRoute/ProtectedRoute";
 import DashboardLayout from "./Dashboard/Layout/Layout";
 import Login from "./Pages/Auth/Login";
 import Register from "./Pages/Auth/Register";
@@ -69,6 +69,9 @@ import BlogCreate from "./Dashboard/Blog/BlogCreate";
 import BlogUpdate from "./Dashboard/Blog/BlogUpdate";
 import BlogView from "./Dashboard/Blog/BlogView";
 import AdminUpdateCertificateTracking from "./Pages/Control/AdminUpdateCertificateTracking";
+import WelcomePage from "./Pages/WelcomePage/WelcomePage";
+import UserProtectedRoute from "./ProtectedRoute/UserProtectedRoute";
+import UserDashboard from "./UserAccount/UserDashboard";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -80,13 +83,10 @@ const AppLayout = () => {
       {!hideNavFooter && <MainNavbars />}
       <Routes location={location} key={location.pathname}>
         <Route path="/" element={<MainHome />} />
-        {/* Auth Routes */}
-        <Route path="/user/login" element={<Login />} />
-        <Route path="/user/create_account" element={<Register />} />
         <Route path="/cc" element={<CertificateTracking />} />
         <Route path="/remote-support" element={<RemoteSupport />} />
         <Route path="/checkout" element={<Checkout />} />
-
+        {/* product layout route */}
         <Route element={<ProductLayout />}>
           <Route path="/:category" element={<CategoryProduct />} />
           <Route path="/:category/:subcategory" element={<CategoryProduct />} />
@@ -112,8 +112,23 @@ const AppLayout = () => {
           <Route path="/payment/fail" element={<PaymentFail />} />
           <Route path="/payment/cancel" element={<PaymentCancel />} />
           <Route path="/payment/ipn" element={<PaymentIpn />} />
-          <Route path="/thank-you" element={<ThankYou />} />
         </Route>
+        {/* product layout end  */}
+        {/* tank you page */}
+        <Route path="/thank-you" element={<ThankYou />} />
+        {/* welcome rotue */}
+        <Route path="/welcome" element={<WelcomePage />} />
+        {/* Auth user Routes */}
+        <Route path="/user/login" element={<Login />} />
+        <Route path="/user/create_account" element={<Register />} />
+        <Route
+          path="/user/account"
+          element={
+            <UserProtectedRoute>
+              <UserDashboard />
+            </UserProtectedRoute>
+          }
+        />
 
         {/* Admin Routes */}
         <Route path="/admin/login" element={<AdminLogin />} />

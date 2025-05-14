@@ -1,24 +1,121 @@
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaFacebook, FaGoogle } from "react-icons/fa";
+import { useAxiospublic } from "../../Hooks/useAxiospublic";
+import Swal from "sweetalert2";
+import { signInWithPopup } from "firebase/auth";
+import { auth, googleProvider, facebookProvider } from "./firebase.config";
+import { useDispatch } from "react-redux";
+import { loginSuccess } from "../../features/UserAuth/authSlice";
 
 const Login = () => {
+  const axiosPublic = useAxiospublic();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (formData) => {
+    try {
+      const response = await axiosPublic.post("/api/user-login", formData, {
+        withCredentials: true,
+      });
+
+      if (response.status === 200) {
+        localStorage.setItem(
+          "user",
+          JSON.stringify({
+            email: response.data.user.email,
+            role: response.data.user.role,
+          })
+        );
+        // Dispatch the action to save user info in Redux
+        dispatch(
+          loginSuccess({
+            email: response.data.user.email,
+            role: response.data.user.role,
+          })
+        );
+
+        Swal.fire({
+          icon: "success",
+          title: "Login successful!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        // Redirect based on user role
+        if (response.data.user.role === "USER") {
+          navigate("/user/account");
+        } else {
+          navigate("/");
+        }
+      }
+    } catch (error) {
+      let errorMessage = "Login failed. Please try again.";
+
+      if (error.response) {
+        const { status, data } = error.response;
+
+        if (status === 400) {
+          errorMessage =
+            data.Error || "Invalid request. Please check your input.";
+        } else if (status === 401) {
+          errorMessage =
+            data.Error || "Unauthorized. Please check your credentials.";
+        } else {
+          errorMessage = data.Error || errorMessage;
+        }
+      }
+
+      Swal.fire({
+        icon: "error",
+        title: errorMessage,
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    }
   };
 
-  const handleFacebookLogin = () => {
-    // connect
+  const handleGoogleLogin = async () => {
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const user = result.user;
+      const idToken = await user.getIdToken();
+
+      // Send this token to your backend
+      const res = await axiosPublic.post("/api/social-login", {
+        token: idToken,
+      });
+
+      if (res.status === 200) {
+        navigate("/dashboard");
+        Swal.fire({ icon: "success", title: "Login successful!", timer: 1500 });
+      }
+    } catch (error) {
+      console.error("Google login error:", error);
+    }
   };
 
-  const handleGoogleLogin = () => {
-    // connect
+  const handleFacebookLogin = async () => {
+    try {
+      const result = await signInWithPopup(auth, facebookProvider);
+      const user = result.user;
+      const idToken = await user.getIdToken();
+
+      const res = await axiosPublic.post("/api/social-login", {
+        token: idToken,
+      });
+
+      if (res.status === 200) {
+        navigate("/dashboard");
+        Swal.fire({ icon: "success", title: "Login successful!", timer: 1500 });
+      }
+    } catch (error) {
+      console.error("Facebook login error:", error);
+    }
   };
 
   return (
@@ -94,11 +191,11 @@ const Login = () => {
           </form>
           {/* Social Login - Moved inside left column */}
           <div className="mb-1">
-            {/* <div className="flex items-center mb-4">
-              <div className="flex-grow border-t border-gray-300"></div> */}
-            {/* <span className="mx-4 text-sm text-gray-500">OR LOGIN WITH</span> */}
-            {/* <div className="flex-grow border-t border-gray-300"></div>
-            </div> */}
+            <div className="flex items-center mb-4">
+              <div className="flex-grow border-t border-gray-300"></div>
+              <span className="mx-4 text-sm text-gray-500">OR LOGIN WITH</span>
+              <div className="flex-grow border-t border-gray-300"></div>
+            </div>
             <div className="flex justify-center gap-4">
               <button
                 onClick={handleFacebookLogin}
