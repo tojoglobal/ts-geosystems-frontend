@@ -7,80 +7,82 @@ import { MdAddShoppingCart, MdOutlineKeyboardVoice } from "react-icons/md";
 import { RxCross1 } from "react-icons/rx";
 import PrevArrow from "../Components/PrevArrow";
 import NextArrow from "../Components/NextArrow";
+import useDataQuery from "../utils/useDataQuery";
 
 const POPULAR_SEARCHES = [
-  "tripod",
-  "cyclone",
-  "gs16",
-  "pix4d",
-  "leica gs16",
-  "nedo",
   "rtc360",
-  "bipod",
-  "rty50",
-  "sed",
+  "ap20",
+  "gs16",
+  "rugby 620",
+  "ts16",
+  "benro",
+  "cloudworx",
+  "cmp104",
+  "cs20",
+  "disto"
 ];
 
 const RECOMMENDED_PRODUCTS = [
   {
-    name: "Retro Reflective Targets",
-    price: "£3.95",
-    image:
-      "https://cdn11.bigcommerce.com/s-ew2v2d3jn1/images/stencil/200x60/products/152/3009/retro-reflective-targets__86299.1678487731.jpg?c=1",
+    name: "Leica GVP621 Soft Bag",
+    price: "£35.40",
+    image: "/images/products/gvp621-soft-bag.jpg"
   },
   {
-    name: "Leica Cyclone REGISTER 360 PLUS",
-    price: "£162.00",
-    image:
-      "https://cdn11.bigcommerce.com/s-ew2v2d3jn1/images/stencil/200x60/products/152/3009/retro-reflective-targets__86299.1678487731.jpg?c=1",
+    name: "Leica GVP703 Soft Bag",
+    price: "£39.60",
+    image: "/images/products/gvp703-soft-bag.jpg"
   },
   {
-    name: "Leica GEB212 Li-Ion Battery",
-    price: "£179.95",
-    image:
-      "https://cdn11.bigcommerce.com/s-ew2v2d3jn1/images/stencil/500x659/products/493/2941/rs30r__86371.1677189463.jpg?c=1",
+    name: "Leica GVP102 Soft Bag",
+    price: "£64.80",
+    image: "/images/products/gvp102-soft-bag.jpg"
   },
   {
-    name: "Leica GS16 SmartAntenna GPS",
-    price: "£7,020.00",
-    image:
-      "https://cdn11.bigcommerce.com/s-ew2v2d3jn1/images/stencil/500x659/products/289/2251/leica-gzt21-scanning-target__56546.1659456209.jpg?c=1",
+    name: "Radiodetection RD Carry Bag",
+    price: "£156.00",
+    image: "/images/products/rd-carry-bag.jpg"
   },
-];
-
-const CATEGORIES = [
-  "Surveying Accessories",
-  "Containers & Bags",
-  "3D Laser Scanning",
-  "Radiodetection"
-];
-
-const BRANDS = [
-  "Leica Geosystems",
-  "Nedo"
-];
-
-const SUGGESTIONS = [
-  "bag",
-  "carry bag", 
-  "mission bag",
-  "leica bag"
+  {
+    name: "Leica BLK360 Mission Bag",
+    price: "£164.95",
+    image: "/images/products/blk360-mission-bag.jpg"
+  },
+  {
+    name: "Radiodetection CAT & Genny Carry Bag",
+    price: "£110.00",
+    image: "/images/products/cat-genny-bag.jpg"
+  }
 ];
 
 const SearchOverlay = ({ isOpen, onClose }) => {
   const [searchText, setSearchText] = useState("");
-  const [latestSearches, setLatestSearches] = useState([]);
-  const [viewAllProducts, setViewAllProducts] = useState(false);
-  const [sortBy, setSortBy] = useState("relevance");
+  const [sortOrder, setSortOrder] = useState("relevance");
   const overlayRef = useRef(null);
+  const [latestSearches, setLatestSearches] = useState([
+    "blog",
+    "leica",
+    "contact",
+    "ortact"
+  ]);
+
+  const { data: searchResults, isLoading } = useDataQuery(
+    ["searchData", searchText, sortOrder],
+    `/api/search?query=${encodeURIComponent(searchText)}&sort=${sortOrder}`,
+    { enabled: !!searchText }
+  );
+
+  // Add these lines before the return statement
+  const displayProducts = searchResults?.products || RECOMMENDED_PRODUCTS;
+  const totalResults = searchResults?.total || RECOMMENDED_PRODUCTS.length;
 
   const handleRemoveSearch = (index) => {
     setLatestSearches(latestSearches.filter((_, i) => i !== index));
   };
 
-  // const handleClearAll = () => {
-  //   setLatestSearches([]);
-  // };
+  const handleClearAll = () => {
+    setLatestSearches([]);
+  };
 
   const saveToLocalStorage = (value) => {
     let updated = [
@@ -95,8 +97,11 @@ const SearchOverlay = ({ isOpen, onClose }) => {
     e.preventDefault();
     if (searchText.trim()) {
       saveToLocalStorage(searchText.trim());
-      setSearchText("");
     }
+  };
+
+  const handleSort = (e) => {
+    setSortOrder(e.target.value);
   };
 
   useEffect(() => {
@@ -108,47 +113,42 @@ const SearchOverlay = ({ isOpen, onClose }) => {
     dots: false,
     infinite: true,
     speed: 500,
-    slidesToShow: 4,
+    slidesToShow: 5,
     slidesToScroll: 1,
     prevArrow: <PrevArrow />,
     nextArrow: <NextArrow />,
   };
 
-  const handleViewAll = () => {
-    setViewAllProducts(true);
-  };
-
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = "unset";
     }
 
     return () => {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = "unset";
     };
   }, [isOpen]);
-
   return (
     <>
       <div
         ref={overlayRef}
-        className={`fixed inset-0 bg-gray-100 z-[100] h-screen overflow-y-auto transition-transform duration-500 ease-in-out transform ${
+        className={`fixed inset-0 bg-gray-100 z-[100] h-9/11 transition-transform duration-500 ease-in-out transform ${
           isOpen ? "translate-y-0" : "-translate-y-full"
         }`}
       >
         <div className="flex max-w-[99%] z-50 mx-auto items-center pt-6 p-4">
           <img
             src="https://cdn11.bigcommerce.com/s-ew2v2d3jn1/images/stencil/250x64/g2-survey-logo_1611121872__30054.original.png"
-            className="w-[200px] h-full mr-4"
+            className="w-[190px] h-full mr-4"
             alt="G2 Survey"
           />
           <form
             onSubmit={handleSearchSubmit}
-            className="relative flex items-center w-full ml-5 mx-auto border-b border-[#c5ccd3] bg-white rounded"
+            className="relative flex items-center w-full ml-2 mx-auto border-b border-[#c5ccd3] bg-white rounded"
           >
-            <IoSearchSharp className="ml-7 mr-3 font-extrabold text-xl text-charcoal-black" />
+            <IoSearchSharp className="ml-6 mr-2 font-extrabold text-xl text-charcoal-black" />
             <input
               type="text"
               placeholder="Search..."
@@ -165,166 +165,114 @@ const SearchOverlay = ({ isOpen, onClose }) => {
             </button>
           </form>
           {/* Close Icon */}
-          <button onClick={onClose} className="ml-4 cursor-pointer ">
+          <button onClick={onClose} className="ml-8 cursor-pointer ">
             <RxCross1 className="text-4xl text-[#626263]" />
           </button>
         </div>
-        {/* Latest Search & Suggestions Section */}
-        <div className="px-6 py-4 flex max-w-[70%] flex-col mx-auto">
-          <div className="flex items-center mb-4">
-            <h2 className="text-gray-700 font-medium mr-2">Latest searches:</h2>
-            <div className="flex flex-wrap gap-2">
-              {latestSearches.map((item, i) => (
-                <div
-                  key={i}
-                  className="flex items-center bg-gray-200 text-sm px-3 py-1 rounded-full text-gray-700"
+        {/* Latest Search Section */}
+        <div className="px-6 mt-2 mb-6 flex max-w-[75%] items-center mx-auto">
+          <h2 className="text-gray-700 text-sm font-semibold mr-2">Latest searches:</h2>
+          <div className="flex flex-wrap gap-2">
+            {latestSearches.map((item, i) => (
+              <div
+                key={i}
+                className="flex items-center bg-gray-200 text-sm px-3 py-1 rounded-full text-gray-700"
+              >
+                <span className="mr-2">{item}</span>
+                <button
+                  onClick={() => handleRemoveSearch(i)}
+                  className="text-gray-600 hover:text-black"
                 >
-                  <span className="mr-2">{item}</span>
-                  <button
-                    onClick={() => handleRemoveSearch(i)}
-                    className="text-gray-600 hover:text-black"
-                  >
-                    <IoCloseOutline size={14} />
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="flex items-center">
-            <h2 className="text-gray-700 font-medium mr-2">Suggestions:</h2>
-            <div className="flex flex-wrap gap-2">
-              {SUGGESTIONS.map((item, i) => (
-                <div
-                  key={i}
-                  className="bg-gray-200 text-sm px-3 py-1 rounded-full text-gray-700"
-                >
-                  {item}
-                </div>
-              ))}
-            </div>
+                  <IoCloseOutline size={14} />
+                </button>
+              </div>
+            ))}
+            {latestSearches.length > 0 && (
+              <button
+                onClick={handleClearAll}
+                className="text-red-500 text-sm font-medium hover:underline ml-2 cursor-pointer"
+              >
+                Delete all
+              </button>
+            )}
           </div>
         </div>
-
-        {/* Main Content Section */}
+        {/* Bottom Section */}
         <div className="flex px-12 pb-12">
-          {/* Left Sidebar */}
+          {/* Left - Popular Searches */}
           <div className="w-1/4 p-5 bg-white">
-            <div className="mb-8">
-              <h3 className="font-semibold text-lg mb-4">Categories</h3>
-              <ul className="text-sm text-gray-700 space-y-3">
-                {CATEGORIES.map((category, i) => (
-                  <li key={i} className="hover:text-[#e62245] cursor-pointer">
-                    {category}
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="mb-8">
-              <h3 className="font-semibold text-lg mb-4">Brands</h3>
-              <ul className="text-sm text-gray-700 space-y-3">
-                {BRANDS.map((brand, i) => (
-                  <li key={i} className="hover:text-[#e62245] cursor-pointer">
-                    {brand}
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="mb-8">
-              <h3 className="font-semibold text-lg mb-4">Condition</h3>
-              <ul className="text-sm text-gray-700 space-y-3">
-                <li className="hover:text-[#e62245] cursor-pointer">New</li>
-                <li className="hover:text-[#e62245] cursor-pointer">Used</li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="font-semibold text-lg mb-4">Price Range</h3>
-              <div className="space-y-2">
-                <input type="range" className="w-full" min="0" max="10000" />
-                <div className="flex justify-between text-sm text-gray-600">
-                  <span>£0</span>
-                  <span>£10,000</span>
-                </div>
-              </div>
-            </div>
+            <h3 className="font-semibold text-lg mb-2">Popular searches</h3>
+            <ul className="text-sm text-gray-700 space-y-3">
+              {POPULAR_SEARCHES.map((search, i) => (
+                <li key={i} className="hover:text-[#e62245] cursor-pointer">
+                  {search}
+                </li>
+              ))}
+            </ul>
           </div>
-
-          {/* Right Content */}
+          {/* Right - Product Slider */}
           <div className="w-3/4 pl-10">
-            <div className="flex justify-between items-center mb-6">
+            <div className="flex justify-between items-center mb-4">
               <h3 className="font-semibold text-lg">
-                {searchText
-                  ? `50 results found for "${searchText}"`
-                  : "Recommended products"}
+                {searchText ? `${totalResults} results found` : "Recommended products"}
               </h3>
-
-              {!viewAllProducts && (
-                <button
-                  onClick={handleViewAll}
-                  className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
-                >
-                  View All
-                </button>
-              )}
-
-              {viewAllProducts && (
-                <select
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value)}
-                  className="px-4 py-1 appearance-none border rounded-sm border-gray-300 focus:outline-none"
-                >
-                  <option value="relevance">Relevance</option>
-                  <option value="price-high">Price: High to Low</option>
-                  <option value="price-low">Price: Low to High</option>
-                  <option value="a-z">A-Z</option>
-                  <option value="z-a">Z-A</option>
-                </select>
+              {searchText && (
+                <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm text-gray-600">Sort by:</span>
+                    <select 
+                      className="text-sm border rounded px-2 py-1"
+                      value={sortOrder}
+                      onChange={handleSort}
+                    >
+                      <option value="relevance">Relevance</option>
+                      <option value="price_asc">Price: Low to High</option>
+                      <option value="price_desc">Price: High to Low</option>
+                      <option value="name_asc">Name: A to Z</option>
+                    </select>
+                  </div>
+                </div>
               )}
             </div>
-
-            {viewAllProducts ? (
-              <div className="grid grid-cols-5 gap-4">
-                {RECOMMENDED_PRODUCTS.map((product, index) => (
-                  <div
-                    key={index}
-                    className="bg-white p-4 border hover:border-gray-300 transition-all duration-200"
-                  >
+            
+            {isLoading ? (
+              <div className="text-center py-10">Loading...</div>
+            ) : displayProducts.length <= 4 ? (
+              <div className="grid grid-cols-4 gap-4">
+                {displayProducts.map((product, index) => (
+                  <div key={index} className="h-full min-h-[350px] flex flex-col bg-white p-6 shadow-sm border border-gray-200 hover:border-gray-300 transition-all duration-200">
                     <img
-                      src={product.image}
-                      alt={product.name}
-                      className="w-full h-32 object-contain mb-3"
+                      src={product.image_urls ? JSON.parse(product.image_urls)[0] : product.image}
+                      alt={product.product_name || product.name}
+                      className="mx-auto h-44 object-contain mb-3"
                     />
-                    <p className="text-sm font-medium mb-1">{product.name}</p>
-                    <div className="flex justify-between items-center mt-4">
-                      <p className="text-sm font-semibold text-gray-800">
-                        {product.price}
-                      </p>
-                      <button className="bg-crimson-red p-2 rounded text-white">
-                        <MdAddShoppingCart className="text-lg" />
-                      </button>
-                    </div>
+                    <p className="text-sm font-medium mb-1 hover:text-[#e62245] cursor-pointer">
+                      {product.product_name || product.name}
+                    </p>
+                    <p className="text-sm font-semibold mt-auto">{product.price}</p>
+                    <button className="mt-2 flex items-center justify-center gap-2 bg-[#e62245] text-white py-2 px-4 rounded hover:bg-[#d41f3f] transition-colors">
+                      <MdAddShoppingCart size={20} />
+                      Add to Cart
+                    </button>
                   </div>
                 ))}
               </div>
             ) : (
               <Slider {...settings}>
-                {RECOMMENDED_PRODUCTS.map((product, index) => (
+                {displayProducts.map((product, index) => (
                   <div key={index} className="px-2">
-                    <div className="h-full min-h-[350px] flex flex-col bg-white p-6 shadow-sm border-2 border-transparent hover:border-gray-300 transition-all duration-200">
+                    <div className="h-full min-h-[350px] flex flex-col bg-white p-6 shadow-sm border border-gray-200 hover:border-gray-300 transition-all duration-200">
                       <img
-                        src={product.image}
-                        alt={product.name}
+                        src={product.image_urls ? JSON.parse(product.image_urls)[0] : product.image}
+                        alt={product.product_name || product.name}
                         className="mx-auto h-44 object-contain mb-3"
                       />
-                      <p className="text-sm font-medium mb-1">{product.name}</p>
-                      <div className="flex justify-between items-center mt-8">
-                        <p className="text-sm font-semibold text-gray-800">
-                          {product.price}
-                        </p>
-                        <button className="bg-crimson-red p-2 rounded text-white">
+                      <p className="text-sm font-medium mb-1 hover:text-[#e62245] cursor-pointer">
+                        {product.product_name || product.name}
+                      </p>
+                      <div className="flex justify-between items-center mt-auto pt-4">
+                        <p className="text-sm font-semibold text-gray-800">£{product.price}</p>
+                        <button className="bg-[#e62245] p-2 rounded text-white hover:bg-[#d41d3f]">
                           <MdAddShoppingCart className="text-lg" />
                         </button>
                       </div>
@@ -336,7 +284,7 @@ const SearchOverlay = ({ isOpen, onClose }) => {
           </div>
         </div>
       </div>
-
+      {/* </div> */}
       {/* Backdrop Overlay inside relative wrapper */}
       {isOpen && (
         <div
@@ -351,3 +299,28 @@ const SearchOverlay = ({ isOpen, onClose }) => {
 };
 
 export default SearchOverlay;
+
+
+// const SUGGESTIONS = [
+//   "bag",
+//   "single bay battery charger",
+//   "geb341 multi-bay battery",
+//   "geb312 single-bay battery",
+//   "geb311 single-bay battery"
+// ];
+
+// {/* Add suggestions section */}
+// <div className="px-6 mt-2 mb-4 max-w-[75%] mx-auto">
+//   <div className="flex flex-wrap gap-2">
+//     <span className="text-gray-700 text-sm font-semibold mr-2">Suggestions:</span>
+//     {SUGGESTIONS.map((suggestion, i) => (
+//       <button
+//         key={i}
+//         className="text-sm text-gray-700 hover:text-[#e62245]"
+//         onClick={() => setSearchText(suggestion)}
+//       >
+//         {suggestion}
+//       </button>
+//     ))}
+//   </div>
+// </div>
