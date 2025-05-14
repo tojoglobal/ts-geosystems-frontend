@@ -4,8 +4,10 @@ import { useQuery } from "@tanstack/react-query";
 import { FaFileAlt } from "react-icons/fa";
 import { FaRegFileLines } from "react-icons/fa6";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
+import { useRef } from "react";
 
 const Hire = () => {
+  const formRef = useRef(null);
   const axiosPublicUrl = useAxiospublic();
   const [formData, setFormData] = useState({
     name: "",
@@ -106,13 +108,15 @@ const Hire = () => {
       </div>
       <h1 className="text-[28px] font-light text-[#e62245] mb-[72px]">HIRE</h1>
       <div className="flex flex-row justify-between mb-5">
-        <Link
-          to="/hire-enquiry"
+        <button
+          onClick={() =>
+            formRef.current?.scrollIntoView({ behavior: "smooth" })
+          }
           className="ml-14 md:ml-56 bg-[#e62245] flex items-center gap-2 text-white px-[18.5px] py-[7.66667px] rounded-[4px] shadow-xl hover:bg-[#c81e3c] transition-all text-[13px] font-medium"
         >
           <FaRegFileLines />
           Hire Enquiry
-        </Link>
+        </button>
         <Link
           to="/credit-application"
           className="mr-14 md:mr-40 bg-[#e62245] flex items-center gap-2 text-white px-[18.5px] py-[7.66667px] rounded-[4px] shadow-xl hover:bg-[#c81e3c] transition-all text-[13px] font-medium"
@@ -122,9 +126,7 @@ const Hire = () => {
         </Link>
       </div>
       <div className="space-y-6 text-gray-700 border-t pt-4 border-gray-200">
-        <h2 className="text-[14px] font-bold">
-          {hireContent?.title}
-        </h2>
+        <h2 className="text-[14px] font-bold">{hireContent?.title}</h2>
         <div
           className="text-[14px] font-normal"
           dangerouslySetInnerHTML={{ __html: hireContent?.description }}
@@ -134,7 +136,7 @@ const Hire = () => {
         className="bg-[#ebedf1] mt-12 text-[14px] font-normal p-8 text-center rounded-lg"
         dangerouslySetInnerHTML={{ __html: hireContent?.infoBox }}
       ></div>
-      <div className="max-w-3xl mx-auto my-12">
+      <div ref={formRef} className="max-w-3xl mx-auto my-12">
         <h2 className="text-3xl font-semibold mb-2">Hire Enquiry Form</h2>
         <p className="mb-6 text-sm">
           Please fill in the form, together with your any specific requirements,

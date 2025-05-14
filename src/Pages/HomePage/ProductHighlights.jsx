@@ -302,14 +302,14 @@ const ProductHighlights = () => {
                     />
                   </div>
                 </Link>
-                <div className="w-full border-t border-gray-200 pt-2 flex flex-col flex-grow">
+                <div className="w-full border-t border-gray-200 mt-3 pt-2 flex flex-col flex-grow space-y-1">
                   <p className="text-xs text-gray-700">
                     Total Station | Sku: 65dVv8Jr8fe
                   </p>
-                  <div className="min-h-[48px] flex items-start">
+                  <div className="min-h-[46px] flex items-start">
                     <Link
                       to={item?.productUrl}
-                      className="font-semibold text-sm text-gray-600"
+                      className="font-semibold text-sm text-gray-600 hover:text-[#e62245]"
                     >
                       {item.name}
                     </Link>
@@ -325,7 +325,7 @@ const ProductHighlights = () => {
                   <div className="flex items-center gap-1 text-sm text-[#b3b3b5]">
                     £11994.00 <span className="underline">(Inc. VAT)</span>
                   </div>
-                  <button className="mt-1 bg-[#e62245] hover:bg-[#c91d3a] text-white text-sm font-semibold py-[6px] px-4 rounded w-full">
+                  <button className="mt-1 bg-[#e62245] hover:bg-[#c91d3a] text-white text-sm font-semibold py-1.5 px-4 rounded w-full transition-colors duration-200">
                     ADD TO CART
                   </button>
                 </div>
