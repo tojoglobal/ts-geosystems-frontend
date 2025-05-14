@@ -1,17 +1,18 @@
 /* eslint-disable no-useless-escape */
-import { useState } from "react";
 import { MdAddShoppingCart, MdOutlineKeyboardVoice } from "react-icons/md";
 import { IoSearchSharp } from "react-icons/io5";
 import { RxCross1 } from "react-icons/rx";
+import { Link } from "react-router-dom";
+import { slugify } from "../utils/slugify";
 const SearchResultsView = ({
   products,
   onClose,
   searchText,
   handleSearchSubmit,
   setSearchText,
+  sortOrder,
+  setSortOrder,
 }) => {
-  const [sortOrder, setSortOrder] = useState("relevance");
-
   const handleSort = (e) => {
     setSortOrder(e.target.value);
   };
@@ -62,72 +63,71 @@ const SearchResultsView = ({
         <div className="flex flex-col md:flex-row">
           {/* Left Sidebar - Filters */}
           <div className="w-full md:w-[20%] bg-white p-6">
-            <h2 className="text-lg font-semibold mb-4">Lektorium für Kosten</h2>
-
             {/* Brand Filter */}
             <div className="mb-6">
-              <h3 className="font-bold text-[18px] mb-2">Brand</h3>
+              <h3 className="font-bold text-[18px] mb-4">Brand</h3>
               <ul className="space-y-1 text-[14px]">
-                <li className="flex justify-between">
-                  <span>Lein Grenzplatten</span>
-                  <span>42</span>
+                <li className="flex justify-between items-center hover:text-[#e62245] cursor-pointer">
+                  <span>Leica Geosystems</span>
+                  <span className="text-gray-500">4</span>
                 </li>
-                <li className="flex justify-between">
-                  <span>Nebel</span>
-                  <span>4</span>
+                <li className="flex justify-between items-center hover:text-[#e62245] cursor-pointer">
+                  <span>Nedo</span>
+                  <span className="text-gray-500">3</span>
                 </li>
-                <li className="flex justify-between">
-                  <span>Radiolektration</span>
-                  <span>3</span>
+                <li className="flex justify-between items-center hover:text-[#e62245] cursor-pointer">
+                  <span>Radiodetection</span>
+                  <span className="text-gray-500">2</span>
                 </li>
               </ul>
             </div>
 
             {/* Category Filter */}
             <div className="mb-6">
-              <h3 className="font-semibold text-[18px] mb-2">Category</h3>
+              <h3 className="font-bold text-[18px] mb-4">Category</h3>
               <ul className="space-y-1 text-[14px]">
-                <li className="flex justify-between">
-                  <span>Prog.All</span>
-                  <span>30</span>
+                <li className="flex justify-between items-center hover:text-[#e62245] cursor-pointer">
+                  <span>Shop All</span>
+                  <span className="text-gray-500">50</span>
                 </li>
-                <li className="flex justify-between">
-                  <span>Survivalpulszeitstufen</span>
-                  <span>34</span>
+                <li className="flex justify-between items-center hover:text-[#e62245] cursor-pointer">
+                  <span>Surveying Accessories</span>
+                  <span className="text-gray-500">24</span>
                 </li>
-                <li className="flex justify-between">
-                  <span>Container & Bap</span>
-                  <span>32</span>
+                <li className="flex justify-between items-center hover:text-[#e62245] cursor-pointer">
+                  <span>Containers & Bags</span>
+                  <span className="text-gray-500">22</span>
                 </li>
-                <li className="flex justify-between">
-                  <span>30 Laser Scanning</span>
-                  <span>12</span>
-                </li>
-                <li className="flex justify-between">
-                  <span>Scanner Accessibilität</span>
-                  <span>11</span>
+                <li className="flex justify-between items-center hover:text-[#e62245] cursor-pointer">
+                  <span>3D Laser Scanning</span>
+                  <span className="text-gray-500">11</span>
                 </li>
               </ul>
             </div>
 
             {/* Condition Filter */}
             <div className="mb-6">
-              <h3 className="font-semibold mb-2 text-[18px]">Condition</h3>
-              <ul className="space-y-1 text-[14px]">
-                <li className="flex justify-between">
-                  <span>NEVY</span>
-                  <span>40</span>
+              <h3 className="font-bold text-[18px] mb-4">Condition</h3>
+              <ul className="text-[14px]">
+                <li className="flex justify-between items-center hover:text-[#e62245] cursor-pointer">
+                  <span>New</span>
+                  <span className="text-gray-500">41</span>
                 </li>
-                <li className="flex justify-between">
-                  <span>USED</span>
-                  <span>4</span>
+                <li className="flex justify-between items-center hover:text-[#e62245] cursor-pointer">
+                  <span>Used</span>
+                  <span className="text-gray-500">9</span>
                 </li>
               </ul>
             </div>
 
             {/* Best Price Filter */}
             <div>
-              <h3 className="font-semibold mb-2">Best Price</h3>
+              <h3 className="font-bold text-[18px] mb-4">Best Price</h3>
+              <input type="range" className="w-full" min="0" max="1000" />
+              <div className="flex justify-between mt-2 text-sm text-gray-600">
+                <span>£0</span>
+                <span>£1000</span>
+              </div>
             </div>
           </div>
 
@@ -156,7 +156,10 @@ const SearchResultsView = ({
 
             <div className="grid grid-cols-5 gap-4 p-5">
               {products.map((product, index) => (
-                <div
+                <Link
+                  to={`/products/${product.id}/${slugify(
+                    product.product_name || ""
+                  )}`}
                   key={index}
                   className="flex flex-col bg-white p-4 border border-gray-200 hover:border-gray-300"
                 >
@@ -171,16 +174,21 @@ const SearchResultsView = ({
                     alt={product.product_name || product.name}
                     className="w-full h-32 object-contain mb-2"
                   />
-                  <p className="text-xs font-medium mb-1 hover:text-[#e62245] cursor-pointer">
+                  <Link
+                    to={`/products/${product.id}/${slugify(
+                      product.product_name || ""
+                    )}`}
+                    className="text-xs font-medium mb-1 hover:text-[#e62245] cursor-pointer"
+                  >
                     {product.product_name || product.name}
-                  </p>
+                  </Link>
                   <div className="flex justify-between items-center mt-auto">
-                    <p className="text-xs font-semibold">{product.price}</p>
+                    <p className="text-xs font-semibold">£{product.price}</p>
                     <button className="p-1 bg-[#e62245] text-white rounded hover:bg-[#d41d3f]">
-                      <MdAddShoppingCart size={16} />
+                      <MdAddShoppingCart size={20} />
                     </button>
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
           </div>

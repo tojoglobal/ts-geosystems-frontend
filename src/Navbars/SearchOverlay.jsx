@@ -10,6 +10,8 @@ import PrevArrow from "../Components/PrevArrow";
 import NextArrow from "../Components/NextArrow";
 import useDataQuery from "../utils/useDataQuery";
 import SearchResultsView from "./SearchResultsView";
+import { Link } from "react-router-dom";
+import { slugify } from "../utils/slugify";
 
 const POPULAR_SEARCHES = [
   "rtc360",
@@ -134,6 +136,8 @@ const SearchOverlay = ({ isOpen, onClose }) => {
         searchText={searchText}
         handleSearchSubmit={handleSearchSubmit}
         setSearchText={setSearchText}
+        sortOrder={sortOrder}
+        setSortOrder={setSortOrder}
       />
     );
   }
@@ -275,11 +279,13 @@ const SearchOverlay = ({ isOpen, onClose }) => {
             ) : displayProducts.length <= 4 ? (
               <div className="grid grid-cols-4 gap-4">
                 {displayProducts.map((product, index) => (
-                  <div
+                  <Link
+                    to={`/products/${product.id}/${slugify(
+                      product.product_name || ""
+                    )}`}
                     key={index}
                     className="h-full min-h-[350px] flex flex-col bg-white p-6 shadow-sm border border-gray-200 hover:border-gray-300 transition-all duration-200"
                   >
-                    {/* ... product display code ... */}
                     <img
                       src={
                         product.image_urls
@@ -291,7 +297,10 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                       alt={product.product_name || product.name}
                       className="mx-auto h-44 object-contain mb-3"
                     />
-                    <p className="text-sm font-medium mb-1 hover:text-[#e62245] cursor-pointer">
+                    <p
+                      className="text-sm font-medium mb-1 hover:text-[#e62245]
+                    cursor-pointer"
+                    >
                       {product.product_name || product.name}
                     </p>
                     <div className="flex justify-between items-center mt-auto">
@@ -300,14 +309,19 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                         <MdAddShoppingCart size={27} />
                       </button>
                     </div>
-                  </div>
+                  </Link>
                 ))}
               </div>
             ) : (
               <Slider {...settings}>
                 {displayProducts.map((product, index) => (
                   <div key={index} className="px-2">
-                    <div className="h-full min-h-[350px] flex flex-col bg-white p-6 shadow-sm border border-gray-200 hover:border-gray-300 transition-all duration-200">
+                    <Link
+                      to={`/products/${product.id}/${slugify(
+                        product.product_name || ""
+                      )}`}
+                      className="h-full min-h-[350px] flex flex-col bg-white p-6 shadow-sm border border-gray-200 hover:border-gray-300 transition-all duration-200"
+                    >
                       <img
                         src={
                           product.image_urls
@@ -319,6 +333,7 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                         alt={product.product_name || product.name}
                         className="mx-auto h-44 object-contain mb-3"
                       />
+
                       <p className="text-sm font-medium mb-1 hover:text-[#e62245] cursor-pointer">
                         {product.product_name || product.name}
                       </p>
@@ -330,7 +345,7 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                           <MdAddShoppingCart size={24} />
                         </button>
                       </div>
-                    </div>
+                    </Link>
                   </div>
                 ))}
               </Slider>
