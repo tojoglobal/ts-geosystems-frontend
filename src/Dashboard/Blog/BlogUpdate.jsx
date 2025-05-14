@@ -72,7 +72,7 @@ const BlogUpdate = () => {
         typeof blog.images === "string" ? JSON.parse(blog.images) : blog.images;
 
       if (parsedImages) {
-        const newImages = parsedImages.map((img, idx) => ({
+        const newImages = parsedImages.map((img) => ({
           file: null,
           show: img?.show,
           order: img?.order,
@@ -83,8 +83,6 @@ const BlogUpdate = () => {
       }
     }
   }, [blog, reset]);
-
-  console.log(originalImages);
 
   const handleTagSelect = (tag) => {
     if (!selectedTags.includes(tag)) {
@@ -136,68 +134,6 @@ const BlogUpdate = () => {
       formData.append("content", data.content);
       formData.append("tags", JSON.stringify(selectedTags));
 
-      // images.forEach((img, idx) => {
-      //   const original = originalImages[idx];
-      //   const hasFile = !!img.file;
-      //   const hasOrderChanged = img.order !== original?.order;
-      //   const hasVisibilityChanged = img.show !== original?.show;
-
-      //   if (hasFile || hasOrderChanged || hasVisibilityChanged) {
-      //     if (img.file) {
-      //       formData.append(`images[${idx}][file]`, img.file);
-      //     } else if (img.previewUrl) {
-      //       formData.append(`images[${idx}][existingUrl]`, img.previewUrl);
-      //     }
-
-      //     // formData.append(`images[${idx}][show]`, img.show);
-      //     formData.append(`images[${idx}][show]`, img.show ? "true" : "false");
-      //     formData.append(`images[${idx}][order]`, img.order);
-      //   }
-      // });
-
-      // Log FormData for debugging
-
-      // images.forEach((img, idx) => {
-      //   const original = originalImages[idx];
-      //   const hasFile = !!img.file;
-      //   // const hasVisibilityChanged = img.show !== original?.show;
-      //   // const hasOrderChanged = img.order !== original?.order;
-
-      //   // Normalize show values to booleans for accurate comparison
-      //   const currentShow = img.show === true || img.show === "true";
-      //   const originalShow =
-      //     original?.show === true || original?.show === "true";
-      //   const hasVisibilityChanged = currentShow !== originalShow;
-
-      //   const hasOrderChanged = img.order !== original?.order;
-
-      //   console.log("img.show:", img.show, "original.show:", original?.show);
-      //   console.log(
-      //     "hasFile:",
-      //     hasFile,
-      //     "hasVisibilityChanged:",
-      //     hasVisibilityChanged,
-      //     "hasOrderChanged:",
-      //     hasOrderChanged
-      //   );
-
-      //   const hasChanges = hasFile || hasOrderChanged || hasVisibilityChanged;
-
-      //   if (hasChanges) {
-      //     if (hasFile) {
-      //       formData.append(`images[${idx}][file]`, img.file); // NEW file
-      //     } else {
-      //       // No new image; send current image reference
-      //       formData.append(`images[${idx}][previewUrl]`, img.previewUrl);
-      //     }
-      //     // this is call
-      //     console.log("this is call 179");
-
-      //     formData.append(`images[${idx}][show]`, img.show ? "true" : "false");
-      //     formData.append(`images[${idx}][order]`, img.order);
-      //   }
-      // });
-
       images.forEach((img, idx) => {
         const original = originalImages[idx];
         const hasFile = !!img.file;
@@ -212,16 +148,6 @@ const BlogUpdate = () => {
         const originalOrder = parseInt(original?.order) || 0;
         const hasOrderChanged = currentOrder == originalOrder;
 
-        console.log("img.show:", img.show, "original.show:", original?.show);
-        console.log(
-          "hasFile:",
-          hasFile,
-          "hasVisibilityChanged:",
-          hasVisibilityChanged,
-          "hasOrderChanged:",
-          hasOrderChanged
-        );
-
         const hasChanges = hasFile || hasVisibilityChanged || hasOrderChanged;
 
         if (hasChanges) {
@@ -232,8 +158,6 @@ const BlogUpdate = () => {
             formData.append(`images[${idx}][previewUrl]`, img.previewUrl);
           }
 
-          console.log("✅ Changes detected for image index:", idx);
-
           formData.append(
             `images[${idx}][show]`,
             currentShow ? "true" : "false"
@@ -241,11 +165,6 @@ const BlogUpdate = () => {
           formData.append(`images[${idx}][order]`, currentOrder);
         }
       });
-
-      console.log("FormData Entries:");
-      for (let [key, value] of formData.entries()) {
-        console.log("Key", key, "value", value);
-      }
 
       await axiosPublicUrl.put(`/api/updatedblogs/${id}`, formData, {
         headers: { "Content-Type": "multipart/form-data" },

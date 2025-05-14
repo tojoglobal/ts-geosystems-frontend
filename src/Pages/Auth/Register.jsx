@@ -1,17 +1,21 @@
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ReCAPTCHA from "react-google-recaptcha";
 import { Country, State, City } from "country-state-city";
 import { toast } from "react-toastify";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
+import { useDispatch } from "react-redux";
+import { loginSuccess } from "../../features/UserAuth/authSlice";
 
 const Register = () => {
   const axiosPUblic = useAxiospublic();
+  const dispatch = useDispatch();
   const [countries, setCountries] = useState([]);
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
   const [captchaToken, setCaptchaToken] = useState(null);
+  const navigate = useNavigate();
 
   const {
     register,
@@ -64,13 +68,10 @@ const Register = () => {
   };
 
   const onSubmit = async (data) => {
-    console.log(data);
-
     if (!captchaToken) {
       toast.error("Please verify the reCAPTCHA");
       return;
     }
-
     try {
       const payload = {
         email: data.email,
@@ -87,32 +88,21 @@ const Register = () => {
         city: data.city,
       };
 
-      // const payload = {
-      //   email: data.email,
-      //   password: data.password,
-      //   confirmPassword: data.confirmPassword,
-      //   firstName: data.firstName,
-      //   lastName: data.lastName,
-      //   postcode: data.postcode,
-      //   phoneNumber: data.phoneNumber || null,
-      //   companyName: data.companyName || null,
-      //   addressLine1: data.addressLine1,
-      //   addressLine2: data.addressLine2 || null,
-      //   country: data.country,
-      //   state: data.state,
-      //   city: data.city,
-      // };
-
-      console.log("Payload being sent to backend:", payload);
-
       const response = await axiosPUblic.post(`/api/add-user`, payload);
       if (response.status === 201) {
         toast.success("Account created successfully");
+        dispatch(
+          loginSuccess({
+            email: response.data.user.email,
+            role: response.data.user.role,
+          })
+        );
         reset();
         setCaptchaToken(null);
-      }
-      if (response.status === 400) {
-        console.log(response?.message);
+        navigate("/welcome", {
+          state: { email: response.data?.email },
+        });
+      } else if (response.status === 400) {
         toast.success(response?.message);
       }
     } catch (error) {
