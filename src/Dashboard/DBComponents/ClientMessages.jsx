@@ -1,43 +1,27 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { useState, useEffect } from "react";
-import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import { toast } from "react-toastify";
+import useDataQuery from "../../utils/useDataQuery";
+import { useAxiospublic } from "../../Hooks/useAxiospublic";
 
 const ClientMessages = () => {
-  const [messages, setMessages] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const axiosPublicUrl = useAxiospublic();
-
-  const fetchMessages = async () => {
-    try {
-      const response = await axiosPublicUrl.get("/api/contact");
-      setMessages(response.data.messages);
-    } catch (error) {
-      console.error("Error fetching messages:", error);
-      toast.error("Failed to load messages");
-    } finally {
-      setLoading(false);
-    }
-  };
+  const axiosPublic = useAxiospublic();
+  const {
+    data={},
+    isLoading,
+    refetch,
+  } = useDataQuery(["contactMessages"], "/api/contact-messages");
 
   const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete this message?")) {
-      try {
-        await axiosPublicUrl.delete(`/api/contact/${id}`);
-        toast.success("Message deleted successfully");
-        fetchMessages();
-      } catch (error) {
-        console.error("Error deleting message:", error);
-        toast.error("Failed to delete message");
-      }
+    try {
+      await axiosPublic.delete(`/api/contact-messages/${id}`);
+      toast.success("Message deleted successfully");
+      refetch();
+    } catch (error) {
+      console.error("Error deleting message:", error);
+      toast.error("Failed to delete message");
     }
   };
 
-  useEffect(() => {
-    fetchMessages();
-  }, []);
-
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="bg-slate-800 text-white rounded-lg p-4 my-4">
         <div className="flex justify-center items-center h-40">
@@ -51,7 +35,9 @@ const ClientMessages = () => {
     <div className="bg-slate-800 text-white rounded-lg p-4 my-4">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold">Client Messages</h2>
-        <div className="text-sm text-gray-400">Sort By: Latest</div>
+        <div className="text-sm text-gray-400">
+          Total Messages: {data?.messages.length}
+        </div>
       </div>
       <div className="overflow-x-auto">
         <table className="min-w-full text-sm text-gray-300">
@@ -67,8 +53,11 @@ const ClientMessages = () => {
             </tr>
           </thead>
           <tbody>
-            {messages.map((message) => (
-              <tr key={message.id} className="bg-slate-800 border-b border-slate-600">
+            {data?.messages.map((message) => (
+              <tr
+                key={message.id}
+                className="bg-slate-800 border-b border-slate-600"
+              >
                 <td className="px-4 py-2">{`${message.first_name} ${message.last_name}`}</td>
                 <td className="px-4 py-2">{message.email}</td>
                 <td className="px-4 py-2">{message.phone}</td>
@@ -79,9 +68,20 @@ const ClientMessages = () => {
                   {new Date(message.created_at).toLocaleDateString()}
                 </td>
                 <td className="px-4 py-2">
-                  <button 
+                  <span
+                    className={`px-2 py-1 rounded text-xs ${
+                      message.status === "unread"
+                        ? "bg-yellow-500 text-yellow-900"
+                        : "bg-green-500 text-green-900"
+                    }`}
+                  >
+                    {message.status}
+                  </span>
+                </td>
+                <td className="px-4 py-2">
+                  <button
                     onClick={() => handleDelete(message.id)}
-                    className="text-red-400 hover:text-red-300"
+                    className="text-red-400 cursor-pointer hover:text-red-300"
                   >
                     Delete
                   </button>
