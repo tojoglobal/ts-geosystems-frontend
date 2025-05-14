@@ -1,5 +1,5 @@
-import useDataQuery from "../../utils/useDataQuery";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
+import useDataQuery from "../../utils/useDataQuery";
 import Swal from "sweetalert2";
 
 const ClientMessages = () => {
@@ -11,7 +11,6 @@ const ClientMessages = () => {
   } = useDataQuery(["contactMessages"], "/api/contact-messages");
 
   const handleDelete = async (id) => {
-    // Show confirmation dialog
     const result = await Swal.fire({
       title: "Delete Message?",
       text: "This action cannot be undone!",
@@ -24,12 +23,11 @@ const ClientMessages = () => {
       confirmButtonColor: "#e11d48",
       cancelButtonColor: "#64748b",
     });
+
     if (result.isConfirmed) {
       try {
         await axiosPublic.delete(`/api/contact-messages/${id}`);
         refetch();
-
-        // Show success notification
         Swal.fire({
           title: "Deleted!",
           text: "The message has been deleted.",
@@ -40,8 +38,6 @@ const ClientMessages = () => {
         });
       } catch (error) {
         console.error("Error deleting message:", error);
-
-        // Show error notification
         Swal.fire({
           title: "Error!",
           text: "Failed to delete message",
@@ -52,6 +48,30 @@ const ClientMessages = () => {
         });
       }
     }
+  };
+
+  const showFullMessage = (message) => {
+    Swal.fire({
+      title: `Message from ${message.first_name} ${message.last_name}`,
+      html: `
+        <div class="text-left">
+          <p class="mb-2"><strong>Email:</strong> ${message.email}</p>
+          <p class="mb-2"><strong>Phone:</strong> ${message.phone}</p>
+          <p class="mb-2"><strong>Date:</strong> ${new Date(
+            message.created_at
+          ).toLocaleString()}</p>
+          <hr class="my-3 border-slate-600">
+          <div class="max-h-96 overflow-y-auto">
+            <p class="whitespace-pre-wrap">${message.message}</p>
+          </div>
+        </div>
+      `,
+      width: "800px",
+      background: "#1e293b",
+      color: "#f8fafc",
+      confirmButtonColor: "#e11d48",
+      showCloseButton: true,
+    });
   };
 
   if (isLoading) {
@@ -69,7 +89,7 @@ const ClientMessages = () => {
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold">Client Messages</h2>
         <div className="text-sm text-gray-400">
-          Total Messages: {data?.messages?.length || 0}
+          Total Messages: {data.messages.length}
         </div>
       </div>
       <div className="overflow-x-auto">
@@ -81,12 +101,11 @@ const ClientMessages = () => {
               <th className="px-4 py-2">Phone</th>
               <th className="px-4 py-2">Message</th>
               <th className="px-4 py-2">Date</th>
-              <th className="px-4 py-2">Status</th>
-              <th className="px-4 py-2">Action</th>
+              <th className="px-4 py-2">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {data?.messages.map((message) => (
+            {data.messages.map((message) => (
               <tr
                 key={message.id}
                 className="bg-slate-800 border-b border-slate-600 hover:bg-slate-700"
@@ -94,26 +113,25 @@ const ClientMessages = () => {
                 <td className="px-4 py-2">{`${message.first_name} ${message.last_name}`}</td>
                 <td className="px-4 py-2">{message.email}</td>
                 <td className="px-4 py-2">{message.phone}</td>
-                <td className="px-4 py-2">
-                  <div className="max-w-xs truncate hover:text-clip">
+                <td
+                  className="px-4 py-2 cursor-pointer"
+                  onClick={() => showFullMessage(message)}
+                >
+                  <div className="max-w-xs truncate hover:text-clip hover:text-white">
                     {message.message}
                   </div>
                 </td>
                 <td className="px-4 py-2">
                   {new Date(message.created_at).toLocaleDateString()}
                 </td>
-                <td className="px-4 py-2">
-                  <span
-                    className={`px-2 py-1 rounded text-xs ${
-                      message.status === "unread"
-                        ? "bg-yellow-500 text-yellow-900"
-                        : "bg-green-500 text-green-900"
-                    }`}
+                <td className="px-4 py-2 space-x-2">
+                  <button
+                    onClick={() => showFullMessage(message)}
+                    className="text-blue-400 hover:text-blue-300 transition-colors"
+                    title="View full message"
                   >
-                    {message.status}
-                  </span>
-                </td>
-                <td className="px-4 py-2">
+                    View
+                  </button>
                   <button
                     onClick={() => handleDelete(message.id)}
                     className="text-red-400 hover:text-red-300 transition-colors"
