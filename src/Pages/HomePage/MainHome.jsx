@@ -33,7 +33,7 @@ const MainHome = () => {
       </div>
     );
 
-    const allComponentsDisabled = Object.values(comp).every(
+    const allComponentsDisabled = Object?.values(comp).every(
       (value) => value === false
     );
 
