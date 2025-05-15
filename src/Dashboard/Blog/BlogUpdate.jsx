@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useForm, Controller } from "react-hook-form";
 import { Editor } from "@tinymce/tinymce-react";
@@ -180,11 +181,9 @@ const BlogUpdate = () => {
     }
   };
 
-  console.log(images);
-
   return (
-    <div className="p-4 max-w-5xl mx-auto">
-      <h1 className="text-2xl font-bold mb-6">Update Blog Post</h1>
+    <div className="max-w-5xl mx-auto">
+      <h1 className="text-xl font-bold mb-4">Update Blog Post</h1>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {/* Title */}
         <div>
