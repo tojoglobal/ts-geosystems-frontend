@@ -88,7 +88,7 @@ const Register = () => {
         city: data.city,
       };
 
-      const response = await axiosPUblic.post(`/api/add-user`, payload);
+      const response = await axiosPUblic.post("/api/add-user", payload);
       if (response.status === 201) {
         toast.success("Account created successfully");
         dispatch(
