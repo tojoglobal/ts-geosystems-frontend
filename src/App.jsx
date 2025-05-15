@@ -78,6 +78,7 @@ import UserAddress from "./UserAccount/UserAddress";
 import RecentlyViewed from "./UserAccount/RecentlyViewed";
 import AccountSettings from "./UserAccount/AccountSettings";
 import UserAccountLayout from "./UserAccount/UserAccountLayout";
+import EditUserAddress from "./UserAccount/EditUserAddress";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -96,6 +97,7 @@ const AppLayout = () => {
           <Route path="/account/orders" element={<UserOrders />} />
           <Route path="/account/inbox" element={<UserInbox />} />
           <Route path="/account/address-book" element={<UserAddress />} />
+          <Route path="/account/edit-address-book" element={<EditUserAddress />} />
           <Route path="/account/recent-viewed" element={<RecentlyViewed />} />
           <Route path="/account/account-settings" element={<AccountSettings />} />
         </Route>

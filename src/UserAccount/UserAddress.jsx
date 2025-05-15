@@ -33,14 +33,14 @@ const UserAddress = () => {
             <p>Phone: {address.phone}</p>
           </div>
           <div className="flex gap-2">
-            <button
+            <Link
+              to="/account/edit-address-book"
               className="px-6 py-1 bg-crimson-red text-white rounded hover:bg-red-700"
-              onClick={() => {}}
             >
               EDIT
-            </button>
+            </Link>
             <button
-              className="px-6 py-1 bg-crimson-red text-white rounded hover:bg-red-700"
+              className="px-6 cursor-pointer py-1 bg-crimson-red text-white rounded hover:bg-red-700"
               onClick={() => {}}
             >
               DELETE

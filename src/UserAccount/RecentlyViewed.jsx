@@ -1,3 +1,5 @@
+import { useSelector } from "react-redux";
+
 const RecentlyViewed = () => {
   const recentItems = [
     {
@@ -43,6 +45,8 @@ const RecentlyViewed = () => {
     },
   ];
 
+  const { user } = useSelector((state) => state.authUser);
+  console.log(user);
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
       {recentItems.map((item) => (
