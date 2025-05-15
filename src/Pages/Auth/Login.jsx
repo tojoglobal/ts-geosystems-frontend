@@ -177,7 +177,7 @@ const Login = () => {
             <div className="flex gap-4 mb-6">
               <button
                 type="submit"
-                className="bg-[#e62245] text-white px-6 py-2 rounded hover:bg-[#d11a3b]"
+                className="bg-[#e62245] cursor-pointer text-white px-6 py-2 rounded hover:bg-[#d11a3b]"
               >
                 LOGIN
               </button>
@@ -199,14 +199,14 @@ const Login = () => {
             <div className="flex justify-center gap-4">
               <button
                 onClick={handleFacebookLogin}
-                className="flex items-center justify-center p-2 bg-[#3b5998] text-white rounded hover:bg-[#344e86]"
+                className="flex cursor-pointer items-center justify-center p-2 bg-[#3b5998] text-white rounded hover:bg-[#344e86]"
               >
                 <FaFacebook className="mr-2" />
                 Facebook
               </button>
               <button
                 onClick={handleGoogleLogin}
-                className="flex items-center justify-center p-2 bg-[#DB4437] text-white rounded hover:bg-[#c23328]"
+                className="flex cursor-pointer items-center justify-center p-2 bg-[#DB4437] text-white rounded hover:bg-[#c23328]"
               >
                 <FaGoogle className="mr-2" />
                 Google
