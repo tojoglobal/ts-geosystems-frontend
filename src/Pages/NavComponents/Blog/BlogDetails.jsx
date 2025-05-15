@@ -1,6 +1,6 @@
 import { IoSearch } from "react-icons/io5";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import AudioPlayer from "react-h5-audio-player";
+// import AudioPlayer from "react-h5-audio-player";
 import "react-h5-audio-player/lib/styles.css";
 import { Facebook, Twitter, Linkedin, Mail, MessageSquare } from "lucide-react";
 import RelatedArticles from "./RelatedArticles";
@@ -88,7 +88,11 @@ const BlogDetails = () => {
       <section className="max-w-2xl mx-auto my-10">
         {/* Top Images */}
         {topImages.length > 0 && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+          <div
+            className={`grid grid-cols-1 ${
+              topImages.length === 1 ? "md:grid-cols-1" : "md:grid-cols-2"
+            } gap-4 mb-8`}
+          >
             {topImages.map((image, index) => (
               <img
                 key={index}
@@ -102,23 +106,19 @@ const BlogDetails = () => {
         <h2 className="text-2xl font-bold text-[#e62245] capitalize">
           {blog.title}
         </h2>
-        <div className="flex items-center gap-4 my-4">
-          <img
-            src="https://dropinblog.net/34252524/authors/G213PNG.png"
-            alt="Author"
-            className="w-10 rounded-full"
-          />
-          <div className="space-y-1">
-            <p className="text-[#e69ba9]">{blog.author}</p>
-            <p className="text-sm text-gray-500">
-              {new Date(blog.created_at).toLocaleDateString("en-US", {
-                month: "short",
-                day: "numeric",
-                year: "numeric",
-              })}{" "}
-              · 5 minute read
-            </p>
-          </div>
+        <div className="space-y-1 my-2">
+          <p>
+            Author:{" "}
+            <span className="text-[#e0516c] capitalize">{blog.author}</span>
+          </p>
+          <p className="text-sm text-gray-500">
+            {new Date(blog.created_at).toLocaleDateString("en-US", {
+              month: "short",
+              day: "numeric",
+              year: "numeric",
+            })}{" "}
+            · 5 minute read
+          </p>
         </div>
         {/* <div className="my-6 shadow-xl">
           <AudioPlayer
@@ -128,7 +128,11 @@ const BlogDetails = () => {
           />
         </div> */}
         {middleImages.length > 0 && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-8">
+          <div
+            className={`grid grid-cols-1 ${
+              middleImages.length === 1 ? "md:grid-cols-1" : "md:grid-cols-2"
+            } gap-4 mb-8`}
+          >
             {middleImages.map((image, index) => (
               <img
                 key={index}
@@ -140,11 +144,15 @@ const BlogDetails = () => {
           </div>
         )}
         <div
-          className="space-y-3 text-sm blog-content"
+          className="space-y-3 text-sm blog-content mb-4"
           dangerouslySetInnerHTML={{ __html: blog.content || "" }}
         />
         {bottomImages.length > 0 && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-8">
+          <div
+            className={`grid grid-cols-1 ${
+              bottomImages.length === 1 ? "md:grid-cols-1" : "md:grid-cols-2"
+            } gap-4 mb-8`}
+          >
             {bottomImages.map((image, index) => (
               <img
                 key={index}
