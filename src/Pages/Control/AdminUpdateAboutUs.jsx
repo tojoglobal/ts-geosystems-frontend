@@ -7,6 +7,7 @@ import { Editor } from "@tinymce/tinymce-react";
 import Swal from "sweetalert2";
 import Button from "../../Dashboard/Button/Button";
 import Loader from "../../utils/Loader";
+import AboutUsImgesControlls from "../../Dashboard/WebsiteControll/AboutUsPage/AboutUsImgesControlls";
 
 const AdminUpdateAboutUs = () => {
   const axiosPublicUrl = useAxiospublic();
@@ -57,7 +58,6 @@ const AdminUpdateAboutUs = () => {
     reset,
     formState: { errors },
   } = useForm();
-  console.log(errors);
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -99,23 +99,23 @@ const AdminUpdateAboutUs = () => {
     }
   };
 
-  const {
-    getRootProps: getWhoWeServeProps,
-    getInputProps: getWhoWeServeInputProps,
-  } = useDropzone({
-    onDrop: (files) => onDrop(files, setWhoWeServeImage),
-    accept: { "image/*": [".jpeg", ".jpg", ".png", ".webp"] },
-    maxFiles: 1,
-  });
+  // const {
+  //   getRootProps: getWhoWeServeProps,
+  //   getInputProps: getWhoWeServeInputProps,
+  // } = useDropzone({
+  //   onDrop: (files) => onDrop(files, setWhoWeServeImage),
+  //   accept: { "image/*": [".jpeg", ".jpg", ".png", ".webp"] },
+  //   maxFiles: 1,
+  // });
 
-  const {
-    getRootProps: getBottomSectionProps,
-    getInputProps: getBottomSectionInputProps,
-  } = useDropzone({
-    onDrop: (files) => onDrop(files, setBottomSectionImage),
-    accept: { "image/*": [".jpeg", ".jpg", ".png", ".webp"] },
-    maxFiles: 1,
-  });
+  // const {
+  //   getRootProps: getBottomSectionProps,
+  //   getInputProps: getBottomSectionInputProps,
+  // } = useDropzone({
+  //   onDrop: (files) => onDrop(files, setBottomSectionImage),
+  //   accept: { "image/*": [".jpeg", ".jpg", ".png", ".webp"] },
+  //   maxFiles: 1,
+  // });
 
   // Function to strip HTML tags and send plain text
   const stripHtml = (html) => {
@@ -236,7 +236,7 @@ const AdminUpdateAboutUs = () => {
             </div>
           ))}
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="rounded">
             <h2 className="text-base font-semibold mb-2">Who We Serve Image</h2>
             <div
@@ -301,7 +301,7 @@ const AdminUpdateAboutUs = () => {
               )
             )}
           </div>
-        </div>
+        </div> */}
         <div className="flex justify-end">
           <Button
             text={"Update About Us"}
@@ -310,6 +310,10 @@ const AdminUpdateAboutUs = () => {
           />
         </div>
       </form>
+
+      <div>
+        <AboutUsImgesControlls />
+      </div>
     </div>
   );
 };

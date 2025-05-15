@@ -1,7 +1,10 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import { useAxiospublic } from "../../Hooks/useAxiospublic";
+import Swal from "sweetalert2";
 
 const TradeIn = () => {
+  const axiosPublicUrl = useAxiospublic();
   const [formData, setFormData] = useState({
     name: "",
     company: "",
@@ -34,22 +37,54 @@ const TradeIn = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Here you can send formData to your server
-    console.log("Form submitted:", formData);
-    // Add your API call here
-    // Example:
-    // fetch('/api/trade-in', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify(formData),
-    // })
-    // .then(response => response.json())
-    // .then(data => console.log('Success:', data))
-    // .catch(error => console.error('Error:', error));
+
+    const form = new FormData();
+
+    Object.keys(formData).forEach((key) => {
+      if (key === "photos" && formData.photos) {
+        // Append multiple files if `photos` is not null
+        Array.from(formData.photos).forEach((photo) => {
+          form.append(key, photo);
+        });
+      } else if (key !== "photos") {
+        // Append other fields
+        form.append(key, formData[key]);
+      }
+    });
+
+    try {
+      const response = await axiosPublicUrl.post("/api/trade-in", form, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      if (response.status == 201) {
+        Swal.fire("Success", `${response.data?.message}`, "success");
+        setFormData({
+          name: "",
+          company: "",
+          email: "",
+          phone: "",
+          equipment: "",
+          model: "",
+          serialNumber: "",
+          software: "",
+          manufactureDate: "",
+          condition: "",
+          sellOrTrade: "",
+          comments: "",
+          photos: null,
+        });
+      } else {
+        console.error("Failed to submit the form");
+      }
+    } catch (error) {
+      Swal.fire("Error", error.message, "error");
+      console.error("Error submitting form:", error);
+    }
   };
 
   return (
@@ -59,7 +94,7 @@ const TradeIn = () => {
           Home
         </Link>
         <span>/</span>
-        <Link to="/trade-in" className="uppercase text-[#e62245]">
+        <Link to="/trade-in" className="capitalize text-[#e62245]">
           Trade In
         </Link>
       </div>
@@ -204,7 +239,7 @@ const TradeIn = () => {
                   onChange={handleChange}
                   required
                 >
-                  <option value=""></option>
+                  <option value="">Select Instrument</option>
                   <option value="Leica">Leica</option>
                   <option value="Sokkia">Sokkia</option>
                   <option value="Topcon">Topcon</option>
