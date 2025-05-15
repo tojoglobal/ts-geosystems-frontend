@@ -165,11 +165,13 @@ const Promo_product_banner_02 = () => {
   return (
     <div>
       <div className="flex flex-col sm:flex-row sm:gap-10 gap-4">
-        <h2 className="text-xl md:text-2xl text-teal-600 capitalize">promo product banner_02</h2>
+        <h2 className="text-xl md:text-2xl text-teal-600 capitalize">
+          promo product banner_02
+        </h2>
         <div className="text-center">
           <label
             htmlFor="imageUpload"
-            className="inline-block w-full sm:w-auto px-4 sm:px-6 py-2 bg-[#0b6d7f] text-white font-bold rounded transition hover:bg-[#095666] disabled:bg-gray-400"
+            className="inline-block cursor-pointer w-full sm:w-auto px-4 sm:px-6 py-2 bg-[#0b6d7f] text-white font-bold rounded transition hover:bg-[#095666] disabled:bg-gray-400"
           >
             Add Images
           </label>

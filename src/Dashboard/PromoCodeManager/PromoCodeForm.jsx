@@ -68,7 +68,7 @@ export default function PromoCodeForm({
       <div className="flex gap-4">
         <button
           type="submit"
-          className="bg-teal-600 text-white py-[6px] px-4 rounded-md hover:bg-teal-700 transition"
+          className="bg-teal-600 text-white cursor-pointer py-[6px] px-4 rounded-sm hover:bg-teal-700 transition"
         >
           {isEditing ? "Update" : "Create"} Promo
         </button>

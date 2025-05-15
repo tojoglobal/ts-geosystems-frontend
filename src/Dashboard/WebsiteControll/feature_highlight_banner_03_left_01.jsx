@@ -171,7 +171,7 @@ const Feature_highlight_banner_03_left_01 = () => {
         <div className="text-center">
           <label
             htmlFor="imageUpload2"
-            className="inline-block w-full sm:w-auto px-4 sm:px-6 py-2 bg-[#0b6d7f] text-white font-bold rounded transition hover:bg-[#095666] disabled:bg-gray-400"
+            className="inline-block cursor-pointer w-full sm:w-auto px-4 sm:px-6 py-2 bg-[#0b6d7f] text-white font-bold rounded transition hover:bg-[#095666] disabled:bg-gray-400"
           >
             Add Images
           </label>

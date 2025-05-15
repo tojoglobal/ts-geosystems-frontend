@@ -26,9 +26,7 @@ export default function TaxForm({
       className="rounded shadow space-y-3 md:space-y-4"
     >
       <div>
-        <label className="block mb-1 font-medium">
-          Tax Name
-        </label>
+        <label className="block mb-1 font-medium">Tax Name</label>
         <input
           type="text"
           {...register("name")}
@@ -37,9 +35,7 @@ export default function TaxForm({
         />
       </div>
       <div>
-        <label className="block mb-1 font-medium">
-          Value (%)
-        </label>
+        <label className="block mb-1 font-medium">Value (%)</label>
         <input
           type="number"
           step="0.01"
@@ -49,9 +45,7 @@ export default function TaxForm({
         />
       </div>
       <div>
-        <label className="block mb-1 font-medium">
-          Status
-        </label>
+        <label className="block mb-1 font-medium">Status</label>
         <select
           {...register("status")}
           className="w-full input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
@@ -64,7 +58,7 @@ export default function TaxForm({
       <div className="flex gap-3">
         <button
           type="submit"
-          className="bg-teal-600 py-[6px] px-4 rounded-md hover:bg-teal-700 transition"
+          className="bg-teal-600 cursor-pointer py-[6px] px-4 rounded-sm hover:bg-teal-700 transition"
         >
           {isEditing ? "Update Tax" : "Add Tax"}
         </button>
@@ -72,7 +66,7 @@ export default function TaxForm({
           <button
             type="button"
             onClick={onCancel}
-            className="bg-gray-500 text-white px-4 py-2 rounded"
+            className="bg-gray-500 cursor-pointer text-white px-4 py-2 rounded"
           >
             Cancel
           </button>

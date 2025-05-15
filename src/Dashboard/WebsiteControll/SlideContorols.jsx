@@ -108,7 +108,9 @@ const SlideContorols = () => {
 
   return (
     <div className="space-y-3 md:space-y-6">
-      <h2 className="text-xl md:text-2xl font-bold text-teal-600">Hero Banner Editor</h2>
+      <h2 className="text-xl md:text-2xl font-bold text-teal-600">
+        Hero Banner Editor
+      </h2>
       <div className="flex flex-wrap gap-2 mb-4">
         {slides.map((slide) => (
           <Button
@@ -211,7 +213,12 @@ const SlideContorols = () => {
           </CardContent>
         </Card>
         <div className="mt-4 flex justify-end">
-          <Button type="submit">Update Slide {currentSlideId}</Button>
+          <Button
+            className="cursor-pointer bg-[#0b6d7f] hover:bg-[#095666]"
+            type="submit"
+          >
+            Update Slide {currentSlideId}
+          </Button>
         </div>
       </form>
     </div>

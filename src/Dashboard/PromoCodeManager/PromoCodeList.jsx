@@ -16,11 +16,21 @@ export default function PromoCodeList({ data, onEdit, onDelete }) {
         <tbody>
           {data.map((promo) => (
             <tr key={promo.id} className="border-t border-gray-600">
-              <td className="px-2 sm:px-4 py-2 whitespace-nowrap">{promo.title}</td>
-              <td className="px-2 sm:px-4 py-2 whitespace-nowrap">{promo.code_name}</td>
-              <td className="px-2 sm:px-4 py-2 whitespace-nowrap">{promo.no_of_times}</td>
-              <td className="px-2 sm:px-4 py-2 whitespace-nowrap">{promo.discount}</td>
-              <td className="px-2 sm:px-4 py-2 whitespace-nowrap">{promo.type}</td>
+              <td className="px-2 sm:px-4 py-2 whitespace-nowrap">
+                {promo.title}
+              </td>
+              <td className="px-2 sm:px-4 py-2 whitespace-nowrap">
+                {promo.code_name}
+              </td>
+              <td className="px-2 sm:px-4 py-2 whitespace-nowrap">
+                {promo.no_of_times}
+              </td>
+              <td className="px-2 sm:px-4 py-2 whitespace-nowrap">
+                {promo.discount}
+              </td>
+              <td className="px-2 sm:px-4 py-2 whitespace-nowrap">
+                {promo.type}
+              </td>
               <td className="px-2 sm:px-4 py-2 whitespace-nowrap">
                 {promo.status ? "Active" : "Inactive"}
               </td>
@@ -28,13 +38,13 @@ export default function PromoCodeList({ data, onEdit, onDelete }) {
                 <div className="flex flex-wrap gap-2">
                   <button
                     onClick={() => onEdit(promo)}
-                    className="bg-yellow-500 text-white px-3 py-1.5 rounded min-w-[60px] text-center"
+                    className="bg-blue-600 cursor-pointer px-3 py-1.5 rounded min-w-[60px] text-center"
                   >
                     Edit
                   </button>
                   <button
                     onClick={() => onDelete(promo.id)}
-                    className="bg-red-600 text-white px-3 py-1.5 rounded min-w-[60px] text-center"
+                    className="bg-red-700 cursor-pointer text-white px-3 py-1.5 rounded min-w-[60px] text-center"
                   >
                     Delete
                   </button>

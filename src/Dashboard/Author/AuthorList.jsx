@@ -18,16 +18,16 @@ export default function AuthorList({ data, onEdit, onDelete }) {
                 <td className="p-3 border-b border-gray-600">
                   {author.status === 1 ? "Active" : "Inactive"}
                 </td>
-                <td className="p-3 border-b border-gray-600 space-x-2">
+                <td className="p-3 border-b border-gray-600 space-x-3">
                   <button
                     onClick={() => onEdit(author)}
-                    className="text-blue-600 hover:underline"
+                    className="text-blue-600 cursor-pointer hover:underline"
                   >
                     Edit
                   </button>
                   <button
                     onClick={() => onDelete(author.id)}
-                    className="text-red-600 hover:underline"
+                    className="text-red-600 cursor-pointer hover:underline"
                   >
                     Delete
                   </button>

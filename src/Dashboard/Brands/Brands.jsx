@@ -103,7 +103,9 @@ const Brands = () => {
 
   return (
     <div className="max-w-4xl mx-auto">
-      <h2 className="text-xl sm:text-2xl font-bold mb-3 md:mb-5">Add a Brand</h2>
+      <h2 className="text-xl sm:text-2xl font-bold mb-3 md:mb-5">
+        Add a Brand
+      </h2>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div className="space-y-2">
           <label className="block text-sm font-semibold">Brand Name</label>
@@ -136,7 +138,9 @@ const Brands = () => {
               src={
                 imagePreview.startsWith("data:")
                   ? imagePreview
-                  : `${import.meta.env.VITE_OPEN_APIURL}/uploads/${imagePreview}`
+                  : `${
+                      import.meta.env.VITE_OPEN_APIURL
+                    }/uploads/${imagePreview}`
               }
               alt="Preview"
               className="w-32 sm:w-48 h-24 object-cover mt-2 rounded-sm"
@@ -146,23 +150,36 @@ const Brands = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           <label className="flex items-center gap-2 cursor-pointer">
-            <input type="checkbox" {...register("is_populer")} className="w-4 h-4" />
+            <input
+              type="checkbox"
+              {...register("is_populer")}
+              className="w-4 h-4"
+            />
             <span>Popular Brand</span>
           </label>
 
           <label className="flex items-center gap-2 cursor-pointer">
-            <input type="checkbox" {...register("home_page_show")} className="w-4 h-4" />
+            <input
+              type="checkbox"
+              {...register("home_page_show")}
+              className="w-4 h-4"
+            />
             <span>Show on Home Page</span>
           </label>
 
           <label className="flex items-center gap-2 cursor-pointer">
-            <input type="checkbox" {...register("status")} defaultChecked className="w-4 h-4" />
+            <input
+              type="checkbox"
+              {...register("status")}
+              defaultChecked
+              className="w-4 h-4"
+            />
             <span>Active</span>
           </label>
         </div>
         <button
           type="submit"
-          className="w-full bg-teal-600 text-white py-[6px] px-4 rounded-sm hover:bg-teal-700 transition text-sm sm:text-base"
+          className="w-full cursor-pointer bg-teal-600 text-white py-[6px] px-4 rounded-sm hover:bg-teal-700 transition text-sm sm:text-base"
         >
           {editingBrand ? "Update Brand" : "Add Brand"}
         </button>
@@ -197,29 +214,35 @@ const Brands = () => {
                     </td>
                     <td className="p-3 border border-gray-600">
                       <img
-                        src={`${import.meta.env.VITE_OPEN_APIURL}/uploads/${brand.photo}`}
+                        src={`${import.meta.env.VITE_OPEN_APIURL}/uploads/${
+                          brand.photo
+                        }`}
                         alt={brand.brands_name}
                         className="w-20 sm:w-32 h-12 object-cover rounded-sm mx-auto"
                       />
                     </td>
                     <td className="text-center p-3 border border-gray-600 whitespace-nowrap">
                       {brand.home_page_show === 1 ? (
-                        <span className="text-green-600 font-semibold">Shown</span>
+                        <span className="text-green-600 font-semibold">
+                          Shown
+                        </span>
                       ) : (
-                        <span className="text-red-600 font-semibold">Hidden</span>
+                        <span className="text-red-600 font-semibold">
+                          Hidden
+                        </span>
                       )}
                     </td>
                     <td className="p-3 border border-gray-600">
                       <div className="flex justify-center gap-4">
                         <button
                           onClick={() => handleEdit(brand)}
-                          className="text-blue-600 hover:text-blue-800 p-1.5"
+                          className="text-blue-600 cursor-pointer hover:text-blue-800 p-1.5"
                         >
                           <FaEdit size={18} />
                         </button>
                         <button
                           onClick={() => handleDelete(brand.id)}
-                          className="text-red-600 hover:text-red-800 p-1.5"
+                          className="text-red-600 cursor-pointer hover:text-red-800 p-1.5"
                         >
                           <FaTrash size={18} />
                         </button>

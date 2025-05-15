@@ -159,7 +159,7 @@ const Software = () => {
         </div>
         <button
           type="submit"
-          className="w-full bg-teal-600 text-white py-2 px-4 rounded-md hover:bg-teal-700 transition"
+          className="w-full bg-teal-600 cursor-pointer text-white py-2 px-4 rounded-md hover:bg-teal-700 transition"
         >
           {editingBrand ? "Update Software" : "Add Software"}
         </button>
@@ -219,13 +219,13 @@ const Software = () => {
                           <div className="flex justify-center items-center gap-3">
                             <button
                               onClick={() => handleEdit(brand)}
-                              className="text-blue-300 hover:text-blue-500 p-1"
+                              className="text-blue-300 cursor-pointer hover:text-blue-500 p-1"
                             >
                               <FaEdit />
                             </button>
                             <button
                               onClick={() => handleDelete(brand.id)}
-                              className="text-red-600 hover:text-red-800 p-1"
+                              className="text-red-600 cursor-pointer hover:text-red-800 p-1"
                             >
                               <FaTrash />
                             </button>

@@ -21,13 +21,13 @@ export default function BlogTypeList({ data, onEdit, onDelete }) {
                 <td className="p-3 border-b border-gray-600 space-x-2">
                   <button
                     onClick={() => onEdit(type)}
-                    className="text-blue-600 hover:underline"
+                    className="text-blue-600 cursor-pointer hover:underline"
                   >
                     Edit
                   </button>
                   <button
                     onClick={() => onDelete(type.id)}
-                    className="text-red-600 hover:underline"
+                    className="text-red-600 cursor-pointer hover:underline"
                   >
                     Delete
                   </button>

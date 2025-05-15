@@ -1,3 +1,4 @@
+import { Eye, Trash } from "lucide-react";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import useDataQuery from "../../utils/useDataQuery";
 import Swal from "sweetalert2";
@@ -108,7 +109,7 @@ const ClientMessages = () => {
             {data.messages.map((message) => (
               <tr
                 key={message.id}
-                className="bg-slate-800 border-b border-slate-600 hover:bg-slate-700"
+                className="bg-slate-800 border-b border-slate-600"
               >
                 <td className="px-4 py-2">{`${message.first_name} ${message.last_name}`}</td>
                 <td className="px-4 py-2">{message.email}</td>
@@ -127,17 +128,15 @@ const ClientMessages = () => {
                 <td className="px-4 py-2 space-x-2">
                   <button
                     onClick={() => showFullMessage(message)}
-                    className="text-blue-400 hover:text-blue-300 transition-colors px-2 py-1 rounded"
-                    title="View full message"
+                    className="text-yellow-400 cursor-pointer bg-yellow-900 p-1 rounded hover:bg-yellow-800"
                   >
-                    View
+                    <Eye size={16} />
                   </button>
                   <button
                     onClick={() => handleDelete(message.id)}
-                    className="text-red-400 hover:text-red-300 transition-colors cursor-pointer px-2 py-1 rounded"
-                    title="Delete message"
+                    className="text-red-400 cursor-pointer bg-red-900 p-1 rounded hover:bg-red-800"
                   >
-                    Delete
+                    <Trash size={16} />
                   </button>
                 </td>
               </tr>

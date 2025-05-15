@@ -168,7 +168,7 @@ const OrderTable = () => {
         <button
           key={1}
           onClick={() => handlePageChange(1)}
-          className={`px-3 py-1 rounded ${
+          className={`px-3 cursor-pointer py-1 rounded ${
             1 === currentPage
               ? "bg-blue-600 text-white"
               : "bg-slate-700 hover:bg-slate-600"
@@ -192,7 +192,7 @@ const OrderTable = () => {
         <button
           key={i}
           onClick={() => handlePageChange(i)}
-          className={`px-3 py-1 rounded ${
+          className={`px-3 cursor-pointer py-1 rounded ${
             i === currentPage
               ? "bg-blue-600 text-white"
               : "bg-slate-700 hover:bg-slate-600"
@@ -242,7 +242,7 @@ const OrderTable = () => {
           <select
             value={itemsPerPage}
             onChange={handleItemsPerPageChange}
-            className="bg-slate-700 appearance-none text-white text-sm rounded px-4 py-1"
+            className="bg-slate-700 cursor-pointer outline-none appearance-none text-white text-sm rounded px-4 py-1"
           >
             <option value="5">5</option>
             <option value="10">10</option>
@@ -281,13 +281,13 @@ const OrderTable = () => {
                   className="bg-slate-800 border-b border-slate-600"
                 >
                   <td className="px-3 md:px-4 py-2">
-                    <input type="checkbox" />
+                    <input type="checkbox" className="cursor-pointer" />
                   </td>
                   <td className="px-3 md:px-4 py-2">{order?.order_id}</td>
                   <td className="px-3 md:px-4 py-2">{order?.shipping_name}</td>
                   <td className="px-3 md:px-4 py-2">{order?.payment_method}</td>
                   <td
-                    className={`px-3 md:px-4 py-2 ${
+                    className={`px-3 capitalize md:px-4 py-2 ${
                       order?.paymentStatus === "paid"
                         ? "text-green-400"
                         : "text-yellow-400"
@@ -298,7 +298,9 @@ const OrderTable = () => {
                   <td className="px-3 md:px-4 py-2">
                     {parseItems(order?.items).length}
                   </td>
-                  <td className="px-3 md:px-4 py-2">{formatDate(order?.created_at)}</td>
+                  <td className="px-3 md:px-4 py-2">
+                    {formatDate(order?.created_at)}
+                  </td>
                   <td className="px-3 md:px-4 py-2">${order?.total}</td>
                   <td className="px-3 md:px-4 py-2">
                     {editStatusId === order.order_id ? (
@@ -324,21 +326,21 @@ const OrderTable = () => {
                       </span>
                     )}
                   </td>
-                  <td className="px-3 md:px-4 py-2 flex gap-2">
+                  <td className="px-3 md:px-4 py-2 flex gap-3">
                     <button
                       onClick={() => handleDownloadInvoice(order)}
-                      className="text-blue-400 bg-blue-900 p-1 rounded hover:bg-blue-700"
+                      className="text-blue-400 cursor-pointer bg-blue-900 p-1 rounded hover:bg-blue-800"
                     >
                       <FaFilePdf size={16} />
                     </button>
                     <button
                       onClick={() => handleShowOrderDetails(order)}
-                      className="text-yellow-400 bg-yellow-900 p-1 rounded hover:bg-yellow-700"
+                      className="text-yellow-400 cursor-pointer bg-yellow-900 p-1 rounded hover:bg-yellow-800"
                     >
                       <Eye size={16} />
                     </button>
                     <button
-                      className="text-green-400 bg-green-900 p-1 rounded hover:bg-green-700"
+                      className="text-green-400 cursor-pointer bg-green-900 p-1 rounded hover:bg-green-800"
                       onClick={() =>
                         setEditStatusId((prev) =>
                           prev === order.order_id ? null : order.order_id
@@ -349,7 +351,7 @@ const OrderTable = () => {
                     </button>
                     <button
                       onClick={() => handleDeleteOrder(order?.order_id)}
-                      className="text-red-400 bg-red-900 p-1 rounded hover:bg-red-700"
+                      className="text-red-400 cursor-pointer bg-red-900 p-1 rounded hover:bg-red-800"
                     >
                       <Trash size={16} />
                     </button>
@@ -378,14 +380,14 @@ const OrderTable = () => {
             <button
               onClick={() => handlePageChange(1)}
               disabled={currentPage === 1}
-              className="p-1 rounded bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-600"
+              className="p-1 cursor-pointer rounded bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-600"
             >
               <ChevronsLeft size={18} />
             </button>
             <button
               onClick={() => handlePageChange(currentPage - 1)}
               disabled={currentPage === 1}
-              className="p-1 rounded bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-600"
+              className="p-1 cursor-pointer rounded bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-600"
             >
               <ChevronLeft size={18} />
             </button>
@@ -395,14 +397,14 @@ const OrderTable = () => {
             <button
               onClick={() => handlePageChange(currentPage + 1)}
               disabled={currentPage === pagination.totalPages}
-              className="p-1 rounded bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-600"
+              className="p-1 cursor-pointer rounded bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-600"
             >
               <ChevronRight size={18} />
             </button>
             <button
               onClick={() => handlePageChange(pagination.totalPages)}
               disabled={currentPage === pagination.totalPages}
-              className="p-1 rounded bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-600"
+              className="p-1 cursor-pointer rounded bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-600"
             >
               <ChevronsRight size={18} />
             </button>

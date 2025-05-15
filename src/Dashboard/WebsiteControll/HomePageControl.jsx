@@ -133,7 +133,7 @@ const HomePageControl = () => {
         <button
           onClick={handleSave}
           disabled={isSaving}
-          className="px-6 py-2 bg-[#0b6d7f] text-white font-bold rounded transition hover:bg-[#095666] disabled:bg-gray-400"
+          className="px-6 py-1.5 cursor-pointer bg-[#0b6d7f] text-white font-bold rounded transition hover:bg-[#095666] disabled:bg-gray-400"
         >
           {isSaving ? "Saving..." : "Save Settings"}
         </button>

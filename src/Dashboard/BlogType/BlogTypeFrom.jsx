@@ -36,7 +36,7 @@ export default function BlogTypeForm({
       <div className="flex gap-3">
         <button
           type="submit"
-          className="bg-teal-600 py-2 px-4 rounded-md hover:bg-teal-700 transition"
+          className="bg-teal-600 cursor-pointer py-2 px-4 rounded-md hover:bg-teal-700 transition"
         >
           {isEditing ? "Update Blog Type" : "Add Blog Type"}
         </button>
@@ -44,7 +44,7 @@ export default function BlogTypeForm({
           <button
             type="button"
             onClick={onCancel}
-            className="bg-gray-500 text-white px-4 py-2 rounded"
+            className="bg-gray-500 cursor-pointer text-white px-4 py-2 rounded"
           >
             Cancel
           </button>

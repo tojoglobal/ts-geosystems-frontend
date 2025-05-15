@@ -1,23 +1,32 @@
 import Swal from "sweetalert2";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
-import { useQuery } from "@tanstack/react-query";
 import { X } from "lucide-react";
+import useDataQuery from "../../utils/useDataQuery";
 
 const ExperienceCenterControl = () => {
   const axiosPublicUrl = useAxiospublic();
-
   const {
-    data: images = [],
+    data = {},
     isLoading,
     isError,
     refetch,
-  } = useQuery({
-    queryKey: ["experience_center_images"],
-    queryFn: async () => {
-      const res = await axiosPublicUrl.get("/api/get-experience-center-images");
-      return res?.data?.data || [];
-    },
-  });
+  } = useDataQuery(
+    ["experience_center_images_public"],
+    "/api/get-experience-center-images"
+  );
+  const images = data?.data || [];
+  // const {
+  //   data: images = [],
+  //   isLoading,
+  //   isError,
+  //   refetch,
+  // } = useQuery({
+  //   queryKey: ["experience_center_images"],
+  //   queryFn: async () => {
+  //     const res = await axiosPublicUrl.get("/api/get-experience-center-images");
+  //     return res?.data?.data || [];
+  //   },
+  // });
 
   const handleImageUpload = async (event) => {
     const files = Array.from(event.target.files);

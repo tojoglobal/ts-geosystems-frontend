@@ -172,27 +172,27 @@ const ProductTable = () => {
                   <td className="py-4 px-4 sm:px-6">
                     {getBrandName(product.brand_name)}
                   </td>
-                  <td className="py-4 px-4 sm:px-6 flex justify-center items-center gap-3 flex-wrap">
+                  <td className="py-4 px-4 sm:px-6 flex justify-center items-center gap-3 md:flex-row">
                     <Link to={`/dashboard/update-product/${product.id}`}>
-                      <button className="text-blue-400 hover:text-blue-600">
-                        <FaEdit size={18} />
+                      <button className="text-blue-400 cursor-pointer hover:text-blue-600">
+                        <FaEdit size={16} />
                       </button>
                     </Link>
                     <button
                       onClick={() =>
                         handleDelete(product.id, product.image_urls)
                       }
-                      className="text-red-400 hover:text-red-600"
+                      className="text-red-400 cursor-pointer hover:text-red-600"
                       title="Delete"
                     >
-                      <FaTrash size={18} />
+                      <FaTrash size={16} />
                     </button>
                     <button
                       onClick={() => handleView(product)}
-                      className="text-green-400 hover:text-green-600"
+                      className="text-green-400 cursor-pointer hover:text-green-600"
                       title="View"
                     >
-                      <FaEye size={18} />
+                      <FaEye size={19} />
                     </button>
                   </td>
                 </tr>

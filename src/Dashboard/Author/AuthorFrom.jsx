@@ -36,7 +36,7 @@ export default function AuthorForm({
       <div className="flex gap-3">
         <button
           type="submit"
-          className="bg-teal-600 py-2 px-4 rounded-md hover:bg-teal-700 transition"
+          className="bg-teal-600 py-[6px] px-4 rounded-sm cursor-pointer hover:bg-teal-700 transition"
         >
           {isEditing ? "Update Author" : "Add Author"}
         </button>

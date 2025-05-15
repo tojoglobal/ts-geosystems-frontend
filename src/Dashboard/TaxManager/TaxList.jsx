@@ -36,13 +36,13 @@ export default function TaxList({ data, onEdit, onDelete }) {
                   <div className="flex gap-3">
                     <button
                       onClick={() => onEdit(tax)}
-                      className="text-blue-600 hover:underline min-w-[40px] py-1"
+                      className="text-blue-600 cursor-pointer hover:underline min-w-[40px] py-1"
                     >
                       Edit
                     </button>
                     <button
                       onClick={() => onDelete(tax.id)}
-                      className="text-red-600 hover:underline min-w-[40px] py-1"
+                      className="text-red-600 cursor-pointer hover:underline min-w-[40px] py-1"
                     >
                       Delete
                     </button>

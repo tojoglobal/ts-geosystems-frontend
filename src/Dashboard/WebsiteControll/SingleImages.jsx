@@ -75,7 +75,7 @@ const SingleImages = () => {
               <div className="absolute top-2 right-2 z-10">
                 <button
                   onClick={() => handleEditClick(image?.id)}
-                  className="p-2 sm:p-2.5 bg-[#0b6d7f] text-white rounded-full transition hover:bg-[#095666] disabled:bg-gray-400 active:scale-95 touch-manipulation"
+                  className="p-2 cursor-pointer sm:p-2.5 bg-[#0b6d7f] text-white rounded-full transition hover:bg-[#095666] disabled:bg-gray-400 active:scale-95 touch-manipulation"
                   aria-label="Edit image"
                 >
                   <EditIcon className="w-4 h-4 sm:w-5 sm:h-5" />

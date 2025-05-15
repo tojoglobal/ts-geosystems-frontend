@@ -169,7 +169,7 @@ const LatestTransactions = () => {
                   <td className="px-4 py-1 md:py-2">{order?.shipping_name}</td>
                   <td className="px-4 py-1 md:py-2">{order?.payment_method}</td>
                   <td
-                    className={`px-4 py-1 md:py-2 ${
+                    className={`px-4 py-1 capitalize md:py-2 ${
                       order?.paymentStatus === "paid"
                         ? "text-green-400"
                         : "text-yellow-400"
@@ -180,7 +180,9 @@ const LatestTransactions = () => {
                   <td className="px-4 py-1 md:py-2">
                     {parseItems(order?.items).length}
                   </td>
-                  <td className="px-4 py-1 md:py-2">{formatDate(order?.created_at)}</td>
+                  <td className="px-4 py-1 md:py-2">
+                    {formatDate(order?.created_at)}
+                  </td>
                   <td className="px-4 py-1 md:py-2">${order?.total}</td>
                   <td className="px-4 py-1 md:py-2">
                     {editStatusId === order.order_id ? (
@@ -206,22 +208,22 @@ const LatestTransactions = () => {
                       </span>
                     )}
                   </td>
-                  <td className="px-4 py-1 md:py-2 flex gap-2">
+                  <td className="px-4 py-1 md:py-2 flex gap-3">
                     <button
                       onClick={() => handleDownloadInvoice(order)}
-                      className="text-blue-400 bg-blue-900 p-1 rounded hover:bg-blue-700"
+                      className="text-blue-400 cursor-pointer bg-blue-900 p-1 rounded hover:bg-blue-800"
                     >
                       <FaFilePdf size={16} />
                     </button>
                     <button
                       onClick={() => handleShowOrderDetails(order)}
-                      className="text-yellow-400 bg-yellow-900 p-1 rounded hover:bg-yellow-700"
+                      className="text-yellow-400 cursor-pointer bg-yellow-900 p-1 rounded hover:bg-yellow-800"
                     >
                       <Eye size={16} />
                     </button>
 
                     <button
-                      className="text-green-400 bg-green-900 p-1 rounded hover:bg-green-700"
+                      className="text-green-400 cursor-pointer bg-green-900 p-1 rounded hover:bg-green-800"
                       onClick={() =>
                         setEditStatusId((prev) =>
                           prev === order.order_id ? null : order.order_id
@@ -232,7 +234,7 @@ const LatestTransactions = () => {
                     </button>
                     <button
                       onClick={() => handleDeleteOrder(order?.order_id)}
-                      className="text-red-400 bg-red-900 p-1 rounded hover:bg-red-700"
+                      className="text-red-400 cursor-pointer bg-red-900 p-1 rounded hover:bg-red-800"
                     >
                       <Trash size={16} />
                     </button>

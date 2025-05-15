@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useForm, Controller } from "react-hook-form";
 import { Editor } from "@tinymce/tinymce-react";
 import { useEffect, useState } from "react";
@@ -258,7 +259,7 @@ const BlogUpdate = () => {
                 key={tag}
                 type="button"
                 onClick={() => handleTagSelect(tag)}
-                className="px-3 py-1 bg-gray-700 rounded text-white text-sm"
+                className="px-3 py-1 cursor-pointer bg-gray-700 rounded text-white text-sm"
               >
                 {tag}
               </button>

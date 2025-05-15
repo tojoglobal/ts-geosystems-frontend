@@ -310,12 +310,11 @@ const Categorys = () => {
             <input type="hidden" value={1} {...registerCategory("status")} />
             <button
               type="submit"
-              className="bg-teal-600 text-white px-4 py-2 rounded hover:bg-teal-700 w-full sm:w-auto"
+              className="bg-teal-600 text-white cursor-pointer px-4 py-2 rounded hover:bg-teal-700 w-full sm:w-auto"
             >
               {editingCategory ? "Update Category" : "Add Category"}
             </button>
           </form>
-
           <div className="overflow-x-auto">
             <div className="inline-block min-w-full align-middle">
               <div className="overflow-hidden border border-gray-600 rounded-lg">
@@ -358,7 +357,7 @@ const Categorys = () => {
                           <div className="flex justify-center space-x-2">
                             <button
                               onClick={() => handleEditCategory(cat)}
-                              className="text-blue-600 hover:text-blue-800 p-1"
+                              className="text-blue-600 cursor-pointer hover:text-blue-800 p-1"
                             >
                               <FaEdit size={16} />
                             </button>
@@ -423,7 +422,7 @@ const Categorys = () => {
             <input type="hidden" value={1} {...registerSubCategory("status")} />
             <button
               type="submit"
-              className="bg-teal-600 text-white px-4 py-2 rounded hover:bg-teal-700 w-full sm:w-auto"
+              className="bg-teal-600 cursor-pointer text-white px-4 py-2 rounded hover:bg-teal-700 w-full sm:w-auto"
             >
               {editingSubCategory ? "Update Subcategory" : "Add Subcategory"}
             </button>
@@ -473,7 +472,7 @@ const Categorys = () => {
                           <div className="flex justify-center space-x-2">
                             <button
                               onClick={() => handleEditSubCategory(sub)}
-                              className="text-blue-600 hover:text-blue-800 p-1"
+                              className="text-blue-600 cursor-pointer hover:text-blue-800 p-1"
                             >
                               <FaEdit size={16} />
                             </button>
