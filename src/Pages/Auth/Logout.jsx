@@ -3,11 +3,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import { logout } from "../../features/UserAuth/authSlice";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 const Logout = () => {
   const { user } = useSelector((state) => state.authUser);
   const dispatch = useDispatch();
   const axiosPublic = useAxiospublic();
+  const navigate = useNavigate();
 
   const handleLogout = async () => {
     try {
@@ -19,6 +21,7 @@ const Logout = () => {
         showConfirmButton: false,
         timer: 1500,
       });
+      navigate("/user/login");
     } catch (error) {
       Swal.fire({
         icon: "error",
