@@ -82,7 +82,7 @@ const HeaderContainer = () => {
                         ACCOUNT INFO
                       </h3>
                       <Link
-                        to="/orders"
+                        to="/account/orders"
                         className="py-[1px] text-[14px] font-normal hover:text-crimson-red"
                       >
                         Orders
@@ -94,25 +94,25 @@ const HeaderContainer = () => {
                         Returns
                       </Link>
                       <Link
-                        to="/messages"
+                        to="/account/inbox"
                         className="py-[1px] text-[14px] font-normal hover:text-crimson-red"
                       >
                         Messages (0)
                       </Link>
                       <Link
-                        to="/addresses"
+                        to="/account/address-book"
                         className="py-[1px] text-[14px] font-normal hover:text-crimson-red"
                       >
                         Addresses
                       </Link>
                       <Link
-                        to="/recently-viewed"
+                        to="/account/recent-viewed"
                         className="py-[1px] text-[14px] font-normal hover:text-crimson-red"
                       >
                         Recently Viewed
                       </Link>
                       <Link
-                        to="/account-settings"
+                        to="/account/account-settings"
                         className="py-[1px] text-[14px] font-normal hover:text-crimson-red"
                       >
                         Account Settings

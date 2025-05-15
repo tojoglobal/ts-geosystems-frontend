@@ -72,6 +72,12 @@ import AdminUpdateCertificateTracking from "./Pages/Control/AdminUpdateCertifica
 import WelcomePage from "./Pages/WelcomePage/WelcomePage";
 import UserProtectedRoute from "./ProtectedRoute/UserProtectedRoute";
 import UserDashboard from "./UserAccount/UserDashboard";
+import UserOrders from "./UserAccount/UserOrders";
+import UserInbox from "./UserAccount/UserInbox";
+import UserAddress from "./UserAccount/UserAddress";
+import RecentlyViewed from "./UserAccount/RecentlyViewed";
+import AccountSettings from "./UserAccount/AccountSettings";
+import UserAccountLayout from "./UserAccount/UserAccountLayout";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -85,6 +91,14 @@ const AppLayout = () => {
         <Route path="/" element={<MainHome />} />
         <Route path="/cc" element={<CertificateTracking />} />
         <Route path="/checkout" element={<Checkout />} />
+        {/* user account */}
+        <Route element={<UserAccountLayout />}>
+          <Route path="/account/orders" element={<UserOrders />} />
+          <Route path="/account/inbox" element={<UserInbox />} />
+          <Route path="/account/address-book" element={<UserAddress />} />
+          <Route path="/account/recent-viewed" element={<RecentlyViewed />} />
+          <Route path="/account/account-settings" element={<AccountSettings />} />
+        </Route>
         {/* product layout route */}
         <Route element={<ProductLayout />}>
           <Route path="/remote-support" element={<RemoteSupport />} />
