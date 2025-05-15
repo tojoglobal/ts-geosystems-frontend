@@ -132,14 +132,6 @@ const menuItems = [
     icon: <Layers size={20} />,
     to: "/dashboard/layouts",
   },
-  {
-    label: "Files",
-    icon: <File size={20} />,
-    submenu: [
-      { label: "Documents", to: "/dashboard/files/documents" },
-      { label: "Images", to: "/dashboard/files/images" },
-    ],
-  },
 ];
 
 const Sidebar = ({

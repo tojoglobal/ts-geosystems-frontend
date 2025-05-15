@@ -82,37 +82,37 @@ const HeaderContainer = () => {
                         ACCOUNT INFO
                       </h3>
                       <Link
-                        to="/account/orders"
+                        to="/user/account/orders"
                         className="py-[1px] text-[14px] font-normal hover:text-crimson-red"
                       >
                         Orders
                       </Link>
-                      <Link
-                        to="/returns"
+                      {/* <Link
+                        to="/user/account/returns"
                         className="py-[1px] text-[14px] font-normal hover:text-crimson-red"
                       >
                         Returns
-                      </Link>
+                      </Link> */}
                       <Link
-                        to="/account/inbox"
+                        to="/user/account/inbox"
                         className="py-[1px] text-[14px] font-normal hover:text-crimson-red"
                       >
                         Messages (0)
                       </Link>
                       <Link
-                        to="/account/address-book"
+                        to="/user/account/address-book"
                         className="py-[1px] text-[14px] font-normal hover:text-crimson-red"
                       >
                         Addresses
                       </Link>
                       <Link
-                        to="/account/recent-viewed"
+                        to="/user/account/recent-viewed"
                         className="py-[1px] text-[14px] font-normal hover:text-crimson-red"
                       >
                         Recently Viewed
                       </Link>
                       <Link
-                        to="/account/account-settings"
+                        to="/user/account/account-settings"
                         className="py-[1px] text-[14px] font-normal hover:text-crimson-red"
                       >
                         Account Settings

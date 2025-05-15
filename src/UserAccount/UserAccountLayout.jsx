@@ -5,18 +5,18 @@ const UserAccountLayout = () => {
   const getPageInfo = () => {
     const path = location.pathname;
     switch (path) {
-      case "/account/orders":
+      case "/user/account/orders":
         return { title: "Orders", breadcrumb: "Your Orders" };
-      case "/account/inbox":
+      case "/user/account/inbox":
         return { title: "Messages", breadcrumb: "Your Messages" };
-      case "/account/address-book":
+      case "/user/account/address-book":
         return { title: "Addresses", breadcrumb: "Your Addresses" };
-      case "/account/recent-viewed":
+      case "/user/account/recent-viewed":
         return {
           title: "Recently Viewed",
           breadcrumb: "Recently Viewed Items",
         };
-      case "/account/account-settings":
+      case "/user/account/account-settings":
         return { title: "Account Settings", breadcrumb: "Account Settings" };
       default:
         return { title: "Account", breadcrumb: "Your Account" };
@@ -47,7 +47,7 @@ const UserAccountLayout = () => {
       <h1 className="text-[28px] font-light mb-3">{pageInfo.title}</h1>
       <div className="flex flex-wrap md:flex-row gap-5 justify-center text-[14px] font-normal mb-12">
         <Link
-          to="/account/orders"
+          to="/user/account/orders"
           className={`${
             isActiveLink("/account/orders")
               ? "border-b-2 border-black -mb-[2px]"
@@ -57,7 +57,7 @@ const UserAccountLayout = () => {
           ORDERS
         </Link>
         <Link
-          to="/account/inbox"
+          to="/user/account/inbox"
           className={`${
             isActiveLink("/account/inbox")
               ? "border-b-2 border-black -mb-[2px]"
@@ -67,7 +67,7 @@ const UserAccountLayout = () => {
           MESSAGES (0)
         </Link>
         <Link
-          to="/account/address-book"
+          to="/user/account/address-book"
           className={`${
             isActiveLink("/account/address-book")
               ? "border-b-2 border-black -mb-[2px]"
@@ -77,7 +77,7 @@ const UserAccountLayout = () => {
           ADDRESSES
         </Link>
         <Link
-          to="/account/recent-viewed"
+          to="/user/account/recent-viewed"
           className={`${
             isActiveLink("/account/recent-viewed")
               ? "border-b-2 border-black -mb-[2px]"
@@ -87,7 +87,7 @@ const UserAccountLayout = () => {
           RECENTLY VIEWED
         </Link>
         <Link
-          to="/account/account-settings"
+          to="/user/account/account-settings"
           className={`${
             isActiveLink("/account/account-settings")
               ? "border-b-2 border-black -mb-[2px]"

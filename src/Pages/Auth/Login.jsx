@@ -48,7 +48,7 @@ const Login = () => {
         });
         // Redirect based on user role
         if (response.data.user.role === "USER") {
-          navigate("/user/account");
+          navigate("/user/account/orders");
         } else {
           navigate("/");
         }
@@ -91,7 +91,7 @@ const Login = () => {
       });
 
       if (res.status === 200) {
-        navigate("/user/account");
+        navigate("/user/account/orders");
         Swal.fire({ icon: "success", title: "Login successful!", timer: 1500 });
         console.log(res.data);
 
@@ -118,7 +118,7 @@ const Login = () => {
       });
 
       if (res.status === 200) {
-        navigate("/user/account");
+        navigate("/user/account/orders");
         Swal.fire({ icon: "success", title: "Login successful!", timer: 1500 });
         dispatch(
           loginSuccess({

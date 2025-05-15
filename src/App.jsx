@@ -91,14 +91,7 @@ const AppLayout = () => {
         <Route path="/" element={<MainHome />} />
         <Route path="/cc" element={<CertificateTracking />} />
         <Route path="/checkout" element={<Checkout />} />
-        {/* user account */}
-        <Route element={<UserAccountLayout />}>
-          <Route path="/account/orders" element={<UserOrders />} />
-          <Route path="/account/inbox" element={<UserInbox />} />
-          <Route path="/account/address-book" element={<UserAddress />} />
-          <Route path="/account/recent-viewed" element={<RecentlyViewed />} />
-          <Route path="/account/account-settings" element={<AccountSettings />} />
-        </Route>
+
         {/* product layout route */}
         <Route element={<ProductLayout />}>
           <Route path="/remote-support" element={<RemoteSupport />} />
@@ -136,13 +129,19 @@ const AppLayout = () => {
         <Route path="/user/login" element={<Login />} />
         <Route path="/user/create_account" element={<Register />} />
         <Route
-          path="/user/account"
+          path="/user/account/"
           element={
             <UserProtectedRoute>
-              <UserDashboard />
+              <UserAccountLayout />
             </UserProtectedRoute>
           }
-        />
+        >
+          <Route path="orders" element={<UserOrders />} />
+          <Route path="inbox" element={<UserInbox />} />
+          <Route path="address-book" element={<UserAddress />} />
+          <Route path="recent-viewed" element={<RecentlyViewed />} />
+          <Route path="account-settings" element={<AccountSettings />} />
+        </Route>
 
         {/* Admin Routes */}
         <Route path="/admin/login" element={<AdminLogin />} />
