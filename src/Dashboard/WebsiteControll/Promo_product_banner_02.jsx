@@ -56,7 +56,7 @@ const SortableImage = ({ image, onDelete }) => {
       {/* Delete Button */}
       <button
         onClick={() => onDelete(image?.id)}
-        className="absolute top-2 right-2 z-50 bg-red-500 text-white p-1.5 rounded-full opacity-0 group-hover:opacity-100 sm:group-hover:opacity-100 transition active:scale-95 touch-manipulation"
+        className="absolute cursor-pointer top-2 right-2 z-50 bg-red-500 text-white p-1.5 rounded-full opacity-0 group-hover:opacity-100 sm:group-hover:opacity-100 transition active:scale-95 touch-manipulation"
       >
         <X className="w-4 h-4" />
       </button>
