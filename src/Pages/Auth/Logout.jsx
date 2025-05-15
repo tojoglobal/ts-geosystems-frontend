@@ -33,7 +33,7 @@ const Logout = () => {
   };
 
   return (
-    <button onClick={handleLogout} className=" text-burgundy">
+    <button onClick={handleLogout} className="cursor-pointer text-burgundy">
       Logout
     </button>
   );
