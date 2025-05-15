@@ -34,9 +34,12 @@ const BlogTable = () => {
       text: "This blog and all its images will be permanently deleted.",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
       confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "Cancel",
+      background: "#1e293b",
+      color: "#f8fafc",
+      confirmButtonColor: "#e11d48",
+      cancelButtonColor: "#64748b",
     });
 
     if (result.isConfirmed) {

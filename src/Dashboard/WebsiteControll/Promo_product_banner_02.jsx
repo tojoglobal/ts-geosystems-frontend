@@ -119,6 +119,11 @@ const Promo_product_banner_02 = () => {
       icon: "warning",
       showCancelButton: true,
       confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "Cancel",
+      background: "#1e293b",
+      color: "#f8fafc",
+      confirmButtonColor: "#e11d48",
+      cancelButtonColor: "#64748b",
     });
 
     if (confirm.isConfirmed) {
