@@ -30,7 +30,7 @@ const GadgetBanner = () => {
             }}
             loop={true}
             pagination={{ clickable: true }}
-            className="w-full h-[150px] md:h-[325px] rounded-lg"
+            className="w-full h-[150px] md:h-[320px] rounded-lg"
           >
             {data.data.map((img, index) => (
               <SwiperSlide key={index}>
@@ -49,7 +49,7 @@ const GadgetBanner = () => {
           <img
             src={`${import.meta.env.VITE_OPEN_APIURL}${banner?.data[0]?.imageUrl}`}
             alt="Right Side"
-            className="w-full h-[150px] md:h-[325px] object-cover transition-transform duration-300 group-hover:scale-110"
+            className="w-auto h-[150px] md:h-[320px] object-cover transition-transform duration-300 group-hover:scale-110"
           />
         </div>
       </div>

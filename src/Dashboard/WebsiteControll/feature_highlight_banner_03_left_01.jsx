@@ -56,7 +56,7 @@ const FeatureSortableImage = ({ image, onDelete }) => {
       {/* Delete Button */}
       <button
         onClick={() => onDelete(image?.id)}
-        className="absolute top-2 right-2 z-50 bg-red-500 text-white p-1.5 rounded-full opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition active:scale-95 touch-manipulation"
+        className="absolute top-2 cursor-pointer right-2 z-50 bg-red-500 text-white p-1.5 rounded-full opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition active:scale-95 touch-manipulation"
       >
         <X className="w-4 h-4" />
       </button>
