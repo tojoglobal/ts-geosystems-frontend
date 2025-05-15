@@ -4,7 +4,7 @@ import { FaFacebook, FaGoogle } from "react-icons/fa";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import Swal from "sweetalert2";
 import { signInWithPopup } from "firebase/auth";
-import { auth, googleProvider, facebookProvider } from "./firebase.config";
+import { auth, googleProvider, facebookProvider } from "./firebase.config.js";
 import { useDispatch } from "react-redux";
 import { loginSuccess } from "../../features/UserAuth/authSlice";
 
@@ -91,8 +91,16 @@ const Login = () => {
       });
 
       if (res.status === 200) {
-        navigate("/dashboard");
+        navigate("/user/account");
         Swal.fire({ icon: "success", title: "Login successful!", timer: 1500 });
+        console.log(res.data);
+
+        dispatch(
+          loginSuccess({
+            email: res.data.user.email,
+            role: res.data.user.role,
+          })
+        );
       }
     } catch (error) {
       console.error("Google login error:", error);
@@ -110,8 +118,14 @@ const Login = () => {
       });
 
       if (res.status === 200) {
-        navigate("/dashboard");
+        navigate("/user/account");
         Swal.fire({ icon: "success", title: "Login successful!", timer: 1500 });
+        dispatch(
+          loginSuccess({
+            email: res.data.user.email,
+            role: res.data.user.role,
+          })
+        );
       }
     } catch (error) {
       console.error("Facebook login error:", error);
