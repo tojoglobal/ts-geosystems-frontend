@@ -1,7 +1,9 @@
+import { useSelector } from "react-redux";
 import SocialButtons from "../Components/SocialButtons";
 import { Link } from "react-router-dom";
 
 const Footer = () => {
+  const { user } = useSelector((state) => state.authUser);
   return (
     <footer className="bg-[#585c5d] text-white pt-12">
       <div className="max-w-[85%] mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 pb-10">
@@ -89,8 +91,8 @@ const Footer = () => {
           <div className="flex mb-4">
             <input
               type="email"
-              placeholder="Your E-mail"
-              className="w-full p-2 placeholder:italic text-black bg-white rounded-l-[4px]"
+              placeholder={user?.email || "Your E-mail"}
+              className="w-full py-2 px-3 placeholder:text-sm placeholder:italic placeholder:text-black text-sm italic placeholder:font-normal bg-white rounded-l-[4px]"
             />
             <button className="bg-[#af1334] px-4 py-2 rounded-r-sm font-medium">
               JOIN

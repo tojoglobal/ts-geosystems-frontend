@@ -1,8 +1,6 @@
-import React from "react";
-
 const UserDashboard = () => {
   return (
-    <div>
+    <div className="min-h-[60vh]">
       <h2>Welcom to the user</h2>
     </div>
   );

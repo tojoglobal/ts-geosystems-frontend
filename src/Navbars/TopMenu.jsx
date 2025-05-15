@@ -2,12 +2,12 @@ import { useSelector } from "react-redux";
 import Logout from "../Pages/Auth/Logout";
 
 const TopMenu = () => {
-  const { isAuth, user } = useSelector((state) => state.authUser);
-  console.log(isAuth, user);
+  const { isAuth } = useSelector((state) => state.authUser);
+  // console.log(isAuth);
 
   return (
-    <div className="border-b border-slightly-dark">
-      <div className="max-w-[1370px] mx-auto py-1 align-middle">
+    <div className="max-w-[1370px] mx-auto py-1 flex items-center justify-between border-b border-slightly-dark">
+      <div className="align-middle">
         <a
           href="tel:+443330232200"
           className="text-left text-burgundy text-[16px]"
@@ -15,12 +15,14 @@ const TopMenu = () => {
           +44 (0)333 023 2200
         </a>
       </div>
-      {isAuth && (
-        // <p>
-        //   Welcome, {user?.email} ({user?.role})
-        // </p>
-        <Logout />
-      )}
+      <div>
+        {isAuth && (
+          // <p>
+          //   Welcome, {user?.email} ({user?.role})
+          // </p>
+          <Logout />
+        )}
+      </div>
     </div>
   );
 };
