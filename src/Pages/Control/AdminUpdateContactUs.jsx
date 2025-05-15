@@ -195,7 +195,7 @@ const AdminUpdateContactUs = () => {
                     <button
                       type="button"
                       onClick={() => removePhone(index)}
-                      className="bg-red-500 text-white px-2 py-1.5 rounded text-xs md:text-sm w-auto min-w-[80px] md:min-w-[100px] flex items-center justify-center gap-1"
+                      className="bg-red-500 cursor-pointer text-white px-2 py-1.5 rounded text-xs md:text-sm w-auto min-w-[80px] md:min-w-[100px] flex items-center justify-center gap-1"
                     >
                       <span>Remove</span>
                     </button>
@@ -205,7 +205,7 @@ const AdminUpdateContactUs = () => {
               <button
                 type="button"
                 onClick={() => addPhone({ value: "" })}
-                className="bg-teal-600 text-white px-3 py-1 rounded text-sm md:text-base w-full md:w-auto"
+                className="bg-teal-600 cursor-pointer text-white px-3 py-1 rounded text-sm md:text-base w-full md:w-auto"
               >
                 + Add Phone Number
               </button>
@@ -241,7 +241,7 @@ const AdminUpdateContactUs = () => {
                     <button
                       type="button"
                       onClick={() => removeEmail(index)}
-                      className="bg-red-500 text-white px-2 py-1.5 rounded text-xs md:text-sm w-auto min-w-[80px] md:min-w-[100px] flex items-center justify-center gap-1"
+                      className="bg-red-500 cursor-pointer text-white px-2 py-1.5 rounded text-xs md:text-sm w-auto min-w-[80px] md:min-w-[100px] flex items-center justify-center gap-1"
                     >
                       <span>Remove</span>
                     </button>
@@ -251,7 +251,7 @@ const AdminUpdateContactUs = () => {
               <button
                 type="button"
                 onClick={() => addEmail({ value: "" })}
-                className="bg-teal-600 text-white px-3 py-1 rounded text-sm md:text-base w-full md:w-auto"
+                className="bg-teal-600 cursor-pointer text-white px-3 py-1 rounded text-sm md:text-base w-full md:w-auto"
               >
                 + Add Email Address
               </button>
@@ -292,7 +292,7 @@ const AdminUpdateContactUs = () => {
                   <button
                     type="button"
                     onClick={() => removeAddress(index)}
-                    className="bg-red-500 text-white px-2 py-1.5 rounded text-xs md:text-sm w-auto min-w-[80px] md:min-w-[100px] flex items-center justify-center gap-1"
+                    className="bg-red-500 cursor-pointer text-white px-2 py-1.5 rounded text-xs md:text-sm w-auto min-w-[80px] md:min-w-[100px] flex items-center justify-center gap-1"
                   >
                     <span>Remove</span>
                   </button>
@@ -302,7 +302,7 @@ const AdminUpdateContactUs = () => {
             <button
               type="button"
               onClick={() => addAddress({ value: "" })}
-              className="bg-teal-600 text-white px-3 py-1 rounded text-sm md:text-base w-full md:w-auto"
+              className="bg-teal-600 cursor-pointer text-white px-3 py-1 rounded text-sm md:text-base w-full md:w-auto"
             >
               + Add Office Address
             </button>

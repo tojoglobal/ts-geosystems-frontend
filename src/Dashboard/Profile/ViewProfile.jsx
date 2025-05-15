@@ -112,7 +112,7 @@ const ViewProfile = () => {
                 <a href="#" className="text-sky-500 dark:text-sky-400 text-xl">
                   <FaTwitter />
                 </a>
-                <button className="bg-[#6C63FF] dark:bg-indigo-700 text-white px-4 py-2 rounded-md font-medium hover:bg-indigo-700 transition">
+                <button className="bg-[#6C63FF] cursor-pointer dark:bg-indigo-700 text-white px-4 py-2 rounded-md font-medium hover:bg-indigo-700 transition">
                   Follow
                 </button>
               </div>
@@ -122,7 +122,7 @@ const ViewProfile = () => {
 
         <div className="mt-24 text-center">
           <Link to="/dashboard/update-profile">
-            <button className="bg-blue-500 dark:bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition">
+            <button className="bg-blue-500 cursor-pointer dark:bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition">
               Edit Profile
             </button>
           </Link>
