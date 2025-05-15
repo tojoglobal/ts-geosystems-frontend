@@ -1,4 +1,15 @@
+import Loader from "../../utils/Loader";
+import useDataQuery from "../../utils/useDataQuery";
+
 const ExperienceCenter = () => {
+  const { data = {}, isLoading } = useDataQuery(
+    ["experience_center_images_public"],
+    "/api/get-experience-center-images"
+  );
+
+  if (isLoading) return <Loader />;
+  if (data?.data === 0) return null;
+
   return (
     <div className="py-3 md:py-12 bg-white">
       <div className="max-w-[1370px] mx-auto px-4">
@@ -10,11 +21,11 @@ const ExperienceCenter = () => {
           <div className="flex-1 h-0.5 bg-[#e62245]"></div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
-          {[1, 2, 3].map((_, i) => (
+          {data?.data.slice(0, 3).map((image, i) => (
             <div key={i} className="overflow-hidden rounded-md">
               <img
-                src="https://ts-geosystems.com.bd/assets/images/bQiBB9xuUvXRTWS-COLLECTIONS.png"
-                alt=""
+                src={`${import.meta.env.VITE_OPEN_APIURL}${image.photourl}`}
+                alt={`Experience Center ${i + 1}`}
                 className="w-full h-40 md:h-64 object-cover transition-transform duration-300 hover:scale-105"
               />
             </div>
