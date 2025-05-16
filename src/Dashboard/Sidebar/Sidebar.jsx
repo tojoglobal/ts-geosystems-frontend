@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocation, NavLink } from "react-router-dom";
+import { useLocation, NavLink, Link } from "react-router-dom";
 import {
   Menu,
   X,
@@ -198,9 +198,13 @@ const Sidebar = ({
             }`}
           >
             {collapsed ? (
-              <img src={smallLogo} alt="Logo" className="h-fit" />
+              <Link to="/">
+                <img src={smallLogo} alt="Logo" className="h-fit" />
+              </Link>
             ) : (
-              <img src={logo} alt="Logo" className="w-[90%]" />
+              <Link to="/">
+                <img src={logo} alt="Logo" className="w-[90%]" />
+              </Link>
             )}
           </h2>
           <button
