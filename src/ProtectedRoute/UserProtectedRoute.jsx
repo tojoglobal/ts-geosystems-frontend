@@ -5,6 +5,7 @@ import { useAxiospublic } from "../Hooks/useAxiospublic";
 const UserProtectedRoute = ({ children }) => {
   const axiosPublicUrl = useAxiospublic();
   const [isUserAuth, setIsUserAuth] = useState(null);
+  // console.log(isUserAuth);
 
   useEffect(() => {
     axiosPublicUrl
@@ -17,7 +18,7 @@ const UserProtectedRoute = ({ children }) => {
 
   if (isUserAuth === null) {
     return (
-      <div className="flex justify-center h-screen items-center bg-black">
+      <div className="flex justify-center h-[60vh] items-center">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#0b6d7f]"></div>
       </div>
     );

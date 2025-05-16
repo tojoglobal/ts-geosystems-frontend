@@ -280,7 +280,6 @@ const AdminUpdateAboutUs = () => {
           />
         </div>
       </form>
-
       <div>
         <AboutUsImgesControlls />
       </div>

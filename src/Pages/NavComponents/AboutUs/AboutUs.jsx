@@ -83,20 +83,18 @@ const AboutUs = () => {
         <p className="text-gray-700 mb-6 text-sm">
           {aboutContent?.section3_description}
         </p>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-          {whoWeServeImages.length > 0 && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-              {whoWeServeImages.map((img, index) => (
-                <img
-                  key={index}
-                  src={`${import.meta.env.VITE_OPEN_APIURL}${img.filePath}`}
-                  alt={`Who we serve ${index + 1}`}
-                  className="w-full rounded-lg"
-                />
-              ))}
-            </div>
-          )}
-        </div>
+        {whoWeServeImages.length > 0 && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-9">
+            {whoWeServeImages.map((img, index) => (
+              <img
+                key={index}
+                src={`${import.meta.env.VITE_OPEN_APIURL}${img.filePath}`}
+                alt={`Who we serve ${index + 1}`}
+                className="w-full h-80 object-cover rounded-md"
+              />
+            ))}
+          </div>
+        )}
       </div>
       <div className="space-y-5">
         <section className="border-b pb-4">
@@ -132,13 +130,13 @@ const AboutUs = () => {
           </p>
         </section>
         {ourJourneyImages.length > 0 && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-9">
             {ourJourneyImages.map((img, index) => (
               <img
                 key={index}
                 src={`${import.meta.env.VITE_OPEN_APIURL}${img.filePath}`}
                 alt={`Our journey ${index + 1}`}
-                className="w-full rounded-lg"
+                className="w-full h-80 object-cover rounded-md"
               />
             ))}
           </div>
@@ -211,13 +209,13 @@ const AboutUs = () => {
       </section>
       {/* Bottom Images */}
       {bottomImages.length > 0 && (
-        <section className="grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
+        <section className="grid grid-cols-1 md:grid-cols-2 gap-6 my-9">
           {bottomImages.map((img, index) => (
             <img
               key={index}
               src={`${import.meta.env.VITE_OPEN_APIURL}${img.filePath}`}
               alt={`About us ${index + 1}`}
-              className="w-full rounded-lg"
+              className="w-full h-80 object-cover rounded-md"
             />
           ))}
         </section>

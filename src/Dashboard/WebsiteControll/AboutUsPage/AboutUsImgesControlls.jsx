@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useAxiospublic } from "../../../Hooks/useAxiospublic";
 import Swal from "sweetalert2";
-import Button from "../../Button/Button";
 import DropzoneImageItem from "./../../../utils/DropzoneImageItem";
 
 const AboutUsImgesControlls = () => {
