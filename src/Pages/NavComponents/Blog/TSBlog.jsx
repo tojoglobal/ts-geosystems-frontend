@@ -22,6 +22,25 @@ const TSBlog = () => {
     "/api/blog-types"
   );
 
+  // Add this query near your other useDataQuery calls
+  const { data: allBlogs = {}, isLoading: isSearchLoading } = useDataQuery(
+    ["allBlogsSearch", searchQuery], // Include searchQuery in query key
+    `/api/search-blog${
+      searchQuery ? `?query=${encodeURIComponent(searchQuery)}` : ""
+    }`,
+    {
+      enabled: isSearchOpen, // Only fetch when search modal is open
+    }
+  );
+
+  // Combine the data sources
+  const allAvailableBlogs = allBlogs.blogs || [];
+  // const filteredBlogs = searchQuery
+  //   ? allAvailableBlogs.filter((blog) =>
+  //       blog.title.toLowerCase().includes(searchQuery.toLowerCase())
+  //     )
+  //   : allAvailableBlogs;
+
   // Update activeTab when URL changes
   useEffect(() => {
     if (urlType) {
@@ -91,10 +110,6 @@ const TSBlog = () => {
   //   window.history.pushState({}, "", newUrl);
   // };
 
-  const filteredBlogs = blogs.filter((blog) =>
-    blog.title.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
   return (
     <div className="p-2 md:p-3">
       <div className="flex items-center gap-2 text-[11px]">
@@ -153,39 +168,50 @@ const TSBlog = () => {
                   />
                   <button
                     className="cursor-pointer z-10 absolute right-6 top-8 text-gray-400 hover:text-red-500"
-                    onClick={() => setIsSearchOpen(false)}
+                    onClick={() => {
+                      setIsSearchOpen(false);
+                      setSearchQuery("");
+                    }}
                   >
                     <RxCross2 size={22} />
                   </button>
                   <div className="mt-6 max-h-[60vh] overflow-y-auto">
-                    {isLoading ? (
+                    {isSearchLoading ? (
                       <p className="text-center text-gray-500">Loading...</p>
-                    ) : filteredBlogs.length > 0 ? (
-                      <div className="grid grid-cols-1 gap-4">
-                        {filteredBlogs.map((blog) => (
-                          <Link
-                            key={blog.id}
-                            to={`/ts-blog/${blog.id}/${slugify(
-                              blog.title || ""
-                            )}`}
-                            className="border-b pb-4"
-                          >
-                            <h3 className="text-lg font-semibold text-[#e62245] mb-1">
-                              {blog.title}
-                            </h3>
-                            <p
-                              className="text-sm text-gray-600 mb-2"
-                              dangerouslySetInnerHTML={{
-                                __html: blog.content?.slice(0, 200) + "...",
-                              }}
-                            />
-                          </Link>
-                        ))}
-                      </div>
                     ) : (
-                      <p className="text-center text-gray-500">
-                        No results found for "<strong>{searchQuery}</strong>"
-                      </p>
+                      <div className="grid grid-cols-1 gap-4">
+                        {allAvailableBlogs.length > 0 ? (
+                          allAvailableBlogs.map((blog) => (
+                            <Link
+                              key={blog.id}
+                              to={`/ts-blog/${blog.id}/${slugify(
+                                blog.title || ""
+                              )}`}
+                              className="border-b pb-4"
+                              onClick={() => {
+                                setIsSearchOpen(false);
+                                setSearchQuery("");
+                              }}
+                            >
+                              <h3 className="text-lg font-semibold text-[#e62245] mb-1">
+                                {blog.title}
+                              </h3>
+                              <p
+                                className="text-sm text-gray-600 mb-2"
+                                dangerouslySetInnerHTML={{
+                                  __html: blog.content?.slice(0, 200) + "...",
+                                }}
+                              />
+                            </Link>
+                          ))
+                        ) : (
+                          <p className="text-center text-gray-500">
+                            {searchQuery
+                              ? `No results found for "${searchQuery}"`
+                              : "No blogs available"}
+                          </p>
+                        )}
+                      </div>
                     )}
                   </div>
                 </div>
