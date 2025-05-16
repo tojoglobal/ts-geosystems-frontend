@@ -413,7 +413,7 @@ const TradeIn = () => {
               <div className="flex justify-center">
                 <button
                   type="submit"
-                  className="bg-[#e62245] text-white px-7 py-2 rounded hover:bg-[#d41d3f] transition-colors"
+                  className="cursor-pointer bg-[#e62245] text-white px-7 py-2 rounded hover:bg-[#d41d3f] transition-colors"
                 >
                   Submit
                 </button>

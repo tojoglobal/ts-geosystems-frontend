@@ -30,8 +30,17 @@ const BlogSearch = () => {
         <IoSearch className="w-5" />
       </button>
       {isSearchOpen && (
-        <div className="fixed inset-0 z-50 bg-black/30 flex justify-center items-start">
-          <div className="mt-20 w-full max-w-3xl px-4">
+        <div
+          className="fixed inset-0 z-50 bg-black/30 flex justify-center items-start"
+          onClick={() => {
+            setIsSearchOpen(false);
+            setSearchQuery("");
+          }}
+        >
+          <div
+            className="mt-20 w-full max-w-3xl px-4"
+            onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside modal content
+          >
             <div className="bg-white rounded-lg shadow-2xl p-6 relative">
               {/* Input */}
               <input

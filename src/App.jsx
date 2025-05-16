@@ -80,6 +80,8 @@ import AccountSettings from "./UserAccount/AccountSettings";
 import UserAccountLayout from "./UserAccount/UserAccountLayout";
 import EditUserAddress from "./UserAccount/EditUserAddress";
 import PublicOnlyRoute from "./ProtectedRoute/PublicOnlyRoute";
+import AdminTradeIn from "./Dashboard/TradeIn/AdminTradeIn";
+import AdminSupportData from "./Dashboard/Support/AdminSupportData";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -190,6 +192,8 @@ const AppLayout = () => {
           {/* hoem page controll */}
           <Route path="home-page" element={<HomePageControl />} />
           <Route path="client-messages" element={<ClientMessages />} />
+          <Route path="trade-in" element={<AdminTradeIn />} />
+          <Route path="support" element={<AdminSupportData />} />
           {/* promoCode */}
           <Route path="promocodemanager" element={<PromoCodeManager />} />
           {/* add taxesmanager */}
