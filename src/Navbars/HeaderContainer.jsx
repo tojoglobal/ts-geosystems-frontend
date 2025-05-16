@@ -158,7 +158,7 @@ const HeaderContainer = () => {
                         </div>
                         <button
                           onClick={handleLogout}
-                          className="w-full bg-crimson-red text-white text-sm font-semibold py-1 px-4 rounded hover:bg-red-700"
+                          className="w-full cursor-pointer bg-crimson-red text-white text-sm font-semibold py-1 px-4 rounded hover:bg-red-700"
                         >
                           LOGOUT
                         </button>

@@ -141,9 +141,9 @@ const Login = () => {
         <span>/</span>
         <span className="text-[#e62245]">Login</span>
       </div>
-      <div className="my-5 flex flex-col md:flex-row">
+      <div className="my-5 flex flex-col md:flex-row gap-6">
         {/* Left Side - Login Form */}
-        <div className="w-full md:w-1/2 pr-8">
+        <div className="w-full md:w-1/2">
           <h2 className="text-2xl font-normal mb-6">Login</h2>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="mb-4">
@@ -230,33 +230,35 @@ const Login = () => {
         </div>
 
         {/* Right Side - New Customer Info f5f5f5 */}
-        <div className="w-full md:w-1/2 bg-[#cac9c9] p-6">
-          <h2 className="text-xl text-gray-600 font-semibold mb-4">
-            New Customer?
-          </h2>
-          <p className="text-sm mb-4 text-gray-600">
-            Create an account with us and you'll be able to:
-          </p>
-          <ul className="list-none text-sm ml-5 space-y-2 mb-6 text-gray-600">
-            {[
-              "Check out faster",
-              "Save multiple shipping addresses",
-              "Access your order history",
-              "Track new orders",
-              "Save items to your wish list",
-            ].map((item, index) => (
-              <li key={index} className="flex items-start">
-                <span className="inline-block w-1.5 h-1.5 bg-gray-600 rounded-full mt-1.5 mr-2"></span>
-                {item}
-              </li>
-            ))}
-          </ul>
-          <Link
-            to="/user/create_account"
-            className="inline-block bg-[#e62245] text-white px-6 py-2 rounded hover:bg-[#d11a3b] text-sm"
-          >
-            CREATE ACCOUNT
-          </Link>
+        <div className="w-full md:w-1/2">
+          <div className="bg-[#cac9c9] p-6">
+            <h2 className="text-xl text-gray-600 font-semibold mb-4">
+              New Customer?
+            </h2>
+            <p className="text-sm mb-4 text-gray-600">
+              Create an account with us and you'll be able to:
+            </p>
+            <ul className="list-none text-sm ml-5 space-y-2 mb-6 text-gray-600">
+              {[
+                "Check out faster",
+                "Save multiple shipping addresses",
+                "Access your order history",
+                "Track new orders",
+                "Save items to your wish list",
+              ].map((item, index) => (
+                <li key={index} className="flex items-start">
+                  <span className="inline-block w-1.5 h-1.5 bg-gray-600 rounded-full mt-1.5 mr-2"></span>
+                  {item}
+                </li>
+              ))}
+            </ul>
+            <Link
+              to="/user/create_account"
+              className="inline-block bg-[#e62245] text-white px-6 py-2 rounded hover:bg-[#d11a3b] text-sm"
+            >
+              CREATE ACCOUNT
+            </Link>
+          </div>
         </div>
       </div>
     </div>

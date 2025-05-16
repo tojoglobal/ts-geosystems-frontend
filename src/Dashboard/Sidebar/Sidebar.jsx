@@ -207,7 +207,7 @@ const Sidebar = ({
             onClick={toggleSidebar}
             className={`${
               collapsed ? "hidden" : " hidden md:block"
-            }  text-white `}
+            }  text-white cursor-pointer`}
           >
             <Menu size={20} />
           </button>
@@ -218,7 +218,6 @@ const Sidebar = ({
             <X size={20} />
           </button>
         </div>
-
         {/* Scrollable Menu Section */}
         <div
           className={`flex-1 overflow-y-auto overflow-x-hidden scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800 px-2 py-2 space-y-1`}
