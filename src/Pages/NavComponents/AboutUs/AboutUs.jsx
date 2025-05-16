@@ -26,7 +26,17 @@ const AboutUs = () => {
     ["aboutUsImage"],
     "/api/get-about-us-images"
   );
-  console.log(aboutUsImg);
+
+  // Filter images by section and show status
+  const whoWeServeImages = aboutUsImg.filter(
+    (img) => img.section === "who_we_serve" && img.show
+  );
+  const ourJourneyImages = aboutUsImg.filter(
+    (img) => img.section === "our_journey" && img.show
+  );
+  const bottomImages = aboutUsImg.filter(
+    (img) => img.section === "bottom_images" && img.show
+  );
 
   if (isLoading || loading || imgLoading) return <Loader />;
   if (isError) return <p>Error loading data...</p>;
@@ -74,19 +84,18 @@ const AboutUs = () => {
           {aboutContent?.section3_description}
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-          {aboutContent?.who_we_serve_image &&
-            Array(4)
-              .fill(null)
-              .map((_, index) => (
+          {whoWeServeImages.length > 0 && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+              {whoWeServeImages.map((img, index) => (
                 <img
                   key={index}
-                  src={`${import.meta.env.VITE_OPEN_APIURL}${
-                    aboutContent.who_we_serve_image
-                  }`}
-                  alt={index + 1}
+                  src={`${import.meta.env.VITE_OPEN_APIURL}${img.filePath}`}
+                  alt={`Who we serve ${index + 1}`}
                   className="w-full rounded-lg"
                 />
               ))}
+            </div>
+          )}
         </div>
       </div>
       <div className="space-y-5">
@@ -122,6 +131,18 @@ const AboutUs = () => {
             {aboutContent?.section7_description}
           </p>
         </section>
+        {ourJourneyImages.length > 0 && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-8">
+            {ourJourneyImages.map((img, index) => (
+              <img
+                key={index}
+                src={`${import.meta.env.VITE_OPEN_APIURL}${img.filePath}`}
+                alt={`Our journey ${index + 1}`}
+                className="w-full rounded-lg"
+              />
+            ))}
+          </div>
+        )}
         <section className="border-b pb-4">
           <h3 className="text-[18px] font-semibold text-[#e62245]">
             {aboutContent?.section8_title}
@@ -189,21 +210,18 @@ const AboutUs = () => {
         </button>
       </section>
       {/* Bottom Images */}
-      <section className="grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
-        {aboutContent?.bottom_section_image &&
-          Array(2)
-            .fill(null)
-            .map((_, index) => (
-              <img
-                key={index}
-                src={`${import.meta.env.VITE_OPEN_APIURL}${
-                  aboutContent.bottom_section_image
-                }`}
-                alt={`About us ${index + 1}`}
-                className="w-full rounded-lg"
-              />
-            ))}
-      </section>
+      {bottomImages.length > 0 && (
+        <section className="grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
+          {bottomImages.map((img, index) => (
+            <img
+              key={index}
+              src={`${import.meta.env.VITE_OPEN_APIURL}${img.filePath}`}
+              alt={`About us ${index + 1}`}
+              className="w-full rounded-lg"
+            />
+          ))}
+        </section>
+      )}
       <GoogleReview />
     </div>
   );
