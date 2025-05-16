@@ -9,7 +9,7 @@ const DropzoneImageItem = ({ img, idx, onDrop, onToggle }) => {
       if (file) {
         const objectUrl = URL.createObjectURL(file);
         setPreview(objectUrl);
-        onDrop(idx, file); // Pass file to parent
+        onDrop([file]);
       }
     },
     accept: {
@@ -70,8 +70,8 @@ const DropzoneImageItem = ({ img, idx, onDrop, onToggle }) => {
         <button
           type="button"
           onClick={onToggle}
-          className={`px-3 py-1 rounded-md text-white ${
-            img.show ? "bg-green-600" : "bg-gray-500"
+          className={`px-3 py-1 cursor-pointer rounded-sm text-white ${
+            img.show ? "bg-teal-600" : "bg-gray-500"
           }`}
         >
           {img.show ? "Visible" : "Hidden"}
