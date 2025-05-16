@@ -6,16 +6,18 @@ import { useNavigate } from "react-router";
 import Swal from "sweetalert2";
 import "./adminlogin.css";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
+import { usePasswordToggle } from "../../utils/usePasswordToggle";
 
 const AdminLogin = () => {
   const axiosPublicUrl = useAxiospublic();
   const navigate = useNavigate();
-  const [showPassword, setShowPassword] = useState(false);
+  // const [showPassword, setShowPassword] = useState(false);
 
-  const togglePassword = () => {
-    setShowPassword(!showPassword);
-  };
+  // const togglePassword = () => {
+  //   setShowPassword(!showPassword);
+  // };
 
+  const [passwordType, ToggleIcon] = usePasswordToggle();
   // form data
   const [formData, setFormData] = useState({
     useremail: "",
@@ -95,19 +97,18 @@ const AdminLogin = () => {
           <span className="material-symbols-outlined person">
             <MdEmail />
           </span>
+
           <input
-            type={showPassword ? "text" : "password"}
+            type={passwordType}
             name="password"
             placeholder="Password"
             value={formData.password}
             onChange={handleChange}
           />
-          <span
-            onClick={togglePassword}
-            className="material-symbols-outlined cursor-pointer lock"
-          >
-            {showPassword ? <FaEyeSlash /> : <FaEye />}
+          <span className="material-symbols-outlined cursor-pointer lock">
+            {ToggleIcon}
           </span>
+
           <button type="submit">Login</button>
           <p>or login with social platforms</p>
           <div>

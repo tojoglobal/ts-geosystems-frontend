@@ -6,7 +6,7 @@ const WelcomePage = () => {
   const navigate = useNavigate();
   const email = location.state?.email || "demo@gmail.com";
   return (
-    <div className="max-w-xl mx-auto mt-20 text-center">
+    <div className="max-w-xl mx-auto mt-20 text-center h-screen">
       <h1 className="text-2xl font-bold text-green-600">
         Your account has been created
       </h1>

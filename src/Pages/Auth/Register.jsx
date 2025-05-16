@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import { useDispatch } from "react-redux";
 import { loginSuccess } from "../../features/UserAuth/authSlice";
+import { usePasswordToggle } from "../../utils/usePasswordToggle";
 
 const Register = () => {
   const axiosPUblic = useAxiospublic();
@@ -16,6 +17,9 @@ const Register = () => {
   const [cities, setCities] = useState([]);
   const [captchaToken, setCaptchaToken] = useState(null);
   const navigate = useNavigate();
+
+  const [passwordType, PasswordIcon] = usePasswordToggle();
+  const [confirmPasswordType, ConfirmPasswordIcon] = usePasswordToggle();
 
   const {
     register,
@@ -151,12 +155,13 @@ const Register = () => {
               )}
             </div>
             {/* Password */}
-            <div className="space-y-1">
+            <div className="space-y-1 relative">
               <label className="block text-sm font-medium text-gray-700">
                 Password<span className="text-red-600">*</span>
               </label>
               <input
-                type="password"
+                // type="password"
+                type={passwordType}
                 className="w-full px-3 py-2 border border-gray-300 rounded-sm focus:outline-none focus:ring-1 focus:ring-[#e62245]"
                 {...register("password", {
                   required: "Password is required",
@@ -166,6 +171,9 @@ const Register = () => {
                   },
                 })}
               />
+              <span className="absolute right-3 top-4/6 -translate-y-1/2 cursor-pointer text-gray-500">
+                {PasswordIcon}
+              </span>
               {errors.password && (
                 <p className="text-red-500 text-xs mt-1">
                   {errors.password.message}
@@ -173,12 +181,13 @@ const Register = () => {
               )}
             </div>
             {/* Confirm Password */}
-            <div className="space-y-1">
+            <div className="space-y-1 relative">
               <label className="block text-sm font-medium text-gray-700">
                 Confirm Password<span className="text-red-600">*</span>
               </label>
               <input
-                type="password"
+                // type="password"
+                type={confirmPasswordType}
                 className="w-full px-3 py-2 border border-gray-300 rounded-sm focus:outline-none focus:ring-1 focus:ring-[#e62245]"
                 {...register("confirmPassword", {
                   required: "Please confirm your password",
@@ -186,6 +195,9 @@ const Register = () => {
                     value === watch("password") || "Passwords do not match",
                 })}
               />
+              <span className="absolute right-3 top-4/6 -translate-y-1/2 cursor-pointer text-gray-500">
+                {ConfirmPasswordIcon}
+              </span>
               {errors.confirmPassword && (
                 <p className="text-red-500 text-xs mt-1">
                   {errors.confirmPassword.message}

@@ -5,7 +5,6 @@ import { useAxiospublic } from "../Hooks/useAxiospublic";
 const UserProtectedRoute = ({ children }) => {
   const axiosPublicUrl = useAxiospublic();
   const [isUserAuth, setIsUserAuth] = useState(null);
-  console.log(isUserAuth);
 
   useEffect(() => {
     axiosPublicUrl
@@ -14,7 +13,7 @@ const UserProtectedRoute = ({ children }) => {
       .catch(() => {
         setIsUserAuth(false);
       });
-  }, [axiosPublicUrl]);
+  }, []);
 
   if (isUserAuth === null) {
     return (

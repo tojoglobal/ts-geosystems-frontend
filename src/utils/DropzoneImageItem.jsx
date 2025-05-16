@@ -9,7 +9,7 @@ const DropzoneImageItem = ({ img, idx, onDrop, onToggle }) => {
       if (file) {
         const objectUrl = URL.createObjectURL(file);
         setPreview(objectUrl);
-        onDrop(idx, file); // Pass file to parent
+        onDrop([file]); // Pass file to parent
       }
     },
     accept: {

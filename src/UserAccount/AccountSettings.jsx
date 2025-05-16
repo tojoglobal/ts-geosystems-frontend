@@ -1,27 +1,89 @@
+import { useQuery } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
+import { useAxiospublic } from "../Hooks/useAxiospublic";
+import { useSelector } from "react-redux";
+import Swal from "sweetalert2";
+import { useEffect } from "react";
+import { usePasswordToggle } from "../utils/usePasswordToggle";
 
 const AccountSettings = () => {
+  const axiosPublicUrl = useAxiospublic();
+  const { user } = useSelector((state) => state.authUser);
+  const [passwordType, PasswordIcon] = usePasswordToggle();
+  const [confirmPasswordType, ConfirmPasswordIcon] = usePasswordToggle();
+  const [currentPasswordType, CurrentPasswordIcon] = usePasswordToggle();
+
   const {
     register,
     handleSubmit,
+    reset,
+    watch,
     formState: { errors },
   } = useForm({
     defaultValues: {
-      firstName: "Momen",
-      lastName: "Hossain",
-      company: "Ian McCarry Solicitors",
-      phoneNumber: "0176761606",
-      email: "momin.cssm@gmail.com",
+      firstName: "",
+      lastName: "",
+      companyName: "",
+      phoneNumber: "",
+      email: "",
       password: "",
       confirmPassword: "",
       currentPassword: "",
     },
   });
 
-  const onSubmit = (data) => {
+  // Fetch user info and set default values
+  const { data: UserInfo = {}, isLoading } = useQuery({
+    queryKey: ["UserAccountInfo", user?.email],
+    enabled: !!user?.email,
+    queryFn: async () => {
+      const { data } = await axiosPublicUrl.get(
+        `/api/getUserInfo/${user.email}`
+      );
+      return data;
+    },
+  });
+
+  useEffect(() => {
+    if (UserInfo && Object.keys(UserInfo).length > 0) {
+      reset({
+        firstName: UserInfo.firstName || "",
+        lastName: UserInfo.lastName || "",
+        companyName: UserInfo.companyName || "",
+        phoneNumber: UserInfo.phoneNumber || "",
+        email: UserInfo.email || "",
+      });
+    }
+  }, [UserInfo, reset]);
+
+  const onSubmit = async (data) => {
     console.log(data);
-    // Handle form submission here
+
+    try {
+      const response = await axiosPublicUrl.put("/api/updateUserInfo", {
+        id: UserInfo.id,
+        ...data,
+      });
+
+      if (response.status === 200) {
+        Swal.fire(
+          "Success",
+          "Account details updated successfully.",
+          "success"
+        );
+      }
+    } catch (error) {
+      Swal.fire(
+        "Error",
+        error?.response?.data?.message || "An error occurred.",
+        "error"
+      );
+    }
   };
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -71,15 +133,15 @@ const AccountSettings = () => {
         {/* Company */}
         <div>
           <label
-            htmlFor="company"
+            htmlFor="companyName"
             className="block text-sm font-medium text-gray-700 mb-1"
           >
             Company
           </label>
           <input
             type="text"
-            id="company"
-            {...register("company")}
+            id="companyName"
+            {...register("companyName")}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-crimson-red"
           />
         </div>
@@ -126,7 +188,7 @@ const AccountSettings = () => {
         </div>
 
         {/* Password */}
-        <div>
+        <div className="relative">
           <label
             htmlFor="password"
             className="block text-sm font-medium text-gray-700 mb-1"
@@ -134,15 +196,28 @@ const AccountSettings = () => {
             Password
           </label>
           <input
-            type="password"
+            type={passwordType}
             id="password"
-            {...register("password")}
+            {...register("password", {
+              validate: (value) => {
+                if (!value || value.length === 0) return true; // allow empty password
+                if (value.length >= 6 && /[a-zA-Z]/.test(value)) return true;
+                return "Password must be at least 6 characters and contain a letter.";
+              },
+            })}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-crimson-red"
           />
+          <span className="absolute right-3 top-4/6 -translate-y-1/2 cursor-pointer text-gray-500">
+            {PasswordIcon}
+          </span>
+          {errors.password && (
+            <p className="mt-1 text-sm text-red-600">
+              {errors.password.message}
+            </p>
+          )}
         </div>
-
         {/* Confirm Password */}
-        <div>
+        <div className="relative">
           <label
             htmlFor="confirmPassword"
             className="block text-sm font-medium text-gray-700 mb-1"
@@ -150,16 +225,17 @@ const AccountSettings = () => {
             Confirm Password
           </label>
           <input
-            type="password"
+            type={confirmPasswordType}
             id="confirmPassword"
             {...register("confirmPassword", {
-              validate: (value) => {
-                const { password } = getValues();
-                return password === value || "Passwords do not match";
-              },
+              validate: (value) =>
+                value === watch("password") || "Passwords must match.",
             })}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-crimson-red"
           />
+          <span className="absolute right-3 top-4/6 -translate-y-1/2 cursor-pointer text-gray-500">
+            {ConfirmPasswordIcon}
+          </span>
           {errors.confirmPassword && (
             <p className="mt-1 text-sm text-red-600">
               {errors.confirmPassword.message}
@@ -168,7 +244,7 @@ const AccountSettings = () => {
         </div>
 
         {/* Current Password */}
-        <div>
+        <div className="relative">
           <label
             htmlFor="currentPassword"
             className="block text-sm font-medium text-gray-700 mb-1"
@@ -176,11 +252,14 @@ const AccountSettings = () => {
             Current Password
           </label>
           <input
-            type="password"
+            type={currentPasswordType}
             id="currentPassword"
             {...register("currentPassword")}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-crimson-red"
           />
+          <span className="absolute right-3 top-4/6 -translate-y-1/2 cursor-pointer text-gray-500">
+            {CurrentPasswordIcon}
+          </span>
         </div>
       </div>
 

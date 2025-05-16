@@ -128,8 +128,8 @@ const AppLayout = () => {
         {/* welcome rotue */}
         <Route path="/welcome" element={<WelcomePage />} />
         {/* Auth user Routes */}
-        {/* <Route path="/user/login" element={<Login />} />
-        <Route path="/user/create_account" element={<Register />} /> */}
+        {/* <Route path="/user/login" element={<Login />} /> */}
+        {/* <Route path="/user/create_account" element={<Register />} /> */}
         <Route
           path="/user/login"
           element={
@@ -146,6 +146,7 @@ const AppLayout = () => {
             </PublicOnlyRoute>
           }
         />
+
         <Route
           path="/user/account/"
           element={
