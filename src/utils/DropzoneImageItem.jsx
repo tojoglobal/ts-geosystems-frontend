@@ -1,13 +1,43 @@
+import { useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 
 const DropzoneImageItem = ({ img, idx, onDrop, onToggle }) => {
+  const [preview, setPreview] = useState("");
   const { getRootProps, getInputProps } = useDropzone({
-    onDrop,
+    onDrop: (acceptedFiles) => {
+      const file = acceptedFiles[0];
+      if (file) {
+        const objectUrl = URL.createObjectURL(file);
+        setPreview(objectUrl);
+        onDrop(idx, file); // Pass file to parent
+      }
+    },
     accept: {
       "image/*": [],
     },
     multiple: false,
   });
+  // const { getRootProps, getInputProps } = useDropzone({
+  //   onDrop,
+  //   accept: {
+  //     "image/*": [],
+  //   },
+  //   multiple: false,
+  // });
+
+  // Cleanup blob URL
+  useEffect(() => {
+    return () => {
+      if (preview) URL.revokeObjectURL(preview);
+    };
+  }, [preview]);
+
+  // Determine which image to show
+  const imageSrc = preview
+    ? preview
+    : img.previewUrl
+    ? import.meta.env.VITE_OPEN_APIURL + img.previewUrl
+    : null;
 
   return (
     <div className="border p-3 rounded-md shadow-sm space-y-2">
@@ -16,9 +46,9 @@ const DropzoneImageItem = ({ img, idx, onDrop, onToggle }) => {
         className="cursor-pointer border p-2 rounded-md bg-gray-100 text-center"
       >
         <input {...getInputProps()} />
-        {img.previewUrl ? (
+        {imageSrc ? (
           <img
-            src={img.previewUrl}
+            src={imageSrc}
             alt={`Preview ${idx}`}
             className="h-40 mx-auto object-contain"
           />

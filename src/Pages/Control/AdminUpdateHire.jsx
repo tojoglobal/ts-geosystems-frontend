@@ -7,6 +7,7 @@ import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import Swal from "sweetalert2";
 import Button from "../../Dashboard/Button/Button";
 import Loader from "../../utils/Loader";
+import HireEquipmentEditor from "../../Dashboard/WebsiteControll/HirePage/HireEquipmentEditor";
 
 const AdminUpdateHire = () => {
   const axiosPublicUrl = useAxiospublic();
@@ -82,7 +83,7 @@ const AdminUpdateHire = () => {
       formData.append("description", data.description);
       formData.append("infoBox", data.infoBox);
       formData.append("imageUrl", data.imageUrl);
-      formData.append("show_buttons", data.show_buttons); 
+      formData.append("show_buttons", data.show_buttons);
 
       // Stringify and append the links object
       formData.append("links", JSON.stringify(data.links));
@@ -288,6 +289,11 @@ const AdminUpdateHire = () => {
           </div>
         </form>
       )}
+
+      <h1 className="text-xl md:text-2xl font-bold mb-4">
+        Update Hire Equipment
+      </h1>
+      <HireEquipmentEditor />
     </div>
   );
 };

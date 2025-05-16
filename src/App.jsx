@@ -79,6 +79,7 @@ import RecentlyViewed from "./UserAccount/RecentlyViewed";
 import AccountSettings from "./UserAccount/AccountSettings";
 import UserAccountLayout from "./UserAccount/UserAccountLayout";
 import EditUserAddress from "./UserAccount/EditUserAddress";
+import PublicOnlyRoute from "./ProtectedRoute/PublicOnlyRoute";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -127,8 +128,24 @@ const AppLayout = () => {
         {/* welcome rotue */}
         <Route path="/welcome" element={<WelcomePage />} />
         {/* Auth user Routes */}
-        <Route path="/user/login" element={<Login />} />
-        <Route path="/user/create_account" element={<Register />} />
+        {/* <Route path="/user/login" element={<Login />} />
+        <Route path="/user/create_account" element={<Register />} /> */}
+        <Route
+          path="/user/login"
+          element={
+            <PublicOnlyRoute>
+              <Login />
+            </PublicOnlyRoute>
+          }
+        />
+        <Route
+          path="/user/create_account"
+          element={
+            <PublicOnlyRoute>
+              <Register />
+            </PublicOnlyRoute>
+          }
+        />
         <Route
           path="/user/account/"
           element={
