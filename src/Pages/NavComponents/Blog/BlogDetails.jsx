@@ -4,6 +4,7 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 import "react-h5-audio-player/lib/styles.css";
 import { Facebook, Twitter, Linkedin, Mail, MessageSquare } from "lucide-react";
 import RelatedArticles from "./RelatedArticles";
+import BlogSearch from "./BlogSearch";
 import useDataQuery from "../../../utils/useDataQuery";
 
 const BlogDetails = () => {
@@ -81,9 +82,7 @@ const BlogDetails = () => {
             {tab.replace("_", " ")}
           </button>
         ))}
-        <button className="hover:text-[#754e55]">
-          <IoSearch className="w-5" />
-        </button>
+        <BlogSearch />
       </div>
       <section className="max-w-2xl mx-auto my-10">
         {/* Top Images */}
