@@ -3,8 +3,8 @@ import { Link, useSearchParams } from "react-router-dom";
 import { IoSearch } from "react-icons/io5";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { slugify } from "../../../utils/slugify";
-import { RxCross2 } from "react-icons/rx";
 import useDataQuery from "../../../utils/useDataQuery";
+import SearchBlog from "./SearchBlog";
 
 const TSBlog = () => {
   const [searchParams] = useSearchParams();
@@ -135,33 +135,12 @@ const TSBlog = () => {
           >
             <IoSearch className="w-5" />
           </button>
-          {isSearchOpen && (
-            <div className="fixed inset-0 z-50 bg-black/30 flex justify-center items-start">
-              <div className="mt-20 w-full max-w-3xl px-4">
-                <div className="bg-white rounded-lg shadow-2xl p-6 relative">
-                  <input
-                    type="text"
-                    placeholder="Search for..."
-                    className="input input-bordered w-full"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                  />
-                  {/* Close Button */}
-                  <button
-                    className="cursor-pointer z-10 absolute right-4 top-4 text-gray-400 hover:text-red-500"
-                    onClick={() => setIsSearchOpen(false)}
-                  >
-                    <RxCross2 size={22} />
-                  </button>
-                  <div className="mt-6 max-h-[60vh] overflow-y-auto">
-                    <div className="grid grid-cols-1 gap-4">
-                      {/* Search results will be populated here later */}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
+          <SearchBlog
+            isSearchOpen={isSearchOpen}
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            setIsSearchOpen={setIsSearchOpen}
+          />
         </div>
         {isLoading ? (
           <div className="text-center py-10">Loading blogs...</div>
