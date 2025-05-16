@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-useless-escape */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { BsGrid3X3GapFill } from "react-icons/bs";
 import { FaThList } from "react-icons/fa";
@@ -14,21 +14,21 @@ import { parsePrice } from "../utils/parsePrice";
 import { useBreadcrumbLabel } from "../utils/useBreadcrumbLabel";
 
 const sortOptions = [
-  "FEATURED ITEMS",
-  "NEWEST ITEMS",
-  "BEST SELLING",
-  "A TO Z",
-  "Z TO A",
-  "BY REVIEW",
-  "PRICE: ASCENDING",
-  "PRICE: DESCENDING",
+  { label: "NEWEST ITEMS", value: "newest" },
+  { label: "PRICE: ASCENDING", value: "price_asc" },
+  { label: "PRICE: DESCENDING", value: "price_desc" },
+  { label: "A TO Z", value: "name_asc" },
+  { label: "Z TO A", value: "name_desc" },
+  // Remove or comment out these until you implement them:
+  // { label: "BEST SELLING", value: "best_selling" },
+  // { label: "BY REVIEW", value: "by_review" },
 ];
 
 const CategoryProduct = () => {
   const axiosPublicUrl = useAxiospublic();
   const dispatch = useDispatch();
+  const [sortBy, setSortBy] = useState(sortOptions[0]);
   const [viewMode, setViewMode] = useState("grid");
-  const [sortBy, setSortBy] = useState("FEATURED ITEMS");
   const [hoveredProductId, setHoveredProductId] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [compareItems, setCompareItems] = useState([]);
@@ -36,14 +36,14 @@ const CategoryProduct = () => {
   const { category, subcategory } = useParams();
   const productsPerPage = 8;
 
-  const isShopAll = category === "shop-all";
+  // const isShopAll = category === "shop-all";
   // Replace the current useQuery with this:
   const { data: productsData = {}, isLoading } = useQuery({
-    queryKey: ["products", category, subcategory, currentPage],
+    queryKey: ["products", category, subcategory, currentPage, sortBy],
     queryFn: async () => {
       const endpoint =
         category === "shop-all"
-          ? "/api/products"
+          ? "/api/shop-all/product"
           : subcategory
           ? `/api/category-products/${category}/${subcategory}`
           : `/api/category-products/${category}`;
@@ -52,11 +52,16 @@ const CategoryProduct = () => {
         params: {
           page: currentPage,
           limit: productsPerPage,
+          sortBy: sortBy.value, // Use the value from the sortOptions
         },
       });
       return res?.data;
     },
   });
+
+  useEffect(() => {
+    setCurrentPage(1); // Reset to first page when sort changes
+  }, [sortBy]);
 
   // Destructure the response
   const { products = [], total = 0, totalPages = 1 } = productsData;
@@ -165,13 +170,18 @@ const CategoryProduct = () => {
             <label className="text-xs">Sort By:</label>
             <div className="relative">
               <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
+                value={sortBy.value}
+                onChange={(e) => {
+                  const selectedOption = sortOptions.find(
+                    (opt) => opt.value === e.target.value
+                  );
+                  setSortBy(selectedOption);
+                }}
                 className="border py-1 pl-2 text-xs border-[#e1dcdc] rounded-[3px] pr-36 appearance-none bg-white cursor-pointer"
               >
                 {sortOptions.map((option) => (
-                  <option key={option} value={option}>
-                    {option}
+                  <option key={option.value} value={option.value}>
+                    {option.label}
                   </option>
                 ))}
               </select>
@@ -186,7 +196,7 @@ const CategoryProduct = () => {
               : "grid-cols-1 gap-7"
           } gap-4`}
         >
-          {products.map((product) => {
+          {products?.map((product) => {
             let images = [];
             try {
               images = JSON.parse(product.image_urls);
@@ -328,7 +338,7 @@ const CategoryProduct = () => {
                       <div className="flex gap-4 mt-2 flex-row">
                         <button
                           onClick={() => handleAddToCart(product)}
-                          className="bg-[#e62245] text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
+                          className="cursor-pointer bg-[#e62245] text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
                         >
                           ADD TO CART
                         </button>
@@ -336,7 +346,7 @@ const CategoryProduct = () => {
                           <input
                             type="checkbox"
                             id={`compare-${product.id}`}
-                            className="accent-[#0075ff]"
+                            className="accent-[#0075ff] cursor-pointer"
                             checked={compareItems.includes(product.id)}
                             onChange={() => toggleCompare(product.id)}
                           />
@@ -382,7 +392,7 @@ const CategoryProduct = () => {
                       <div className="flex flex-col gap-2 mt-2">
                         <button
                           onClick={() => handleAddToCart(product)}
-                          className="bg-[#e62245] text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
+                          className="cursor-pointer bg-[#e62245] text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
                         >
                           ADD TO CART
                         </button>
@@ -390,7 +400,7 @@ const CategoryProduct = () => {
                           <input
                             type="checkbox"
                             id={`compare-${product.id}`}
-                            className="accent-[#0075ff]"
+                            className="accent-[#0075ff] cursor-pointer"
                             checked={compareItems.includes(product.id)}
                             onChange={() => toggleCompare(product.id)}
                           />
@@ -457,7 +467,7 @@ const CategoryProduct = () => {
             onClick={handleCompareSelected}
             className={`${
               compareItems.length >= 2
-                ? "bg-[#e62245] hover:bg-[#d41d3f] text-white"
+                ? "cursor-pointer bg-[#e62245] hover:bg-[#d41d3f] text-white"
                 : "bg-gray-200 hover:bg-gray-300"
             } text-xs font-semibold px-6 py-2 rounded transition-colors`}
           >

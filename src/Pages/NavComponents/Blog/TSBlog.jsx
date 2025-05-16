@@ -145,12 +145,12 @@ const TSBlog = () => {
                 <Link
                   key={post.id}
                   to={`/ts-blog/${post.id}/${slugify(post.title || "")}`}
-                  className="relative border border-[#eaedef] rounded-sm pb-6 hover:shadow-md"
+                  className="relative border border-[#eaedef] pb-6 hover:shadow-md"
                 >
                   <img
                     src={post.image}
                     alt={post.title}
-                    className="w-full h-80 object-cover"
+                    className="w-full h-80 object-cover rounded-t-sm"
                   />
                   <div className="p-2 mt-1 bg-[#fafdff]">
                     <p className="text-xs text-gray-500 text-center mb-1">

@@ -325,7 +325,7 @@ const ProductHighlights = () => {
                   <div className="flex items-center gap-1 text-sm text-[#b3b3b5]">
                     ৳11994.00 <span className="underline">(Inc. VAT)</span>
                   </div>
-                  <button className="mt-1 bg-[#e62245] hover:bg-[#c91d3a] text-white text-sm font-semibold py-1.5 px-4 rounded w-full transition-colors duration-200">
+                  <button className="mt-1 cursor-pointer bg-[#e62245] hover:bg-[#c91d3a] text-white text-sm font-semibold py-1.5 px-4 rounded w-full transition-colors duration-200">
                     ADD TO CART
                   </button>
                 </div>

@@ -118,7 +118,7 @@ const Compare = () => {
                   ৳{product.priceExVat.toFixed(2)} (Inc. VAT)
                 </p>
               </div>
-              <button className="w-full bg-[#e62245] text-white py-2 hover:bg-[#d41d3f] transition-colors font-semibold mb-4">
+              <button className="w-full cursor-pointer bg-[#e62245] text-white py-2 hover:bg-[#d41d3f] transition-colors font-semibold mb-4">
                 ADD TO CART
               </button>
               <div className="p-6">

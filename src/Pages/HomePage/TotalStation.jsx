@@ -206,7 +206,7 @@ const TotalStation = () => {
                       ৳{item.discountPrice}
                     </span>
                   </div>
-                  <button className="mt-3 bg-[#e62245] hover:bg-[#c91d3a] text-white text-sm font-semibold py-1.5 px-4 rounded w-full">
+                  <button className="mt-3 cursor-pointer bg-[#e62245] hover:bg-[#c91d3a] text-white text-sm font-semibold py-1.5 px-4 rounded w-full">
                     ADD TO CART
                   </button>
                 </div>

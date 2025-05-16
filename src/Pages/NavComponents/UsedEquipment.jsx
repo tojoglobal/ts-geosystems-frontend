@@ -291,14 +291,14 @@ const UsedEquipment = () => {
                         </div>
                       </div>
                       <div className="flex gap-4 mt-2 flex-row">
-                        <button className="bg-[#e62245] text-white px-6 py-[5px] rounded-[3px] hover:bg-[#d41d3f] font-bold transition-colors">
+                        <button className="bg-[#e62245] cursor-pointer text-[14px] text-white px-6 py-[5px] rounded-[3px] hover:bg-[#d41d3f] font-bold transition-colors">
                           ADD TO CART
                         </button>
                         <div className="flex items-center gap-2">
                           <input
                             type="checkbox"
                             id={`compare-${product.id}`}
-                            className="accent-[#0075ff]"
+                            className="accent-[#0075ff] cursor-pointer"
                             checked={compareItems.includes(product.id)}
                             onChange={() => toggleCompare(product.id)}
                           />
@@ -336,14 +336,14 @@ const UsedEquipment = () => {
                         <span className="underline">(Inc. VAT)</span>
                       </div>
                       <div className="flex flex-col gap-2 mt-2">
-                        <button className="bg-[#e62245] text-white px-6 py-[5px] rounded-[3px] hover:bg-[#d41d3f] font-bold transition-colors">
+                        <button className="bg-[#e62245] cursor-pointer text-[14px] text-white px-6 py-[5px] rounded-[3px] hover:bg-[#d41d3f] font-bold transition-colors">
                           ADD TO CART
                         </button>
                         <div className="flex items-center gap-2 mt-1">
                           <input
                             type="checkbox"
                             id={`compare-${product.id}`}
-                            className="accent-[#0075ff]"
+                            className="accent-[#0075ff] cursor-pointer"
                             checked={compareItems.includes(product.id)}
                             onChange={() => toggleCompare(product.id)}
                           />
@@ -391,7 +391,6 @@ const UsedEquipment = () => {
                   ))}
                 </div>
               </div>
-
               {currentPage < totalPages && (
                 <button
                   onClick={() => setCurrentPage(currentPage + 1)}
@@ -406,7 +405,7 @@ const UsedEquipment = () => {
                 onClick={handleCompareSelected}
                 className={`${
                   compareItems.length >= 2
-                    ? "bg-[#e62245] hover:bg-[#d41d3f] text-white"
+                    ? "bg-[#e62245] cursor-pointer hover:bg-[#d41d3f] text-white"
                     : "bg-gray-200 hover:bg-gray-300"
                 } text-xs font-semibold px-6 py-2 rounded transition-colors`}
               >

@@ -268,7 +268,7 @@ const Clearance = () => {
                       <div className="flex gap-4 mt-2 flex-row">
                         <button
                           onClick={() => handleAddToCart(product)}
-                          className="bg-[#e62245] text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
+                          className="bg-[#e62245] cursor-pointer text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
                         >
                           ADD TO CART
                         </button>
@@ -276,7 +276,7 @@ const Clearance = () => {
                           <input
                             type="checkbox"
                             id={`compare-${product.id}`}
-                            className="accent-[#0075ff]"
+                            className="accent-[#0075ff] cursor-pointer"
                             checked={compareItems.includes(product.id)}
                             onChange={() => toggleCompare(product.id)}
                           />
@@ -316,7 +316,7 @@ const Clearance = () => {
                       <div className="flex flex-col gap-2 mt-2">
                         <button
                           onClick={() => handleAddToCart(product)}
-                          className="bg-[#e62245] text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
+                          className="bg-[#e62245] cursor-pointer text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
                         >
                           ADD TO CART
                         </button>
@@ -324,7 +324,7 @@ const Clearance = () => {
                           <input
                             type="checkbox"
                             id={`compare-${product.id}`}
-                            className="accent-[#0075ff]"
+                            className="accent-[#0075ff] cursor-pointer"
                             checked={compareItems.includes(product.id)}
                             onChange={() => toggleCompare(product.id)}
                           />
@@ -387,7 +387,7 @@ const Clearance = () => {
               onClick={handleCompareSelected}
               className={`${
                 compareItems.length >= 2
-                  ? "bg-[#e62245] hover:bg-[#d41d3f] text-white"
+                  ? "bg-[#e62245] cursor-pointer hover:bg-[#d41d3f] text-white"
                   : "bg-gray-200 hover:bg-gray-300"
               } text-xs font-semibold px-6 py-2 rounded transition-colors`}
             >

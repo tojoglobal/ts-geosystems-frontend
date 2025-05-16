@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { Editor } from "@tinymce/tinymce-react";
@@ -271,15 +272,11 @@ const UpdateProductForm = () => {
     });
 
     try {
-      const response = await axiosPublicUrl.put(
-        `/api/products/${id}`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      await axiosPublicUrl.put(`/api/products/${id}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
       Swal.fire({
         icon: "success",
         title: "Product update successfully!",

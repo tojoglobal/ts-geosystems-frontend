@@ -89,7 +89,7 @@ const RecentlyViewed = () => {
                 <div className="text-xs text-gray-500">(Inc. VAT)</div>
               </div>
             </div>
-            <button className="mt-4 w-full bg-crimson-red text-white text-[14px] py-2 px-4 rounded hover:bg-red-700 transition-colors">
+            <button className="mt-4 cursor-pointer text-[14px] w-full bg-crimson-red text-white py-[6px] px-4 rounded hover:bg-red-700 transition-colors">
               {item.salePrice ? "ADD TO CART" : "CHOOSE OPTIONS"}
             </button>
           </div>
