@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import { IoSearch } from "react-icons/io5";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { slugify } from "../../../utils/slugify";
 import useDataQuery from "../../../utils/useDataQuery";
+import BlogSearch from "./BlogSearch";
 
 const TSBlog = () => {
   const [searchParams] = useSearchParams();
@@ -18,6 +18,14 @@ const TSBlog = () => {
     ["blogTypes"],
     "/api/blog-types"
   );
+
+  // Combine the data sources
+  // const allAvailableBlogs = allBlogs.blogs || [];
+  // const filteredBlogs = searchQuery
+  //   ? allAvailableBlogs.filter((blog) =>
+  //       blog.title.toLowerCase().includes(searchQuery.toLowerCase())
+  //     )
+  //   : allAvailableBlogs;
 
   // Update activeTab when URL changes
   useEffect(() => {
@@ -126,9 +134,7 @@ const TSBlog = () => {
               {tab.replace("_", " ")}
             </Link>
           ))}
-          <button className="hover:text-[#754e55]">
-            <IoSearch className="w-5" />
-          </button>
+          <BlogSearch />
         </div>
         {isLoading ? (
           <div className="text-center py-10">Loading blogs...</div>

@@ -289,8 +289,7 @@ const AdminUpdateHire = () => {
           </div>
         </form>
       )}
-
-      <h1 className="text-xl md:text-2xl font-bold mb-4">
+      <h1 className="text-xl mt-6 md:text-2xl font-bold mb-4">
         Update Hire Equipment
       </h1>
       <HireEquipmentEditor />

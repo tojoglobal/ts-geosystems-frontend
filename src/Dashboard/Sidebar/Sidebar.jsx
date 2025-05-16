@@ -16,6 +16,8 @@ import {
   MonitorCogIcon,
   PackageCheck,
   MessageSquareText,
+  Repeat,
+  LifeBuoy,
 } from "lucide-react";
 import SidebarProfileDropdown from "./SidebarProfileDropdown/SidebarProfileDropdown";
 import logo from "/TS-WEB-LOGO.png";
@@ -35,11 +37,6 @@ const menuItems = [
     to: "/dashboard",
   },
   {
-    label: "Product",
-    icon: <MdOutlineShoppingCart size={20} />,
-    to: "/dashboard/product",
-  },
-  {
     label: "Orders",
     icon: <PackageCheck size={20} />,
     to: "/dashboard/orders",
@@ -48,6 +45,21 @@ const menuItems = [
     label: "Client Messages",
     icon: <MessageSquareText size={20} />,
     to: "/dashboard/client-messages",
+  },
+  {
+    label: "Trade In",
+    icon: <Repeat size={20} />,
+    to: "/dashboard/trade-in",
+  },
+  {
+    label: "Support",
+    icon: <LifeBuoy size={20} />,
+    to: "/dashboard/support",
+  },
+  {
+    label: "Product",
+    icon: <MdOutlineShoppingCart size={20} />,
+    to: "/dashboard/product",
   },
   {
     label: "Add Software",

@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import useDataQuery from "../../../utils/useDataQuery";
+import { Link } from "react-router-dom";
+import { slugify } from "../../../utils/slugify";
 
 const RelatedArticles = ({ currentBlogType, currentBlogId }) => {
   const [articles, setArticles] = useState([]);
@@ -27,8 +29,9 @@ const RelatedArticles = ({ currentBlogType, currentBlogId }) => {
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {articles.map((article) => (
-          <div
+          <Link
             key={article.id}
+            to={`/ts-blog/${article.id}/${slugify(article.title || "")}`}
             className="bg-white overflow-hidden shadow-md hover:shadow-lg transition-shadow"
           >
             {article.image && (
@@ -39,7 +42,7 @@ const RelatedArticles = ({ currentBlogType, currentBlogId }) => {
               />
             )}
             <div className="px-4 py-8 bg-[#fafdff]">
-              <h3 className="text-xl text-center font-semibold mb-2 hover:text-[#e62245] transition-colors">
+              <h3 className="text-xl text-center font-semibold mb-2 transition-colors">
                 {article.title}
               </h3>
               <div className="flex justify-center items-center text-xs text-gray-600 space-x-2">
@@ -48,7 +51,7 @@ const RelatedArticles = ({ currentBlogType, currentBlogId }) => {
                 <span>{article.date}</span>
               </div>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </div>

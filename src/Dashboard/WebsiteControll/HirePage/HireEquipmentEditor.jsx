@@ -135,7 +135,7 @@ const HireEquipmentEditor = () => {
 
             <button
               onClick={() => saveChanges(eq.id)}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition"
+              className="bg-teal-600 hover:bg-teal-700 text-white px-4 py-1.5 rounded transition"
             >
               Save
             </button>
