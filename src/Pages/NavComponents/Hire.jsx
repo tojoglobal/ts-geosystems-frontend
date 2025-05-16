@@ -5,6 +5,7 @@ import { FaFileAlt } from "react-icons/fa";
 import { FaRegFileLines } from "react-icons/fa6";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import { useRef } from "react";
+import Swal from "sweetalert2";
 
 const Hire = () => {
   const formRef = useRef(null);
@@ -69,31 +70,58 @@ const Hire = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const submissionData = {
-      contactDetails: {
-        name: formData.name,
-        company: formData.company,
-        email: formData.email,
-        phone: formData.phone,
-        existingCustomer: formData.existingCustomer,
-      },
-      hireRequirements: {
-        equipment: formData.equipment,
-        hireDate: formData.hireDate,
-        hirePeriod: formData.hirePeriod,
-        specialInstructions: formData.comments,
-      },
+      name: formData.name,
+      company: formData.company,
+      email: formData.email,
+      phone: formData.phone,
+      existingCustomer: formData.existingCustomer,
+      equipment: formData.equipment,
+      hireDate: formData.hireDate,
+      hirePeriod: formData.hirePeriod,
+      comments: formData.comments,
     };
 
-    console.log("Submitting data:", JSON.stringify(submissionData, null, 2));
-
     try {
-      // logic
+      const response = await axiosPublicUrl.post("/api/hire", submissionData);
+
+      if (response.status === 201) {
+        Swal.fire({
+          title: "Success",
+          text: response.data?.message,
+          icon: "success",
+          timer: 1500,
+          showConfirmButton: false,
+        });
+
+        // Reset form
+        setFormData({
+          name: "",
+          company: "",
+          email: "",
+          phone: "",
+          existingCustomer: "",
+          equipment: [],
+          hireDate: "",
+          hirePeriod: "",
+          comments: "",
+        });
+      } else {
+        Swal.fire("Error", "Failed to submit hire enquiry", "error");
+      }
     } catch (error) {
-      console.log(error);
+      console.error("Error submitting hire enquiry:", error);
+      Swal.fire({
+        title: "Error",
+        text: error?.response?.data?.message || "An unknown error occurred.",
+        icon: "error",
+        timer: 1500,
+        showConfirmButton: false,
+      });
     }
   };
-  
+
   return (
     <div className="p-2 md:p-3">
       <div className="flex items-center gap-2 text-[11px] mb-3">

@@ -1,7 +1,10 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import { useAxiospublic } from "../../Hooks/useAxiospublic";
+import Swal from "sweetalert2";
 
 const Support = () => {
+  const axiosPublicUrl = useAxiospublic();
   const [formData, setFormData] = useState({
     name: "",
     company: "",
@@ -46,31 +49,98 @@ const Support = () => {
     }));
   };
 
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   const submissionData = {
+  //     contactDetails: {
+  //       name: formData.name,
+  //       company: formData.company,
+  //       email: formData.email,
+  //       phone: formData.phone,
+  //     },
+  //     equipmentDetails: {
+  //       type: formData.equipment,
+  //       model: formData.model,
+  //     },
+  //     supportRequest: {
+  //       issues: formData.supportIssues,
+  //       details: formData.details,
+  //       attachments: formData.files.length > 0 ? "Files attached" : "No files",
+  //     },
+  //   };
+  //   console.log(submissionData);
+
+  //   try {
+  //     // logic here
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const submissionData = {
-      contactDetails: {
-        name: formData.name,
-        company: formData.company,
-        email: formData.email,
-        phone: formData.phone,
-      },
-      equipmentDetails: {
-        type: formData.equipment,
-        model: formData.model,
-      },
-      supportRequest: {
-        issues: formData.supportIssues,
-        details: formData.details,
-        attachments: formData.files.length > 0 ? "Files attached" : "No files",
-      },
-    };
-    console.log(submissionData);
+
+    const form = new FormData();
+
+    // Add all form fields to FormData
+    Object.keys(formData).forEach((key) => {
+      if (key === "supportIssues") {
+        form.append(key, JSON.stringify(formData[key])); // Convert array to JSON string
+      } else if (key === "files") {
+        formData.files.forEach((file) => {
+          form.append("files", file); // Append multiple files
+        });
+      } else {
+        form.append(key, formData[key]);
+      }
+    });
 
     try {
-      // logic here
+      const response = await axiosPublicUrl.post("/api/support", form, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      if (response.status === 201) {
+        Swal.fire({
+          title: "Success",
+          text: response.data?.message,
+          icon: "success",
+          timer: 1500,
+          showConfirmButton: false,
+        });
+
+        setFormData({
+          name: "",
+          company: "",
+          email: "",
+          phone: "",
+          equipment: "",
+          model: "",
+          supportIssues: [],
+          details: "",
+          files: [],
+        });
+      } else {
+        console.error("Failed to submit the support request");
+        Swal.fire("Error", "Failed to submit the support request", "error");
+      }
     } catch (error) {
-      console.error(error);
+      console.error(
+        "Error submitting support request:",
+        error.response || error.message
+      );
+      Swal.fire({
+        title: "Error",
+        text:
+          error?.response?.data?.message ||
+          error.message ||
+          "An unknown error occurred.",
+        icon: "error",
+        timer: 1500,
+        showConfirmButton: false,
+      });
     }
   };
 
