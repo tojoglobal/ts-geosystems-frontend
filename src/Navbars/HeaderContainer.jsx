@@ -6,7 +6,7 @@ import SearchOverlay from "./SearchOverlay";
 import { useAppContext } from "../context/useAppContext";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleCart } from "../features/CartToggleSlice/CartToggleSlice";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useAxiospublic } from "../Hooks/useAxiospublic";
 import { logout } from "../features/UserAuth/authSlice";
 import Swal from "sweetalert2";
@@ -19,6 +19,28 @@ const HeaderContainer = () => {
   const dispatch = useDispatch();
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [isSticky] = useState(false);
+  const userMenuRef = useRef(null);
+  const userIconRef = useRef(null);
+
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        showUserMenu &&
+        userMenuRef.current &&
+        !userMenuRef.current.contains(event.target) &&
+        userIconRef.current &&
+        !userIconRef.current.contains(event.target)
+      ) {
+        setShowUserMenu(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showUserMenu]);
 
   const handleLogout = async () => {
     try {
@@ -68,11 +90,15 @@ const HeaderContainer = () => {
           <div className="relative">
             {isAuth ? (
               <>
-                <div onClick={() => setShowUserMenu(!showUserMenu)}>
+                <div
+                  ref={userIconRef}
+                  onClick={() => setShowUserMenu(!showUserMenu)}
+                >
                   <LuUserRound className="text-[36px] text-davy-gray hover:text-crimson-red cursor-pointer" />
                 </div>
                 {showUserMenu && (
                   <div
+                    ref={userMenuRef}
                     className={`absolute z-[100] w-[250px] bg-white border border-gray-200 shadow-xl p-4 ${
                       isSticky ? "top-11 right-48" : "top-[72px] -right-[75px]"
                     }`}
@@ -82,6 +108,7 @@ const HeaderContainer = () => {
                         ACCOUNT INFO
                       </h3>
                       <Link
+                        onClick={() => setShowUserMenu(!showUserMenu)}
                         to="/user/account/orders"
                         className="py-[1px] text-[14px] font-normal hover:text-crimson-red"
                       >
@@ -94,24 +121,28 @@ const HeaderContainer = () => {
                         Returns
                       </Link> */}
                       <Link
+                        onClick={() => setShowUserMenu(!showUserMenu)}
                         to="/user/account/inbox"
                         className="py-[1px] text-[14px] font-normal hover:text-crimson-red"
                       >
                         Messages (0)
                       </Link>
                       <Link
+                        onClick={() => setShowUserMenu(!showUserMenu)}
                         to="/user/account/address-book"
                         className="py-[1px] text-[14px] font-normal hover:text-crimson-red"
                       >
                         Addresses
                       </Link>
                       <Link
+                        onClick={() => setShowUserMenu(!showUserMenu)}
                         to="/user/account/recent-viewed"
                         className="py-[1px] text-[14px] font-normal hover:text-crimson-red"
                       >
                         Recently Viewed
                       </Link>
                       <Link
+                        onClick={() => setShowUserMenu(!showUserMenu)}
                         to="/user/account/account-settings"
                         className="py-[1px] text-[14px] font-normal hover:text-crimson-red"
                       >

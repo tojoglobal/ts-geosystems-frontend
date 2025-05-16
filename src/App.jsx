@@ -71,14 +71,14 @@ import BlogView from "./Dashboard/Blog/BlogView";
 import AdminUpdateCertificateTracking from "./Pages/Control/AdminUpdateCertificateTracking";
 import WelcomePage from "./Pages/WelcomePage/WelcomePage";
 import UserProtectedRoute from "./ProtectedRoute/UserProtectedRoute";
-import UserDashboard from "./UserAccount/UserDashboard";
+// import UserDashboard from "./UserAccount/UserDashboard";
 import UserOrders from "./UserAccount/UserOrders";
 import UserInbox from "./UserAccount/UserInbox";
 import UserAddress from "./UserAccount/UserAddress";
 import RecentlyViewed from "./UserAccount/RecentlyViewed";
 import AccountSettings from "./UserAccount/AccountSettings";
 import UserAccountLayout from "./UserAccount/UserAccountLayout";
-import EditUserAddress from "./UserAccount/EditUserAddress";
+// import EditUserAddress from "./UserAccount/EditUserAddress";
 import PublicOnlyRoute from "./ProtectedRoute/PublicOnlyRoute";
 import AdminTradeIn from "./Dashboard/TradeIn/AdminTradeIn";
 import AdminSupportData from "./Dashboard/Support/AdminSupportData";
@@ -152,7 +152,7 @@ const AppLayout = () => {
         <Route
           path="/user/account/"
           element={
-            <UserProtectedRoute>
+          <UserProtectedRoute>
               <UserAccountLayout />
             </UserProtectedRoute>
           }
