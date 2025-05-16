@@ -30,7 +30,7 @@ const Cart = () => {
   const estimateShippingCost = () => {
     if (shippingInfo.country && shippingInfo.zip) {
       setShippingCost(190.79); // Example from your screenshot
-      Swal.fire("Shipping Estimated", "Estimated cost: £190.79", "success");
+      Swal.fire("Shipping Estimated", "Estimated cost: ৳190.79", "success");
     }
   };
 
@@ -150,7 +150,7 @@ const Cart = () => {
                   <td className="w-2xs">
                     <p className="font-medium pr-3">{item.product_name}</p>
                   </td>
-                  <td>£{item?.price.toFixed(2)}</td>
+                  <td>৳{item?.price.toFixed(2)}</td>
 
                   <td>
                     <div className="flex items-center">
@@ -170,10 +170,10 @@ const Cart = () => {
                     </div>
                   </td>
 
-                  <td>£{item?.totalVat.toFixed(2)}</td>
+                  <td>৳{item?.totalVat.toFixed(2)}</td>
                   <td className="text-right">
                     <div className="flex items-center justify-end gap-3">
-                      <p>£{(item.price * item.quantity).toFixed(2)}</p>
+                      <p>৳{(item.price * item.quantity).toFixed(2)}</p>
                       <button
                         onClick={() => handleRemove(item.id)}
                         className="text-red-500 cursor-pointer"
@@ -192,7 +192,7 @@ const Cart = () => {
             {/* Totals */}
             <div className="flex justify-between mb-2 border-b pb-2">
               <span>Subtotal:</span>
-              <span>£{subTotal.toFixed(2)}</span>
+              <span>৳{subTotal.toFixed(2)}</span>
             </div>
             {/* Coupon Section */}
             <div className="mb-2 border-b pb-2">
@@ -238,7 +238,7 @@ const Cart = () => {
                           Valid coupon code:{" "}
                           {coupon.type === "percentage"
                             ? `${coupon.discount}% off`
-                            : `£${coupon.discount} off`}
+                            : `৳${coupon.discount} off`}
                         </p>
                       ) : (
                         <p className="text-red-600 text-sm mt-1">
@@ -317,21 +317,21 @@ const Cart = () => {
 
             <div className="flex justify-between mb-2 border-b pb-2">
               <span>VAT:</span>
-              <span>£{vat.toFixed(2)}</span>
+              <span>৳{vat.toFixed(2)}</span>
             </div>
             <div className="flex justify-between mb-2 border-b pb-2">
               <span>Shipping:</span>
-              <span>£{shippingCost.toFixed(2)}</span>
+              <span>৳{shippingCost.toFixed(2)}</span>
             </div>
             {discount > 0 && (
               <div className="flex justify-between mb-2 border-b pb-2 text-green-600">
                 <span>Discount:</span>
-                <span>-£{discount.toFixed(2)}</span>
+                <span>-৳{discount.toFixed(2)}</span>
               </div>
             )}
             <div className="flex justify-between text-lg font-semibold">
               <span>Grand Total:</span>
-              <span>£{grandTotal.toFixed(2)}</span>
+              <span>৳{grandTotal.toFixed(2)}</span>
             </div>
             <div className="flex justify-end mt-5">
               <Link to="/checkout">

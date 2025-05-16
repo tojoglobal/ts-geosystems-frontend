@@ -24,25 +24,25 @@ const POPULAR_SEARCHES = [
 const RECOMMENDED_PRODUCTS = [
   {
     name: "Retro Reflective Targets",
-    price: "£3.95",
+    price: "৳3.95",
     image:
       "https://cdn11.bigcommerce.com/s-ew2v2d3jn1/images/stencil/200x60/products/152/3009/retro-reflective-targets__86299.1678487731.jpg?c=1",
   },
   {
     name: "Leica Cyclone REGISTER 360 PLUS",
-    price: "£162.00",
+    price: "৳162.00",
     image:
       "https://cdn11.bigcommerce.com/s-ew2v2d3jn1/images/stencil/200x60/products/152/3009/retro-reflective-targets__86299.1678487731.jpg?c=1",
   },
   {
     name: "Leica GEB212 Li-Ion Battery",
-    price: "£179.95",
+    price: "৳179.95",
     image:
       "https://cdn11.bigcommerce.com/s-ew2v2d3jn1/images/stencil/500x659/products/493/2941/rs30r__86371.1677189463.jpg?c=1",
   },
   {
     name: "Leica GS16 SmartAntenna GPS",
-    price: "£7,020.00",
+    price: "৳7,020.00",
     image:
       "https://cdn11.bigcommerce.com/s-ew2v2d3jn1/images/stencil/500x659/products/289/2251/leica-gzt21-scanning-target__56546.1659456209.jpg?c=1",
   },

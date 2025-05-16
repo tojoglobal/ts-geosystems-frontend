@@ -83,7 +83,7 @@ const UsedEquipment = () => {
       return field;
     }
   };
-  
+
   if (isLoading) return <div>Loading...</div>;
 
   return (
@@ -276,7 +276,7 @@ const UsedEquipment = () => {
                       <div className="flex flex-col">
                         <div className="flex items-center gap-1">
                           <p className="font-bold text-lg">
-                            Price £{price.toFixed(2)}
+                            Price ৳{price.toFixed(2)}
                           </p>
                           <p className="text-sm text-gray-500 underline">
                             (Ex. VAT)
@@ -286,7 +286,7 @@ const UsedEquipment = () => {
                           <p className="text-[#2f2f2b] text-lg font-semibold">
                             Price:
                           </p>
-                          £{priceExVat.toFixed(2)}{" "}
+                          ৳{priceExVat.toFixed(2)}{" "}
                           <span className="underline">(Inc. VAT)</span>
                         </div>
                       </div>
@@ -326,13 +326,13 @@ const UsedEquipment = () => {
                     </div>
                     <div className="mt-1">
                       <div className="flex items-center gap-1">
-                        <p className="font-bold">£{price.toFixed(2)}</p>
+                        <p className="font-bold">৳{price.toFixed(2)}</p>
                         <p className="text-sm text-gray-500 underline">
                           (Ex. VAT)
                         </p>
                       </div>
                       <div className="flex items-center gap-1 text-sm text-[#b3b3b5] mt-1">
-                        £{priceExVat.toFixed(2)}{" "}
+                        ৳{priceExVat.toFixed(2)}{" "}
                         <span className="underline">(Inc. VAT)</span>
                       </div>
                       <div className="flex flex-col gap-2 mt-2">

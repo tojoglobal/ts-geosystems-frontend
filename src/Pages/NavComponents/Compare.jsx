@@ -107,15 +107,15 @@ const Compare = () => {
               <div>
                 <div className="flex items-center gap-1">
                   <p className="text-gray-500 line-through">
-                    Was: £{product.oldPrice.toFixed(2)}
+                    Was: ৳{product.oldPrice.toFixed(2)}
                   </p>
                   <p className="font-bold">
-                    £{product.price.toFixed(2)} (Ex. VAT)
+                    ৳{product.price.toFixed(2)} (Ex. VAT)
                   </p>
                 </div>
-                <p className="font-bold">£{product.price.toFixed(2)}</p>
+                <p className="font-bold">৳{product.price.toFixed(2)}</p>
                 <p className="text-gray-500">
-                  £{product.priceExVat.toFixed(2)} (Inc. VAT)
+                  ৳{product.priceExVat.toFixed(2)} (Inc. VAT)
                 </p>
               </div>
               <button className="w-full bg-[#e62245] text-white py-2 hover:bg-[#d41d3f] transition-colors font-semibold mb-4">

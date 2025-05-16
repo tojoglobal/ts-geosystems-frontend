@@ -50,10 +50,7 @@ const RecentlyViewed = () => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
       {recentItems.map((item) => (
-        <div
-          key={item.id}
-          className="bg-white overflow-hidden"
-        >
+        <div key={item.id} className="bg-white overflow-hidden">
           <div className="relative">
             {item.onSale && (
               <span className="absolute top-1 right-4 bg-red-500 text-white px-2 py-1 text-xs font-semibold rounded">
@@ -78,15 +75,15 @@ const RecentlyViewed = () => {
                 {item.salePrice ? (
                   <>
                     <span className="text-lg font-bold text-gray-900">
-                      £{item.salePrice.toFixed(2)}
+                      ৳{item.salePrice.toFixed(2)}
                     </span>
                     <span className="ml-2 text-sm text-gray-500 line-through">
-                      £{item.price.toFixed(2)}
+                      ৳{item.price.toFixed(2)}
                     </span>
                   </>
                 ) : (
                   <span className="text-lg font-bold text-gray-900">
-                    £{item.price.toFixed(2)}
+                    ৳{item.price.toFixed(2)}
                   </span>
                 )}
                 <div className="text-xs text-gray-500">(Inc. VAT)</div>

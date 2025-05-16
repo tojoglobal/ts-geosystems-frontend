@@ -120,7 +120,7 @@ const Cart = () => {
                     </div>
                   </td>
                   {/* Price */}
-                  <td>£{item.price.toFixed(2)}</td>
+                  <td>৳{item.price.toFixed(2)}</td>
                   {/* Quantity */}
                   <td>
                     <div className="flex items-center">
@@ -144,7 +144,7 @@ const Cart = () => {
                   {/* Total */}
                   <td className="text-right">
                     <div className="flex items-center justify-end gap-3">
-                      <p>£{(item.price * item.quantity).toFixed(2)}</p>
+                      <p>৳{(item.price * item.quantity).toFixed(2)}</p>
                       <button
                         onClick={() => removeItem(item.id)}
                         className="p-[2px] bg-gray-300 text-red-500 rounded-full flex items-center justify-center"
@@ -161,7 +161,7 @@ const Cart = () => {
           <div className="max-w-lg ml-auto p-4 rounded">
             <div className="flex justify-between mb-3 border-b pb-3">
               <span>Subtotal:</span>
-              <span>£{subTotal.toFixed(2)}</span>
+              <span>৳{subTotal.toFixed(2)}</span>
             </div>
             <div className="flex justify-between mb-3 border-b pb-3">
               <span>Shipping:</span>
@@ -169,7 +169,7 @@ const Cart = () => {
             </div>
             <div className="flex justify-between mb-3 border-b pb-3">
               <span>VAT:</span>
-              <span>£{vat.toFixed(2)}</span>
+              <span>৳{vat.toFixed(2)}</span>
             </div>
             <div className="flex justify-between mb-3 border-b pb-3">
               <span>Coupon Code:</span>
@@ -179,7 +179,7 @@ const Cart = () => {
             </div>
             <div className="flex justify-between text-lg mt-4">
               <span>Grand Total:</span>
-              <span>£{grandTotal.toFixed(2)}</span>
+              <span>৳{grandTotal.toFixed(2)}</span>
             </div>
             <div className="flex justify-end mt-7">
               <Link to="/checkout">

@@ -309,11 +309,11 @@ const CategoryProduct = () => {
                     <div>
                       <div className="flex flex-col">
                         <div className="text-[#2f2f2b] font-semibold">
-                          Was: £{(parseFloat(product.price) * 1.5).toFixed(2)}
+                          Was: ৳{(parseFloat(product.price) * 1.5).toFixed(2)}
                         </div>
                         <div className="flex items-center gap-1">
                           <p className="font-bold">
-                            Price £{parsePrice(product.price).toFixed(2)}
+                            Price ৳{parsePrice(product.price).toFixed(2)}
                           </p>
                           <p className="text-sm text-gray-500 underline">
                             (Ex. VAT)
@@ -321,7 +321,7 @@ const CategoryProduct = () => {
                         </div>
                         <div className="flex items-center gap-1 text-sm text-[#b3b3b5]">
                           <p className="text-[#2f2f2b] font-semibold">Price:</p>
-                          £{(parseFloat(product.price) * 1.2).toFixed(2)}{" "}
+                          ৳{(parseFloat(product.price) * 1.2).toFixed(2)}{" "}
                           <span className="underline">(Inc. VAT)</span>
                         </div>
                       </div>
@@ -369,14 +369,14 @@ const CategoryProduct = () => {
                     <div className="mt-1">
                       <div className="flex items-center gap-1">
                         <p className="text-sm font-bold">
-                          £{parsePrice(product.price).toFixed(2)}
+                          ৳{parsePrice(product.price).toFixed(2)}
                         </p>
                         <p className="text-sm text-gray-500 underline">
                           (Ex. VAT)
                         </p>
                       </div>
                       <div className="flex items-center gap-1 text-sm text-[#b3b3b5] mt-1">
-                        £{(parseFloat(product.price) * 1.2).toFixed(2)}{" "}
+                        ৳{(parseFloat(product.price) * 1.2).toFixed(2)}{" "}
                         <span className="underline">(Inc. VAT)</span>
                       </div>
                       <div className="flex flex-col gap-2 mt-2">

@@ -125,8 +125,8 @@ const SearchResultsView = ({
               <h3 className="font-bold text-[18px] mb-4">Best Price</h3>
               <input type="range" className="w-full" min="0" max="1000" />
               <div className="flex justify-between mt-2 text-sm text-gray-600">
-                <span>£0</span>
-                <span>£1000</span>
+                <span>৳0</span>
+                <span>৳1000</span>
               </div>
             </div>
           </div>
@@ -183,7 +183,7 @@ const SearchResultsView = ({
                     {product.product_name || product.name}
                   </Link>
                   <div className="flex justify-between items-center mt-auto">
-                    <p className="text-xs font-semibold">£{product.price}</p>
+                    <p className="text-xs font-semibold">৳{product.price}</p>
                     <button className="p-1 bg-[#e62245] text-white rounded hover:bg-[#d41d3f]">
                       <MdAddShoppingCart size={20} />
                     </button>

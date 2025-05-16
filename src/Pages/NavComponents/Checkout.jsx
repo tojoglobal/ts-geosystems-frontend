@@ -477,20 +477,20 @@ const Checkout = () => {
           <div className="space-y-3 text-sm">
             <div className="flex justify-between">
               <span>Subtotal</span>
-              <span>£{subtotal.toLocaleString()}</span>
+              <span>৳{subtotal.toLocaleString()}</span>
             </div>
             <div className="flex justify-between">
               <span>Shipping</span>
-              <span>£{shippingCost}</span>
+              <span>৳{shippingCost}</span>
             </div>
             {/* <div className="flex justify-between">
               <span>VAT</span>
-              <span>£{vat.toLocaleString()}</span>
+              <span>৳{vat.toLocaleString()}</span>
             </div> */}
             {coupon?.code_name && (
               <div className="flex justify-between text-green-600">
                 <span>Discount:({coupon?.code_name})</span>
-                <span>-£{discount.toFixed(2)}</span>
+                <span>-৳{discount.toFixed(2)}</span>
               </div>
             )}
 
@@ -524,7 +524,7 @@ const Checkout = () => {
           <div className="flex justify-between text-xl font-semibold">
             <span>Total</span>
             <span>
-              £{total.toLocaleString(undefined, { maximumFractionDigits: 2 })}
+              ৳{total.toLocaleString(undefined, { maximumFractionDigits: 2 })}
             </span>
           </div>
 
@@ -533,7 +533,7 @@ const Checkout = () => {
             <p className="font-semibold mb-1">TAX INCLUDED IN TOTAL:</p>
             <div className="flex justify-between">
               <span>VAT</span>
-              <span>£{vat.toLocaleString()}</span>
+              <span>৳{vat.toLocaleString()}</span>
             </div>
           </div>
         </div>
