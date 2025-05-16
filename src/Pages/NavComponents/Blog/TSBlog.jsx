@@ -1,12 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, Fragment } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { IoSearch } from "react-icons/io5";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { slugify } from "../../../utils/slugify";
+import { RxCross2 } from "react-icons/rx";
 import useDataQuery from "../../../utils/useDataQuery";
 
 const TSBlog = () => {
   const [searchParams] = useSearchParams();
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const urlType = searchParams.get("type");
 
   const [activeTab, setActiveTab] = useState(urlType || "All");
@@ -126,9 +129,39 @@ const TSBlog = () => {
               {tab.replace("_", " ")}
             </Link>
           ))}
-          <button className="hover:text-[#754e55]">
+          <button
+            className="cursor-pointer hover:text-[#754e55]"
+            onClick={() => setIsSearchOpen(true)}
+          >
             <IoSearch className="w-5" />
           </button>
+          {isSearchOpen && (
+            <div className="fixed inset-0 flex items-center justify-center z-50">
+              <div className="modal modal-open">
+                <div className="modal-box flex items-center bg-white rounded-lg shadow-2xl max-w-2xl w-full">
+                  <input
+                    type="text"
+                    placeholder="Search for..."
+                    className="input input-bordered w-full mt-4"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
+                  {/* Close Button */}
+                  <button
+                    className="cursor-pointer z-10 absolute right-4 top-4 text-gray-400 hover:text-red-500"
+                    onClick={() => setIsSearchOpen(false)}
+                  >
+                    <RxCross2 size={22} />
+                  </button>
+                  <div className="mt-6 max-h-[60vh] overflow-y-auto">
+                    <div className="grid grid-cols-1 gap-4">
+                      {/* Search results will be populated here later */}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
         {isLoading ? (
           <div className="text-center py-10">Loading blogs...</div>
