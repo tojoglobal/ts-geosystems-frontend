@@ -5,32 +5,30 @@ import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import "swiper/css";
 import "swiper/css/navigation";
 import GoogleReview from "./GoogleReview";
-import { useQuery } from "@tanstack/react-query";
-import { useAxiospublic } from "../../../Hooks/useAxiospublic";
 import Loader from "../../../utils/Loader";
 import useDataQuery from "../../../utils/useDataQuery";
 
 const AboutUs = () => {
-  const axiosPublicUrl = useAxiospublic();
   const { data = [], isLoading: loading } = useDataQuery(
     ["popularBrand"],
     "/api/brands"
   );
-
-  const {
-    data: aboutContent,
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: ["aboutContent"],
-    queryFn: async () => {
-      const { data } = await axiosPublicUrl.get("/api/about-us");
-      return data.data;
-    },
-  });
   const brands = data.filter((brand) => brand.is_populer === 1);
 
-  if (isLoading || loading) return <Loader />;
+  const {
+    data: response = {},
+    isLoading,
+    isError,
+  } = useDataQuery(["aboutContent"], "/api/about-us");
+  const aboutContent = response.data || {};
+
+  const { data: aboutUsImg = [], isLoading: imgLoading } = useDataQuery(
+    ["aboutUsImage"],
+    "/api/get-about-us-images"
+  );
+  console.log(aboutUsImg);
+
+  if (isLoading || loading || imgLoading) return <Loader />;
   if (isError) return <p>Error loading data...</p>;
 
   const section2Points = aboutContent?.section2_points || [];

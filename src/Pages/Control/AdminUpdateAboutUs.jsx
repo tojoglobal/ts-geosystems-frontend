@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useForm, Controller, useFieldArray } from "react-hook-form";
-import { useDropzone } from "react-dropzone";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import { Editor } from "@tinymce/tinymce-react";
@@ -12,12 +11,6 @@ import AboutUsImgesControlls from "../../Dashboard/WebsiteControll/AboutUsPage/A
 const AdminUpdateAboutUs = () => {
   const axiosPublicUrl = useAxiospublic();
   const queryClient = useQueryClient();
-  const [whoWeServeImage, setWhoWeServeImage] = useState(null);
-  const [bottomSectionImage, setBottomSectionImage] = useState(null);
-  const [existingImages, setExistingImages] = useState({
-    who_we_serve_image: null,
-    bottom_section_image: null,
-  });
 
   const { data: aboutContent, isLoading } = useQuery({
     queryKey: ["aboutContent"],
@@ -58,6 +51,7 @@ const AdminUpdateAboutUs = () => {
     reset,
     formState: { errors },
   } = useForm();
+  console.log(errors);
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -86,18 +80,14 @@ const AdminUpdateAboutUs = () => {
         section9_title: aboutContent.section9_title || "",
         section9_description: aboutContent.section9_description || "",
       });
-      setExistingImages({
-        who_we_serve_image: aboutContent.who_we_serve_image,
-        bottom_section_image: aboutContent.bottom_section_image,
-      });
     }
   }, [aboutContent, reset]);
 
-  const onDrop = (acceptedFiles, setImage) => {
-    if (acceptedFiles?.length) {
-      setImage(acceptedFiles[0]);
-    }
-  };
+  // const onDrop = (acceptedFiles, setImage) => {
+  //   if (acceptedFiles?.length) {
+  //     setImage(acceptedFiles[0]);
+  //   }
+  // };
 
   // const {
   //   getRootProps: getWhoWeServeProps,
@@ -136,26 +126,6 @@ const AdminUpdateAboutUs = () => {
         formData.append(key, value);
       }
     });
-
-    // Only append new images if they exist
-    if (whoWeServeImage) {
-      formData.append("who_we_serve_image", whoWeServeImage);
-    } else if (existingImages.who_we_serve_image) {
-      // Send the existing path only if no new image is selected
-      formData.append(
-        "old_who_we_serve_image",
-        existingImages.who_we_serve_image
-      );
-    }
-
-    if (bottomSectionImage) {
-      formData.append("bottom_section_image", bottomSectionImage);
-    } else if (existingImages.bottom_section_image) {
-      formData.append(
-        "old_bottom_section_image",
-        existingImages.bottom_section_image
-      );
-    }
 
     updateMutation.mutate(formData);
   };
