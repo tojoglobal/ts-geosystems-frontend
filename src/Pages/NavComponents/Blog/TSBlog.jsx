@@ -136,13 +136,13 @@ const TSBlog = () => {
             <IoSearch className="w-5" />
           </button>
           {isSearchOpen && (
-            <div className="fixed inset-0 flex items-center justify-center z-50">
-              <div className="modal modal-open">
-                <div className="modal-box flex items-center bg-white rounded-lg shadow-2xl max-w-2xl w-full">
+            <div className="fixed inset-0 z-50 bg-black/30 flex justify-center items-start">
+              <div className="mt-20 w-full max-w-3xl px-4">
+                <div className="bg-white rounded-lg shadow-2xl p-6 relative">
                   <input
                     type="text"
                     placeholder="Search for..."
-                    className="input input-bordered w-full mt-4"
+                    className="input input-bordered w-full"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                   />
