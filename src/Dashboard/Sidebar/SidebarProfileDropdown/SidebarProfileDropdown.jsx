@@ -42,7 +42,7 @@ const SidebarProfileDropdown = () => {
       {/* Profile Trigger */}
       <button
         onClick={() => setOpen(!open)}
-        className="w-full flex items-center justify-between gap-2 bg-white/10 p-2 rounded-lg text-white hover:bg-white/20 transition"
+        className="w-full cursor-pointer flex items-center justify-between gap-2 bg-white/10 p-2 rounded-lg text-white hover:bg-white/20 transition"
       >
         <div className="flex items-center gap-2">
           <img
@@ -54,7 +54,6 @@ const SidebarProfileDropdown = () => {
         </div>
         {open ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
       </button>
-
       {/* Dropdown Menu */}
       {open && (
         <div className="absolute bottom-14 left-3 w-56 md:w-60 bg-white shadow-lg rounded-lg z-50">
