@@ -82,6 +82,7 @@ import EditUserAddress from "./UserAccount/EditUserAddress";
 import PublicOnlyRoute from "./ProtectedRoute/PublicOnlyRoute";
 import AdminTradeIn from "./Dashboard/TradeIn/AdminTradeIn";
 import AdminSupportData from "./Dashboard/Support/AdminSupportData";
+import AddNewAddress from "./UserAccount/AddNewAddress";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -160,6 +161,7 @@ const AppLayout = () => {
           <Route path="orders" element={<UserOrders />} />
           <Route path="inbox" element={<UserInbox />} />
           <Route path="address-book" element={<UserAddress />} />
+          <Route path="add-address" element={<AddNewAddress />} />
           <Route path="recent-viewed" element={<RecentlyViewed />} />
           <Route path="account-settings" element={<AccountSettings />} />
         </Route>

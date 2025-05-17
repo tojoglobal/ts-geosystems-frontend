@@ -1,19 +1,19 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const UserAddress = () => {
   const [addresses, setAddresses] = useState([
     {
       id: 1,
-      name: 'Momen Hossain',
-      company: 'Ian McCarry Solicitors',
-      address1: '1980-1984 Maryhill Road',
-      address2: 'ssd',
-      city: 'Glasgow',
-      postcode: 'G20 0EF',
-      country: 'United Kingdom',
-      phone: '0176761606'
-    }
+      name: "Momen Hossain",
+      company: "Ian McCarry Solicitors",
+      address1: "1980-1984 Maryhill Road",
+      address2: "ssd",
+      city: "Glasgow",
+      postcode: "G20 0EF",
+      country: "United Kingdom",
+      phone: "0176761606",
+    },
   ]);
 
   return (
@@ -51,7 +51,7 @@ const UserAddress = () => {
 
       {/* Add New Address Card */}
       <Link
-        to="/account/account-settings"
+        to="/user/account/add-address"
         className="border-2 group border-dashed border-gray-300 p-6 flex flex-col items-center justify-center cursor-pointer  hover:border-crimson-red transition-colors"
       >
         <div className="text-5xl text-crimson-red group-hover:text-red-700 mb-2">
