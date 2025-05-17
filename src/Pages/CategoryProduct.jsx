@@ -221,7 +221,9 @@ const CategoryProduct = () => {
 
             const isHovered = hoveredProductId === product.id;
             const displayImage = isHovered ? secondImage : firstImage;
-
+            const options = product.product_options
+              ? JSON.parse(product.product_options)
+              : [];
             return (
               <div
                 key={product.id}
@@ -346,14 +348,28 @@ const CategoryProduct = () => {
                       </div>
                       <div className="flex gap-4 mt-2 flex-row">
                         {product?.isStock === 1 && (
-                          <button
-                            onClick={() => handleAddToCart(product)}
-                            className="cursor-pointer bg-[#e62245] text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
-                          >
-                            ADD TO CART
-                          </button>
+                          <div>
+                            {options.length < 2 ? (
+                              <Link
+                                onClick={() => trackProductView(product.id)}
+                                to={`/products/${product.id}/${slugify(
+                                  product.product_name || ""
+                                )}`}
+                                className="cursor-pointer bg-[#e62245] text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
+                              >
+                                CHOOSE OPTION
+                              </Link>
+                            ) : (
+                              <button
+                                onClick={() => handleAddToCart(product)}
+                                className="cursor-pointer bg-[#e62245] text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
+                              >
+                                ADD TO CART
+                              </button>
+                            )}
+                          </div>
                         )}
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 mt-1">
                           <input
                             type="checkbox"
                             id={`compare-${product.id}`}
@@ -403,12 +419,26 @@ const CategoryProduct = () => {
                       </div>
                       <div className="flex flex-col gap-2 mt-2">
                         {product?.isStock === 1 && (
-                          <button
-                            onClick={() => handleAddToCart(product)}
-                            className="cursor-pointer bg-[#e62245] text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
-                          >
-                            ADD TO CART
-                          </button>
+                          <div>
+                            {options.length < 2 ? (
+                              <Link
+                                onClick={() => trackProductView(product.id)}
+                                to={`/products/${product.id}/${slugify(
+                                  product.product_name || ""
+                                )}`}
+                                className="w-full block text-center cursor-pointer bg-[#e62245] text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
+                              >
+                                CHOOSE OPTION
+                              </Link>
+                            ) : (
+                              <button
+                                onClick={() => handleAddToCart(product)}
+                                className="w-full cursor-pointer bg-[#e62245] text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
+                              >
+                                ADD TO CART
+                              </button>
+                            )}
+                          </div>
                         )}
                         <div className="flex items-center gap-2 mt-1">
                           <input
@@ -441,7 +471,7 @@ const CategoryProduct = () => {
           {currentPage > 1 ? (
             <button
               onClick={() => setCurrentPage(currentPage - 1)}
-              className="border px-3 py-1 rounded hover:bg-gray-100 transition text-sm"
+              className="border cursor-pointer px-3 py-1 rounded hover:bg-gray-100 transition text-sm"
             >
               ← Previous
             </button>
@@ -454,7 +484,7 @@ const CategoryProduct = () => {
               <button
                 key={idx}
                 onClick={() => setCurrentPage(idx + 1)}
-                className={`border px-3 py-1 rounded text-sm ${
+                className={`border cursor-pointer px-3 py-1 rounded text-sm ${
                   currentPage === idx + 1 ? "bg-gray-200" : "hover:bg-gray-100"
                 }`}
               >
@@ -467,7 +497,7 @@ const CategoryProduct = () => {
         {currentPage < totalPages ? (
           <button
             onClick={() => setCurrentPage(currentPage + 1)}
-            className="border px-3 py-1 rounded hover:bg-gray-100 transition text-sm"
+            className="border cursor-pointer px-3 py-1 rounded hover:bg-gray-100 transition text-sm"
           >
             Next →
           </button>
