@@ -27,23 +27,31 @@ const UserOrders = () => {
   }
 
   const orders = data?.data || [];
-  
-  // Format order data for display
-  const formattedOrders = orders.map((order) => {
-    // Get the first item's image if available
-    let firstImage = "/placeholder-product.jpg"; // default image
+
+  // Function to extract first image URL from items
+  const getFirstImageUrl = (order) => {
     try {
       const items = JSON.parse(order.items);
-      if (items.length > 0 && items[0].image_urls) {
-        const images = JSON.parse(items[0].image_urls);
-        if (images.length > 0) {
-          firstImage = images[0];
+      if (items.length > 0) {
+        const firstItem = items[0];
+        if (firstItem.image_urls) {
+          // Parse the image_urls string to get the array
+          const imageUrls = JSON.parse(firstItem.image_urls);
+          if (imageUrls.length > 0) {
+            // Return the full URL with the base API URL
+            return `${import.meta.env.VITE_OPEN_APIURL}${imageUrls[0]}`;
+          }
         }
       }
-    } catch (e) {
-      console.error("Error parsing order items", e);
+    } catch (error) {
+      console.error("Error parsing order items:", error);
     }
+    // Fallback to placeholder image
+    return "/placeholder-product.jpg";
+  };
 
+  // Format order data for display
+  const formattedOrders = orders.map((order) => {
     return {
       id: order.order_id,
       productCount: JSON.parse(order.items).length,
@@ -59,7 +67,7 @@ const UserOrders = () => {
         year: "numeric",
       }),
       status: order.status.toUpperCase(),
-      image: firstImage,
+      image: getFirstImageUrl(order),
     };
   });
 
@@ -89,7 +97,15 @@ const UserOrders = () => {
                         {order.totalAmount}
                       </p>
                     </div>
-                    <span className="bg-gray-200 text-gray-600 text-xs px-2 py-1 rounded">
+                    <span
+                      className={`text-xs px-2 py-1 rounded ${
+                        order.status === "COMPLETED"
+                          ? "bg-green-100 text-green-800"
+                          : order.status === "PENDING"
+                          ? "bg-yellow-100 text-yellow-800"
+                          : "bg-gray-200 text-gray-600"
+                      }`}
+                    >
                       {order.status}
                     </span>
                   </div>
