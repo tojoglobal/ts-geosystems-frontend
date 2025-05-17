@@ -5,7 +5,7 @@ const RemoteSupport = () => {
   const [isFocused, setIsFocused] = useState(false);
 
   return (
-    <div className="max-w-md min-h-[60vh] mx-auto mt-20 p-4 relative">
+    <div className="max-w-md min-h-[60vh] mx-auto mt-10 md:mt-20 p-4 relative">
       {/* Under Development Banner */}
       <div className="absolute -top-3 -right-3 bg-yellow-500 text-white px-3 py-1 rounded-md text-sm font-medium transform rotate-6 shadow-md z-10">
         Under Development

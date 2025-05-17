@@ -1,4 +1,3 @@
-import React from "react";
 import { Link } from "react-router-dom";
 
 const QuickGuides = () => {
@@ -78,7 +77,7 @@ const QuickGuides = () => {
   ];
 
   return (
-    <div className="p-2 md:p-3">
+    <div className="p-1 md:p-3">
       <div className="flex items-center gap-2 text-[11px]">
         <Link to="/" className="text-[#e62245]">
           Home
