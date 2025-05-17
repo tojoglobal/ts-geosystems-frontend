@@ -197,7 +197,7 @@ const ProductSidebar = () => {
             popularImage.photo
           }`}
           alt="Leica Authorized Distributor"
-          className="w-full object-cover h-28 transition-transform duration-1000 hover:scale-110"
+          className="w-full object-cover h-[105px] transition-transform duration-1000 hover:scale-110"
         />
       </div>
     </div>
