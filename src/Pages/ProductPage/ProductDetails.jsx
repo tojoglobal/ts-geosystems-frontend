@@ -5,17 +5,15 @@ import { Navigation, Thumbs } from "swiper/modules";
 import { FaFacebook, FaLinkedin, FaTwitter, FaPinterest } from "react-icons/fa";
 import Recommended from "./Recommended";
 import { useParams } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import { useDispatch } from "react-redux";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import { MdOutlineKeyboardArrowUp } from "react-icons/md";
 import { addToCart } from "../../features/AddToCart/AddToCart";
 import { parsePrice } from "../../utils/parsePrice";
+import useDataQuery from "../../utils/useDataQuery";
 
 const ProductDetails = () => {
   const { id } = useParams();
-  const axiosPublicUrl = useAxiospublic();
   const dispatch = useDispatch();
   const [selectedImage, setSelectedImage] = useState("");
   const [activeTab, setActiveTab] = useState("OVERVIEW");
@@ -27,13 +25,8 @@ const ProductDetails = () => {
     data: product = {},
     isLoading,
     error,
-  } = useQuery({
-    queryKey: ["productDetails", id],
-    queryFn: async () => {
-      const res = await axiosPublicUrl.get(`/api/products/${id}`);
-      return res.data;
-    },
-  });
+  } = useDataQuery(["productDetails", id], `/api/products/${id}`, !!id);
+  // console.log(product);
 
   // Quantity handlers
   const incrementQuantity = () => {

@@ -1,9 +1,13 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-useless-escape */
 import { MdAddShoppingCart, MdOutlineKeyboardVoice } from "react-icons/md";
 import { IoSearchSharp } from "react-icons/io5";
 import { RxCross1 } from "react-icons/rx";
 import { Link } from "react-router-dom";
 import { slugify } from "../utils/slugify";
+import { useEffect, useState } from "react";
+import { useAxiospublic } from "../Hooks/useAxiospublic";
+
 const SearchResultsView = ({
   products,
   onClose,
@@ -13,6 +17,159 @@ const SearchResultsView = ({
   sortOrder,
   setSortOrder,
 }) => {
+  const axiosPublic = useAxiospublic();
+  const [filters, setFilters] = useState({
+    brands: [],
+    categories: [],
+    conditions: [],
+    minPrice: 0,
+    maxPrice: 10000,
+  });
+  const [selectedFilters, setSelectedFilters] = useState({
+    brand: null,
+    category: null,
+    condition: null,
+    priceRange: [0, 10000],
+  });
+  const [filteredProducts, setFilteredProducts] = useState(products);
+
+  // Extract filters from products
+  useEffect(() => {
+    if (products.length > 0) {
+      // Extract unique brands
+      const brandsMap = {};
+      const categoriesMap = {};
+      const conditionsMap = {};
+      let minPrice = Infinity;
+      let maxPrice = 0;
+
+      products.forEach((product) => {
+        // Process brands
+        if (product.brand_name) {
+          brandsMap[product.brand_name] =
+            (brandsMap[product.brand_name] || 0) + 1;
+        }
+
+        // Process categories
+        try {
+          if (product.category) {
+            const categoryObj = JSON.parse(product.category);
+            if (categoryObj.cat) {
+              categoriesMap[categoryObj.cat] =
+                (categoriesMap[categoryObj.cat] || 0) + 1;
+            }
+          }
+        } catch (e) {
+          console.error("Error parsing category", e);
+        }
+
+        // Process conditions
+        if (product.product_condition) {
+          conditionsMap[product.product_condition] =
+            (conditionsMap[product.product_condition] || 0) + 1;
+        }
+
+        // Process prices
+        const price = parseFloat(product.price) || 0;
+        if (price < minPrice) minPrice = price;
+        if (price > maxPrice) maxPrice = price;
+      });
+
+      setFilters({
+        brands: Object.entries(brandsMap).map(([name, count]) => ({
+          name,
+          count,
+        })),
+        categories: Object.entries(categoriesMap).map(([name, count]) => ({
+          name,
+          count,
+        })),
+        conditions: Object.entries(conditionsMap).map(([name, count]) => ({
+          name,
+          count,
+        })),
+        minPrice: Math.floor(minPrice),
+        maxPrice: Math.ceil(maxPrice),
+      });
+
+      // Set initial price range
+      setSelectedFilters((prev) => ({
+        ...prev,
+        priceRange: [Math.floor(minPrice), Math.ceil(maxPrice)],
+      }));
+    }
+  }, [products]);
+
+  // Apply filters when they change
+  useEffect(() => {
+    let result = [...products];
+
+    // Apply brand filter
+    if (selectedFilters.brand) {
+      result = result.filter((p) => p.brand_name === selectedFilters.brand);
+    }
+
+    // Apply category filter
+    if (selectedFilters.category) {
+      result = result.filter((p) => {
+        try {
+          const categoryObj = JSON.parse(p.category);
+          return categoryObj.cat === selectedFilters.category;
+        } catch (e) {
+          return false;
+        }
+      });
+    }
+
+    // Apply condition filter
+    if (selectedFilters.condition) {
+      result = result.filter(
+        (p) => p.product_condition === selectedFilters.condition
+      );
+    }
+
+    // Apply price range filter
+    result = result.filter((p) => {
+      const price = parseFloat(p.price) || 0;
+      return (
+        price >= selectedFilters.priceRange[0] &&
+        price <= selectedFilters.priceRange[1]
+      );
+    });
+
+    setFilteredProducts(result);
+  }, [products, selectedFilters]);
+
+  const handleBrandFilter = (brand) => {
+    setSelectedFilters((prev) => ({
+      ...prev,
+      brand: prev.brand === brand ? null : brand,
+    }));
+  };
+
+  const handleCategoryFilter = (category) => {
+    setSelectedFilters((prev) => ({
+      ...prev,
+      category: prev.category === category ? null : category,
+    }));
+  };
+
+  const handleConditionFilter = (condition) => {
+    setSelectedFilters((prev) => ({
+      ...prev,
+      condition: prev.condition === condition ? null : condition,
+    }));
+  };
+
+  const handlePriceChange = (e, index) => {
+    const value = parseInt(e.target.value);
+    setSelectedFilters((prev) => {
+      const newRange = [...prev.priceRange];
+      newRange[index] = value;
+      return { ...prev, priceRange: newRange };
+    });
+  };
+
   const handleSort = (e) => {
     setSortOrder(e.target.value);
   };
@@ -54,88 +211,121 @@ const SearchResultsView = ({
         Latest searches:
       </h2>
       <div className="p-8">
-        {/* <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold">2.5 U R V E Y</h1>
-          <button onClick={onClose} className="text-2xl text-gray-600">
-            ×
-          </button>
-        </div> */}
         <div className="flex flex-col md:flex-row">
           {/* Left Sidebar - Filters */}
           <div className="w-full md:w-[20%] bg-white p-6">
             {/* Brand Filter */}
-            <div className="mb-6">
-              <h3 className="font-bold text-[18px] mb-4">Brand</h3>
-              <ul className="space-y-1 text-[14px]">
-                <li className="flex justify-between items-center hover:text-[#e62245] cursor-pointer">
-                  <span>Leica Geosystems</span>
-                  <span className="text-gray-500">4</span>
-                </li>
-                <li className="flex justify-between items-center hover:text-[#e62245] cursor-pointer">
-                  <span>Nedo</span>
-                  <span className="text-gray-500">3</span>
-                </li>
-                <li className="flex justify-between items-center hover:text-[#e62245] cursor-pointer">
-                  <span>Radiodetection</span>
-                  <span className="text-gray-500">2</span>
-                </li>
-              </ul>
-            </div>
+            {filters.brands.length > 0 && (
+              <div className="mb-6">
+                <h3 className="font-bold text-[18px] mb-4">Brand</h3>
+                <ul className="space-y-1 text-[14px]">
+                  {filters.brands.map((brand, i) => (
+                    <li
+                      key={i}
+                      className={`flex justify-between items-center cursor-pointer ${
+                        selectedFilters.brand === brand.name
+                          ? "text-[#e62245]"
+                          : "hover:text-[#e62245]"
+                      }`}
+                      onClick={() => handleBrandFilter(brand.name)}
+                    >
+                      <span>{brand.name}</span>
+                      <span className="text-gray-500">{brand.count}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
 
             {/* Category Filter */}
-            <div className="mb-6">
-              <h3 className="font-bold text-[18px] mb-4">Category</h3>
-              <ul className="space-y-1 text-[14px]">
-                <li className="flex justify-between items-center hover:text-[#e62245] cursor-pointer">
-                  <span>Shop All</span>
-                  <span className="text-gray-500">50</span>
-                </li>
-                <li className="flex justify-between items-center hover:text-[#e62245] cursor-pointer">
-                  <span>Surveying Accessories</span>
-                  <span className="text-gray-500">24</span>
-                </li>
-                <li className="flex justify-between items-center hover:text-[#e62245] cursor-pointer">
-                  <span>Containers & Bags</span>
-                  <span className="text-gray-500">22</span>
-                </li>
-                <li className="flex justify-between items-center hover:text-[#e62245] cursor-pointer">
-                  <span>3D Laser Scanning</span>
-                  <span className="text-gray-500">11</span>
-                </li>
-              </ul>
-            </div>
+            {filters.categories.length > 0 && (
+              <div className="mb-6">
+                <h3 className="font-bold text-[18px] mb-4">Category</h3>
+                <ul className="space-y-1 text-[14px]">
+                  {filters.categories.map((category, i) => (
+                    <li
+                      key={i}
+                      className={`flex justify-between items-center cursor-pointer ${
+                        selectedFilters.category === category.name
+                          ? "text-[#e62245]"
+                          : "hover:text-[#e62245]"
+                      }`}
+                      onClick={() => handleCategoryFilter(category.name)}
+                    >
+                      <span>{category.name.replace(/-/g, " ")}</span>
+                      <span className="text-gray-500">{category.count}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
 
             {/* Condition Filter */}
-            <div className="mb-6">
-              <h3 className="font-bold text-[18px] mb-4">Condition</h3>
-              <ul className="text-[14px]">
-                <li className="flex justify-between items-center hover:text-[#e62245] cursor-pointer">
-                  <span>New</span>
-                  <span className="text-gray-500">41</span>
-                </li>
-                <li className="flex justify-between items-center hover:text-[#e62245] cursor-pointer">
-                  <span>Used</span>
-                  <span className="text-gray-500">9</span>
-                </li>
-              </ul>
-            </div>
-
-            {/* Best Price Filter */}
-            <div>
-              <h3 className="font-bold text-[18px] mb-4">Best Price</h3>
-              <input type="range" className="w-full" min="0" max="1000" />
-              <div className="flex justify-between mt-2 text-sm text-gray-600">
-                <span>৳0</span>
-                <span>৳1000</span>
+            {filters.conditions.length > 0 && (
+              <div className="mb-6">
+                <h3 className="font-bold text-[18px] mb-4">Condition</h3>
+                <ul className="text-[14px]">
+                  {filters.conditions.map((condition, i) => (
+                    <li
+                      key={i}
+                      className={`flex justify-between items-center cursor-pointer ${
+                        selectedFilters.condition === condition.name
+                          ? "text-[#e62245]"
+                          : "hover:text-[#e62245]"
+                      }`}
+                      onClick={() => handleConditionFilter(condition.name)}
+                    >
+                      <span>
+                        {condition.name.charAt(0).toUpperCase() +
+                          condition.name.slice(1)}
+                      </span>
+                      <span className="text-gray-500">{condition.count}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
-            </div>
+            )}
+
+            {/* Price Range Filter */}
+            {filteredProducts.length > 1 && (
+              <div>
+                <h3 className="font-bold text-[18px] mb-4">Price Range</h3>
+                <div className="mb-2">
+                  <input
+                    type="range"
+                    className="w-full"
+                    min={filters.minPrice}
+                    max={filters.maxPrice}
+                    value={selectedFilters.priceRange[0]}
+                    onChange={(e) => handlePriceChange(e, 0)}
+                  />
+                  <input
+                    type="range"
+                    className="w-full"
+                    min={filters.minPrice}
+                    max={filters.maxPrice}
+                    value={selectedFilters.priceRange[1]}
+                    onChange={(e) => handlePriceChange(e, 1)}
+                  />
+                </div>
+                <div className="flex justify-between mt-2 text-sm text-gray-600">
+                  <span>৳{selectedFilters.priceRange[0]}</span>
+                  <span>৳{selectedFilters.priceRange[1]}</span>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Right Side - Products */}
           <div className="w-full md:w-[80%]">
             <div className="flex justify-between mx-5 items-center bg-white py-[6px] px-6">
               <p className="text-sm">
-                {products.length} results found for "{searchText}"
+                {filteredProducts.length} results found for "{searchText}"
+                {selectedFilters.brand && ` in brand ${selectedFilters.brand}`}
+                {selectedFilters.category &&
+                  ` in category ${selectedFilters.category.replace(/-/g, " ")}`}
+                {selectedFilters.condition &&
+                  ` with condition ${selectedFilters.condition}`}
               </p>
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2">
@@ -155,7 +345,7 @@ const SearchResultsView = ({
             </div>
 
             <div className="grid grid-cols-5 gap-4 p-5">
-              {products.map((product, index) => (
+              {filteredProducts.map((product, index) => (
                 <Link
                   to={`/products/${product.id}/${slugify(
                     product.product_name || ""
