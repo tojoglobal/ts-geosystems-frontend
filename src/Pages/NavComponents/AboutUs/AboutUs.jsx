@@ -90,7 +90,7 @@ const AboutUs = () => {
                 key={index}
                 src={`${import.meta.env.VITE_OPEN_APIURL}${img.filePath}`}
                 alt={`Who we serve ${index + 1}`}
-                className="w-full h-80 object-cover rounded-md"
+                className="w-full h-44 md:h-80 object-cover rounded-md"
               />
             ))}
           </div>
@@ -136,7 +136,7 @@ const AboutUs = () => {
                 key={index}
                 src={`${import.meta.env.VITE_OPEN_APIURL}${img.filePath}`}
                 alt={`Our journey ${index + 1}`}
-                className="w-full h-80 object-cover rounded-md"
+                className="w-full h-44 md:h-80 object-cover rounded-md"
               />
             ))}
           </div>
@@ -215,7 +215,7 @@ const AboutUs = () => {
               key={index}
               src={`${import.meta.env.VITE_OPEN_APIURL}${img.filePath}`}
               alt={`About us ${index + 1}`}
-              className="w-full h-80 object-cover rounded-md"
+              className="w-full h-44 md:h-80 object-cover rounded-md"
             />
           ))}
         </section>

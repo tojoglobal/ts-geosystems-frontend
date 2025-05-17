@@ -7,6 +7,8 @@ import { FaThList } from "react-icons/fa";
 import Swal from "sweetalert2";
 import { useQuery } from "@tanstack/react-query";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
+import { slugify } from "../../utils/slugify";
+import { useTrackProductView } from "../../Hooks/useTrackProductView";
 
 const sortOptions = [
   "FEATURED ITEMS",
@@ -21,6 +23,7 @@ const sortOptions = [
 
 const UsedEquipment = () => {
   const axiosPublicUrl = useAxiospublic();
+  const { trackProductView } = useTrackProductView();
   const [viewMode, setViewMode] = useState("grid");
   const [sortBy, setSortBy] = useState("FEATURED ITEMS");
   const [hoveredProductId, setHoveredProductId] = useState(null);
@@ -133,7 +136,7 @@ const UsedEquipment = () => {
           <div className="flex gap-2">
             <button
               onClick={() => setViewMode("grid")}
-              className={`p-2 ${
+              className={`p-2 cursor-pointer ${
                 viewMode === "grid"
                   ? "bg-[#e62245] text-white rounded-sm"
                   : "text-gray-600 border"
@@ -143,7 +146,7 @@ const UsedEquipment = () => {
             </button>
             <button
               onClick={() => setViewMode("list")}
-              className={`p-2 ${
+              className={`p-2 cursor-pointer ${
                 viewMode === "list"
                   ? "bg-[#e62245] text-white rounded-sm"
                   : "text-black border"
@@ -208,7 +211,9 @@ const UsedEquipment = () => {
               <div
                 key={product.id}
                 className={`relative ${
-                  viewMode === "list" ? "flex gap-8" : "flex flex-col h-full"
+                  viewMode === "list"
+                    ? "flex flex-col md:flex-row gap-8"
+                    : "flex flex-col h-full"
                 }`}
               >
                 {/* SALE badge */}
@@ -224,7 +229,13 @@ const UsedEquipment = () => {
                   </div>
                 )}
                 {viewMode === "list" ? (
-                  <Link to={`/product/${product.id}`} className="w-1/3">
+                  <Link
+                    onClick={() => trackProductView(product.id)}
+                    to={`/products/${product.id}/${slugify(
+                      product.product_name || ""
+                    )}`}
+                    className="w-full md:w-1/3"
+                  >
                     <div
                       onMouseEnter={() => setHoveredProductId(product.id)}
                       onMouseLeave={() => setHoveredProductId(null)}
@@ -239,7 +250,10 @@ const UsedEquipment = () => {
                 ) : (
                   <div className="w-full h-56 flex items-center justify-center bg-white">
                     <Link
-                      to={`/product/${product.id}`}
+                      onClick={() => trackProductView(product.id)}
+                      to={`/products/${product.id}/${slugify(
+                        product.product_name || ""
+                      )}`}
                       className="w-full h-full"
                     >
                       <div
@@ -263,7 +277,12 @@ const UsedEquipment = () => {
                       <div className="text-xs text-gray-600">
                         {product.brand_name} | Sku: {product.sku}
                       </div>
-                      <Link to={`/product/${product.id}`}>
+                      <Link
+                        onClick={() => trackProductView(product.id)}
+                        to={`/products/${product.id}/${slugify(
+                          product.product_name || ""
+                        )}`}
+                      >
                         <h3 className="text-xl text-gray-800 font-medium hover:text-[#e62245] cursor-pointer">
                           {product.product_name}
                         </h3>
@@ -318,7 +337,12 @@ const UsedEquipment = () => {
                       <div className="border-t border-gray-300 pt-2 text-xs text-gray-600 mb-1">
                         {product.brand_name} | Sku: {product.sku}
                       </div>
-                      <Link to={`/product/${product.id}`}>
+                      <Link
+                        onClick={() => trackProductView(product.id)}
+                        to={`/products/${product.id}/${slugify(
+                          product.product_name || ""
+                        )}`}
+                      >
                         <h3 className="text-gray-800 font-medium hover:text-[#e62245] cursor-pointer leading-tight">
                           {product.product_name}
                         </h3>

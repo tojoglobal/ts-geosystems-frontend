@@ -118,7 +118,7 @@ const TSBlog = () => {
             </h2>
           </div>
         )}
-        <div className="border-t border-b border-[#d5d8d9] py-3 flex flex-wrap justify-center items-center gap-4 text-[#db7084] font-medium">
+        <div className="border-t border-b py-4 mt-12 flex flex-wrap md:flex-row justify-center items-center gap-3 md:gap-6 text-[#db7084] font-medium">
           {tabs.map((tab) => (
             <Link
               to={

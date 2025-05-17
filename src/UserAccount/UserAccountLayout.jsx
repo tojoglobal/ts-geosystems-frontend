@@ -30,7 +30,7 @@ const UserAccountLayout = () => {
   const pageInfo = getPageInfo();
 
   return (
-    <div className="max-w-[1370px] mx-auto py-5">
+    <div className="px-2 md:px-0 py-2 max-w-[1370px] mx-auto md:py-5">
       {/* Breadcrumb Navigation */}
       <div className="flex items-center gap-2 text-[11px] mb-5">
         <Link to="/" className="hover:text-crimson-red">
@@ -45,11 +45,11 @@ const UserAccountLayout = () => {
       </div>
       {/* Page Title */}
       <h1 className="text-[28px] font-light mb-3">{pageInfo.title}</h1>
-      <div className="flex flex-wrap md:flex-row gap-5 justify-center text-[14px] font-normal mb-12">
+      <div className="flex flex-wrap md:flex-row gap-3 md:gap-5 justify-center text-[14px] font-normal mb-12">
         <Link
           to="/user/account/orders"
           className={`${
-            isActiveLink("/account/orders")
+            isActiveLink("/user/account/orders")
               ? "border-b-2 border-black -mb-[2px]"
               : "hover:text-crimson-red"
           }`}
@@ -59,7 +59,7 @@ const UserAccountLayout = () => {
         <Link
           to="/user/account/inbox"
           className={`${
-            isActiveLink("/account/inbox")
+            isActiveLink("/user/account/inbox")
               ? "border-b-2 border-black -mb-[2px]"
               : "hover:text-crimson-red"
           }`}
@@ -69,7 +69,7 @@ const UserAccountLayout = () => {
         <Link
           to="/user/account/address-book"
           className={`${
-            isActiveLink("/account/address-book")
+            isActiveLink("/user/account/address-book")
               ? "border-b-2 border-black -mb-[2px]"
               : "hover:text-crimson-red"
           }`}
@@ -79,7 +79,7 @@ const UserAccountLayout = () => {
         <Link
           to="/user/account/recent-viewed"
           className={`${
-            isActiveLink("/account/recent-viewed")
+            isActiveLink("/user/account/recent-viewed")
               ? "border-b-2 border-black -mb-[2px]"
               : "hover:text-crimson-red"
           }`}
@@ -89,7 +89,7 @@ const UserAccountLayout = () => {
         <Link
           to="/user/account/account-settings"
           className={`${
-            isActiveLink("/account/account-settings")
+            isActiveLink("/user/account/account-settings")
               ? "border-b-2 border-black -mb-[2px]"
               : "hover:text-crimson-red"
           }`}

@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { SlArrowDown, SlArrowUp } from "react-icons/sl";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import { useQuery } from "@tanstack/react-query";
+import useDataQuery from "../../utils/useDataQuery";
 
 const ProductSidebar = () => {
   const { category, subcategory } = useParams();
@@ -50,6 +51,11 @@ const ProductSidebar = () => {
     },
   });
 
+  const { data: popularImage = {}, isLoading: loading } = useDataQuery(
+    ["popularBrandPhoto"],
+    "/api/brand/popular-photo"
+  );
+
   useEffect(() => {
     // Automatically open the section if category is in URL params
     if (category && categoriesData?.categories) {
@@ -80,7 +86,7 @@ const ProductSidebar = () => {
     );
   };
 
-  if (categoriesLoading || subcategoriesLoading || brandsLoading) {
+  if (categoriesLoading || subcategoriesLoading || brandsLoading || loading) {
     return <div>Loading...</div>;
   }
 
@@ -185,11 +191,13 @@ const ProductSidebar = () => {
           </div>
         )
       )}
-      <div className="mt-6 overflow-hidden rounded-[4px]">
+      <div className="mt-6 overflow-hidden border rounded-[4px]">
         <img
-          src="https://ts-geosystems.com.bd/assets/images/6enPbrand-leica-adsp.png"
+          src={`${import.meta.env.VITE_OPEN_APIURL}/uploads/${
+            popularImage.photo
+          }`}
           alt="Leica Authorized Distributor"
-          className="w-full transition-transform duration-1000 hover:scale-110"
+          className="w-full object-cover h-28 transition-transform duration-1000 hover:scale-110"
         />
       </div>
     </div>

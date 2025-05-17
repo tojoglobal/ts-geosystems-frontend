@@ -70,7 +70,7 @@ const BlogDetails = () => {
         </Link>
       </div>
       <h1 className="text-3xl mt-2 text-[#e62245] mb-2">TS BLOG</h1>
-      <div className="border-t border-b py-4 mt-12 flex justify-center items-center gap-6 text-[#db7084] font-medium">
+      <div className="border-t border-b py-4 mt-12 flex flex-wrap md:flex-row justify-center items-center gap-3 md:gap-6 text-[#db7084] font-medium">
         {tabs.map((tab) => (
           <button
             className={`capitalize cursor-pointer text-[14px] font-normal hover:text-[#754e55] ${
