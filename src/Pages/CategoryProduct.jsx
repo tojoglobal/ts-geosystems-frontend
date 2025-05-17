@@ -12,6 +12,7 @@ import { addToCart } from "../features/AddToCart/AddToCart";
 import { slugify } from "../utils/slugify";
 import { parsePrice } from "../utils/parsePrice";
 import { useBreadcrumbLabel } from "../utils/useBreadcrumbLabel";
+import { useTrackProductView } from "../Hooks/useTrackProductView";
 
 const sortOptions = [
   { label: "NEWEST ITEMS", value: "newest" },
@@ -27,6 +28,7 @@ const sortOptions = [
 const CategoryProduct = () => {
   const axiosPublicUrl = useAxiospublic();
   const dispatch = useDispatch();
+  const { trackProductView } = useTrackProductView();
   const [sortBy, setSortBy] = useState(sortOptions[0]);
   const [viewMode, setViewMode] = useState("grid");
   const [hoveredProductId, setHoveredProductId] = useState(null);
@@ -241,6 +243,7 @@ const CategoryProduct = () => {
                 </div>
                 {viewMode === "list" ? (
                   <Link
+                    onClick={() => trackProductView(product.id)}
                     to={`/products/${product.id}/${slugify(
                       product.product_name || ""
                     )}`}
@@ -260,6 +263,7 @@ const CategoryProduct = () => {
                 ) : (
                   <div className="w-full h-56 flex items-center justify-center bg-white">
                     <Link
+                      onClick={() => trackProductView(product.id)}
                       to={`/products/${product.id}/${slugify(
                         product.product_name || ""
                       )}`}
@@ -287,6 +291,7 @@ const CategoryProduct = () => {
                         {product.brand_name} | Sku: {product.sku}
                       </div> */}
                       <Link
+                        onClick={() => trackProductView(product.id)}
                         to={`/products/${product.id}/${slugify(
                           product.product_name || ""
                         )}`}
@@ -369,6 +374,7 @@ const CategoryProduct = () => {
                         {product.brand_name} | Sku: {product.sku}
                       </div>
                       <Link
+                        onClick={() => trackProductView(product.id)}
                         to={`/products/${product.id}/${slugify(
                           product.product_name || ""
                         )}`}
