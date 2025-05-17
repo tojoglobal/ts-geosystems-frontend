@@ -185,10 +185,10 @@ const Checkout = () => {
   }
 
   return (
-    <div className="max-w-[1370px] mx-auto py-6 mb-5">
-      <div className="grid md:grid-cols-3 gap-6">
+    <div className="max-w-[1370px] md:mx-auto py-6 mb-5 mx-3">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* LEFT COLUMN */}
-        <div className="md:col-span-2 space-y-8">
+        <div className="col-span-1 md:col-span-2 space-y-8">
           {/* Express Checkout Buttons */}
           <div>
             <p className="text-sm mb-2">Check out faster with:</p>

@@ -135,19 +135,19 @@ const Hire = () => {
       </div>
       <h1 className="text-[28px] font-light text-[#e62245] mb-[72px]">HIRE</h1>
       {hireContent?.show_buttons === 1 && (
-        <div className="flex flex-row justify-between mb-5">
+        <div className="flex flex-row justify-center gap-2 md:gap-0 md:justify-between mb-5">
           <button
             onClick={() =>
               formRef.current?.scrollIntoView({ behavior: "smooth" })
             }
-            className="ml-14 md:ml-56 bg-[#e62245] flex items-center gap-2 text-white px-[18.5px] py-[7.66667px] rounded-[4px] shadow-xl hover:bg-[#c81e3c] transition-all text-[13px] font-medium"
+            className="md:ml-56 bg-[#e62245] flex items-center gap-2 text-white px-2 md:px-[18.5px] md:py-[7.66667px] rounded-[4px] shadow-xl hover:bg-[#c81e3c] transition-all text-[13px] font-medium"
           >
             <FaRegFileLines />
             Hire Enquiry
           </button>
           <Link
             to="/credit-application"
-            className="mr-14 md:mr-40 bg-[#e62245] flex items-center gap-2 text-white px-[18.5px] py-[7.66667px] rounded-[4px] shadow-xl hover:bg-[#c81e3c] transition-all text-[13px] font-medium"
+            className="md:mr-40 bg-[#e62245] flex items-center gap-2 text-white px-2 md:px-[18.5px] py-[7.66667px] rounded-[4px] shadow-xl hover:bg-[#c81e3c] transition-all text-[13px] font-medium"
           >
             <FaFileAlt />
             Credit Account Application

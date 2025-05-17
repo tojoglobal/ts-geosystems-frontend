@@ -93,7 +93,7 @@ const Clearance = () => {
   }
 
   return (
-    <div className="p-2 md:p-3">
+    <div className="p-1 md:p-3">
       <div className="flex items-center gap-2 text-[11px] mb-4">
         <Link className="text-gray-500" to="/">
           Home
@@ -103,14 +103,14 @@ const Clearance = () => {
           Clearance
         </Link>
       </div>
-      <h1 className="text-[30px] font-bold mb-4">CLEARANCE</h1>
+      <h1 className="text-xl md:text-[30px] font-bold mb-4">CLEARANCE</h1>
       <section>
         <div className="flex items-center justify-between md:justify-normal md:gap-52 mb-6">
           {/* View Mode Buttons */}
           <div className="flex gap-2">
             <button
               onClick={() => setViewMode("grid")}
-              className={`p-2 ${
+              className={`p-2 cursor-pointer ${
                 viewMode === "grid"
                   ? "bg-[#e62245] text-white rounded-sm"
                   : "text-gray-600 border"
@@ -120,7 +120,7 @@ const Clearance = () => {
             </button>
             <button
               onClick={() => setViewMode("list")}
-              className={`p-2 ${
+              className={`p-2 cursor-pointer ${
                 viewMode === "list"
                   ? "bg-[#e62245] text-white rounded-sm"
                   : "text-black border"
@@ -135,7 +135,7 @@ const Clearance = () => {
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="border py-1 pl-2 text-xs border-[#e1dcdc] rounded-[3px] pr-36 appearance-none bg-white cursor-pointer"
+                className="border py-1 pl-2 text-xs border-[#e1dcdc] rounded-[3px] md:pr-36 appearance-none bg-white cursor-pointer"
               >
                 {sortOptions.map((option) => (
                   <option key={option} value={option}>
@@ -185,7 +185,9 @@ const Clearance = () => {
               <div
                 key={product.id}
                 className={`relative ${
-                  viewMode === "list" ? "flex gap-8" : "flex flex-col h-full"
+                  viewMode === "list"
+                    ? "flex flex-col md:flex-row gap-8"
+                    : "flex flex-col h-full"
                 }`}
               >
                 {/* SALE badge */}
@@ -199,7 +201,10 @@ const Clearance = () => {
                   SALE
                 </div>
                 {viewMode === "list" ? (
-                  <Link to={`/product/${product.id}`} className="w-1/3">
+                  <Link
+                    to={`/product/${product.id}`}
+                    className="w-full md:w-1/3"
+                  >
                     <div
                       onMouseEnter={() => setHoveredProductId(product.id)}
                       onMouseLeave={() => setHoveredProductId(null)}
@@ -233,7 +238,7 @@ const Clearance = () => {
                 )}
                 {/* Product Details */}
                 {viewMode === "list" ? (
-                  <div className="w-2/3 flex flex-col justify-between">
+                  <div className="w-full md:w-2/3 flex flex-col justify-between">
                     <div>
                       <div className="text-xs text-gray-600">
                         {product.brand_name} | Sku: {product.sku}

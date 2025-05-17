@@ -146,7 +146,7 @@ const CategoryProduct = () => {
           <div className="flex gap-2">
             <button
               onClick={() => setViewMode("grid")}
-              className={`p-2 ${
+              className={`p-2 cursor-pointer ${
                 viewMode === "grid"
                   ? "bg-[#e62245] text-white rounded-sm"
                   : "text-gray-600 border"
@@ -156,7 +156,7 @@ const CategoryProduct = () => {
             </button>
             <button
               onClick={() => setViewMode("list")}
-              className={`p-2 ${
+              className={`p-2 cursor-pointer ${
                 viewMode === "list"
                   ? "bg-[#e62245] text-white rounded-sm"
                   : "text-black border"

@@ -133,7 +133,7 @@ const UsedEquipment = () => {
           <div className="flex gap-2">
             <button
               onClick={() => setViewMode("grid")}
-              className={`p-2 ${
+              className={`p-2 cursor-pointer ${
                 viewMode === "grid"
                   ? "bg-[#e62245] text-white rounded-sm"
                   : "text-gray-600 border"
@@ -143,7 +143,7 @@ const UsedEquipment = () => {
             </button>
             <button
               onClick={() => setViewMode("list")}
-              className={`p-2 ${
+              className={`p-2 cursor-pointer ${
                 viewMode === "list"
                   ? "bg-[#e62245] text-white rounded-sm"
                   : "text-black border"
@@ -208,7 +208,9 @@ const UsedEquipment = () => {
               <div
                 key={product.id}
                 className={`relative ${
-                  viewMode === "list" ? "flex gap-8" : "flex flex-col h-full"
+                  viewMode === "list"
+                    ? "flex flex-col md:flex-row gap-8"
+                    : "flex flex-col h-full"
                 }`}
               >
                 {/* SALE badge */}
@@ -224,7 +226,10 @@ const UsedEquipment = () => {
                   </div>
                 )}
                 {viewMode === "list" ? (
-                  <Link to={`/product/${product.id}`} className="w-1/3">
+                  <Link
+                    to={`/product/${product.id}`}
+                    className="w-full md:w-1/3"
+                  >
                     <div
                       onMouseEnter={() => setHoveredProductId(product.id)}
                       onMouseLeave={() => setHoveredProductId(null)}

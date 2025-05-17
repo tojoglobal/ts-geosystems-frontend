@@ -30,7 +30,7 @@ const UserAccountLayout = () => {
   const pageInfo = getPageInfo();
 
   return (
-    <div className="max-w-[1370px] mx-auto py-5">
+    <div className="p-2 md:p-0 max-w-[1370px] mx-auto py-5">
       {/* Breadcrumb Navigation */}
       <div className="flex items-center gap-2 text-[11px] mb-5">
         <Link to="/" className="hover:text-crimson-red">
@@ -45,7 +45,7 @@ const UserAccountLayout = () => {
       </div>
       {/* Page Title */}
       <h1 className="text-[28px] font-light mb-3">{pageInfo.title}</h1>
-      <div className="flex flex-wrap md:flex-row gap-5 justify-center text-[14px] font-normal mb-12">
+      <div className="flex flex-wrap md:flex-row gap-3 md:gap-5 justify-center text-[14px] font-normal mb-12">
         <Link
           to="/user/account/orders"
           className={`${
