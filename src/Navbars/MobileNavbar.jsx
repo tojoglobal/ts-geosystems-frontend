@@ -14,42 +14,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAxiospublic } from "../Hooks/useAxiospublic";
 import { useTrackProductView } from "../Hooks/useTrackProductView";
 import { slugify } from "../utils/slugify";
-
-const categories = [
-  { title: "Shop All" },
-  { title: "Used Surveying Equipment" },
-  {
-    title: "3D Laser Scanning",
-    subLinks: ["Scanners", "Scanner Software", "Scanner Accessories"],
-  },
-  { title: "Total Stations" },
-  { title: "GPS/GNSS Systems" },
-  { title: "Lasers" },
-  { title: "Levels" },
-  { title: "Location Detection" },
-  { title: "Distance Measuring" },
-  { title: "Construction" },
-  { title: "Surveying Accessories" },
-  { title: "Clearance" },
-];
-
-const brands = [{ title: "Leica Geosystems" }];
-
-const mainMenu = [
-  {
-    title: "Support",
-    subLinks: [
-      "Software Downloads",
-      "Quick Guides",
-      "User Manuals",
-      "Remote Support",
-    ],
-  },
-  { title: "Trade In" },
-  { title: "G2 Blog" },
-  { title: "About Us" },
-  { title: "Contact Us" },
-];
+import { useQuery } from "@tanstack/react-query";
+import useDataQuery from "../utils/useDataQuery";
 
 const MobileNavbar = () => {
   const submenuRef = useRef(null);
@@ -66,6 +32,86 @@ const MobileNavbar = () => {
   const [showResults, setShowResults] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
   const navigate = useNavigate();
+
+  // Fetch categories
+  const {
+    data: categoriesData,
+    isLoading: categoriesLoading,
+    error: categoriesError,
+  } = useDataQuery(["categories"], "/api/category");
+
+  // Fetch subcategories
+  const {
+    data: subcategoriesData,
+    isLoading: subcategoriesLoading,
+    error: subcategoriesError,
+  } = useDataQuery(["subcategories"], "/api/subcategory");
+
+  // Fetch brands
+  const {
+    data: brandsData,
+    isLoading: brandsLoading,
+    error: brandsError,
+  } = useQuery({
+    queryKey: ["brands"],
+    queryFn: async () => {
+      const res = await axiosPublicUrl.get("/api/brands");
+      return res?.data?.map((brand) => ({
+        name: brand.brands_name,
+        slug: brand.slug,
+      }));
+    },
+  });
+
+  // Get subcategories for a category
+  const getSubcategoriesForCategory = (categoryId) => {
+    if (!subcategoriesData?.subcategories) return [];
+    return subcategoriesData.subcategories.filter(
+      (subcat) => subcat.main_category_id === categoryId
+    );
+  };
+
+  // Create dynamic categories data structure
+  const dynamicCategories = [
+    { title: "Shop All", link: "/shop-all" },
+    ...(categoriesData?.categories?.map((category) => ({
+      title: category.category_name,
+      link: `/${category.slug_name}`,
+      subLinks: getSubcategoriesForCategory(category.id).map((subcat) => ({
+        title: subcat.name,
+        link: `/${category.slug_name}/${subcat.slug}`,
+      })),
+    })) || []),
+    { title: "Clearance", link: "/clearance" },
+  ];
+
+  // Dynamic brands data
+  const dynamicBrands = brandsData?.map((brand) => ({
+    title: brand.name,
+    link: `/${brand.slug}`,
+  })) || [{ title: "Leica Geosystems" }];
+
+  // Main menu (static)
+  const mainMenu = [
+    { title: "USED EQUIPMENT", link: "/used" },
+    { title: "CLEARANCE", link: "/clearance" },
+    { title: "HIRE", link: "/hire" },
+    { title: "SERVICE", link: "/service" },
+    {
+      title: "Support",
+      subLinks: [
+        { title: "Support Request Form", link: "/support" },
+        { title: "Software Downloads", link: "/software-downloads" },
+        { title: "Quick Guides", link: "/quick-guides" },
+        { title: "User Manuals", link: "/user-manuals" },
+        { title: "Remote Support", link: "/remote-support" },
+      ],
+    },
+    { title: "TRADE IN", link: "/trade-in" },
+    { title: "TS Blog", link: "/ts-blog" },
+    { title: "TS Blog", link: "/about-us" },
+    { title: "Contact Us", link: "/contact-us" },
+  ];
 
   const handleSearch = async (query) => {
     setSearchQuery(query);
@@ -104,6 +150,11 @@ const MobileNavbar = () => {
 
   const handleResultClick = (productId) => {
     trackProductView(productId);
+    navigate(
+      `/products/${productId}/${slugify(
+        searchResults.find((p) => p.id === productId)?.product_name || ""
+      )}`
+    );
     setShowResults(false);
     setIsSearchOpen(false);
     setSearchQuery("");
@@ -168,6 +219,66 @@ const MobileNavbar = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isSearchOpen]);
+
+  if (categoriesLoading || subcategoriesLoading || brandsLoading) {
+    return (
+      <div className="w-full relative z-50">
+        {/* Simplified loading navbar */}
+        <div className="fixed top-0 w-full">
+          <div className="flex items-center justify-between px-4 py-3 bg-white shadow-sm">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-4 bg-gray-200 rounded"></div>
+              <div className="w-24 h-4 bg-gray-200 rounded"></div>
+            </div>
+            <div className="flex gap-2">
+              <div className="w-6 h-6 bg-gray-200 rounded"></div>
+              <div className="w-6 h-6 bg-gray-200 rounded"></div>
+              <div className="w-6 h-6 bg-gray-200 rounded"></div>
+            </div>
+          </div>
+        </div>
+        <div className="flex w-full justify-center items-center mt-12 pt-4 pb-10 px-13 bg-white border-y border-slightly-dark">
+          <div className="w-64 h-12 bg-gray-200 rounded"></div>
+        </div>
+      </div>
+    );
+  }
+
+  if (categoriesError || subcategoriesError || brandsError) {
+    return (
+      <div className="w-full relative z-50">
+        {/* Error state navbar */}
+        <div className="fixed top-0 w-full">
+          <div className="flex items-center justify-between px-4 py-3 bg-white shadow-sm">
+            <div className="flex items-center gap-3">
+              <button className="relative w-8 h-4 flex flex-col gap-0.5 justify-between items-center z-50">
+                <span className="block w-5 h-0.5 bg-gray-400"></span>
+                <span className="block w-5 h-0.5 bg-gray-400"></span>
+                <span className="block w-5 h-0.5 bg-gray-400"></span>
+              </button>
+              <span className="text-xs font-normal text-gray-400">
+                +44 (0)333 023 2200
+              </span>
+            </div>
+            <div className="flex gap-2">
+              <div className="text-2xl text-gray-400">
+                <IoSearchOutline />
+              </div>
+              <div className="text-2xl text-gray-400">
+                <LuUserRound />
+              </div>
+              <div className="relative text-2xl text-gray-400">
+                <PiShoppingCart />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="flex w-full justify-center items-center mt-12 pt-4 pb-10 px-13 bg-white border-y border-slightly-dark">
+          <div className="text-gray-400">Error loading navigation</div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full relative z-50">
@@ -362,17 +473,32 @@ const MobileNavbar = () => {
             <span className="text-base font-semibold">SHOP BY CATEGORY</span>
           </div>
           <ul className="space-y-2 mb-6">
-            {categories.map((item, idx) => (
+            {dynamicCategories.map((item, idx) => (
               <li key={idx} className="relative group">
                 <div className="flex justify-between items-center cursor-pointer">
-                  <span>{item.title}</span>
-                  {item.subLinks && <IoIosArrowDown className="text-lg" />}
+                  <Link
+                    to={item.link}
+                    className="flex-1"
+                    onClick={() =>
+                      item.subLinks && handleCategoryClick(item.title)
+                    }
+                  >
+                    {item.title}
+                  </Link>
+                  {item.subLinks && (
+                    <button
+                      onClick={() => handleCategoryClick(item.title)}
+                      className="cursor-pointer"
+                    >
+                      <IoIosArrowDown className="text-lg" />
+                    </button>
+                  )}
                 </div>
-                {item.subLinks && (
-                  <ul className="absolute left-0 top-full bg-white text-crimson-red text-sm shadow-lg px-4 py-2 space-y-1 hidden group-hover:block z-50 w-52 rounded-md">
+                {item.subLinks && openCategory === item.title && (
+                  <ul className="text-sm shadow-lg px-4 py-2 space-y-1 z-50 rounded-md">
                     {item.subLinks.map((sub, i) => (
-                      <li key={i} className="hover:text-black transition">
-                        {sub}
+                      <li key={i} className="hover:text-red-500 transition">
+                        <Link to={sub.link}>{sub.title}</Link>
                       </li>
                     ))}
                   </ul>
@@ -386,8 +512,10 @@ const MobileNavbar = () => {
             <span className="text-base font-semibold">SHOP BY BRAND</span>
           </div>
           <ul className="space-y-2 mb-6">
-            {brands.map((item, idx) => (
-              <li key={idx}>{item.title}</li>
+            {dynamicBrands.map((item, idx) => (
+              <li key={idx}>
+                <Link to={item.link || "#"}>{item.title}</Link>
+              </li>
             ))}
           </ul>
 
@@ -397,23 +525,34 @@ const MobileNavbar = () => {
           </div>
           <ul className="space-y-2 mb-6">
             {mainMenu.map((item, idx) => (
-              <li
-                onClick={() => handleCategoryClick(item.title)}
-                key={idx}
-                className="relative group"
-              >
+              <li key={idx} className="relative group">
                 <div className="flex justify-between items-center cursor-pointer">
-                  <span>{item.title}</span>
-                  {item.subLinks && <IoIosArrowDown className="text-lg" />}
+                  {item.link ? (
+                    <Link to={item.link} className="flex-1">
+                      {item.title}
+                    </Link>
+                  ) : (
+                    <span className="flex-1">{item.title}</span>
+                  )}
+                  {item.subLinks && (
+                    <button
+                      onClick={() => handleCategoryClick(item.title)}
+                      className="cursor-pointer"
+                    >
+                      <IoIosArrowDown className="text-lg" />
+                    </button>
+                  )}
                 </div>
-                {item.subLinks && (
-                  <ul className="absolute left-0 top-full bg-white text-crimson-red text-sm shadow-lg px-4 py-2 space-y-1 hidden group-hover:flex flex-col items-center z-50 w-52 rounded-md">
+                {item.subLinks && openCategory === item.title && (
+                  <ul className="bg-white text-crimson-red text-sm shadow-lg px-4 py-2 space-y-1 z-50 rounded-md">
                     {item.subLinks.map((sub, i) => (
                       <li
                         key={i}
-                        className="hover:bg-gray-100 hover:shadow-md hover:rounded-md transition-all duration-200 w-full text-center"
+                        className="hover:bg-gray-100 hover:shadow-md hover:rounded-md transition-all duration-200 w-full"
                       >
-                        {sub}
+                        <Link to={sub.link} className="block text-center">
+                          {sub.title}
+                        </Link>
                       </li>
                     ))}
                   </ul>

@@ -15,25 +15,14 @@ const ProductSidebar = () => {
     data: categoriesData,
     isLoading: categoriesLoading,
     error: categoriesError,
-  } = useQuery({
-    queryKey: ["categories"],
-    queryFn: async () => {
-      const res = await axiosPublicUrl.get("/api/category");
-      return res?.data;
-    },
-  });
+  } = useDataQuery(["categories"], "/api/category");
+
   // Fetch subcategories
   const {
     data: subcategoriesData,
     isLoading: subcategoriesLoading,
     error: subcategoriesError,
-  } = useQuery({
-    queryKey: ["subcategories"],
-    queryFn: async () => {
-      const res = await axiosPublicUrl.get("/api/subcategory");
-      return res?.data;
-    },
-  });
+  } = useDataQuery(["subcategories"], "/api/subcategory");
 
   // Fetch brands
   const {
