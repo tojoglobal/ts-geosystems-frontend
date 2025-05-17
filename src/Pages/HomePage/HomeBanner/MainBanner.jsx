@@ -12,7 +12,7 @@ const baseURL = import.meta.env.VITE_OPEN_APIURL;
 // Static content for first slide
 const firstSlideContent = {
   layout: "center",
-  title: "Welcome to G2 Survey",
+  title: "Welcome to TS Survey",
   subtitle: "Your trusted partner for precision surveying solutions",
   helpText: "How can we help you today?",
   links: [
@@ -96,19 +96,19 @@ const MainBanner = () => {
               />
               <div className="absolute inset-0 text-white px-4 flex justify-center items-center text-center">
                 <div className="space-y-4 max-w-2xl">
-                  <h2 className="mt-3 text-2xl md:text-4xl font-bold text-[#e62245]">
+                  <h2 className="mt-3 text-2xl md:text-[40px] font-bold text-[#e62245]">
                     {firstSlideContent.title}
                   </h2>
-                  <p className="text-lg md:text-xl text-white">
+                  <p className="text-lg md:text-[22px] text-white">
                     {firstSlideContent.subtitle}
                   </p>
-                  <p className="text-lg">{firstSlideContent.helpText}</p>
+                  <p className="text-[22px]">{firstSlideContent.helpText}</p>
                   <div className="flex flex-wrap gap-4 justify-center">
                     {firstSlideContent.links.map((link, idx) => (
                       <a
                         key={idx}
                         href={link.href}
-                        className="underline text-xl text-[#e62245] transition"
+                        className="underline text-[22px] text-[#e62245] transition"
                       >
                         {link.label}
                       </a>
