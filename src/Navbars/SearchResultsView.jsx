@@ -222,7 +222,7 @@ const SearchResultsView = ({
                   {filters.brands.map((brand, i) => (
                     <li
                       key={i}
-                      className={`flex justify-between items-center cursor-pointer ${
+                      className={`flex capitalize justify-between items-center cursor-pointer ${
                         selectedFilters.brand === brand.name
                           ? "text-[#e62245]"
                           : "hover:text-[#e62245]"
@@ -245,7 +245,7 @@ const SearchResultsView = ({
                   {filters.categories.map((category, i) => (
                     <li
                       key={i}
-                      className={`flex justify-between items-center cursor-pointer ${
+                      className={`flex capitalize justify-between items-center cursor-pointer ${
                         selectedFilters.category === category.name
                           ? "text-[#e62245]"
                           : "hover:text-[#e62245]"

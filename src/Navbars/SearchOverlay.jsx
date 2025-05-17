@@ -26,39 +26,6 @@ const POPULAR_SEARCHES = [
   "disto",
 ];
 
-const RECOMMENDED_PRODUCTS = [
-  {
-    name: "Leica GVP621 Soft Bag",
-    price: "৳35.40",
-    image: "/images/products/gvp621-soft-bag.jpg",
-  },
-  {
-    name: "Leica GVP703 Soft Bag",
-    price: "৳39.60",
-    image: "/images/products/gvp703-soft-bag.jpg",
-  },
-  {
-    name: "Leica GVP102 Soft Bag",
-    price: "৳64.80",
-    image: "/images/products/gvp102-soft-bag.jpg",
-  },
-  {
-    name: "Radiodetection RD Carry Bag",
-    price: "৳156.00",
-    image: "/images/products/rd-carry-bag.jpg",
-  },
-  {
-    name: "Leica BLK360 Mission Bag",
-    price: "৳164.95",
-    image: "/images/products/blk360-mission-bag.jpg",
-  },
-  {
-    name: "Radiodetection CAT & Genny Carry Bag",
-    price: "৳110.00",
-    image: "/images/products/cat-genny-bag.jpg",
-  },
-];
-
 const SearchOverlay = ({ isOpen, onClose }) => {
   const [searchText, setSearchText] = useState("");
   const [sortOrder, setSortOrder] = useState("relevance");
@@ -70,12 +37,27 @@ const SearchOverlay = ({ isOpen, onClose }) => {
     "contact",
     "ortact",
   ]);
+  const [recommendedProducts, setRecommendedProducts] = useState([]);
+
+  // Fetch recommended products
+  const { data: recommendedData } = useDataQuery(
+    "recommendedProducts",
+    "/api/recommended-products",
+    { enabled: !searchText }
+  );
 
   const { data: searchResults, isLoading } = useDataQuery(
     ["searchData", searchText, sortOrder],
     `/api/search?query=${encodeURIComponent(searchText)}&sort=${sortOrder}`,
     { enabled: !!searchText }
   );
+
+  useEffect(() => {
+    if (recommendedData?.products) {
+      // Take first 10 recommended products
+      setRecommendedProducts(recommendedData.products.slice(0, 10));
+    }
+  }, [recommendedData]);
 
   useEffect(() => {
     const saved = JSON.parse(localStorage.getItem("latestSearches")) || [];
@@ -94,7 +76,10 @@ const SearchOverlay = ({ isOpen, onClose }) => {
     };
   }, [isOpen]);
 
-  const displayProducts = searchResults?.products || RECOMMENDED_PRODUCTS;
+  // Use recommended products when there's no search text, otherwise use search results
+  const displayProducts = searchText
+    ? searchResults?.products || []
+    : recommendedProducts;
 
   const handleRemoveSearch = (index) => {
     setLatestSearches(latestSearches.filter((_, i) => i !== index));
@@ -238,7 +223,6 @@ const SearchOverlay = ({ isOpen, onClose }) => {
               ))}
             </ul>
           </div>
-
           {/* Right - Product Slider */}
           <div className="w-full md:w-[80%] pl-10">
             <div className="flex justify-between items-center mb-4 mx-2">
@@ -279,7 +263,7 @@ const SearchOverlay = ({ isOpen, onClose }) => {
             ) : displayProducts.length <= 4 ? (
               <div className="grid grid-cols-4 gap-4">
                 {displayProducts.map((product, index) => (
-                  <Link
+                  <Link onClick={onClose}
                     to={`/products/${product.id}/${slugify(
                       product.product_name || ""
                     )}`}
