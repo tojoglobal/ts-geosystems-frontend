@@ -6,13 +6,13 @@ const MainNavbars = () => {
   return (
     <>
       {/* Desktop & tablet only */}
-      <div className="hidden md:block">
+      <div className="hidden lg:block">
         <TopMenu />
         <HeaderContainer />
         <MainNavContainer />
       </div>
       {/* Mobile only */}
-      <div className="md:hidden">
+      <div className="lg:hidden">
         <MobileNavbar />
       </div>
     </>

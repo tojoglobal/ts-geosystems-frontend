@@ -218,7 +218,7 @@ const ProductHighlights = () => {
               <span
                 className={`${
                   idx !== 0 ? "-left-4" : "-left-3"
-                } absolute -left-3 -bottom-[3px] h-[4px] bg-[#e62245] transition-all duration-300 w-0 group-hover:w-full`}
+                } absolute -left-3 -bottom-[3px] h-[3px] bg-[#e62245] transition-all duration-300 w-0 group-hover:w-full`}
               />
             </div>
           ))}
