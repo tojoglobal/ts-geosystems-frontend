@@ -63,6 +63,27 @@ const OrderTable = () => {
     }
   };
 
+  const handleEditPaymentStatus = async (orderId, newPaymentStatus) => {
+    try {
+      const res = await axiospublic.put(
+        `/api/orders/${orderId}/payment-status`,
+        {
+          paymentStatus: newPaymentStatus,
+        }
+      );
+
+      if (res.status === 200) {
+        refetch();
+        setEditStatusId(null);
+        Swal.fire("Success", "Payment status updated!", "success");
+      } else {
+        throw new Error("Failed to update payment status");
+      }
+    } catch (error) {
+      Swal.fire("Error", error.message, "error");
+    }
+  };
+
   const handleDeleteOrder = (order_id) => {
     Swal.fire({
       title: "Are you sure?",
@@ -286,7 +307,7 @@ const OrderTable = () => {
                   <td className="px-3 md:px-4 py-2">{order?.order_id}</td>
                   <td className="px-3 md:px-4 py-2">{order?.shipping_name}</td>
                   <td className="px-3 md:px-4 py-2">{order?.payment_method}</td>
-                  <td
+                  {/* <td
                     className={`px-3 capitalize md:px-4 py-2 ${
                       order?.paymentStatus === "paid"
                         ? "text-green-400"
@@ -294,7 +315,39 @@ const OrderTable = () => {
                     }`}
                   >
                     {order?.paymentStatus}
+                  </td> */}
+
+                  <td className="px-3 md:px-4 py-2">
+                    {editStatusId === order.order_id ? (
+                      <select
+                        value={order.paymentStatus}
+                        onChange={(e) =>
+                          handleEditPaymentStatus(
+                            order.order_id,
+                            e.target.value
+                          )
+                        }
+                        className="bg-gray-800 appearance-none text-white p-1 rounded"
+                      >
+                        <option value="pending">Pending</option>
+                        <option value="paid">Paid</option>
+                        <option value="unpaid">Unpaid</option>
+                      </select>
+                    ) : (
+                      <span
+                        className={`capitalize font-medium ${
+                          order.paymentStatus === "paid"
+                            ? "text-green-400"
+                            : order.paymentStatus === "unpaid"
+                            ? "text-red-400"
+                            : "text-yellow-400"
+                        }`}
+                      >
+                        {order.paymentStatus}
+                      </span>
+                    )}
                   </td>
+
                   <td className="px-3 md:px-4 py-2">
                     {parseItems(order?.items).length}
                   </td>

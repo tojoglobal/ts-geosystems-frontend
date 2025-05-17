@@ -7,6 +7,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import Swal from "sweetalert2";
 import Button from "../../Dashboard/Button/Button";
 import Loader from "../../utils/Loader";
+import ServcePageImageControll from "../../Dashboard/WebsiteControll/ServicePage/ServicePageImageControll";
 
 const AdminUpdateServicePage = () => {
   const axiosPublicUrl = useAxiospublic();
@@ -158,8 +159,8 @@ const AdminUpdateServicePage = () => {
               )}
             />
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            {/* Grid Image Upload */}
+          {/* Grid Image Upload */}
+          {/* <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div className="space-y-2">
               <label className="block font-medium">
                 Grid Image (will be repeated 4 times)
@@ -199,8 +200,7 @@ const AdminUpdateServicePage = () => {
                   />
                 </div>
               )}
-            </div>
-            {/* Banner Image Upload */}
+            </div>            
             <div className="space-y-2">
               <label className="block font-medium">
                 Banner Image (will be repeated 2 times)
@@ -241,7 +241,7 @@ const AdminUpdateServicePage = () => {
                 </div>
               )}
             </div>
-          </div>
+          </div> */}
           {/* Info After Images Section */}
           <div className="space-y-3">
             <label htmlFor="info_after_images" className="block font-medium">
@@ -272,6 +272,9 @@ const AdminUpdateServicePage = () => {
           </div>
         </form>
       )}
+      <div>
+        <ServcePageImageControll />
+      </div>
     </div>
   );
 };
