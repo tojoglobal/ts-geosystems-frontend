@@ -3,6 +3,7 @@ import { MdArrowForwardIos } from "react-icons/md";
 import { useAxiospublic } from "../Hooks/useAxiospublic";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
+import useDataQuery from "../utils/useDataQuery";
 
 export default function NewEquipmentDropdown() {
   const axiosPublicUrl = useAxiospublic();
@@ -15,26 +16,14 @@ export default function NewEquipmentDropdown() {
     data: categoriesData,
     isLoading: categoriesLoading,
     error: categoriesError,
-  } = useQuery({
-    queryKey: ["categories"],
-    queryFn: async () => {
-      const res = await axiosPublicUrl.get("/api/category");
-      return res?.data;
-    },
-  });
+  } = useDataQuery(["categories"], "/api/category");
 
   // Fetch subcategories
   const {
     data: subcategoriesData,
     isLoading: subcategoriesLoading,
     error: subcategoriesError,
-  } = useQuery({
-    queryKey: ["subcategories"],
-    queryFn: async () => {
-      const res = await axiosPublicUrl.get("/api/subcategory");
-      return res?.data;
-    },
-  });
+  } = useDataQuery(["subcategories"], "/api/subcategory");
 
   // Fetch brands
   const {
@@ -99,13 +88,16 @@ export default function NewEquipmentDropdown() {
           SHOP BY CATEGORY
         </h3>
         <ul className="space-y-2 text-sm text-gray-700">
-          <li
-            className="cursor-pointer hover:text-crimson-red transition"
-            onMouseEnter={() => {
-              handleMouseEnterCategory(null);
-            }}
-          >
-            Shop All
+          <li>
+            <Link
+              to="/shop-all"
+              className="cursor-pointer hover:text-crimson-red transition"
+              onMouseEnter={() => {
+                handleMouseEnterCategory(null);
+              }}
+            >
+              Shop All
+            </Link>
           </li>
           {categoriesData?.categories?.map((category) => (
             <li
