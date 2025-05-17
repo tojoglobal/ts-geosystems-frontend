@@ -77,6 +77,7 @@ const Checkout = () => {
     }
   };
 
+  console.log(mergedCart);
   const handlePlaceOrder = async () => {
     const newOrderId = "TSGB" + Date.now();
     setOrderId(newOrderId);
@@ -120,6 +121,8 @@ const Checkout = () => {
       coupon: coupon || null,
     };
 
+    console.log(orderData);
+
     if (formData.paymentMethod === "sslcommerz") {
       try {
         // Save order with status "pending"
@@ -133,7 +136,6 @@ const Checkout = () => {
           );
 
           if (paymentInitRes.data?.GatewayPageURL) {
-            console.log(paymentInitRes.data.GatewayPageURL);
             window.location.href = paymentInitRes.data.GatewayPageURL;
           } else {
             toast.error("Failed to initiate payment");

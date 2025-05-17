@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import Swal from "sweetalert2";
-import "sweetalert2/dist/sweetalert2.min.css";
+import "sweetalert2/dist/sweetalert2.min.css"; // Optional, for default style
 
 const generateSlug = (text) =>
   text
@@ -11,76 +11,80 @@ const generateSlug = (text) =>
     .replace(/\s+/g, "-")
     .replace(/[^a-z0-9-]/g, "");
 
-const Software = () => {
+const AddUserManuals = () => {
   const axiosPublicUrl = useAxiospublic();
   const [imagePreview, setImagePreview] = useState(null);
-  const [softwar, setSoftwar] = useState([]);
+  const [userManuals, setUserManuals] = useState([]);
   const [editingBrand, setEditingBrand] = useState(null);
 
   const { register, handleSubmit, watch, reset, setValue } = useForm();
 
-  const watchSoftwarName = watch("softwarName", "");
+  const watchuserManualsName = watch("userManualsName", "");
 
-  const fetchSoftwar = async () => {
+  const fetchuserManuals = async () => {
     try {
-      const res = await axiosPublicUrl.get("/api/softwar");
-      setSoftwar(res.data);
+      const res = await axiosPublicUrl.get("/api/userManuals");
+      setUserManuals(res.data);
     } catch (error) {
-      Swal.fire("Error", "Error fetching software.", "error");
+      Swal.fire("Error", "Error fetching user manuals.", "error");
     }
   };
 
   useEffect(() => {
-    fetchSoftwar();
+    fetchuserManuals();
   }, []);
 
   const onSubmit = async (data) => {
     try {
       const formData = new FormData();
-      formData.append("softwar_name", data.softwarName);
-      formData.append("slug", generateSlug(data.softwarName));
-      formData.append("softwarlink", data.softwarlink);
+      formData.append("userManuals_name", data.userManualsName);
+      formData.append("slug", generateSlug(data.userManualsName));
+      formData.append("userManualslink", data.userManualslink);
       if (data.photo && data.photo[0]) {
         formData.append("photo", data.photo[0]);
       }
 
       let message = "";
       if (editingBrand) {
-        await axiosPublicUrl.put(`/api/softwar/${editingBrand.id}`, formData, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
-        message = "Software updated successfully!";
+        await axiosPublicUrl.put(
+          `/api/put-userManuals/${editingBrand.id}`,
+          formData,
+          {
+            headers: { "Content-Type": "multipart/form-data" },
+          }
+        );
+        message = "User Manual updated successfully!";
       } else {
-        await axiosPublicUrl.post("/api/softwar", formData, {
+        await axiosPublicUrl.post("/api/userManuals", formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
-        message = "Software added successfully!";
+        message = "User Manual added successfully!";
       }
 
-      fetchSoftwar();
+      fetchuserManuals();
       reset();
       setEditingBrand(null);
       setImagePreview(null);
       Swal.fire("Success", message, "success");
     } catch (error) {
-      Swal.fire("Error", "Error saving software.", "error");
+      Swal.fire("Error", "Error saving user manual.", "error");
     }
   };
 
-  const handleEdit = (brand) => {
+  const handleEdit = (manual) => {
     Swal.fire({
-      title: "Edit this software?",
-      text: "Do you want to edit this software?",
+      title: "Edit this user manual?",
+      text: "Do you want to edit this user manual?",
       icon: "question",
       showCancelButton: true,
       confirmButtonText: "Yes, edit",
       cancelButtonText: "Cancel",
     }).then((result) => {
       if (result.isConfirmed) {
-        setEditingBrand(brand);
-        setValue("softwarName", brand.softwar_name);
-        setValue("softwarlink", brand.softwarlink);
-        setImagePreview(brand.photo);
+        setEditingBrand(manual);
+        setValue("userManualsName", manual?.user_manuals_name);
+        setValue("userManualslink", manual.user_manuals_link);
+        setImagePreview(manual?.photo);
       }
     });
   };
@@ -97,11 +101,11 @@ const Software = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          await axiosPublicUrl.delete(`/api/softwar/${id}`);
-          fetchSoftwar();
-          Swal.fire("Deleted!", "Software has been deleted.", "success");
+          await axiosPublicUrl.delete(`/api/userManuals/${id}`);
+          fetchuserManuals();
+          Swal.fire("Deleted!", "User manual has been deleted.", "success");
         } catch (error) {
-          Swal.fire("Error", "Error deleting software.", "error");
+          Swal.fire("Error", "Error deleting user manual.", "error");
         }
       }
     });
@@ -123,31 +127,31 @@ const Software = () => {
 
   return (
     <div className="max-w-4xl mx-auto mb-3">
-      <h2 className="text-2xl font-bold mb-3 md:mb-5">Add a Software</h2>
+      <h2 className="text-2xl font-bold mb-3 md:mb-5">Add a userManualse</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-4">
           <label className="block text-sm font-semibold mb-1">
-            Software Name
+            User Manuals Name
           </label>
           <input
             type="text"
-            {...register("softwarName", { required: true })}
+            {...register("userManualsName", { required: true })}
             className="w-full input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
-            placeholder="Enter software name"
+            placeholder="Enter Manuals name"
           />
         </div>
         <div className="mb-4">
           <label className="block text-sm font-semibold mb-1">Slug</label>
           <input
             type="text"
-            value={generateSlug(watchSoftwarName)}
+            value={generateSlug(watchuserManualsName)}
             readOnly
             className="w-full input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
           />
         </div>
         <div className="mb-4">
           <label className="block text-sm font-semibold mb-1">
-            Software Logo
+            User Manuals Logo
           </label>
           <input
             type="file"
@@ -170,13 +174,13 @@ const Software = () => {
           )}
           <div className="mt-4">
             <label className="block text-sm font-semibold mb-1">
-              Software Link
+              User Manuals Drive Link
             </label>
             <input
               type="text"
-              {...register("softwarlink", { required: true })}
+              {...register("userManualslink", { required: true })}
               className="w-full input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
-              placeholder="Enter software link"
+              placeholder="Enter userManuals Link"
             />
           </div>
         </div>
@@ -184,10 +188,10 @@ const Software = () => {
           type="submit"
           className="w-full bg-teal-600 cursor-pointer text-white py-2 px-4 rounded-md hover:bg-teal-700 transition"
         >
-          {editingBrand ? "Update Software" : "Add Software"}
+          {editingBrand ? "Update userManualse" : "Add userManualse"}
         </button>
       </form>
-      {/* Software Table */}
+      {/* Brands Table */}
       <div className="mt-8">
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
           <div className="inline-block min-w-full align-middle">
@@ -202,7 +206,7 @@ const Software = () => {
                       Logo
                     </th>
                     <th className="text-center p-2 sm:p-3 border border-gray-600 whitespace-nowrap">
-                      Software Link
+                      Manuals Link
                     </th>
                     <th className="text-center p-2 sm:p-3 border border-gray-600 whitespace-nowrap">
                       Actions
@@ -210,44 +214,44 @@ const Software = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {Array.isArray(softwar) && softwar.length > 0 ? (
-                    softwar.map((brand) => (
+                  {Array.isArray(userManuals) && userManuals.length > 0 ? (
+                    userManuals.map((manual) => (
                       <tr
-                        key={brand.id}
+                        key={manual?.id}
                         className="border border-gray-600 bg-gray-900 text-white hover:bg-gray-800 transition-colors"
                       >
                         <td className="p-2 sm:p-3 border border-gray-600 whitespace-nowrap">
-                          {brand.softwar_name}
+                          {manual?.user_manuals_name}
                         </td>
                         <td className="p-2 sm:p-3 border border-gray-600">
                           <img
                             src={`${import.meta.env.VITE_OPEN_APIURL}/uploads/${
-                              brand.photo
+                              manual?.photo
                             }`}
-                            alt={brand.softwar_name}
+                            alt={manual?.user_manuals_name}
                             className="w-20 h-12 object-cover rounded"
                           />
                         </td>
                         <td className="text-center p-2 sm:p-3 border border-gray-600 whitespace-nowrap">
                           <a
-                            href={brand.softwarlink}
+                            href={manual?.user_manuals_link}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-blue-400 hover:text-blue-500"
                           >
-                            {brand.softwar_name.slice(0, 20)}
+                            {manual?.user_manuals_name.slice(0, 20)}
                           </a>
                         </td>
                         <td className="text-center p-2 sm:p-3 border border-gray-600 whitespace-nowrap">
                           <div className="flex justify-center items-center gap-3">
                             <button
-                              onClick={() => handleEdit(brand)}
+                              onClick={() => handleEdit(manual)}
                               className="text-blue-300 cursor-pointer hover:text-blue-500 p-1"
                             >
                               <FaEdit />
                             </button>
                             <button
-                              onClick={() => handleDelete(brand.id)}
+                              onClick={() => handleDelete(manual?.id)}
                               className="text-red-600 cursor-pointer hover:text-red-800 p-1"
                             >
                               <FaTrash />
@@ -262,7 +266,7 @@ const Software = () => {
                         colSpan="4"
                         className="text-center p-3 border border-gray-600"
                       >
-                        No software found.
+                        No userManualse found.
                       </td>
                     </tr>
                   )}
@@ -276,4 +280,4 @@ const Software = () => {
   );
 };
 
-export default Software;
+export default AddUserManuals;

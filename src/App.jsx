@@ -83,6 +83,8 @@ import PublicOnlyRoute from "./ProtectedRoute/PublicOnlyRoute";
 import AdminTradeIn from "./Dashboard/TradeIn/AdminTradeIn";
 import AdminSupportData from "./Dashboard/Support/AdminSupportData";
 import AddNewAddress from "./UserAccount/AddNewAddress";
+import AddUserManuals from "./Dashboard/UserManuals/UserManuals";
+import AddQuickGuides from "./Dashboard/QuickGuides/QuickGuides";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -153,7 +155,7 @@ const AppLayout = () => {
         <Route
           path="/user/account/"
           element={
-          <UserProtectedRoute>
+            <UserProtectedRoute>
               <UserAccountLayout />
             </UserProtectedRoute>
           }
@@ -190,6 +192,10 @@ const AppLayout = () => {
           <Route path="add-brands" element={<Brands />} />
           {/* add software  */}
           <Route path="add-software" element={<Software />} />
+          {/* add userManuals  */}
+          <Route path="add-userManuals" element={<AddUserManuals />} />
+          {/* add quickGuides  */}
+          <Route path="add-quickGuides" element={<AddQuickGuides />} />
           {/* order route */}
           <Route path="orders" element={<OrderTable />} />
           {/* hoem page controll */}
@@ -204,7 +210,6 @@ const AppLayout = () => {
           {/* blog routes */}
           <Route path="ts-blog" element={<BlogTable />} />
           <Route path="ts-blog/create" element={<BlogCreate />} />
-          {/* <Route path="ts-blog/edit/:id" element={<BlogUpdate />} /> */}
           <Route path="ts-blog/view/:id" element={<BlogView />} />
           <Route path="ts-blog/create" element={<BlogCreate />} />
           <Route path="ts-blog/edit/:id" element={<BlogUpdate />} />

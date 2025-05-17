@@ -18,6 +18,8 @@ import {
   MessageSquareText,
   Repeat,
   LifeBuoy,
+  BookUser,
+  BookmarkCheck,
 } from "lucide-react";
 import SidebarProfileDropdown from "./SidebarProfileDropdown/SidebarProfileDropdown";
 import logo from "/TS-WEB-LOGO.png";
@@ -65,6 +67,16 @@ const menuItems = [
     label: "Add Software",
     icon: <MonitorCogIcon size={20} />,
     to: "/dashboard/add-software",
+  },
+  {
+    label: "Add UserManuals",
+    icon: <BookUser size={20} />,
+    to: "/dashboard/add-userManuals",
+  },
+  {
+    label: "Add QuickGuides",
+    icon: <BookmarkCheck size={20} />,
+    to: "/dashboard/add-quickGuides",
   },
   {
     label: "Add categorys",
