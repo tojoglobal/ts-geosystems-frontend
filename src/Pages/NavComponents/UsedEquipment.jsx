@@ -86,7 +86,7 @@ const UsedEquipment = () => {
       return field;
     }
   };
-
+  
   if (isLoading) return <div>Loading...</div>;
 
   return (
@@ -217,7 +217,7 @@ const UsedEquipment = () => {
                 }`}
               >
                 {/* SALE badge */}
-                {product.clearance && (
+                {product.sale === 1 && (
                   <div
                     className={`absolute ${
                       viewMode === "list"
@@ -310,9 +310,11 @@ const UsedEquipment = () => {
                         </div>
                       </div>
                       <div className="flex gap-4 mt-2 flex-row">
-                        <button className="bg-[#e62245] cursor-pointer text-[14px] text-white px-6 py-[5px] rounded-[3px] hover:bg-[#d41d3f] font-bold transition-colors">
-                          ADD TO CART
-                        </button>
+                        {product?.isStock === 1 && (
+                          <button className="bg-[#e62245] cursor-pointer text-[14px] text-white px-6 py-[5px] rounded-[3px] hover:bg-[#d41d3f] font-bold transition-colors">
+                            ADD TO CART
+                          </button>
+                        )}
                         <div className="flex items-center gap-2">
                           <input
                             type="checkbox"
@@ -360,9 +362,11 @@ const UsedEquipment = () => {
                         <span className="underline">(Inc. VAT)</span>
                       </div>
                       <div className="flex flex-col gap-2 mt-2">
-                        <button className="bg-[#e62245] cursor-pointer text-[14px] text-white px-6 py-[5px] rounded-[3px] hover:bg-[#d41d3f] font-bold transition-colors">
-                          ADD TO CART
-                        </button>
+                        {product?.isStock === 1 && (
+                          <button className="bg-[#e62245] cursor-pointer text-[14px] text-white px-6 py-[5px] rounded-[3px] hover:bg-[#d41d3f] font-bold transition-colors">
+                            ADD TO CART
+                          </button>
+                        )}
                         <div className="flex items-center gap-2 mt-1">
                           <input
                             type="checkbox"

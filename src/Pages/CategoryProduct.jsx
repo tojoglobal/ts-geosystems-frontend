@@ -232,15 +232,17 @@ const CategoryProduct = () => {
                 }`}
               >
                 {/* SALE badge */}
-                <div
-                  className={`absolute ${
-                    viewMode === "list"
-                      ? "top-3 left-64 md:left-[267px]"
-                      : "-top-1 right-4"
-                  } bg-[#e62245] text-white px-2 py-[1px] font-semibold rounded-sm text-sm`}
-                >
-                  SALE
-                </div>
+                {product?.sale === 1 && (
+                  <div
+                    className={`absolute ${
+                      viewMode === "list"
+                        ? "top-3 left-64 md:left-[267px]"
+                        : "-top-1 right-4"
+                    } bg-[#e62245] text-white px-2 py-[1px] font-semibold rounded-sm text-sm`}
+                  >
+                    SALE
+                  </div>
+                )}
                 {viewMode === "list" ? (
                   <Link
                     onClick={() => trackProductView(product.id)}
@@ -343,12 +345,14 @@ const CategoryProduct = () => {
                         </div>
                       </div>
                       <div className="flex gap-4 mt-2 flex-row">
-                        <button
-                          onClick={() => handleAddToCart(product)}
-                          className="cursor-pointer bg-[#e62245] text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
-                        >
-                          ADD TO CART
-                        </button>
+                        {product?.isStock === 1 && (
+                          <button
+                            onClick={() => handleAddToCart(product)}
+                            className="cursor-pointer bg-[#e62245] text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
+                          >
+                            ADD TO CART
+                          </button>
+                        )}
                         <div className="flex items-center gap-2">
                           <input
                             type="checkbox"
@@ -398,12 +402,14 @@ const CategoryProduct = () => {
                         <span className="underline">(Inc. VAT)</span>
                       </div>
                       <div className="flex flex-col gap-2 mt-2">
-                        <button
-                          onClick={() => handleAddToCart(product)}
-                          className="cursor-pointer bg-[#e62245] text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
-                        >
-                          ADD TO CART
-                        </button>
+                        {product?.isStock === 1 && (
+                          <button
+                            onClick={() => handleAddToCart(product)}
+                            className="cursor-pointer bg-[#e62245] text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
+                          >
+                            ADD TO CART
+                          </button>
+                        )}
                         <div className="flex items-center gap-2 mt-1">
                           <input
                             type="checkbox"

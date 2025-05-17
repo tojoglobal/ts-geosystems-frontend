@@ -351,8 +351,13 @@ const SearchResultsView = ({
                     product.product_name || ""
                   )}`}
                   key={index}
-                  className="flex flex-col bg-white p-4 border border-gray-200 hover:border-gray-300"
+                  className="relative flex flex-col bg-white p-4 border border-gray-200 hover:border-gray-300"
                 >
+                  {product?.sale === 1 && (
+                    <div className="absolute top-2 right-2 bg-[#e62245] text-white px-2 py-[1px] font-semibold rounded-sm text-sm">
+                      SALE
+                    </div>
+                  )}
                   <img
                     src={
                       product.image_urls
@@ -374,9 +379,11 @@ const SearchResultsView = ({
                   </Link>
                   <div className="flex justify-between items-center mt-auto">
                     <p className="text-xs font-semibold">৳{product.price}</p>
-                    <button className="p-1 bg-[#e62245] text-white rounded hover:bg-[#d41d3f]">
-                      <MdAddShoppingCart size={20} />
-                    </button>
+                    {product?.isStock === 1 && (
+                      <button className="p-1 cursor-pointer bg-[#e62245] text-white rounded hover:bg-[#d41d3f]">
+                        <MdAddShoppingCart size={20} />
+                      </button>
+                    )}
                   </div>
                 </Link>
               ))}

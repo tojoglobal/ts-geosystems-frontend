@@ -263,7 +263,8 @@ const SearchOverlay = ({ isOpen, onClose }) => {
             ) : displayProducts.length <= 4 ? (
               <div className="grid grid-cols-4 gap-4">
                 {displayProducts.map((product, index) => (
-                  <Link onClick={onClose}
+                  <Link
+                    onClick={onClose}
                     to={`/products/${product.id}/${slugify(
                       product.product_name || ""
                     )}`}
@@ -289,9 +290,11 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                     </p>
                     <div className="flex justify-between items-center mt-auto">
                       <p className="font-semibold">{product.price}</p>
-                      <button className="mt-2 w-10 ml-auto p-[6px] flex items-center justify-center gap-2 bg-[#e62245] text-white rounded hover:bg-[#d41f3f] transition-colors">
-                        <MdAddShoppingCart size={27} />
-                      </button>
+                      {product?.isStock === 1 && (
+                        <button className="mt-2 cursor-pointer w-10 ml-auto p-[6px] flex items-center justify-center gap-2 bg-[#e62245] text-white rounded hover:bg-[#d41f3f] transition-colors">
+                          <MdAddShoppingCart size={27} />
+                        </button>
+                      )}
                     </div>
                   </Link>
                 ))}
@@ -299,7 +302,12 @@ const SearchOverlay = ({ isOpen, onClose }) => {
             ) : (
               <Slider {...settings}>
                 {displayProducts.map((product, index) => (
-                  <div key={index} className="px-2">
+                  <div key={index} className="px-2 relative">
+                    {product?.sale === 1 && (
+                      <div className="absolute top-2 right-4 bg-[#e62245] text-white px-2 py-[1px] font-semibold rounded-sm text-sm">
+                        SALE
+                      </div>
+                    )}
                     <Link
                       to={`/products/${product.id}/${slugify(
                         product.product_name || ""
@@ -325,9 +333,11 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                         <p className="text-sm font-semibold text-gray-800">
                           ৳{product.price}
                         </p>
-                        <button className="bg-[#e62245] p-[6px] rounded text-white hover:bg-[#d41d3f]">
-                          <MdAddShoppingCart size={24} />
-                        </button>
+                        {product?.isStock === 1 && (
+                          <button className="bg-[#e62245] cursor-pointer p-[6px] rounded text-white hover:bg-[#d41d3f]">
+                            <MdAddShoppingCart size={24} />
+                          </button>
+                        )}
                       </div>
                     </Link>
                   </div>
