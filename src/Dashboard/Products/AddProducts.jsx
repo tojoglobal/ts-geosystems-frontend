@@ -281,47 +281,68 @@ const ProductAddForm = () => {
             placeholder="YouTube Video URLs (comma separated)"
             className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
           />
+          {/* Moved Condition select here */}
+          <select
+            {...register("condition", { required: true })}
+            className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
+          >
+            <option value="">Condition</option>
+            <option value="new">New</option>
+            <option value="used">Used</option>
+            <option value="old">Old</option>
+          </select>
+
+          {/* Moved Tax select here */}
+          <select
+            {...register("tax", { required: true })}
+            className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
+          >
+            <option value="">Select Tax</option>
+            {taxes.map((tax) => (
+              <option
+                key={tax.id}
+                value={JSON.stringify({ id: tax.id, value: tax.value })}
+              >
+                {tax.name} ({tax.value}%)
+              </option>
+            ))}
+          </select>
         </div>
+
         {/* Third Column */}
         <div className="col-span-1 space-y-3 sm:space-y-4">
-          {/* Clearance */}
-          {/* Clearance */}
+          {/* Clearance, In Stock, On Sale checkboxes remain the same */}
           <div className="flex items-center gap-2">
             <input
               type="checkbox"
               {...register("clearance")}
-              className="w-5 h-5 accent-teal-600"
+              className="w-5 h-5 cursor-pointer accent-teal-600"
             />
             <label>Clearance Item</label>
           </div>
-
-          {/* NEW: In Stock */}
           <div className="flex items-center gap-2">
             <input
               type="checkbox"
               {...register("isStock")}
               defaultChecked={true}
-              className="w-5 h-5 accent-teal-600"
+              className="w-5 h-5 cursor-pointer accent-teal-600"
             />
             <label>In Stock</label>
           </div>
-
-          {/* NEW: On Sale */}
           <div className="flex items-center gap-2">
             <input
               type="checkbox"
               {...register("sale")}
-              className="w-5 h-5 accent-teal-600"
+              className="w-5 h-5 cursor-pointer accent-teal-600"
             />
             <label>On Sale</label>
           </div>
+          {/* Price and other fields remain the same */}
           <input
             {...register("price", { required: true })}
             placeholder="Price"
             className="w-full input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
           />
-
-          {/* Price Show/Hide */}
           <div className="flex items-center gap-2">
             <input
               type="checkbox"
@@ -333,8 +354,7 @@ const ProductAddForm = () => {
             />
             <label>Hide Price</label>
           </div>
-
-          {/* product option */}
+          {/* Product Options and other fields remain the same */}
           <Controller
             name="productOptions"
             control={control}
@@ -391,7 +411,6 @@ const ProductAddForm = () => {
               />
             )}
           />
-
           {/* Product Option Show/Hide */}
           <div className="flex items-center gap-2">
             <input
@@ -406,8 +425,6 @@ const ProductAddForm = () => {
             />
             <label>Hide Product Options</label>
           </div>
-
-          {/* software option */}
           <Controller
             name="softwareOptions"
             control={control}
@@ -464,32 +481,6 @@ const ProductAddForm = () => {
               />
             )}
           />
-
-          <select
-            {...register("condition", { required: true })}
-            className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
-          >
-            <option value="">Condition</option>
-            <option value="new">New</option>
-            <option value="used">Used</option>
-            <option value="old">Old</option>
-          </select>
-
-          {/* Tax selection field */}
-          <select
-            {...register("tax", { required: true })}
-            className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
-          >
-            <option value="">Select Tax</option>
-            {taxes.map((tax) => (
-              <option
-                key={tax.id}
-                value={JSON.stringify({ id: tax.id, value: tax.value })}
-              >
-                {tax.name} ({tax.value}%)
-              </option>
-            ))}
-          </select>
         </div>
         <div className="col-span-2 space-y-4">
           <label className="ml-1">Product Overview</label>
