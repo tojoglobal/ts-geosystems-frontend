@@ -12,7 +12,7 @@ const PopularBrands = () => {
     ["popularBrand"],
     "/api/brands"
   );
-  
+
   if (isLoading) return <Loader />;
   const brands = data.filter((brand) => brand.home_page_show === 1);
 
@@ -54,8 +54,8 @@ const PopularBrands = () => {
           >
             {brands.map((brand) => (
               <SwiperSlide key={brand.id}>
-                <Link
-                  to={`/catalog?brand=${brand.slug}`}
+                <div
+                  // to={`/catalog?brand=${brand.slug}`}
                   className="brand-card p-4 transition-all duration-300 hover:border-[#e62245] hover:border-2 rounded-lg h-32 flex items-center justify-center"
                 >
                   <img
@@ -65,7 +65,7 @@ const PopularBrands = () => {
                     alt={brand.brands_name}
                     className="h-36 object-contain"
                   />
-                </Link>
+                </div>
               </SwiperSlide>
             ))}
           </Swiper>

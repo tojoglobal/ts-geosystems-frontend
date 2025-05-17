@@ -105,7 +105,7 @@ const TopClients = () => {
           >
             {brands.map((brand) => (
               <SwiperSlide key={brand.id}>
-                <Link
+                <div
                   to={brand.url}
                   className="brand-card p-4 transition-all duration-300 hover:border-[#e62245] hover:border-2 rounded-lg h-32 flex items-center justify-center"
                 >
@@ -114,7 +114,7 @@ const TopClients = () => {
                     alt={brand.name}
                     className="max-w-full max-h-full object-contain"
                   />
-                </Link>
+                </div>
               </SwiperSlide>
             ))}
           </Swiper>

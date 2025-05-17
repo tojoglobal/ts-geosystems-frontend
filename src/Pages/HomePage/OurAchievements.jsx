@@ -11,26 +11,26 @@ const OurAchievements = () => {
         </h2>
         <div className="flex-1 h-0.5 bg-[#e62245]"></div>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8">
         <div className="p-8 rounded-lg border shadow-sm md:shadow-md text-center">
           <div className="flex justify-center mb-4">
-            <BsBriefcaseFill className="w-16 h-16 text-teal-500" />
+            <BsBriefcaseFill className="w-10 md:w-16 h-10 md:h-16 text-teal-500" />
           </div>
-          <h3 className="text-4xl font-bold mb-2">11+</h3>
+          <h3 className="text-2xl md:text-4xl font-bold mb-2">11+</h3>
           <p className="uppercase font-medium">YEARS EXPERIENCE</p>
         </div>
         <div className="p-8 rounded-lg border shadow-sm md:shadow-md text-center">
           <div className="flex justify-center mb-4">
-            <FaUsers className="w-16 h-16 text-teal-500" />
+            <FaUsers className="w-10 md:w-16 h-10 md:h-16 text-teal-500" />
           </div>
-          <h3 className="text-4xl font-bold mb-2">1126+</h3>
+          <h3 className="text-2xl md:text-4xl font-bold mb-2">1126+</h3>
           <p className="uppercase font-medium">VALUABLE CLIENTS</p>
         </div>
         <div className="p-8 rounded-lg border shadow-sm md:shadow-md text-center">
           <div className="flex justify-center mb-4">
-            <FiSettings className="w-16 h-16 text-teal-500" />
+            <FiSettings className="w-10 md:w-16 h-10 md:h-16 text-teal-500" />
           </div>
-          <h3 className="text-4xl font-bold mb-2">4099+</h3>
+          <h3 className="text-2xl md:text-4xl font-bold mb-2">4099+</h3>
           <p className="uppercase font-medium">CALIBRATION</p>
         </div>
       </div>

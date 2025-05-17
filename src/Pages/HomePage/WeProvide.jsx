@@ -46,7 +46,7 @@ const WeProvide = () => {
           {services.map((service, index) => (
             <div
               key={index}
-              className="p-8 border rounded-lg shadow hover:shadow-md transition"
+              className="p-4 md:p-8 border rounded-lg shadow hover:shadow-md transition"
             >
               <img src={service.image} className="w-20 mx-auto" alt="" />
               <h3 className="text-2xl text-black font-bold mb-2">

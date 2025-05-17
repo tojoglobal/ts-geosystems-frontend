@@ -200,7 +200,7 @@ const ProductHighlights = () => {
   return (
     <div className="max-w-[1370px] mx-auto rounded-md px-3 md:px-0 py-6 md:py-12 bg-white relative">
       {/* Tab Header */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between border border-gray-200 rounded-l-[4px] relative">
+      <div className="flex flex-row justify-between md:items-center md:justify-between border border-gray-200 rounded-l-[4px] relative">
         <div className="flex flex-col md:flex-row gap-3 sm:gap-4 px-3 py-[2px]">
           {tabOptions.map((tab, idx) => (
             <div
@@ -223,7 +223,7 @@ const ProductHighlights = () => {
             </div>
           ))}
         </div>
-        <div className="flex gap-2 pr-4">
+        <div className="flex gap-2 pt-2 lg:pt-0 pr-4">
           <div
             className={`swiper-button-prev-custom cursor-pointer ${
               isBeginning
@@ -289,7 +289,7 @@ const ProductHighlights = () => {
                   </p>
                 )}
                 <Link to={item?.productUrl}>
-                  <div className="relative group w-full max-w-[120px] sm:max-w-[140px] md:max-w-[260px] mx-auto">
+                  <div className="relative group w-full max-w-[200px] md:max-w-[260px] mx-auto">
                     <img
                       src={item?.img}
                       alt={item.name}
