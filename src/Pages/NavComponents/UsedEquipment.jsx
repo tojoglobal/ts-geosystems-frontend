@@ -87,7 +87,7 @@ const UsedEquipment = () => {
   if (isLoading) return <div>Loading...</div>;
 
   return (
-    <div className="p-2 md:p-3">
+    <div className="p-1 md:p-3">
       <div className="flex items-center gap-2 text-[11px] mb-4">
         <Link to="/" className="text-gray-500">
           Home
@@ -97,7 +97,7 @@ const UsedEquipment = () => {
           Used Surveying Equipment
         </Link>
       </div>
-      <h1 className="text-[30px] font-semibold mb-6 uppercase">
+      <h1 className="text-xl md:text-[30px] font-semibold mb-6 uppercase">
         Used Surveying Equipment
       </h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 border-b pb-10">
@@ -158,7 +158,7 @@ const UsedEquipment = () => {
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="border py-1 pl-2 text-xs border-[#e1dcdc] rounded-[3px] pr-36 appearance-none bg-white cursor-pointer"
+                className="border py-1 pl-2 text-xs border-[#e1dcdc] rounded-[3px] md:pr-36 appearance-none bg-white cursor-pointer"
               >
                 {sortOptions.map((option) => (
                   <option key={option} value={option}>
@@ -258,7 +258,7 @@ const UsedEquipment = () => {
                 )}
                 {/* Product Details */}
                 {viewMode === "list" ? (
-                  <div className="w-2/3 flex flex-col justify-between">
+                  <div className="w-full md:w-2/3 flex flex-col justify-between">
                     <div>
                       <div className="text-xs text-gray-600">
                         {product.brand_name} | Sku: {product.sku}

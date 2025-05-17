@@ -111,7 +111,7 @@ const CategoryProduct = () => {
   if (isLoading) return <div>Loading...</div>;
 
   return (
-    <div className="p-2 md:p-3">
+    <div className="p-1 md:p-3">
       <div className="flex items-center gap-2 text-[11px] mb-4">
         <Link to="/" className="hover:text-[#e62245]">
           Home
@@ -137,7 +137,7 @@ const CategoryProduct = () => {
           </>
         )}
       </div>
-      <h1 className="text-3xl font-bold mb-4">
+      <h1 className="text-xl md:text-3xl font-bold mb-4">
         {(subcategory || category).replace(/-/g, " ").toUpperCase()}
       </h1>
       <section>
@@ -177,7 +177,7 @@ const CategoryProduct = () => {
                   );
                   setSortBy(selectedOption);
                 }}
-                className="border py-1 pl-2 text-xs border-[#e1dcdc] rounded-[3px] pr-36 appearance-none bg-white cursor-pointer"
+                className="border py-1 pl-2 text-xs border-[#e1dcdc] rounded-[3px] md:pr-36 appearance-none bg-white cursor-pointer"
               >
                 {sortOptions.map((option) => (
                   <option key={option.value} value={option.value}>
@@ -224,14 +224,16 @@ const CategoryProduct = () => {
               <div
                 key={product.id}
                 className={`relative ${
-                  viewMode === "list" ? "flex gap-8" : "flex flex-col h-full"
+                  viewMode === "list"
+                    ? "flex flex-col lg:flex-row gap-8"
+                    : "flex flex-col h-full"
                 }`}
               >
                 {/* SALE badge */}
                 <div
                   className={`absolute ${
                     viewMode === "list"
-                      ? "top-3 left-[267px]"
+                      ? "top-3 left-64 md:left-[267px]"
                       : "-top-1 right-4"
                   } bg-[#e62245] text-white px-2 py-[1px] font-semibold rounded-sm text-sm`}
                 >
@@ -242,7 +244,7 @@ const CategoryProduct = () => {
                     to={`/products/${product.id}/${slugify(
                       product.product_name || ""
                     )}`}
-                    className="w-1/3"
+                    className="w-full md:w-1/3"
                   >
                     <div
                       onMouseEnter={() => setHoveredProductId(product.id)}
@@ -279,7 +281,7 @@ const CategoryProduct = () => {
                 )}
                 {/* Product Details - Different structure for list vs grid */}
                 {viewMode === "list" ? (
-                  <div className="w-2/3 flex flex-col justify-between">
+                  <div className="w-full md:w-2/3 flex flex-col justify-between">
                     <div>
                       {/* <div className="text-xs text-gray-600">
                         {product.brand_name} | Sku: {product.sku}
