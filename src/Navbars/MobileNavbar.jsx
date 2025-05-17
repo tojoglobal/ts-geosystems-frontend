@@ -158,6 +158,7 @@ const MobileNavbar = () => {
     setShowResults(false);
     setIsSearchOpen(false);
     setSearchQuery("");
+    setIsMenuOpen(false);
   };
 
   const toggleMenu = () => {
@@ -365,7 +366,9 @@ const MobileNavbar = () => {
                 {searchResults.map((product) => (
                   <div key={product.id} className="border-b">
                     <Link
-                      onClick={() => handleResultClick(product.id)}
+                      onClick={() => {
+                        handleResultClick(product.id);
+                      }}
                       to={`/products/${product.id}/${slugify(
                         product.product_name || ""
                       )}`}
@@ -441,7 +444,9 @@ const MobileNavbar = () => {
               <div className="absolute top-full left-0 right-0 bg-white border border-gray-200 shadow-lg z-50 max-h-60 overflow-y-auto">
                 {searchResults.map((product) => (
                   <Link
-                    onClick={() => handleResultClick(product.id)}
+                    onClick={() => {
+                      handleResultClick(product.id);
+                    }}
                     to={`/products/${product.id}/${slugify(
                       product.product_name || ""
                     )}`}
@@ -475,13 +480,17 @@ const MobileNavbar = () => {
           <ul className="space-y-2 mb-6">
             {dynamicCategories.map((item, idx) => (
               <li key={idx} className="relative group">
-                <div className="flex justify-between items-center cursor-pointer">
+                <div className="flex justify-between items-center">
                   <Link
                     to={item.link}
                     className="flex-1"
-                    onClick={() =>
-                      item.subLinks && handleCategoryClick(item.title)
-                    }
+                    onClick={() => {
+                      if (item.subLinks) {
+                        handleCategoryClick(item.title);
+                      } else {
+                        toggleMenu();
+                      }
+                    }}
                   >
                     {item.title}
                   </Link>
@@ -498,7 +507,9 @@ const MobileNavbar = () => {
                   <ul className="text-sm shadow-lg px-4 py-2 space-y-1 z-50 rounded-md">
                     {item.subLinks.map((sub, i) => (
                       <li key={i} className="hover:text-red-500 transition">
-                        <Link to={sub.link}>{sub.title}</Link>
+                        <Link to={sub.link} onClick={toggleMenu}>
+                          {sub.title}
+                        </Link>
                       </li>
                     ))}
                   </ul>
@@ -514,7 +525,9 @@ const MobileNavbar = () => {
           <ul className="space-y-2 mb-6">
             {dynamicBrands.map((item, idx) => (
               <li key={idx}>
-                <Link to={item.link || "#"}>{item.title}</Link>
+                <Link to={item.link || "#"} onClick={toggleMenu}>
+                  {item.title}
+                </Link>
               </li>
             ))}
           </ul>
@@ -526,9 +539,19 @@ const MobileNavbar = () => {
           <ul className="space-y-2 mb-6">
             {mainMenu.map((item, idx) => (
               <li key={idx} className="relative group">
-                <div className="flex justify-between items-center cursor-pointer">
+                <div className="flex justify-between items-center">
                   {item.link ? (
-                    <Link to={item.link} className="flex-1">
+                    <Link
+                      to={item.link}
+                      className="flex-1"
+                      onClick={() => {
+                        if (item.subLinks) {
+                          handleCategoryClick(item.title);
+                        } else {
+                          toggleMenu();
+                        }
+                      }}
+                    >
                       {item.title}
                     </Link>
                   ) : (
@@ -550,7 +573,11 @@ const MobileNavbar = () => {
                         key={i}
                         className="hover:bg-gray-100 hover:shadow-md hover:rounded-md transition-all duration-200 w-full"
                       >
-                        <Link to={sub.link} className="block text-center">
+                        <Link
+                          to={sub.link}
+                          className="block text-center"
+                          onClick={toggleMenu}
+                        >
                           {sub.title}
                         </Link>
                       </li>

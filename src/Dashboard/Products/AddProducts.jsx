@@ -285,6 +285,7 @@ const ProductAddForm = () => {
         {/* Third Column */}
         <div className="col-span-1 space-y-3 sm:space-y-4">
           {/* Clearance */}
+          {/* Clearance */}
           <div className="flex items-center gap-2">
             <input
               type="checkbox"
@@ -292,6 +293,27 @@ const ProductAddForm = () => {
               className="w-5 h-5 accent-teal-600"
             />
             <label>Clearance Item</label>
+          </div>
+
+          {/* NEW: In Stock */}
+          <div className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              {...register("isStock")}
+              defaultChecked={true}
+              className="w-5 h-5 accent-teal-600"
+            />
+            <label>In Stock</label>
+          </div>
+
+          {/* NEW: On Sale */}
+          <div className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              {...register("sale")}
+              className="w-5 h-5 accent-teal-600"
+            />
+            <label>On Sale</label>
           </div>
           <input
             {...register("price", { required: true })}

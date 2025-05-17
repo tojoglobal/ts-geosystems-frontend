@@ -166,6 +166,8 @@ const UpdateProductForm = () => {
         priceShowHide: productData.priceShowHide || 0,
         productOptionShowHide: productData.productOptionShowHide || 0,
         tax: productData.tax || null,
+        isStock: productData.isStock !== undefined ? productData.isStock : true,
+        sale: productData.sale !== undefined ? productData.sale : false,
       });
 
       setImages(
@@ -239,7 +241,6 @@ const UpdateProductForm = () => {
 
   const onSubmit = async (data) => {
     console.log("Form Data:", data);
-    console.log("Images:", images);
 
     const parsedData = {
       ...data,
@@ -250,6 +251,13 @@ const UpdateProductForm = () => {
       priceShowHide: parseInt(data.priceShowHide),
       productOptionShowHide: parseInt(data.productOptionShowHide),
       tax: data.tax ? JSON.parse(data.tax) : productData.tax || null,
+      clearance:
+        data.clearance === true ||
+        data.clearance === "true" ||
+        data.clearance === 1,
+      isStock:
+        data.isStock === true || data.isStock === "true" || data.isStock === 1,
+      sale: data.sale === true || data.sale === "true" || data.sale === 1,
     };
 
     const formData = new FormData();
@@ -263,24 +271,26 @@ const UpdateProductForm = () => {
     });
 
     Object.entries(parsedData).forEach(([key, value]) => {
-      formData.append(
-        key,
-        typeof value === "object" && value !== null
-          ? JSON.stringify(value)
-          : value
-      );
+      // Convert boolean values to 1/0 for MySQL
+      if (typeof value === "boolean") {
+        formData.append(key, value ? "1" : "0");
+      } else if (typeof value === "object" && value !== null) {
+        formData.append(key, JSON.stringify(value));
+      } else {
+        formData.append(key, value);
+      }
     });
 
     try {
-      await axiosPublicUrl.put(`/api/products/${id}`, formData, {
+      const res = await axiosPublicUrl.put(`/api/products/${id}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
+      console.log(res);
       Swal.fire({
         icon: "success",
         title: "Product update successfully!",
-        // text: response.data.message,
         confirmButtonColor: "#14b8a6",
       });
     } catch (error) {
@@ -406,6 +416,46 @@ const UpdateProductForm = () => {
 
           {/* Third Column */}
           <div className="col-span-1 space-y-4">
+            {/* Clearance */}
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                {...register("clearance")}
+                defaultChecked={
+                  productData.clearance === 1 || productData.clearance === true
+                }
+                className="w-5 h-5 accent-teal-600"
+              />
+              <label>Clearance Item</label>
+            </div>
+
+            {/* In Stock */}
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                {...register("isStock")}
+                defaultChecked={
+                  productData.isStock === undefined
+                    ? true
+                    : productData.isStock === 1 || productData.isStock === true
+                }
+                className="w-5 h-5 accent-teal-600"
+              />
+              <label>In Stock</label>
+            </div>
+
+            {/* On Sale */}
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                {...register("sale")}
+                defaultChecked={
+                  productData.sale === 1 || productData.sale === true
+                }
+                className="w-5 h-5 accent-teal-600"
+              />
+              <label>On Sale</label>
+            </div>
             <input
               {...register("price")}
               placeholder="Price"
