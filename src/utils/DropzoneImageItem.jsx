@@ -17,13 +17,6 @@ const DropzoneImageItem = ({ img, idx, onDrop, onToggle }) => {
     },
     multiple: false,
   });
-  // const { getRootProps, getInputProps } = useDropzone({
-  //   onDrop,
-  //   accept: {
-  //     "image/*": [],
-  //   },
-  //   multiple: false,
-  // });
 
   // Cleanup blob URL
   useEffect(() => {
