@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import useProductsByIdsQuery from "../../Hooks/useProductsByIdsQuery";
@@ -13,6 +13,7 @@ const Checkout = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { items, coupon, totalQuantity } = useSelector((state) => state.cart);
+  const { user, isAuth } = useSelector((state) => state.authUser);
   const [step, setStep] = useState(1);
   // const [coupon, setCoupon] = useState("");
   const [shippingCost, setShippingCost] = useState(5.99);
@@ -32,6 +33,8 @@ const Checkout = () => {
     billingAddress: "",
     paymentMethod: "",
   });
+
+  console.log(user, isAuth);
 
   // get a cart product
   const productIds = useMemo(() => items.map((item) => item.id), [items]);
@@ -55,6 +58,13 @@ const Checkout = () => {
   }
   const total = subtotal + vat + shippingCost - discount;
 
+  // Set email if user is authenticated
+  useEffect(() => {
+    if (user && isAuth) {
+      setFormData((prev) => ({ ...prev, email: user?.email }));
+    }
+  }, [user, isAuth]);
+
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData({
@@ -62,9 +72,18 @@ const Checkout = () => {
       [name]: type === "checkbox" ? checked : value,
     });
   };
-
   const handleContinue = (currentStep) => {
-    if (currentStep === 1 && formData.email) setStep(2);
+    if (currentStep === 1) {
+      if ((user && isAuth) || formData.email) {
+        setFormData((prev) => ({
+          ...prev,
+          email: user && isAuth ? user.email : formData.email,
+        }));
+        setStep(2);
+      }
+      return;
+    }
+    // if (currentStep === 1 && formData.email) setStep(2);
     if (currentStep === 2 && formData.shippingAddress) setStep(3);
     if (currentStep === 3) {
       if (formData.billingSameAsShipping) {
@@ -77,7 +96,6 @@ const Checkout = () => {
     }
   };
 
-  console.log(mergedCart);
   const handlePlaceOrder = async () => {
     const newOrderId = "TSGB" + Date.now();
     setOrderId(newOrderId);
@@ -175,7 +193,7 @@ const Checkout = () => {
           Your cart is empty.
         </p>
         <Link
-          to="/shop"
+          to="/shop-all"
           className="inline-block bg-[#e62245] text-white px-6 py-2 rounded"
         >
           Browse Products
@@ -227,14 +245,16 @@ const Checkout = () => {
                 <input
                   type="email"
                   name="email"
-                  value={formData.email}
+                  value={isAuth && user ? user?.email : formData.email}
                   onChange={handleInputChange}
                   placeholder="you@example.com"
+                  readOnly={!!(user && isAuth)}
                   className="border p-2 rounded flex-grow"
                 />
                 <button
                   onClick={() => handleContinue(1)}
                   className="bg-[#e62245] cursor-pointer text-white px-4 py-2 rounded"
+                  disabled={!((user && isAuth) || formData.email)}
                 >
                   CONTINUE
                 </button>
@@ -248,14 +268,25 @@ const Checkout = () => {
                 />
                 <label>Subscribe to our newsletter</label>
               </div>
-              <p className="text-sm mt-2">
-                Already have an account?{" "}
-                <Link to="/user/login" className="text-[#e62245] font-semibold">
-                  Sign in now
-                </Link>
-              </p>
+              {!isAuth && (
+                <p className="text-sm mt-2">
+                  Already have an account?{" "}
+                  <Link
+                    to="/user/login"
+                    className="text-[#e62245] font-semibold"
+                  >
+                    Sign in now
+                  </Link>
+                </p>
+              )}
+              {user && isAuth && (
+                <div className="text-green-700 text-sm mt-2">
+                  Logged in as <strong>{user.email}</strong>
+                </div>
+              )}
             </div>
           )}
+
           <hr className="flex-grow border-gray-300" />
           {/* Step 2: Shipping */}
           <div>

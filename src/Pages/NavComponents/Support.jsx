@@ -49,34 +49,6 @@ const Support = () => {
     }));
   };
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   const submissionData = {
-  //     contactDetails: {
-  //       name: formData.name,
-  //       company: formData.company,
-  //       email: formData.email,
-  //       phone: formData.phone,
-  //     },
-  //     equipmentDetails: {
-  //       type: formData.equipment,
-  //       model: formData.model,
-  //     },
-  //     supportRequest: {
-  //       issues: formData.supportIssues,
-  //       details: formData.details,
-  //       attachments: formData.files.length > 0 ? "Files attached" : "No files",
-  //     },
-  //   };
-  //   console.log(submissionData);
-
-  //   try {
-  //     // logic here
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 

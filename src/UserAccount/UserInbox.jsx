@@ -132,13 +132,14 @@ const UserInbox = () => {
                 })}
                 disabled={isSubmitting}
               >
-                {data.map((order) => (
-                  <option key={order.order_id} value={order.order_id}>
-                    Order #{order.order_id} - Placed on{" "}
-                    {new Date(order.created_at).toLocaleDateString()} for £
-                    {parseFloat(order.total).toFixed(2)}
-                  </option>
-                ))}
+                {data.length > 0 &&
+                  data.map((order) => (
+                    <option key={order.order_id} value={order.order_id}>
+                      Order #{order.order_id} - Placed on{" "}
+                      {new Date(order.created_at).toLocaleDateString()} for £
+                      {parseFloat(order.total).toFixed(2)}
+                    </option>
+                  ))}
               </select>
               {errors.selectedOrder && (
                 <p className="text-red-500 text-sm mt-1">

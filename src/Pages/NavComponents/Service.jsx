@@ -1,8 +1,11 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import useDataQuery from "../../utils/useDataQuery";
+import { useAxiospublic } from "../../Hooks/useAxiospublic";
+import Swal from "sweetalert2";
 
 const Service = () => {
+  const axiosPublicUrl = useAxiospublic();
   const [formData, setFormData] = useState({
     name: "",
     company: "",
@@ -19,6 +22,11 @@ const Service = () => {
     files: null,
   });
 
+  // For showing the current number of files selected
+  const [fileCount, setFileCount] = useState(0);
+  // For showing a small green "file added" message
+  const [fileAddMsg, setFileAddMsg] = useState("");
+
   const {
     data = {},
     isLoading,
@@ -29,14 +37,13 @@ const Service = () => {
   const { data: images = [], isLoading: loading } = useDataQuery(
     ["serviceImages"],
     "/api/get-service-images"
-  ); 
-  
-  // Filter and sort images for the grid (order 1-4 where show is true)
+  );
+
+  // Grid and banner image logic as before
   const gridImages = images
     .filter((img) => img.show && [1, 2, 3, 4].includes(img.order))
     .sort((a, b) => a.order - b.order);
 
-  // Filter and sort images for the banner (order 5-6 where show is true)
   const bannerImages = images
     .filter((img) => img.show && [5, 6].includes(img.order))
     .sort((a, b) => a.order - b.order);
@@ -69,15 +76,99 @@ const Service = () => {
   };
 
   const handleFileChange = (e) => {
+    const files = e.target.files;
     setFormData((prev) => ({
       ...prev,
-      files: e.target.files,
+      files: files,
     }));
+    setFileCount(files.length);
+    if (files.length > 0) {
+      setFileAddMsg("File(s) added!");
+      setTimeout(() => setFileAddMsg(""), 1500);
+    } else {
+      setFileAddMsg("");
+    }
   };
 
-  const handleSubmit = (e) => {
+  // Helper: check if required fields are filled
+  const isFormValid = () => {
+    if (
+      !formData.name.trim() ||
+      !formData.company.trim() ||
+      !formData.email.trim() ||
+      !formData.phone.trim() ||
+      !formData.model.trim()
+    )
+      return false;
+    // At least one request type must be checked
+    if (
+      !formData.requests.service &&
+      !formData.requests.calibration &&
+      !formData.requests.repair
+    )
+      return false;
+    return true;
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form data to be submitted:", formData);
+
+    if (!isFormValid()) {
+      Swal.fire({
+        icon: "error",
+        title: "Form incomplete",
+        text: "Please fill in all required fields and select at least one request type.",
+      });
+      return;
+    }
+
+    const formDataToSend = new FormData();
+    Object.entries(formData).forEach(([key, value]) => {
+      if (key === "requests") {
+        formDataToSend.append("requests", JSON.stringify(value));
+      } else if (key === "files" && value) {
+        Array.from(value).forEach((file) => {
+          formDataToSend.append("files", file);
+        });
+      } else {
+        formDataToSend.append(key, value);
+      }
+    });
+
+    try {
+      const res = await axiosPublicUrl.post(
+        "/api/service-inquiries",
+        formDataToSend,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+      if (res.status === 201) {
+        await Swal.fire("Success", res.data?.message, "success");
+        setFormData({
+          name: "",
+          company: "",
+          email: "",
+          phone: "",
+          equipment: "",
+          model: "",
+          requests: {
+            service: false,
+            calibration: false,
+            repair: false,
+          },
+          comments: "",
+          files: null,
+        });
+        setFileCount(0);
+      }
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Submission failed",
+        text: "Could not submit your inquiry. Please try again.",
+      });
+    }
   };
 
   return (
@@ -305,6 +396,19 @@ const Service = () => {
                   multiple
                 />
               </label>
+              {/* Show file count and "file(s) added" message */}
+              <div className="mt-2 flex items-center gap-3 min-h-[22px]">
+                {fileCount > 0 && (
+                  <span className="text-green-700 text-sm">
+                    {fileCount} file{fileCount > 1 ? "s" : ""} selected
+                  </span>
+                )}
+                {fileAddMsg && (
+                  <span className="text-green-600 text-xs bg-green-50 px-2 py-1 rounded">
+                    {fileAddMsg}
+                  </span>
+                )}
+              </div>
             </div>
             <div className="flex justify-center">
               <button
