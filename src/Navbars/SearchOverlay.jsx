@@ -149,22 +149,22 @@ const SearchOverlay = ({ isOpen, onClose }) => {
   };
 
   const handleAddToCart = (product) => {
-      const itemToAdd = {
-        id: product.id,
-        product_name: product.product_name,
-        price: parsePrice(product.price),
-        quantity: 1,
-      };
-  
-      dispatch(addToCart(itemToAdd));
-      Swal.fire({
-        title: "Added to Cart",
-        text: `${product.product_name} has been added to your cart.`,
-        icon: "success",
-        timer: 2000,
-        showConfirmButton: false,
-      });
+    const itemToAdd = {
+      id: product.id,
+      product_name: product.product_name,
+      price: parsePrice(product.price),
+      quantity: 1,
     };
+
+    dispatch(addToCart(itemToAdd));
+    Swal.fire({
+      title: "Added to Cart",
+      text: `${product.product_name} has been added to your cart.`,
+      icon: "success",
+      timer: 2000,
+      showConfirmButton: false,
+    });
+  };
 
   return (
     <>

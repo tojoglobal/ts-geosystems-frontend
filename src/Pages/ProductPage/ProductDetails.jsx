@@ -26,7 +26,7 @@ const ProductDetails = () => {
     isLoading,
     error,
   } = useDataQuery(["productDetails", id], `/api/products/${id}`, !!id);
-console.log(product);
+  
   // Quantity handlers
   const incrementQuantity = () => {
     setQuantity((prev) => prev + 1);
