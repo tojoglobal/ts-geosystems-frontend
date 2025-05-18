@@ -121,8 +121,6 @@ const Checkout = () => {
       coupon: coupon || null,
     };
 
-    console.log(orderData);
-
     if (formData.paymentMethod === "sslcommerz") {
       try {
         // Save order with status "pending"
