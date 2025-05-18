@@ -49,7 +49,6 @@ import CategoryProduct from "./Pages/CategoryProduct";
 import OrderTable from "./Dashboard/Orders/OrderTable";
 import HomePageControl from "./Dashboard/WebsiteControll/HomePageControl";
 import ClientMessages from "./Dashboard/DBComponents/ClientMessages";
-import SupportPage from "./Pages/NavComponents/SupportPage";
 import ThankYou from "./Pages/ThankYou/ThankYou";
 import PaymentSuccess from "./Pages/payment/PaymentSuccess";
 import PaymentFail from "./Pages/payment/PaymentFail";
@@ -113,7 +112,6 @@ const AppLayout = () => {
           <Route path="/hire" element={<Hire />} />
           <Route path="/service" element={<Service />} />
           <Route path="/support" element={<Support />} />
-          <Route path="/support-page" element={<SupportPage />} />
           <Route path="/quick-guides" element={<QuickGuides />} />
           <Route path="/software-downloads" element={<SoftwareDownloads />} />
           <Route path="/trade-in" element={<TradeIn />} />

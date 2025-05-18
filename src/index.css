@@ -225,3 +225,17 @@ select {
     @apply bg-background text-foreground;
   }
 }
+
+@keyframes slide-down {
+  from {
+    transform: translateY(-100%);
+  }
+
+  to {
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-down {
+  animation: slide-down 0.5s ease-in-out;
+}

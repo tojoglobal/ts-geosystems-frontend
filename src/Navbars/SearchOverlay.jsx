@@ -168,221 +168,237 @@ const SearchOverlay = ({ isOpen, onClose }) => {
 
   return (
     <>
-      <div
-        ref={overlayRef}
-        className={`fixed inset-0 bg-gray-100 z-[100] h-9/11 transition-transform duration-500 ease-in-out transform ${
-          isOpen ? "translate-y-0" : "-translate-y-full"
-        }`}
-      >
-        <div className="flex max-w-[99%] z-50 mx-auto items-center pt-6 p-4">
-          <img
-            src="https://cdn11.bigcommerce.com/s-ew2v2d3jn1/images/stencil/250x64/g2-survey-logo_1611121872__30054.original.png"
-            className="w-[190px] h-full mr-4"
-            alt="G2 Survey"
-          />
-          <form
-            onSubmit={handleSearchSubmit}
-            className="relative flex items-center w-full ml-2 mx-auto border-b border-[#c5ccd3] bg-white rounded"
+      {isOpen && (
+        <>
+          <div
+            ref={overlayRef}
+            className={`fixed inset-0 bg-gray-100 z-[100] h-9/11 transition-transform duration-500 ease-in-out transform  animate-slide-down ${
+              isOpen ? "translate-y-0" : "-translate-y-full"
+            }`}
           >
-            <IoSearchSharp className="ml-6 mr-2 font-extrabold text-xl text-charcoal-black" />
-            <input
-              type="text"
-              placeholder="Search..."
-              className="flex-1 px-3 py-4 text-2xl outline-none focus:outline-none"
-              value={searchText}
-              onChange={(e) => setSearchText(e.target.value)}
-            />
-            <MdOutlineKeyboardVoice className="mr-30 text-2xl text-charcoal" />
-            <button
-              type="submit"
-              className="absolute right-0 cursor-pointer px-4 h-full text-2xl border-2 border-charcoal-black bg-gray-200 hover:bg-gray-100 focus:outline-none"
-            >
-              Submit
-            </button>
-          </form>
-          {/* Close Icon */}
-          <button onClick={onClose} className="ml-8 cursor-pointer ">
-            <RxCross1 className="text-4xl text-[#626263]" />
-          </button>
-        </div>
-        {/* Latest Search Section */}
-        <div className="px-6 mt-2 mb-6 flex max-w-[75%] items-center mx-auto">
-          <h2 className="text-gray-700 text-sm font-semibold mr-2">
-            Latest searches:
-          </h2>
-          <div className="flex flex-wrap gap-2">
-            {latestSearches.map((item, i) => (
-              <div
-                key={i}
-                className="flex items-center bg-gray-200 text-sm px-3 py-1 rounded-full text-gray-700"
+            <div className="flex max-w-[99%] z-50 mx-auto items-center pt-6 p-4">
+              <img
+                src="https://cdn11.bigcommerce.com/s-ew2v2d3jn1/images/stencil/250x64/g2-survey-logo_1611121872__30054.original.png"
+                className="w-[190px] h-full mr-4"
+                alt="G2 Survey"
+              />
+              <form
+                onSubmit={handleSearchSubmit}
+                className="relative flex items-center w-full ml-2 mx-auto border-b border-[#c5ccd3] bg-white rounded"
               >
-                <span className="mr-2">{item}</span>
+                <IoSearchSharp className="ml-6 mr-2 font-extrabold text-xl text-charcoal-black" />
+                <input
+                  type="text"
+                  placeholder="Search..."
+                  className="flex-1 px-3 py-4 text-2xl outline-none focus:outline-none"
+                  value={searchText}
+                  onChange={(e) => setSearchText(e.target.value)}
+                />
+                <MdOutlineKeyboardVoice className="mr-30 text-2xl text-charcoal" />
                 <button
-                  onClick={() => handleRemoveSearch(i)}
-                  className="text-gray-600 hover:text-black"
+                  type="submit"
+                  className="absolute right-0 cursor-pointer px-4 h-full text-2xl border-2 border-charcoal-black bg-gray-200 hover:bg-gray-100 focus:outline-none"
                 >
-                  <IoCloseOutline size={14} />
+                  Submit
                 </button>
-              </div>
-            ))}
-            {latestSearches.length > 0 && (
-              <button
-                onClick={handleClearAll}
-                className="text-red-500 text-sm font-medium hover:underline ml-2 cursor-pointer"
-              >
-                Delete all
+              </form>
+              {/* Close Icon */}
+              <button onClick={onClose} className="ml-8 cursor-pointer ">
+                <RxCross1 className="text-4xl text-[#626263]" />
               </button>
-            )}
-          </div>
-        </div>
-        {/* Bottom Section */}
-        <div className="flex flex-col md:flex-row px-12 pb-12">
-          {/* Left - Popular Searches */}
-          <div className="w-full md:w-[20%] p-5 bg-white">
-            <h3 className="font-semibold text-lg mb-2">Popular searches</h3>
-            <ul className="text-sm text-gray-700 space-y-3">
-              {POPULAR_SEARCHES.map((search, i) => (
-                <li key={i} className="hover:text-[#e62245] cursor-pointer">
-                  {search}
-                </li>
-              ))}
-            </ul>
-          </div>
-          {/* Right - Product Slider */}
-          <div className="w-full md:w-[80%] pl-10">
-            <div className="flex justify-between items-center mb-4 mx-2">
-              <h3 className="text-sm">
-                {searchText
-                  ? `${searchResults?.products?.length || 0} results found`
-                  : "Recommended products"}
-              </h3>
-              {searchText && displayProducts.length > 0 && (
-                <div className="flex items-center gap-4">
-                  <button
-                    onClick={handleViewAll}
-                    className="text-sm cursor-pointer text-[#e62245] hover:underline"
+            </div>
+            {/* Latest Search Section */}
+            <div className="px-6 mt-2 mb-6 flex max-w-[75%] items-center mx-auto">
+              <h2 className="text-gray-700 text-sm font-semibold mr-2">
+                Latest searches:
+              </h2>
+              <div className="flex flex-wrap gap-2">
+                {latestSearches.map((item, i) => (
+                  <div
+                    key={i}
+                    className="flex items-center bg-gray-200 text-sm px-3 py-1 rounded-full text-gray-700"
                   >
-                    View All
+                    <span className="mr-2">{item}</span>
+                    <button
+                      onClick={() => handleRemoveSearch(i)}
+                      className="text-gray-600 hover:text-black"
+                    >
+                      <IoCloseOutline size={14} />
+                    </button>
+                  </div>
+                ))}
+                {latestSearches.length > 0 && (
+                  <button
+                    onClick={handleClearAll}
+                    className="text-red-500 text-sm font-medium hover:underline ml-2 cursor-pointer"
+                  >
+                    Delete all
                   </button>
-                  {showResultsView && (
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm text-gray-600">Sort by:</span>
-                      <select
-                        className="appearance-none text-sm border rounded px-2 py-1"
-                        value={sortOrder}
-                        onChange={handleSort}
+                )}
+              </div>
+            </div>
+            {/* Bottom Section */}
+            <div className="flex flex-col md:flex-row px-12 pb-12">
+              {/* Left - Popular Searches */}
+              <div className="w-full md:w-[20%] p-5 bg-white">
+                <h3 className="font-semibold text-lg mb-2">Popular searches</h3>
+                <ul className="text-sm text-gray-700 space-y-3">
+                  {POPULAR_SEARCHES.map((search, i) => (
+                    <li key={i} className="hover:text-[#e62245] cursor-pointer">
+                      {search}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              {/* Right - Product Slider */}
+              <div className="w-full md:w-[80%] pl-10">
+                <div className="flex justify-between items-center mb-4 mx-2">
+                  <h3 className="text-sm">
+                    {searchText
+                      ? `${searchResults?.products?.length || 0} results found`
+                      : "Recommended products"}
+                  </h3>
+                  {searchText && displayProducts.length > 0 && (
+                    <div className="flex items-center gap-4">
+                      <button
+                        onClick={handleViewAll}
+                        className="text-sm cursor-pointer text-[#e62245] hover:underline"
                       >
-                        <option value="relevance">Relevance</option>
-                        <option value="price_asc">Price: Low to High</option>
-                        <option value="price_desc">Price: High to Low</option>
-                        <option value="name_asc">Name: A to Z</option>
-                      </select>
+                        View All
+                      </button>
+                      {showResultsView && (
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm text-gray-600">
+                            Sort by:
+                          </span>
+                          <select
+                            className="appearance-none text-sm border rounded px-2 py-1"
+                            value={sortOrder}
+                            onChange={handleSort}
+                          >
+                            <option value="relevance">Relevance</option>
+                            <option value="price_asc">
+                              Price: Low to High
+                            </option>
+                            <option value="price_desc">
+                              Price: High to Low
+                            </option>
+                            <option value="name_asc">Name: A to Z</option>
+                          </select>
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
-              )}
-            </div>
 
-            {isLoading ? (
-              <div className="text-center py-10">Loading...</div>
-            ) : displayProducts.length <= 4 ? (
-              <div className="grid grid-cols-4 gap-4">
-                {displayProducts.map((product, index) => (
-                  <Link
-                    onClick={() => trackProductView(product.id)}
-                    to={`/products/${product.id}/${slugify(
-                      product.product_name || ""
-                    )}`}
-                    key={index}
-                    className="h-full min-h-[350px] flex flex-col bg-white p-6 shadow-sm border border-gray-200 hover:border-gray-300 transition-all duration-200"
-                  >
-                    <img
-                      src={
-                        product.image_urls
-                          ? `${import.meta.env.VITE_OPEN_APIURL}${JSON.parse(
-                              product.image_urls
-                            )[0].replace(/^["\[]+|["\]]+$/g, "")}`
-                          : product.image
-                      }
-                      alt={product.product_name || product.name}
-                      className="mx-auto h-44 object-contain mb-3"
-                    />
-                    <p
-                      className="text-sm font-medium mb-1 hover:text-[#e62245]
+                {isLoading ? (
+                  <div className="text-center py-10">Loading...</div>
+                ) : displayProducts.length <= 4 ? (
+                  <div className="grid grid-cols-4 gap-4">
+                    {displayProducts.map((product, index) => (
+                      <Link
+                        onClick={() => trackProductView(product.id)}
+                        to={`/products/${product.id}/${slugify(
+                          product.product_name || ""
+                        )}`}
+                        key={index}
+                        className="h-full min-h-[350px] flex flex-col bg-white p-6 shadow-sm border border-gray-200 hover:border-gray-300 transition-all duration-200"
+                      >
+                        <img
+                          src={
+                            product.image_urls
+                              ? `${
+                                  import.meta.env.VITE_OPEN_APIURL
+                                }${JSON.parse(product.image_urls)[0].replace(
+                                  /^["\[]+|["\]]+$/g,
+                                  ""
+                                )}`
+                              : product.image
+                          }
+                          alt={product.product_name || product.name}
+                          className="mx-auto h-44 object-contain mb-3"
+                        />
+                        <p
+                          className="text-sm font-medium mb-1 hover:text-[#e62245]
                     cursor-pointer"
-                    >
-                      {product.product_name || product.name}
-                    </p>
-                    <div className="flex justify-between items-center mt-auto">
-                      <p className="font-semibold">{product.price}</p>
-                      {product?.isStock === 1 && (
-                        <button
-                          onClick={() => handleAddToCart(product)}
-                          className="mt-2 cursor-pointer w-10 ml-auto p-[6px] flex items-center justify-center gap-2 bg-[#e62245] text-white rounded hover:bg-[#d41f3f] transition-colors"
                         >
-                          <MdAddShoppingCart size={27} />
-                        </button>
-                      )}
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            ) : (
-              <Slider {...settings}>
-                {displayProducts.map((product, index) => (
-                  <div key={index} className="px-2 relative">
-                    {product?.sale === 1 && (
-                      <div className="absolute top-2 right-4 bg-[#e62245] text-white px-2 py-[1px] font-semibold rounded-sm text-sm">
-                        SALE
-                      </div>
-                    )}
-                    <Link
-                      onClick={() => trackProductView(product.id)}
-                      to={`/products/${product.id}/${slugify(
-                        product.product_name || ""
-                      )}`}
-                      className="h-full min-h-[350px] flex flex-col bg-white p-6 shadow-sm border border-gray-200 hover:border-gray-300 transition-all duration-200"
-                    >
-                      <img
-                        src={
-                          product.image_urls
-                            ? `${import.meta.env.VITE_OPEN_APIURL}${JSON.parse(
-                                product.image_urls
-                              )[0].replace(/^["\[]+|["\]]+$/g, "")}`
-                            : product.image
-                        }
-                        alt={product.product_name || product.name}
-                        className="mx-auto h-44 object-contain mb-3"
-                      />
-
-                      <p className="text-sm font-medium mb-1 hover:text-[#e62245] cursor-pointer">
-                        {product.product_name || product.name}
-                      </p>
-                      <div className="flex justify-between items-center mt-auto pt-4">
-                        <p className="text-sm font-semibold text-gray-800">
-                          ৳{product.price}
+                          {product.product_name || product.name}
                         </p>
-                        {product?.isStock === 1 && (
-                          <button className="bg-[#e62245] cursor-pointer p-[6px] rounded text-white hover:bg-[#d41d3f]">
-                            <MdAddShoppingCart size={24} />
-                          </button>
-                        )}
-                      </div>
-                    </Link>
+                        <div className="flex justify-between items-center mt-auto">
+                          <p className="font-semibold">{product.price}</p>
+                          {product?.isStock === 1 && (
+                            <button
+                              onClick={() => handleAddToCart(product)}
+                              className="mt-2 cursor-pointer w-10 ml-auto p-[6px] flex items-center justify-center gap-2 bg-[#e62245] text-white rounded hover:bg-[#d41f3f] transition-colors"
+                            >
+                              <MdAddShoppingCart size={27} />
+                            </button>
+                          )}
+                        </div>
+                      </Link>
+                    ))}
                   </div>
-                ))}
-              </Slider>
-            )}
+                ) : (
+                  <Slider {...settings}>
+                    {displayProducts.map((product, index) => (
+                      <div key={index} className="px-2 relative">
+                        {product?.sale === 1 && (
+                          <div className="absolute top-2 right-4 bg-[#e62245] text-white px-2 py-[1px] font-semibold rounded-sm text-sm">
+                            SALE
+                          </div>
+                        )}
+                        <Link
+                          onClick={() => trackProductView(product.id)}
+                          to={`/products/${product.id}/${slugify(
+                            product.product_name || ""
+                          )}`}
+                          className="h-full min-h-[350px] flex flex-col bg-white p-6 shadow-sm border border-gray-200 hover:border-gray-300 transition-all duration-200"
+                        >
+                          <img
+                            src={
+                              product.image_urls
+                                ? `${
+                                    import.meta.env.VITE_OPEN_APIURL
+                                  }${JSON.parse(product.image_urls)[0].replace(
+                                    /^["\[]+|["\]]+$/g,
+                                    ""
+                                  )}`
+                                : product.image
+                            }
+                            alt={product.product_name || product.name}
+                            className="mx-auto h-44 object-contain mb-3"
+                          />
+
+                          <p className="text-sm font-medium mb-1 hover:text-[#e62245] cursor-pointer">
+                            {product.product_name || product.name}
+                          </p>
+                          <div className="flex justify-between items-center mt-auto pt-4">
+                            <p className="text-sm font-semibold text-gray-800">
+                              ৳{product.price}
+                            </p>
+                            {product?.isStock === 1 && (
+                              <button className="bg-[#e62245] cursor-pointer p-[6px] rounded text-white hover:bg-[#d41d3f]">
+                                <MdAddShoppingCart size={24} />
+                              </button>
+                            )}
+                          </div>
+                        </Link>
+                      </div>
+                    ))}
+                  </Slider>
+                )}
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-      {isOpen && (
-        <div
-          className={`fixed top-0 left-0 right-0 bottom-0 w-full h-full z-[30] bg-black/85 transition-transform duration-500 ease-in-out transform ${
-            isOpen ? "translate-y-0" : "-translate-y-full"
-          }`}
-          onClick={onClose}
-        ></div>
+          {isOpen && (
+            <div
+              className={`fixed top-0 left-0 right-0 bottom-0 w-full h-full z-[30] bg-black/85 transition-transform duration-500 ease-in-out transform ${
+                isOpen ? "translate-y-0" : "-translate-y-full"
+              }`}
+              onClick={onClose}
+            ></div>
+          )}
+        </>
       )}
     </>
   );
