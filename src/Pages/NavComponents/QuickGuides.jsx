@@ -42,10 +42,10 @@ const QuickGuides = () => {
           Quick Guides
         </Link>
       </div>
-      <p className="text-[#e62245] font-light mt-3 mb-6 text-[28px]">
+      <p className="text-[#e62245] font-light mt-3 mb-4 text-[28px]">
         Quick Guides
       </p>
-      <h1 className="text-[#e62245] font-bold text-xl mb-8">
+      <h1 className="text-[#e62245] font-bold text-xl mb-4">
         G2 Survey 3D Laser Scanner Quick Guides
       </h1>
       {isLoading ? (
@@ -63,10 +63,10 @@ const QuickGuides = () => {
                     guide.photo
                   }`}
                   alt={guide.quick_guides_name}
-                  className="w-full h-auto object-contain mb-4"
+                  className="w-full h-52 object-contain mb-4"
                 />
                 <div className="border-b w-full mb-4"></div>
-                <h3 className="text-center text-sm mb-4">
+                <h3 className="text-center capitalize text-sm mb-4">
                   {guide.quick_guides_name}
                 </h3>
                 <button
@@ -85,7 +85,7 @@ const QuickGuides = () => {
               <button
                 onClick={handlePrev}
                 disabled={currentPage === 1}
-                className="px-3 cursor-pointer py-1 border hover:border-[#e62245] hover:text-[#e62245] flex items-center gap-1 disabled:opacity-50"
+                className="px-3 cursor-pointer py-1 border hover:text-[#e62245] flex items-center gap-1 disabled:opacity-50"
               >
                 <span>&lt;</span> Prev
               </button>
@@ -111,8 +111,8 @@ const QuickGuides = () => {
                         onClick={() => handlePageChange(pageNum)}
                         className={`px-3 cursor-pointer py-1 border ${
                           currentPage === pageNum
-                            ? "border-[#e62245] text-[#e62245]"
-                            : "hover:border-[#e62245] hover:text-[#e62245]"
+                            ? "bg-crimson-red text-white"
+                            : "bg-white hover:bg-gray-50"
                         }`}
                       >
                         {pageNum}
@@ -124,7 +124,7 @@ const QuickGuides = () => {
               <button
                 onClick={handleNext}
                 disabled={currentPage === pagination.totalPages}
-                className="px-3 cursor-pointer py-1 border hover:border-[#e62245] hover:text-[#e62245] flex items-center gap-1 disabled:opacity-50"
+                className="px-3 cursor-pointer py-1 border hover:text-[#e62245] flex items-center gap-1 disabled:opacity-50"
               >
                 Next <span>&gt;</span>
               </button>
