@@ -12,6 +12,11 @@ import useDataQuery from "../utils/useDataQuery";
 import SearchResultsView from "./SearchResultsView";
 import { Link } from "react-router-dom";
 import { slugify } from "../utils/slugify";
+import { parsePrice } from "../utils/parsePrice";
+import { useTrackProductView } from "../Hooks/useTrackProductView";
+import { useDispatch } from "react-redux";
+import Swal from "sweetalert2";
+import { addToCart } from "../features/AddToCart/AddToCart";
 
 const POPULAR_SEARCHES = [
   "rtc360",
@@ -27,6 +32,8 @@ const POPULAR_SEARCHES = [
 ];
 
 const SearchOverlay = ({ isOpen, onClose }) => {
+  const dispatch = useDispatch();
+  const { trackProductView } = useTrackProductView();
   const [searchText, setSearchText] = useState("");
   const [sortOrder, setSortOrder] = useState("relevance");
   const [showResultsView, setShowResultsView] = useState(false);
@@ -140,6 +147,24 @@ const SearchOverlay = ({ isOpen, onClose }) => {
     prevArrow: <PrevArrow />,
     nextArrow: <NextArrow />,
   };
+
+  const handleAddToCart = (product) => {
+      const itemToAdd = {
+        id: product.id,
+        product_name: product.product_name,
+        price: parsePrice(product.price),
+        quantity: 1,
+      };
+  
+      dispatch(addToCart(itemToAdd));
+      Swal.fire({
+        title: "Added to Cart",
+        text: `${product.product_name} has been added to your cart.`,
+        icon: "success",
+        timer: 2000,
+        showConfirmButton: false,
+      });
+    };
 
   return (
     <>
@@ -264,7 +289,7 @@ const SearchOverlay = ({ isOpen, onClose }) => {
               <div className="grid grid-cols-4 gap-4">
                 {displayProducts.map((product, index) => (
                   <Link
-                    onClick={onClose}
+                    onClick={() => trackProductView(product.id)}
                     to={`/products/${product.id}/${slugify(
                       product.product_name || ""
                     )}`}
@@ -291,7 +316,10 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                     <div className="flex justify-between items-center mt-auto">
                       <p className="font-semibold">{product.price}</p>
                       {product?.isStock === 1 && (
-                        <button className="mt-2 cursor-pointer w-10 ml-auto p-[6px] flex items-center justify-center gap-2 bg-[#e62245] text-white rounded hover:bg-[#d41f3f] transition-colors">
+                        <button
+                          onClick={() => handleAddToCart(product)}
+                          className="mt-2 cursor-pointer w-10 ml-auto p-[6px] flex items-center justify-center gap-2 bg-[#e62245] text-white rounded hover:bg-[#d41f3f] transition-colors"
+                        >
                           <MdAddShoppingCart size={27} />
                         </button>
                       )}
@@ -309,6 +337,7 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                       </div>
                     )}
                     <Link
+                      onClick={() => trackProductView(product.id)}
                       to={`/products/${product.id}/${slugify(
                         product.product_name || ""
                       )}`}
