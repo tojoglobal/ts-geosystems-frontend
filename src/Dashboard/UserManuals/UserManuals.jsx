@@ -186,7 +186,7 @@ const AddUserManuals = () => {
         </div>
         <button
           type="submit"
-          className="w-full bg-teal-600 cursor-pointer text-white py-2 px-4 rounded-md hover:bg-teal-700 transition"
+          className="w-full bg-teal-600 cursor-pointer text-white py-2 px-4 rounded-sm hover:bg-teal-700 transition"
         >
           {editingBrand ? "Update userManualse" : "Add userManualse"}
         </button>
