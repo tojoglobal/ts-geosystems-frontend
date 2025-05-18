@@ -6,6 +6,13 @@ import "swiper/css/navigation";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { Link } from "react-router-dom";
 import useDataQuery from "../../utils/useDataQuery";
+import { useTrackProductView } from "../../Hooks/useTrackProductView";
+import { parsePrice } from "../../utils/parsePrice";
+import { useDispatch } from "react-redux";
+import Swal from "sweetalert2";
+import { addToCart } from "../../features/AddToCart/AddToCart";
+import { slugify } from "../../utils/slugify";
+import { getProductType } from "../../utils/productOption";
 
 const tabOptions = [
   { name: "Featured Products", key: "featured" },
@@ -14,6 +21,8 @@ const tabOptions = [
 ];
 
 const ProductHighlights = () => {
+  const dispatch = useDispatch();
+  const { trackProductView } = useTrackProductView();
   const [activeTab, setActiveTab] = useState("featured");
   const [items, setItems] = useState([]);
   const swiperRef = useRef(null);
@@ -26,7 +35,6 @@ const ProductHighlights = () => {
     error,
   } = useDataQuery(["productHighlights"], "/api/product-highlights");
   const highlightsData = data?.data;
-  console.log(highlightsData);
 
   useEffect(() => {
     if (!isLoading && !error) {
@@ -35,6 +43,24 @@ const ProductHighlights = () => {
       else if (activeTab === "new") setItems(highlightsData.new || []);
     }
   }, [activeTab, highlightsData, isLoading, error]);
+
+  const handleAddToCart = (product) => {
+    const itemToAdd = {
+      id: product.id,
+      product_name: product.product_name,
+      price: parsePrice(product.price),
+      quantity: 1,
+    };
+
+    dispatch(addToCart(itemToAdd));
+    Swal.fire({
+      title: "Added to Cart",
+      text: `${product.product_name} has been added to your cart.`,
+      icon: "success",
+      timer: 2000,
+      showConfirmButton: false,
+    });
+  };
 
   const handleSlideChange = (swiper) => {
     setIsBeginning(swiper.isBeginning);
@@ -136,81 +162,106 @@ const ProductHighlights = () => {
             },
           }}
         >
-          {items.map((item, idx) => (
-            <SwiperSlide key={idx}>
-              <div className="relative flex flex-col items-center bg-white h-full">
-                {item?.sale === 1 && (
-                  <p className="absolute top-1 right-3 px-2 py-[1px] font-bold rounded-[4px] text-white text-[14px] bg-[#e62245] z-50">
-                    SALE
-                  </p>
-                )}
-                <Link
-                  to={`/product/${item.product_name
-                    .replace(/\s+/g, "-")
-                    .toLowerCase()}`}
-                >
-                  <div className="relative group w-full max-w-[200px] md:max-w-[260px] mx-auto">
-                    {item.image_urls &&
-                      JSON.parse(item.image_urls).length > 0 && (
-                        <>
-                          <img
-                            src={`${import.meta.env.VITE_OPEN_APIURL}${
-                              JSON.parse(item.image_urls)[0]
-                            }`}
-                            alt={item.product_name}
-                            className="w-full h-[256.19px] transition-opacity duration-300 group-hover:opacity-0"
-                          />
-                          {JSON.parse(item.image_urls).length > 1 && (
+          {items.map((item, idx) => {
+            const { isSimpleProduct } = getProductType(item);
+            return (
+              <SwiperSlide key={idx}>
+                <div className="relative flex flex-col items-center bg-white h-full">
+                  {item?.sale === 1 && (
+                    <p className="absolute top-1 right-3 px-2 py-[1px] font-bold rounded-[4px] text-white text-[14px] bg-[#e62245] z-50">
+                      SALE
+                    </p>
+                  )}
+                  <Link
+                    to={`/products/${item.id}/${slugify(
+                      item.product_name || ""
+                    )}`}
+                  >
+                    <div className="relative group w-full max-w-[200px] md:max-w-[260px] mx-auto">
+                      {item.image_urls &&
+                        JSON.parse(item.image_urls).length > 0 && (
+                          <>
                             <img
                               src={`${import.meta.env.VITE_OPEN_APIURL}${
-                                JSON.parse(item.image_urls)[1]
+                                JSON.parse(item.image_urls)[0]
                               }`}
-                              alt={`${item.product_name} hover`}
-                              className="w-full h-[256.19px] absolute top-0 left-0 transition-opacity duration-300 opacity-0 group-hover:opacity-100"
+                              alt={item.product_name}
+                              className="w-full h-[256.19px] transition-opacity duration-300 group-hover:opacity-0"
                             />
-                          )}
-                        </>
-                      )}
-                  </div>
-                </Link>
-                <div className="w-full border-t border-gray-200 mt-3 pt-2 flex flex-col flex-grow space-y-1">
-                  <p className="text-xs text-gray-700">
-                    {item.category ? JSON.parse(item.category).cat : "Category"}{" "}
-                    | Sku: {item.sku || "N/A"}
-                  </p>
-                  <div className="flex items-start">
-                    <Link
-                      to={`/product/${item.product_name
-                        .replace(/\s+/g, "-")
-                        .toLowerCase()}`}
-                      className="font-semibold text-sm text-gray-600 hover:text-[#e62245]"
-                    >
-                      {item.product_name}
-                    </Link>
-                  </div>
-                  <div className="space-x-2">
-                    <p className="flex items-center gap-2 text-sm font-bold text-[#222]">
-                      <span> ৳{item.price}</span>
-                      <span className="underline text-gray-400 text-sm">
-                        (Ex. VAT)
-                      </span>
+                            {JSON.parse(item.image_urls).length > 1 && (
+                              <img
+                                src={`${import.meta.env.VITE_OPEN_APIURL}${
+                                  JSON.parse(item.image_urls)[1]
+                                }`}
+                                alt={`${item.product_name} hover`}
+                                className="w-full h-[256.19px] absolute top-0 left-0 transition-opacity duration-300 opacity-0 group-hover:opacity-100"
+                              />
+                            )}
+                          </>
+                        )}
+                    </div>
+                  </Link>
+                  <div className="w-full border-t border-gray-200 mt-3 pt-2 flex flex-col flex-grow space-y-1">
+                    <p className="text-xs capitalize text-gray-700">
+                      {item.category
+                        ? JSON.parse(item.category).cat
+                        : "Category"}{" "}
+                      | Sku: {item.sku || "N/A"}
                     </p>
-                    {item.discountPrice && (
-                      <span className="text-xs line-through text-gray-400">
-                        ৳{item.discountPrice}
-                      </span>
+                    <div className="flex items-start">
+                      <Link
+                        to={`/products/${item.id}/${slugify(
+                          item.product_name || ""
+                        )}`}
+                        className="font-semibold min-h-10 text-sm text-gray-600 hover:text-[#e62245]"
+                      >
+                        {item.product_name}
+                      </Link>
+                    </div>
+                    <div className="space-x-2">
+                      <p className="flex items-center gap-2 text-sm font-bold text-[#222]">
+                        <span> ৳{item.price}</span>
+                        <span className="underline text-gray-400 text-sm">
+                          (Ex. VAT)
+                        </span>
+                      </p>
+                      {item.discountPrice && (
+                        <span className="text-xs line-through text-gray-400">
+                          ৳{item.discountPrice}
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-1 text-sm text-[#b3b3b5]">
+                      ৳{item.price}{" "}
+                      <span className="underline">(Inc. VAT)</span>
+                    </div>
+                    {item?.isStock === 1 && (
+                      <div>
+                        {isSimpleProduct ? (
+                          <button
+                            onClick={() => handleAddToCart(item)}
+                            className="w-full cursor-pointer bg-[#e62245] text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
+                          >
+                            ADD TO CART
+                          </button>
+                        ) : (
+                          <Link
+                            onClick={() => trackProductView(item.id)}
+                            to={`/products/${item.id}/${slugify(
+                              item.product_name || ""
+                            )}`}
+                            className="w-full block text-center cursor-pointer bg-[#e62245] text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
+                          >
+                            CHOOSE OPTION
+                          </Link>
+                        )}
+                      </div>
                     )}
                   </div>
-                  <div className="flex items-center gap-1 text-sm text-[#b3b3b5]">
-                    ৳{item.price} <span className="underline">(Inc. VAT)</span>
-                  </div>
-                  <button className="mt-1 cursor-pointer bg-[#e62245] hover:bg-[#c91d3a] text-white text-sm font-semibold py-1.5 px-4 rounded w-full transition-colors duration-200">
-                    ADD TO CART
-                  </button>
                 </div>
-              </div>
-            </SwiperSlide>
-          ))}
+              </SwiperSlide>
+            );
+          })}
         </Swiper>
       </div>
     </div>
