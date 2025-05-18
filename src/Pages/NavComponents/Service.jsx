@@ -1,10 +1,8 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { useAxiospublic } from "../../Hooks/useAxiospublic";
+import useDataQuery from "../../utils/useDataQuery";
 
 const Service = () => {
-  const axiosPublicUrl = useAxiospublic();
   const [formData, setFormData] = useState({
     name: "",
     company: "",
@@ -22,18 +20,28 @@ const Service = () => {
   });
 
   const {
-    data: serviceContent,
+    data = {},
     isLoading,
     isError,
-  } = useQuery({
-    queryKey: ["serviceContent"],
-    queryFn: async () => {
-      const { data } = await axiosPublicUrl.get("/api/service");
-      return data.data;
-    },
-  });
+  } = useDataQuery(["serviceContent"], "/api/service");
+  const serviceContent = data?.data || [];
 
-  if (isLoading) {
+  const { data: images = [], isLoading: loading } = useDataQuery(
+    ["serviceImages"],
+    "/api/get-service-images"
+  ); 
+  
+  // Filter and sort images for the grid (order 1-4 where show is true)
+  const gridImages = images
+    .filter((img) => img.show && [1, 2, 3, 4].includes(img.order))
+    .sort((a, b) => a.order - b.order);
+
+  // Filter and sort images for the banner (order 5-6 where show is true)
+  const bannerImages = images
+    .filter((img) => img.show && [5, 6].includes(img.order))
+    .sort((a, b) => a.order - b.order);
+
+  if (isLoading || loading) {
     return <p>Loading...</p>;
   }
 
@@ -96,16 +104,14 @@ const Service = () => {
         dangerouslySetInnerHTML={{ __html: serviceContent?.description }}
       />
       {/* Grid Images */}
-      {serviceContent?.image_grid && (
-        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-          {[1, 2, 3, 4].map((index) => (
-            <div key={index}>
+      {gridImages.length > 0 && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-12">
+          {gridImages.map((image) => (
+            <div key={image.order}>
               <img
-                src={`${import.meta.env.VITE_OPEN_APIURL}${
-                  serviceContent.image_grid
-                }`}
-                alt="Service grid image"
-                className="w-full h-auto rounded-[4px]"
+                src={`${import.meta.env.VITE_OPEN_APIURL}${image.filePath}`}
+                alt={`Service grid image ${image.order}`}
+                className="w-full h-64 rounded-[4px]"
               />
             </div>
           ))}
@@ -119,16 +125,14 @@ const Service = () => {
         />
       )}
       {/* Banner Images */}
-      {serviceContent?.image_banner && (
+      {bannerImages.length > 0 && (
         <div className="space-y-6 mb-12">
-          {[1, 2].map((index) => (
+          {bannerImages.map((image) => (
             <img
-              key={index}
-              src={`${import.meta.env.VITE_OPEN_APIURL}${
-                serviceContent.image_banner
-              }`}
-              alt="Service center"
-              className="w-full rounded-sm"
+              key={image.order}
+              src={`${import.meta.env.VITE_OPEN_APIURL}${image.filePath}`}
+              alt={`Service banner ${image.order}`}
+              className="w-full h-[490px] rounded-sm"
             />
           ))}
         </div>
