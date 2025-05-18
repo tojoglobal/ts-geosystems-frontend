@@ -375,7 +375,7 @@ const UsedEquipment = () => {
                     </div>
                   </div>
                 ) : (
-                  <div className="flex flex-col flex-grow border-t pt-3">
+                  <div className="flex flex-col flex-grow mt-3">
                     <div className="flex-grow">
                       <div className="border-t border-gray-300 pt-2 text-xs text-gray-600 mb-1">
                         {product.brand_name} | Sku: {product.sku}
@@ -456,7 +456,7 @@ const UsedEquipment = () => {
                 {currentPage > 1 && (
                   <button
                     onClick={() => setCurrentPage(currentPage - 1)}
-                    className="border px-3 py-1 rounded hover:bg-gray-100 transition text-sm"
+                    className="border cursor-pointer px-3 py-1 rounded hover:bg-gray-100 transition text-sm"
                   >
                     ← Previous
                   </button>
@@ -466,7 +466,7 @@ const UsedEquipment = () => {
                     <button
                       key={idx}
                       onClick={() => setCurrentPage(idx + 1)}
-                      className={`border px-3 py-1 rounded text-sm ${
+                      className={`border cursor-pointer px-3 py-1 rounded text-sm ${
                         currentPage === idx + 1
                           ? "bg-gray-200"
                           : "hover:bg-gray-100"
@@ -480,7 +480,7 @@ const UsedEquipment = () => {
               {currentPage < totalPages && (
                 <button
                   onClick={() => setCurrentPage(currentPage + 1)}
-                  className="border px-3 py-1 rounded hover:bg-gray-100 transition text-sm"
+                  className="border px-3 cursor-pointer py-1 rounded hover:bg-gray-100 transition text-sm"
                 >
                   Next →
                 </button>
@@ -555,7 +555,7 @@ const UsedEquipment = () => {
             </p>
 
             <div className="flex justify-center">
-              <button className="bg-[#e62245] text-white px-6 py-2 rounded-md hover:bg-[#c81e3b] transition">
+              <button className="bg-[#e62245] text-white px-6 py-1.5 rounded-[4px] hover:bg-[#c81e3b] transition">
                 Contact Us
               </button>
             </div>

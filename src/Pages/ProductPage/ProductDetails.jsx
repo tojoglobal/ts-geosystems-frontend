@@ -26,7 +26,7 @@ const ProductDetails = () => {
     isLoading,
     error,
   } = useDataQuery(["productDetails", id], `/api/products/${id}`, !!id);
-
+console.log(product);
   // Quantity handlers
   const incrementQuantity = () => {
     setQuantity((prev) => prev + 1);
@@ -62,6 +62,9 @@ const ProductDetails = () => {
   // Parse video URLs if available
   const videoUrls = product?.video_urls ? product.video_urls.split(",") : [];
 
+  const category = product?.category ? JSON.parse(product.category).cat : null;
+  const currentProductId = product?.id;
+  
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -366,7 +369,7 @@ const ProductDetails = () => {
           </div>
         </div>
       </div>
-      <Recommended />
+      <Recommended category={category} currentProductId={currentProductId} />
     </div>
   );
 };
