@@ -11,6 +11,7 @@ import { addToCart } from "../../features/AddToCart/AddToCart";
 import useDataQuery from "../../utils/useDataQuery";
 import { useTrackProductView } from "../../Hooks/useTrackProductView";
 import { slugify } from "../../utils/slugify";
+import { getProductType } from "../../utils/productOption";
 
 const sortOptions = [
   "FEATURED ITEMS",
@@ -158,6 +159,7 @@ const Clearance = () => {
           } gap-4`}
         >
           {products.map((product) => {
+            const { isSimpleProduct } = getProductType(product);
             let images = [];
             try {
               images = JSON.parse(product.image_urls);
@@ -288,12 +290,26 @@ const Clearance = () => {
                       </div>
                       <div className="flex gap-4 mt-2 flex-row">
                         {product?.isStock === 1 && (
-                          <button
-                            onClick={() => handleAddToCart(product)}
-                            className="bg-[#e62245] cursor-pointer text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
-                          >
-                            ADD TO CART
-                          </button>
+                          <div>
+                            {isSimpleProduct ? (
+                              <button
+                                onClick={() => handleAddToCart(product)}
+                                className="bg-[#e62245] cursor-pointer text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
+                              >
+                                ADD TO CART
+                              </button>
+                            ) : (
+                              <Link
+                                onClick={() => trackProductView(product.id)}
+                                to={`/products/${product.id}/${slugify(
+                                  product.product_name || ""
+                                )}`}
+                                className="w-full block text-center cursor-pointer bg-[#e62245] text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
+                              >
+                                CHOOSE OPTION
+                              </Link>
+                            )}
+                          </div>
                         )}
                         <div className="flex items-center gap-2">
                           <input
@@ -343,12 +359,26 @@ const Clearance = () => {
                       </div>
                       <div className="flex flex-col gap-2 mt-2">
                         {product?.isStock === 1 && (
-                          <button
-                            onClick={() => handleAddToCart(product)}
-                            className="bg-[#e62245] cursor-pointer text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
-                          >
-                            ADD TO CART
-                          </button>
+                          <div>
+                            {isSimpleProduct ? (
+                              <button
+                                onClick={() => handleAddToCart(product)}
+                                className="bg-[#e62245] w-full cursor-pointer text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
+                              >
+                                ADD TO CART
+                              </button>
+                            ) : (
+                              <Link
+                                onClick={() => trackProductView(product.id)}
+                                to={`/products/${product.id}/${slugify(
+                                  product.product_name || ""
+                                )}`}
+                                className="w-full block text-center cursor-pointer bg-[#e62245] text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
+                              >
+                                CHOOSE OPTION
+                              </Link>
+                            )}
+                          </div>
                         )}
                         <div className="flex items-center gap-2 mt-1">
                           <input

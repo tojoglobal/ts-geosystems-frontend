@@ -9,6 +9,10 @@ import { useQuery } from "@tanstack/react-query";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import { slugify } from "../../utils/slugify";
 import { useTrackProductView } from "../../Hooks/useTrackProductView";
+import { getProductType } from "../../utils/productOption";
+import { parsePrice } from "../../utils/parsePrice";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../../features/AddToCart/AddToCart";
 
 const sortOptions = [
   "FEATURED ITEMS",
@@ -23,6 +27,7 @@ const sortOptions = [
 
 const UsedEquipment = () => {
   const axiosPublicUrl = useAxiospublic();
+  const dispatch = useDispatch();
   const { trackProductView } = useTrackProductView();
   const [viewMode, setViewMode] = useState("grid");
   const [sortBy, setSortBy] = useState("FEATURED ITEMS");
@@ -63,6 +68,24 @@ const UsedEquipment = () => {
     );
   };
 
+  const handleAddToCart = (product) => {
+      const itemToAdd = {
+        id: product.id,
+        product_name: product.product_name,
+        price: parsePrice(product.price),
+        quantity: 1,
+      };
+  
+      dispatch(addToCart(itemToAdd));
+      Swal.fire({
+        title: "Added to Cart",
+        text: `${product.product_name} has been added to your cart.`,
+        icon: "success",
+        timer: 2000,
+        showConfirmButton: false,
+      });
+    };
+
   const handleCompareSelected = () => {
     if (compareItems.length < 2) {
       Swal.fire({
@@ -86,7 +109,7 @@ const UsedEquipment = () => {
       return field;
     }
   };
-  
+
   if (isLoading) return <div>Loading...</div>;
 
   return (
@@ -181,6 +204,7 @@ const UsedEquipment = () => {
           } gap-4`}
         >
           {currentProducts.map((product) => {
+            const { isSimpleProduct } = getProductType(product);
             let images = [];
             try {
               images = JSON.parse(product.image_urls);
@@ -311,9 +335,26 @@ const UsedEquipment = () => {
                       </div>
                       <div className="flex gap-4 mt-2 flex-row">
                         {product?.isStock === 1 && (
-                          <button className="bg-[#e62245] cursor-pointer text-[14px] text-white px-6 py-[5px] rounded-[3px] hover:bg-[#d41d3f] font-bold transition-colors">
-                            ADD TO CART
-                          </button>
+                          <div>
+                            {isSimpleProduct ? (
+                              <button
+                                onClick={() => handleAddToCart(product)}
+                                className="bg-[#e62245] cursor-pointer text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
+                              >
+                                ADD TO CART
+                              </button>
+                            ) : (
+                              <Link
+                                onClick={() => trackProductView(product.id)}
+                                to={`/products/${product.id}/${slugify(
+                                  product.product_name || ""
+                                )}`}
+                                className="w-full block text-center cursor-pointer bg-[#e62245] text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
+                              >
+                                CHOOSE OPTION
+                              </Link>
+                            )}
+                          </div>
                         )}
                         <div className="flex items-center gap-2">
                           <input
@@ -363,9 +404,26 @@ const UsedEquipment = () => {
                       </div>
                       <div className="flex flex-col gap-2 mt-2">
                         {product?.isStock === 1 && (
-                          <button className="bg-[#e62245] cursor-pointer text-[14px] text-white px-6 py-[5px] rounded-[3px] hover:bg-[#d41d3f] font-bold transition-colors">
-                            ADD TO CART
-                          </button>
+                          <div>
+                            {isSimpleProduct ? (
+                              <button
+                                onClick={() => handleAddToCart(product)}
+                                className="bg-[#e62245] w-full cursor-pointer text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
+                              >
+                                ADD TO CART
+                              </button>
+                            ) : (
+                              <Link
+                                onClick={() => trackProductView(product.id)}
+                                to={`/products/${product.id}/${slugify(
+                                  product.product_name || ""
+                                )}`}
+                                className="w-full block text-center cursor-pointer bg-[#e62245] text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
+                              >
+                                CHOOSE OPTION
+                              </Link>
+                            )}
+                          </div>
                         )}
                         <div className="flex items-center gap-2 mt-1">
                           <input

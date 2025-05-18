@@ -13,6 +13,7 @@ import { slugify } from "../utils/slugify";
 import { parsePrice } from "../utils/parsePrice";
 import { useBreadcrumbLabel } from "../utils/useBreadcrumbLabel";
 import { useTrackProductView } from "../Hooks/useTrackProductView";
+import { getProductType } from "../utils/productOption";
 
 const sortOptions = [
   { label: "NEWEST ITEMS", value: "newest" },
@@ -199,6 +200,7 @@ const CategoryProduct = () => {
           } gap-4`}
         >
           {products?.map((product) => {
+            const { isSimpleProduct } = getProductType(product);
             let images = [];
             try {
               images = JSON.parse(product.image_urls);
@@ -221,9 +223,6 @@ const CategoryProduct = () => {
 
             const isHovered = hoveredProductId === product.id;
             const displayImage = isHovered ? secondImage : firstImage;
-            const options = product.product_options
-              ? JSON.parse(product.product_options)
-              : [];
             return (
               <div
                 key={product.id}
@@ -349,23 +348,23 @@ const CategoryProduct = () => {
                       <div className="flex gap-4 mt-2 flex-row">
                         {product?.isStock === 1 && (
                           <div>
-                            {options.length < 2 ? (
+                            {isSimpleProduct ? (
+                              <button
+                                onClick={() => handleAddToCart(product)}
+                                className="bg-[#e62245] cursor-pointer text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
+                              >
+                                ADD TO CART
+                              </button>
+                            ) : (
                               <Link
                                 onClick={() => trackProductView(product.id)}
                                 to={`/products/${product.id}/${slugify(
                                   product.product_name || ""
                                 )}`}
-                                className="cursor-pointer bg-[#e62245] text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
+                                className="w-full block text-center cursor-pointer bg-[#e62245] text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
                               >
                                 CHOOSE OPTION
                               </Link>
-                            ) : (
-                              <button
-                                onClick={() => handleAddToCart(product)}
-                                className="cursor-pointer bg-[#e62245] text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
-                              >
-                                ADD TO CART
-                              </button>
                             )}
                           </div>
                         )}
@@ -420,7 +419,14 @@ const CategoryProduct = () => {
                       <div className="flex flex-col gap-2 mt-2">
                         {product?.isStock === 1 && (
                           <div>
-                            {options.length < 2 ? (
+                            {isSimpleProduct ? (
+                              <button
+                                onClick={() => handleAddToCart(product)}
+                                className="bg-[#e62245] w-full cursor-pointer text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
+                              >
+                                ADD TO CART
+                              </button>
+                            ) : (
                               <Link
                                 onClick={() => trackProductView(product.id)}
                                 to={`/products/${product.id}/${slugify(
@@ -430,13 +436,6 @@ const CategoryProduct = () => {
                               >
                                 CHOOSE OPTION
                               </Link>
-                            ) : (
-                              <button
-                                onClick={() => handleAddToCart(product)}
-                                className="w-full cursor-pointer bg-[#e62245] text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
-                              >
-                                ADD TO CART
-                              </button>
                             )}
                           </div>
                         )}
