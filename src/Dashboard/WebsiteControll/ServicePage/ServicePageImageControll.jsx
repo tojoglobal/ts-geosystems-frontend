@@ -78,7 +78,7 @@ const ServcePageImageControll = () => {
 
   return (
     <div className="mt-7">
-      <h1 className="text-xl text-center mb-3">service Image Controls</h1>
+      <h1 className="text-xl mb-3">Service Image Controls</h1>
       <form onSubmit={(e) => e.preventDefault()}>
         <div className="grid md:grid-cols-2 gap-4 mb-4">
           {images.map((img, idx) => (

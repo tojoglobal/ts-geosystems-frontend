@@ -33,10 +33,10 @@ const DropzoneImageItem = ({ img, idx, onDrop, onToggle }) => {
     : null;
 
   return (
-    <div className="border p-3 rounded-md shadow-sm space-y-2">
+    <div className="border border-gray-500 p-3 rounded-md shadow-sm space-y-2">
       <div
         {...getRootProps()}
-        className="cursor-pointer border p-2 rounded-md bg-gray-100 text-center"
+        className="cursor-pointer p-2 rounded-md text-center"
       >
         <input {...getInputProps()} />
         {imageSrc ? (

@@ -131,7 +131,7 @@ const AdminUpdateServicePage = () => {
               type="text"
               id="title"
               {...register("title", { required: "Title is required" })}
-              className="w-full border border-gray-300 rounded p-2 focus:outline-none focus:ring focus:ring-[#e62245]"
+              className="w-full border border-gray-500 rounded p-2 focus:outline-none focus:ring focus:ring-[#e62245]"
               placeholder="Enter page title"
             />
           </div>
