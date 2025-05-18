@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+import Swal from "sweetalert2";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AlertCircle } from "lucide-react";
 import { useSelector } from "react-redux";
@@ -29,11 +31,18 @@ const UserInbox = () => {
     formState: { errors, isSubmitting },
     reset,
     setError,
-  } = useForm({
-    defaultValues: {
-      selectedOrder: data[0]?.order_id || "",
-    },
-  });
+    watch,
+  } = useForm();
+
+  useEffect(() => {
+    if (data.length > 0) {
+      reset({
+        selectedOrder: data[0]?.order_id || "",
+        subject: "",
+        message: "",
+      });
+    }
+  }, [data, reset]);
 
   // Mutation for sending message
   const sendMessageMutation = useMutation({
@@ -42,7 +51,11 @@ const UserInbox = () => {
       return res.data;
     },
     onSuccess: () => {
-      toast.success("Message sent successfully!");
+      Swal.fire({
+        title: "Success",
+        text: "Message sent successfully!",
+        icon: "success",
+      });
       reset();
       queryClient.invalidateQueries(["userMessages"]);
     },
@@ -68,6 +81,7 @@ const UserInbox = () => {
 
   const handleClear = () => {
     reset({
+      selectedOrder: watch("selectedOrder"),
       subject: "",
       message: "",
     });
@@ -112,7 +126,7 @@ const UserInbox = () => {
                 Order:
               </label>
               <select
-                className="w-full appearance-none border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:ring-crimson-red"
+                className="w-full text-sm !text-gray-500 appearance-none border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:ring-crimson-red"
                 {...register("selectedOrder", {
                   required: "Please select an order",
                 })}
@@ -140,7 +154,7 @@ const UserInbox = () => {
               </label>
               <input
                 type="text"
-                className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:ring-crimson-red"
+                className="w-full text-sm !text-gray-500 border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:ring-crimson-red"
                 disabled={isSubmitting}
                 {...register("subject", {
                   required: "You must enter a subject",
@@ -164,7 +178,7 @@ const UserInbox = () => {
               </label>
               <textarea
                 rows={6}
-                className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:ring-crimson-red"
+                className="w-full text-sm !text-gray-500 border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:ring-crimson-red"
                 disabled={isSubmitting}
                 {...register("message", {
                   required: "You must enter a message",
@@ -186,7 +200,7 @@ const UserInbox = () => {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className={`bg-[#E91E63] text-white px-4 py-2 rounded hover:bg-[#D81B60] transition-colors flex items-center ${
+                className={`bg-[#E91E63] cursor-pointer text-white px-4 py-2 rounded hover:bg-[#D81B60] transition-colors flex items-center ${
                   isSubmitting ? "opacity-75 cursor-not-allowed" : ""
                 }`}
               >
@@ -222,7 +236,7 @@ const UserInbox = () => {
                 type="button"
                 onClick={handleClear}
                 disabled={isSubmitting}
-                className="bg-gray-200 text-gray-800 px-4 py-2 rounded hover:bg-gray-300 transition-colors"
+                className="bg-gray-200 cursor-pointer text-gray-800 px-4 py-2 rounded hover:bg-gray-300 transition-colors"
               >
                 CLEAR
               </button>

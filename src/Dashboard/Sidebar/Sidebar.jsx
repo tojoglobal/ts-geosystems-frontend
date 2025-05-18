@@ -20,6 +20,7 @@ import {
   LifeBuoy,
   BookUser,
   BookmarkCheck,
+  Tags,
 } from "lucide-react";
 import SidebarProfileDropdown from "./SidebarProfileDropdown/SidebarProfileDropdown";
 import logo from "/TS-WEB-LOGO.png";
@@ -92,6 +93,11 @@ const menuItems = [
     label: "Promo Code",
     icon: <MdLocalOffer size={20} />,
     to: "/dashboard/promocodemanager",
+  },
+  {
+    label: "Subscriber",
+    icon: <Tags size={20} />,
+    to: "/dashboard/subscriber",
   },
   {
     label: "Add Brands",

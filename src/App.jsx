@@ -86,6 +86,7 @@ import AddNewAddress from "./UserAccount/AddNewAddress";
 import AddUserManuals from "./Dashboard/UserManuals/UserManuals";
 import AddQuickGuides from "./Dashboard/QuickGuides/QuickGuides";
 import Chat from "./Dashboard/Chat/Chat";
+import Subscriber from "./Dashboard/Subscriber/Subscriber";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -206,6 +207,7 @@ const AppLayout = () => {
           <Route path="support" element={<AdminSupportData />} />
           {/* promoCode */}
           <Route path="promocodemanager" element={<PromoCodeManager />} />
+          <Route path="subscriber" element={<Subscriber />} />
           {/* add taxesmanager */}
           <Route path="taxesmanager" element={<TaxManager />} />
           {/* blog routes */}

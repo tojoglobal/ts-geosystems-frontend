@@ -1,9 +1,43 @@
+import Swal from "sweetalert2";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import SocialButtons from "../Components/SocialButtons";
 import { Link } from "react-router-dom";
+import { useAxiospublic } from "../Hooks/useAxiospublic";
 
 const Footer = () => {
   const { user } = useSelector((state) => state.authUser);
+  const axiosPublic = useAxiospublic();
+  const [email, setEmail] = useState(user?.email || "");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubscribe = async (e) => {
+    e.preventDefault();
+    if (!email) return;
+
+    setIsSubmitting(true);
+    try {
+      const res = await axiosPublic.post("/api/subscribers", { email });
+      Swal.fire({
+        title: "Success!",
+        text: res.data.message,
+        icon: "success",
+      });
+      setEmail("");
+    } catch (error) {
+      Swal.fire({
+        title: "Error!",
+        text: error.response?.data?.error || "Failed to subscribe",
+        icon: "error",
+        background: "#1e293b",
+        color: "#f8fafc",
+        confirmButtonColor: "#e11d48",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <footer className="bg-[#585c5d] text-white pt-12">
       <div className="max-w-[85%] mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 pb-10">
@@ -88,16 +122,25 @@ const Footer = () => {
             Signup for our newsletter to receive specials and up to date product
             news and releases.
           </p>
-          <div className="flex mb-4">
+          <form onSubmit={handleSubscribe} className="flex mb-4">
             <input
               type="email"
-              placeholder={user?.email || "Your E-mail"}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Your E-mail"
               className="w-full py-2 px-3 placeholder:text-sm placeholder:italic placeholder:text-black text-sm italic placeholder:font-normal bg-white rounded-l-[4px]"
+              required
             />
-            <button className="bg-[#af1334] px-4 py-2 rounded-r-sm font-medium">
-              JOIN
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className={`bg-[#af1334] cursor-pointer px-4 py-2 rounded-r-sm font-medium ${
+                isSubmitting ? "opacity-75" : ""
+              }`}
+            >
+              {isSubmitting ? "Joining..." : "JOIN"}
             </button>
-          </div>
+          </form>
           <SocialButtons />
         </div>
       </div>
