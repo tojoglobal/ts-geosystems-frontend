@@ -33,6 +33,7 @@ import {
   MdPercent,
   MdWebStories,
 } from "react-icons/md";
+import { BsQuestionCircle } from "react-icons/bs";
 const menuItems = [
   {
     label: "Dashboard",
@@ -58,6 +59,11 @@ const menuItems = [
     label: "Support",
     icon: <LifeBuoy size={20} />,
     to: "/dashboard/support",
+  },
+  {
+    label: "Service Inquiries",
+    icon: <BsQuestionCircle size={20} />,
+    to: "/dashboard/service-inquiries",
   },
   {
     label: "Product",
@@ -118,7 +124,6 @@ const menuItems = [
     icon: <MdWebStories size={20} />,
     submenu: [
       { label: "Home Page", to: "/dashboard/home-page" },
-      { label: "Sent", to: "/dashboard/email/sent" },
       { label: "Hire", to: "/dashboard/hire" },
       { label: "Service", to: "/dashboard/service" },
       { label: "About Us", to: "/dashboard/about-us" },

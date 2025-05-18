@@ -87,6 +87,9 @@ import AddUserManuals from "./Dashboard/UserManuals/UserManuals";
 import AddQuickGuides from "./Dashboard/QuickGuides/QuickGuides";
 import Chat from "./Dashboard/Chat/Chat";
 import Subscriber from "./Dashboard/Subscriber/Subscriber";
+import AdminServiceInquiries from "./Dashboard/Services/AdminServiceInquiries";
+import MailView from "./Dashboard/Email/MailView";
+import Inbox from "./Dashboard/Email/Inbox";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -183,7 +186,6 @@ const AppLayout = () => {
           <Route index element={<Dashboard />} />
           <Route path="viewprofile" element={<ViewProfile />} />
           <Route path="update-profile" element={<UpdateProfile />} />
-
           {/* product route */}
           <Route path="product" element={<ProductTable />} />
           <Route path="add-product" element={<ProductAddForm />} />
@@ -204,6 +206,7 @@ const AppLayout = () => {
           <Route path="home-page" element={<HomePageControl />} />
           <Route path="client-messages" element={<ClientMessages />} />
           <Route path="trade-in" element={<AdminTradeIn />} />
+          {/* support route */}
           <Route path="support" element={<AdminSupportData />} />
           {/* promoCode */}
           <Route path="promocodemanager" element={<PromoCodeManager />} />
@@ -216,12 +219,19 @@ const AppLayout = () => {
           <Route path="ts-blog/view/:id" element={<BlogView />} />
           <Route path="ts-blog/create" element={<BlogCreate />} />
           <Route path="ts-blog/edit/:id" element={<BlogUpdate />} />
-
           {/* author route */}
           <Route path="author" element={<AuthorManager />} />
           {/* Blog Type route */}
           <Route path="blog-type" element={<BlogTypeManage />} />
+          {/* service-inquiries route  */}
+          <Route path="service-inquiries" element={<AdminServiceInquiries />} />
 
+          {/* email routes */}
+          <Route path="email/inbox" element={<MailView />} />
+          <Route
+            path="email/sent"
+            element={<Inbox userEmail={"no-reply@tsgb.site"} />}
+          />
           {/* dynamic about page */}
           <Route path="hire" element={<AdminUpdateHire />} />
           <Route path="service" element={<AdminUpdateService />} />

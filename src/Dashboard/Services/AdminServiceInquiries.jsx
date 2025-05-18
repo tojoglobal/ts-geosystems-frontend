@@ -2,65 +2,51 @@ import Swal from "sweetalert2";
 import useDataQuery from "../../utils/useDataQuery";
 import { Eye } from "lucide-react";
 
-const AdminSupportData = () => {
+const AdminServiceInquiries = () => {
   const { data = [], isLoading } = useDataQuery(
-    ["adminSupportData"],
-    "/api/support"
+    ["service-inquiries"],
+    "/api/service-inquiries"
   );
 
-  const showFullDetails = (support) => {
-    // Parse supportIssues (may be a double-stringified array)
-    let issuesArr = [];
-    try {
-      let parsed = support.supportIssues;
-      if (typeof parsed === "string") parsed = JSON.parse(parsed);
-      if (typeof parsed === "string") parsed = JSON.parse(parsed);
-      issuesArr = Array.isArray(parsed) ? parsed : [];
-    } catch {
-      issuesArr = [];
-    }
-
-    // Parse files (array, may be empty)
+  const showFullDetails = (inquiry) => {
+    // Parse file_paths as array
     let files = [];
     try {
-      let parsed = support.files;
-      if (typeof parsed === "string") parsed = JSON.parse(parsed);
-      files = Array.isArray(parsed) ? parsed : [];
+      files = JSON.parse(inquiry.file_paths || "[]");
     } catch {
       files = [];
     }
 
     Swal.fire({
-      title: `Support Request from ${support.name}`,
+      title: `Service Inquiry from ${inquiry.name}`,
       html: `
         <div class="text-left text-gray-300">
           <div class="grid grid-cols-2 gap-4 mb-4">
             <div>
-              <p class="mb-2"><strong>Company:</strong> ${support.company}</p>
-              <p class="mb-2"><strong>Email:</strong> ${support.email}</p>
-              <p class="mb-2"><strong>Phone:</strong> ${support.phone}</p>
+              <p class="mb-2"><strong>Company:</strong> ${inquiry.company}</p>
+              <p class="mb-2"><strong>Email:</strong> ${inquiry.email}</p>
+              <p class="mb-2"><strong>Phone:</strong> ${inquiry.phone}</p>
               <p class="mb-2"><strong>Equipment:</strong> ${
-                support.equipment
+                inquiry.equipment
               }</p>
-              <p class="mb-2"><strong>Model:</strong> ${support.model}</p>
-              <p class="mb-2"><strong>Support Issues:</strong> ${
-                issuesArr.length
-                  ? issuesArr
-                      .map(
-                        (i) =>
-                          `<span class="bg-slate-700 rounded px-2 py-1 mr-1">${i}</span>`
-                      )
-                      .join(" ")
-                  : "None"
+              <p class="mb-2"><strong>Model:</strong> ${inquiry.model}</p>
+              <p class="mb-2"><strong>Request Service:</strong> ${
+                inquiry.request_service ? "Yes" : "No"
+              }</p>
+              <p class="mb-2"><strong>Request Calibration:</strong> ${
+                inquiry.request_calibration ? "Yes" : "No"
+              }</p>
+              <p class="mb-2"><strong>Request Repair:</strong> ${
+                inquiry.request_repair ? "Yes" : "No"
               }</p>
             </div>
             <div>
               <p class="mb-2"><strong>Submitted:</strong> ${new Date(
-                support.createdAt
+                inquiry.created_at
               ).toLocaleString()}</p>
-              <p class="mb-2"><strong>Details:</strong></p>
+              <p class="mb-2"><strong>Comments:</strong></p>
               <p class="bg-slate-700 p-2 rounded">${
-                support.details || "None"
+                inquiry.comments || "None"
               }</p>
             </div>
           </div>
@@ -82,7 +68,7 @@ const AdminSupportData = () => {
                           <img 
                             src="${
                               import.meta.env.VITE_OPEN_APIURL
-                            }${file.replace(/^uploads\//, "uploads/")}" 
+                            }/${file.replace(/^uploads\//, "uploads/")}" 
                             alt="Attachment" 
                             class="w-full h-auto rounded border border-slate-600"
                           />
@@ -94,7 +80,7 @@ const AdminSupportData = () => {
                         <div class="w-48 flex flex-col items-center justify-center">
                           <a href="${
                             import.meta.env.VITE_OPEN_APIURL
-                          }${file}" target="_blank" class="text-blue-400 underline break-words">
+                          }/${file}" target="_blank" class="text-blue-400 underline break-words">
                             ${file.split("/").pop()}
                           </a>
                         </div>
@@ -128,9 +114,9 @@ const AdminSupportData = () => {
   return (
     <div className="bg-slate-800 text-white rounded-lg p-4 my-4">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold">Support Requests</h2>
+        <h2 className="text-xl font-semibold">Service Inquiries</h2>
         <div className="text-sm text-gray-400">
-          Total Requests: {data.length || 0}
+          Total Inquiries: {data.length || 0}
         </div>
       </div>
       <div className="overflow-x-auto">
@@ -143,54 +129,40 @@ const AdminSupportData = () => {
               <th className="px-4 py-2">Phone</th>
               <th className="px-4 py-2">Equipment</th>
               <th className="px-4 py-2">Model</th>
-              <th className="px-4 py-2">Support Issues</th>
+              <th className="px-4 py-2">Service</th>
+              <th className="px-4 py-2">Calibration</th>
+              <th className="px-4 py-2">Repair</th>
               <th className="px-4 py-2">Date</th>
               <th className="px-4 py-2">View</th>
             </tr>
           </thead>
           <tbody>
-            {data.map((support) => (
+            {data.map((inquiry) => (
               <tr
-                key={support.id}
+                key={inquiry.id}
                 className="bg-slate-800 border-b border-slate-600"
               >
-                <td className="px-4 py-2">{support.name}</td>
-                <td className="px-4 py-2">{support.company}</td>
-                <td className="px-4 py-2">{support.email}</td>
-                <td className="px-4 py-2">{support.phone}</td>
-                <td className="px-4 py-2">{support.equipment}</td>
-                <td className="px-4 py-2">{support.model}</td>
+                <td className="px-4 py-2">{inquiry.name}</td>
+                <td className="px-4 py-2">{inquiry.company}</td>
+                <td className="px-4 py-2">{inquiry.email}</td>
+                <td className="px-4 py-2">{inquiry.phone}</td>
+                <td className="px-4 py-2">{inquiry.equipment}</td>
+                <td className="px-4 py-2">{inquiry.model}</td>
                 <td className="px-4 py-2">
-                  {(() => {
-                    let arr = [];
-                    try {
-                      let parsed = support.supportIssues;
-                      if (typeof parsed === "string")
-                        parsed = JSON.parse(parsed);
-                      if (typeof parsed === "string")
-                        parsed = JSON.parse(parsed);
-                      arr = Array.isArray(parsed) ? parsed : [];
-                    } catch {
-                      arr = [];
-                    }
-                    return arr.length
-                      ? arr.map((i) => (
-                          <span
-                            key={i}
-                            className="bg-slate-700 rounded px-2 py-1 mr-1"
-                          >
-                            {i}
-                          </span>
-                        ))
-                      : "None";
-                  })()}
+                  {inquiry.request_service ? "Yes" : "No"}
                 </td>
                 <td className="px-4 py-2">
-                  {new Date(support.createdAt).toLocaleDateString()}
+                  {inquiry.request_calibration ? "Yes" : "No"}
+                </td>
+                <td className="px-4 py-2">
+                  {inquiry.request_repair ? "Yes" : "No"}
+                </td>
+                <td className="px-4 py-2">
+                  {new Date(inquiry.created_at).toLocaleDateString()}
                 </td>
                 <td className="px-4 py-2">
                   <button
-                    onClick={() => showFullDetails(support)}
+                    onClick={() => showFullDetails(inquiry)}
                     className="text-yellow-400 cursor-pointer bg-yellow-900 p-1 rounded hover:bg-yellow-800"
                   >
                     <Eye size={16} />
@@ -205,4 +177,4 @@ const AdminSupportData = () => {
   );
 };
 
-export default AdminSupportData;
+export default AdminServiceInquiries;
