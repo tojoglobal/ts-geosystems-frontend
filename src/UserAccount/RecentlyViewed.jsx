@@ -1,12 +1,19 @@
 /* eslint-disable no-useless-escape */
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import useDataQuery from "../utils/useDataQuery";
 import { useState, useEffect } from "react";
 import Loader from "../utils/Loader";
+import { getProductType } from "../utils/productOption";
+import { parsePrice } from "../utils/parsePrice";
+import { addToCart } from "../features/AddToCart/AddToCart";
+import Swal from "sweetalert2";
+import { slugify } from "../utils/slugify";
+import { Link } from "react-router-dom";
 
 const RecentlyViewed = () => {
   const { user } = useSelector((state) => state.authUser);
   const [page, setPage] = useState(1);
+  const dispatch = useDispatch();
   const [limit, setLimit] = useState(8);
   const [totalPages, setTotalPages] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
@@ -48,6 +55,24 @@ const RecentlyViewed = () => {
     setPage(1); // Reset to first page when changing limit
   };
 
+  const handleAddToCart = (product) => {
+    const itemToAdd = {
+      id: product.id,
+      product_name: product.product_name,
+      price: parsePrice(product.price),
+      quantity: 1,
+    };
+
+    dispatch(addToCart(itemToAdd));
+    Swal.fire({
+      title: "Added to Cart",
+      text: `${product.product_name} has been added to your cart.`,
+      icon: "success",
+      timer: 2000,
+      showConfirmButton: false,
+    });
+  };
+
   if (isLoading) return <Loader />;
 
   return (
@@ -77,6 +102,7 @@ const RecentlyViewed = () => {
       {/* Product grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-1">
         {recentItems.map((item) => {
+          const { isSimpleProduct } = getProductType(item);
           let images = [];
           try {
             images = JSON.parse(item.image_urls);
@@ -121,19 +147,31 @@ const RecentlyViewed = () => {
                     SALE
                   </span>
                 )}
-                <img
-                  src={displayImage}
-                  alt={item.product_name}
-                  className="w-auto mx-auto max-h-[176px] object-cover"
-                />
+                <Link
+                  to={`/products/${item.id}/${slugify(
+                    item.product_name || ""
+                  )}`}
+                >
+                  <img
+                    src={displayImage}
+                    alt={item.product_name}
+                    className="w-auto mx-auto max-h-[176px] object-cover"
+                  />
+                </Link>
               </div>
               <div className="p-[5px]">
                 <div className="capitalize text-sm text-gray-600 mb-1 border-t border-gray-200 pt-3">
                   {item.brand_name} | Sku: {item.sku}
                 </div>
-                <h3 className="text-sm min-h-10 font-medium text-gray-900 mb-2">
-                  {item.product_name}
-                </h3>
+                <Link
+                  to={`/products/${item.id}/${slugify(
+                    item.product_name || ""
+                  )}`}
+                >
+                  <h3 className="text-sm min-h-10 font-medium text-gray-900 mb-2">
+                    {item.product_name}
+                  </h3>{" "}
+                </Link>
                 <div className="text-sm text-gray-900 font-semibold">
                   ৳{formatPrice(price)}{" "}
                   <span className="text-xs text-gray-500">(Ex. VAT)</span>
@@ -142,9 +180,27 @@ const RecentlyViewed = () => {
                   ৳{formatPrice(priceIncVat)}{" "}
                   <span className="text-xs text-gray-500">(Inc. VAT)</span>
                 </div>
-                <button className="mt-2 cursor-pointer text-[14px] w-full bg-crimson-red text-white py-[6px] px-4 rounded hover:bg-red-700 transition-colors">
-                  {onSale ? "ADD TO CART" : "CHOOSE OPTIONS"}
-                </button>
+                {item?.isStock === 1 && (
+                  <div>
+                    {isSimpleProduct ? (
+                      <button
+                        onClick={() => handleAddToCart(item)}
+                        className="bg-[#e62245] w-full cursor-pointer text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
+                      >
+                        ADD TO CART
+                      </button>
+                    ) : (
+                      <Link
+                        to={`/products/${item.id}/${slugify(
+                          item.product_name || ""
+                        )}`}
+                        className="w-full block text-center cursor-pointer bg-[#e62245] text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
+                      >
+                        CHOOSE OPTION
+                      </Link>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           );

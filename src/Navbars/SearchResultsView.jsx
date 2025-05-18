@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { slugify } from "../utils/slugify";
 import { useEffect, useState } from "react";
 import { useAxiospublic } from "../Hooks/useAxiospublic";
+import { useTrackProductView } from "../Hooks/useTrackProductView";
 
 const SearchResultsView = ({
   products,
@@ -17,7 +18,7 @@ const SearchResultsView = ({
   sortOrder,
   setSortOrder,
 }) => {
-  const axiosPublic = useAxiospublic();
+  const { trackProductView } = useTrackProductView();
   const [filters, setFilters] = useState({
     brands: [],
     categories: [],
@@ -343,10 +344,13 @@ const SearchResultsView = ({
                 </div>
               </div>
             </div>
-
             <div className="grid grid-cols-5 gap-4 p-5">
               {filteredProducts.map((product, index) => (
                 <Link
+                  onClick={(e) => {
+                    trackProductView(product.id);
+                    onClose();
+                  }}
                   to={`/products/${product.id}/${slugify(
                     product.product_name || ""
                   )}`}
@@ -370,6 +374,10 @@ const SearchResultsView = ({
                     className="w-full h-32 object-contain mb-2"
                   />
                   <Link
+                    onClick={(e) => {
+                      trackProductView(product.id);
+                      onClose();
+                    }}
                     to={`/products/${product.id}/${slugify(
                       product.product_name || ""
                     )}`}

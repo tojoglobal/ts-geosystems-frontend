@@ -8,9 +8,12 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import useDataQuery from "../../utils/useDataQuery";
 import { parsePrice } from "../../utils/parsePrice";
+import { useTrackProductView } from "../../Hooks/useTrackProductView";
+import { slugify } from "../../utils/slugify";
 
 const Recommended = ({ category, currentProductId }) => {
   const swiperRef = useRef(null);
+  const { trackProductView } = useTrackProductView();
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
   const [recommendedProducts, setRecommendedProducts] = useState([]);
@@ -22,7 +25,7 @@ const Recommended = ({ category, currentProductId }) => {
     !!category
   );
   const products = data?.products;
-  
+
   useEffect(() => {
     if (products?.length > 0) {
       const filteredProducts = products?.filter(
@@ -56,7 +59,7 @@ const Recommended = ({ category, currentProductId }) => {
     <div className="max-w-[1370px] mx-auto rounded-md py-6 relative">
       {/* Tab Header */}
       <div className="flex items-center justify-between border border-gray-200">
-        <div className="relative group px-3 py-1">
+        <div className="relative cursor-pointer group px-3 py-1">
           <div className="relative">
             <h2 className="text-[#e62245] text-base py-1 uppercase text-[20px] font-semibold w-fit pr-3 border-r border-gray-200">
               RECOMMENDED
@@ -132,7 +135,12 @@ const Recommended = ({ category, currentProductId }) => {
             return (
               <SwiperSlide key={idx}>
                 <div className="relative flex flex-col items-center bg-white h-full">
-                  <Link to={`/product/${product.id}`}>
+                  <Link
+                    onClick={() => trackProductView(product.id)}
+                    to={`/products/${product.id}/${slugify(
+                      product.product_name || ""
+                    )}`}
+                  >
                     <div className="relative group w-full max-w-[120px] sm:max-w-[140px] md:max-w-[260px] mx-auto">
                       <img
                         src={mainImage}
@@ -156,7 +164,10 @@ const Recommended = ({ category, currentProductId }) => {
                     </p>
                     <div className="min-h-[48px] flex items-start">
                       <Link
-                        to={`/product/${product.id}`}
+                        onClick={() => trackProductView(product.id)}
+                        to={`/products/${product.id}/${slugify(
+                          product.product_name || ""
+                        )}`}
                         className="font-semibold text-sm text-gray-800"
                       >
                         {product.product_name}

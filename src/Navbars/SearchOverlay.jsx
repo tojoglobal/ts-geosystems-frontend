@@ -1,5 +1,6 @@
 /* eslint-disable no-useless-escape */
 import { useEffect, useRef, useState } from "react";
+import Swal from "sweetalert2";
 import Slider from "react-slick";
 import { IoCloseOutline, IoSearchSharp } from "react-icons/io5";
 import "slick-carousel/slick/slick.css";
@@ -15,7 +16,6 @@ import { slugify } from "../utils/slugify";
 import { parsePrice } from "../utils/parsePrice";
 import { useTrackProductView } from "../Hooks/useTrackProductView";
 import { useDispatch } from "react-redux";
-import Swal from "sweetalert2";
 import { addToCart } from "../features/AddToCart/AddToCart";
 
 const POPULAR_SEARCHES = [
@@ -290,14 +290,16 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                     </div>
                   )}
                 </div>
-
                 {isLoading ? (
                   <div className="text-center py-10">Loading...</div>
                 ) : displayProducts.length <= 4 ? (
                   <div className="grid grid-cols-4 gap-4">
                     {displayProducts.map((product, index) => (
                       <Link
-                        onClick={() => trackProductView(product.id)}
+                        onClick={() => {
+                          trackProductView(product.id);
+                          onClose();
+                        }}
                         to={`/products/${product.id}/${slugify(
                           product.product_name || ""
                         )}`}
@@ -348,7 +350,10 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                           </div>
                         )}
                         <Link
-                          onClick={() => trackProductView(product.id)}
+                          onClick={() => {
+                            trackProductView(product.id);
+                            onClose();
+                          }}
                           to={`/products/${product.id}/${slugify(
                             product.product_name || ""
                           )}`}
