@@ -85,6 +85,7 @@ import AdminSupportData from "./Dashboard/Support/AdminSupportData";
 import AddNewAddress from "./UserAccount/AddNewAddress";
 import AddUserManuals from "./Dashboard/UserManuals/UserManuals";
 import AddQuickGuides from "./Dashboard/QuickGuides/QuickGuides";
+import Chat from "./Dashboard/Chat/Chat";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -225,6 +226,7 @@ const AppLayout = () => {
           <Route path="about-us" element={<AdminUpdateAboutUs />} />
           <Route path="contact-us" element={<AdminUpdateContactUs />} />
           <Route path="cc" element={<AdminUpdateCertificateTracking />} />
+          <Route path="chat" element={<Chat />} />
         </Route>
 
         <Route path="*" element={<Error />} />
