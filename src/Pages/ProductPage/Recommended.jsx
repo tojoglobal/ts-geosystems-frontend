@@ -6,96 +6,51 @@ import "../HomePage/TotalStation.css";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import useDataQuery from "../../utils/useDataQuery";
+import { parsePrice } from "../../utils/parsePrice";
 
-const items = [
-  {
-    name: "Kolida CTS-662R10 Total Station",
-    img: "https://ts-geosystems.com.bd/assets/images/JMqcf5wY.png",
-    link: "https://ts-geosystems.com.bd/product/Kolida-KTS470-Windows-Total-Station",
-    price: "162,174.39",
-    discountPrice: "225,297.94",
-  },
-  {
-    name: "Kolida CTS-632R10M Total Station",
-    img: "https://ts-geosystems.com.bd/assets/images/f6ID2zYF.png",
-    link: "https://ts-geosystems.com.bd/product/Kolida-KTS470-Windows-Total-Station",
-    price: "162,174.39",
-    discountPrice: "225,297.94",
-  },
-  {
-    name: "Kolida CTS-662R10 Total Station",
-    img: "https://ts-geosystems.com.bd/assets/images/JMqcf5wY.png",
-    link: "https://ts-geosystems.com.bd/product/Kolida-KTS470-Windows-Total-Station",
-    price: "162,174.39",
-    discountPrice: "225,297.94",
-  },
-  {
-    name: "Kolida CTS-632R10M Total Station",
-    img: "https://ts-geosystems.com.bd/assets/images/f6ID2zYF.png",
-    link: "https://ts-geosystems.com.bd/product/Kolida-KTS470-Windows-Total-Station",
-    price: "162,174.39",
-    discountPrice: "225,297.94",
-  },
-  {
-    name: "Kolida CTS-662R10 Total Station",
-    img: "https://ts-geosystems.com.bd/assets/images/JMqcf5wY.png",
-    link: "https://ts-geosystems.com.bd/product/Kolida-KTS470-Windows-Total-Station",
-    price: "162,174.39",
-    discountPrice: "225,297.94",
-  },
-  {
-    name: "Kolida CTS-632R10M Total Station",
-    img: "https://ts-geosystems.com.bd/assets/images/f6ID2zYF.png",
-    link: "https://ts-geosystems.com.bd/product/Kolida-KTS470-Windows-Total-Station",
-    price: "162,174.39",
-    discountPrice: "225,297.94",
-  },
-  {
-    name: "Kolida CTS-662R10 Total Station",
-    img: "https://ts-geosystems.com.bd/assets/images/JMqcf5wY.png",
-    link: "https://ts-geosystems.com.bd/product/Kolida-KTS470-Windows-Total-Station",
-    price: "162,174.39",
-    discountPrice: "225,297.94",
-  },
-  {
-    name: "Kolida CTS-632R10M Total Station",
-    img: "https://ts-geosystems.com.bd/assets/images/f6ID2zYF.png",
-    link: "https://ts-geosystems.com.bd/product/Kolida-KTS470-Windows-Total-Station",
-    price: "162,174.39",
-    discountPrice: "225,297.94",
-  },
-  {
-    name: "Kolida CTS-662R10 Total Station",
-    img: "https://ts-geosystems.com.bd/assets/images/JMqcf5wY.png",
-    link: "https://ts-geosystems.com.bd/product/Kolida-KTS470-Windows-Total-Station",
-    price: "162,174.39",
-    discountPrice: "225,297.94",
-  },
-  {
-    name: "Kolida CTS-632R10M Total Station",
-    img: "https://ts-geosystems.com.bd/assets/images/f6ID2zYF.png",
-    link: "https://ts-geosystems.com.bd/product/Kolida-KTS470-Windows-Total-Station",
-    price: "162,174.39",
-    discountPrice: "225,297.94",
-  },
-];
-
-const Recommended = () => {
+const Recommended = ({ category, currentProductId }) => {
   const swiperRef = useRef(null);
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
+  const [recommendedProducts, setRecommendedProducts] = useState([]);
+
+  // Fetch recommended products when category changes
+  const { data = {}, isLoading } = useDataQuery(
+    ["recommendedProducts", category],
+    `/api/category-products/${category}`,
+    !!category
+  );
+  const products = data?.products;
+  
+  useEffect(() => {
+    if (products?.length > 0) {
+      const filteredProducts = products?.filter(
+        (product) => product.id !== currentProductId
+      );
+      setRecommendedProducts(filteredProducts.slice(0, 10));
+    }
+  }, [products, currentProductId]);
 
   useEffect(() => {
     if (swiperRef.current) {
       setIsBeginning(swiperRef.current.isBeginning);
       setIsEnd(swiperRef.current.isEnd);
     }
-  }, []);
+  }, [recommendedProducts]); // Update when recommendedProducts change
 
   const handleSlideChange = (swiper) => {
     setIsBeginning(swiper.isBeginning);
     setIsEnd(swiper.isEnd);
   };
+
+  if (isLoading) {
+    return <div>Loading recommended products...</div>;
+  }
+
+  if (!category || recommendedProducts.length === 0) {
+    return null; // Don't show if no category or no recommended products
+  }
 
   return (
     <div className="max-w-[1370px] mx-auto rounded-md py-6 relative">
@@ -117,6 +72,7 @@ const Recommended = () => {
                 ? "text-gray-200 cursor-not-allowed"
                 : "text-gray-400 hover:text-gray-600"
             }`}
+            onClick={() => swiperRef.current?.slidePrev()}
           >
             <IoIosArrowBack size={22} />
           </div>
@@ -126,6 +82,7 @@ const Recommended = () => {
                 ? "text-gray-200 cursor-not-allowed"
                 : "text-gray-400 hover:text-gray-600"
             }`}
+            onClick={() => swiperRef.current?.slideNext()}
           >
             <IoIosArrowForward size={22} />
           </div>
@@ -163,56 +120,68 @@ const Recommended = () => {
             },
           }}
         >
-          {items.map((item, idx) => (
-            <SwiperSlide key={idx}>
-              <div className="relative flex flex-col items-center bg-white h-full">
-                {/* <p className="absolute top-2 right-2 px-2 py-[2px] rounded-md text-white bg-[#e62245]">
-                  SALE
-                </p> */}
-                <Link to={item?.link}>
-                  <div className="relative group w-full max-w-[120px] sm:max-w-[140px] md:max-w-[260px] mx-auto">
-                    <img
-                      src={item?.img}
-                      alt={item.name}
-                      className="w-full h-auto transition-opacity duration-300 group-hover:opacity-0"
-                    />
-                    <img
-                      src={item?.img2}
-                      alt={`${item?.name} hover`}
-                      className="w-full h-auto absolute top-0 left-0 transition-opacity duration-300 opacity-0 group-hover:opacity-100"
-                    />
+          {recommendedProducts.map((product, idx) => {
+            const imageUrls = product?.image_urls
+              ? JSON.parse(product.image_urls)
+              : [];
+            const mainImage =
+              imageUrls.length > 0
+                ? `${import.meta.env.VITE_OPEN_APIURL}${imageUrls[0]}`
+                : "https://via.placeholder.com/150";
+
+            return (
+              <SwiperSlide key={idx}>
+                <div className="relative flex flex-col items-center bg-white h-full">
+                  <Link to={`/product/${product.id}`}>
+                    <div className="relative group w-full max-w-[120px] sm:max-w-[140px] md:max-w-[260px] mx-auto">
+                      <img
+                        src={mainImage}
+                        alt={product.product_name}
+                        className="w-full h-auto transition-opacity duration-300 group-hover:opacity-0"
+                      />
+                      {/* If you have hover images, you can add them here */}
+                      <img
+                        src={mainImage}
+                        alt={`${product.product_name} hover`}
+                        className="w-full h-auto absolute top-0 left-0 transition-opacity duration-300 opacity-0 group-hover:opacity-100"
+                      />
+                    </div>
+                  </Link>
+                  <div className="w-full border-t border-gray-200 pt-2 flex flex-col flex-grow">
+                    <p className="text-xs text-gray-500">
+                      {product.category
+                        ? JSON.parse(product.category).cat
+                        : "Category"}{" "}
+                      | Sku: {product.sku || "N/A"}
+                    </p>
+                    <div className="min-h-[48px] flex items-start">
+                      <Link
+                        to={`/product/${product.id}`}
+                        className="font-semibold text-sm text-gray-800"
+                      >
+                        {product.product_name}
+                      </Link>
+                    </div>
+                    <div className="space-x-2">
+                      <span className="text-sm font-bold text-[#222]">
+                        ৳{parsePrice(product.price)}.00
+                      </span>
+                      <span className="text-xs line-through text-gray-400">
+                        ৳{(parsePrice(product.price) * 1.2).toFixed(2)}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-1 text-sm text-[#b3b3b5]">
+                      ৳{(parsePrice(product.price) * 1.2).toFixed(2)}{" "}
+                      <span className="underline">(Inc. VAT)</span>
+                    </div>
+                    <button className="mt-1 cursor-pointer bg-[#e62245] hover:bg-[#c91d3a] text-white text-sm font-semibold py-[6px] px-4 rounded w-full">
+                      ADD TO CART
+                    </button>
                   </div>
-                </Link>
-                <div className="w-full border-t border-gray-200 pt-2 flex flex-col flex-grow">
-                  <p className="text-xs text-gray-500">
-                    Total Station | Sku: 65dVv8Jr8fe
-                  </p>
-                  <div className="min-h-[48px] flex items-start">
-                    <Link
-                      to={item?.link}
-                      className="font-semibold text-sm text-gray-800"
-                    >
-                      {item.name}
-                    </Link>
-                  </div>
-                  <div className="space-x-2">
-                    <span className="text-sm font-bold text-[#222]">
-                      ৳{item.price}
-                    </span>
-                    <span className="text-xs line-through text-gray-400">
-                      ৳{item.discountPrice}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-1 text-sm text-[#b3b3b5]">
-                    ৳11994.00 <span className="underline">(Inc. VAT)</span>
-                  </div>
-                  <button className="mt-1 cursor-pointer bg-[#e62245] hover:bg-[#c91d3a] text-white text-sm font-semibold py-[6px] px-4 rounded w-full">
-                    ADD TO CART
-                  </button>
                 </div>
-              </div>
-            </SwiperSlide>
-          ))}
+              </SwiperSlide>
+            );
+          })}
         </Swiper>
       </div>
     </div>

@@ -57,32 +57,34 @@ const SoftwareDownloads = () => {
           Software Downloads
         </Link>
       </div>
-      <p className="text-[#e62245] font-light mt-3 mb-6 text-[28px]">
+      <p className="text-[#e62245] font-light mt-3 mb-3 text-[28px]">
         Software Downloads
       </p>
-      <h1 className="text-[#e62245] font-bold text-xl mb-8">
+      <h1 className="text-[#e62245] font-bold text-xl mb-5">
         G2 Survey 3D Laser Scanner Software Downloads
       </h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {currentData.map((software) => (
           <div
             key={software.id}
-            className="border rounded-lg p-4 flex flex-col items-center"
+            className="border rounded-sm flex flex-col h-full"
           >
-            <img
-              src={`${import.meta.env.VITE_OPEN_APIURL}/uploads/${
-                software.photo
-              }`}
-              alt={software.softwar_name}
-              className="w-full h-auto object-contain mb-4"
-            />
-            <div className="border-b w-full mb-4"></div>
-            <h3 className="text-center text-sm mb-4">
-              {software.softwar_name}
-            </h3>
+            <div className="flex flex-col p-4 flex-grow">
+              <img
+                src={`${import.meta.env.VITE_OPEN_APIURL}/uploads/${
+                  software.photo
+                }`}
+                alt={software.softwar_name}
+                className="w-full h-32 object-contain mb-3"
+              />
+              <div className="border-b w-full mb-3"></div>
+              <h3 className="capitalize text-sm mb-2 flex-grow">
+                {software.softwar_name}
+              </h3>
+            </div>
             <button
               onClick={() => window.open(software.softwarlink, "_blank")}
-              className="bg-[#e62245] text-white px-6 py-1 rounded hover:bg-[#d41d3f] transition-colors w-full"
+              className="bg-[#e62245] cursor-pointer text-white px-6 py-1 rounded hover:bg-[#d41d3f] transition-colors w-full mt-auto"
             >
               DOWNLOAD
             </button>
@@ -94,7 +96,7 @@ const SoftwareDownloads = () => {
         <button
           onClick={() => handlePageChange(currentPage - 1)}
           disabled={currentPage === 1}
-          className={`px-3 py-1 border flex items-center gap-1 ${
+          className={`px-3 py-1 cursor-pointer border flex items-center gap-1 ${
             currentPage === 1
               ? "cursor-not-allowed text-gray-400"
               : "hover:border-[#e62245] hover:text-[#e62245]"
@@ -107,7 +109,7 @@ const SoftwareDownloads = () => {
             <button
               key={index + 1}
               onClick={() => handlePageChange(index + 1)}
-              className={`px-3 py-1 border ${
+              className={`px-3 cursor-pointer py-1 border ${
                 currentPage === index + 1
                   ? "bg-[#e62245] text-white"
                   : "hover:border-[#e62245] hover:text-[#e62245]"
@@ -120,7 +122,7 @@ const SoftwareDownloads = () => {
         <button
           onClick={() => handlePageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
-          className={`px-3 py-1 border flex items-center gap-1 ${
+          className={`px-3 cursor-pointer py-1 border flex items-center gap-1 ${
             currentPage === totalPages
               ? "cursor-not-allowed text-gray-400"
               : "hover:border-[#e62245] hover:text-[#e62245]"
