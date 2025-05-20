@@ -13,9 +13,9 @@ import { parseItems } from "../../utils/parseItems";
 import { formatDate } from "../../utils/formatDate";
 import { FaFilePdf } from "react-icons/fa";
 import Swal from "sweetalert2";
-import { useQuery } from "@tanstack/react-query";
 import { GenerateInvoicePdf } from "../../utils/generateInvoicePdf";
 import Loader from "../../utils/Loader";
+import useDataQuery from "../../utils/useDataQuery";
 
 const OrderTable = () => {
   const axiospublic = useAxiospublic();
@@ -23,21 +23,16 @@ const OrderTable = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
 
+  
   const {
     data: orderData = {},
     isLoading,
     isError,
     refetch,
-  } = useQuery({
-    queryKey: ["orders", currentPage, itemsPerPage],
-    queryFn: async () => {
-      const res = await axiospublic.get(
-        `api/orderinfo?page=${currentPage}&limit=${itemsPerPage}`
-      );
-      return res?.data;
-    },
-  });
-
+  } = useDataQuery(
+    ["orders", currentPage, itemsPerPage],
+    `api/orderinfo?page=${currentPage}&limit=${itemsPerPage}`
+  );
   const { data: orders = [], pagination = {} } = orderData;
 
   const handleDownloadInvoice = async (order) => {

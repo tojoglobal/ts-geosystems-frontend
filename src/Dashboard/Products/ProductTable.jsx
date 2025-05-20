@@ -100,8 +100,8 @@ const ProductTable = () => {
     setViewProduct(product);
     setIsModalOpen(true);
   };
-  console.log(products);
-  console.log(viewProduct);
+  // console.log(products);
+  // console.log(viewProduct);
 
   const getCategoryName = (id) => {
     const converparse = JSON.parse(id);
@@ -125,16 +125,16 @@ const ProductTable = () => {
 
   return (
     <div>
-      <h1 className="text-xl md:text-2xl font-bold mb-4">Products List</h1>
+      <div className="flex justify-between mb-6">
+        <h1 className="text-xl md:text-2xl font-bold">Products List</h1>
+        <Link
+          to="/dashboard/add-product"
+          className="bg-teal-600 text-white py-1.5 px-4 rounded-sm hover:bg-teal-700 transition duration-200 text-center w-full sm:w-auto"
+        >
+          Add Product
+        </Link>
+      </div>
       <div className="overflow-x-auto">
-        <div className="flex flex-col sm:flex-row sm:justify-end gap-2 mb-3">
-          <Link
-            to="/dashboard/add-product"
-            className="bg-teal-600 text-white py-1 md:py-2 px-4 rounded-md hover:bg-teal-700 transition duration-200 text-center w-full sm:w-auto"
-          >
-            Add Product
-          </Link>
-        </div>
         <table className="w-full text-sm text-left text-white min-w-[800px]">
           <thead className="text-xs uppercase bg-gray-800 text-gray-200">
             <tr>
