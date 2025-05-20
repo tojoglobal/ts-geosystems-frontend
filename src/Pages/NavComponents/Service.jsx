@@ -3,6 +3,7 @@ import { useState } from "react";
 import useDataQuery from "../../utils/useDataQuery";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import Swal from "sweetalert2";
+import { SkeletonLoader } from "../../utils/Loader/SkeletonLoader";
 
 const Service = () => {
   const axiosPublicUrl = useAxiospublic();
@@ -29,12 +30,12 @@ const Service = () => {
 
   const {
     data = {},
-    isLoading,
-    isError,
+    isLoading: contentLoading,
+    isError: contentError,
   } = useDataQuery(["serviceContent"], "/api/service");
   const serviceContent = data?.data || [];
 
-  const { data: images = [], isLoading: loading } = useDataQuery(
+  const { data: images = [], isLoading: imagesLoading } = useDataQuery(
     ["serviceImages"],
     "/api/get-service-images"
   );
@@ -48,8 +49,7 @@ const Service = () => {
     .filter((img) => img.show && [5, 6].includes(img.order))
     .sort((a, b) => a.order - b.order);
 
-  if (isLoading || loading) return null;
-  if (isError) {
+  if (contentError) {
     return <p>Error loading data...</p>;
   }
 
@@ -179,51 +179,98 @@ const Service = () => {
           Service
         </Link>
       </div>
-      <p className="text-[#e62245] font-light uppercase text-[28px] mt-2 mb-4">
-        Service
-      </p>
-      <h1 className="text-lg mt-2 text-[#e62245] mb-2 font-bold">
-        {serviceContent?.title ||
-          "Surveying Equipment Service, Calibration & Repairs"}
-      </h1>
-      {/* Service Description */}
-      <div
-        className="text-gray-700 space-y-4 text-sm font-normal mb-8"
-        dangerouslySetInnerHTML={{ __html: serviceContent?.description }}
-      />
-      {/* Grid Images */}
-      {gridImages.length > 0 && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-12">
-          {gridImages.map((image) => (
-            <div key={image.order}>
-              <img
-                src={`${import.meta.env.VITE_OPEN_APIURL}${image.filePath}`}
-                alt={`Service grid image ${image.order}`}
-                className="w-full h-64 rounded-[4px]"
-              />
-            </div>
-          ))}
-        </div>
+      {contentLoading ? (
+        <SkeletonLoader className="h-8 w-32 mb-4" />
+      ) : (
+        <p className="text-[#e62245] font-light uppercase text-[28px] mt-2 mb-4">
+          Service
+        </p>
       )}
-      {/* Info After Images */}
-      {serviceContent?.info_after_images && (
+      {/* Main title */}
+      {contentLoading ? (
+        <SkeletonLoader className="h-6 w-3/4 mb-2" />
+      ) : (
+        <h1 className="text-lg mt-2 text-[#e62245] mb-2 font-bold">
+          {serviceContent?.title ||
+            "Surveying Equipment Service, Calibration & Repairs"}
+        </h1>
+      )}
+
+      {/* Service Description */}
+      {contentLoading ? (
+        <div className="space-y-2 mb-8">
+          <SkeletonLoader className="h-4 w-full" />
+          <SkeletonLoader className="h-4 w-5/6" />
+          <SkeletonLoader className="h-4 w-4/5" />
+          <SkeletonLoader className="h-4 w-full" />
+        </div>
+      ) : (
         <div
-          className="space-y-4 mb-8 text-sm font-normal"
-          dangerouslySetInnerHTML={{ __html: serviceContent.info_after_images }}
+          className="text-gray-700 space-y-4 text-sm font-normal mb-8"
+          dangerouslySetInnerHTML={{ __html: serviceContent?.description }}
         />
       )}
-      {/* Banner Images */}
-      {bannerImages.length > 0 && (
-        <div className="space-y-6 mb-12">
-          {bannerImages.map((image) => (
-            <img
-              key={image.order}
-              src={`${import.meta.env.VITE_OPEN_APIURL}${image.filePath}`}
-              alt={`Service banner ${image.order}`}
-              className="w-full h-[490px] rounded-sm"
-            />
+      {/* Grid Images */}
+      {imagesLoading ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-12">
+          {[1, 2, 3, 4].map((i) => (
+            <SkeletonLoader key={i} className="w-full h-64 rounded-[4px]" />
           ))}
         </div>
+      ) : (
+        gridImages.length > 0 && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-12">
+            {gridImages.map((image) => (
+              <div key={image.order}>
+                <img
+                  src={`${import.meta.env.VITE_OPEN_APIURL}${image.filePath}`}
+                  alt={`Service grid image ${image.order}`}
+                  className="w-full h-64 rounded-[4px]"
+                />
+              </div>
+            ))}
+          </div>
+        )
+      )}
+
+      {/* Info After Images */}
+      {contentLoading ? (
+        <div className="space-y-2 mb-8">
+          <SkeletonLoader className="h-4 w-full" />
+          <SkeletonLoader className="h-4 w-5/6" />
+          <SkeletonLoader className="h-4 w-4/5" />
+        </div>
+      ) : (
+        serviceContent?.info_after_images && (
+          <div
+            className="space-y-4 mb-8 text-sm font-normal"
+            dangerouslySetInnerHTML={{
+              __html: serviceContent.info_after_images,
+            }}
+          />
+        )
+      )}
+
+      {/* Banner Images */}
+      {imagesLoading ? (
+        <div className="space-y-6 mb-12">
+          {[1, 2].map((i) => (
+            <SkeletonLoader key={i} className="w-full h-[490px] rounded-sm" />
+          ))}
+        </div>
+      ) : (
+        bannerImages.length > 0 && (
+          <div className="space-y-6 mb-12">
+            {bannerImages.map((image) => (
+              <img
+                key={image.order}
+                src={`${import.meta.env.VITE_OPEN_APIURL}${image.filePath}`}
+                alt={`Service banner ${image.order}`}
+                className="w-full h-[490px] rounded-sm"
+              />
+            ))}
+          </div>
+        )
       )}
       <div className="max-w-3xl mx-auto mb-12">
         <h2 className="text-2xl font-semibold mb-4">Service Enquiry Form</h2>
@@ -436,15 +483,19 @@ const Service = () => {
           </div>
         </form>
       </div>
-      <div>
-        {/* make it dynamic */}
-        <img
-          src={`${
-            import.meta.env.VITE_OPEN_APIURL
-          }/uploads/hire/hire-banner-1746352683586.jpg`}
-          alt=""
-        />
-      </div>
+      {imagesLoading ? (
+        <SkeletonLoader className="w-full h-64" />
+      ) : (
+        <div>
+          <img
+            src={`${
+              import.meta.env.VITE_OPEN_APIURL
+            }/uploads/hire/hire-banner-1746352683586.jpg`}
+            alt="Service banner"
+            className="w-full"
+          />
+        </div>
+      )}
     </div>
   );
 };
