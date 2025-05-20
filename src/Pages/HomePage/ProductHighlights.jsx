@@ -13,6 +13,7 @@ import Swal from "sweetalert2";
 import { addToCart } from "../../features/AddToCart/AddToCart";
 import { slugify } from "../../utils/slugify";
 import { getProductType } from "../../utils/productOption";
+import { ComponentLoader } from "../../utils/Loader/ComponentLoader";
 
 const tabOptions = [
   { name: "Featured Products", key: "featured" },
@@ -67,7 +68,7 @@ const ProductHighlights = () => {
     setIsEnd(swiper.isEnd);
   };
 
-  if (isLoading) return null;
+  if (isLoading) return <ComponentLoader componentName="ProductHighlights" />;
 
   if (error) {
     return (

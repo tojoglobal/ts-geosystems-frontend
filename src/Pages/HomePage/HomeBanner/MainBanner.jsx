@@ -7,6 +7,7 @@ import "swiper/css/effect-fade";
 import { useEffect } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import useDataQuery from "../../../utils/useDataQuery";
+import { ComponentLoader } from "../../../utils/Loader/ComponentLoader";
 const baseURL = import.meta.env.VITE_OPEN_APIURL;
 
 // Static content for first slide
@@ -52,7 +53,7 @@ const MainBanner = () => {
     }
   }, []);
 
-  if (isLoading) return null;
+  if (isLoading) return <ComponentLoader componentName="MainBanner" />;
   if (error) return <div>Error loading slides</div>;
 
   // Get slides from API

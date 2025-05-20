@@ -8,6 +8,7 @@ import TopClients from "./TopClients";
 import WeProvide from "./WeProvide";
 import HomeBanner from "./HomeBanner/HomeBanner";
 import useDataQuery from "../../utils/useDataQuery";
+import { ComponentLoader } from "../../utils/Loader/ComponentLoader";
 
 const MainHome = () => {
   const { data, isLoading, isError } = useDataQuery(
@@ -15,8 +16,16 @@ const MainHome = () => {
     "/api/homepage-control"
   );
   const comp = data?.components || {};
-
-  if (isLoading) return null;
+  // For simpler components, you can use the generic loader:
+  // if (isLoading) return <ComponentLoader />;
+    if (isLoading)
+    return (
+      <div className="space-y-8">
+        <ComponentLoader componentName="MainBanner" />
+        <ComponentLoader componentName="ProductHighlights" />
+        <ComponentLoader type="spinner" />
+      </div>
+    );
   if (isError)
     return (
       <div className="min-h-[80vh] text-center my-16">
