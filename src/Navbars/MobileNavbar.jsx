@@ -17,7 +17,10 @@ import { slugify } from "../utils/slugify";
 import { useQuery } from "@tanstack/react-query";
 import useDataQuery from "../utils/useDataQuery";
 import { useDispatch, useSelector } from "react-redux";
-import { closeCart, toggleCart } from "../features/CartToggleSlice/CartToggleSlice";
+import {
+  closeCart,
+  toggleCart,
+} from "../features/CartToggleSlice/CartToggleSlice";
 import CartWithPopover from "./CartWithPopover";
 
 const MobileNavbar = () => {

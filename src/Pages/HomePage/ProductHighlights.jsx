@@ -184,7 +184,7 @@ const ProductHighlights = () => {
                                 JSON.parse(item.image_urls)[0]
                               }`}
                               alt={item.product_name}
-                              className="w-full h-[256.19px] transition-opacity duration-300 group-hover:opacity-0"
+                              className="w-full h-44 md:h-[256.19px] transition-opacity duration-300 group-hover:opacity-0"
                             />
                             {JSON.parse(item.image_urls).length > 1 && (
                               <img
@@ -192,7 +192,7 @@ const ProductHighlights = () => {
                                   JSON.parse(item.image_urls)[1]
                                 }`}
                                 alt={`${item.product_name} hover`}
-                                className="w-full h-[256.19px] absolute top-0 left-0 transition-opacity duration-300 opacity-0 group-hover:opacity-100"
+                                className="w-full h-44 md:h-[256.19px] absolute top-0 left-0 transition-opacity duration-300 opacity-0 group-hover:opacity-100"
                               />
                             )}
                           </>

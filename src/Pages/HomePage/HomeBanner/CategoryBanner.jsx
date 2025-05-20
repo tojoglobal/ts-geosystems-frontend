@@ -19,7 +19,7 @@ const CategoryBanner = () => {
                 category.photo
               }`}
               alt={category.category_name}
-              className="w-full mx-auto h-48 lg:h-64 object-cover transition-transform duration-300 group-hover:scale-110"
+              className="w-full mx-auto h-36 lg:h-64 object-cover transition-transform duration-300 group-hover:scale-110"
             />
           </div>
           <p className="mt-1 md:mt-2 uppercase text-sm font-semibold transition-colors duration-300 group-hover:text-[#e62446]">

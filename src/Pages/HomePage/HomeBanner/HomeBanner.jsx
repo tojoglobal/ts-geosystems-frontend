@@ -12,7 +12,7 @@ const HomeBanner = ({ control }) => {
   const home = loc.pathname === "/";
   return (
     <>
-      {home && control.hero_banner_slider_01 && <HeaderBottom />}
+    {home && control.hero_banner_slider_01 && <HeaderBottom />}
       {control.hero_banner_slider_01 && <MainBanner />}
       {control.promo_product_banner_02 && <MobilesBanner />}
       {control.feature_highlight_banner_03 && <GadgetBanner />}
