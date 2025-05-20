@@ -1,12 +1,10 @@
-import React, { useRef, useEffect, useMemo } from "react";
-import { Popover } from "@headlessui/react";
+import { useRef, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
+import { slugify } from "../utils/slugify";
 import { useDispatch, useSelector } from "react-redux";
-import { PiShoppingCart } from "react-icons/pi";
 import { closeCart } from "../features/CartToggleSlice/CartToggleSlice";
 import useProductsByIdsQuery from "../Hooks/useProductsByIdsQuery";
 import { getFirstImage } from "../utils/getFirstImage";
-import { slugify } from "../utils/slugify";
 
 const CartWithPopover = () => {
   const { isSticky } = useSelector((state) => state.sticky);
@@ -60,7 +58,7 @@ const CartWithPopover = () => {
           <p className="text-center text-gray-600 py-8">Your cart is empty</p>
         ) : (
           <>
-            {mergedCart.map((item, index) => (
+            {mergedCart?.map((item, index) => (
               <div key={item.id} className="py-3">
                 <div className="flex items-start gap-4">
                   <img
@@ -75,7 +73,7 @@ const CartWithPopover = () => {
                     className="w-14 h-14 object-contain"
                   />
                   <div>
-                    <p className="text-sm text-gray-600 mb-1">
+                    <p className="capitalize text-sm text-gray-600 mb-1">
                       {item.brand_name}
                     </p>
                     <Link
@@ -97,7 +95,7 @@ const CartWithPopover = () => {
                 )}
               </div>
             ))}
-            <div className="flex gap-3 pt-5 border-t">
+            <div className="flex gap-2 pt-5 border-t">
               <Link to="/checkout" className="w-1/2">
                 <button className="w-full bg-crimson-red text-sm text-white cursor-pointer font-semibold py-2 rounded">
                   CHECK OUT NOW

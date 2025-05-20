@@ -1,3 +1,4 @@
+import Swal from "sweetalert2";
 import { IoSearchOutline } from "react-icons/io5";
 import { LuUserRound } from "react-icons/lu";
 import { PiShoppingCart } from "react-icons/pi";
@@ -9,7 +10,6 @@ import { toggleCart } from "../features/CartToggleSlice/CartToggleSlice";
 import { useState, useEffect, useRef } from "react";
 import { useAxiospublic } from "../Hooks/useAxiospublic";
 import { logout } from "../features/UserAuth/authSlice";
-import Swal from "sweetalert2";
 
 const HeaderContainer = () => {
   const axiosPublic = useAxiospublic();
@@ -180,7 +180,6 @@ const HeaderContainer = () => {
               {totalQuantity}
             </span>
           </div>
-          {/* <CartWithPopover /> */}
           {/* Search Overlay */}
           <SearchOverlay
             isOpen={showSearch}
