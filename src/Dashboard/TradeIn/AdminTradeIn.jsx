@@ -89,7 +89,7 @@ const AdminTradeIn = () => {
   }
 
   return (
-    <div className="bg-slate-800 text-white rounded-lg p-4 my-4">
+    <div className="bg-slate-800 text-white rounded-lg p-4">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold">Trade-In Requests</h2>
         <div className="text-sm text-gray-400">
@@ -100,14 +100,14 @@ const AdminTradeIn = () => {
         <table className="min-w-full text-sm text-gray-300">
           <thead className="text-xs text-gray-400 uppercase bg-slate-900">
             <tr className="text-left">
-              <th className="px-4 py-2">Name</th>
-              <th className="px-4 py-2">Email</th>
-              <th className="px-4 py-2">Phone</th>
-              <th className="px-4 py-2">Equipment</th>
-              <th className="px-4 py-2">Model</th>
-              <th className="px-4 py-2">Condition</th>
-              <th className="px-4 py-2">Date</th>
-              <th className="px-4 py-2">View</th>
+              <th className="px-3 md:px-4 py-2">Name</th>
+              <th className="px-3 md:px-4 py-2">Email</th>
+              <th className="px-3 md:px-4 py-2">Phone</th>
+              <th className="px-3 md:px-4 py-2">Equipment</th>
+              <th className="px-3 md:px-4 py-2">Model</th>
+              <th className="px-3 md:px-4 py-2">Condition</th>
+              <th className="px-3 md:px-4 py-2">Date</th>
+              <th className="px-3 md:px-4 py-2">View</th>
             </tr>
           </thead>
           <tbody>
@@ -116,16 +116,16 @@ const AdminTradeIn = () => {
                 key={request.id}
                 className="bg-slate-800 border-b border-slate-600"
               >
-                <td className="px-4 py-2">{request.name}</td>
-                <td className="px-4 py-2">{request.email}</td>
-                <td className="px-4 py-2">{request.phone}</td>
-                <td className="px-4 py-2">{request.equipment}</td>
-                <td className="px-4 py-2">{request.model}</td>
-                <td className="px-4 py-2">{request.condition}/5</td>
-                <td className="px-4 py-2">
+                <td className="px-3 md:px-4 py-2">{request.name}</td>
+                <td className="px-3 md:px-4 py-2">{request.email}</td>
+                <td className="px-3 md:px-4 py-2">{request.phone}</td>
+                <td className="px-3 md:px-4 py-2">{request.equipment}</td>
+                <td className="px-3 md:px-4 py-2">{request.model}</td>
+                <td className="px-3 md:px-4 py-2">{request.condition}/5</td>
+                <td className="px-3 md:px-4 py-2">
                   {new Date(request.createdAt).toLocaleDateString()}
                 </td>
-                <td className="px-4 py-2">
+                <td className="px-3 md:px-4 py-2">
                   <button
                     onClick={() => showFullDetails(request)}
                     className="text-yellow-400 cursor-pointer bg-yellow-900 p-1 rounded hover:bg-yellow-800"

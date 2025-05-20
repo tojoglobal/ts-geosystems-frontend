@@ -21,7 +21,7 @@ export default function BlogTypeForm({
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="p-4 rounded shadow space-y-4"
+      className="rounded shadow space-y-4"
     >
       <div>
         <label className="block mb-1 font-medium">Blog Type Name</label>

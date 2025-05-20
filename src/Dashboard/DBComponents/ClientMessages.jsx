@@ -86,7 +86,7 @@ const ClientMessages = () => {
   }
 
   return (
-    <div className="bg-slate-800 text-white rounded-lg p-4 my-4">
+    <div className="bg-slate-800 text-white rounded-lg p-4">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold">Client Messages</h2>
         <div className="text-sm text-gray-400">
@@ -97,12 +97,12 @@ const ClientMessages = () => {
         <table className="min-w-full text-sm text-gray-300">
           <thead className="text-xs text-gray-400 uppercase bg-slate-900">
             <tr className="text-left">
-              <th className="px-4 py-2">Name</th>
-              <th className="px-4 py-2">Email</th>
-              <th className="px-4 py-2">Phone</th>
-              <th className="px-4 py-2">Message Preview</th>
-              <th className="px-4 py-2">Date</th>
-              <th className="px-4 py-2">Actions</th>
+              <th className="px-3 md:px-4 py-2">Name</th>
+              <th className="px-3 md:px-4 py-2">Email</th>
+              <th className="px-3 md:px-4 py-2">Phone</th>
+              <th className="px-3 md:px-4 py-2">Message Preview</th>
+              <th className="px-3 md:px-4 py-2">Date</th>
+              <th className="px-3 md:px-4 py-2">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -111,21 +111,21 @@ const ClientMessages = () => {
                 key={message.id}
                 className="bg-slate-800 border-b border-slate-600"
               >
-                <td className="px-4 py-2">{`${message.first_name} ${message.last_name}`}</td>
-                <td className="px-4 py-2">{message.email}</td>
-                <td className="px-4 py-2">{message.phone || "N/A"}</td>
+                <td className="px-3 md:px-4 py-2 capitalize">{`${message.first_name} ${message.last_name}`}</td>
+                <td className="px-3 md:px-4 py-2">{message.email}</td>
+                <td className="px-3 md:px-4 py-2">{message.phone || "N/A"}</td>
                 <td
-                  className="px-4 py-2 cursor-pointer"
+                  className="px-3 md:px-4 py-2 cursor-pointer"
                   onClick={() => showFullMessage(message)}
                 >
                   <div className="max-w-xs truncate hover:text-clip hover:text-white">
                     {message.message.substring(0, 50)}...
                   </div>
                 </td>
-                <td className="px-4 py-2">
+                <td className="px-3 md:px-4 py-2">
                   {new Date(message.created_at).toLocaleDateString()}
                 </td>
-                <td className="px-4 py-2 space-x-2">
+                <td className="px-3 md:px-4 py-2 space-x-2">
                   <button
                     onClick={() => showFullMessage(message)}
                     className="text-yellow-400 cursor-pointer bg-yellow-900 p-1 rounded hover:bg-yellow-800"

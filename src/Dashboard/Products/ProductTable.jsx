@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import Swal from "sweetalert2";
 import { Dialog, Transition } from "@headlessui/react";
-import { FaEdit, FaTrash, FaEye, FaTimes } from "react-icons/fa";
+import { Edit, Eye, Trash } from "lucide-react";
 import { Link } from "react-router-dom";
 import DOMPurify from "dompurify";
 import useDataQuery from "../../utils/useDataQuery";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
+import { FaTimes } from "react-icons/fa";
 
 const ProductTable = () => {
   const axiosPublicUrl = useAxiospublic();
@@ -121,7 +122,7 @@ const ProductTable = () => {
 
   return (
     <div>
-      <div className="flex justify-between mb-6">
+      <div className="flex justify-between mb-5">
         <h1 className="text-xl md:text-2xl font-bold">Products List</h1>
         <Link
           to="/dashboard/add-product"
@@ -134,14 +135,14 @@ const ProductTable = () => {
         <table className="w-full text-sm text-left text-white min-w-[800px]">
           <thead className="text-xs uppercase bg-gray-800 text-gray-200">
             <tr>
-              <th className="py-3 px-4">Product Name</th>
-              <th className="py-3 px-4">Price ৳</th>
-              <th className="py-3 px-4">Category</th>
-              <th className="py-3 px-4">Sub Category</th>
-              <th className="py-3 px-4">SKU</th>
-              <th className="py-3 px-4">Condition</th>
-              <th className="py-3 px-4">Brand</th>
-              <th className="py-3 px-4 text-center">Actions</th>
+              <th className="px-3 md:px-4 py-2">Product Name</th>
+              <th className="px-3 md:px-4 py-2">Price ৳</th>
+              <th className="px-3 md:px-4 py-2">Category</th>
+              <th className="px-3 md:px-4 py-2">Sub Category</th>
+              <th className="px-3 md:px-4 py-2">SKU</th>
+              <th className="px-3 md:px-4 py-2">Condition</th>
+              <th className="px-3 md:px-4 py-2">Brand</th>
+              <th className="px-3 md:px-4 py-2 text-center">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -168,27 +169,24 @@ const ProductTable = () => {
                   <td className="py-4 px-4 sm:px-6">
                     {getBrandName(product.brand_name)}
                   </td>
-                  <td className="py-4 px-4 sm:px-6 flex justify-center items-center gap-3 md:flex-row">
+                  <td className="py-4 px-4 flex justify-center items-center gap-2 md:flex-row">
                     <Link to={`/dashboard/update-product/${product.id}`}>
-                      <button className="text-blue-400 cursor-pointer hover:text-blue-600">
-                        <FaEdit size={16} />
+                      <button className="text-green-400 cursor-pointer bg-green-900 p-1 rounded hover:bg-green-800">
+                        <Edit size={16} />
                       </button>
                     </Link>
                     <button
-                      onClick={() =>
-                        handleDelete(product.id, product.image_urls)
-                      }
-                      className="text-red-400 cursor-pointer hover:text-red-600"
-                      title="Delete"
+                      onClick={() => handleDelete(product.id)}
+                      className="text-red-400 cursor-pointer bg-red-900 p-1 rounded hover:bg-red-800"
                     >
-                      <FaTrash size={16} />
+                      <Trash size={16} />
                     </button>
                     <button
                       onClick={() => handleView(product)}
-                      className="text-green-400 cursor-pointer hover:text-green-600"
                       title="View"
+                      className="text-yellow-400 cursor-pointer bg-yellow-900 p-1 rounded hover:bg-yellow-800"
                     >
-                      <FaEye size={19} />
+                      <Eye size={16} />
                     </button>
                   </td>
                 </tr>
@@ -206,7 +204,6 @@ const ProductTable = () => {
           </tbody>
         </table>
       </div>
-
       {/* Improved Modal using Headless UI */}
       <Transition appear show={isModalOpen} as={React.Fragment}>
         <Dialog
@@ -328,7 +325,6 @@ const ProductTable = () => {
                       </div>
                     </div>
                   )}
-
                   <div className="mt-6 flex justify-end">
                     <button
                       type="button"
