@@ -134,7 +134,7 @@ const ProductTable = () => {
           Add Product
         </Link>
       </div>
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto border border-gray-700">
         <table className="w-full text-sm text-left text-white min-w-[800px]">
           <thead className="text-xs uppercase bg-gray-800 text-gray-200">
             <tr>
