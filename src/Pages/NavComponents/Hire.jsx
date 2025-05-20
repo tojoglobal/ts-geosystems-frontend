@@ -1,11 +1,12 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { FaFileAlt } from "react-icons/fa";
 import { FaRegFileLines } from "react-icons/fa6";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
-import { useRef } from "react";
 import Swal from "sweetalert2";
+import { ComponentLoader } from "../../utils/Loader/ComponentLoader";
+import { SkeletonLoader } from "../../utils/Loader/SkeletonLoader";
 
 const Hire = () => {
   const formRef = useRef(null);
@@ -42,10 +43,7 @@ const Hire = () => {
     },
   });
 
-  if (isLoading) return null;
-
   if (isError) {
-    // you can use error.messgae/add error beside isError in useQuery
     return <p>Error loading data...</p>;
   }
 
@@ -132,25 +130,29 @@ const Hire = () => {
         </Link>
       </div>
       <h1 className="text-[28px] font-light text-[#e62245] mb-[72px]">HIRE</h1>
-      {hireContent?.show_buttons === 1 && (
-        <div className="flex flex-row justify-center gap-2 md:gap-0 md:justify-between mb-5">
-          <button
-            onClick={() =>
-              formRef.current?.scrollIntoView({ behavior: "smooth" })
-            }
-            className="md:ml-56 bg-[#e62245] flex items-center gap-2 text-white px-2 md:px-[18.5px] md:py-[7.66667px] rounded-[4px] shadow-xl hover:bg-[#c81e3c] transition-all text-[13px] font-medium"
-          >
-            <FaRegFileLines />
-            Hire Enquiry
-          </button>
-          <Link
-            to="/credit-application"
-            className="md:mr-40 bg-[#e62245] flex items-center gap-2 text-white px-2 md:px-[18.5px] py-[7.66667px] rounded-[4px] shadow-xl hover:bg-[#c81e3c] transition-all text-[13px] font-medium"
-          >
-            <FaFileAlt />
-            Credit Account Application
-          </Link>
-        </div>
+      {isLoading ? (
+        <ComponentLoader componentName="MainBanner" />
+      ) : (
+        hireContent?.show_buttons === 1 && (
+          <div className="flex flex-row justify-center gap-2 md:gap-0 md:justify-between mb-5">
+            <button
+              onClick={() =>
+                formRef.current?.scrollIntoView({ behavior: "smooth" })
+              }
+              className="md:ml-56 bg-[#e62245] flex items-center gap-2 text-white px-2 md:px-[18.5px] md:py-[7.66667px] rounded-[4px] shadow-xl hover:bg-[#c81e3c] transition-all text-[13px] font-medium"
+            >
+              <FaRegFileLines />
+              Hire Enquiry
+            </button>
+            <Link
+              to="/credit-application"
+              className="md:mr-40 bg-[#e62245] flex items-center gap-2 text-white px-2 md:px-[18.5px] py-[7.66667px] rounded-[4px] shadow-xl hover:bg-[#c81e3c] transition-all text-[13px] font-medium"
+            >
+              <FaFileAlt />
+              Credit Account Application
+            </Link>
+          </div>
+        )
       )}
       <div className="space-y-6 text-gray-700 border-t pt-4 border-gray-200">
         <h2 className="text-[14px] font-bold">{hireContent?.title}</h2>
@@ -510,12 +512,16 @@ const Hire = () => {
           </div>
         </form>
       </div>
-      {hireContent.imageUrl && (
-        <img
-          src={`${import.meta.env.VITE_OPEN_APIURL}${hireContent?.imageUrl}`}
-          alt="Hire Banner"
-          className="max-w-full h-auto mt-8 rounded"
-        />
+      {isLoading ? (
+        <SkeletonLoader className="w-full h-64 mt-8" />
+      ) : (
+        hireContent?.imageUrl && (
+          <img
+            src={`${import.meta.env.VITE_OPEN_APIURL}${hireContent?.imageUrl}`}
+            alt="Hire Banner"
+            className="max-w-full h-auto mt-8 rounded"
+          />
+        )
       )}
     </div>
   );
