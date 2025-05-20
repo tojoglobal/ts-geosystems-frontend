@@ -162,7 +162,7 @@ const Service = () => {
     } catch (error) {
       Swal.fire({
         icon: "error",
-        title: "Submission failed",
+        title: error.message || "Submission failed",
         text: "Could not submit your inquiry. Please try again.",
       });
     }
