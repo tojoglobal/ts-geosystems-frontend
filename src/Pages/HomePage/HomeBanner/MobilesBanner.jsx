@@ -10,9 +10,7 @@ const MobilesBanner = () => {
     "/api/getupload-images"
   );
 
-  const baseURL = import.meta.env.VITE_OPEN_APIURL;
-  if (isLoading)
-    return <div className="text-center py-10">Loading...</div>;
+  if (isLoading) return null;
 
   return (
     <div className="md:w-full md:relative my-3 md:my-5 mx-3 md:max-w-[1370px] md:mx-auto">
@@ -29,7 +27,7 @@ const MobilesBanner = () => {
         {data?.data?.map((img, index) => (
           <SwiperSlide key={img.id || index}>
             <img
-              src={`${baseURL}${img.photourl}`}
+              src={`${import.meta.env.VITE_OPEN_APIURL}${img.photourl}`}
               alt={`Slide ${index + 1}`}
               className="w-full h-full object-cover"
             />

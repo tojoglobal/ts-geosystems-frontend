@@ -3,7 +3,6 @@ import { Navigation, Autoplay } from "swiper/modules";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import "swiper/css";
 import "swiper/css/navigation";
-import { Link } from "react-router-dom";
 
 const TopClients = () => {
   const brands = [
@@ -68,7 +67,7 @@ const TopClients = () => {
   ];
 
   return (
-    <div className="py-8 md:py-16">
+    <div className="py-5 md:py-16">
       <div className="max-w-[1370px] mx-auto px-3">
         <div className="flex items-center justify-center gap-4 mb-5 md:mb-12">
           <div className="flex-1 h-0.5 bg-[#e62245]"></div>

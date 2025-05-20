@@ -75,9 +75,8 @@ const ProductSidebar = () => {
     );
   };
 
-  if (categoriesLoading || subcategoriesLoading || brandsLoading || loading) {
-    return <div>Loading...</div>;
-  }
+  if (categoriesLoading || subcategoriesLoading || brandsLoading || loading)
+    return null;
 
   if (categoriesError || subcategoriesError || brandsError) {
     return <div>Error loading data</div>;

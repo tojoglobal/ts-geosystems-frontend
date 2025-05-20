@@ -222,7 +222,7 @@ const ProductDetails = () => {
             {product?.isStock === 1 && (
               <button
                 onClick={handleAddToCart}
-                className="relative overflow-hidden group text-white px-16 font-semibold py-[5px] rounded-[3px] text-[17px] bg-[#e62245]"
+                className="relative cursor-pointer overflow-hidden group text-white px-16 font-semibold py-[5px] rounded-[3px] text-[17px] bg-[#e62245]"
               >
                 <span className="absolute left-0 top-0 h-full w-0 bg-black transition-all duration-500 ease-out group-hover:w-full z-0"></span>
                 <span className="relative z-10">ADD TO CART</span>

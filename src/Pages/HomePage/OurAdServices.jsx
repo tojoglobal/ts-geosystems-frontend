@@ -45,7 +45,7 @@ const services = [
 
 const OurAdServices = () => {
   return (
-    <div className="py-7 md:py-16 px-4">
+    <div className="py-7 md:py-16 px-3 md:px-4">
       <div className="max-w-[1370px] mx-auto">
         {/* Title */}
         <div className="flex items-center justify-center gap-1 md:gap-4 mb-6 md:mb-12">

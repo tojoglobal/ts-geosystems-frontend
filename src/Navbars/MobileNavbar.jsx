@@ -16,12 +16,22 @@ import { useTrackProductView } from "../Hooks/useTrackProductView";
 import { slugify } from "../utils/slugify";
 import { useQuery } from "@tanstack/react-query";
 import useDataQuery from "../utils/useDataQuery";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  closeCart,
+  toggleCart,
+} from "../features/CartToggleSlice/CartToggleSlice";
+import CartWithPopover from "./CartWithPopover";
 
 const MobileNavbar = () => {
   const submenuRef = useRef(null);
   const { trackProductView } = useTrackProductView();
   const searchInputRef = useRef(null);
   const axiosPublicUrl = useAxiospublic();
+  const navigate = useNavigate();
+  const { isCartVisible } = useSelector((state) => state.cartToggle);
+  const { totalQuantity } = useSelector((state) => state.cart);
+  const dispatch = useDispatch();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [openCategory, setOpenCategory] = useState(null);
@@ -31,8 +41,28 @@ const MobileNavbar = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [showResults, setShowResults] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
-  const navigate = useNavigate();
+  const cartRef = useRef(null);
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (isSearchOpen && !event.target.closest(".search-container")) {
+        setShowResults(false);
+      }
+      // Add cart click outside detection
+      if (
+        isCartVisible &&
+        cartRef.current &&
+        !cartRef.current.contains(event.target)
+      ) {
+        dispatch(closeCart());
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isSearchOpen, isCartVisible, dispatch]);
   // Fetch categories
   const {
     data: categoriesData,
@@ -329,15 +359,18 @@ const MobileNavbar = () => {
             <Link to="/user/login" aria-label="User account">
               <LuUserRound className="text-2xl text-red-600" />
             </Link>
-            <button className="relative" aria-label="Shopping cart">
+            <button
+              className="relative cursor-pointer"
+              aria-label="Shopping cart"
+              onClick={() => dispatch(toggleCart())}
+            >
               <PiShoppingCart className="text-2xl text-red-600" />
               <span className="absolute -top-1 -right-1 bg-[#e62245] text-white text-xs w-4 h-4 flex items-center justify-center rounded-full font-bold">
-                4
+                {totalQuantity}
               </span>
             </button>
           </div>
         </div>
-
         {/* Search box */}
         {isSearchOpen && (
           <div className="bg-charcoal-gray px-2.5 py-2 z-40 shadow-md relative search-container">
@@ -608,6 +641,14 @@ const MobileNavbar = () => {
           </div>
         </div>
       </div>
+      {isCartVisible && (
+        <div
+          ref={cartRef}
+          className="fixed top-12 right-0 z-[100] w-[90vw] max-w-sm"
+        >
+          <CartWithPopover />
+        </div>
+      )}
     </div>
   );
 };

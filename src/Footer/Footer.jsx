@@ -29,9 +29,6 @@ const Footer = () => {
         title: "Error!",
         text: error.response?.data?.error || "Failed to subscribe",
         icon: "error",
-        background: "#1e293b",
-        color: "#f8fafc",
-        confirmButtonColor: "#e11d48",
       });
     } finally {
       setIsSubmitting(false);
@@ -39,8 +36,8 @@ const Footer = () => {
   };
 
   return (
-    <footer className="bg-[#585c5d] text-white pt-12">
-      <div className="max-w-[85%] mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 pb-10">
+    <footer className="bg-[#585c5d] text-white pt-8 md:pt-12">
+      <div className="max-w-[89%] md:max-w-[85%] mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 pb-10">
         <div>
           <h2 className="text-xl font-semibold mb-4">CONTACT US</h2>
           <p className="text-sm mb-2">
@@ -63,7 +60,6 @@ const Footer = () => {
             <img src="/ea-jas.png" alt="EA-JAS" className="h-8" /> */}
           </div>
         </div>
-
         {/* Accounts & Orders */}
         <div>
           <h2 className="text-xl font-semibold mb-4">ACCOUNTS & ORDERS</h2>
@@ -87,7 +83,6 @@ const Footer = () => {
             </li>
           </ul>
         </div>
-
         {/* Navigate */}
         <div>
           <h2 className="text-xl font-semibold mb-4">NAVIGATE</h2>

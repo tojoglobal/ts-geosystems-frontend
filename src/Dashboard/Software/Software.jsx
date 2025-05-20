@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaEdit, FaTrash } from "react-icons/fa";
-import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import Swal from "sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
+import { useAxiospublic } from "../../Hooks/useAxiospublic";
+import useDataQuery from "../../utils/useDataQuery";
 
 const generateSlug = (text) =>
   text
@@ -14,25 +15,18 @@ const generateSlug = (text) =>
 const Software = () => {
   const axiosPublicUrl = useAxiospublic();
   const [imagePreview, setImagePreview] = useState(null);
-  const [softwar, setSoftwar] = useState([]);
   const [editingBrand, setEditingBrand] = useState(null);
 
+  // Using TanStack Query hook
+  const {
+    data: softwar = [],
+    isLoading,
+    error,
+    refetch: refetchSoftwar,
+  } = useDataQuery(["software"], "/api/software");
+
   const { register, handleSubmit, watch, reset, setValue } = useForm();
-
   const watchSoftwarName = watch("softwarName", "");
-
-  const fetchSoftwar = async () => {
-    try {
-      const res = await axiosPublicUrl.get("/api/softwar");
-      setSoftwar(res.data);
-    } catch (error) {
-      Swal.fire("Error", "Error fetching software.", "error");
-    }
-  };
-
-  useEffect(() => {
-    fetchSoftwar();
-  }, []);
 
   const onSubmit = async (data) => {
     try {
@@ -46,43 +40,33 @@ const Software = () => {
 
       let message = "";
       if (editingBrand) {
-        await axiosPublicUrl.put(`/api/softwar/${editingBrand.id}`, formData, {
+        await axiosPublicUrl.put(`/api/software/${editingBrand.id}`, formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
         message = "Software updated successfully!";
       } else {
-        await axiosPublicUrl.post("/api/softwar", formData, {
+        await axiosPublicUrl.post("/api/software", formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
         message = "Software added successfully!";
       }
 
-      fetchSoftwar();
+      refetchSoftwar(); // Refetch data after mutation
       reset();
       setEditingBrand(null);
       setImagePreview(null);
       Swal.fire("Success", message, "success");
     } catch (error) {
-      Swal.fire("Error", "Error saving software.", "error");
+      Swal.fire("Error", error.message || "Error saving software.", "error");
     }
   };
 
+  // Simplified edit function without SweetAlert confirmation
   const handleEdit = (brand) => {
-    Swal.fire({
-      title: "Edit this software?",
-      text: "Do you want to edit this software?",
-      icon: "question",
-      showCancelButton: true,
-      confirmButtonText: "Yes, edit",
-      cancelButtonText: "Cancel",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        setEditingBrand(brand);
-        setValue("softwarName", brand.softwar_name);
-        setValue("softwarlink", brand.softwarlink);
-        setImagePreview(brand.photo);
-      }
-    });
+    setEditingBrand(brand);
+    setValue("softwarName", brand.softwar_name);
+    setValue("softwarlink", brand.softwarlink);
+    setImagePreview(brand.photo);
   };
 
   const handleDelete = async (id) => {
@@ -97,11 +81,15 @@ const Software = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          await axiosPublicUrl.delete(`/api/softwar/${id}`);
-          fetchSoftwar();
+          await axiosPublicUrl.delete(`/api/software/${id}`);
+          refetchSoftwar(); // Refetch data after deletion
           Swal.fire("Deleted!", "Software has been deleted.", "success");
         } catch (error) {
-          Swal.fire("Error", "Error deleting software.", "error");
+          Swal.fire(
+            "Error",
+            error.message || "Error deleting software.",
+            "error"
+          );
         }
       }
     });
@@ -120,6 +108,9 @@ const Software = () => {
     });
     return () => subscription.unsubscribe();
   }, [watch]);
+
+  if (isLoading) return null;
+  if (error) return <div>Error loading software data</div>;
 
   return (
     <div className="max-w-4xl mx-auto mb-3">
@@ -189,7 +180,7 @@ const Software = () => {
       </form>
       {/* Software Table */}
       <div className="mt-8">
-        <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <div className="relative overflow-x-auto shadow-md rounded-md">
           <div className="inline-block min-w-full align-middle">
             <div className="overflow-hidden">
               <table className="min-w-full border border-gray-600 table-auto">

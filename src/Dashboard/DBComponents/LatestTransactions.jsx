@@ -5,26 +5,19 @@ import { parseItems } from "../../utils/parseItems";
 import { formatDate } from "../../utils/formatDate";
 import { FaFilePdf } from "react-icons/fa";
 import Swal from "sweetalert2";
-import { useQuery } from "@tanstack/react-query";
 // import { saveAs } from "file-saver";
 import { GenerateInvoicePdf } from "../../utils/generateInvoicePdf";
+import useDataQuery from "../../utils/useDataQuery";
 
 const LatestTransactions = () => {
   const axiospublic = useAxiospublic();
   const [editStatusId, setEditStatusId] = useState(null);
 
-  const {
-    data: orders = [],
-    isLoading,
-    isError,
-    refetch,
-  } = useQuery({
-    queryKey: ["latestOrders"],
-    queryFn: async () => {
-      const res = await axiospublic.get("api/latest-order");
-      return res.data?.data;
-    },
-  });
+  const { data, isLoading, isError, refetch } = useDataQuery(
+    ["latestOrders"],
+    "/api/latest-order"
+  );
+  const orders = data?.data || [];
 
   const handleDownloadInvoice = async (order) => {
     const doc = await GenerateInvoicePdf(order);

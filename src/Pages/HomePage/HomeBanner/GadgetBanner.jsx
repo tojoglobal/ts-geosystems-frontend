@@ -3,6 +3,7 @@ import { Autoplay, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import useDataQuery from "../../../utils/useDataQuery";
+import { SkeletonLoader } from "../../../utils/Loader/SkeletonLoader";
 
 const GadgetBanner = () => {
   const { data = {}, isLoading } = useDataQuery(
@@ -13,9 +14,14 @@ const GadgetBanner = () => {
     ["homepageSingleImages"],
     "/api/get-homepage-single-images"
   );
-  
+
   if (isLoading || loading)
-    return <div className="text-center py-10">Loading...</div>;
+    return (
+      <div className="md:max-w-[1370px] md:mx-auto flex flex-col md:flex-row gap-4">
+        <SkeletonLoader className="w-full md:w-[67%] h-[320px]" />
+        <SkeletonLoader className="w-full md:w-[33%] h-[320px]" />
+      </div>
+    );
 
   return (
     <div className="md:w-full my-3 md:my-5 mx-3 md:max-w-[1370px] md:mx-auto">
@@ -47,7 +53,9 @@ const GadgetBanner = () => {
         {/* Right: Static Image */}
         <div className="w-full md:w-[33%] overflow-hidden rounded-lg group">
           <img
-            src={`${import.meta.env.VITE_OPEN_APIURL}${banner?.data[0]?.imageUrl}`}
+            src={`${import.meta.env.VITE_OPEN_APIURL}${
+              banner?.data[0]?.imageUrl
+            }`}
             alt="Right Side"
             className="w-auto h-[150px] md:h-[320px] object-cover transition-transform duration-300 group-hover:scale-110"
           />
