@@ -1,74 +1,43 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React, { useState } from "react";
 import Swal from "sweetalert2";
-import Modal from "react-modal";
-import { FaEdit, FaTrash, FaEye } from "react-icons/fa";
-import { useAxiospublic } from "../../Hooks/useAxiospublic";
+import { Dialog, Transition } from "@headlessui/react";
+import { FaEdit, FaTrash, FaEye, FaTimes } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import DOMPurify from "dompurify";
-
-Modal.setAppElement("#root"); // Important for accessibility
+import useDataQuery from "../../utils/useDataQuery";
+import { useAxiospublic } from "../../Hooks/useAxiospublic";
 
 const ProductTable = () => {
   const axiosPublicUrl = useAxiospublic();
-  const [products, setProducts] = useState([]);
-  const [productCategory, setProductCategory] = useState([]);
-  const [productSubCategory, setProductSubCategory] = useState([]);
-  const [productBrands, setProductBrans] = useState([]);
   const [viewProduct, setViewProduct] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  useEffect(() => {
-    fetchProducts();
-  }, []);
+  // Fetch products
+  const {
+    data,
+    isLoading: productsLoading,
+    refetch: refetchProducts,
+  } = useDataQuery(["products"], "/api/products");
+  const products = data?.products || [];
 
-  // fetch the product category
-  useEffect(() => {
-    const fetchProductCategory = async () => {
-      try {
-        const res = await axiosPublicUrl.get("/api/category");
-        setProductCategory(res.data?.categories);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    fetchProductCategory();
-  }, []);
-  // fetch the product subcategory
-  useEffect(() => {
-    const fetchProductCategory = async () => {
-      try {
-        const res = await axiosPublicUrl.get("/api/subcategory");
-        setProductSubCategory(res.data?.subcategories);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    fetchProductCategory();
-  }, []);
+  // Fetch categories
+  const { data: categoryData, isLoading: categoriesLoading } = useDataQuery(
+    ["categories"],
+    "/api/category"
+  );
+  const productCategory = categoryData?.categories || [];
 
-  // fetch the product Brand name
-  useEffect(() => {
-    const fetchProductCategory = async () => {
-      try {
-        const res = await axiosPublicUrl.get("/api/brands");
-        setProductBrans(res.data);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    fetchProductCategory();
-  }, []);
+  // Fetch subcategories
+  const { data: subcategoryData, isLoading: subcategoriesLoading } =
+    useDataQuery(["subcategories"], "/api/subcategory");
+  const productSubCategory = subcategoryData?.subcategories || [];
 
-  const fetchProducts = async () => {
-    try {
-      const res = await axiosPublicUrl.get("/api/products");
-      setProducts(res.data?.products);
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  // Fetch brands
+  const { data: brandsData, isLoading: brandsLoading } = useDataQuery(
+    ["brands"],
+    "/api/brands"
+  );
+  const productBrands = brandsData || [];
 
   const handleDelete = async (id, imageUrls) => {
     const confirm = await Swal.fire({
@@ -86,9 +55,11 @@ const ProductTable = () => {
 
     if (confirm.isConfirmed) {
       try {
-        await axios.delete(`/api/products/${id}`, { data: { imageUrls } }); // 🔥 Pass image URLs for unlink
+        await axiosPublicUrl.delete(`/api/products/${id}`, {
+          data: { imageUrls },
+        });
         Swal.fire("Deleted!", "Your product has been deleted.", "success");
-        fetchProducts();
+        refetchProducts();
       } catch (err) {
         console.error(err);
         Swal.fire("Error!", "Something went wrong.", "error");
@@ -100,31 +71,52 @@ const ProductTable = () => {
     setViewProduct(product);
     setIsModalOpen(true);
   };
-  // console.log(products);
-  // console.log(viewProduct);
 
   const getCategoryName = (id) => {
-    const converparse = JSON.parse(id);
-    return (
-      productCategory.find((cat) => cat.id === converparse.id)?.category_name ||
-      "N/A"
-    );
+    try {
+      const converparse = JSON.parse(id);
+      return (
+        productCategory.find((cat) => cat.id === converparse.id)
+          ?.category_name || "N/A"
+      );
+    } catch {
+      return "N/A";
+    }
   };
 
   const getSubCategoryName = (id) => {
-    const converparse = JSON.parse(id);
-    return (
-      productSubCategory.find((sub) => sub.id === converparse.id)?.name || "N/A"
-    );
+    try {
+      const converparse = JSON.parse(id);
+      return (
+        productSubCategory.find((sub) => sub.id === converparse.id)?.name ||
+        "N/A"
+      );
+    } catch {
+      return "N/A";
+    }
   };
+
   const getBrandName = (id) => {
     return (
       productBrands.find((brand) => brand.slug === id)?.brands_name || "N/A"
     );
   };
 
+  if (
+    productsLoading ||
+    categoriesLoading ||
+    subcategoriesLoading ||
+    brandsLoading
+  ) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-teal-500"></div>
+      </div>
+    );
+  }
+
   return (
-    <div className="bg-slate-800 text-white rounded-lg p-4 my-4">
+    <div>
       <div className="flex justify-between mb-6">
         <h1 className="text-xl md:text-2xl font-bold">Products List</h1>
         <Link
@@ -134,9 +126,9 @@ const ProductTable = () => {
           Add Product
         </Link>
       </div>
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto border border-gray-700">
         <table className="w-full text-sm text-left text-white min-w-[800px]">
-          <thead className="text-xs text-gray-400 uppercase bg-slate-900">
+          <thead className="text-xs uppercase bg-gray-800 text-gray-200">
             <tr>
               <th className="py-3 px-4">Product Name</th>
               <th className="py-3 px-4">Price ৳</th>
@@ -153,7 +145,7 @@ const ProductTable = () => {
               products.map((product) => (
                 <tr
                   key={product.id}
-                  className="bg-slate-800 border-b border-slate-600"
+                  className="bg-gray-900 border-b border-gray-700"
                 >
                   <td className="py-4 px-4 sm:px-6">{product.product_name}</td>
                   <td className="py-4 px-4 sm:px-6 whitespace-nowrap">
@@ -211,89 +203,143 @@ const ProductTable = () => {
         </table>
       </div>
 
-      {/* Modal */}
-      <Modal
-        isOpen={isModalOpen}
-        onRequestClose={() => setIsModalOpen(false)}
-        contentLabel="Product Details"
-        className="bg-gray-900 p-4 sm:p-6 md:p-8 rounded-md shadow-lg w-[95%] sm:w-full max-w-2xl mx-auto my-10 max-h-[90vh] overflow-y-auto text-white"
-        overlayClassName="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center"
-      >
-        {viewProduct && (
-          <div className="space-y-4 text-sm sm:text-base">
-            <h2 className="text-xl sm:text-2xl font-bold mb-4">
-              {viewProduct.product_name}
-            </h2>
-            <p>
-              <strong>Price:</strong> ৳ {viewProduct.price}
-            </p>
-            <p>
-              <strong>Category:</strong> {getCategoryName(viewProduct.category)}
-            </p>
-            <p>
-              <strong>Sub Category:</strong>{" "}
-              {getSubCategoryName(viewProduct.sub_category)}
-            </p>
-            <p>
-              <strong>SKU:</strong> {viewProduct.sku}
-            </p>
-            <p>
-              <strong>Condition:</strong> {viewProduct.product_condition}
-            </p>
-            <p>
-              <strong>Brand:</strong> {getBrandName(viewProduct.brand_name)}
-            </p>
-            <div>
-              <strong>Overview:</strong>
-              <article
-                dangerouslySetInnerHTML={{
-                  __html: DOMPurify.sanitize(viewProduct.product_overview),
-                }}
-                className="prose max-w-none prose-sm sm:prose-base leading-relaxed bg-white text-black p-2"
-              ></article>
+      {/* Improved Modal using Headless UI */}
+      <Transition appear show={isModalOpen} as={React.Fragment}>
+        <Dialog
+          as="div"
+          className="relative z-50"
+          onClose={() => setIsModalOpen(false)}
+        >
+          <Transition.Child
+            as={React.Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 backdrop-blur-sm" />
+          </Transition.Child>
+
+          <div className="fixed inset-0 overflow-y-auto">
+            <div className="flex min-h-full items-center justify-center p-4 text-center">
+              <Transition.Child
+                as={React.Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 scale-95"
+                enterTo="opacity-100 scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 scale-100"
+                leaveTo="opacity-0 scale-95"
+              >
+                <Dialog.Panel className="w-full max-w-2xl transform overflow-hidden rounded-2xl bg-gray-800 p-6 text-left align-middle shadow-xl transition-all">
+                  <div className="flex justify-between items-start">
+                    <Dialog.Title
+                      as="h3"
+                      className="text-lg font-medium leading-6 text-white"
+                    >
+                      {viewProduct?.product_name}
+                    </Dialog.Title>
+                    <button
+                      onClick={() => setIsModalOpen(false)}
+                      className="text-gray-400 cursor-pointer hover:text-white"
+                    >
+                      <FaTimes className="h-5 w-5" />
+                    </button>
+                  </div>
+                  {viewProduct && (
+                    <div className="mt-4 space-y-4 text-sm text-gray-200">
+                      <p>
+                        <strong className="text-gray-300">Price:</strong> ৳{" "}
+                        {viewProduct.price}
+                      </p>
+                      <p>
+                        <strong className="text-gray-300">Category:</strong>{" "}
+                        {getCategoryName(viewProduct.category)}
+                      </p>
+                      <p>
+                        <strong className="text-gray-300">Sub Category:</strong>{" "}
+                        {getSubCategoryName(viewProduct.sub_category)}
+                      </p>
+                      <p>
+                        <strong className="text-gray-300">SKU:</strong>{" "}
+                        {viewProduct.sku}
+                      </p>
+                      <p>
+                        <strong className="text-gray-300">Condition:</strong>{" "}
+                        {viewProduct.product_condition}
+                      </p>
+                      <p>
+                        <strong className="text-gray-300">Brand:</strong>{" "}
+                        {getBrandName(viewProduct.brand_name)}
+                      </p>
+                      <div>
+                        <strong className="text-gray-300">Overview:</strong>
+                        <article
+                          dangerouslySetInnerHTML={{
+                            __html: DOMPurify.sanitize(
+                              viewProduct.product_overview
+                            ),
+                          }}
+                          className="prose max-w-none prose-sm sm:prose-base leading-relaxed bg-gray-700 text-white p-3 rounded mt-2"
+                        />
+                      </div>
+                      <div>
+                        <strong className="text-gray-300">
+                          Warranty Info:
+                        </strong>
+                        <article
+                          dangerouslySetInnerHTML={{
+                            __html: DOMPurify.sanitize(
+                              viewProduct.warranty_info
+                            ),
+                          }}
+                          className="prose max-w-none prose-sm sm:prose-base leading-relaxed bg-gray-700 text-white p-3 rounded mt-2"
+                        />
+                      </div>
+                      {viewProduct.video_urls && (
+                        <p>
+                          <strong className="text-gray-300">Video:</strong>{" "}
+                          <a
+                            href={viewProduct.video_urls}
+                            className="text-blue-400 hover:text-blue-300"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            Watch Video
+                          </a>
+                        </p>
+                      )}
+                      <div className="grid grid-cols-2 gap-3 sm:gap-4 mt-4">
+                        {Array.isArray(viewProduct.image_urls) &&
+                          viewProduct.image_urls.map((img, idx) => (
+                            <img
+                              key={idx}
+                              src={img}
+                              alt="Product"
+                              className="rounded-md object-cover h-32 w-full border border-gray-600"
+                            />
+                          ))}
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="mt-6 flex justify-end">
+                    <button
+                      type="button"
+                      className="inline-flex cursor-pointer justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                      onClick={() => setIsModalOpen(false)}
+                    >
+                      Close
+                    </button>
+                  </div>
+                </Dialog.Panel>
+              </Transition.Child>
             </div>
-            <p>
-              <strong>Warranty Info:</strong>
-              <article
-                dangerouslySetInnerHTML={{
-                  __html: DOMPurify.sanitize(viewProduct.warranty_info),
-                }}
-                className="prose max-w-none prose-sm sm:prose-base leading-relaxed text-white"
-              ></article>
-            </p>
-            {viewProduct.video_urls && (
-              <p>
-                <strong>Video:</strong>{" "}
-                <a
-                  href={viewProduct.video_urls}
-                  className="text-blue-500"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Watch Video
-                </a>
-              </p>
-            )}
-            <div className="grid grid-cols-2 gap-3 sm:gap-4 mt-4">
-              {Array.isArray(viewProduct.image_urls) &&
-                viewProduct.image_urls.map((img, idx) => (
-                  <img
-                    key={idx}
-                    src={img}
-                    alt="Product"
-                    className="rounded-md object-cover h-32 w-full"
-                  />
-                ))}
-            </div>
-            <button
-              onClick={() => setIsModalOpen(false)}
-              className="mt-6 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 w-full sm:w-auto"
-            >
-              Close
-            </button>
           </div>
-        )}
-      </Modal>
+        </Dialog>
+      </Transition>
     </div>
   );
 };
