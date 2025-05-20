@@ -3,7 +3,6 @@ import { Navigation, Autoplay } from "swiper/modules";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import "swiper/css";
 import "swiper/css/navigation";
-import { Link } from "react-router-dom";
 
 const TopClients = () => {
   const brands = [

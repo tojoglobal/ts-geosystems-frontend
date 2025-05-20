@@ -1,11 +1,10 @@
 import useDataQuery from "../../../utils/useDataQuery";
 const GadgetGoHighBanner = () => {
-  const { data=[], isLoading } = useDataQuery(
+  const { data = [], isLoading } = useDataQuery(
     ["homepageSingleImages"],
     "/api/get-homepage-single-images"
   );
-  if (isLoading)
-    return <div className="text-center py-10">Loading...</div>;
+  if (isLoading) return null;
   return (
     <div className="md:w-full my-3 md:my-5 mx-3 max-w-[1370px] md:mx-auto">
       <div className="flex h-96 md:h-64 w-full flex-col md:flex-row gap-3 md:gap-4">

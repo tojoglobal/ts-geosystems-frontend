@@ -1,5 +1,3 @@
-import { useQuery } from "@tanstack/react-query";
-import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import ExperienceCenter from "./ExperienceCenter";
 import OurAchievements from "./OurAchievements";
 import OurAdServices from "./OurAdServices";
@@ -9,23 +7,16 @@ import ProductHighlights from "./ProductHighlights";
 import TopClients from "./TopClients";
 import WeProvide from "./WeProvide";
 import HomeBanner from "./HomeBanner/HomeBanner";
-import Loader from "../../utils/Loader";
+import useDataQuery from "../../utils/useDataQuery";
 
 const MainHome = () => {
-  const axiosPublicUrl = useAxiospublic();
-  const {
-    data: comp,
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: ["homepageControl"],
-    queryFn: async () => {
-      const res = await axiosPublicUrl.get("/api/homepage-control");
-      return res?.data?.components || {};
-    },
-  });
+  const { data, isLoading, isError } = useDataQuery(
+    ["homepageControl"],
+    "/api/homepage-control"
+  );
+  const comp = data?.components || {};
 
-  if (isLoading) return <Loader />;
+  if (isLoading) return null;
   if (isError)
     return (
       <div className="min-h-[80vh] text-center my-16">
@@ -33,24 +24,24 @@ const MainHome = () => {
       </div>
     );
 
-    const allComponentsDisabled = Object?.values(comp).every(
-      (value) => value === false
-    );
+  const allComponentsDisabled = Object?.values(comp).every(
+    (value) => value === false
+  );
 
-    if (allComponentsDisabled) {
-      return (
-        <div className="min-h-[85vh] flex items-center justify-center">
-          <div className="text-center">
-            <h2 className="text-2xl font-bold text-gray-800 mb-1">
-              Website Under Maintenance
-            </h2>
-            <p className="text-gray-600">
-              We're currently updating our website. Please check back later.
-            </p>
-          </div>
+  if (allComponentsDisabled) {
+    return (
+      <div className="min-h-[75vh] flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-gray-800 mb-1">
+            Website Under Maintenance
+          </h2>
+          <p className="text-gray-600">
+            We're currently updating our website. Please check back later.
+          </p>
         </div>
-      );
-    }
+      </div>
+    );
+  }
 
   return (
     <>
