@@ -39,7 +39,7 @@ const ProductTable = () => {
   );
   const productBrands = brandsData || [];
 
-  const handleDelete = async (id, imageUrls) => {
+  const handleDelete = async (id) => {
     const confirm = await Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -55,10 +55,14 @@ const ProductTable = () => {
 
     if (confirm.isConfirmed) {
       try {
-        await axiosPublicUrl.delete(`/api/products/${id}`, {
-          data: { imageUrls },
+        await axiosPublicUrl.delete(`/api/products/${id}`);
+        Swal.fire({
+          title: "Deleted",
+          text: "Your product has been deleted.",
+          icon: "success",
+          background: "#1e293b",
+          color: "#f8fafc",
         });
-        Swal.fire("Deleted!", "Your product has been deleted.", "success");
         refetchProducts();
       } catch (err) {
         console.error(err);
