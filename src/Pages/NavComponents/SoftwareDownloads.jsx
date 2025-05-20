@@ -10,7 +10,7 @@ const SoftwareDownloads = () => {
     data: softwareData = [],
     isLoading,
     error,
-  } = useDataQuery(["software"], "/api/softwar");
+  } = useDataQuery(["software"], "/api/software");
 
   if (isLoading) return null;
 
