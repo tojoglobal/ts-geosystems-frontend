@@ -124,7 +124,7 @@ const ProductTable = () => {
   };
 
   return (
-    <div className="bg-slate-800 text-white rounded-lg p-4 my-4">
+    <div>
       <div className="flex justify-between mb-6">
         <h1 className="text-xl md:text-2xl font-bold">Products List</h1>
         <Link
@@ -134,9 +134,9 @@ const ProductTable = () => {
           Add Product
         </Link>
       </div>
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto border border-gray-700">
         <table className="w-full text-sm text-left text-white min-w-[800px]">
-          <thead className="text-xs text-gray-400 uppercase bg-slate-900">
+          <thead className="text-xs uppercase bg-gray-800 text-gray-200">
             <tr>
               <th className="py-3 px-4">Product Name</th>
               <th className="py-3 px-4">Price ৳</th>
@@ -153,7 +153,7 @@ const ProductTable = () => {
               products.map((product) => (
                 <tr
                   key={product.id}
-                  className="bg-slate-800 border-b border-slate-600"
+                  className="bg-gray-900 border-b border-gray-700"
                 >
                   <td className="py-4 px-4 sm:px-6">{product.product_name}</td>
                   <td className="py-4 px-4 sm:px-6 whitespace-nowrap">
