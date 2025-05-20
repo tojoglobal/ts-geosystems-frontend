@@ -10,17 +10,18 @@ import "swiper/css/navigation";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import { toast } from "react-toastify";
 import useDataQuery from "../../utils/useDataQuery";
+import { SkeletonLoader } from "../../utils/Loader/SkeletonLoader";
 
 const ContactUs = () => {
   const axiosPublicUrl = useAxiospublic();
-  const { data = [], isLoading: loading } = useDataQuery(
+  const { data = [], isLoading: brandsLoading } = useDataQuery(
     ["popularBrand"],
     "/api/brands"
   );
 
   const {
     data: contactInfo,
-    isLoading,
+    isLoading: contactInfoLoading,
     isError,
   } = useDataQuery(["contactInfo"], "/api/admin-contact-us");
 
@@ -39,7 +40,6 @@ const ContactUs = () => {
 
     try {
       const response = await axiosPublicUrl.post("/api/contact", data);
-      console.log(response);
       if (response.data.success) {
         toast.success("Message sent successfully!");
         form.reset();
@@ -51,8 +51,6 @@ const ContactUs = () => {
   };
 
   const brands = data.filter((brand) => brand.is_populer === 1);
-
-  if (isLoading || loading) return null;
 
   if (isError) {
     return <div className="p-3">Error loading contact information</div>;
@@ -143,83 +141,104 @@ const ContactUs = () => {
               Contact & Email
               <span className="absolute bottom-0 left-0 w-20 h-0.5 bg-[#e62245]"></span>
             </h2>
-            <ul className="space-y-2 text-gray-600">
-              {/* Dynamic Phone Numbers */}
-              {contactInfo?.phoneNumbers?.map((phone, index) => (
-                <li key={index} className="flex items-center gap-2">
-                  <FaPhoneAlt />
-                  {phone.value}
-                </li>
-              ))}
-              {/* Dynamic Emails */}
-              {contactInfo?.emails?.map((email, index) => (
-                <li key={index} className="flex items-center gap-2">
-                  <FaEnvelope />
-                  {email.value}
-                </li>
-              ))}
-            </ul>
+            {contactInfoLoading ? (
+              <div className="space-y-2">
+                <SkeletonLoader className="h-4 w-3/4" />
+                <SkeletonLoader className="h-4 w-1/2" />
+              </div>
+            ) : (
+              <ul className="space-y-2 text-gray-600">
+                {contactInfo?.phoneNumbers?.map((phone, index) => (
+                  <li key={index} className="flex items-center gap-2">
+                    <FaPhoneAlt />
+                    {phone.value}
+                  </li>
+                ))}
+                {contactInfo?.emails?.map((email, index) => (
+                  <li key={index} className="flex items-center gap-2">
+                    <FaEnvelope />
+                    {email.value}
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
           <div>
             <h2 className="text-lg font-bold pb-4 mb-4 relative border-b border-gray-200">
               Office Address
               <span className="absolute bottom-0 left-0 w-20 h-0.5 bg-[#e62245]"></span>
             </h2>
-            <ul className="space-y-2 text-gray-600">
-              {/* Dynamic Office Addresses */}
-              {contactInfo?.officeAddresses?.map((address, index) => (
-                <li key={index} className="flex items-start gap-2">
-                  <FaMapMarkerAlt className="mt-1" />
-                  {address.value.split("\n").map((line, i) => (
-                    <span key={i}>
-                      {line}
-                      <br />
-                    </span>
-                  ))}
-                </li>
-              ))}
-            </ul>
+            {contactInfoLoading ? (
+              <div className="space-y-2">
+                <SkeletonLoader className="h-4 w-full" />
+                <SkeletonLoader className="h-4 w-5/6" />
+              </div>
+            ) : (
+              <ul className="space-y-2 text-gray-600">
+                {contactInfo?.officeAddresses?.map((address, index) => (
+                  <li key={index} className="flex items-start gap-2">
+                    <FaMapMarkerAlt className="mt-1" />
+                    {address.value.split("\n").map((line, i) => (
+                      <span key={i}>
+                        {line}
+                        <br />
+                      </span>
+                    ))}
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
           <div className="flex space-x-4 pt-2">
-            {contactInfo?.socialLinks?.facebook && (
-              <a
-                href={contactInfo.socialLinks.facebook}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="rounded-full p-2 border hover:bg-[#1877F2] hover:text-white transition"
-              >
-                <FaFacebookF />
-              </a>
-            )}
-            {contactInfo?.socialLinks?.twitter && (
-              <a
-                href={contactInfo.socialLinks.twitter}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="rounded-full p-2 border hover:bg-[#1DA1F2] hover:text-white transition"
-              >
-                <FaTwitter />
-              </a>
-            )}
-            {contactInfo?.socialLinks?.youtube && (
-              <a
-                href={contactInfo.socialLinks.youtube}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="rounded-full p-2 border hover:bg-[#FF0000] hover:text-white transition"
-              >
-                <FaYoutube />
-              </a>
-            )}
-            {contactInfo?.socialLinks?.instagram && (
-              <a
-                href={contactInfo.socialLinks.instagram}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="rounded-full p-2 border hover:bg-gradient-to-tr from-pink-500 via-red-500 to-yellow-500 hover:text-white transition"
-              >
-                <FaInstagram />
-              </a>
+            {contactInfoLoading ? (
+              <div className="flex gap-4">
+                {[1, 2, 3, 4].map((i) => (
+                  <SkeletonLoader key={i} className="w-8 h-8 rounded-full" />
+                ))}
+              </div>
+            ) : (
+              <>
+                {contactInfo?.socialLinks?.facebook && (
+                  <a
+                    href={contactInfo.socialLinks.facebook}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="rounded-full p-2 border hover:bg-[#1877F2] hover:text-white transition"
+                  >
+                    <FaFacebookF />
+                  </a>
+                )}
+                {contactInfo?.socialLinks?.twitter && (
+                  <a
+                    href={contactInfo.socialLinks.twitter}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="rounded-full p-2 border hover:bg-[#1DA1F2] hover:text-white transition"
+                  >
+                    <FaTwitter />
+                  </a>
+                )}
+                {contactInfo?.socialLinks?.youtube && (
+                  <a
+                    href={contactInfo.socialLinks.youtube}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="rounded-full p-2 border hover:bg-[#FF0000] hover:text-white transition"
+                  >
+                    <FaYoutube />
+                  </a>
+                )}
+                {contactInfo?.socialLinks?.instagram && (
+                  <a
+                    href={contactInfo.socialLinks.instagram}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="rounded-full p-2 border hover:bg-gradient-to-tr from-pink-500 via-red-500 to-yellow-500 hover:text-white transition"
+                  >
+                    <FaInstagram />
+                  </a>
+                )}
+              </>
             )}
           </div>
         </div>
@@ -245,53 +264,67 @@ const ContactUs = () => {
           </h2>
           <div className="flex-1 h-0.5 bg-[#e62245]"></div>
         </div>
-        <Swiper
-          modules={[Navigation, Autoplay]}
-          spaceBetween={30}
-          slidesPerView={4}
-          autoplay={{ delay: 3000 }}
-          loop={true}
-          navigation={{
-            prevEl: ".swiper-button-prev-custom",
-            nextEl: ".swiper-button-next-custom",
-          }}
-          breakpoints={{
-            320: {
-              slidesPerView: 1,
-            },
-            640: {
-              slidesPerView: 2,
-            },
-            768: {
-              slidesPerView: 3,
-            },
-            1024: {
-              slidesPerView: 4,
-            },
-          }}
-        >
-          {brands?.map((brand, index) => (
-            <SwiperSlide key={index}>
-              <div className="w-full h-12 rounded shadow flex items-center justify-center">
-                <Link to={brand.slug}>
-                  <img
-                    src={`${import.meta.env.VITE_OPEN_APIURL}/uploads/${
-                      brand.photo
-                    }`}
-                    alt={brand.name}
-                    className="max-h-36 w-auto object-contain"
-                  />
-                </Link>
-              </div>
-            </SwiperSlide>
-          ))}
-        </Swiper>
-        <button className="cursor-pointer swiper-button-prev-custom hidden group-hover:block absolute -left-1 md:-left-4 top-[78%] -translate-y-1/2 z-10 bg-[#696666e3] shadow-md rounded-full p-2 hover:bg-[#111111]">
-          <IoIosArrowBack size={18} className="text-white" />
-        </button>
-        <button className="cursor-pointer swiper-button-next-custom hidden group-hover:block absolute -right-1 md:-right-4 top-[78%] -translate-y-1/2 z-10 bg-[#696666e3] shadow-md rounded-full p-2 hover:bg-[#111111]">
-          <IoIosArrowForward size={18} className="text-white" />
-        </button>
+
+        {brandsLoading ? (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {[1, 2, 3, 4].map((i) => (
+              <SkeletonLoader key={i} className="h-12 w-full rounded" />
+            ))}
+          </div>
+        ) : (
+          <Swiper
+            modules={[Navigation, Autoplay]}
+            spaceBetween={30}
+            slidesPerView={4}
+            autoplay={{ delay: 3000 }}
+            loop={true}
+            navigation={{
+              prevEl: ".swiper-button-prev-custom",
+              nextEl: ".swiper-button-next-custom",
+            }}
+            breakpoints={{
+              320: {
+                slidesPerView: 1,
+              },
+              640: {
+                slidesPerView: 2,
+              },
+              768: {
+                slidesPerView: 3,
+              },
+              1024: {
+                slidesPerView: 4,
+              },
+            }}
+          >
+            {brands?.map((brand, index) => (
+              <SwiperSlide key={index}>
+                <div className="w-full h-12 rounded shadow flex items-center justify-center">
+                  <Link to={brand.slug}>
+                    <img
+                      src={`${import.meta.env.VITE_OPEN_APIURL}/uploads/${
+                        brand.photo
+                      }`}
+                      alt={brand.name}
+                      className="max-h-36 w-auto object-contain"
+                    />
+                  </Link>
+                </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        )}
+
+        {!brandsLoading && (
+          <>
+            <button className="cursor-pointer swiper-button-prev-custom hidden group-hover:block absolute -left-1 md:-left-4 top-[78%] -translate-y-1/2 z-10 bg-[#696666e3] shadow-md rounded-full p-2 hover:bg-[#111111]">
+              <IoIosArrowBack size={18} className="text-white" />
+            </button>
+            <button className="cursor-pointer swiper-button-next-custom hidden group-hover:block absolute -right-1 md:-right-4 top-[78%] -translate-y-1/2 z-10 bg-[#696666e3] shadow-md rounded-full p-2 hover:bg-[#111111]">
+              <IoIosArrowForward size={18} className="text-white" />
+            </button>
+          </>
+        )}
       </section>
     </div>
   );
