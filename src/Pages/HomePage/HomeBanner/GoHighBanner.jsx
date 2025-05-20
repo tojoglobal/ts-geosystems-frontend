@@ -5,7 +5,7 @@ const GoHighBanner = () => {
     ["homepageSingleImages"],
     "/api/get-homepage-single-images"
   );
-  if (isLoading) return <div className="text-center py-10">Loading...</div>;
+  if (isLoading) return null;
   return (
     <div className="mt-6 h-44 md:h-80 md:mt-10 max-w-[1370px] mx-2 md:mx-auto overflow-hidden rounded-lg">
       <img

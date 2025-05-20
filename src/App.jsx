@@ -36,7 +36,6 @@ import RemoteSupport from "./Pages/NavComponents/RemoteSupport";
 import UserManuals from "./Pages/NavComponents/UserManuals";
 import TSBlog from "./Pages/NavComponents/Blog/TSBlog";
 import Clearance from "./Pages/NavComponents/Clearance";
-import Categorys from "./Dashboard/Categorys/Categorys";
 import Compare from "./Pages/NavComponents/Compare";
 import UsedEquipment from "./Pages/NavComponents/UsedEquipment";
 import Brands from "./Dashboard/Brands/Brands";
@@ -70,25 +69,24 @@ import BlogView from "./Dashboard/Blog/BlogView";
 import AdminUpdateCertificateTracking from "./Pages/Control/AdminUpdateCertificateTracking";
 import WelcomePage from "./Pages/WelcomePage/WelcomePage";
 import UserProtectedRoute from "./ProtectedRoute/UserProtectedRoute";
-// import UserDashboard from "./UserAccount/UserDashboard";
 import UserOrders from "./UserAccount/UserOrders";
 import UserInbox from "./UserAccount/UserInbox";
 import UserAddress from "./UserAccount/UserAddress";
 import RecentlyViewed from "./UserAccount/RecentlyViewed";
 import AccountSettings from "./UserAccount/AccountSettings";
 import UserAccountLayout from "./UserAccount/UserAccountLayout";
-// import EditUserAddress from "./UserAccount/EditUserAddress";
 import PublicOnlyRoute from "./ProtectedRoute/PublicOnlyRoute";
 import AdminTradeIn from "./Dashboard/TradeIn/AdminTradeIn";
 import AdminSupportData from "./Dashboard/Support/AdminSupportData";
 import AddNewAddress from "./UserAccount/AddNewAddress";
-import AddUserManuals from "./Dashboard/UserManuals/UserManuals";
-import AddQuickGuides from "./Dashboard/QuickGuides/QuickGuides";
 import Chat from "./Dashboard/Chat/Chat";
 import Subscriber from "./Dashboard/Subscriber/Subscriber";
 import AdminServiceInquiries from "./Dashboard/Services/AdminServiceInquiries";
 import MailView from "./Dashboard/Email/MailView";
 import Inbox from "./Dashboard/Email/Inbox";
+import Categories from "./Dashboard/Categorys/Categories";
+import AddUserManuals from "./Dashboard/UserManuals/AddUserManuals";
+import AddQuickGuides from "./Dashboard/QuickGuides/AddQuickGuides";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -189,15 +187,15 @@ const AppLayout = () => {
           <Route path="add-product" element={<ProductAddForm />} />
           <Route path="update-product/:id" element={<UpdateProductForm />} />
           {/* category add */}
-          <Route path="add-categorys" element={<Categorys />} />
+          <Route path="add-categorys" element={<Categories />} />
           {/* add brand */}
           <Route path="add-brands" element={<Brands />} />
           {/* add software  */}
           <Route path="add-software" element={<Software />} />
           {/* add userManuals  */}
-          <Route path="add-userManuals" element={<AddUserManuals />} />
+          <Route path="add-usermanuals" element={<AddUserManuals />} />
           {/* add quickGuides  */}
-          <Route path="add-quickGuides" element={<AddQuickGuides />} />
+          <Route path="add-quickguides" element={<AddQuickGuides />} />
           {/* order route */}
           <Route path="orders" element={<OrderTable />} />
           {/* hoem page controll */}

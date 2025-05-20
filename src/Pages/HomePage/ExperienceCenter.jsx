@@ -1,13 +1,11 @@
-import Loader from "../../utils/Loader";
 import useDataQuery from "../../utils/useDataQuery";
-
 const ExperienceCenter = () => {
   const { data = {}, isLoading } = useDataQuery(
     ["experience_center_images_public"],
     "/api/get-experience-center-images"
   );
 
-  if (isLoading) return <Loader />;
+  if (isLoading) return null;
   if (data?.data === 0) return null;
 
   return (

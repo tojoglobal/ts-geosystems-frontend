@@ -5,7 +5,6 @@ import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import "swiper/css";
 import "swiper/css/navigation";
 import GoogleReview from "./GoogleReview";
-import Loader from "../../../utils/Loader";
 import useDataQuery from "../../../utils/useDataQuery";
 
 const AboutUs = () => {
@@ -38,7 +37,7 @@ const AboutUs = () => {
     (img) => img.section === "bottom_images" && img.show
   );
 
-  if (isLoading || loading || imgLoading) return <Loader />;
+  if (isLoading || loading || imgLoading) return null;
   if (isError) return <p>Error loading data...</p>;
 
   const section2Points = aboutContent?.section2_points || [];

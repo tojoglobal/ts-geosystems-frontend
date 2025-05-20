@@ -52,7 +52,7 @@ const MainBanner = () => {
     }
   }, []);
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return null;
   if (error) return <div>Error loading slides</div>;
 
   // Get slides from API

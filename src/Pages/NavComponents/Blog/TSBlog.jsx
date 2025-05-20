@@ -95,6 +95,7 @@ const TSBlog = () => {
   //     tab === "All" ? "/ts-blog" : `/ts-blog?type=${encodeURIComponent(tab)}`;
   //   window.history.pushState({}, "", newUrl);
   // };
+  if (isLoading) return null;
 
   return (
     <div className="p-2 md:p-3">
@@ -136,75 +137,68 @@ const TSBlog = () => {
           ))}
           <BlogSearch />
         </div>
-        {isLoading ? (
-          <div className="text-center py-10">Loading blogs...</div>
-        ) : (
-          <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7 mt-10">
-              {parsedBlogs.map((post) => (
-                <Link
-                  key={post.id}
-                  to={`/ts-blog/${post.id}/${slugify(post.title || "")}`}
-                  className="relative border border-[#eaedef] pb-6 hover:shadow-md"
-                >
-                  <img
-                    src={post.image}
-                    alt={post.title}
-                    className="w-full h-80 object-cover rounded-t-sm"
-                  />
-                  <div className="p-2 mt-1 bg-[#fafdff]">
-                    <p className="text-xs text-gray-500 text-center mb-1">
-                      {post.meta}
-                    </p>
-                    <h3 className="text-[30px] font-bold text-center capitalize mb-2">
-                      {post.title}
-                    </h3>
-                    <p className="text-sm text-center text-gray-400 uppercase">
-                      {post.type.replace("_", " ")}
-                    </p>
-                  </div>
-                </Link>
-              ))}
-            </div>
-
-            {/* Pagination Navigation */}
-            <div className="flex justify-between items-center mt-8 max-w-6xl mx-auto px-4">
-              <div>
-                {currentPage > 1 && (
-                  <Link
-                    to={`/ts-blog?page=${currentPage - 1}${
-                      activeTab !== "All"
-                        ? `&type=${encodeURIComponent(activeTab)}`
-                        : ""
-                    }`}
-                    className="flex items-center gap-2 text-[#e62245] hover:text-[#754e55]"
-                  >
-                    <IoIosArrowBack />
-                    Previous
-                  </Link>
-                )}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7 mt-10">
+          {parsedBlogs.map((post) => (
+            <Link
+              key={post.id}
+              to={`/ts-blog/${post.id}/${slugify(post.title || "")}`}
+              className="relative border border-[#eaedef] pb-6 hover:shadow-md"
+            >
+              <img
+                src={post.image}
+                alt={post.title}
+                className="w-full h-80 object-cover rounded-t-sm"
+              />
+              <div className="p-2 mt-1 bg-[#fafdff]">
+                <p className="text-xs text-gray-500 text-center mb-1">
+                  {post.meta}
+                </p>
+                <h3 className="text-[30px] font-bold text-center capitalize mb-2">
+                  {post.title}
+                </h3>
+                <p className="text-sm text-center text-gray-400 uppercase">
+                  {post.type.replace("_", " ")}
+                </p>
               </div>
-              <div className="text-sm text-gray-600">
-                Page {currentPage} of {totalPages}
-              </div>
-              <div>
-                {currentPage < totalPages && (
-                  <Link
-                    to={`/ts-blog?page=${currentPage + 1}${
-                      activeTab !== "All"
-                        ? `&type=${encodeURIComponent(activeTab)}`
-                        : ""
-                    }`}
-                    className="flex items-center gap-2 text-[#e62245] hover:text-[#754e55]"
-                  >
-                    Next
-                    <IoIosArrowForward />
-                  </Link>
-                )}
-              </div>
-            </div>
-          </>
-        )}
+            </Link>
+          ))}
+        </div>
+        {/* Pagination Navigation */}
+        <div className="flex justify-between items-center mt-8 max-w-6xl mx-auto px-4">
+          <div>
+            {currentPage > 1 && (
+              <Link
+                to={`/ts-blog?page=${currentPage - 1}${
+                  activeTab !== "All"
+                    ? `&type=${encodeURIComponent(activeTab)}`
+                    : ""
+                }`}
+                className="flex items-center gap-2 text-[#e62245] hover:text-[#754e55]"
+              >
+                <IoIosArrowBack />
+                Previous
+              </Link>
+            )}
+          </div>
+          <div className="text-sm text-gray-600">
+            Page {currentPage} of {totalPages}
+          </div>
+          <div>
+            {currentPage < totalPages && (
+              <Link
+                to={`/ts-blog?page=${currentPage + 1}${
+                  activeTab !== "All"
+                    ? `&type=${encodeURIComponent(activeTab)}`
+                    : ""
+                }`}
+                className="flex items-center gap-2 text-[#e62245] hover:text-[#754e55]"
+              >
+                Next
+                <IoIosArrowForward />
+              </Link>
+            )}
+          </div>
+        </div>
       </section>
     </div>
   );

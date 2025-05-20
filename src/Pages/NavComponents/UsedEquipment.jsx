@@ -110,7 +110,7 @@ const UsedEquipment = () => {
     }
   };
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return null;
 
   return (
     <div className="p-1 md:p-3">

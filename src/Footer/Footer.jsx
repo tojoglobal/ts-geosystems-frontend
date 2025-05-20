@@ -29,9 +29,6 @@ const Footer = () => {
         title: "Error!",
         text: error.response?.data?.error || "Failed to subscribe",
         icon: "error",
-        background: "#1e293b",
-        color: "#f8fafc",
-        confirmButtonColor: "#e11d48",
       });
     } finally {
       setIsSubmitting(false);

@@ -67,9 +67,7 @@ const ProductHighlights = () => {
     setIsEnd(swiper.isEnd);
   };
 
-  if (isLoading) {
-    return <div className="max-w-[1370px] mx-auto py-12">Loading...</div>;
-  }
+  if (isLoading) return null;
 
   if (error) {
     return (

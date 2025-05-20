@@ -1,10 +1,10 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import Swal from "sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
+import useDataQuery from "../../utils/useDataQuery";
 
 const generateSlug = (text) =>
   text
@@ -12,82 +12,65 @@ const generateSlug = (text) =>
     .replace(/\s+/g, "-")
     .replace(/[^a-z0-9-]/g, "");
 
-const AddQuickGuides = () => {
+const AddUserManuals = () => {
   const axiosPublicUrl = useAxiospublic();
   const [imagePreview, setImagePreview] = useState(null);
-  const [quickGuides, setQuickGuides] = useState([]);
-  const [editingGuide, setEditingGuide] = useState(null);
+  const [editingBrand, setEditingBrand] = useState(null);
 
+  const {
+    data = {},
+    isLoading,
+    error,
+    refetch: fetchuserManuals,
+  } = useDataQuery(["userManuals"], "/api/userManuals");
+  const userManuals = data?.data || [];
+  
   const { register, handleSubmit, watch, reset, setValue } = useForm();
 
-  const watchQuickGuidesName = watch("quickGuidesName", "");
-
-  const fetchQuickGuides = async () => {
-    try {
-      const res = await axiosPublicUrl.get("/api/quickGuides");
-      setQuickGuides(res.data);
-    } catch (error) {
-      Swal.fire("Error", "Error fetching quick guides.", "error");
-    }
-  };
-
-  useEffect(() => {
-    fetchQuickGuides();
-  }, []);
+  const watchuserManualsName = watch("userManualsName", "");
 
   const onSubmit = async (data) => {
     try {
       const formData = new FormData();
-      formData.append("quickGuides_name", data.quickGuidesName);
-      formData.append("slug", generateSlug(data.quickGuidesName));
-      formData.append("quickGuideslink", data.quickGuideslink);
+      formData.append("userManuals_name", data.userManualsName);
+      formData.append("slug", generateSlug(data.userManualsName));
+      formData.append("userManualslink", data.userManualslink);
       if (data.photo && data.photo[0]) {
         formData.append("photo", data.photo[0]);
       }
 
       let message = "";
-      if (editingGuide) {
+      if (editingBrand) {
         await axiosPublicUrl.put(
-          `/api/put-quickGuides/${editingGuide.id}`,
+          `/api/put-userManuals/${editingBrand.id}`,
           formData,
           {
             headers: { "Content-Type": "multipart/form-data" },
           }
         );
-        message = "Quick Guide updated successfully!";
+        message = "User Manual updated successfully!";
       } else {
-        await axiosPublicUrl.post("/api/quickGuides", formData, {
+        await axiosPublicUrl.post("/api/userManuals", formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
-        message = "Quick Guide added successfully!";
+        message = "User Manual added successfully!";
       }
 
-      fetchQuickGuides();
+      fetchuserManuals();
       reset();
-      setEditingGuide(null);
+      setEditingBrand(null);
       setImagePreview(null);
       Swal.fire("Success", message, "success");
     } catch (error) {
-      Swal.fire("Error", "Error saving quick guide.", "error");
+      Swal.fire("Error", error.message || "Error saving user manual.", "error");
     }
   };
 
-  const handleEdit = (guide) => {
-    Swal.fire({
-      title: "Edit this Quick Guide?",
-      text: "Do you want to edit this quick guide?",
-      icon: "question",
-      showCancelButton: true,
-      confirmButtonText: "Yes, edit",
-      cancelButtonText: "Cancel",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        setEditingGuide(guide);
-        setValue("quickGuidesName", guide?.quick_guides_name);
-        setValue("quickGuideslink", guide.quick_guides_link);
-        setImagePreview(guide?.photo);
-      }
-    });
+  const handleEdit = (manual) => {
+    setEditingBrand(manual);
+    setValue("userManualsName", manual?.user_manuals_name);
+    setValue("userManualslink", manual.user_manuals_link);
+    setImagePreview(manual?.photo);
   };
 
   const handleDelete = async (id) => {
@@ -102,11 +85,15 @@ const AddQuickGuides = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          await axiosPublicUrl.delete(`/api/quickGuides/${id}`);
-          fetchQuickGuides();
-          Swal.fire("Deleted!", "Quick guide has been deleted.", "success");
+          await axiosPublicUrl.delete(`/api/userManuals/${id}`);
+          fetchuserManuals();
+          Swal.fire("Deleted!", "User manual has been deleted.", "success");
         } catch (error) {
-          Swal.fire("Error", "Error deleting quick guide.", "error");
+          Swal.fire(
+            "Error",
+            error.message || "Error deleting user manual.",
+            "error"
+          );
         }
       }
     });
@@ -126,33 +113,36 @@ const AddQuickGuides = () => {
     return () => subscription.unsubscribe();
   }, [watch]);
 
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error loading user manuals</div>;
+
   return (
     <div className="max-w-4xl mx-auto mb-3">
-      <h2 className="text-2xl font-bold mb-3 md:mb-5">Add a Quick Guide</h2>
+      <h2 className="text-2xl font-bold mb-3 md:mb-5">Add a userManualse</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-4">
           <label className="block text-sm font-semibold mb-1">
-            Quick Guide Name
+            User Manuals Name
           </label>
           <input
             type="text"
-            {...register("quickGuidesName", { required: true })}
+            {...register("userManualsName", { required: true })}
             className="w-full input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
-            placeholder="Enter Guide name"
+            placeholder="Enter Manuals name"
           />
         </div>
         <div className="mb-4">
           <label className="block text-sm font-semibold mb-1">Slug</label>
           <input
             type="text"
-            value={generateSlug(watchQuickGuidesName)}
+            value={generateSlug(watchuserManualsName)}
             readOnly
             className="w-full input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
           />
         </div>
         <div className="mb-4">
           <label className="block text-sm font-semibold mb-1">
-            Quick Guide Logo
+            User Manuals Logo
           </label>
           <input
             type="file"
@@ -170,18 +160,18 @@ const AddQuickGuides = () => {
                     }/uploads/${imagePreview}`
               }
               alt="Preview"
-              className="w-4/12 h-24 object-cover mt-2 rounded"
+              className="w-4/12 h-24 object-cover mt-2 rounded-sm"
             />
           )}
           <div className="mt-4">
             <label className="block text-sm font-semibold mb-1">
-              Quick Guide Drive Link
+              User Manuals Drive Link
             </label>
             <input
               type="text"
-              {...register("quickGuideslink", { required: true })}
+              {...register("userManualslink", { required: true })}
               className="w-full input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
-              placeholder="Enter quick guide link"
+              placeholder="Enter userManuals Link"
             />
           </div>
         </div>
@@ -189,12 +179,12 @@ const AddQuickGuides = () => {
           type="submit"
           className="w-full bg-teal-600 cursor-pointer text-white py-2 px-4 rounded-sm hover:bg-teal-700 transition"
         >
-          {editingGuide ? "Update Quick Guide" : "Add Quick Guide"}
+          {editingBrand ? "Update userManualse" : "Add userManualse"}
         </button>
       </form>
-      {/* Quick Guides Table */}
+      {/* Brands Table */}
       <div className="mt-8">
-        <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <div className="relative overflow-x-auto shadow-md rounded-sm">
           <div className="inline-block min-w-full align-middle">
             <div className="overflow-hidden">
               <table className="min-w-full border border-gray-600 table-auto">
@@ -207,7 +197,7 @@ const AddQuickGuides = () => {
                       Logo
                     </th>
                     <th className="text-center p-2 sm:p-3 border border-gray-600 whitespace-nowrap">
-                      Guide Link
+                      Manuals Link
                     </th>
                     <th className="text-center p-2 sm:p-3 border border-gray-600 whitespace-nowrap">
                       Actions
@@ -215,44 +205,44 @@ const AddQuickGuides = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {Array.isArray(quickGuides) && quickGuides.length > 0 ? (
-                    quickGuides.map((guide) => (
+                  {Array.isArray(userManuals) && userManuals.length > 0 ? (
+                    userManuals.map((manual) => (
                       <tr
-                        key={guide?.id}
+                        key={manual?.id}
                         className="border border-gray-600 bg-gray-900 text-white hover:bg-gray-800 transition-colors"
                       >
                         <td className="p-2 sm:p-3 border border-gray-600 whitespace-nowrap">
-                          {guide?.quick_guides_name}
+                          {manual?.user_manuals_name}
                         </td>
                         <td className="p-2 sm:p-3 border border-gray-600">
                           <img
                             src={`${import.meta.env.VITE_OPEN_APIURL}/uploads/${
-                              guide?.photo
+                              manual?.photo
                             }`}
-                            alt={guide?.quick_guides_name}
+                            alt={manual?.user_manuals_name}
                             className="w-20 h-12 object-cover rounded"
                           />
                         </td>
                         <td className="text-center p-2 sm:p-3 border border-gray-600 whitespace-nowrap">
                           <a
-                            href={guide?.quick_guides_link}
+                            href={manual?.user_manuals_link}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-blue-400 hover:text-blue-500"
                           >
-                            {guide?.quick_guides_name.slice(0, 20)}
+                            {manual?.user_manuals_name.slice(0, 20)}
                           </a>
                         </td>
                         <td className="text-center p-2 sm:p-3 border border-gray-600 whitespace-nowrap">
                           <div className="flex justify-center items-center gap-3">
                             <button
-                              onClick={() => handleEdit(guide)}
+                              onClick={() => handleEdit(manual)}
                               className="text-blue-300 cursor-pointer hover:text-blue-500 p-1"
                             >
                               <FaEdit />
                             </button>
                             <button
-                              onClick={() => handleDelete(guide?.id)}
+                              onClick={() => handleDelete(manual?.id)}
                               className="text-red-600 cursor-pointer hover:text-red-800 p-1"
                             >
                               <FaTrash />
@@ -267,7 +257,7 @@ const AddQuickGuides = () => {
                         colSpan="4"
                         className="text-center p-3 border border-gray-600"
                       >
-                        No quick guides found.
+                        No userManualse found.
                       </td>
                     </tr>
                   )}
@@ -281,4 +271,4 @@ const AddQuickGuides = () => {
   );
 };
 
-export default AddQuickGuides;
+export default AddUserManuals;

@@ -3,9 +3,7 @@ import { Navigation, Autoplay } from "swiper/modules";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import "swiper/css";
 import "swiper/css/navigation";
-import { Link } from "react-router-dom";
 import useDataQuery from "../../utils/useDataQuery";
-import Loader from "../../utils/Loader";
 
 const PopularBrands = () => {
   const { data = [], isLoading } = useDataQuery(
@@ -13,7 +11,7 @@ const PopularBrands = () => {
     "/api/brands"
   );
 
-  if (isLoading) return <Loader />;
+  if (isLoading) return null
   const brands = data.filter((brand) => brand.home_page_show === 1);
 
   return (

@@ -1,10 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import { useAxiospublic } from "../../Hooks/useAxiospublic";
+import useDataQuery from "../../utils/useDataQuery";
 
 const SoftwareDownloads = () => {
-  const axiosPublicUrl = useAxiospublic();
   const ITEMS_PER_PAGE = 12;
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -12,17 +10,9 @@ const SoftwareDownloads = () => {
     data: softwareData = [],
     isLoading,
     error,
-  } = useQuery({
-    queryKey: ["software"],
-    queryFn: async () => {
-      const res = await axiosPublicUrl.get("/api/softwar");
-      return res?.data;
-    },
-  });
+  } = useDataQuery(["software"], "/api/software");
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  if (isLoading) return null;
 
   if (error) {
     return <div>Error fetching software data</div>;

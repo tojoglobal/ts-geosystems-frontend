@@ -48,10 +48,7 @@ const Service = () => {
     .filter((img) => img.show && [5, 6].includes(img.order))
     .sort((a, b) => a.order - b.order);
 
-  if (isLoading || loading) {
-    return <p>Loading...</p>;
-  }
-
+  if (isLoading || loading) return null;
   if (isError) {
     return <p>Error loading data...</p>;
   }

@@ -30,7 +30,7 @@ const BlogTable = () => {
 
   const handleDelete = async (blogId) => {
     const result = await Swal.fire({
-      title: "Are you sure you want to delete this blog?",
+      title: "Are you sure to delete this blog?",
       text: "This blog and all its images will be permanently deleted.",
       icon: "warning",
       showCancelButton: true,
@@ -64,29 +64,29 @@ const BlogTable = () => {
         <div className="flex flex-col sm:flex-row sm:justify-end gap-2 mb-3">
           <Link
             to="/dashboard/ts-blog/create"
-            className="bg-teal-500 text-white py-1.5 px-4 rounded-md hover:bg-teal-700 transition duration-200 text-center w-full sm:w-auto"
+            className="bg-teal-500 text-white py-1.5 px-4 rounded-sm hover:bg-teal-700 transition duration-200 text-center w-full sm:w-auto"
           >
             Add blog
           </Link>
         </div>
       </div>
-      <table className="w-full table-auto border-collapse bg-gray-900 text-white">
+      <table className="w-full table-auto border border-collapse bg-gray-900 text-white">
         <thead>
           <tr className="bg-gray-800">
-            <th className="border px-4 py-2">Title</th>
-            <th className="border px-4 py-2">Author</th>
-            <th className="border px-4 py-2">Type</th>
-            <th className="border px-4 py-2">Actions</th>
+            <th className="border border-gray-700 px-4 py-2">Title</th>
+            <th className="border border-gray-700 px-4 py-2">Author</th>
+            <th className="border border-gray-700 px-4 py-2">Type</th>
+            <th className="border border-gray-700 px-4 py-2">Actions</th>
           </tr>
         </thead>
         <tbody>
           {blogs?.length > 0 &&
             blogs?.map((blog) => (
               <tr key={blog.id}>
-                <td className="border px-4 py-2">{blog.title}</td>
-                <td className="border px-4 py-2">{blog.author}</td>
-                <td className="border px-4 py-2">{blog.blogType}</td>
-                <td className="border px-4 py-2 space-x-3 text-center">
+                <td className="border border-gray-700 px-4 py-2">{blog.title}</td>
+                <td className="border border-gray-700 px-4 py-2 capitalize">{blog.author}</td>
+                <td className="border border-gray-700 px-4 py-2">{blog.blogType}</td>
+                <td className="border border-gray-700 px-4 py-2 space-x-3 text-center">
                   {/* View */}
                   <Link to={`/dashboard/ts-blog/view/${blog.id}`}>
                     <button className="text-blue-400 cursor-pointer hover:text-blue-600">

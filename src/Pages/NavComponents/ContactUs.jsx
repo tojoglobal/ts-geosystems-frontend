@@ -9,7 +9,6 @@ import "swiper/css";
 import "swiper/css/navigation";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import { toast } from "react-toastify";
-import { useQuery } from "@tanstack/react-query";
 import useDataQuery from "../../utils/useDataQuery";
 
 const ContactUs = () => {
@@ -23,13 +22,7 @@ const ContactUs = () => {
     data: contactInfo,
     isLoading,
     isError,
-  } = useQuery({
-    queryKey: ["contactInfo"],
-    queryFn: async () => {
-      const response = await axiosPublicUrl.get("/api/admin-contact-us");
-      return response.data;
-    },
-  });
+  } = useDataQuery(["contactInfo"], "/api/admin-contact-us");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -59,9 +52,7 @@ const ContactUs = () => {
 
   const brands = data.filter((brand) => brand.is_populer === 1);
 
-  if (isLoading || loading) {
-    return <div className="p-3">Loading contact information...</div>;
-  }
+  if (isLoading || loading) return null;
 
   if (isError) {
     return <div className="p-3">Error loading contact information</div>;
