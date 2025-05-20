@@ -42,9 +42,7 @@ const Hire = () => {
     },
   });
 
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
+  if (isLoading) return null;
 
   if (isError) {
     // you can use error.messgae/add error beside isError in useQuery

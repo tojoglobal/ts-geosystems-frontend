@@ -36,7 +36,7 @@ import RemoteSupport from "./Pages/NavComponents/RemoteSupport";
 import UserManuals from "./Pages/NavComponents/UserManuals";
 import TSBlog from "./Pages/NavComponents/Blog/TSBlog";
 import Clearance from "./Pages/NavComponents/Clearance";
-import Categorys from "./Dashboard/Categorys/Categorys";
+// import Categorys from "./Dashboard/Categorys/Categorys";
 import Compare from "./Pages/NavComponents/Compare";
 import UsedEquipment from "./Pages/NavComponents/UsedEquipment";
 import Brands from "./Dashboard/Brands/Brands";
@@ -86,6 +86,7 @@ import AddUserManuals from "./Dashboard/UserManuals/UserManuals";
 import AddQuickGuides from "./Dashboard/QuickGuides/QuickGuides";
 import Chat from "./Dashboard/Chat/Chat";
 import Subscriber from "./Dashboard/Subscriber/Subscriber";
+import Categories from "./Dashboard/Categorys/Categories";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -187,7 +188,7 @@ const AppLayout = () => {
           <Route path="add-product" element={<ProductAddForm />} />
           <Route path="update-product/:id" element={<UpdateProductForm />} />
           {/* category add */}
-          <Route path="add-categorys" element={<Categorys />} />
+          <Route path="add-categorys" element={<Categories />} />
           {/* add brand */}
           <Route path="add-brands" element={<Brands />} />
           {/* add software  */}

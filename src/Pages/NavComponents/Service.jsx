@@ -29,8 +29,8 @@ const Service = () => {
   const { data: images = [], isLoading: loading } = useDataQuery(
     ["serviceImages"],
     "/api/get-service-images"
-  ); 
-  
+  );
+
   // Filter and sort images for the grid (order 1-4 where show is true)
   const gridImages = images
     .filter((img) => img.show && [1, 2, 3, 4].includes(img.order))
@@ -41,10 +41,7 @@ const Service = () => {
     .filter((img) => img.show && [5, 6].includes(img.order))
     .sort((a, b) => a.order - b.order);
 
-  if (isLoading || loading) {
-    return <p>Loading...</p>;
-  }
-
+  if (isLoading || loading) return null;
   if (isError) {
     return <p>Error loading data...</p>;
   }
