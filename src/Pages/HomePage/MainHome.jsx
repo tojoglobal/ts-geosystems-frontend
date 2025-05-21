@@ -20,7 +20,7 @@ const MainHome = () => {
   // if (isLoading) return <ComponentLoader />;
     if (isLoading)
     return (
-      <div className="space-y-8">
+      <div className="space-y-8 my-2">
         <ComponentLoader componentName="MainBanner" />
         <ComponentLoader componentName="ProductHighlights" />
         <ComponentLoader type="spinner" />
