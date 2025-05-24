@@ -1,12 +1,84 @@
-import { IoSearch } from "react-icons/io5";
 import { Link, useParams, useNavigate } from "react-router-dom";
-// import AudioPlayer from "react-h5-audio-player";
-import "react-h5-audio-player/lib/styles.css";
 import { Facebook, Twitter, Linkedin, Mail, MessageSquare } from "lucide-react";
+import {
+  FaFacebookF,
+  FaXTwitter,
+  FaLinkedinIn,
+  FaRedditAlien,
+  FaWhatsapp,
+  FaEnvelope,
+} from "react-icons/fa6";
 import RelatedArticles from "./RelatedArticles";
 import BlogSearch from "./BlogSearch";
 import useDataQuery from "../../../utils/useDataQuery";
 import BlogContentWithImages from "./BlogContentWithImages";
+
+const SocialShareButtons = ({ blogUrl, blogTitle }) => {
+  const shareButtons = [
+    {
+      name: "Facebook",
+      icon: <FaFacebookF className="text-white text-xs mr-1" />,
+      url: `https://www.facebook.com/sharer/sharer.php?u=${blogUrl}`,
+      bg: "#3b5998",
+    },
+    {
+      name: "Twitter",
+      icon: <FaXTwitter className="text-white text-xs mr-1" />,
+      url: `https://twitter.com/intent/tweet?url=${blogUrl}&text=${blogTitle}`,
+      bg: "#000000",
+    },
+    {
+      name: "LinkedIn",
+      icon: <FaLinkedinIn className="text-white text-xs mr-1" />,
+      url: `https://www.linkedin.com/sharing/share-offsite/?url=${blogUrl}`,
+      bg: "#0077b5",
+    },
+    {
+      name: "Reddit",
+      icon: <FaRedditAlien className="text-white text-xs mr-1" />,
+      url: `https://www.reddit.com/submit?url=${blogUrl}&title=${blogTitle}`,
+      bg: "#ff4500",
+    },
+    {
+      name: "WhatsApp",
+      icon: <FaWhatsapp className="text-white text-xs mr-1" />,
+      url: `https://wa.me/?text=${blogTitle}%20${blogUrl}`,
+      bg: "#25d366",
+    },
+    {
+      name: "Email",
+      icon: <FaEnvelope className="text-white text-xs mr-1" />,
+      url: `mailto:?subject=${blogTitle}&body=${blogUrl}`,
+      bg: "#7b7b7b",
+    },
+  ];
+
+  return (
+    <div className="grid grid-cols-2 sm:grid-cols-6 gap-1 w-full my-6 z-10">
+      {shareButtons.map((btn) => (
+        <a
+          key={btn.name}
+          href={btn.url}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <div
+            className="flex justify-center items-center px-1 py-1 h-8"
+            style={{ backgroundColor: btn.bg, transform: "skewX(-15deg)" }}
+          >
+            <div
+              style={{ transform: "skewX(15deg)" }}
+              className="flex items-center text-sm"
+            >
+              {btn.icon}
+              <span className="text-white text-[10px]">{btn.name}</span>
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+  );
+};
 
 const BlogDetails = () => {
   const { id } = useParams();
@@ -33,9 +105,6 @@ const BlogDetails = () => {
   // Create tabs - "Back to Blog" + all blog types
   const tabs = ["Back to Blog", ...blogTypes.map((type) => type.name)];
 
-  const iconClass =
-    "w-9 h-9 flex items-center justify-center rounded-md text-white";
-
   // Dynamic URL and title for sharing
   const blogUrl = encodeURIComponent(window.location.href);
   const blogTitle = encodeURIComponent(
@@ -50,7 +119,6 @@ const BlogDetails = () => {
     if (tab === "Back to Blog") {
       navigate("/ts-blog");
     } else {
-      // Navigate to filtered blog list view
       navigate(`/ts-blog?type=${encodeURIComponent(tab)}`);
     }
   };
@@ -119,14 +187,9 @@ const BlogDetails = () => {
             · 5 minute read
           </p>
         </div>
-        {/* <div className="my-6 shadow-xl">
-          <AudioPlayer
-            src="your-audio-file-url.mp3"
-            autoPlay={false}
-            controls
-          />
-        </div> */}
+
         <BlogContentWithImages blog={blog} middleImages={middleImages} />
+
         {/* Tags */}
         {tags.length > 0 && (
           <div className="flex flex-wrap gap-1 underline text-sm text-[#e62245]">
@@ -135,56 +198,10 @@ const BlogDetails = () => {
             ))}
           </div>
         )}
-        {/* Social Sharing */}
-        <div className="flex gap-2 my-6">
-          <a
-            href={`https://www.facebook.com/sharer/sharer.php?u=${blogUrl}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`${iconClass} bg-[#3b5998]`}
-          >
-            <Facebook size={16} />
-          </a>
-          <a
-            href={`https://twitter.com/intent/tweet?url=${blogUrl}&text=${blogTitle}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`${iconClass} bg-[#000000]`}
-          >
-            <Twitter size={16} />
-          </a>
-          <a
-            href={`https://www.linkedin.com/sharing/share-offsite/?url=${blogUrl}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`${iconClass} bg-[#0077b5]`}
-          >
-            <Linkedin size={16} />
-          </a>
-          <a
-            href={`https://www.reddit.com/submit?url=${blogUrl}&title=${blogTitle}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`${iconClass} bg-[#ff4500]`}
-          >
-            <MessageSquare size={16} />
-          </a>
-          <a
-            href={`https://wa.me/?text=${blogTitle}%20${blogUrl}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`${iconClass} bg-[#25d366]`}
-          >
-            <MessageSquare size={16} />
-          </a>
 
-          <a
-            href={`mailto:?subject=${blogTitle}&body=${blogUrl}`}
-            className={`${iconClass} bg-[#7b7b7b]`}
-          >
-            <Mail size={16} />
-          </a>
-        </div>
+        {/* Social Sharing */}
+        <SocialShareButtons blogUrl={blogUrl} blogTitle={blogTitle} />
+
         <Link
           to="/ts-blog"
           className="text-sm text-[#e62245] hover:underline block mt-4"
