@@ -90,14 +90,14 @@ const BlogDetails = () => {
           <div
             className={`grid grid-cols-1 ${
               topImages.length === 1 ? "md:grid-cols-1" : "md:grid-cols-2"
-            } gap-4 mb-8`}
+            } gap-3 mb-8`}
           >
             {topImages.map((image, index) => (
               <img
                 key={index}
                 src={`${import.meta.env.VITE_OPEN_APIURL}${image.filePath}`}
                 alt={blog.title}
-                className="rounded-md"
+                className="rounded-sm w-full md:w-[350px] h-[200px]"
               />
             ))}
           </div>
