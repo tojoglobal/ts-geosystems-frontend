@@ -168,244 +168,194 @@ const AdminUpdateContactUs = () => {
 
   return (
     <div>
-      <h1 className="text-xl md:text-2xl font-bold mb-2 md:mb-3">
+      <h1 className="text-2xl font-bold mb-6 text-white">
         Admin - Update Contact Us
       </h1>
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="space-y-4 md:space-y-8"
-      >
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6">
-          <div>
-            <h2 className="text-base md:text-lg font-semibold mb-1">
-              Working Days
-            </h2>
-            <div className="space-y-2 md:space-y-3">
-              <label className="w-full md:w-24 text-sm md:text-base">
-                Regular Days:
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+        {/* Working Days Section */}
+        <div>
+          <h2 className="text-lg font-semibold mb-3 text-gray-100">
+            Working Days
+          </h2>
+          <div className="grid gap-4">
+            <div>
+              <label className="block mb-1 text-sm font-medium text-gray-300">
+                Regular Days
               </label>
               <input
                 type="text"
                 {...register("workingDays", {
                   required: "Working days information is required",
                 })}
-                className="border border-gray-700 p-2 rounded w-full text-sm md:text-base"
+                className="w-full p-2 border border-gray-700 rounded-md text-sm bg-gray-900 text-white focus:outline-none focus:border-gray-500 focus:ring-1 focus:ring-gray-500"
               />
-              <label className="w-full md:w-24 text-sm md:text-base">
-                Holiday:
+            </div>
+            <div>
+              <label className="block mb-1 text-sm font-medium text-gray-300">
+                Holiday
               </label>
               <input
                 type="text"
                 {...register("weeklyHoliday", {
                   required: "Holiday information is required",
                 })}
-                className="border border-gray-700 p-2 rounded w-full text-sm md:text-base"
-              />
-            </div>
-          </div>
-          <div>
-            <h2 className="text-base md:text-lg font-semibold mb-1">Contact</h2>
-            <div className="space-y-2 md:space-y-3">
-              {phoneFields.map((field, index) => (
-                <div
-                  key={field.id}
-                  className="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-4"
-                >
-                  <input
-                    type="text"
-                    {...register(`phoneNumbers.${index}.value`, {
-                      required: "Phone number is required",
-                    })}
-                    placeholder="Enter phone number"
-                    className={`border border-gray-700 p-2 rounded w-full text-sm md:text-base ${
-                      errors.phoneNumbers?.[index]?.value
-                        ? "border-red-500"
-                        : ""
-                    }`}
-                  />
-                  {phoneFields.length > 1 && (
-                    <button
-                      type="button"
-                      onClick={() => removePhone(index)}
-                      className="bg-red-500 cursor-pointer text-white px-2 py-1.5 rounded text-xs md:text-sm w-auto min-w-[80px] md:min-w-[100px] flex items-center justify-center gap-1"
-                    >
-                      <span>Remove</span>
-                    </button>
-                  )}
-                </div>
-              ))}
-              <button
-                type="button"
-                onClick={() => addPhone({ value: "" })}
-                className="bg-teal-600 cursor-pointer text-white px-3 py-1 rounded text-sm md:text-base w-full md:w-auto"
-              >
-                + Add Phone Number
-              </button>
-              {errors.phoneNumbers && (
-                <p className="text-red-500 text-xs md:text-sm">
-                  {errors.phoneNumbers.message ||
-                    "At least one phone number is required"}
-                </p>
-              )}
-            </div>
-          </div>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6">
-          {/* Email Section */}
-          <div>
-            <h2 className="text-base md:text-lg font-semibold mb-1">Email</h2>
-            <div className="space-y-2 md:space-y-3">
-              {emailFields.map((field, index) => (
-                <div
-                  key={field.id}
-                  className="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-4"
-                >
-                  <input
-                    type="email"
-                    {...register(`emails.${index}.value`, {
-                      required: "Email address is required",
-                    })}
-                    placeholder="Enter email address"
-                    className={`border border-gray-700 p-2 rounded w-full text-sm md:text-base ${
-                      errors.emails?.[index]?.value ? "border-red-500" : ""
-                    }`}
-                  />
-                  {emailFields.length > 1 && (
-                    <button
-                      type="button"
-                      onClick={() => removeEmail(index)}
-                      className="bg-red-500 cursor-pointer text-white px-2 py-1.5 rounded text-xs md:text-sm w-auto min-w-[80px] md:min-w-[100px] flex items-center justify-center gap-1"
-                    >
-                      <span>Remove</span>
-                    </button>
-                  )}
-                </div>
-              ))}
-              <button
-                type="button"
-                onClick={() => addEmail({ value: "" })}
-                className="bg-teal-600 cursor-pointer text-white px-3 py-1 rounded text-sm md:text-base w-full md:w-auto"
-              >
-                + Add Email Address
-              </button>
-              {errors.emails && (
-                <p className="text-red-500 text-xs md:text-sm">
-                  {errors.emails.message ||
-                    "At least one email address is required"}
-                </p>
-              )}
-            </div>
-          </div>
-          {/* Office Address Section */}
-          <div>
-            <h2 className="text-base md:text-lg font-semibold mb-1">
-              Office Address
-            </h2>
-            <div className="space-y-2 md:space-y-3">
-              {addressFields.map((field, index) => (
-                <div
-                  key={field.id}
-                  className="flex flex-col md:flex-row items-start gap-2 md:gap-4"
-                >
-                  <textarea
-                    {...register(`officeAddresses.${index}.value`, {
-                      required: "Office address is required",
-                    })}
-                    placeholder="Enter office address"
-                    className={`border border-gray-700 p-2 rounded w-full text-sm md:text-base ${
-                      errors.officeAddresses?.[index]?.value
-                        ? "border-red-500"
-                        : ""
-                    }`}
-                    rows={2}
-                  ></textarea>
-                  {addressFields.length > 1 && (
-                    <button
-                      type="button"
-                      onClick={() => removeAddress(index)}
-                      className="bg-red-500 cursor-pointer text-white px-2 py-1.5 rounded text-xs md:text-sm w-auto min-w-[80px] md:min-w-[100px] flex items-center justify-center gap-1"
-                    >
-                      <span>Remove</span>
-                    </button>
-                  )}
-                </div>
-              ))}
-              <button
-                type="button"
-                onClick={() => addAddress({ value: "" })}
-                className="bg-teal-600 cursor-pointer text-white px-3 py-1 rounded text-sm md:text-base w-full md:w-auto"
-              >
-                + Add Office Address
-              </button>
-              {errors.officeAddresses && (
-                <p className="text-red-500 text-xs md:text-sm">
-                  {errors.officeAddresses.message ||
-                    "At least one office address is required"}
-                </p>
-              )}
-            </div>
-          </div>
-        </div>
-        {/* Social Media Links Section */}
-        <div>
-          <h2 className="text-base md:text-lg font-semibold mb-1">
-            Social Media Links
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {/* Social Media Input Fields */}
-            <div className="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-4">
-              <label className="w-full md:w-24 text-sm md:text-base">
-                Facebook:
-              </label>
-              <input
-                type="url"
-                {...register("socialLinks.facebook")}
-                placeholder="https://facebook.com/yourpage"
-                className="border border-gray-700 p-2 rounded w-full text-sm md:text-base"
-              />
-            </div>
-            <div className="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-4">
-              <label className="w-full md:w-24 text-sm md:text-base">
-                Twitter:
-              </label>
-              <input
-                type="url"
-                {...register("socialLinks.twitter")}
-                placeholder="https://twitter.com/yourpage"
-                className="border border-gray-700 p-2 rounded w-full text-sm md:text-base"
-              />
-            </div>
-            <div className="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-4">
-              <label className="w-full md:w-24 text-sm md:text-base">
-                YouTube:
-              </label>
-              <input
-                type="url"
-                {...register("socialLinks.youtube")}
-                placeholder="https://youtube.com/yourchannel"
-                className="border border-gray-700 p-2 rounded w-full text-sm md:text-base"
-              />
-            </div>
-            <div className="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-4">
-              <label className="w-full md:w-24 text-sm md:text-base">
-                Instagram:
-              </label>
-              <input
-                type="url"
-                {...register("socialLinks.instagram")}
-                placeholder="https://instagram.com/yourpage"
-                className="border border-gray-700 p-2 rounded w-full text-sm md:text-base"
+                className="w-full p-2 border border-gray-700 rounded-md text-sm bg-gray-900 text-white focus:outline-none focus:border-gray-500 focus:ring-1 focus:ring-gray-500"
               />
             </div>
           </div>
         </div>
 
-        {/* Submit Button */}
-        <div className="col-span-1">
+        {/* Phone Numbers Section */}
+        <div>
+          <h2 className="text-lg font-semibold mb-3 text-gray-100">
+            Phone Numbers
+          </h2>
+          <div className="space-y-3">
+            {phoneFields.map((field, index) => (
+              <div key={field.id} className="flex flex-col md:flex-row gap-3">
+                <input
+                  type="text"
+                  {...register(`phoneNumbers.${index}.value`, {
+                    required: "Phone number is required",
+                  })}
+                  placeholder="Enter phone number"
+                  className={`w-full p-2 border rounded-md text-sm bg-gray-900 text-white focus:outline-none focus:border-gray-500 focus:ring-1 focus:ring-gray-500 ${
+                    errors.phoneNumbers?.[index]?.value
+                      ? "border-red-500"
+                      : "border-gray-700"
+                  }`}
+                />
+                {phoneFields.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => removePhone(index)}
+                    className="bg-red-600 text-white text-xs px-3 py-2 rounded-md hover:bg-red-700"
+                  >
+                    Remove
+                  </button>
+                )}
+              </div>
+            ))}
+            <button
+              type="button"
+              onClick={() => addPhone({ value: "" })}
+              className="bg-teal-600 text-white px-4 py-2 rounded-md text-sm hover:bg-teal-700"
+            >
+              + Add Phone Number
+            </button>
+          </div>
+        </div>
+
+        {/* Email Section */}
+        <div>
+          <h2 className="text-lg font-semibold mb-3 text-gray-100">
+            Email Addresses
+          </h2>
+          <div className="space-y-3">
+            {emailFields.map((field, index) => (
+              <div key={field.id} className="flex flex-col md:flex-row gap-3">
+                <input
+                  type="email"
+                  {...register(`emails.${index}.value`, {
+                    required: "Email address is required",
+                  })}
+                  placeholder="Enter email address"
+                  className={`w-full p-2 border rounded-md text-sm bg-gray-900 text-white focus:outline-none focus:border-gray-500 focus:ring-1 focus:ring-gray-500 ${
+                    errors.emails?.[index]?.value
+                      ? "border-red-500"
+                      : "border-gray-700"
+                  }`}
+                />
+                {emailFields.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => removeEmail(index)}
+                    className="bg-red-600 text-white text-xs px-3 py-2 rounded-md hover:bg-red-700"
+                  >
+                    Remove
+                  </button>
+                )}
+              </div>
+            ))}
+            <button
+              type="button"
+              onClick={() => addEmail({ value: "" })}
+              className="bg-teal-600 text-white px-4 py-2 rounded-md text-sm hover:bg-teal-700"
+            >
+              + Add Email Address
+            </button>
+          </div>
+        </div>
+
+        {/* Office Address Section */}
+        <div>
+          <h2 className="text-lg font-semibold mb-3 text-gray-100">
+            Office Addresses
+          </h2>
+          <div className="space-y-3">
+            {addressFields.map((field, index) => (
+              <div key={field.id} className="flex flex-col md:flex-row gap-3">
+                <textarea
+                  rows={2}
+                  {...register(`officeAddresses.${index}.value`, {
+                    required: "Office address is required",
+                  })}
+                  placeholder="Enter office address"
+                  className={`w-full p-2 border rounded-md text-sm bg-gray-900 text-white focus:outline-none focus:border-gray-500 focus:ring-1 focus:ring-gray-500 ${
+                    errors.officeAddresses?.[index]?.value
+                      ? "border-red-500"
+                      : "border-gray-700"
+                  }`}
+                />
+                {addressFields.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => removeAddress(index)}
+                    className="bg-red-600 text-white text-xs px-3 py-2 rounded-md hover:bg-red-700"
+                  >
+                    Remove
+                  </button>
+                )}
+              </div>
+            ))}
+            <button
+              type="button"
+              onClick={() => addAddress({ value: "" })}
+              className="bg-teal-600 text-white px-4 py-2 rounded-md text-sm hover:bg-teal-700"
+            >
+              + Add Office Address
+            </button>
+          </div>
+        </div>
+
+        {/* Social Media Section */}
+        <div>
+          <h2 className="text-lg font-semibold mb-3 text-gray-100">
+            Social Media Links
+          </h2>
+          <div className="grid md:grid-cols-2 gap-4">
+            {["facebook", "twitter", "youtube", "instagram"].map((platform) => (
+              <div key={platform}>
+                <label className="block mb-1 text-sm font-medium capitalize text-gray-300">
+                  {platform}
+                </label>
+                <input
+                  type="url"
+                  {...register(`socialLinks.${platform}`)}
+                  placeholder={`https://${platform}.com/yourpage`}
+                  className="w-full p-2 border border-gray-700 rounded-md text-sm bg-gray-900 text-white focus:outline-none focus:border-gray-500 focus:ring-1 focus:ring-gray-500"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Submit */}
+        <div>
           <Button
-            text={"Submit Contact Us"}
+            text="Submit Contact Us"
             disabled={updateContactMutation.isPending}
-            className="w-full md:w-auto text-sm md:text-base"
+            className="w-full md:w-auto bg-blue-600 hover:bg-blue-700 text-white text-sm px-6 py-2 rounded-md"
           />
         </div>
       </form>

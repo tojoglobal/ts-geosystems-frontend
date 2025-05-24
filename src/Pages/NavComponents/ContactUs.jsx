@@ -11,6 +11,7 @@ import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import { toast } from "react-toastify";
 import useDataQuery from "../../utils/useDataQuery";
 import { SkeletonLoader } from "../../utils/Loader/SkeletonLoader";
+import SocialButtons from "../../Components/SocialButtons";
 
 const ContactUs = () => {
   const axiosPublicUrl = useAxiospublic();
@@ -202,48 +203,7 @@ const ContactUs = () => {
                 ))}
               </div>
             ) : (
-              <>
-                {contactInfo?.socialLinks?.facebook && (
-                  <a
-                    href={contactInfo.socialLinks.facebook}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="rounded-full p-2 border hover:bg-[#1877F2] hover:text-white transition"
-                  >
-                    <FaFacebookF />
-                  </a>
-                )}
-                {contactInfo?.socialLinks?.twitter && (
-                  <a
-                    href={contactInfo.socialLinks.twitter}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="rounded-full p-2 border hover:bg-[#1DA1F2] hover:text-white transition"
-                  >
-                    <FaTwitter />
-                  </a>
-                )}
-                {contactInfo?.socialLinks?.youtube && (
-                  <a
-                    href={contactInfo.socialLinks.youtube}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="rounded-full p-2 border hover:bg-[#FF0000] hover:text-white transition"
-                  >
-                    <FaYoutube />
-                  </a>
-                )}
-                {contactInfo?.socialLinks?.instagram && (
-                  <a
-                    href={contactInfo.socialLinks.instagram}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="rounded-full p-2 border hover:bg-gradient-to-tr from-pink-500 via-red-500 to-yellow-500 hover:text-white transition"
-                  >
-                    <FaInstagram />
-                  </a>
-                )}
-              </>
+              <SocialButtons contactInfo={contactInfo} />
             )}
           </div>
         </div>

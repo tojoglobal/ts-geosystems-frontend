@@ -4,12 +4,19 @@ import { useSelector } from "react-redux";
 import SocialButtons from "../Components/SocialButtons";
 import { Link } from "react-router-dom";
 import { useAxiospublic } from "../Hooks/useAxiospublic";
+import useDataQuery from "../utils/useDataQuery";
+import { SkeletonLoader } from "../utils/Loader/SkeletonLoader";
 
 const Footer = () => {
   const { user } = useSelector((state) => state.authUser);
   const axiosPublic = useAxiospublic();
   const [email, setEmail] = useState(user?.email || "");
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const {
+    data: contactInfo,
+    isLoading: contactInfoLoading,
+  } = useDataQuery(["contactInfo"], "/api/admin-contact-us");
 
   const handleSubscribe = async (e) => {
     e.preventDefault();
@@ -136,7 +143,15 @@ const Footer = () => {
               {isSubmitting ? "Joining..." : "JOIN"}
             </button>
           </form>
-          <SocialButtons />
+          {contactInfoLoading ? (
+            <div className="flex gap-4">
+              {[1, 2, 3, 4].map((i) => (
+                <SkeletonLoader key={i} className="w-8 h-8 rounded-full" />
+              ))}
+            </div>
+          ) : (
+            <SocialButtons contactInfo={contactInfo} />
+          )}
         </div>
       </div>
       <hr className="border-gray-400 pt-2 mb-4" />
