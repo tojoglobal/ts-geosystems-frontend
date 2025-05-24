@@ -126,16 +126,21 @@ const ContactUs = () => {
       </div>
       <div className="flex flex-col md:flex-row gap-8">
         <div className="w-full md:w-[40%] space-y-6 text-sm">
-          <div className="">
-            <h2 className="text-lg font-bold pb-4 mb-4 relative border-b border-gray-200 text-black">
-              Working Days
-              <span className="absolute bottom-0 left-0 w-20 h-0.5 bg-[#e62245]"></span>
-            </h2>
-            <p className=" mb-1 text-black">
-              Saturday-Thursday: 9:27 PM - 9:27 PM
-            </p>
-            <p className=" text-black">Friday: Weekly Holiday</p>
-          </div>
+          <h2 className="text-lg font-bold pb-4 mb-4 relative border-b border-gray-200 text-black">
+            Working Days
+            <span className="absolute bottom-0 left-0 w-20 h-0.5 bg-[#e62245]"></span>
+          </h2>
+          {contactInfoLoading ? (
+            <div className="space-y-2">
+              <SkeletonLoader className="h-4 w-3/4" />
+              <SkeletonLoader className="h-4 w-1/2" />
+            </div>
+          ) : (
+            <>
+              <p className="mb-1 text-black">{contactInfo?.workingDays}</p>
+              <p className="text-black">{contactInfo?.weeklyHoliday}</p>
+            </>
+          )}
           <div>
             <h2 className="text-lg font-bold pb-4 mb-4 relative border-b border-gray-200">
               Contact & Email

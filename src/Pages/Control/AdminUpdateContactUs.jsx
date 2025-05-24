@@ -57,6 +57,8 @@ const AdminUpdateContactUs = () => {
         youtube: "",
         instagram: "",
       },
+      workingDays: "",
+      weeklyHoliday: "",
     },
   });
 
@@ -80,6 +82,8 @@ const AdminUpdateContactUs = () => {
           youtube: "",
           instagram: "",
         },
+        workingDays: contactData.workingDays,
+        weeklyHoliday: contactData.weeklyHoliday,
       });
     }
   }, [contactData, reset]);
@@ -138,7 +142,9 @@ const AdminUpdateContactUs = () => {
       officeAddresses: data.officeAddresses.filter(
         (item) => item.value.trim() !== ""
       ),
-      socialLinks: data.socialLinks, // Include socialLinks in the submitted data
+      socialLinks: data.socialLinks,
+      workingDays: data.workingDays,
+      weeklyHoliday: data.weeklyHoliday,
     };
 
     // Ensure at least one entry remains after filtering
@@ -169,8 +175,34 @@ const AdminUpdateContactUs = () => {
         onSubmit={handleSubmit(onSubmit)}
         className="space-y-4 md:space-y-8"
       >
-        {/* Contact Section */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6">
+          <div>
+            <h2 className="text-base md:text-lg font-semibold mb-1">
+              Working Days
+            </h2>
+            <div className="space-y-2 md:space-y-3">
+              <label className="w-full md:w-24 text-sm md:text-base">
+                Regular Days:
+              </label>
+              <input
+                type="text"
+                {...register("workingDays", {
+                  required: "Working days information is required",
+                })}
+                className="border border-gray-700 p-2 rounded w-full text-sm md:text-base"
+              />
+              <label className="w-full md:w-24 text-sm md:text-base">
+                Holiday:
+              </label>
+              <input
+                type="text"
+                {...register("weeklyHoliday", {
+                  required: "Holiday information is required",
+                })}
+                className="border border-gray-700 p-2 rounded w-full text-sm md:text-base"
+              />
+            </div>
+          </div>
           <div>
             <h2 className="text-base md:text-lg font-semibold mb-1">Contact</h2>
             <div className="space-y-2 md:space-y-3">
@@ -217,7 +249,8 @@ const AdminUpdateContactUs = () => {
               )}
             </div>
           </div>
-
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6">
           {/* Email Section */}
           <div>
             <h2 className="text-base md:text-lg font-semibold mb-1">Email</h2>
@@ -263,58 +296,56 @@ const AdminUpdateContactUs = () => {
               )}
             </div>
           </div>
-        </div>
-
-        {/* Office Address Section */}
-        <div>
-          <h2 className="text-base md:text-lg font-semibold mb-1">
-            Office Address
-          </h2>
-          <div className="space-y-2 md:space-y-3">
-            {addressFields.map((field, index) => (
-              <div
-                key={field.id}
-                className="flex flex-col md:flex-row items-start gap-2 md:gap-4"
+          {/* Office Address Section */}
+          <div>
+            <h2 className="text-base md:text-lg font-semibold mb-1">
+              Office Address
+            </h2>
+            <div className="space-y-2 md:space-y-3">
+              {addressFields.map((field, index) => (
+                <div
+                  key={field.id}
+                  className="flex flex-col md:flex-row items-start gap-2 md:gap-4"
+                >
+                  <textarea
+                    {...register(`officeAddresses.${index}.value`, {
+                      required: "Office address is required",
+                    })}
+                    placeholder="Enter office address"
+                    className={`border border-gray-700 p-2 rounded w-full text-sm md:text-base ${
+                      errors.officeAddresses?.[index]?.value
+                        ? "border-red-500"
+                        : ""
+                    }`}
+                    rows={2}
+                  ></textarea>
+                  {addressFields.length > 1 && (
+                    <button
+                      type="button"
+                      onClick={() => removeAddress(index)}
+                      className="bg-red-500 cursor-pointer text-white px-2 py-1.5 rounded text-xs md:text-sm w-auto min-w-[80px] md:min-w-[100px] flex items-center justify-center gap-1"
+                    >
+                      <span>Remove</span>
+                    </button>
+                  )}
+                </div>
+              ))}
+              <button
+                type="button"
+                onClick={() => addAddress({ value: "" })}
+                className="bg-teal-600 cursor-pointer text-white px-3 py-1 rounded text-sm md:text-base w-full md:w-auto"
               >
-                <textarea
-                  {...register(`officeAddresses.${index}.value`, {
-                    required: "Office address is required",
-                  })}
-                  placeholder="Enter office address"
-                  className={`border border-gray-700 p-2 rounded w-full text-sm md:text-base ${
-                    errors.officeAddresses?.[index]?.value
-                      ? "border-red-500"
-                      : ""
-                  }`}
-                  rows={2}
-                ></textarea>
-                {addressFields.length > 1 && (
-                  <button
-                    type="button"
-                    onClick={() => removeAddress(index)}
-                    className="bg-red-500 cursor-pointer text-white px-2 py-1.5 rounded text-xs md:text-sm w-auto min-w-[80px] md:min-w-[100px] flex items-center justify-center gap-1"
-                  >
-                    <span>Remove</span>
-                  </button>
-                )}
-              </div>
-            ))}
-            <button
-              type="button"
-              onClick={() => addAddress({ value: "" })}
-              className="bg-teal-600 cursor-pointer text-white px-3 py-1 rounded text-sm md:text-base w-full md:w-auto"
-            >
-              + Add Office Address
-            </button>
-            {errors.officeAddresses && (
-              <p className="text-red-500 text-xs md:text-sm">
-                {errors.officeAddresses.message ||
-                  "At least one office address is required"}
-              </p>
-            )}
+                + Add Office Address
+              </button>
+              {errors.officeAddresses && (
+                <p className="text-red-500 text-xs md:text-sm">
+                  {errors.officeAddresses.message ||
+                    "At least one office address is required"}
+                </p>
+              )}
+            </div>
           </div>
         </div>
-
         {/* Social Media Links Section */}
         <div>
           <h2 className="text-base md:text-lg font-semibold mb-1">
