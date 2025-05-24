@@ -185,7 +185,7 @@ const TradeIn = () => {
                 htmlFor="company"
                 className="absolute pl-2 left-2 top-2 text-gray-500 text-sm transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base peer-placeholder-shown:text-black peer-focus:top-2 peer-focus:text-xs peer-focus:text-black"
               >
-                Company Name
+                Company Name *
               </label>
             </div>
             <div className="relative w-full">
@@ -233,7 +233,7 @@ const TradeIn = () => {
               <div>
                 <label className="block mb-1">Instrument Make *</label>
                 <select
-                  className="w-full border appearance-none p-4 focus:outline-none focus:ring focus:ring-[#e62245]"
+                  className="w-full border rounded appearance-none p-4 focus:outline-none focus:ring focus:ring-[#e62245]"
                   name="equipment"
                   value={formData.equipment}
                   onChange={handleChange}
@@ -447,6 +447,7 @@ const TradeIn = () => {
             import.meta.env.VITE_OPEN_APIURL
           }/uploads/hire/hire-banner-1746352683586.jpg`}
           alt=""
+          className="rounded-sm"
         />
       </div>
     </div>

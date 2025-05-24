@@ -1,5 +1,3 @@
-import React from "react";
-
 const BlogContentWithImages = ({ blog, middleImages }) => {
   const renderContentWithImages = () => {
     if (!blog?.content) return "";

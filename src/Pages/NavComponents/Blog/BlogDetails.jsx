@@ -54,7 +54,7 @@ const SocialShareButtons = ({ blogUrl, blogTitle }) => {
   ];
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-6 gap-1 w-full my-6 z-10">
+    <div className="grid grid-cols-2 md:grid-cols-6 max-w-md gap-1 w-full my-6 z-10">
       {shareButtons.map((btn) => (
         <a
           key={btn.name}
@@ -187,9 +187,7 @@ const BlogDetails = () => {
             · 5 minute read
           </p>
         </div>
-
         <BlogContentWithImages blog={blog} middleImages={middleImages} />
-
         {/* Tags */}
         {tags.length > 0 && (
           <div className="flex flex-wrap gap-1 underline text-sm text-[#e62245]">
@@ -198,10 +196,8 @@ const BlogDetails = () => {
             ))}
           </div>
         )}
-
         {/* Social Sharing */}
         <SocialShareButtons blogUrl={blogUrl} blogTitle={blogTitle} />
-
         <Link
           to="/ts-blog"
           className="text-sm text-[#e62245] hover:underline block mt-4"
