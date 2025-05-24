@@ -264,14 +264,14 @@ const ContactUs = () => {
           >
             {brands?.map((brand, index) => (
               <SwiperSlide key={index}>
-                <div className="w-full h-12 rounded shadow flex items-center justify-center">
+                <div className="w-56 rounded shadow flex items-center justify-center">
                   <Link to={brand.slug}>
                     <img
                       src={`${import.meta.env.VITE_OPEN_APIURL}/uploads/${
                         brand.photo
                       }`}
                       alt={brand.name}
-                      className="max-h-36 w-auto object-contain"
+                      className="h-auto w-auto object-contain"
                     />
                   </Link>
                 </div>

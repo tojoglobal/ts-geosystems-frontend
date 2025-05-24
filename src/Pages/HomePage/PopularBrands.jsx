@@ -11,7 +11,7 @@ const PopularBrands = () => {
     "/api/brands"
   );
 
-  if (isLoading) return null
+  if (isLoading) return null;
   const brands = data.filter((brand) => brand.home_page_show === 1);
 
   return (
@@ -41,8 +41,8 @@ const PopularBrands = () => {
               },
             }}
             navigation={{
-              nextEl: ".custom-next",
-              prevEl: ".custom-prev",
+              nextEl: ".swiper-button-next-custom",
+              prevEl: ".swiper-button-prev-custom",
             }}
             autoplay={{
               delay: 2000,

@@ -93,8 +93,8 @@ const TopClients = () => {
               },
             }}
             navigation={{
-              nextEl: ".custom-next",
-              prevEl: ".custom-prev",
+              nextEl: ".swiper-button-next-custom",
+              prevEl: ".swiper-button-prev-custom",
             }}
             autoplay={{
               delay: 2000,
