@@ -6,6 +6,7 @@ import { Facebook, Twitter, Linkedin, Mail, MessageSquare } from "lucide-react";
 import RelatedArticles from "./RelatedArticles";
 import BlogSearch from "./BlogSearch";
 import useDataQuery from "../../../utils/useDataQuery";
+import BlogContentWithImages from "./BlogContentWithImages";
 
 const BlogDetails = () => {
   const { id } = useParams();
@@ -125,26 +126,7 @@ const BlogDetails = () => {
             controls
           />
         </div> */}
-        {middleImages.length > 0 && (
-          <div
-            className={`grid grid-cols-1 ${
-              middleImages.length === 1 ? "md:grid-cols-1" : "md:grid-cols-2"
-            } gap-4 mb-8`}
-          >
-            {middleImages.map((image, index) => (
-              <img
-                key={index}
-                src={`${import.meta.env.VITE_OPEN_APIURL}${image.filePath}`}
-                alt={blog.title}
-                className="rounded-md"
-              />
-            ))}
-          </div>
-        )}
-        <div
-          className="space-y-3 text-sm blog-content mb-4"
-          dangerouslySetInnerHTML={{ __html: blog.content || "" }}
-        />
+        <BlogContentWithImages blog={blog} middleImages={middleImages} />
         {/* Tags */}
         {tags.length > 0 && (
           <div className="flex flex-wrap gap-1 underline text-sm text-[#e62245]">
