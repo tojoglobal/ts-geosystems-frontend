@@ -44,7 +44,6 @@ const BlogDetails = () => {
   // Split images for display
   const topImages = images.slice(0, 2);
   const middleImages = images.slice(2, 4);
-  const bottomImages = images.slice(4, 6);
 
   const handleTabClick = (tab) => {
     if (tab === "Back to Blog") {
@@ -146,22 +145,6 @@ const BlogDetails = () => {
           className="space-y-3 text-sm blog-content mb-4"
           dangerouslySetInnerHTML={{ __html: blog.content || "" }}
         />
-        {bottomImages.length > 0 && (
-          <div
-            className={`grid grid-cols-1 ${
-              bottomImages.length === 1 ? "md:grid-cols-1" : "md:grid-cols-2"
-            } gap-4 mb-8`}
-          >
-            {bottomImages.map((image, index) => (
-              <img
-                key={index}
-                src={`${import.meta.env.VITE_OPEN_APIURL}${image.filePath}`}
-                alt={blog.title}
-                className="rounded-md"
-              />
-            ))}
-          </div>
-        )}
         {/* Tags */}
         {tags.length > 0 && (
           <div className="flex flex-wrap gap-1 underline text-sm text-[#e62245]">
