@@ -90,7 +90,7 @@ const RecentlyViewed = () => {
             id="itemsPerPage"
             value={limit}
             onChange={handleLimitChange}
-            className="border appearance-none rounded outline-none px-5 py-[1px] text-sm"
+            className="border cursor-pointer appearance-none rounded outline-none px-5 py-[1px] text-sm"
           >
             <option value="4">4</option>
             <option value="8">8</option>
