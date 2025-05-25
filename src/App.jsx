@@ -76,7 +76,7 @@ import RecentlyViewed from "./UserAccount/RecentlyViewed";
 import AccountSettings from "./UserAccount/AccountSettings";
 import UserAccountLayout from "./UserAccount/UserAccountLayout";
 import PublicOnlyRoute from "./ProtectedRoute/PublicOnlyRoute";
-import AdminTradeIn from "./Dashboard/TradeIn/AdminTradeIn";
+import TradeInData from "./Dashboard/TradeIn/TradeInData";
 import AdminSupportData from "./Dashboard/Support/AdminSupportData";
 import AddNewAddress from "./UserAccount/AddNewAddress";
 import Chat from "./Dashboard/Chat/Chat";
@@ -87,6 +87,7 @@ import Inbox from "./Dashboard/Email/Inbox";
 import Categories from "./Dashboard/Categorys/Categories";
 import AddUserManuals from "./Dashboard/UserManuals/AddUserManuals";
 import AddQuickGuides from "./Dashboard/QuickGuides/AddQuickGuides";
+import AdminUpdateTradeIn from "./Pages/Control/AdminUpdateTradeIn";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -201,7 +202,7 @@ const AppLayout = () => {
           {/* hoem page controll */}
           <Route path="home-page" element={<HomePageControl />} />
           <Route path="client-messages" element={<ClientMessages />} />
-          <Route path="trade-in" element={<AdminTradeIn />} />
+          <Route path="trade-in" element={<TradeInData />} />
           {/* support route */}
           <Route path="support" element={<AdminSupportData />} />
           {/* promoCode */}
@@ -231,6 +232,7 @@ const AppLayout = () => {
           {/* dynamic about page */}
           <Route path="hire" element={<AdminUpdateHire />} />
           <Route path="service" element={<AdminUpdateService />} />
+          <Route path="tradein" element={<AdminUpdateTradeIn />} />
           <Route path="about-us" element={<AdminUpdateAboutUs />} />
           <Route path="contact-us" element={<AdminUpdateContactUs />} />
           <Route path="cc" element={<AdminUpdateCertificateTracking />} />

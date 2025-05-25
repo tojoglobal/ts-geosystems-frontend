@@ -1,10 +1,15 @@
 import Swal from "sweetalert2";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import SocialButtons from "../Components/SocialButtons";
 import { Link } from "react-router-dom";
 import { useAxiospublic } from "../Hooks/useAxiospublic";
 import useDataQuery from "../utils/useDataQuery";
+import {
+  FaFacebookF,
+  FaXTwitter,
+  FaYoutube,
+  FaInstagram,
+} from "react-icons/fa6";
 import { SkeletonLoader } from "../utils/Loader/SkeletonLoader";
 
 const Footer = () => {
@@ -13,10 +18,11 @@ const Footer = () => {
   const [email, setEmail] = useState(user?.email || "");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const {
-    data: contactInfo,
-    isLoading: contactInfoLoading,
-  } = useDataQuery(["contactInfo"], "/api/admin-contact-us");
+  const { data: contactInfo, isLoading: contactInfoLoading } = useDataQuery(
+    ["contactInfo"],
+    "/api/admin-contact-us"
+  );
+  const socialLinks = contactInfo?.socialLinks || {};
 
   const handleSubscribe = async (e) => {
     e.preventDefault();
@@ -41,6 +47,33 @@ const Footer = () => {
       setIsSubmitting(false);
     }
   };
+
+  const buttons = [
+    {
+      name: "Facebook",
+      icon: <FaFacebookF className="text-white text-xs mr-1" />,
+      url: socialLinks?.facebook,
+      bg: "#155dfc",
+    },
+    {
+      name: "Twitter",
+      icon: <FaXTwitter className="text-white text-xs mr-1" />,
+      url: socialLinks?.twitter,
+      bg: "#000000",
+    },
+    {
+      name: "YouTube",
+      icon: <FaYoutube className="text-white text-xs mr-1" />,
+      url: socialLinks?.youtube,
+      bg: "#FF0000",
+    },
+    {
+      name: "Instagram",
+      icon: <FaInstagram className="text-white text-xs mr-1" />,
+      url: socialLinks?.instagram,
+      bg: "#E1306C",
+    },
+  ];
 
   return (
     <footer className="bg-[#585c5d] text-white pt-8 md:pt-12">
@@ -150,7 +183,32 @@ const Footer = () => {
               ))}
             </div>
           ) : (
-            <SocialButtons contactInfo={contactInfo} />
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-1 w-full max-w-md mx-auto z-10">
+              {buttons.map((btn) => (
+                <Link
+                  key={btn.name}
+                  to={btn.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <div
+                    className="flex justify-center items-center px-1 py-1 h-8"
+                    style={{
+                      backgroundColor: btn.bg,
+                      transform: "skewX(-15deg)",
+                    }}
+                  >
+                    <div
+                      style={{ transform: "skewX(15deg)" }}
+                      className="flex items-center text-sm"
+                    >
+                      {btn.icon}
+                      <span className="text-white text-[10px]">{btn.name}</span>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
           )}
         </div>
       </div>

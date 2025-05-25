@@ -227,7 +227,7 @@ const Support = () => {
                 htmlFor="company"
                 className="absolute pl-2 left-2 top-2 text-gray-500 text-sm transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base peer-placeholder-shown:text-black peer-focus:top-2 peer-focus:text-xs peer-focus:text-black"
               >
-                Company Name
+                Company Name *
               </label>
             </div>
             <div className="relative w-full">
@@ -275,7 +275,7 @@ const Support = () => {
               <div>
                 <label className="block mb-1">Instrument Type *</label>
                 <select
-                  className="w-full border p-3 appearance-none focus:outline-none focus:ring focus:ring-[#e62245]"
+                  className="w-full border p-3 appearance-none focus:outline-none focus:ring focus:ring-[#e62245] rounded"
                   name="equipment"
                   value={formData.equipment}
                   onChange={handleInputChange}
@@ -402,6 +402,7 @@ const Support = () => {
       <img
         src="https://cdn11.bigcommerce.com/s-ew2v2d3jn1/product_images/uploaded_images/banner-support-page.jpg"
         alt=""
+        className="rounded"
       />
     </div>
   );

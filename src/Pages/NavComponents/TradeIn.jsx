@@ -2,6 +2,8 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import Swal from "sweetalert2";
+import useDataQuery from "../../utils/useDataQuery";
+import { SkeletonLoader } from "../../utils/Loader/SkeletonLoader";
 
 const TradeIn = () => {
   const axiosPublicUrl = useAxiospublic();
@@ -21,6 +23,11 @@ const TradeIn = () => {
     photos: null,
   });
 
+  const { data = {}, isLoading } = useDataQuery(
+    ["tradeInContent"],
+    "/api/trade-in-content"
+  );
+  const tradeInContent = data?.data || {};
   const handleChange = (e) => {
     const { name, value, type } = e.target;
 
@@ -101,46 +108,42 @@ const TradeIn = () => {
       <p className="text-[#e62245] font-light mt-3 text-[28px] mb-6">
         TRADE IN
       </p>
-      <h1 className="text-[26px] mt-2 text-[#e62245] mb-2 font-bold">
-        Sell or Trade In Your Surveying Equipment
-      </h1>
-      <p className="mb-4 text-sm">
-        G2 Survey purchases Leica Geosystems survey equipment and will trade in
-        Trimble, Topcon, and others against the purchase of new or used Leica
-        surveying instruments.
-      </p>
-      <h2 className="text-[#e62245] font-bold text-[18px] mb-1">
-        Our Buying Process
-      </h2>
-      <ol className="list-decimal list-inside mb-4 text-sm">
-        <li>
-          1. To give you our best offer, we request you complete the form below
-          as fully as possible, especially the make, model, serial number,
-          software, condition, and photos.
-        </li>
-        <li>
-          2. Once we receive that information, we will review the details and
-          condition and will make you an offer. When you agree to the quote,
-          we'll send a purchase order for your review along with our terms and
-          conditions.
-        </li>
-        <li>
-          3. Upon approval of the purchase order, we will arrange collection.
-          Once the equipment is received it will be tested and verified within 5
-          working days.
-        </li>
-        <li>
-          4. Payment is sent once condition has been verified. If the items are
-          not received as expected, we may amend our offer, or return at no
-          cost.
-        </li>
-      </ol>
-      <h2 className="text-[#e62245] font-bold mb-1 text-[18px]">Trade-Ins</h2>
-      <p className="text-sm">
-        Are you looking to trade in your survey equipment? The process is the
-        same for buying your equipment! We will simply credit the offer amount
-        towards the new equipment you want to purchase.
-      </p>
+      {isLoading ? (
+        <>
+          <SkeletonLoader className="h-8 w-64 mb-4" />
+          <SkeletonLoader className="h-4 w-full mb-4" />
+          <SkeletonLoader className="h-6 w-48 mb-2" />
+          <div className="space-y-2 mb-4">
+            {[1, 2, 3, 4].map((i) => (
+              <SkeletonLoader key={i} className="h-4 w-full" />
+            ))}
+          </div>
+          <SkeletonLoader className="h-6 w-32 mb-2" />
+          <SkeletonLoader className="h-4 w-3/4 mb-8" />
+        </>
+      ) : (
+        <>
+          <h1 className="text-[26px] mt-2 text-[#e62245] mb-2 font-bold">
+            {tradeInContent.title1}
+          </h1>
+          <p className="mb-4 text-sm">{tradeInContent.description1}</p>
+          <h2 className="text-[#e62245] font-bold text-[18px] mb-1">
+            {tradeInContent.title2}
+          </h2>
+          <ol className="list-decimal list-inside mb-4 text-sm">
+            {tradeInContent.process_points?.map((point, index) => (
+              <li key={index}>
+                {index + 1}. {point}
+              </li>
+            ))}
+          </ol>
+          <h2 className="text-[#e62245] font-bold mb-1 text-[18px]">
+            {tradeInContent.title3}
+          </h2>
+          <p className="text-sm">{tradeInContent.description3}</p>
+        </>
+      )}
+
       <div className="max-w-3xl mx-auto my-8">
         <h2 className="text-[34px] font-bold mb-1">
           Survey Equipment Sell / Trade In Offer Form
@@ -240,11 +243,12 @@ const TradeIn = () => {
                   required
                 >
                   <option value="">Select Instrument</option>
-                  <option value="Leica">Leica</option>
-                  <option value="Sokkia">Sokkia</option>
-                  <option value="Topcon">Topcon</option>
-                  <option value="Trimble">Trimble</option>
-                  <option value="Other">Other</option>
+                  {!isLoading &&
+                    tradeInContent.instrument_makes?.map((make, index) => (
+                      <option key={index} value={make}>
+                        {make}
+                      </option>
+                    ))}
                 </select>
               </div>
               <div className="grid grid-cols-2 gap-4">
@@ -447,7 +451,7 @@ const TradeIn = () => {
             import.meta.env.VITE_OPEN_APIURL
           }/uploads/hire/hire-banner-1746352683586.jpg`}
           alt=""
-          className="rounded-sm"
+          className="rounded"
         />
       </div>
     </div>

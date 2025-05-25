@@ -179,7 +179,16 @@ const ProductSidebar = () => {
           </div>
         )
       )}
-      <div className="mt-6 overflow-hidden border rounded-[4px]">
+      <div className="mt-6 h-[90px] overflow-hidden border rounded-[4px]">
+        <img
+          src={`${import.meta.env.VITE_OPEN_APIURL}/uploads/${
+            popularImage.photo
+          }`}
+          alt="Leica Authorized Distributor"
+          className="h-full w-full transition-transform duration-1000 hover:scale-110"
+        />
+      </div>
+      {/* <div className="mt-6 overflow-hidden border rounded-[4px]">
         <img
           src={`${import.meta.env.VITE_OPEN_APIURL}/uploads/${
             popularImage.photo
@@ -187,7 +196,7 @@ const ProductSidebar = () => {
           alt="Leica Authorized Distributor"
           className="w-full object-cover h-[105px] transition-transform duration-1000 hover:scale-110"
         />
-      </div>
+      </div> */}
     </div>
   );
 };
