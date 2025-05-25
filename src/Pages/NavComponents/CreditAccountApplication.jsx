@@ -1,6 +1,99 @@
 import { Link } from "react-router-dom";
+import { useState } from "react";
 
 const CreditAccountApplication = () => {
+    const [formData, setFormData] = useState({
+      // Company Details
+      companyName: "",
+      tradingName: "",
+      invoiceAddress: "",
+      deliveryAddress: "",
+      registeredOffice: "",
+      tradingAddress: "",
+      companyType: "",
+      partnersInfo: "",
+      vatNumber: "",
+      companyNumber: "",
+      incorporationDate: "",
+      website: "",
+
+      // Contact Details
+      buyersContactName: "",
+      buyersPhone: "",
+      buyersEmail: "",
+      accountsContactName: "",
+      accountsPhone: "",
+      accountsEmail: "",
+      emailInvoices: "",
+      invoiceEmail: "",
+
+      // Trade References
+      ref1Company: "",
+      ref1Phone: "",
+      ref1Contact: "",
+      ref1Email: "",
+      ref1Address: "",
+      ref2Company: "",
+      ref2Phone: "",
+      ref2Contact: "",
+      ref2Email: "",
+      ref2Address: "",
+
+      // Signatory
+      applicantName: "",
+      applicantPosition: "",
+      applicantPhone: "",
+      applicationDate: "",
+      files: null,
+
+      // Marketing
+      discoveryMethod: "",
+      g2RepName: "",
+    });
+
+    const handleChange = (e) => {
+      const { name, value, type, files } = e.target;
+
+      if (type === "file") {
+        setFormData((prev) => ({
+          ...prev,
+          [name]: files[0], // Store the first file
+        }));
+      } else {
+        setFormData((prev) => ({
+          ...prev,
+          [name]: value,
+        }));
+      }
+    };
+
+    const handleSubmit = (e) => {
+      e.preventDefault();
+
+      // Here you would typically send the data to your backend
+      console.log("Form data to be sent:", formData);
+
+      // Example of how you might send it:
+      /*
+      fetch('/api/credit-application', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Success:', data);
+        // Handle success (e.g., show success message, redirect, etc.)
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        // Handle error
+      });
+      */
+    };
+
   return (
     <div className="p-2 md:p-3">
       <div className="flex items-center gap-2 text-[11px] mb-3">
@@ -23,7 +116,7 @@ const CreditAccountApplication = () => {
             contact us...
           </Link>
         </p>
-        <form className="space-y-6">
+        <form className="space-y-6" onSubmit={handleSubmit}>
           {/* Company Details Section */}
           <div className="space-y-4">
             <h2 className="text-xl font-semibold">Company Details</h2>
@@ -34,6 +127,8 @@ const CreditAccountApplication = () => {
                   type="text"
                   name="companyName"
                   id="companyName"
+                  value={formData.companyName}
+                  onChange={handleChange}
                   required
                   className="peer w-full border border-gray-300 p-2 pt-5 placeholder-transparent focus:outline-none focus:ring focus:ring-[#e62245] rounded"
                   placeholder="Company Name *"
@@ -52,6 +147,8 @@ const CreditAccountApplication = () => {
                   type="text"
                   name="tradingName"
                   id="tradingName"
+                  value={formData.tradingName}
+                  onChange={handleChange}
                   className="peer w-full border border-gray-300 p-2 pt-5 placeholder-transparent focus:outline-none focus:ring focus:ring-[#e62245] rounded"
                   placeholder="Trading Name (if different)"
                 />
@@ -71,6 +168,8 @@ const CreditAccountApplication = () => {
                     name="invoiceAddress"
                     id="invoiceAddress"
                     required
+                    value={formData.invoiceAddress}
+                    onChange={handleChange}
                     className="peer w-full border border-gray-300 p-2 pt-5 placeholder-transparent focus:outline-none focus:ring focus:ring-[#e62245] rounded"
                     placeholder="Invoice Address *"
                     rows="3"
@@ -89,6 +188,8 @@ const CreditAccountApplication = () => {
                     name="deliveryAddress"
                     id="deliveryAddress"
                     required
+                    value={formData.deliveryAddress}
+                    onChange={handleChange}
                     className="peer w-full border border-gray-300 p-2 pt-5 placeholder-transparent focus:outline-none focus:ring focus:ring-[#e62245] rounded"
                     placeholder="Delivery Address *"
                     rows="3"
@@ -147,6 +248,8 @@ const CreditAccountApplication = () => {
                       type="radio"
                       name="companyType"
                       value="Limited"
+                      checked={formData.companyType === "Limited"}
+                      onChange={handleChange}
                       className="w-5 h-5 cursor-pointer appearance-none rounded-full border-[2px] border-gray-300 checked:border-[5px] checked:border-[#e62245] checked:bg-white bg-[#e7e7e7] transition-all duration-150"
                       required
                     />
@@ -716,14 +819,20 @@ const CreditAccountApplication = () => {
             </div>
 
             {/* File Upload */}
-            <div className="border-2 border-dashed p-4 text-center rounded">
-              <p className="text-gray-600">
-                Company Letter Head, BACS Details & Signature
+            <div>
+              <p className="mb-2 font-semibold">
+                Please attach photos if applicable:
               </p>
-              <button type="button" className="text-blue-600 hover:underline">
-                Choose file
-              </button>
-              <p className="text-sm text-gray-500">or drop here</p>
+              <label className="border-2 border-dashed border-gray-300 rounded p-8 text-center text-sm text-black block cursor-pointer">
+                <span className="text-[#e62245]">Choose file</span> or drop here
+                <input
+                  type="file"
+                  name="photos"
+                  onChange={handleChange}
+                  className="hidden"
+                  multiple
+                />
+              </label>
             </div>
           </div>
 
