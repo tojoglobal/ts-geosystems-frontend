@@ -2,9 +2,9 @@ import Swal from "sweetalert2";
 import useDataQuery from "../../utils/useDataQuery";
 import { Eye } from "lucide-react";
 
-const AdminTradeIn = () => {
+const TradeInData = () => {
   const { data = [], isLoading } = useDataQuery(
-    ["adminTradeIn"],
+    ["tradeInData"],
     "/api/trade-in"
   );
 
@@ -142,4 +142,4 @@ const AdminTradeIn = () => {
   );
 };
 
-export default AdminTradeIn;
+export default TradeInData;

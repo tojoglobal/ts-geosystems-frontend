@@ -76,7 +76,7 @@ import RecentlyViewed from "./UserAccount/RecentlyViewed";
 import AccountSettings from "./UserAccount/AccountSettings";
 import UserAccountLayout from "./UserAccount/UserAccountLayout";
 import PublicOnlyRoute from "./ProtectedRoute/PublicOnlyRoute";
-import AdminTradeIn from "./Dashboard/TradeIn/AdminTradeIn";
+import TradeInData from "./Dashboard/TradeIn/TradeInData";
 import AdminSupportData from "./Dashboard/Support/AdminSupportData";
 import AddNewAddress from "./UserAccount/AddNewAddress";
 import Chat from "./Dashboard/Chat/Chat";
@@ -201,7 +201,7 @@ const AppLayout = () => {
           {/* hoem page controll */}
           <Route path="home-page" element={<HomePageControl />} />
           <Route path="client-messages" element={<ClientMessages />} />
-          <Route path="trade-in" element={<AdminTradeIn />} />
+          <Route path="trade-in" element={<TradeInData />} />
           {/* support route */}
           <Route path="support" element={<AdminSupportData />} />
           {/* promoCode */}

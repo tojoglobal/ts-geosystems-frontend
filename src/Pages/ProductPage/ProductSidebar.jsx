@@ -179,7 +179,7 @@ const ProductSidebar = () => {
           </div>
         )
       )}
-      <div className="mt-6 h-[100px] overflow-hidden border rounded-[4px]">
+      <div className="mt-6 h-[90px] overflow-hidden border rounded-[4px]">
         <img
           src={`${import.meta.env.VITE_OPEN_APIURL}/uploads/${
             popularImage.photo
