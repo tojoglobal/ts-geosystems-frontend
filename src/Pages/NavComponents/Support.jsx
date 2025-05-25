@@ -2,6 +2,8 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import Swal from "sweetalert2";
+import useDataQuery from "../../utils/useDataQuery";
+import { SkeletonLoader } from "../../utils/Loader/SkeletonLoader";
 
 const Support = () => {
   const axiosPublicUrl = useAxiospublic();
@@ -16,6 +18,11 @@ const Support = () => {
     details: "",
     files: [],
   });
+
+  const { data: { data: supportContent } = {}, isLoading } = useDataQuery(
+    ["supportContent"],
+    "/api/support-content"
+  );
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -274,20 +281,24 @@ const Support = () => {
               </label>
               <div>
                 <label className="block mb-1">Instrument Type *</label>
-                <select
-                  className="w-full border p-3 appearance-none focus:outline-none focus:ring focus:ring-[#e62245] rounded"
-                  name="equipment"
-                  value={formData.equipment}
-                  onChange={handleInputChange}
-                  required
-                >
-                  <option value=""></option>
-                  <option value="Leica HDS">Leica HDS</option>
-                  <option value="Leica TPS">Leica TPS</option>
-                  <option value="Leica GPS">Leica GPS</option>
-                  <option value="Leica Construction">Leica Construction</option>
-                  <option value="Other">Other</option>
-                </select>
+                {isLoading ? (
+                  <SkeletonLoader className="w-full h-12" />
+                ) : (
+                  <select
+                    className="w-full border p-3 appearance-none focus:outline-none focus:ring focus:ring-[#e62245] rounded"
+                    name="equipment"
+                    value={formData.equipment}
+                    onChange={handleInputChange}
+                    required
+                  >
+                    <option value=""></option>
+                    {supportContent.instrument_types?.map((type, index) => (
+                      <option key={index} value={type}>
+                        {type}
+                      </option>
+                    ))}
+                  </select>
+                )}
               </div>
               <div className="relative w-full">
                 <input
@@ -369,6 +380,7 @@ const Support = () => {
                   </p>
                 )}
               </div>
+
               <div className="flex justify-center">
                 <button
                   type="submit"

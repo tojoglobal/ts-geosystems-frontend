@@ -13,7 +13,6 @@ const CertificateTracking = () => {
     ["certificateDescription"],
     "/api/certificate-description"
   );
-  console.log(certificateData);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -33,7 +32,7 @@ const CertificateTracking = () => {
         / <span className="text-red-600 font-medium">Support</span> /{" "}
         <span className="text-red-600 font-medium">Certificate Tracking</span>
       </div>
-      <h1 className="text-[30px] font-bold text-red-600 mb-4 uppercase">
+      <h1 className="text-[28px] font-light mt-2 text-[#e62245] mb-4 uppercase">
         Certificate Tracking
       </h1>
       {certificateData?.description && (

@@ -88,6 +88,7 @@ import Categories from "./Dashboard/Categorys/Categories";
 import AddUserManuals from "./Dashboard/UserManuals/AddUserManuals";
 import AddQuickGuides from "./Dashboard/QuickGuides/AddQuickGuides";
 import AdminUpdateTradeIn from "./Pages/Control/AdminUpdateTradeIn";
+import AdminUpdateSupport from "./Pages/Control/AdminUpdateSupport";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -235,6 +236,7 @@ const AppLayout = () => {
           <Route path="tradein" element={<AdminUpdateTradeIn />} />
           <Route path="about-us" element={<AdminUpdateAboutUs />} />
           <Route path="contact-us" element={<AdminUpdateContactUs />} />
+          <Route path="update/support" element={<AdminUpdateSupport />} />
           <Route path="cc" element={<AdminUpdateCertificateTracking />} />
           <Route path="chat" element={<Chat />} />
         </Route>
