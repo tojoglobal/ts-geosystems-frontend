@@ -54,7 +54,7 @@ const SocialShareButtons = ({ blogUrl, blogTitle }) => {
   ];
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-6 max-w-md gap-1 w-full my-6 z-10">
+    <div className="grid grid-cols-2 md:grid-cols-6 max-w-lg gap-1 w-full my-6 z-10">
       {shareButtons.map((btn) => (
         <a
           key={btn.name}
@@ -165,7 +165,7 @@ const BlogDetails = () => {
                 key={index}
                 src={`${import.meta.env.VITE_OPEN_APIURL}${image.filePath}`}
                 alt={blog.title}
-                className="rounded-sm w-full md:w-[350px] h-[200px]"
+                className="rounded-sm w-full max-w-[350px] h-[210px]"
               />
             ))}
           </div>
