@@ -1,8 +1,10 @@
 import { Link } from "react-router-dom";
 import useDataQuery from "../../utils/useDataQuery";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 const UserManuals = () => {
+  const { isAuth } = useSelector((state) => state.authUser);
   const [currentPage, setCurrentPage] = useState(1);
   const { data = {}, isLoading } = useDataQuery(
     ["userManuals", currentPage],
@@ -54,25 +56,33 @@ const UserManuals = () => {
         {manuals?.map((manual) => (
           <div
             key={manual.id}
-            className="border rounded-sm flex flex-col items-center"
+            className="border rounded-sm flex flex-col h-full"
           >
-            <img
-              src={`${import.meta.env.VITE_OPEN_APIURL}/uploads/${
-                manual.photo
-              }`}
-              alt={manual.user_manuals_name}
-              className="w-full h-40 object-contain mb-4"
-            />
-            <div className="border-b w-full mb-4"></div>
-            <h3 className="text-center capitalize text-sm mb-4">
-              {manual.user_manuals_name}
-            </h3>
-            <button
-              onClick={() => window.open(manual.user_manuals_link, "_blank")}
-              className="bg-[#e62245] text-white cursor-pointer px-6 py-1 rounded hover:bg-[#d41d3f] transition-colors w-full"
+            <div className="flex flex-col flex-grow items-center">
+              <img
+                src={`${import.meta.env.VITE_OPEN_APIURL}/uploads/${
+                  manual.photo
+                }`}
+                alt={manual.user_manuals_name}
+                className="w-full h-40 object-contain mb-4"
+              />
+              <div className="border-b w-full mb-4"></div>
+              <h3 className="text-center capitalize text-sm mb-4">
+                {manual.user_manuals_name}
+              </h3>
+            </div>
+            <a
+              onClick={() =>
+                isAuth
+                  ? window.open(manual.user_manuals_link, "_blank")
+                  : window.location.replace("/user/login")
+              }
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-[#e62245] cursor-pointer hover:bg-[#d41d3f] text-white text-sm font-semibold py-1 w-full text-center rounded block transition-colors"
             >
               DOWNLOAD
-            </button>
+            </a>
           </div>
         ))}
       </div>

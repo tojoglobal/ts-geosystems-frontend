@@ -1,20 +1,22 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import useDataQuery from "../../utils/useDataQuery";
+import { useSelector } from "react-redux";
 
 const SoftwareDownloads = () => {
+  const { isAuth } = useSelector((state) => state.authUser);
   const ITEMS_PER_PAGE = 12;
   const [currentPage, setCurrentPage] = useState(1);
 
   const {
     data: softwareData = [],
     isLoading,
-    error,
+    isError,
   } = useDataQuery(["software"], "/api/software");
 
   if (isLoading) return null;
 
-  if (error) {
+  if (isError) {
     return <div>Error fetching software data</div>;
   }
 
@@ -72,12 +74,18 @@ const SoftwareDownloads = () => {
                 {software.softwar_name}
               </h3>
             </div>
-            <button
-              onClick={() => window.open(software.softwarlink, "_blank")}
-              className="bg-[#e62245] cursor-pointer text-white px-6 py-1 rounded hover:bg-[#d41d3f] transition-colors w-full mt-auto"
+            <a
+              onClick={() =>
+                isAuth
+                  ? window.open(software.softwarlink, "_blank")
+                  : window.location.replace("/user/login")
+              }
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-[#e62245] hover:bg-[#d41d3f] text-white text-sm font-semibold py-1 w-full text-center rounded block transition-colors"
             >
               DOWNLOAD
-            </button>
+            </a>
           </div>
         ))}
       </div>
