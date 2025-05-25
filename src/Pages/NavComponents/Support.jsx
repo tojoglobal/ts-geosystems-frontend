@@ -127,8 +127,8 @@ const Support = () => {
           Support
         </Link>
       </div>
-      <h1 className="text-[28px] font-light mt-2 text-[#e62245] mb-6">
-        SUPPORT
+      <h1 className="text-[28px] uppercase font-light mt-2 text-[#e62245] mb-6">
+        SUPPORT Request Form
       </h1>
       <div className="flex flex-col items-center text-center md:flex-row md:justify-center gap-2 md:gap-7 text-sm font-normal text-[#e62245] mb-16">
         <Link to="/software-downloads">SOFTWARE DOWNLOADS</Link>
