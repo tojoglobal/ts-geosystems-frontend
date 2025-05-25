@@ -155,7 +155,7 @@ const MainNavContainer = () => {
                     <div className="absolute -left-10 top-full w-50 bg-white rounded-sm border border-slightly-dark shadow-lg pl-4 py-2 hidden group-hover:block z-50">
                       <ul className="space-y-1 font-normal text-[13px] text-charcoal">
                         <li className="hover:text-crimson-red cursor-pointer transition-colors duration-300">
-                          <Link to="/support">Support Requiest Form</Link>
+                          <Link to="/support">Support Request Form</Link>
                         </li>
                         <li className="hover:text-crimson-red cursor-pointer transition-colors duration-300">
                           <Link to="/software-downloads">

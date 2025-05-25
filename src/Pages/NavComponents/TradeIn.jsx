@@ -447,7 +447,7 @@ const TradeIn = () => {
             import.meta.env.VITE_OPEN_APIURL
           }/uploads/hire/hire-banner-1746352683586.jpg`}
           alt=""
-          className="rounded-sm"
+          className="rounded"
         />
       </div>
     </div>
