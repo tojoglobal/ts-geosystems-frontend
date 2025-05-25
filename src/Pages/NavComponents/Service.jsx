@@ -40,6 +40,11 @@ const Service = () => {
     "/api/get-service-images"
   );
 
+  const { data: equipment = [], isLoading: optionsLoading } = useDataQuery(
+    ["serviceEquipment"],
+    "/api/service-equipment-options"
+  );
+  const equipmentOptions = equipment?.data?.equipment_options || [];
   // Grid and banner image logic as before
   const gridImages = images
     .filter((img) => img.show && [1, 2, 3, 4].includes(img.order))
@@ -368,11 +373,19 @@ const Service = () => {
               onChange={handleInputChange}
             >
               <option value="">Select Equipment</option>
-              <option value="Leica">Leica</option>
-              <option value="Radiodetection">Radiodetection</option>
-              <option value="Trimble">Trimble</option>
-              <option value="Topcon">Topcon</option>
-              <option value="Sokkia">Sokkia</option>
+              {optionsLoading ? (
+                <option value="" disabled>
+                  Loading options...
+                </option>
+              ) : (
+                equipmentOptions?.map(
+                  (option, index) => (
+                    <option key={index} value={option}>
+                      {option}
+                    </option>
+                  )
+                )
+              )}
             </select>
           </div>
           <div className="relative w-full">
@@ -492,7 +505,7 @@ const Service = () => {
               import.meta.env.VITE_OPEN_APIURL
             }/uploads/hire/hire-banner-1746352683586.jpg`}
             alt="Service banner"
-            className="w-full"
+            className="w-full rounded"
           />
         </div>
       )}

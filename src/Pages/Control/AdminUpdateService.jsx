@@ -8,6 +8,7 @@ import Swal from "sweetalert2";
 import Button from "../../Dashboard/Button/Button";
 import Loader from "../../utils/Loader";
 import ServcePageImageControll from "../../Dashboard/WebsiteControll/ServicePage/ServicePageImageControll";
+import AdminUpdateServiceEquipment from "./AdminUpdateServiceEquipment";
 
 const AdminUpdateServicePage = () => {
   const axiosPublicUrl = useAxiospublic();
@@ -273,6 +274,7 @@ const AdminUpdateServicePage = () => {
         </form>
       )}
       <div>
+        <AdminUpdateServiceEquipment />
         <ServcePageImageControll />
       </div>
     </div>
