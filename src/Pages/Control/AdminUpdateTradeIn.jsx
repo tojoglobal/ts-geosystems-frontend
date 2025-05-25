@@ -96,14 +96,14 @@ const AdminUpdateTradeIn = () => {
       <h1 className="text-lg font-semibold mb-2">Update Trade-In Page</h1>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          <div className="rounded p-3 border">
+          <div className="rounded p-3 border border-gray-600">
             <h2 className="text-base font-semibold mb-2">Section 1</h2>
             <div className="space-y-2">
               <div>
                 <label className="block text-sm mb-1">Title</label>
                 <input
                   {...register("title1")}
-                  className="w-full p-1.5 border rounded text-sm"
+                  className="w-full p-1.5 border border-gray-600 rounded text-sm"
                 />
               </div>
               <div>
@@ -130,7 +130,7 @@ const AdminUpdateTradeIn = () => {
             </div>
           </div>
 
-          <div className="rounded p-3 border">
+          <div className="rounded p-3 border border-gray-600">
             <h2 className="text-base font-semibold mb-2">
               Section 2 - Buying Process
             </h2>
@@ -139,7 +139,7 @@ const AdminUpdateTradeIn = () => {
                 <label className="block text-sm mb-1">Title</label>
                 <input
                   {...register("title2")}
-                  className="w-full p-1.5 border rounded text-sm"
+                  className="w-full p-1.5 border border-gray-600 rounded text-sm"
                 />
               </div>
               <div>
@@ -149,7 +149,7 @@ const AdminUpdateTradeIn = () => {
                     <div key={field.id} className="flex gap-1">
                       <input
                         {...register(`process_points.${index}`)}
-                        className="flex-1 p-1.5 border rounded text-sm"
+                        className="flex-1 p-1.5 border border-gray-600 rounded text-sm"
                         placeholder="Enter process point"
                       />
                       <button
@@ -173,7 +173,7 @@ const AdminUpdateTradeIn = () => {
             </div>
           </div>
 
-          <div className="rounded p-3 border">
+          <div className="rounded p-3 border border-gray-600">
             <h2 className="text-base font-semibold mb-2">
               Section 3 - Trade-Ins
             </h2>
@@ -182,7 +182,7 @@ const AdminUpdateTradeIn = () => {
                 <label className="block text-sm mb-1">Title</label>
                 <input
                   {...register("title3")}
-                  className="w-full p-1.5 border rounded text-sm"
+                  className="w-full p-1.5 border border-gray-600 rounded text-sm"
                 />
               </div>
               <div>
@@ -209,14 +209,14 @@ const AdminUpdateTradeIn = () => {
             </div>
           </div>
 
-          <div className="rounded p-3 border">
+          <div className="rounded p-3 border border-gray-600">
             <h2 className="text-base font-semibold mb-2">Instrument Makes</h2>
             <div className="space-y-1">
               {instrumentMakesFields.map((field, index) => (
                 <div key={field.id} className="flex gap-1">
                   <input
                     {...register(`instrument_makes.${index}`)}
-                    className="flex-1 p-1.5 border rounded text-sm"
+                    className="flex-1 p-1.5 border border-gray-600 rounded text-sm"
                     placeholder="Enter instrument make"
                   />
                   <button

@@ -129,6 +129,7 @@ const menuItems = [
       { label: "Trade In", to: "/dashboard/tradein" },
       { label: "About Us", to: "/dashboard/about-us" },
       { label: "Contact Us", to: "/dashboard/contact-us" },
+      { label: "Support", to: "/dashboard/update/support" },
       { label: "Certificate Tracking", to: "/dashboard/cc" },
     ],
   },
