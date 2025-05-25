@@ -50,13 +50,13 @@ const BlogContentWithImages = ({ blog, middleImages }) => {
     const img2 = images[index + 1];
 
     return `
-      <div class="flex flex-col md:flex-row gap-3 justify-center my-8">
+      <div class="flex flex-col md:flex-row gap-3 justify-center my-8 w-full">
         ${
           img1
             ? `<img 
                 src="${import.meta.env.VITE_OPEN_APIURL}${img1.filePath}" 
                 alt="Blog content image ${index + 1}" 
-                class="rounded-sm w-auto h-[200px] object-cover" 
+                class="rounded-sm w-full max-w-[350px] h-[210px] object-cover" 
               />`
             : ""
         }
@@ -65,7 +65,7 @@ const BlogContentWithImages = ({ blog, middleImages }) => {
             ? `<img 
                 src="${import.meta.env.VITE_OPEN_APIURL}${img2.filePath}" 
                 alt="Blog content image ${index + 2}" 
-                class="rounded-sm w-auto h-[200px] object-cover" 
+                class="rounded-sm w-full max-w-[350px] h-[210px] object-cover" 
               />`
             : ""
         }

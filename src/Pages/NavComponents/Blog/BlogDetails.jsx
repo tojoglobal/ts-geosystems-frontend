@@ -165,7 +165,7 @@ const BlogDetails = () => {
                 key={index}
                 src={`${import.meta.env.VITE_OPEN_APIURL}${image.filePath}`}
                 alt={blog.title}
-                className="rounded-sm w-full md:w-[350px] h-[200px]"
+                className="rounded-sm w-full max-w-[350px] h-[210px]"
               />
             ))}
           </div>
