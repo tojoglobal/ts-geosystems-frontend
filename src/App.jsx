@@ -89,6 +89,7 @@ import AddUserManuals from "./Dashboard/UserManuals/AddUserManuals";
 import AddQuickGuides from "./Dashboard/QuickGuides/AddQuickGuides";
 import AdminUpdateTradeIn from "./Pages/Control/AdminUpdateTradeIn";
 import AdminUpdateSupport from "./Pages/Control/AdminUpdateSupport";
+import CreditAccountApplication from "./Pages/NavComponents/CreditAccountApplication";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -113,6 +114,10 @@ const AppLayout = () => {
           <Route path="/compare/:ids" element={<Compare />} />
           <Route path="/used" element={<UsedEquipment />} />
           <Route path="/hire" element={<Hire />} />
+          <Route
+            path="/hire/credit-account-application"
+            element={<CreditAccountApplication />}
+          />
           <Route path="/service" element={<Service />} />
           <Route path="/support" element={<Support />} />
           <Route path="/quick-guides" element={<QuickGuides />} />

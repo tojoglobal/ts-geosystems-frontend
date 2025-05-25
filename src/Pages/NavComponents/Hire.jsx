@@ -145,7 +145,7 @@ const Hire = () => {
               Hire Enquiry
             </button>
             <Link
-              to="/credit-application"
+              to="/hire/credit-account-application"
               className="md:mr-40 bg-[#e62245] flex items-center gap-2 text-white px-2 md:px-[18.5px] py-[7.66667px] rounded-[4px] shadow-xl hover:bg-[#c81e3c] transition-all text-[13px] font-medium"
             >
               <FaFileAlt />
