@@ -138,11 +138,11 @@ const TSBlog = () => {
           <BlogSearch />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7 mt-10">
-          {parsedBlogs.map((post) => (
+          {parsedBlogs?.map((post) => (
             <Link
               key={post.id}
               to={`/ts-blog/${post.id}/${slugify(post.title || "")}`}
-              className="relative border border-[#eaedef] pb-6 hover:shadow-md"
+              className="relative border rounded-t-md border-[#eaedef] pb-6 hover:shadow-md"
             >
               <img
                 src={post.image}
