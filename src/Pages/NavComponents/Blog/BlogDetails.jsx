@@ -54,7 +54,7 @@ const SocialShareButtons = ({ blogUrl, blogTitle }) => {
   ];
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-6 max-w-md gap-1 w-full my-6 z-10">
+    <div className="grid grid-cols-2 md:grid-cols-6 max-w-lg gap-1 w-full my-6 z-10">
       {shareButtons.map((btn) => (
         <a
           key={btn.name}
