@@ -87,6 +87,7 @@ import Inbox from "./Dashboard/Email/Inbox";
 import Categories from "./Dashboard/Categorys/Categories";
 import AddUserManuals from "./Dashboard/UserManuals/AddUserManuals";
 import AddQuickGuides from "./Dashboard/QuickGuides/AddQuickGuides";
+import AdminUpdateTradeIn from "./Pages/Control/AdminUpdateTradeIn";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -231,6 +232,7 @@ const AppLayout = () => {
           {/* dynamic about page */}
           <Route path="hire" element={<AdminUpdateHire />} />
           <Route path="service" element={<AdminUpdateService />} />
+          <Route path="tradein" element={<AdminUpdateTradeIn />} />
           <Route path="about-us" element={<AdminUpdateAboutUs />} />
           <Route path="contact-us" element={<AdminUpdateContactUs />} />
           <Route path="cc" element={<AdminUpdateCertificateTracking />} />

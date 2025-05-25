@@ -126,6 +126,7 @@ const menuItems = [
       { label: "Home Page", to: "/dashboard/home-page" },
       { label: "Hire", to: "/dashboard/hire" },
       { label: "Service", to: "/dashboard/service" },
+      { label: "Trade In", to: "/dashboard/tradein" },
       { label: "About Us", to: "/dashboard/about-us" },
       { label: "Contact Us", to: "/dashboard/contact-us" },
       { label: "Certificate Tracking", to: "/dashboard/cc" },
