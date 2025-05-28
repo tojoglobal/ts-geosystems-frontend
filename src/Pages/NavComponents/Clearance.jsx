@@ -6,6 +6,7 @@ import { BsGrid3X3GapFill } from "react-icons/bs";
 import { FaThList } from "react-icons/fa";
 import Swal from "sweetalert2";
 import { useDispatch } from "react-redux";
+import { MdKeyboardArrowRight } from "react-icons/md";
 import { parsePrice } from "../../utils/parsePrice";
 import { addToCart } from "../../features/AddToCart/AddToCart";
 import useDataQuery from "../../utils/useDataQuery";
@@ -187,7 +188,7 @@ const Clearance = () => {
             return (
               <div
                 key={product.id}
-                className={`relative ${
+                className={`mx-1 relative ${
                   viewMode === "list"
                     ? "flex flex-col md:flex-row gap-8"
                     : "flex flex-col h-full"
@@ -241,7 +242,7 @@ const Clearance = () => {
                         <img
                           src={displayImage}
                           alt={product.product_name}
-                          className="w-auto h-56 object-contain transition-all duration-300 ease-in-out"
+                          className="w-auto max-h-[265.17px] object-contain transition-all duration-300 ease-in-out"
                         />
                       </div>
                     </Link>
@@ -265,7 +266,7 @@ const Clearance = () => {
                         </h3>
                       </Link>
                       <p className="text-sm text-[#2f2f2b] mt-2">
-                        {product.product_overview || "No description available"}
+                        {product?.product_overview?.slice(0, 300)}...
                       </p>
                     </div>
                     <div>
@@ -328,9 +329,9 @@ const Clearance = () => {
                     </div>
                   </div>
                 ) : (
-                  <div className="flex flex-col flex-grow border-t pt-3">
+                  <div className="flex flex-col flex-grow pt-8 mb-4">
                     <div className="flex-grow">
-                      <div className="border-t border-gray-300 pt-2 text-xs text-gray-600 mb-1">
+                      <div className="border-t border-[#f3f3f3] pt-2 text-xs text-gray-600 mb-1">
                         {product.brand_name} | Sku: {product.sku}
                       </div>
                       <Link
@@ -420,10 +421,10 @@ const Clearance = () => {
                   <button
                     key={idx}
                     onClick={() => setCurrentPage(idx + 1)}
-                    className={`border px-3 py-1 rounded text-sm ${
+                    className={`border px-2 py-1.5 rounded text-sm ${
                       currentPage === idx + 1
-                        ? "bg-gray-200"
-                        : "hover:bg-gray-100"
+                        ? "border border-gray-300 bg-[#ebebeb] hover:text-red-500"
+                        : "hover:text-red-500"
                     }`}
                   >
                     {idx + 1}
@@ -434,9 +435,9 @@ const Clearance = () => {
             {currentPage < totalPages && (
               <button
                 onClick={() => setCurrentPage(currentPage + 1)}
-                className="border px-3 py-1 rounded hover:bg-gray-100 transition text-sm"
+                className="border flex items-center gap-1 px-1.5 p-1 rounded hover:bg-gray-100 transition text-sm"
               >
-                Next →
+                Next <MdKeyboardArrowRight />
               </button>
             )}
           </div>
@@ -447,7 +448,7 @@ const Clearance = () => {
                 compareItems.length >= 2
                   ? "bg-[#e62245] cursor-pointer hover:bg-[#d41d3f] text-white"
                   : "bg-gray-200 hover:bg-gray-300"
-              } text-xs font-semibold px-6 py-2 rounded transition-colors`}
+              } text-xs font-semibold px-4 py-2 rounded transition-colors`}
             >
               COMPARE SELECTED ({compareItems.length})
             </button>
