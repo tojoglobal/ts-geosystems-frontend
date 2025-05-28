@@ -36,31 +36,11 @@ const UsedEquipmentBenefits = () => {
               {data?.benefits_box_title}
             </h2>
             <div
-              className="space-y-2"
+              className="space-y-2 text-sm font-normal"
               dangerouslySetInnerHTML={{
                 __html: data.benefits_box_description,
               }}
             />
-            <div className="flex justify-center">
-              <Link
-                to={data.links?.contactUs || "/contact-us"}
-                className="bg-[#e62245] text-white px-3 text-sm py-1.5 rounded-[4px] hover:bg-[#c81e3b] transition"
-              >
-                Contact Us
-              </Link>
-            </div>
-            {data.links?.brochure && (
-              <div>
-                <a
-                  href={data.links.brochure}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-[#e62245] underline text-sm"
-                >
-                  G2 Survey Reconditioned Surveying Equipment Brochure
-                </a>
-              </div>
-            )}
           </div>
         )}
       </div>

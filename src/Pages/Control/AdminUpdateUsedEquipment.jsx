@@ -28,10 +28,6 @@ const AdminUpdateUsedEquipment = () => {
       benefits_box_title: "USED SURVEYING EQUIPMENT BENEFITS",
       benefits_box_description: "",
       benefits_box_show: true,
-      links: {
-        contactUs: "",
-        brochure: "",
-      },
     },
   });
 
@@ -44,7 +40,6 @@ const AdminUpdateUsedEquipment = () => {
         benefits_box_title: data.benefits_box_title,
         benefits_box_description: data.benefits_box_description,
         benefits_box_show: !!data.benefits_box_show,
-        links: data.links || { contactUs: "", brochure: "" },
       });
     }
   }, [data, reset]);
@@ -94,7 +89,6 @@ const AdminUpdateUsedEquipment = () => {
       formVals.benefits_box_description
     );
     formData.append("benefits_box_show", formVals.benefits_box_show);
-    formData.append("links", JSON.stringify(formVals.links || {}));
     mutation.mutate(formData);
   };
 
@@ -202,33 +196,6 @@ const AdminUpdateUsedEquipment = () => {
               Show Benefits Box Section
             </span>
           </label>
-        </div>
-        <div className="border-t pt-4">
-          <h3 className="text-base font-medium">Page Links</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <div>
-              <label className="block font-medium text-sm mb-1">
-                Contact Us Link
-              </label>
-              <input
-                type="text"
-                {...register("links.contactUs")}
-                className="w-full border border-gray-600 rounded p-2 text-sm"
-                placeholder="/contact-us"
-              />
-            </div>
-            <div>
-              <label className="block font-medium text-sm mb-1">
-                Brochure Link
-              </label>
-              <input
-                type="text"
-                {...register("links.brochure")}
-                className="w-full border border-gray-600 rounded p-2 text-sm"
-                placeholder="https://"
-              />
-            </div>
-          </div>
         </div>
         <div className="flex justify-start pt-2">
           <button
