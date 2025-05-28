@@ -124,6 +124,7 @@ const menuItems = [
     icon: <MdWebStories size={20} />,
     submenu: [
       { label: "Home Page", to: "/dashboard/home-page" },
+      { label: "Used Equipment", to: "/dashboard/used-equipment" },
       { label: "Hire", to: "/dashboard/hire" },
       { label: "Service", to: "/dashboard/service" },
       { label: "Trade In", to: "/dashboard/tradein" },

@@ -90,6 +90,7 @@ import AddQuickGuides from "./Dashboard/QuickGuides/AddQuickGuides";
 import AdminUpdateTradeIn from "./Pages/Control/AdminUpdateTradeIn";
 import AdminUpdateSupport from "./Pages/Control/AdminUpdateSupport";
 import CreditAccountApplication from "./Pages/NavComponents/CreditAccountApplication";
+import AdminUpdateUsedEquipment from "./Pages/Control/AdminUpdateUsedEquipment";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -236,6 +237,7 @@ const AppLayout = () => {
             element={<Inbox userEmail={"no-reply@tsgb.site"} />}
           />
           {/* dynamic about page */}
+          <Route path="used-equipment" element={<AdminUpdateUsedEquipment />} />
           <Route path="hire" element={<AdminUpdateHire />} />
           <Route path="service" element={<AdminUpdateService />} />
           <Route path="tradein" element={<AdminUpdateTradeIn />} />
