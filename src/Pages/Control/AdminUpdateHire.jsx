@@ -29,7 +29,9 @@ const AdminUpdateHire = () => {
       description: "",
       infoBox: "",
       imageUrl: "",
-      show_buttons: true,
+      show_hire_enquiry_button: true,
+      show_credit_account_button: true,
+      show_info_box: true,
       links: {
         contactUs: "",
         privacyPolicy: "",
@@ -59,7 +61,9 @@ const AdminUpdateHire = () => {
         description: hireContent.description || "",
         infoBox: hireContent.infoBox || "",
         imageUrl: hireContent.imageUrl || "",
-        show_buttons: hireContent.show_buttons || "",
+        show_hire_enquiry_button: !!hireContent.show_hire_enquiry_button,
+        show_credit_account_button: !!hireContent.show_credit_account_button,
+        show_info_box: !!hireContent.show_info_box,
         links: hireContent.links || {
           contactUs: "",
           privacyPolicy: "",
@@ -78,12 +82,21 @@ const AdminUpdateHire = () => {
         formData.append("image", files[0]);
       }
 
-      // Append the simple fields
       formData.append("title", data.title);
       formData.append("description", data.description);
       formData.append("infoBox", data.infoBox);
       formData.append("imageUrl", data.imageUrl);
-      formData.append("show_buttons", data.show_buttons);
+
+      // FIXED: append all three new checkboxes
+      formData.append(
+        "show_hire_enquiry_button",
+        data.show_hire_enquiry_button
+      );
+      formData.append(
+        "show_credit_account_button",
+        data.show_credit_account_button
+      );
+      formData.append("show_info_box", data.show_info_box);
 
       // Stringify and append the links object
       formData.append("links", JSON.stringify(data.links));
@@ -127,11 +140,31 @@ const AdminUpdateHire = () => {
             <label className="inline-flex items-center">
               <input
                 type="checkbox"
-                {...register("show_buttons")}
+                {...register("show_hire_enquiry_button")}
                 className="form-checkbox h-5 w-5 text-[#e62245] rounded focus:ring-[#e62245] border-gray-300"
               />
-              <span className="ml-2 text-sm">
-                Show Hire Enquiry & Credit Account Application Buttons
+              <span className="ml-2 text-sm cursor-pointer">
+                Show Hire Enquiry Button
+              </span>
+            </label>
+            <label className="inline-flex items-center ml-6">
+              <input
+                type="checkbox"
+                {...register("show_credit_account_button")}
+                className="form-checkbox h-5 w-5 text-[#e62245] rounded focus:ring-[#e62245] border-gray-300"
+              />
+              <span className="ml-2 text-sm cursor-pointer">
+                Show Credit Account Application Button
+              </span>
+            </label>
+            <label className="inline-flex items-center ml-6">
+              <input
+                type="checkbox"
+                {...register("show_info_box")}
+                className="form-checkbox h-5 w-5 text-[#e62245] rounded focus:ring-[#e62245] border-gray-300"
+              />
+              <span className="ml-2 text-sm cursor-pointer">
+                Show Info Box Content (Estimated Price Sections)
               </span>
             </label>
           </div>
@@ -222,7 +255,7 @@ const AdminUpdateHire = () => {
           {/* Info Box Section */}
           <div className="space-y-2">
             <label htmlFor="infoBox" className="block font-medium text-sm">
-              Info Box Content
+              Info Box Content (Estimated Price Sections)
             </label>
             <Controller
               name="infoBox"
