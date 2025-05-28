@@ -13,6 +13,8 @@ import { getProductType } from "../../utils/productOption";
 import { parsePrice } from "../../utils/parsePrice";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../../features/AddToCart/AddToCart";
+import UsedEquipmentBenefits from "./UsedEquipmentBenefits";
+import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 
 const sortOptions = [
   "FEATURED ITEMS",
@@ -69,22 +71,22 @@ const UsedEquipment = () => {
   };
 
   const handleAddToCart = (product) => {
-      const itemToAdd = {
-        id: product.id,
-        product_name: product.product_name,
-        price: parsePrice(product.price),
-        quantity: 1,
-      };
-  
-      dispatch(addToCart(itemToAdd));
-      Swal.fire({
-        title: "Added to Cart",
-        text: `${product.product_name} has been added to your cart.`,
-        icon: "success",
-        timer: 2000,
-        showConfirmButton: false,
-      });
+    const itemToAdd = {
+      id: product.id,
+      product_name: product.product_name,
+      price: parsePrice(product.price),
+      quantity: 1,
     };
+
+    dispatch(addToCart(itemToAdd));
+    Swal.fire({
+      title: "Added to Cart",
+      text: `${product.product_name} has been added to your cart.`,
+      icon: "success",
+      timer: 2000,
+      showConfirmButton: false,
+    });
+  };
 
   const handleCompareSelected = () => {
     if (compareItems.length < 2) {
@@ -126,7 +128,7 @@ const UsedEquipment = () => {
       <h1 className="text-xl md:text-[30px] font-semibold mb-6 uppercase">
         Used Surveying Equipment
       </h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 border-b pb-10">
+      {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 border-b pb-10">
         {subcategories.map((category) => {
           const categorySlug = parseField(category.slug)?.slug || category.slug;
           return (
@@ -152,7 +154,7 @@ const UsedEquipment = () => {
             </Link>
           );
         })}
-      </div>
+      </div> */}
       <section className="mt-2">
         <div className="flex items-center justify-between md:justify-normal md:gap-52 mb-6">
           {/* View Mode Buttons */}
@@ -234,7 +236,7 @@ const UsedEquipment = () => {
             return (
               <div
                 key={product.id}
-                className={`relative ${
+                className={`mx-1 relative ${
                   viewMode === "list"
                     ? "flex flex-col md:flex-row gap-8"
                     : "flex flex-col h-full"
@@ -288,7 +290,7 @@ const UsedEquipment = () => {
                         <img
                           src={displayImage}
                           alt={product.product_name}
-                          className="w-auto h-56 object-contain transition-all duration-300 ease-in-out"
+                          className="w-auto max-h-[265.17px] object-contain transition-all duration-300 ease-in-out"
                         />
                       </div>
                     </Link>
@@ -312,7 +314,7 @@ const UsedEquipment = () => {
                         </h3>
                       </Link>
                       <p className="text-sm text-[#2f2f2b] mt-2">
-                        {product.product_overview || "No description available"}
+                        {product?.product_overview?.slice(0, 300)}...
                       </p>
                     </div>
                     <div>
@@ -375,7 +377,7 @@ const UsedEquipment = () => {
                     </div>
                   </div>
                 ) : (
-                  <div className="flex flex-col flex-grow mt-3">
+                  <div className="flex flex-col flex-grow pt-8 mb-4">
                     <div className="flex-grow">
                       <div className="border-t border-gray-300 pt-2 text-xs text-gray-600 mb-1">
                         {product.brand_name} | Sku: {product.sku}
@@ -452,13 +454,13 @@ const UsedEquipment = () => {
         {products.length > 0 && (
           <>
             <div className="flex items-center justify-between mt-10">
-              <div className="flex items-center">
+              <div className="flex items-center gap-2">
                 {currentPage > 1 && (
                   <button
                     onClick={() => setCurrentPage(currentPage - 1)}
-                    className="border cursor-pointer px-3 py-1 rounded hover:bg-gray-100 transition text-sm"
+                    className="border flex items-center gap-1 px-1.5 p-1 rounded hover:bg-gray-100 transition text-sm"
                   >
-                    ← Previous
+                    <MdKeyboardArrowLeft /> Previous
                   </button>
                 )}
                 <div className="flex gap-2">
@@ -466,10 +468,10 @@ const UsedEquipment = () => {
                     <button
                       key={idx}
                       onClick={() => setCurrentPage(idx + 1)}
-                      className={`border cursor-pointer px-3 py-1 rounded text-sm ${
+                      className={`border px-2 py-1.5 rounded text-sm ${
                         currentPage === idx + 1
-                          ? "bg-gray-200"
-                          : "hover:bg-gray-100"
+                          ? "border border-gray-300 bg-[#ebebeb] hover:text-red-500"
+                          : "hover:text-red-500 cursor-pointer"
                       }`}
                     >
                       {idx + 1}
@@ -480,9 +482,9 @@ const UsedEquipment = () => {
               {currentPage < totalPages && (
                 <button
                   onClick={() => setCurrentPage(currentPage + 1)}
-                  className="border px-3 cursor-pointer py-1 rounded hover:bg-gray-100 transition text-sm"
+                  className="border flex items-center gap-1 px-1.5 p-1 rounded hover:bg-gray-100 transition text-sm"
                 >
-                  Next →
+                  Next <MdKeyboardArrowRight />
                 </button>
               )}
             </div>
@@ -493,7 +495,7 @@ const UsedEquipment = () => {
                   compareItems.length >= 2
                     ? "bg-[#e62245] cursor-pointer hover:bg-[#d41d3f] text-white"
                     : "bg-gray-200 hover:bg-gray-300"
-                } text-xs font-semibold px-6 py-2 rounded transition-colors`}
+                } text-xs font-semibold px-4 py-2 rounded transition-colors`}
               >
                 COMPARE SELECTED
               </button>
@@ -501,73 +503,7 @@ const UsedEquipment = () => {
           </>
         )}
       </section>
-      <section className="mt-12">
-        <img
-          src="https://cdn11.bigcommerce.com/s-ew2v2d3jn1/product_images/uploaded_images/banner-used-equipment.jpg"
-          alt="Used Equipment Banner"
-        />
-        <div className="space-y-6 text-center mt-5">
-          <p>
-            G2 Survey offer a wide range of reconditioned and used surveying
-            equipment at very competitive prices, providing excellent value for
-            money.
-          </p>
-          <p>
-            All of our pre-owned used Total Stations, GNSS/GPS Systems, 3D Laser
-            Scanners, Laser Levels, Levels, and other used surveying equipment
-            are fully serviced, certified and come with a minimum 3 month
-            warranty for both parts and labour.
-          </p>
-          <p>
-            With an extensive range of used Total Stations, used 3D Laser
-            Scanners and used GNSS/GPS Systems and more, we're guaranteed to
-            find the right equipment for you, whatever the budget.
-          </p>
-          {/* Highlighted box */}
-          <div className="bg-gray-100 p-8 rounded-lg space-y-6">
-            <h2 className="text-xl text-[#e62245] uppercase">
-              Used Surveying Equipment Benefits
-            </h2>
-            <p>
-              Cost Effective - Substantial Savings Over Buying New Equipment
-            </p>
-            <p>Serviced / Calibrated by Leica Trained Technicians</p>
-            <p>6 Month Extended Warranty Available on Many Instruments</p>
-            <p>
-              Leading Brands - Whether it be a Used{" "}
-              <a href="#" className="underline">
-                Leica TS15
-              </a>{" "}
-              Total Station or a{" "}
-              <a href="#" className="underline">
-                Leica BLK360
-              </a>{" "}
-              Used Laser Scanner you're after, we've got you covered
-            </p>
-            <p className="italic font-semibold">Worldwide Shipping</p>
-            <p className="text-[#e62245] font-semibold">
-              DEMAND IS HIGH FOR PRE-OWNED EQUIPMENT, AND OUR STOCK IS
-              CONSTANTLY CHANGING.
-            </p>
-            <p className="text-[#e62245] font-semibold">
-              IF YOU CAN'T FIND THE SPECIFIC KIT YOU REQUIRE PLEASE CONTACT US
-              AND WE WILL SOURCE IT.
-            </p>
-
-            <div className="flex justify-center">
-              <button className="bg-[#e62245] text-white px-6 py-1.5 rounded-[4px] hover:bg-[#c81e3b] transition">
-                Contact Us
-              </button>
-            </div>
-
-            <div>
-              <a href="#" className="text-[#e62245] underline text-sm">
-                G2 Survey Reconditioned Surveying Equipment Brochure
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
+      <UsedEquipmentBenefits />
     </div>
   );
 };

@@ -89,6 +89,8 @@ import AddUserManuals from "./Dashboard/UserManuals/AddUserManuals";
 import AddQuickGuides from "./Dashboard/QuickGuides/AddQuickGuides";
 import AdminUpdateTradeIn from "./Pages/Control/AdminUpdateTradeIn";
 import AdminUpdateSupport from "./Pages/Control/AdminUpdateSupport";
+import CreditAccountApplication from "./Pages/NavComponents/CreditAccountApplication";
+import AdminUpdateUsedEquipment from "./Pages/Control/AdminUpdateUsedEquipment";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -113,6 +115,10 @@ const AppLayout = () => {
           <Route path="/compare/:ids" element={<Compare />} />
           <Route path="/used" element={<UsedEquipment />} />
           <Route path="/hire" element={<Hire />} />
+          <Route
+            path="/hire/credit-account-application"
+            element={<CreditAccountApplication />}
+          />
           <Route path="/service" element={<Service />} />
           <Route path="/support" element={<Support />} />
           <Route path="/quick-guides" element={<QuickGuides />} />
@@ -231,6 +237,7 @@ const AppLayout = () => {
             element={<Inbox userEmail={"no-reply@tsgb.site"} />}
           />
           {/* dynamic about page */}
+          <Route path="used-equipment" element={<AdminUpdateUsedEquipment />} />
           <Route path="hire" element={<AdminUpdateHire />} />
           <Route path="service" element={<AdminUpdateService />} />
           <Route path="tradein" element={<AdminUpdateTradeIn />} />

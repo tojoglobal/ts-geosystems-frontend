@@ -1,8 +1,10 @@
 import { Link } from "react-router-dom";
 import useDataQuery from "../../utils/useDataQuery";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 const QuickGuides = () => {
+  const { isAuth } = useSelector((state) => state.authUser);
   const [currentPage, setCurrentPage] = useState(1);
   const { data = {}, isLoading } = useDataQuery(
     ["quickGuides", currentPage],
@@ -52,10 +54,7 @@ const QuickGuides = () => {
       </h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {guides.map((guide) => (
-          <div
-            key={guide.id}
-            className="border rounded-sm flex flex-col items-center"
-          >
+          <div key={guide.id} className="flex flex-col items-center">
             <img
               src={`${import.meta.env.VITE_OPEN_APIURL}/uploads/${guide.photo}`}
               alt={guide.quick_guides_name}
@@ -65,12 +64,18 @@ const QuickGuides = () => {
             <h3 className="text-center capitalize text-sm mb-4">
               {guide.quick_guides_name}
             </h3>
-            <button
-              onClick={() => window.open(guide.quick_guides_link, "_blank")}
-              className="bg-[#e62245] text-white cursor-pointer px-6 py-1 rounded hover:bg-[#d41d3f] transition-colors w-full"
+            <a
+              onClick={() =>
+                isAuth
+                  ? window.open(guide.quick_guides_link, "_blank")
+                  : window.location.replace("/user/login")
+              }
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-[#e62245] hover:bg-[#d41d3f] text-white text-sm font-semibold py-1 w-full text-center rounded block transition-colors"
             >
               DOWNLOAD
-            </button>
+            </a>
           </div>
         ))}
       </div>

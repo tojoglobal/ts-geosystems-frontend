@@ -130,11 +130,11 @@ const Hire = () => {
         </Link>
       </div>
       <h1 className="text-[28px] font-light text-[#e62245] mb-[72px]">HIRE</h1>
-      {isLoading ? (
-        <ComponentLoader componentName="MainBanner" />
-      ) : (
-        hireContent?.show_buttons === 1 && (
-          <div className="flex flex-row justify-center gap-2 md:gap-0 md:justify-between mb-5">
+      <div className="flex flex-row justify-center gap-2 md:gap-0 md:justify-between mb-5">
+        {isLoading ? (
+          <ComponentLoader componentName="MainBanner" />
+        ) : (
+          hireContent?.show_hire_enquiry_button && (
             <button
               onClick={() =>
                 formRef.current?.scrollIntoView({ behavior: "smooth" })
@@ -144,16 +144,22 @@ const Hire = () => {
               <FaRegFileLines />
               Hire Enquiry
             </button>
+          )
+        )}
+        {isLoading ? (
+          <ComponentLoader componentName="MainBanner" />
+        ) : (
+          hireContent?.show_credit_account_button && (
             <Link
-              to="/credit-application"
+              to="/hire/credit-account-application"
               className="md:mr-40 bg-[#e62245] flex items-center gap-2 text-white px-2 md:px-[18.5px] py-[7.66667px] rounded-[4px] shadow-xl hover:bg-[#c81e3c] transition-all text-[13px] font-medium"
             >
               <FaFileAlt />
               Credit Account Application
             </Link>
-          </div>
-        )
-      )}
+          )
+        )}
+      </div>
       <div className="space-y-6 text-gray-700 border-t pt-4 border-gray-200">
         <h2 className="text-[14px] font-bold">{hireContent?.title}</h2>
         <div
@@ -161,10 +167,12 @@ const Hire = () => {
           dangerouslySetInnerHTML={{ __html: hireContent?.description }}
         ></div>
       </div>
-      <div
-        className="bg-[#ebedf1] mt-12 text-[14px] font-normal p-8 text-center rounded-lg"
-        dangerouslySetInnerHTML={{ __html: hireContent?.infoBox }}
-      ></div>
+      {hireContent?.show_info_box && (
+        <div
+          className="bg-[#ebedf1] mt-12 text-[14px] font-normal p-8 text-center rounded-lg"
+          dangerouslySetInnerHTML={{ __html: hireContent?.infoBox }}
+        ></div>
+      )}
       <div ref={formRef} className="max-w-3xl mx-auto my-12">
         <h2 className="text-3xl font-semibold mb-2">Hire Enquiry Form</h2>
         <p className="mb-6 text-sm">
