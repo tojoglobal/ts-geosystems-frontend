@@ -6,7 +6,7 @@ import { BsGrid3X3GapFill } from "react-icons/bs";
 import { FaThList } from "react-icons/fa";
 import Swal from "sweetalert2";
 import { useDispatch } from "react-redux";
-import { MdKeyboardArrowRight } from "react-icons/md";
+import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 import { parsePrice } from "../../utils/parsePrice";
 import { addToCart } from "../../features/AddToCart/AddToCart";
 import useDataQuery from "../../utils/useDataQuery";
@@ -411,9 +411,9 @@ const Clearance = () => {
               {currentPage > 1 && (
                 <button
                   onClick={() => setCurrentPage(currentPage - 1)}
-                  className="border px-3 py-1 rounded hover:bg-gray-100 transition text-sm"
+                  className="border flex items-center gap-1 px-1.5 p-1 rounded hover:bg-gray-100 transition text-sm"
                 >
-                  ← Previous
+                  <MdKeyboardArrowLeft /> Previous
                 </button>
               )}
               <div className="flex gap-2">
@@ -424,7 +424,7 @@ const Clearance = () => {
                     className={`border px-2 py-1.5 rounded text-sm ${
                       currentPage === idx + 1
                         ? "border border-gray-300 bg-[#ebebeb] hover:text-red-500"
-                        : "hover:text-red-500"
+                        : "hover:text-red-500 cursor-pointer"
                     }`}
                   >
                     {idx + 1}
