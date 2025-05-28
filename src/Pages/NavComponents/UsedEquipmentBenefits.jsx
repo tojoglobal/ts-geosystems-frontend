@@ -16,7 +16,7 @@ const UsedEquipmentBenefits = () => {
   if (isLoading)
     return <ComponentLoader componentName="UsedEquipmentBenefits" />;
   if (isError || !data) return <p>Error loading content.</p>;
-  
+
   return (
     <section className="mt-12">
       {data.banner_image_show && data.banner_image && (
@@ -26,11 +26,14 @@ const UsedEquipmentBenefits = () => {
         />
       )}
       <div className="space-y-6 text-center mt-5">
-        <div dangerouslySetInnerHTML={{ __html: data.description }} />
+        <div
+          className="text-sm font-normal"
+          dangerouslySetInnerHTML={{ __html: data.description }}
+        />
         {data.benefits_box_show && (
           <div className="bg-gray-100 p-8 rounded-lg space-y-6">
             <h2 className="text-xl text-[#e62245] uppercase">
-              {data.benefits_box_title || "USED SURVEYING EQUIPMENT BENEFITS"}
+              {data?.benefits_box_title}
             </h2>
             <div
               className="space-y-2"

@@ -134,9 +134,11 @@ const AdminUpdateUsedEquipment = () => {
             <input
               type="checkbox"
               {...register("banner_image_show")}
-              className="form-checkbox h-5 w-5 text-[#e62245]"
+              className="form-checkbox h-5 w-5 cursor-pointer text-[#e62245]"
             />
-            <span className="ml-2 text-sm">Show Banner Image</span>
+            <span className="ml-2 text-sm cursor-pointer">
+              Show Banner Image
+            </span>
           </label>
         </div>
         <div>
@@ -194,9 +196,11 @@ const AdminUpdateUsedEquipment = () => {
             <input
               type="checkbox"
               {...register("benefits_box_show")}
-              className="form-checkbox h-5 w-5 text-[#e62245]"
+              className="form-checkbox h-5 w-5 cursor-pointer text-[#e62245]"
             />
-            <span className="ml-2 text-sm">Show Benefits Box Section</span>
+            <span className="ml-2 text-sm cursor-pointer">
+              Show Benefits Box Section
+            </span>
           </label>
         </div>
         <div className="border-t pt-4">
@@ -229,7 +233,7 @@ const AdminUpdateUsedEquipment = () => {
         <div className="flex justify-start pt-2">
           <button
             type="submit"
-            className="bg-[#e62245] text-white px-6 py-2 rounded hover:bg-[#c81e3b] transition"
+            className="w-full cursor-pointer bg-teal-600 text-white py-2 px-4 rounded-sm hover:bg-teal-700 transition"
           >
             Save Changes
           </button>
