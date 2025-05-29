@@ -48,15 +48,15 @@ const OurAchievements = () => {
               </div>
               <h3 className="text-2xl md:text-4xl font-bold mb-2">
                 {!isNaN(numericPart) ? (
-                  <>
+                  <div className="text-5xl font-normal">
                     <CountUp
                       start={0}
                       end={numericPart}
-                      duration={4}
+                      duration={5}
                       separator=","
                     />
                     {hasPlus && "+"}
-                  </>
+                  </div>
                 ) : (
                   rawNumber
                 )}

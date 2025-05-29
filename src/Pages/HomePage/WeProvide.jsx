@@ -30,7 +30,7 @@ const WeProvide = () => {
               <img
                 src={`${import.meta.env.VITE_OPEN_APIURL}${service.image}`}
                 className="w-16 md:w-20 mx-auto"
-                alt=""
+                alt="WE PROVIDE"
               />
               <h3 className="text-2xl text-black font-bold mb-2">
                 {service.title}
