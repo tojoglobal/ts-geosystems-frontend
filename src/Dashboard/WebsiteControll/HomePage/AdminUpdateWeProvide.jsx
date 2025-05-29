@@ -10,7 +10,6 @@ const AdminUpdateWeProvide = () => {
   const queryClient = useQueryClient();
   const fileInputs = useRef([]);
 
-  // Fetch data
   const { data } = useQuery({
     queryKey: ["weProvide"],
     queryFn: async () => (await axiosPublicUrl.get("/api/we-provide")).data,
@@ -25,22 +24,19 @@ const AdminUpdateWeProvide = () => {
     name: "items",
   });
 
-  // Handle form submission
   const onSubmit = async (formData) => {
     const dataToSend = new FormData();
 
-    // Add items as JSON string
     dataToSend.append(
       "items",
       JSON.stringify(
         formData.items.map((item) => ({
           ...item,
-          oldImage: item.image, // Include old image path for cleanup
+          oldImage: item.image,
         }))
       )
     );
 
-    // Add all selected files
     fileInputs.current.forEach((input) => {
       if (input?.files?.[0]) {
         dataToSend.append("images", input.files[0]);
@@ -64,7 +60,6 @@ const AdminUpdateWeProvide = () => {
     }
   };
 
-  // Reset form when data loads
   useEffect(() => {
     if (data) {
       reset({
@@ -81,16 +76,16 @@ const AdminUpdateWeProvide = () => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="space-y-6 max-w-3xl mx-auto p-4 bg-[#18181b] rounded-lg shadow"
+      className="space-y-6 p-4 bg-gray-800 rounded-lg shadow text-white"
     >
-      <h2 className="text-2xl font-bold mb-4 text-[#e62245]">
+      <h2 className="text-2xl font-bold mb-4 text-teal-500">
         Update WE PROVIDE
       </h2>
 
       {fields.map((item, idx) => (
         <div
           key={item.id || idx}
-          className="border border-gray-800 rounded-md p-4 mb-2 bg-[#23232b] relative"
+          className="border border-gray-700 rounded-md p-4 mb-2"
         >
           <div className="flex flex-col md:flex-row gap-4 items-center">
             <div className="flex flex-col items-center">
@@ -124,32 +119,31 @@ const AdminUpdateWeProvide = () => {
               />
               <button
                 type="button"
-                className="bg-[#e62245] text-white px-3 py-2 rounded flex items-center gap-1 text-sm"
+                className="bg-teal-600 cursor-pointer hover:bg-teal-500 text-white px-3 py-2 rounded flex items-center gap-1 text-sm mt-1"
                 onClick={() => fileInputs.current[idx]?.click()}
               >
                 <FaUpload /> Upload
               </button>
             </div>
-            <div className="flex-1 flex flex-col gap-2">
+            <div className="flex-1 flex flex-col gap-2 w-full">
               <input
                 {...register(`items.${idx}.title`, { required: true })}
                 placeholder="Title"
-                className="border border-gray-700 p-2 rounded bg-[#101014] text-white placeholder-gray-400"
+                className="border border-gray-700 p-2 rounded bg-gray-700 text-white placeholder-gray-400"
               />
               <textarea
                 {...register(`items.${idx}.description`, { required: true })}
                 placeholder="Description"
-                className="border border-gray-700 p-2 rounded bg-[#101014] text-white placeholder-gray-400"
+                className="border border-gray-700 p-2 rounded bg-gray-700 text-white placeholder-gray-400"
                 rows={3}
               />
             </div>
           </div>
         </div>
       ))}
-
       <button
         type="submit"
-        className="bg-teal-600 text-white px-6 py-2 rounded font-bold hover:bg-teal-500"
+        className="bg-teal-600 cursor-pointer hover:bg-teal-700 text-white px-6 py-1.5 rounded font-bold"
       >
         Save Changes
       </button>

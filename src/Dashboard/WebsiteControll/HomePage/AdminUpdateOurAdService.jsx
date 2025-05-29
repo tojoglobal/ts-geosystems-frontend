@@ -3,6 +3,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { useAxiospublic } from "../../../Hooks/useAxiospublic";
 import { FaTrash, FaPlus } from "react-icons/fa";
+import Swal from "sweetalert2";
 
 const AdminUpdateOurAdService = () => {
   const axiosPublicUrl = useAxiospublic();
@@ -26,8 +27,25 @@ const AdminUpdateOurAdService = () => {
   const mutation = useMutation({
     mutationFn: (formData) =>
       axiosPublicUrl.put("/api/our-ad-services", formData.items),
-    onSuccess: () => queryClient.invalidateQueries(["ourAdServices"]),
+    onSuccess: () => {
+      queryClient.invalidateQueries(["ourAdServices"]);
+      Swal.fire({
+        icon: "success",
+        title: "Updated!",
+        text: "Our Advantage & Services updated successfully.",
+        timer: 2000,
+        showConfirmButton: false,
+      });
+    },
+    onError: () => {
+      Swal.fire({
+        icon: "error",
+        title: "Oops!",
+        text: "Something went wrong while updating. Please try again.",
+      });
+    },
   });
+  
 
   useEffect(() => {
     if (data) reset({ items: data });
@@ -44,7 +62,7 @@ const AdminUpdateOurAdService = () => {
       {fields.map((item, idx) => (
         <div
           key={item.id || idx}
-          className="border border-gray-600 rounded-md p-4 mb-2 relative"
+          className="border border-gray-600 rounded-md p-3 mb-4 relative"
         >
           <button
             type="button"
@@ -69,13 +87,13 @@ const AdminUpdateOurAdService = () => {
       <button
         type="button"
         onClick={() => append({ title: "", description: "" })}
-        className="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded flex items-center gap-1 transition-colors"
+        className="bg-teal-600 cursor-pointer hover:bg-teal-700 text-white px-4 py-1.5 rounded flex items-center gap-1 transition-colors"
       >
         <FaPlus /> Add More
       </button>
       <button
         type="submit"
-        className="bg-teal-600 hover:bg-teal-700 text-white px-6 py-2 rounded font-bold transition-colors"
+        className="bg-teal-600 cursor-pointer hover:bg-teal-700 text-white px-6 py-1.5 rounded font-bold transition-colors"
       >
         Save Changes
       </button>

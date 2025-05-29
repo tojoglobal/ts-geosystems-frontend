@@ -1,6 +1,7 @@
 import { useForm, useFieldArray } from "react-hook-form";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
+import Swal from "sweetalert2";
 import { useAxiospublic } from "../../../Hooks/useAxiospublic";
 
 const AdminUpdateOurAchievements = () => {
@@ -25,9 +26,25 @@ const AdminUpdateOurAchievements = () => {
   const mutation = useMutation({
     mutationFn: (formData) =>
       axiosPublicUrl.put("/api/our-achievements", formData.items),
-    onSuccess: () => queryClient.invalidateQueries(["ourAchievements"]),
+    onSuccess: () => {
+      queryClient.invalidateQueries(["ourAchievements"]);
+      Swal.fire({
+        icon: "success",
+        title: "Success!",
+        text: "Achievements updated successfully.",
+        timer: 2000,
+        showConfirmButton: false,
+      });
+    },
+    onError: () => {
+      Swal.fire({
+        icon: "error",
+        title: "Error!",
+        text: "Failed to update achievements. Please try again.",
+      });
+    },
   });
-
+  
   useEffect(() => {
     if (data) {
       reset({
@@ -63,7 +80,8 @@ const AdminUpdateOurAchievements = () => {
       ))}
       <button
         type="submit"
-        className="bg-teal-600 hover:bg-teal-700 text-white px-6 py-2 rounded font-bold"
+        className="bg-teal-600 cursor-pointer
+         mt-2 hover:bg-teal-700 text-white px-6 py-1.5 rounded font-bold"
       >
         Save Changes
       </button>
