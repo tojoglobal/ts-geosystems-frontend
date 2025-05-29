@@ -83,8 +83,14 @@ const Footer = () => {
   // All values come from database, do not fallback to defaults!
   const address1 = footerData.address1 || "";
   const address2 = footerData.address2 || "";
-  const iso_image_url = footerData.iso_image_url
-    ? `${import.meta.env.VITE_OPEN_APIURL || ""}${footerData.iso_image_url}`
+  const iso_image_url_1 = footerData.iso_image_url_1
+    ? `${import.meta.env.VITE_OPEN_APIURL || ""}${footerData.iso_image_url_1}`
+    : "";
+  const iso_image_url_2 = footerData.iso_image_url_2
+    ? `${import.meta.env.VITE_OPEN_APIURL || ""}${footerData.iso_image_url_2}`
+    : "";
+  const iso_image_url_3 = footerData.iso_image_url_3
+    ? `${import.meta.env.VITE_OPEN_APIURL || ""}${footerData.iso_image_url_3}`
     : "";
   const mailing_title = footerData.mailing_title || "";
   const mailing_text = footerData.mailing_text || "";
@@ -114,9 +120,15 @@ const Footer = () => {
               </>
             )}
           </p>
-          <div className="flex gap-4 mt-4">
-            {iso_image_url && (
-              <img src={iso_image_url} alt="ISO" className="h-12" />
+          <div className="flex gap-2 mt-4">
+            {iso_image_url_1 && (
+              <img src={iso_image_url_1} alt="ISO" className="h-12 w-14" />
+            )}
+            {iso_image_url_2 && (
+              <img src={iso_image_url_2} alt="ISO" className="h-12 w-14" />
+            )}
+            {iso_image_url_3 && (
+              <img src={iso_image_url_3} alt="ISO" className="h-12 w-14" />
             )}
           </div>
         </div>
