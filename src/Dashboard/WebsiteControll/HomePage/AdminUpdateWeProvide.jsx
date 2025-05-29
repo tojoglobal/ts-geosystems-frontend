@@ -1,23 +1,23 @@
 import { useForm, useFieldArray } from "react-hook-form";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef } from "react";
 import { useAxiospublic } from "../../../Hooks/useAxiospublic";
 import { FaUpload } from "react-icons/fa";
-
-const defaultImage = "https://via.placeholder.com/96x96.png?text=No+Image"; // You can put your own default
+import Swal from "sweetalert2";
 
 const AdminUpdateWeProvide = () => {
   const axiosPublicUrl = useAxiospublic();
   const queryClient = useQueryClient();
   const fileInputs = useRef([]);
 
+  // Fetch data
   const { data } = useQuery({
     queryKey: ["weProvide"],
     queryFn: async () => (await axiosPublicUrl.get("/api/we-provide")).data,
   });
 
   const { control, handleSubmit, reset, register, setValue, watch } = useForm({
-    defaultValues: { items: [{}, {}, {}] },
+    defaultValues: { items: Array(3).fill({}) },
   });
 
   const { fields } = useFieldArray({
@@ -25,43 +25,68 @@ const AdminUpdateWeProvide = () => {
     name: "items",
   });
 
-  const mutation = useMutation({
-    mutationFn: (formData) =>
-      axiosPublicUrl.put("/api/we-provide", formData.items),
-    onSuccess: () => queryClient.invalidateQueries(["weProvide"]),
-  });
+  // Handle form submission
+  const onSubmit = async (formData) => {
+    const dataToSend = new FormData();
 
+    // Add items as JSON string
+    dataToSend.append(
+      "items",
+      JSON.stringify(
+        formData.items.map((item) => ({
+          ...item,
+          oldImage: item.image, // Include old image path for cleanup
+        }))
+      )
+    );
+
+    // Add all selected files
+    fileInputs.current.forEach((input) => {
+      if (input?.files?.[0]) {
+        dataToSend.append("images", input.files[0]);
+      }
+    });
+
+    try {
+      await axiosPublicUrl.put("/api/we-provide", dataToSend, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      queryClient.invalidateQueries(["weProvide"]);
+      Swal.fire("Success", "We Provide section updated!", "success");
+    } catch (error) {
+      Swal.fire(
+        "Error",
+        error.response?.data?.error || "Failed to update",
+        "error"
+      );
+    }
+  };
+
+  // Reset form when data loads
   useEffect(() => {
     if (data) {
       reset({
-        items: [
-          ...data,
-          ...Array(3 - data.length).fill({
-            title: "",
-            image: "",
-            description: ["", "", ""],
-          }),
-        ].slice(0, 3),
+        items: data.map((item) => ({
+          ...item,
+          image: item.image
+            ? `${import.meta.env.VITE_OPEN_APIURL}${item.image}`
+            : "",
+        })),
       });
     }
   }, [data, reset]);
 
-  // Upload handler
-  const handleImageUpload = async (idx, file) => {
-    const formData = new FormData();
-    formData.append("image", file);
-    const res = await axiosPublicUrl.post("/api/we-provide/upload", formData);
-    setValue(`items.${idx}.image`, res.data.imageUrl);
-  };
-
   return (
     <form
-      onSubmit={handleSubmit(mutation.mutate)}
+      onSubmit={handleSubmit(onSubmit)}
       className="space-y-6 max-w-3xl mx-auto p-4 bg-[#18181b] rounded-lg shadow"
     >
       <h2 className="text-2xl font-bold mb-4 text-[#e62245]">
         Update WE PROVIDE
       </h2>
+
       {fields.map((item, idx) => (
         <div
           key={item.id || idx}
@@ -72,12 +97,14 @@ const AdminUpdateWeProvide = () => {
               <div className="w-24 h-24 mb-2 rounded bg-gray-700 flex items-center justify-center overflow-hidden border border-gray-700">
                 <img
                   src={
-                    watch(`items.${idx}.image`)
-                      ? watch(`items.${idx}.image`)
-                      : defaultImage
+                    watch(`items.${idx}.image`) ||
+                    "/uploads/we-provide/default-we-provide.jpg"
                   }
                   alt="preview"
                   className="object-cover w-full h-full"
+                  onError={(e) => {
+                    e.target.src = "/uploads/we-provide/default-we-provide.jpg";
+                  }}
                 />
               </div>
               <input
@@ -85,8 +112,13 @@ const AdminUpdateWeProvide = () => {
                 accept="image/*"
                 ref={(el) => (fileInputs.current[idx] = el)}
                 onChange={(e) => {
-                  if (e.target.files[0])
-                    handleImageUpload(idx, e.target.files[0]);
+                  if (e.target.files?.[0]) {
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                      setValue(`items.${idx}.image`, event.target.result);
+                    };
+                    reader.readAsDataURL(e.target.files[0]);
+                  }
                 }}
                 style={{ display: "none" }}
               />
@@ -104,25 +136,17 @@ const AdminUpdateWeProvide = () => {
                 placeholder="Title"
                 className="border border-gray-700 p-2 rounded bg-[#101014] text-white placeholder-gray-400"
               />
-              <input
-                {...register(`items.${idx}.description.0`, { required: true })}
-                placeholder="Description line 1"
+              <textarea
+                {...register(`items.${idx}.description`, { required: true })}
+                placeholder="Description"
                 className="border border-gray-700 p-2 rounded bg-[#101014] text-white placeholder-gray-400"
-              />
-              <input
-                {...register(`items.${idx}.description.1`, { required: true })}
-                placeholder="Description line 2"
-                className="border border-gray-700 p-2 rounded bg-[#101014] text-white placeholder-gray-400"
-              />
-              <input
-                {...register(`items.${idx}.description.2`, { required: true })}
-                placeholder="Description line 3"
-                className="border border-gray-700 p-2 rounded bg-[#101014] text-white placeholder-gray-400"
+                rows={3}
               />
             </div>
           </div>
         </div>
       ))}
+
       <button
         type="submit"
         className="bg-teal-600 text-white px-6 py-2 rounded font-bold hover:bg-teal-500"
@@ -132,4 +156,5 @@ const AdminUpdateWeProvide = () => {
     </form>
   );
 };
+
 export default AdminUpdateWeProvide;

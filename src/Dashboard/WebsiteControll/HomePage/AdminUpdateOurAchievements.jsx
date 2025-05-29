@@ -42,9 +42,9 @@ const AdminUpdateOurAchievements = () => {
   return (
     <form
       onSubmit={handleSubmit(mutation.mutate)}
-      className="space-y-6 max-w-2xl mx-auto p-4 bg-white rounded-lg shadow"
+      className="space-y-6 p-4 bg-gray-800 rounded-lg shadow text-white"
     >
-      <h2 className="text-2xl font-bold mb-4 text-[#e62245]">
+      <h2 className="text-2xl font-bold mb-4 text-teal-500">
         Update Our Achievements
       </h2>
       {fields.map((item, idx) => (
@@ -52,18 +52,18 @@ const AdminUpdateOurAchievements = () => {
           <input
             {...register(`items.${idx}.number`, { required: true })}
             placeholder="Number"
-            className="border p-2 rounded w-32"
+            className="bg-gray-700 border border-gray-600 p-2 rounded w-32 text-white placeholder-gray-400"
           />
           <input
             {...register(`items.${idx}.text`, { required: true })}
             placeholder="Text"
-            className="border p-2 rounded flex-1"
+            className="bg-gray-700 border border-gray-600 p-2 rounded flex-1 text-white placeholder-gray-400"
           />
         </div>
       ))}
       <button
         type="submit"
-        className="bg-teal-600 text-white px-6 py-2 rounded font-bold"
+        className="bg-teal-600 hover:bg-teal-700 text-white px-6 py-2 rounded font-bold"
       >
         Save Changes
       </button>

@@ -36,19 +36,19 @@ const AdminUpdateOurAdService = () => {
   return (
     <form
       onSubmit={handleSubmit(mutation.mutate)}
-      className="space-y-6 max-w-3xl mx-auto p-4 bg-white rounded-lg shadow"
+      className="space-y-6 p-4 bg-gray-800 rounded-lg shadow-lg"
     >
-      <h2 className="text-2xl font-bold mb-4 text-[#e62245]">
+      <h2 className="text-2xl font-bold mb-4 text-teal-400">
         OUR ADVANTAGE & SERVICES
       </h2>
       {fields.map((item, idx) => (
         <div
           key={item.id || idx}
-          className="border rounded-md p-4 mb-2 bg-gray-50 relative"
+          className="border border-gray-600 rounded-md p-4 mb-2 relative"
         >
           <button
             type="button"
-            className="absolute top-3 right-3 text-red-500"
+            className="absolute top-3 right-3 text-red-400 hover:text-red-300"
             onClick={() => remove(idx)}
           >
             <FaTrash />
@@ -56,12 +56,12 @@ const AdminUpdateOurAdService = () => {
           <input
             {...register(`items.${idx}.title`, { required: true })}
             placeholder="Title"
-            className="border p-2 rounded w-full mb-2"
+            className="border border-gray-600 bg-gray-800 focus:outline-none text-white p-2 rounded w-full mb-2"
           />
           <textarea
             {...register(`items.${idx}.description`, { required: true })}
             placeholder="Description"
-            className="border p-2 rounded w-full"
+            className="border border-gray-600 bg-gray-800 focus:outline-none text-white p-2 rounded w-full"
             rows={2}
           />
         </div>
@@ -69,13 +69,13 @@ const AdminUpdateOurAdService = () => {
       <button
         type="button"
         onClick={() => append({ title: "", description: "" })}
-        className="bg-[#e62245] text-white px-4 py-2 rounded flex items-center gap-1"
+        className="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded flex items-center gap-1 transition-colors"
       >
         <FaPlus /> Add More
       </button>
       <button
         type="submit"
-        className="bg-teal-600 text-white px-6 py-2 rounded font-bold"
+        className="bg-teal-600 hover:bg-teal-700 text-white px-6 py-2 rounded font-bold transition-colors"
       >
         Save Changes
       </button>

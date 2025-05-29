@@ -10,7 +10,7 @@ const WeProvide = () => {
       return res.data;
     },
   });
-  console.log(data);
+
   return (
     <div className="py-5 md:py-16 bg-white">
       <div className="max-w-[1370px] mx-auto px-3 md:px-4">
@@ -28,7 +28,7 @@ const WeProvide = () => {
               className="p-4 md:p-8 border rounded-lg shadow hover:shadow-md transition"
             >
               <img
-                src={service.image}
+                src={`${import.meta.env.VITE_OPEN_APIURL}${service.image}`}
                 className="w-16 md:w-20 mx-auto"
                 alt=""
               />
