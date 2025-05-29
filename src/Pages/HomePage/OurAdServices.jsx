@@ -1,49 +1,17 @@
+import { useQuery } from "@tanstack/react-query";
 import { FaCheckCircle } from "react-icons/fa";
-
-const services = [
-  {
-    title: "Certified Service Engineer Of KOLIDA",
-    description:
-      "TS Geosystems Bangladesh has a factory-trained certified service engineer of Kolida Instrument.",
-  },
-  {
-    title: "Authorized Distributor GEOMAX",
-    description:
-      "TS Geosystems Bangladesh is the authorized distributor of Geomax in Bangladesh.",
-  },
-  {
-    title: "Certified Service Engineer Of Leica",
-    description:
-      "TS Geosystems Bangladesh has a factory-trained certified service engineer of Leica Geosystems.",
-  },
-  {
-    title: "Authorized Distributor Kolida",
-    description:
-      "TS Geosystems Bangladesh is the authorized distributor of Kolida in Bangladesh.",
-  },
-  {
-    title: "Loan facilities",
-    description:
-      "TS Geosystems Bangladesh provides loan facilities when purchasing new equipment.",
-  },
-  {
-    title: "Wide range of equipment",
-    description:
-      "TS Geosystems always maintain wide range of brand & model surveying equipment.",
-  },
-  {
-    title: "ISO Certified Calibration Equipment",
-    description:
-      "All of our surveying equipment service & calibrated by ISO certified equipment.",
-  },
-  {
-    title: "Tranning & Support",
-    description:
-      "TS Geosystems provides training facilities with new equipment & any support that our valuable clients need.",
-  },
-];
+import { useAxiospublic } from "../../Hooks/useAxiospublic";
 
 const OurAdServices = () => {
+  const axiosPublicUrl = useAxiospublic();
+  const { data = [] } = useQuery({
+    queryKey: ["ourAdServices"],
+    queryFn: async () => {
+      const res = await axiosPublicUrl.get("/api/our-ad-services");
+      return res.data;
+    },
+  });
+
   return (
     <div className="py-7 md:py-16 px-3 md:px-4">
       <div className="max-w-[1370px] mx-auto">
@@ -57,9 +25,9 @@ const OurAdServices = () => {
         </div>
         {/* Services Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-          {services.map((item, index) => (
+          {data?.map((item, index) => (
             <div
-              key={index}
+              key={item.id || index}
               className="border border-gray-200 rounded-lg p-3 md:p-5 flex gap-2 md:gap-4 items-start"
             >
               <FaCheckCircle className="text-[#61b961] text-2xl mt-1" />

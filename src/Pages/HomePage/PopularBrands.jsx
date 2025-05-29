@@ -54,7 +54,7 @@ const PopularBrands = () => {
               <SwiperSlide key={brand.id}>
                 <div
                   // to={`/catalog?brand=${brand.slug}`}
-                  className="brand-card p-4 transition-all duration-300 hover:border-[#e62245] hover:border-2 rounded-lg h-32 flex items-center justify-center"
+                  className="brand-card p-4 transition-all duration-300 rounded-lg h-32 flex items-center justify-center"
                 >
                   <img
                     src={`${import.meta.env.VITE_OPEN_APIURL}/uploads/${

@@ -7,6 +7,9 @@ import SingleImages from "./SingleImages";
 import SlideContorols from "./SlideContorols";
 import ExperienceCenterControl from "./ExperienceCenterControl";
 import Feature_highlight_banner_03_left_01 from "./feature_highlight_banner_03_left_01";
+import AdminUpdateWeProvide from "./HomePage/AdminUpdateWeProvide";
+import AdminUpdateOurAchievements from "./HomePage/AdminUpdateOurAchievements";
+import AdminUpdateOurAdService from "./HomePage/AdminUpdateOurAdService";
 
 // Define the exact order of components as they appear on the homepage
 const COMPONENT_ORDER = [
@@ -158,6 +161,12 @@ const HomePageControl = () => {
         <SingleImages />
         <div className="my-6 border-t border-gray-200/20" />
         <ExperienceCenterControl />
+        <div className="my-6 border-t border-gray-200/20" />
+        <AdminUpdateWeProvide />
+        <div className="my-6 border-t border-gray-200/20" />
+        <AdminUpdateOurAchievements />
+        <div className="my-6 border-t border-gray-200/20" />
+        <AdminUpdateOurAdService />
       </div>
     </div>
   );
