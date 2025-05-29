@@ -26,22 +26,21 @@ const AdminUpdateWeProvide = () => {
 
   const onSubmit = async (formData) => {
     const dataToSend = new FormData();
-
     dataToSend.append(
       "items",
       JSON.stringify(
-        formData.items.map((item) => ({
+        formData.items.map((item, index) => ({
           ...item,
-          oldImage: item.image,
+          oldImage: data[index]?.image || "", // send the original image if not updated
         }))
       )
     );
-
-    fileInputs.current.forEach((input) => {
+    fileInputs.current.forEach((input, index) => {
       if (input?.files?.[0]) {
-        dataToSend.append("images", input.files[0]);
+        // Use a unique field name per file to keep the order/index
+        dataToSend.append(`images[${index}]`, input.files[0]);
       }
-    });
+    });      
 
     try {
       await axiosPublicUrl.put("/api/we-provide", dataToSend, {
@@ -68,6 +67,7 @@ const AdminUpdateWeProvide = () => {
           image: item.image
             ? `${import.meta.env.VITE_OPEN_APIURL}${item.image}`
             : "",
+          oldImage: item.image || "",
         })),
       });
     }
