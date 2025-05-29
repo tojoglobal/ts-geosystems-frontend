@@ -56,7 +56,7 @@ const OurAchievements = () => {
                           <CountUp
                             start={0}
                             end={numericPart}
-                            duration={5}
+                            duration={3}
                             separator=","
                           />
                         ) : (

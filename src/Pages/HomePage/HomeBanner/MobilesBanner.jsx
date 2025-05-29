@@ -22,7 +22,7 @@ const MobilesBanner = () => {
         }}
         loop={true}
         pagination={{ clickable: true }}
-        className="w-full h-[150px] md:h-[410px] rounded-md relative"
+        className="w-full h-[150px] md:h-[425px] rounded-md relative"
       >
         {data?.data?.map((img, index) => (
           <SwiperSlide key={img.id || index}>
