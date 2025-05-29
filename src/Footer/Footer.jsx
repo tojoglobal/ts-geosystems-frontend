@@ -25,10 +25,9 @@ const Footer = () => {
   );
   const socialLinks = contactInfo?.socialLinks || {};
 
-  const {
-    data: { data: footerData = [] },
-    isLoading: footerLoading,
-  } = useDataQuery(["footerData"], "/api/footer");
+  // Load footer data from the API
+  const { data } = useDataQuery(["footerData"], "/api/footer");
+  const footerData = data?.data || {};
 
   const handleSubscribe = async (e) => {
     e.preventDefault();
@@ -81,30 +80,15 @@ const Footer = () => {
     },
   ];
 
-  // Fallbacks if no data
-  const address1 =
-    footerLoading || !footerData
-      ? "Loading address..."
-      : footerData.address1 || "";
-  const address2 =
-    footerLoading || !footerData ? "" : footerData.address2 || "";
-  const iso_image_url =
-    footerLoading || !footerData
-      ? "https://ts-geosystems.com.bd/assets/images/ISO-WHITE.png"
-      : footerData.iso_image_url
-      ? `${import.meta.env.VITE_OPEN_APIURL || ""}${footerData.iso_image_url}`
-      : "https://ts-geosystems.com.bd/assets/images/ISO-WHITE.png";
-  const mailing_title =
-    footerLoading || !footerData
-      ? "JOIN OUR MAILING LIST"
-      : footerData.mailing_title || "JOIN OUR MAILING LIST";
-  const mailing_text =
-    footerLoading || !footerData
-      ? "Signup for our newsletter to receive specials and up to date product news and releases."
-      : footerData.mailing_text ||
-        "Signup for our newsletter to receive specials and up to date product news and releases.";
-  const bg_color =
-    footerLoading || !footerData ? "#585c5d" : footerData.bg_color || "#585c5d";
+  // All values come from database, do not fallback to defaults!
+  const address1 = footerData.address1 || "";
+  const address2 = footerData.address2 || "";
+  const iso_image_url = footerData.iso_image_url
+    ? `${import.meta.env.VITE_OPEN_APIURL || ""}${footerData.iso_image_url}`
+    : "";
+  const mailing_title = footerData.mailing_title || "";
+  const mailing_text = footerData.mailing_text || "";
+  const bg_color = footerData.bg_color || "";
 
   return (
     <footer
@@ -131,7 +115,9 @@ const Footer = () => {
             )}
           </p>
           <div className="flex gap-4 mt-4">
-            <img src={iso_image_url} alt="ISO" className="h-12" />
+            {iso_image_url && (
+              <img src={iso_image_url} alt="ISO" className="h-12" />
+            )}
           </div>
         </div>
         {/* Accounts & Orders */}
