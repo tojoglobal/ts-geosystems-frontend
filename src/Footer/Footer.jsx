@@ -18,11 +18,17 @@ const Footer = () => {
   const [email, setEmail] = useState(user?.email || "");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Contact info for social links (kept as before)
   const { data: contactInfo, isLoading: contactInfoLoading } = useDataQuery(
     ["contactInfo"],
     "/api/admin-contact-us"
   );
   const socialLinks = contactInfo?.socialLinks || {};
+
+  const {
+    data: { data: footerData = [] },
+    isLoading: footerLoading,
+  } = useDataQuery(["footerData"], "/api/footer");
 
   const handleSubscribe = async (e) => {
     e.preventDefault();
@@ -75,29 +81,57 @@ const Footer = () => {
     },
   ];
 
+  // Fallbacks if no data
+  const address1 =
+    footerLoading || !footerData
+      ? "Loading address..."
+      : footerData.address1 || "";
+  const address2 =
+    footerLoading || !footerData ? "" : footerData.address2 || "";
+  const iso_image_url =
+    footerLoading || !footerData
+      ? "https://ts-geosystems.com.bd/assets/images/ISO-WHITE.png"
+      : footerData.iso_image_url
+      ? `${import.meta.env.VITE_OPEN_APIURL || ""}${footerData.iso_image_url}`
+      : "https://ts-geosystems.com.bd/assets/images/ISO-WHITE.png";
+  const mailing_title =
+    footerLoading || !footerData
+      ? "JOIN OUR MAILING LIST"
+      : footerData.mailing_title || "JOIN OUR MAILING LIST";
+  const mailing_text =
+    footerLoading || !footerData
+      ? "Signup for our newsletter to receive specials and up to date product news and releases."
+      : footerData.mailing_text ||
+        "Signup for our newsletter to receive specials and up to date product news and releases.";
+  const bg_color =
+    footerLoading || !footerData ? "#585c5d" : footerData.bg_color || "#585c5d";
+
   return (
-    <footer className="bg-[#585c5d] text-white pt-8 md:pt-12">
+    <footer
+      className="text-white pt-8 md:pt-12"
+      style={{ backgroundColor: bg_color }}
+    >
       <div className="max-w-[89%] md:max-w-[85%] mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 pb-10">
         <div>
           <h2 className="text-xl font-semibold mb-4">CONTACT US</h2>
           <p className="text-sm mb-2">
-            Banglamotor, Rusul view 65 Mymensingh Road (7th floor)
-            <br />
-            Dhaka-1000, Bangladesh.
+            {address1 && (
+              <>
+                {address1}
+                <br />
+              </>
+            )}
           </p>
           <p className="text-sm mb-4">
-            Banglamotor, Rusul view 65 Mymensingh Road (7th floor)
-            <br />
-            Dhaka-1000, Bangladesh.
+            {address2 && (
+              <>
+                {address2}
+                <br />
+              </>
+            )}
           </p>
           <div className="flex gap-4 mt-4">
-            <img
-              src="https://ts-geosystems.com.bd/assets/images/ISO-WHITE.png"
-              alt="ISO"
-              className="h-12"
-            />
-            {/* <img src="/ur.png" alt="UR" className="h-8" />
-            <img src="/ea-jas.png" alt="EA-JAS" className="h-8" /> */}
+            <img src={iso_image_url} alt="ISO" className="h-12" />
           </div>
         </div>
         {/* Accounts & Orders */}
@@ -152,11 +186,8 @@ const Footer = () => {
         </div>
         {/* Mailing List */}
         <div>
-          <h2 className="text-xl font-semibold mb-4">JOIN OUR MAILING LIST</h2>
-          <p className="text-sm mb-4">
-            Signup for our newsletter to receive specials and up to date product
-            news and releases.
-          </p>
+          <h2 className="text-xl font-semibold mb-4">{mailing_title}</h2>
+          <p className="text-sm mb-4">{mailing_text}</p>
           <form onSubmit={handleSubscribe} className="flex mb-4">
             <input
               type="email"
@@ -218,7 +249,7 @@ const Footer = () => {
           TS Geosystem © All rights reserved |{" "}
           <Link to="/sitemap">Sitemap</Link>
         </p>
-        <div className="bg-[#585c5d] text-white text-center">
+        <div className="text-white text-center">
           <p>
             Provided by{" "}
             <a
@@ -237,11 +268,6 @@ const Footer = () => {
             alt="Visa"
             className="h-6"
           />
-          {/* <img src="/paypal.png" alt="Paypal" className="h-6" />
-          <img src="/vice.png" alt="Vice" className="h-6" />
-          <img src="/electic.png" alt="Electic" className="h-6" />
-          <img src="/amex.png" alt="Amex" className="h-6" />
-          <img src="/discover.png" alt="Discover" className="h-6" /> */}
         </div>
       </div>
     </footer>

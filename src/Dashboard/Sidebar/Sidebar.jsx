@@ -132,6 +132,7 @@ const menuItems = [
       { label: "Contact Us", to: "/dashboard/contact-us" },
       { label: "Support", to: "/dashboard/update/support" },
       { label: "Certificate Tracking", to: "/dashboard/cc" },
+      { label: "Footer", to: "/dashboard/footer" },
     ],
   },
   {
