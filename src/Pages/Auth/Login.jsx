@@ -2,7 +2,6 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { FaGoogle } from "react-icons/fa";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
-import Swal from "sweetalert2";
 import { signInWithPopup } from "firebase/auth";
 import { auth, googleProvider } from "./firebase.config.js";
 import { useDispatch } from "react-redux";

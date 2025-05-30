@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import useProductsByIdsQuery from "../../Hooks/useProductsByIdsQuery";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
-import { toast } from "react-toastify";
 import { selectMergedCart } from "../../utils/selectMergedCart";
 import { clearCart, clearCoupon } from "../../features/AddToCart/AddToCart";
 import useToastSwal from "../../Hooks/useToastSwal";
@@ -156,10 +155,10 @@ const Checkout = () => {
           if (paymentInitRes.data?.GatewayPageURL) {
             window.location.href = paymentInitRes.data.GatewayPageURL;
           } else {
-            toast.error("Failed to initiate payment");
+            showToast("error", "Failed to initiate payment");
           }
         } else {
-          toast.error("Failed to save order before payment");
+          showToast("error", "Failed to save order before payment");
         }
       } catch (err) {
         console.error("SSLCommerz Payment Error:", err);

@@ -3,15 +3,16 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import ReCAPTCHA from "react-google-recaptcha";
 import { Country, State, City } from "country-state-city";
-import { toast } from "react-toastify";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import { useDispatch } from "react-redux";
 import { loginSuccess } from "../../features/UserAuth/authSlice";
 import { usePasswordToggle } from "../../utils/usePasswordToggle";
+import useToastSwal from "../../Hooks/useToastSwal";
 
 const Register = () => {
   const axiosPUblic = useAxiospublic();
   const dispatch = useDispatch();
+  const showToast = useToastSwal();
   const [countries, setCountries] = useState([]);
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
@@ -73,7 +74,7 @@ const Register = () => {
 
   const onSubmit = async (data) => {
     if (!captchaToken) {
-      toast.error("Please verify the reCAPTCHA");
+      showToast("error", "Please verify the reCAPTCHA");
       return;
     }
     try {
@@ -94,7 +95,7 @@ const Register = () => {
 
       const response = await axiosPUblic.post("/api/add-user", payload);
       if (response.status === 201) {
-        toast.success("Account created successfully");
+        showToast("success", "Account created successfully");
         dispatch(
           loginSuccess({
             email: response.data.user.email,
@@ -107,10 +108,12 @@ const Register = () => {
           state: { email: response.data?.email },
         });
       } else if (response.status === 400) {
-        toast.success(response?.message);
+        showToast("success", response?.message);
       }
     } catch (error) {
-      toast.error(
+      showToast(
+        "error",
+        "error",
         error.response?.data?.message || "An error occurred. Please try again."
       );
     }
@@ -139,7 +142,7 @@ const Register = () => {
               </label>
               <input
                 type="email"
-                className="w-full px-3 py-2 border border-gray-300 rounded-sm focus:outline-none focus:ring-1 focus:ring-[#e62245]"
+                className="w-full px-3 py-2 border border-gray-300 rounded-sm focus:outline-none focus:border focus:border-gray-400"
                 {...register("email", {
                   required: "Email is required",
                   pattern: {
@@ -162,7 +165,7 @@ const Register = () => {
               <input
                 // type="password"
                 type={passwordType}
-                className="w-full px-3 py-2 border border-gray-300 rounded-sm focus:outline-none focus:ring-1 focus:ring-[#e62245]"
+                className="w-full px-3 py-2 border border-gray-300 rounded-sm focus:outline-none focus:border focus:border-gray-400"
                 {...register("password", {
                   required: "Password is required",
                   minLength: {
@@ -171,7 +174,7 @@ const Register = () => {
                   },
                 })}
               />
-              <span className="absolute right-3 top-4/6 -translate-y-1/2 cursor-pointer text-gray-500">
+              <span className="absolute right-2 top-3/6 -translate-y-1/2 cursor-pointer text-gray-500">
                 {PasswordIcon}
               </span>
               {errors.password && (
@@ -188,14 +191,14 @@ const Register = () => {
               <input
                 // type="password"
                 type={confirmPasswordType}
-                className="w-full px-3 py-2 border border-gray-300 rounded-sm focus:outline-none focus:ring-1 focus:ring-[#e62245]"
+                className="w-full px-3 py-2 border border-gray-300 rounded-sm focus:outline-none focus:border focus:border-gray-400"
                 {...register("confirmPassword", {
                   required: "Please confirm your password",
                   validate: (value) =>
                     value === watch("password") || "Passwords do not match",
                 })}
               />
-              <span className="absolute right-3 top-4/6 -translate-y-1/2 cursor-pointer text-gray-500">
+              <span className="absolute right-2 top-3/6 -translate-y-1/2 cursor-pointer text-gray-500">
                 {ConfirmPasswordIcon}
               </span>
               {errors.confirmPassword && (
@@ -211,7 +214,7 @@ const Register = () => {
               </label>
               <input
                 type="text"
-                className="w-full px-3 py-2 border border-gray-300 rounded-sm focus:outline-none focus:ring-1 focus:ring-[#e62245]"
+                className="w-full px-3 py-2 border border-gray-300 rounded-sm focus:outline-none focus:border focus:border-gray-400"
                 {...register("firstName", {
                   required: "First name is required",
                 })}
@@ -229,7 +232,7 @@ const Register = () => {
               </label>
               <input
                 type="text"
-                className="w-full px-3 py-2 border border-gray-300 rounded-sm focus:outline-none focus:ring-1 focus:ring-[#e62245]"
+                className="w-full px-3 py-2 border border-gray-300 rounded-sm focus:outline-none focus:border focus:border-gray-400"
                 {...register("lastName", {
                   required: "Last name is required",
                 })}
@@ -247,7 +250,7 @@ const Register = () => {
               </label>
               <input
                 type="text"
-                className="w-full px-3 py-2 border border-gray-300 rounded-sm focus:outline-none focus:ring-1 focus:ring-[#e62245]"
+                className="w-full px-3 py-2 border border-gray-300 rounded-sm focus:outline-none focus:border focus:border-gray-400"
                 {...register("postcode", {
                   required: "Postcode is required",
                 })}
@@ -265,7 +268,7 @@ const Register = () => {
               </label>
               <input
                 type="tel"
-                className="w-full px-3 py-2 border border-gray-300 rounded-sm focus:outline-none focus:ring-1 focus:ring-[#e62245]"
+                className="w-full px-3 py-2 border border-gray-300 rounded-sm focus:outline-none focus:border focus:border-gray-400"
                 {...register("phoneNumber")}
               />
             </div>
@@ -276,7 +279,7 @@ const Register = () => {
               </label>
               <input
                 type="text"
-                className="w-full px-3 py-2 border border-gray-300 rounded-sm focus:outline-none focus:ring-1 focus:ring-[#e62245]"
+                className="w-full px-3 py-2 border border-gray-300 rounded-sm focus:outline-none focus:border focus:border-gray-400"
                 {...register("companyName")}
               />
             </div>
@@ -287,7 +290,7 @@ const Register = () => {
               </label>
               <input
                 type="text"
-                className="w-full px-3 py-2 border border-gray-300 rounded-sm focus:outline-none focus:ring-1 focus:ring-[#e62245]"
+                className="w-full px-3 py-2 border border-gray-300 rounded-sm focus:outline-none focus:border focus:border-gray-400"
                 {...register("addressLine1", {
                   required: "Address line 1 is required",
                 })}
@@ -305,7 +308,7 @@ const Register = () => {
               </label>
               <input
                 type="text"
-                className="w-full px-3 py-2 border border-gray-300 rounded-sm focus:outline-none focus:ring-1 focus:ring-[#e62245]"
+                className="w-full px-3 py-2 border border-gray-300 rounded-sm focus:outline-none focus:border focus:border-gray-400"
                 {...register("addressLine2")}
               />
             </div>
@@ -315,7 +318,7 @@ const Register = () => {
                 Country<span className="text-red-600">*</span>
               </label>
               <select
-                className="w-full appearance-none px-3 py-2 border border-gray-300 rounded-sm focus:outline-none focus:ring-1 focus:ring-[#e62245]"
+                className="w-full appearance-none px-3 py-2 border border-gray-300 rounded-sm focus:outline-none focus:border focus:border-gray-400"
                 {...register("country", {
                   required: "Country is required",
                 })}
@@ -340,7 +343,7 @@ const Register = () => {
               </label>
               {states.length > 0 ? (
                 <select
-                  className="w-full px-3 py-2 border border-gray-300 rounded-sm focus:outline-none focus:ring-1 focus:ring-[#e62245]"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-sm focus:outline-none focus:border focus:border-gray-400"
                   {...register("state", {
                     required: "State is required",
                   })}
@@ -356,7 +359,7 @@ const Register = () => {
               ) : (
                 <input
                   type="text"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-sm focus:outline-none focus:ring-1 focus:ring-[#e62245]"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-sm focus:outline-none focus:border focus:border-gray-400"
                   placeholder="Enter your state"
                   {...register("state", {
                     required: "State is required",
@@ -376,7 +379,7 @@ const Register = () => {
               </label>
               {cities.length > 0 ? (
                 <select
-                  className="w-full px-3 py-2 border border-gray-300 rounded-sm focus:outline-none focus:ring-1 focus:ring-[#e62245]"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-sm focus:outline-none focus:border focus:border-gray-400"
                   {...register("city", {
                     required: "City is required",
                   })}
@@ -392,7 +395,7 @@ const Register = () => {
               ) : (
                 <input
                   type="text"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-sm focus:outline-none focus:ring-1 focus:ring-[#e62245]"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-sm focus:outline-none focus:border focus:border-gray-400"
                   placeholder="Enter your city"
                   {...register("city", {
                     required: "City is required",
@@ -416,7 +419,7 @@ const Register = () => {
             <div className="col-span-full">
               <button
                 type="submit"
-                className="bg-[#e62245] text-white px-8 py-2 rounded hover:bg-[#d41f3f]"
+                className="bg-[#e62245] cursor-pointer text-white px-8 py-2 rounded hover:bg-[#d41f3f]"
               >
                 CREATE ACCOUNT
               </button>
