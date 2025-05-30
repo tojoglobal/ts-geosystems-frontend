@@ -18,11 +18,16 @@ const Footer = () => {
   const [email, setEmail] = useState(user?.email || "");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Contact info for social links (kept as before)
   const { data: contactInfo, isLoading: contactInfoLoading } = useDataQuery(
     ["contactInfo"],
     "/api/admin-contact-us"
   );
   const socialLinks = contactInfo?.socialLinks || {};
+
+  // Load footer data from the API
+  const { data } = useDataQuery(["footerData"], "/api/footer");
+  const footerData = data?.data || {};
 
   const handleSubscribe = async (e) => {
     e.preventDefault();
@@ -75,29 +80,56 @@ const Footer = () => {
     },
   ];
 
+  // All values come from database, do not fallback to defaults!
+  const address1 = footerData.address1 || "";
+  const address2 = footerData.address2 || "";
+  const iso_image_url_1 = footerData.iso_image_url_1
+    ? `${import.meta.env.VITE_OPEN_APIURL || ""}${footerData.iso_image_url_1}`
+    : "";
+  const iso_image_url_2 = footerData.iso_image_url_2
+    ? `${import.meta.env.VITE_OPEN_APIURL || ""}${footerData.iso_image_url_2}`
+    : "";
+  const iso_image_url_3 = footerData.iso_image_url_3
+    ? `${import.meta.env.VITE_OPEN_APIURL || ""}${footerData.iso_image_url_3}`
+    : "";
+  const mailing_title = footerData.mailing_title || "";
+  const mailing_text = footerData.mailing_text || "";
+  const bg_color = footerData.bg_color || "";
+
   return (
-    <footer className="bg-[#585c5d] text-white pt-8 md:pt-12">
+    <footer
+      className="text-white pt-8 md:pt-12"
+      style={{ backgroundColor: bg_color }}
+    >
       <div className="max-w-[89%] md:max-w-[85%] mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 pb-10">
         <div>
           <h2 className="text-xl font-semibold mb-4">CONTACT US</h2>
           <p className="text-sm mb-2">
-            Banglamotor, Rusul view 65 Mymensingh Road (7th floor)
-            <br />
-            Dhaka-1000, Bangladesh.
+            {address1 && (
+              <>
+                {address1}
+                <br />
+              </>
+            )}
           </p>
           <p className="text-sm mb-4">
-            Banglamotor, Rusul view 65 Mymensingh Road (7th floor)
-            <br />
-            Dhaka-1000, Bangladesh.
+            {address2 && (
+              <>
+                {address2}
+                <br />
+              </>
+            )}
           </p>
-          <div className="flex gap-4 mt-4">
-            <img
-              src="https://ts-geosystems.com.bd/assets/images/ISO-WHITE.png"
-              alt="ISO"
-              className="h-12"
-            />
-            {/* <img src="/ur.png" alt="UR" className="h-8" />
-            <img src="/ea-jas.png" alt="EA-JAS" className="h-8" /> */}
+          <div className="flex gap-2 mt-4">
+            {iso_image_url_1 && (
+              <img src={iso_image_url_1} alt="ISO" className="h-12 w-14" />
+            )}
+            {iso_image_url_2 && (
+              <img src={iso_image_url_2} alt="ISO" className="h-12 w-14" />
+            )}
+            {iso_image_url_3 && (
+              <img src={iso_image_url_3} alt="ISO" className="h-12 w-14" />
+            )}
           </div>
         </div>
         {/* Accounts & Orders */}
@@ -152,11 +184,8 @@ const Footer = () => {
         </div>
         {/* Mailing List */}
         <div>
-          <h2 className="text-xl font-semibold mb-4">JOIN OUR MAILING LIST</h2>
-          <p className="text-sm mb-4">
-            Signup for our newsletter to receive specials and up to date product
-            news and releases.
-          </p>
+          <h2 className="text-xl font-semibold mb-4">{mailing_title}</h2>
+          <p className="text-sm mb-4">{mailing_text}</p>
           <form onSubmit={handleSubscribe} className="flex mb-4">
             <input
               type="email"
@@ -218,7 +247,7 @@ const Footer = () => {
           TS Geosystem © All rights reserved |{" "}
           <Link to="/sitemap">Sitemap</Link>
         </p>
-        <div className="bg-[#585c5d] text-white text-center">
+        <div className="text-white text-center">
           <p>
             Provided by{" "}
             <a
@@ -237,11 +266,6 @@ const Footer = () => {
             alt="Visa"
             className="h-6"
           />
-          {/* <img src="/paypal.png" alt="Paypal" className="h-6" />
-          <img src="/vice.png" alt="Vice" className="h-6" />
-          <img src="/electic.png" alt="Electic" className="h-6" />
-          <img src="/amex.png" alt="Amex" className="h-6" />
-          <img src="/discover.png" alt="Discover" className="h-6" /> */}
         </div>
       </div>
     </footer>

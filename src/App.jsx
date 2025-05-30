@@ -91,6 +91,7 @@ import AdminUpdateTradeIn from "./Pages/Control/AdminUpdateTradeIn";
 import AdminUpdateSupport from "./Pages/Control/AdminUpdateSupport";
 import CreditAccountApplication from "./Pages/NavComponents/CreditAccountApplication";
 import AdminUpdateUsedEquipment from "./Pages/Control/AdminUpdateUsedEquipment";
+import AdminUpdateFooter from "./Pages/Control/AdminUpdateFooter";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -245,7 +246,8 @@ const AppLayout = () => {
           <Route path="contact-us" element={<AdminUpdateContactUs />} />
           <Route path="update/support" element={<AdminUpdateSupport />} />
           <Route path="cc" element={<AdminUpdateCertificateTracking />} />
-          <Route path="chat" element={<Chat />} />
+          <Route path="cc" element={<AdminUpdateCertificateTracking />} />
+          <Route path="footer" element={<AdminUpdateFooter />} />
         </Route>
 
         <Route path="*" element={<Error />} />

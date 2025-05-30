@@ -9,6 +9,8 @@ import WeProvide from "./WeProvide";
 import HomeBanner from "./HomeBanner/HomeBanner";
 import useDataQuery from "../../utils/useDataQuery";
 import { ComponentLoader } from "../../utils/Loader/ComponentLoader";
+import GoHighBanner from "./HomeBanner/GoHighBanner";
+import LastBanner from "./HomeBanner/LastBanner";
 
 const MainHome = () => {
   const { data, isLoading, isError } = useDataQuery(
@@ -56,6 +58,7 @@ const MainHome = () => {
     <>
       <HomeBanner control={comp} />
       {comp.featured_products_grid_section_07 && <ProductHighlights />}
+      <LastBanner />
       {comp.experienced_center_popular_products_slider_08 && (
         <ExperienceCenter />
       )}
