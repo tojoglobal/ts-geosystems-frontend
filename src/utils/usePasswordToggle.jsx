@@ -11,7 +11,7 @@ export const usePasswordToggle = () => {
       className="cursor-pointer"
       //   className="absolute right-3 top-2/4 -translate-y-1/2 cursor-pointer text-gray-500"
     >
-      {visible ? <FaEyeSlash /> : <FaEye />}
+      {visible ? <FaEye /> : <FaEyeSlash />}
     </span>
   );
 

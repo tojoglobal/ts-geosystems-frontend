@@ -79,7 +79,7 @@ import PublicOnlyRoute from "./ProtectedRoute/PublicOnlyRoute";
 import TradeInData from "./Dashboard/TradeIn/TradeInData";
 import AdminSupportData from "./Dashboard/Support/AdminSupportData";
 import AddNewAddress from "./UserAccount/AddNewAddress";
-import Chat from "./Dashboard/Chat/Chat";
+// import Chat from "./Dashboard/Chat/Chat";
 import Subscriber from "./Dashboard/Subscriber/Subscriber";
 import AdminServiceInquiries from "./Dashboard/Services/AdminServiceInquiries";
 import MailView from "./Dashboard/Email/MailView";
@@ -92,6 +92,8 @@ import AdminUpdateSupport from "./Pages/Control/AdminUpdateSupport";
 import CreditAccountApplication from "./Pages/NavComponents/CreditAccountApplication";
 import AdminUpdateUsedEquipment from "./Pages/Control/AdminUpdateUsedEquipment";
 import AdminUpdateFooter from "./Pages/Control/AdminUpdateFooter";
+import SiteMap from "./Components/SiteMap";
+import HelpDeskButton from "./Pages/HelpDeskButton";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -142,6 +144,7 @@ const AppLayout = () => {
         <Route path="/thank-you" element={<ThankYou />} />
         {/* welcome rotue */}
         <Route path="/welcome" element={<WelcomePage />} />
+        <Route path="/sitemap" element={<SiteMap />} />
         {/* Auth user Routes */}
         {/* <Route path="/user/login" element={<Login />} /> */}
         {/* <Route path="/user/create_account" element={<Register />} /> */}
@@ -253,6 +256,7 @@ const AppLayout = () => {
         <Route path="*" element={<Error />} />
       </Routes>
       {!hideNavFooter && <Footer />}
+      {!hideNavFooter && <HelpDeskButton />}
     </>
   );
 };

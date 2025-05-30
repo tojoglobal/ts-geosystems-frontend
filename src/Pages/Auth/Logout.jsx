@@ -1,33 +1,30 @@
 import { useDispatch, useSelector } from "react-redux";
-
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import { logout } from "../../features/UserAuth/authSlice";
-import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import useToastSwal from "../../Hooks/useToastSwal";
 
 const Logout = () => {
   const { user } = useSelector((state) => state.authUser);
   const dispatch = useDispatch();
   const axiosPublic = useAxiospublic();
   const navigate = useNavigate();
+  const showToast = useToastSwal();
 
   const handleLogout = async () => {
     try {
       await axiosPublic.post("/api/user-logout", { email: user.email });
       dispatch(logout());
-      Swal.fire({
-        icon: "success",
-        title: "Logged out successfully!",
-        showConfirmButton: false,
-        timer: 1500,
-      });
+      showToast(
+        "success",
+        "Logged out successfully!",
+        "",
+        { timer: 1500 }
+      );
       navigate("/user/login");
     } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: `Logout failed. ${error?.message}`,
-        showConfirmButton: false,
-        timer: 1500,
+      showToast("error", "Logout failed.", error?.message || "Unknown error.", {
+        timer: 2000,
       });
     }
   };

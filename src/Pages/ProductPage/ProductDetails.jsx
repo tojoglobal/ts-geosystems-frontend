@@ -17,9 +17,11 @@ import { addToCart } from "../../features/AddToCart/AddToCart";
 import { parsePrice } from "../../utils/parsePrice";
 import useDataQuery from "../../utils/useDataQuery";
 import { setBreadcrumb } from "../../features/breadcrumb/breadcrumbSlice";
+import useToastSwal from "../../Hooks/useToastSwal";
 
 const ProductDetails = () => {
   const { id } = useParams();
+  const showToast = useToastSwal();
   const dispatch = useDispatch();
   const [selectedImage, setSelectedImage] = useState("");
   const [activeTab, setActiveTab] = useState("OVERVIEW");
@@ -87,13 +89,13 @@ const ProductDetails = () => {
       quantity,
     };
     dispatch(addToCart(itemToAdd));
-    Swal.fire({
-      title: "Added to Cart",
-      text: `${product.product_name} has been added to your cart.`,
-      icon: "success",
-      timer: 2000,
-      showConfirmButton: false,
-    });
+
+    showToast(
+      "success",
+      "Added to Cart!",
+      `<b style="color:#333">${product.product_name}</b> has been added to your cart.`,
+      { timer: 2000 }
+    );
   };
 
   if (isLoading) return null;

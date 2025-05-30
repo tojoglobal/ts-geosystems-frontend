@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import { FaPhoneAlt, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
-import { FaFacebookF, FaTwitter, FaYoutube, FaInstagram } from "react-icons/fa";
 import GoogleReview from "./AboutUs/GoogleReview";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay } from "swiper/modules";
@@ -8,12 +7,13 @@ import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import "swiper/css";
 import "swiper/css/navigation";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
-import { toast } from "react-toastify";
 import useDataQuery from "../../utils/useDataQuery";
 import { SkeletonLoader } from "../../utils/Loader/SkeletonLoader";
 import SocialButtons from "../../Components/SocialButtons";
+import useToastSwal from "../../Hooks/useToastSwal";
 
 const ContactUs = () => {
+  const showToast = useToastSwal();
   const axiosPublicUrl = useAxiospublic();
   const { data = [], isLoading: brandsLoading } = useDataQuery(
     ["popularBrand"],
@@ -42,12 +42,19 @@ const ContactUs = () => {
     try {
       const response = await axiosPublicUrl.post("/api/contact", data);
       if (response.data.success) {
-        toast.success("Message sent successfully!");
+        showToast(
+          "success",
+          "Message sent successfully!",
+          "We will get back to you soon. Thank you!"
+        );
         form.reset();
       }
     } catch (error) {
-      console.error("Error sending message:", error);
-      toast.error("Failed to send message. Please try again.");
+      showToast(
+        "error",
+        "error",
+        error.message || "Failed to send message. Please try again."
+      );
     }
   };
 
@@ -279,7 +286,6 @@ const ContactUs = () => {
             ))}
           </Swiper>
         )}
-
         {!brandsLoading && (
           <>
             <button className="cursor-pointer swiper-button-prev-custom hidden group-hover:block absolute -left-1 md:-left-4 top-[78%] -translate-y-1/2 z-10 bg-[#696666e3] shadow-md rounded-full p-2 hover:bg-[#111111]">

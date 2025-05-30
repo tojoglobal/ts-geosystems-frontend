@@ -9,9 +9,11 @@ import { addToCart } from "../features/AddToCart/AddToCart";
 import Swal from "sweetalert2";
 import { slugify } from "../utils/slugify";
 import { Link } from "react-router-dom";
+import useToastSwal from "../Hooks/useToastSwal";
 
 const RecentlyViewed = () => {
   const { user } = useSelector((state) => state.authUser);
+  const showToast = useToastSwal();
   const [page, setPage] = useState(1);
   const dispatch = useDispatch();
   const [limit, setLimit] = useState(8);
@@ -64,13 +66,13 @@ const RecentlyViewed = () => {
     };
 
     dispatch(addToCart(itemToAdd));
-    Swal.fire({
-      title: "Added to Cart",
-      text: `${product.product_name} has been added to your cart.`,
-      icon: "success",
-      timer: 2000,
-      showConfirmButton: false,
-    });
+
+    showToast(
+      "success",
+      "Added to Cart!",
+      `<b style="color:#333">${product.product_name}</b> has been added to your cart.`,
+      { timer: 2000 }
+    );
   };
 
   if (isLoading) return <Loader />;
@@ -98,9 +100,8 @@ const RecentlyViewed = () => {
           </select>
         </div>
       </div>
-
       {/* Product grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-7">
         {recentItems.map((item) => {
           const { isSimpleProduct } = getProductType(item);
           let images = [];
@@ -137,7 +138,7 @@ const RecentlyViewed = () => {
           return (
             <div
               key={item.id}
-              className="bg-white overflow-hidden"
+              className="bg-white flex flex-col justify-between overflow-hidden h-full"
               onMouseEnter={() => setHoveredProductId(item.id)}
               onMouseLeave={() => setHoveredProductId(null)}
             >
@@ -155,7 +156,7 @@ const RecentlyViewed = () => {
                   <img
                     src={displayImage}
                     alt={item.product_name}
-                    className="w-auto mx-auto max-h-[176px] object-cover"
+                    className="min-h-[160px] object-cover"
                   />
                 </Link>
               </div>
