@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 const HelpDeskButton = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -12,15 +13,20 @@ const HelpDeskButton = () => {
       // Hide after 5 seconds
       const hideTimeout = setTimeout(() => {
         if (!showInfo) {
-          // Only hide if info panel isn't open
           setIsVisible(false);
         }
-      }, 50000);
+      }, 5000);
 
       return () => clearTimeout(hideTimeout);
-    }, 5000);
+    }, 10000);
 
-    return () => clearInterval(showInterval);
+    // Show the popup the first time after 1s
+    const initialTimeout = setTimeout(() => setIsVisible(true), 1000);
+
+    return () => {
+      clearInterval(showInterval);
+      clearTimeout(initialTimeout);
+    };
   }, [showInfo]);
 
   const toggleInfo = () => {
@@ -37,33 +43,41 @@ const HelpDeskButton = () => {
       }`}
     >
       {showInfo ? (
-        <div className="bg-white p-4 rounded-lg shadow-lg max-w-md border border-gray-200">
-          <div className="flex justify-between items-center mb-1 gap-2">
+        <div className="bg-white p-3 rounded-xl shadow-lg max-w-sm w-[280px] border border-gray-200">
+          <div className="flex justify-between items-center mb-1 gap-1">
             <h3 className="font-bold text-lg text-gray-800">Contact Support</h3>
             <button
               onClick={toggleInfo}
-              className="text-gray-500 cursor-pointer hover:text-gray-700"
+              className="text-gray-500 text-lg cursor-pointer hover:text-gray-700"
             >
               ×
             </button>
           </div>
-          <div className="space-y-1">
-            <div>
+          <div>
+            <div className="flex items-center gap-1">
               <p className="text-sm text-gray-600">Helpline Number:</p>
               <p className="font-medium text-crimson-red">+1 (123) 456-7890</p>
             </div>
-            <div>
+            <div className="flex items-center gap-1">
               <p className="text-sm text-gray-600">WhatsApp:</p>
               <p className="font-medium text-crimson-red">+1 (987) 654-3210</p>
             </div>
-            <div>
+            <div className="flex items-center gap-1">
               <p className="text-sm text-gray-600">Email:</p>
               <p className="font-medium text-crimson-red">support@ts.com</p>
+            </div>
+            <div className="w-full">
+              <Link
+                to="/contact-us"
+                className="inline-block w-full justify-center text-center bg-crimson-red text-white px-4 py-1 rounded-[4px] font-semibold mt-2 shadow hover:bg-red-700 transition"
+              >
+                Contact Us
+              </Link>
             </div>
           </div>
         </div>
       ) : (
-        <div className="relative">
+        <div className="relative w-fit">
           <div className="absolute -top-3 right-1 transform translate-x-full bg-white text-crimson-red text-xs font-semibold px-2 py-1 rounded shadow-md whitespace-nowrap">
             Need Support?
             <div className="absolute top-1/2 -left-1 w-2 h-2 bg-white transform -translate-y-1/2 rotate-45"></div>
