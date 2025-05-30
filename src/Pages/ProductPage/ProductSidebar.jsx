@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useParams, useLocation } from "react-router-dom";
 import { SlArrowDown, SlArrowUp } from "react-icons/sl";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
@@ -12,6 +12,7 @@ const ProductSidebar = () => {
   const axiosPublicUrl = useAxiospublic();
   const [openSections, setOpenSections] = useState({});
   const breadcrumb = useSelector((state) => state.breadcrumb);
+  const subcategoryRefs = useRef({}); // Ref to hold subcategory div elements
 
   // Fetch categories
   const {
@@ -47,9 +48,8 @@ const ProductSidebar = () => {
     ["popularBrandPhoto"],
     "/api/brand/popular-photo"
   );
-  
+
   useEffect(() => {
-    // Find out which category should be open.
     let catSlug =
       (location.pathname.startsWith("/products/") &&
         breadcrumb?.category?.slug) ||
@@ -61,21 +61,17 @@ const ProductSidebar = () => {
       );
       if (foundCategory) {
         setOpenSections({
-          [foundCategory.category_name]: true, // <-- Only this one open!
+          [foundCategory.category_name]: true,
         });
       }
     }
-    // If no category, close all
     if (!catSlug) setOpenSections({});
   }, [category, categoriesData, breadcrumb?.category, location.pathname]);
 
   useEffect(() => {
-    // Find out which category should be open.
     let catSlug =
-      // If on details page, prefer breadcrumb (which is set by click or by details page on direct load)
       (location.pathname.startsWith("/products/") &&
         breadcrumb?.category?.slug) ||
-      // Else, use category param as usual
       category;
 
     if (catSlug && categoriesData?.categories) {
@@ -90,7 +86,6 @@ const ProductSidebar = () => {
       }
     }
   }, [category, categoriesData, breadcrumb?.category, location.pathname]);
-  // --- END AUTO-OPEN LOGIC ---
 
   const toggleSection = (label) => {
     setOpenSections((prev) => ({
@@ -99,7 +94,6 @@ const ProductSidebar = () => {
     }));
   };
 
-  // Get subcategories for a category
   const getSubcategoriesForCategory = (categoryId) => {
     if (!subcategoriesData?.subcategories) return [];
     return subcategoriesData.subcategories.filter(
@@ -114,7 +108,6 @@ const ProductSidebar = () => {
     return <div>Error loading data</div>;
   }
 
-  // Create sidebar data structure dynamically
   const dynamicSidebarData = [
     { label: "Shop All", link: "/shop-all", children: null },
     ...(categoriesData?.categories?.map((category) => ({
@@ -137,7 +130,6 @@ const ProductSidebar = () => {
     },
   ];
 
-  // Figure out which category/subcategory should be highlighted
   const activeCategorySlug =
     (location.pathname.startsWith("/products/") &&
       breadcrumb?.category?.slug) ||
@@ -155,7 +147,7 @@ const ProductSidebar = () => {
         ) : (
           <div
             key={item.label}
-            className={` bg-[#ebebeb] font-bold rounded-[4px] text-[13px] ${
+            className={`bg-[#ebebeb] font-bold rounded-[4px] text-[13px] ${
               index !== 0 ? "mt-[5px]" : ""
             }`}
           >
@@ -163,17 +155,17 @@ const ProductSidebar = () => {
               <div>
                 <Link
                   to={item?.categorySlug}
-                  className={`w-full text-xs capitalize hover:text-[#e62245] flex items-center justify-between bg-[#ebebeb] font-medium text-left p-3 ${
+                  className={`w-full text-xs capitalize hover:text-[#e62245] flex items-center justify-between bg-[#ebebeb] font-bold text-left p-3 ${
                     openSections[item.label]
                       ? "border-b-2 border-[#e62245]"
                       : ""
-                  } ${
-                    activeCategorySlug === item.categorySlug
-                      ? "text-[#e62245] font-bold"
-                      : ""
+                    // } ${
+                    //   activeCategorySlug === item.categorySlug
+                    //     ? "text-[#e62245]"
+                    //     : ""
                   }`}
                 >
-                  <span>{item.label}</span>
+                  {item.label}
                   <button
                     onClick={(e) => {
                       e.preventDefault();
@@ -188,7 +180,18 @@ const ProductSidebar = () => {
                     )}
                   </button>
                 </Link>
-                {openSections[item.label] && item.children.length > 0 && (
+                {/* Apply animation classes here */}
+                <div
+                  ref={(el) => (subcategoryRefs.current[item.label] = el)}
+                  style={{
+                    maxHeight: openSections[item.label]
+                      ? `${subcategoryRefs.current[item.label]?.scrollHeight}px`
+                      : "0",
+                  }}
+                  className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                    openSections[item.label] ? "opacity-100" : "opacity-0"
+                  }`}
+                >
                   <div className="bg-[#f6f6f6]">
                     {item.children.map((child) => (
                       <Link
@@ -209,15 +212,13 @@ const ProductSidebar = () => {
                       </Link>
                     ))}
                   </div>
-                )}
+                </div>
               </div>
             ) : (
               <Link
                 to={item.link}
-                className={`block p-[11px] hover:text-[#e62245] font-medium hover:underline ${
-                  item.link === `/${activeCategorySlug}`
-                    ? "text-[#e62245] font-bold"
-                    : ""
+                className={`block p-[11px] hover:text-[#e62245] font-bold hover:underline ${
+                  item.link === `/${activeCategorySlug}` ? "text-[#e62245]" : ""
                 }`}
               >
                 {item.label}
