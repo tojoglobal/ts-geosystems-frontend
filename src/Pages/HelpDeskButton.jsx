@@ -1,63 +1,72 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 
 const HelpDeskButton = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
-  const [closing, setClosing] = useState(false);
-  const [opening, setOpening] = useState(false);
-  const [timeoutId, setTimeoutId] = useState(null);
+  const [panelAnim, setPanelAnim] = useState("");
+  const timeoutRef = useRef(null);
+  const intervalRef = useRef(null);
 
-  // Show/hide logic for the main button
   useEffect(() => {
-    const showButton = () => {
+    const startLoop = () => {
+      // Show the button
       setIsVisible(true);
 
-      // Clear any existing timeout
-      if (timeoutId) clearTimeout(timeoutId);
-
-      // Set new timeout to hide after 5 seconds if info isn't shown
-      const id = setTimeout(() => {
+      // Set timeout to hide after 5 seconds if panel is not open
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      timeoutRef.current = setTimeout(() => {
         if (!showInfo) {
           setIsVisible(false);
         }
-      }, 5000);
-
-      setTimeoutId(id);
+      }, 5000); // Show for 5 seconds
     };
 
-    // Initial show after 1 second
-    const initialTimeout = setTimeout(showButton, 1000);
+    // Initial show after 15 seconds
+    const initialDelay = setTimeout(startLoop, 13000); // Wait 15 seconds before first show
 
-    // Set interval to show every 10 seconds
-    const interval = setInterval(showButton, 10000);
+    // Set interval for subsequent shows (13 seconds hide + 5 seconds show = 20 second cycle)
+    intervalRef.current = setInterval(() => {
+      if (!showInfo) {
+        // Only run the loop if the info panel is not open
+        startLoop();
+      }
+    }, 18000); // 15 seconds hidden + 5 seconds visible = 20 seconds total cycle
 
     return () => {
-      clearTimeout(initialTimeout);
-      clearInterval(interval);
-      if (timeoutId) clearTimeout(timeoutId);
+      clearTimeout(initialDelay);
+      clearInterval(intervalRef.current);
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
     };
-  }, [showInfo]);
+  }, [showInfo]); // Re-run effect if showInfo changes
 
-  const toggleInfo = () => {
-    if (showInfo) {
-      // Close the info panel with scale animation
-      setClosing(true);
-      setTimeout(() => {
-        setShowInfo(false);
-        setClosing(false);
-        // Don't hide the main button immediately after closing
-      });
-    } else {
-      // Open the info panel with scale animation
-      setShowInfo(true);
-      setOpening(true);
-      setTimeout(() => setOpening(false), 300);
-      // Keep visible when info is shown
-      setIsVisible(true);
-      // Clear the auto-hide timeout when opening
-      if (timeoutId) clearTimeout(timeoutId);
-    }
+  const openPanel = () => {
+    setShowInfo(true);
+    setPanelAnim("animate-scaleIn");
+    setIsVisible(true); // Keep button visible while panel is open
+    if (timeoutRef.current) clearTimeout(timeoutRef.current); // Clear any pending hide timeout
+    setTimeout(() => setPanelAnim(""), 300);
+  };
+
+  const closePanel = () => {
+    setPanelAnim("animate-scaleOut");
+    setTimeout(() => {
+      setShowInfo(false);
+      setPanelAnim("");
+      // After closing, restart the visibility logic from the start of a "hide" phase
+      setIsVisible(false); // Hide immediately after closing
+      if (intervalRef.current) clearInterval(intervalRef.current); // Clear existing interval
+      if (timeoutRef.current) clearTimeout(timeoutRef.current); // Clear existing timeout
+      // Restart the loop from the beginning of a 15-second hide
+      intervalRef.current = setInterval(() => {
+        if (!showInfo) {
+          setIsVisible(true);
+          timeoutRef.current = setTimeout(() => {
+            setIsVisible(false);
+          }, 5000);
+        }
+      }, 18000); // 15 seconds hidden + 5 seconds visible = 20 seconds total cycle
+    }, 300);
   };
 
   return (
@@ -68,30 +77,31 @@ const HelpDeskButton = () => {
     >
       {showInfo ? (
         <div
-          className={`bg-white p-3 rounded-xl shadow-lg max-w-sm w-[280px] border border-gray-200 transition-all duration-300 ease-in-out ${
-            opening ? "animate-scaleIn" : closing ? "animate-scaleOut" : ""
-          }`}
+          className={`bg-white p-3 rounded-xl shadow-lg max-w-sm w-[280px] border border-gray-200 ${panelAnim}`}
         >
           <div className="flex justify-between items-center mb-1 gap-1">
-            <h3 className="font-bold text-lg text-center text-gray-800">Contact Support</h3>
+            <h3 className="font-bold text-center flex-1 text-gray-800">
+              Contact Support
+            </h3>
             <button
-              onClick={toggleInfo}
-              className="text-gray-500 text-lg cursor-pointer hover:text-gray-700"
+              onClick={closePanel}
+              className="text-gray-500 text-lg cursor-pointer hover:text-gray-700 ml-2"
+              aria-label="Close"
             >
               ×
             </button>
           </div>
-          <div>
+          <div className="space-y-1 text-sm">
             <div className="flex items-center gap-1">
-              <p className="text-sm text-gray-600">Helpline Number:</p>
+              <p className="text-gray-600">Helpline Number:</p>
               <p className="font-medium text-crimson-red">+1 (123) 456-7890</p>
             </div>
             <div className="flex items-center gap-1">
-              <p className="text-sm text-gray-600">WhatsApp:</p>
+              <p className="text-gray-600">WhatsApp:</p>
               <p className="font-medium text-crimson-red">+1 (987) 654-3210</p>
             </div>
             <div className="flex items-center gap-1">
-              <p className="text-sm text-gray-600">Email:</p>
+              <p className="text-gray-600">Email:</p>
               <p className="font-medium text-crimson-red">support@ts.com</p>
             </div>
             <div className="w-full">
@@ -115,7 +125,7 @@ const HelpDeskButton = () => {
             <div className="absolute top-1/2 -left-1 w-2 h-2 bg-white transform -translate-y-1/2 rotate-45"></div>
           </div>
           <button
-            onClick={toggleInfo}
+            onClick={openPanel}
             className="bg-crimson-red cursor-pointer text-white p-3 rounded-full shadow-lg hover:bg-red-700 transition-colors"
             aria-label="Help Desk"
           >

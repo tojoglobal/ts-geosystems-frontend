@@ -79,7 +79,7 @@ import PublicOnlyRoute from "./ProtectedRoute/PublicOnlyRoute";
 import TradeInData from "./Dashboard/TradeIn/TradeInData";
 import AdminSupportData from "./Dashboard/Support/AdminSupportData";
 import AddNewAddress from "./UserAccount/AddNewAddress";
-import Chat from "./Dashboard/Chat/Chat";
+// import Chat from "./Dashboard/Chat/Chat";
 import Subscriber from "./Dashboard/Subscriber/Subscriber";
 import AdminServiceInquiries from "./Dashboard/Services/AdminServiceInquiries";
 import MailView from "./Dashboard/Email/MailView";
@@ -256,6 +256,7 @@ const AppLayout = () => {
         <Route path="*" element={<Error />} />
       </Routes>
       {!hideNavFooter && <Footer />}
+      {!hideNavFooter && <HelpDeskButton />}
     </>
   );
 };
@@ -268,7 +269,6 @@ function App() {
           future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
         >
           <AppLayout />
-          <HelpDeskButton />
         </Router>
       </AppProvider>
     </>
