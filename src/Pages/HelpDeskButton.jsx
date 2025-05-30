@@ -5,47 +5,58 @@ const HelpDeskButton = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
   const [closing, setClosing] = useState(false);
-  const [opening, setOpening] = useState(false); // New state for opening animation
+  const [opening, setOpening] = useState(false);
+  const [timeoutId, setTimeoutId] = useState(null);
 
+  // Show/hide logic for the main button
   useEffect(() => {
-    // Show the button every 15 seconds
-    const showInterval = setInterval(() => {
+    const showButton = () => {
       setIsVisible(true);
 
-      // Hide after 5 seconds if info is not shown
-      const hideTimeout = setTimeout(() => {
+      // Clear any existing timeout
+      if (timeoutId) clearTimeout(timeoutId);
+
+      // Set new timeout to hide after 5 seconds if info isn't shown
+      const id = setTimeout(() => {
         if (!showInfo) {
           setIsVisible(false);
         }
       }, 5000);
 
-      return () => clearTimeout(hideTimeout);
-    }, 10000);
+      setTimeoutId(id);
+    };
 
-    // Show the popup the first time after 1s
-    const initialTimeout = setTimeout(() => setIsVisible(true), 1000);
+    // Initial show after 1 second
+    const initialTimeout = setTimeout(showButton, 1000);
+
+    // Set interval to show every 10 seconds
+    const interval = setInterval(showButton, 10000);
 
     return () => {
-      clearInterval(showInterval);
       clearTimeout(initialTimeout);
+      clearInterval(interval);
+      if (timeoutId) clearTimeout(timeoutId);
     };
   }, [showInfo]);
 
   const toggleInfo = () => {
     if (showInfo) {
-      setClosing(true); // Start closing animation
+      // Close the info panel with scale animation
+      setClosing(true);
       setTimeout(() => {
         setShowInfo(false);
-        setClosing(false); // Reset closing state after animation
-        setIsVisible(false); // Hide the button after closing
-      }, 500); // Duration of closing animation
+        setClosing(false);
+        // Don't hide the main button immediately after closing
+      });
     } else {
+      // Open the info panel with scale animation
       setShowInfo(true);
-      setOpening(true); // Start opening animation
-      setTimeout(() => {
-        setOpening(false); // Reset opening state after animation
-      }, 500);
-      setIsVisible(true); // Keep visible when info is shown
+      setOpening(true);
+      setTimeout(() => setOpening(false), 300);
+      // Keep visible when info is shown
+      setIsVisible(true);
+      // Clear the auto-hide timeout when opening
+      if (timeoutId) clearTimeout(timeoutId);
     }
   };
 
@@ -53,14 +64,7 @@ const HelpDeskButton = () => {
     <div
       className={`fixed bottom-4 left-4 z-50 transition-all duration-500 ease-in-out ${
         isVisible ? "opacity-100" : "opacity-0 pointer-events-none"
-      } ${
-        showInfo
-          ? "translate-x-0"
-          : isVisible
-          ? "translate-x-0"
-          : "-translate-x-full" // Move left when hidden
-      }
-      ${closing ? "-translate-x-full" : "translate-x-0"} `} // Slide left on closing
+      }`}
     >
       {showInfo ? (
         <div
@@ -69,7 +73,7 @@ const HelpDeskButton = () => {
           }`}
         >
           <div className="flex justify-between items-center mb-1 gap-1">
-            <h3 className="font-bold text-lg text-gray-800">Contact Support</h3>
+            <h3 className="font-bold text-lg text-center text-gray-800">Contact Support</h3>
             <button
               onClick={toggleInfo}
               className="text-gray-500 text-lg cursor-pointer hover:text-gray-700"
@@ -103,7 +107,7 @@ const HelpDeskButton = () => {
       ) : (
         <div
           className={`relative w-fit transition-transform duration-500 ease-in-out ${
-            isVisible ? "translate-x-0" : "-translate-x-full" // Slide in from left when it appears
+            isVisible ? "translate-x-0" : "-translate-x-full"
           }`}
         >
           <div className="absolute -top-3 right-1 transform translate-x-full bg-white text-crimson-red text-xs font-semibold px-2 py-1 rounded shadow-md whitespace-nowrap">
