@@ -9,7 +9,6 @@ import WeProvide from "./WeProvide";
 import HomeBanner from "./HomeBanner/HomeBanner";
 import useDataQuery from "../../utils/useDataQuery";
 import { ComponentLoader } from "../../utils/Loader/ComponentLoader";
-import GoHighBanner from "./HomeBanner/GoHighBanner";
 import LastBanner from "./HomeBanner/LastBanner";
 
 const MainHome = () => {
@@ -20,7 +19,7 @@ const MainHome = () => {
   const comp = data?.components || {};
   // For simpler components, you can use the generic loader:
   // if (isLoading) return <ComponentLoader />;
-    if (isLoading)
+  if (isLoading)
     return (
       <div className="space-y-8 my-2">
         <ComponentLoader componentName="MainBanner" />

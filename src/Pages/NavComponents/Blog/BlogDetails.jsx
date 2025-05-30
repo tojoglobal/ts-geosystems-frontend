@@ -1,5 +1,4 @@
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { Facebook, Twitter, Linkedin, Mail, MessageSquare } from "lucide-react";
 import {
   FaFacebookF,
   FaXTwitter,

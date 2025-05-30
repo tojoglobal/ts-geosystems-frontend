@@ -14,6 +14,7 @@ import { addToCart } from "../../features/AddToCart/AddToCart";
 import { slugify } from "../../utils/slugify";
 import { getProductType } from "../../utils/productOption";
 import { ComponentLoader } from "../../utils/Loader/ComponentLoader";
+import useToastSwal from "../../Hooks/useToastSwal";
 
 const tabOptions = [
   { name: "Featured Products", key: "featured" },
@@ -28,6 +29,7 @@ const ProductHighlights = () => {
   const [items, setItems] = useState([]);
   const swiperRef = useRef(null);
   const [isBeginning, setIsBeginning] = useState(true);
+  const showToast = useToastSwal();
   const [isEnd, setIsEnd] = useState(false);
 
   const {
@@ -54,13 +56,13 @@ const ProductHighlights = () => {
     };
 
     dispatch(addToCart(itemToAdd));
-    Swal.fire({
-      title: "Added to Cart",
-      text: `${product.product_name} has been added to your cart.`,
-      icon: "success",
-      timer: 2000,
-      showConfirmButton: false,
-    });
+
+    showToast(
+      "success",
+      "Added to Cart!",
+      `<b style="color:#333">${product.product_name}</b> has been added to your cart.`,
+      { timer: 2000 }
+    );
   };
 
   const handleSlideChange = (swiper) => {

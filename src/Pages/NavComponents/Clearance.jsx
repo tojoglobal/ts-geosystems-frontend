@@ -13,6 +13,7 @@ import useDataQuery from "../../utils/useDataQuery";
 import { useTrackProductView } from "../../Hooks/useTrackProductView";
 import { slugify } from "../../utils/slugify";
 import { getProductType } from "../../utils/productOption";
+import useToastSwal from "../../Hooks/useToastSwal";
 
 const sortOptions = [
   "FEATURED ITEMS",
@@ -32,6 +33,7 @@ const Clearance = () => {
   const [hoveredProductId, setHoveredProductId] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [compareItems, setCompareItems] = useState([]);
+  const showToast = useToastSwal();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -84,13 +86,12 @@ const Clearance = () => {
     };
 
     dispatch(addToCart(itemToAdd));
-    Swal.fire({
-      title: "Added to Cart",
-      text: `${product.product_name} has been added to your cart.`,
-      icon: "success",
-      timer: 2000,
-      showConfirmButton: false,
-    });
+    showToast(
+      "success",
+      "Added to Cart!",
+      `<b style="color:#333">${product.product_name}</b> has been added to your cart.`,
+      { timer: 2000 }
+    );
   };
 
   if (isLoading) return null;

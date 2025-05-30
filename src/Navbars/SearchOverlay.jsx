@@ -17,6 +17,7 @@ import { parsePrice } from "../utils/parsePrice";
 import { useTrackProductView } from "../Hooks/useTrackProductView";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../features/AddToCart/AddToCart";
+import useToastSwal from "../Hooks/useToastSwal";
 
 const POPULAR_SEARCHES = [
   "rtc360",
@@ -38,6 +39,7 @@ const SearchOverlay = ({ isOpen, onClose }) => {
   const [sortOrder, setSortOrder] = useState("relevance");
   const [showResultsView, setShowResultsView] = useState(false);
   const overlayRef = useRef(null);
+  const showToast = useToastSwal();
   const [latestSearches, setLatestSearches] = useState([
     "blog",
     "leica",
@@ -157,13 +159,13 @@ const SearchOverlay = ({ isOpen, onClose }) => {
     };
 
     dispatch(addToCart(itemToAdd));
-    Swal.fire({
-      title: "Added to Cart",
-      text: `${product.product_name} has been added to your cart.`,
-      icon: "success",
-      timer: 2000,
-      showConfirmButton: false,
-    });
+
+    showToast(
+      "success",
+      "Added to Cart!",
+      `<b style="color:#333">${product.product_name}</b> has been added to your cart.`,
+      { timer: 2000 }
+    );
   };
 
   return (

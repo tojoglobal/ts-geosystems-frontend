@@ -14,6 +14,7 @@ import { parsePrice } from "../utils/parsePrice";
 import { useBreadcrumbLabel } from "../utils/useBreadcrumbLabel";
 import { useTrackProductView } from "../Hooks/useTrackProductView";
 import { getProductType } from "../utils/productOption";
+import useToastSwal from "../Hooks/useToastSwal";
 
 const sortOptions = [
   { label: "NEWEST ITEMS", value: "newest" },
@@ -30,6 +31,7 @@ const CategoryProduct = () => {
   const axiosPublicUrl = useAxiospublic();
   const dispatch = useDispatch();
   const { trackProductView } = useTrackProductView();
+  const showToast = useToastSwal();
   const [sortBy, setSortBy] = useState(sortOptions[0]);
   const [viewMode, setViewMode] = useState("grid");
   const [hoveredProductId, setHoveredProductId] = useState(null);
@@ -78,13 +80,13 @@ const CategoryProduct = () => {
     };
 
     dispatch(addToCart(itemToAdd));
-    Swal.fire({
-      title: "Added to Cart",
-      text: `${product.product_name} has been added to your cart.`,
-      icon: "success",
-      timer: 2000,
-      showConfirmButton: false,
-    });
+
+    showToast(
+      "success",
+      "Added to Cart!",
+      `<b style="color:#333">${product.product_name}</b> has been added to your cart.`,
+      { timer: 2000 }
+    );
   };
 
   const toggleCompare = (productId) => {

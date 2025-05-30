@@ -11,8 +11,10 @@ import {
   FaInstagram,
 } from "react-icons/fa6";
 import { SkeletonLoader } from "../utils/Loader/SkeletonLoader";
+import useToastSwal from "../Hooks/useToastSwal";
 
 const Footer = () => {
+  const showToast = useToastSwal();
   const { user } = useSelector((state) => state.authUser);
   const axiosPublic = useAxiospublic();
   const [email, setEmail] = useState(user?.email || "");
@@ -36,18 +38,10 @@ const Footer = () => {
     setIsSubmitting(true);
     try {
       const res = await axiosPublic.post("/api/subscribers", { email });
-      Swal.fire({
-        title: "Success!",
-        text: res.data.message,
-        icon: "success",
-      });
+      showToast("success", res.data.message || "Subscribed successfully");
       setEmail("");
     } catch (error) {
-      Swal.fire({
-        title: "Error!",
-        text: error.response?.data?.error || "Failed to subscribe",
-        icon: "error",
-      });
+      showToast("error", error.response?.data?.error || "Failed to subscribe");
     } finally {
       setIsSubmitting(false);
     }

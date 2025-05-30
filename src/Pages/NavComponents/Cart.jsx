@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import { RxCross2 } from "react-icons/rx";
-import Swal from "sweetalert2";
 import { useDispatch, useSelector } from "react-redux";
 import { useMemo, useState } from "react";
 import useProductsByIdsQuery from "../../Hooks/useProductsByIdsQuery";
@@ -12,10 +11,12 @@ import {
 } from "../../features/AddToCart/AddToCart";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import { selectMergedCart } from "../../utils/selectMergedCart";
+import useToastSwal from "../../Hooks/useToastSwal";
 
 const Cart = () => {
   const axiosPublicUrl = useAxiospublic();
   const dispatch = useDispatch();
+  const showToast = useToastSwal();
   const { items, coupon } = useSelector((state) => state.cart);
   const [shippingCost, setShippingCost] = useState(5.99);
   const [showCouponInput, setShowCouponInput] = useState(false);
@@ -30,7 +31,7 @@ const Cart = () => {
   const estimateShippingCost = () => {
     if (shippingInfo.country && shippingInfo.zip) {
       setShippingCost(190.79); // Example from your screenshot
-      Swal.fire("Shipping Estimated", "Estimated cost: ৳190.79", "success");
+      showToast("Success", "Shipping Estimated", "Estimated cost: ৳190.79");
     }
   };
 
@@ -44,20 +45,8 @@ const Cart = () => {
   };
 
   const handleRemove = (id) => {
-    Swal.fire({
-      title: "Are you sure?",
-      text: "This item will be removed from your cart.",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#e62245",
-      cancelButtonColor: "#aaa",
-      confirmButtonText: "Yes, remove it!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        dispatch(removeFromCart(id));
-        Swal.fire("Removed!", "Item removed from cart.", "success");
-      }
-    });
+    dispatch(removeFromCart(id));
+    showToast("success", "Removed!", "Item removed from cart.");
   };
 
   const handleApplyCoupon = async () => {
@@ -68,20 +57,20 @@ const Cart = () => {
 
       if (!res.data) {
         const error = await res.json();
-        Swal.fire("Invalid", error.message, "Your Coupon is in valid");
+        showToast("error", "Your Coupon is in valid", error.message);
         dispatch(clearCoupon());
         return;
       }
       const data = res.data;
       dispatch(setCoupon(data));
-      Swal.fire("Success", `Coupon "${data.code_name}" applied!`, "success");
+      showToast("Success", "success", `Coupon "${data.code_name}" applied!`);
     } catch (err) {
       console.error(err);
       dispatch(clearCoupon());
-      Swal.fire(
-        "Error",
-        "An error occurred while applying the coupon",
-        "error"
+      showToast(
+        "error",
+        "error",
+        "An error occurred while applying the coupon"
       );
     }
   };
@@ -208,7 +197,7 @@ const Cart = () => {
                 ) : (
                   <button
                     onClick={() => setShowCouponInput(false)}
-                    className="text-gray-500 ml-2 underline text-sm"
+                    className="text-gray-500 cursor-pointer ml-2 underline text-sm"
                   >
                     Cancel
                   </button>
@@ -226,7 +215,7 @@ const Cart = () => {
                     />
                     <button
                       onClick={handleApplyCoupon}
-                      className="bg-[#e62245] text-white py-2 px-3 mt-2 rounded"
+                      className="bg-[#e62245] cursor-pointer text-white py-2 px-3 mt-2 rounded"
                     >
                       APPLY
                     </button>

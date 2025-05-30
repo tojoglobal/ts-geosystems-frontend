@@ -7,11 +7,13 @@ import { signInWithPopup } from "firebase/auth";
 import { auth, googleProvider } from "./firebase.config.js";
 import { useDispatch } from "react-redux";
 import { loginSuccess } from "../../features/UserAuth/authSlice";
+import useToastSwal from "../../Hooks/useToastSwal.jsx";
 
 const Login = () => {
   const axiosPublic = useAxiospublic();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const showToast = useToastSwal();
   const {
     register,
     handleSubmit,
@@ -40,12 +42,7 @@ const Login = () => {
           })
         );
 
-        Swal.fire({
-          icon: "success",
-          title: "Login successful!",
-          showConfirmButton: false,
-          timer: 1500,
-        });
+        showToast("success", "Login successful!");
         // Redirect based on user role
         if (response.data.user.role === "USER") {
           navigate("/user/account/orders");
@@ -69,13 +66,11 @@ const Login = () => {
           errorMessage = data.Error || errorMessage;
         }
       }
-
-      Swal.fire({
-        icon: "error",
-        title: errorMessage,
-        showConfirmButton: false,
-        timer: 1500,
-      });
+      showToast(
+        "error",
+        "Login Failed",
+        errorMessage || "Invalid username or password"
+      );
     }
   };
 
@@ -92,7 +87,7 @@ const Login = () => {
 
       if (res.status === 200) {
         navigate("/user/account/orders");
-        Swal.fire({ icon: "success", title: "Login successful!", timer: 1500 });
+        showToast("success", "Google Login successful!");
         console.log(res.data);
 
         dispatch(
@@ -127,7 +122,7 @@ const Login = () => {
               </label>
               <input
                 type="email"
-                className="w-full px-3 py-2 border border-gray-300 rounded-sm"
+                className="w-full px-3 py-2 focus:outline-none focus:border focus:border-gray-400 border border-gray-300 rounded-sm"
                 {...register("email", {
                   required: "Email is required",
                   pattern: {
@@ -148,7 +143,7 @@ const Login = () => {
               </label>
               <input
                 type="password"
-                className="w-full px-3 py-2 border border-gray-300 rounded-sm"
+                className="w-full px-3 py-2 border focus:outline-none focus:border focus:border-gray-400 border-gray-300 rounded-sm"
                 {...register("password", {
                   required: "Password is required",
                   minLength: {

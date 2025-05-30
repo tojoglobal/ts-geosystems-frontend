@@ -1,17 +1,19 @@
+/* eslint-disable no-unused-vars */
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import useProductsByIdsQuery from "../../Hooks/useProductsByIdsQuery";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import { toast } from "react-toastify";
-import Swal from "sweetalert2";
 import { selectMergedCart } from "../../utils/selectMergedCart";
 import { clearCart, clearCoupon } from "../../features/AddToCart/AddToCart";
+import useToastSwal from "../../Hooks/useToastSwal";
 
 const Checkout = () => {
   const axiosPublicUrl = useAxiospublic();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const showToast = useToastSwal();
   const { items, coupon, totalQuantity } = useSelector((state) => state.cart);
   const { user, isAuth } = useSelector((state) => state.authUser);
   const [step, setStep] = useState(1);
@@ -161,11 +163,7 @@ const Checkout = () => {
         }
       } catch (err) {
         console.error("SSLCommerz Payment Error:", err);
-        Swal.fire({
-          icon: "error",
-          text: "An error occurred while starting payment.",
-          confirmButtonColor: "#ef4444",
-        });
+        showToast("error", "An error occurred while starting payment.");
       }
     } else if (formData.paymentMethod === "bank") {
       try {
@@ -303,7 +301,7 @@ const Checkout = () => {
                     value={formData.shippingName}
                     onChange={handleInputChange}
                     placeholder="Full Name"
-                    className="border p-2 rounded"
+                    className="border p-2 rounded-sm focus:outline-none focus:border focus:border-gray-400"
                   />
                   <input
                     type="text"
@@ -311,7 +309,7 @@ const Checkout = () => {
                     value={formData.shippingPhone}
                     onChange={handleInputChange}
                     placeholder="Phone Number"
-                    className="border p-2 rounded"
+                    className="border p-2 rounded-sm focus:outline-none focus:border focus:border-gray-400"
                   />
                   <input
                     type="text"
@@ -319,7 +317,7 @@ const Checkout = () => {
                     value={formData.shippingAddress}
                     onChange={handleInputChange}
                     placeholder="Address"
-                    className="border p-2 rounded"
+                    className="border p-2 rounded-sm focus:outline-none focus:border focus:border-gray-400"
                   />
                   <input
                     type="text"
@@ -327,7 +325,7 @@ const Checkout = () => {
                     value={formData.shippingCity}
                     onChange={handleInputChange}
                     placeholder="City"
-                    className="border p-2 rounded"
+                    className="border p-2 rounded-sm focus:outline-none focus:border focus:border-gray-400"
                   />
                   <input
                     type="text"
@@ -335,7 +333,7 @@ const Checkout = () => {
                     value={formData.shippingZip}
                     onChange={handleInputChange}
                     placeholder="Zip Code"
-                    className="border p-2 rounded"
+                    className="border p-2 rounded-sm focus:outline-none focus:border focus:border-gray-400"
                   />
                 </div>
 
@@ -344,7 +342,7 @@ const Checkout = () => {
                   value={formData.shippingComments}
                   onChange={handleInputChange}
                   placeholder="Order Comments"
-                  className="border p-2 rounded w-full mb-4"
+                  className="border p-2 mb-4 w-full rounded-sm focus:outline-none focus:border focus:border-gray-400"
                 />
 
                 <button
@@ -418,7 +416,7 @@ const Checkout = () => {
 
                 <button
                   onClick={handlePlaceOrder}
-                  className="bg-[#e62245] text-white px-4 py-2 rounded"
+                  className="bg-[#e62245] cursor-pointer text-white px-4 py-2 rounded"
                 >
                   Place Order
                 </button>

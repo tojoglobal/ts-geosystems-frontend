@@ -15,6 +15,7 @@ import { useDispatch } from "react-redux";
 import { addToCart } from "../../features/AddToCart/AddToCart";
 import UsedEquipmentBenefits from "./UsedEquipmentBenefits";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
+import useToastSwal from "../../Hooks/useToastSwal";
 
 const sortOptions = [
   "FEATURED ITEMS",
@@ -30,6 +31,7 @@ const sortOptions = [
 const UsedEquipment = () => {
   const axiosPublicUrl = useAxiospublic();
   const dispatch = useDispatch();
+  const showToast = useToastSwal();
   const { trackProductView } = useTrackProductView();
   const [viewMode, setViewMode] = useState("grid");
   const [sortBy, setSortBy] = useState("FEATURED ITEMS");
@@ -79,13 +81,12 @@ const UsedEquipment = () => {
     };
 
     dispatch(addToCart(itemToAdd));
-    Swal.fire({
-      title: "Added to Cart",
-      text: `${product.product_name} has been added to your cart.`,
-      icon: "success",
-      timer: 2000,
-      showConfirmButton: false,
-    });
+    showToast(
+      "success",
+      "Added to Cart!",
+      `<b style="color:#333">${product.product_name}</b> has been added to your cart.`,
+      { timer: 2000 }
+    );
   };
 
   const handleCompareSelected = () => {
