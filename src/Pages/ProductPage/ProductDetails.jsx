@@ -16,6 +16,7 @@ import {
 import { addToCart } from "../../features/AddToCart/AddToCart";
 import { parsePrice } from "../../utils/parsePrice";
 import useDataQuery from "../../utils/useDataQuery";
+import { setBreadcrumb } from "../../features/breadcrumb/breadcrumbSlice";
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -32,7 +33,6 @@ const ProductDetails = () => {
     isError,
     error,
   } = useDataQuery(["productDetails", id], `/api/products/${id}`, !!id);
-  
   // Parse the image URLs from the product data
   const imageUrls = product?.image_urls ? JSON.parse(product.image_urls) : [];
   // Parse video URLs if available
@@ -48,6 +48,30 @@ const ProductDetails = () => {
     // If product changes, ensure selectedImage resets
     // eslint-disable-next-line
   }, [product]);
+
+  // After product loads, set the breadcrumb
+  useEffect(() => {
+    if (product && product.product_name) {
+      let catData = product.category ? JSON.parse(product.category) : null;
+      let subcatData = product.sub_category
+        ? JSON.parse(product.sub_category)
+        : null;
+      dispatch(
+        setBreadcrumb({
+          category: catData
+            ? { slug: catData.cat, name: catData.cat.replace(/-/g, " ") }
+            : null,
+          subcategory: subcatData
+            ? {
+                slug: subcatData.slug,
+                name: subcatData.slug.replace(/-/g, " "),
+              }
+            : null,
+          product: { id: product.id, name: product.product_name },
+        })
+      );
+    }
+  }, [product, dispatch]);
 
   // Quantity handlers
   const incrementQuantity = () => setQuantity((prev) => prev + 1);
