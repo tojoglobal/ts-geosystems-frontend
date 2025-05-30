@@ -661,14 +661,14 @@ const MobileNavbar = () => {
           </div>
         </div>
       </div>
-      {isCartVisible && (
+      {/* {isCartVisible && (
         <div
           ref={cartRef}
           className="fixed top-12 right-0 z-[100] w-[90vw] max-w-sm"
         >
           <CartWithPopover />
         </div>
-      )}
+      )} */}
     </div>
   );
 };

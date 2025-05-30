@@ -94,7 +94,7 @@ const Footer = () => {
     : "";
   const mailing_title = footerData.mailing_title || "";
   const mailing_text = footerData.mailing_text || "";
-  const bg_color = footerData.bg_color || "";
+  const bg_color = footerData.bg_color || "#000000";
 
   return (
     <footer
