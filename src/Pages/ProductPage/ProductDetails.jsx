@@ -1,13 +1,15 @@
 import Swal from "sweetalert2";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Thumbs } from "swiper/modules";
 import { FaFacebook, FaLinkedin, FaTwitter, FaPinterest } from "react-icons/fa";
 import Recommended from "./Recommended";
 import { useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { MdOutlineKeyboardArrowDown } from "react-icons/md";
-import { MdOutlineKeyboardArrowUp } from "react-icons/md";
+import {
+  MdOutlineKeyboardArrowDown,
+  MdOutlineKeyboardArrowUp,
+} from "react-icons/md";
 import { addToCart } from "../../features/AddToCart/AddToCart";
 import { parsePrice } from "../../utils/parsePrice";
 import useDataQuery from "../../utils/useDataQuery";
@@ -24,19 +26,30 @@ const ProductDetails = () => {
   const {
     data: product = {},
     isLoading,
+    isError,
     error,
   } = useDataQuery(["productDetails", id], `/api/products/${id}`, !!id);
-  
-  // Quantity handlers
-  const incrementQuantity = () => {
-    setQuantity((prev) => prev + 1);
-  };
 
-  const decrementQuantity = () => {
-    if (quantity > 1) {
-      setQuantity((prev) => prev - 1);
+  // Parse the image URLs from the product data
+  const imageUrls = product?.image_urls ? JSON.parse(product.image_urls) : [];
+  // Parse video URLs if available
+  const videoUrls = product?.video_urls ? product.video_urls.split(",") : [];
+  const category = product?.category ? JSON.parse(product.category).cat : null;
+  const currentProductId = product?.id;
+
+  // Set default selected image if not set, only on initial load or when product changes
+  useEffect(() => {
+    if (!selectedImage && imageUrls.length > 0) {
+      setSelectedImage(imageUrls[0]);
     }
-  };
+    // If product changes, ensure selectedImage resets
+    // eslint-disable-next-line
+  }, [product]);
+
+  // Quantity handlers
+  const incrementQuantity = () => setQuantity((prev) => prev + 1);
+  const decrementQuantity = () =>
+    quantity > 1 && setQuantity((prev) => prev - 1);
 
   // Add to cart handler
   const handleAddToCart = () => {
@@ -44,10 +57,9 @@ const ProductDetails = () => {
       id: product.id,
       product_name: product.product_name,
       price: parsePrice(product.price),
-      quantity: quantity,
+      quantity,
     };
     dispatch(addToCart(itemToAdd));
-
     Swal.fire({
       title: "Added to Cart",
       text: `${product.product_name} has been added to your cart.`,
@@ -57,26 +69,9 @@ const ProductDetails = () => {
     });
   };
 
-  // Parse the image URLs from the product data
-  const imageUrls = product?.image_urls ? JSON.parse(product.image_urls) : [];
-  // Parse video URLs if available
-  const videoUrls = product?.video_urls ? product.video_urls.split(",") : [];
-
-  const category = product?.category ? JSON.parse(product.category).cat : null;
-  const currentProductId = product?.id;
-  
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>Error loading product details</div>;
-  }
-
-  // Set default selected image if not set
-  if (!selectedImage && imageUrls.length > 0) {
-    setSelectedImage(imageUrls[0]);
-  }
+  if (isLoading) return null;
+  if (isError)
+    return <div>{error.message} ||Error loading product details</div>;
 
   return (
     <div className="bg-white p-3">
@@ -84,60 +79,40 @@ const ProductDetails = () => {
         <div className="flex flex-col md:flex-row gap-5">
           {/* Image Gallery */}
           <div className="flex flex-col items-start gap-2 relative">
-            {/* Badges */}
-            {/* <div className="absolute top-2 left-2 z-10">
-              <div className="flex flex-col gap-2">
-                <span className="bg-[#ffa000] text-white text-xs px-2 py-1 rounded">
-                  Featured
-                </span>
-                {product.priceShowHide ? (
-                  <span className="bg-[#daa520] text-white text-xs px-2 py-1 rounded">
-                    -17%
-                  </span>
-                ) : null}
-              </div>
-            </div> */}
-            <div className="w-[550px] h-[550px] overflow-hidden">
-              <Swiper
-                spaceBetween={0}
-                slidesPerView={1}
-                modules={[Navigation, Thumbs]}
-                className="w-full h-full"
-              >
-                {imageUrls.map((img, index) => (
-                  <SwiperSlide key={index}>
-                    <img
-                      src={`${import.meta.env.VITE_OPEN_APIURL}${img}`}
-                      alt={`Product ${index + 1}`}
-                      className="w-full h-full object-contain"
-                    />
-                  </SwiperSlide>
-                ))}
-              </Swiper>
+            {/* Main Image */}
+            <div className="w-[550px] h-[550px] overflow-hidden border rounded">
+              {selectedImage ? (
+                <img
+                  src={`${import.meta.env.VITE_OPEN_APIURL}${selectedImage}`}
+                  alt="Selected Product"
+                  className="w-full h-full object-contain"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center text-gray-400">
+                  No Image
+                </div>
+              )}
             </div>
-            {/* Swiper for thumbnails */}
+            {/* Thumbnails */}
             {imageUrls.length > 1 && (
-              <Swiper
-                spaceBetween={10}
-                slidesPerView={4}
-                modules={[Navigation, Thumbs]}
-                className="w-80"
-              >
+              <div className="flex justify-center gap-2 mt-2 w-[550px]">
                 {imageUrls.map((img, index) => (
-                  <SwiperSlide
+                  <div
                     key={index}
                     onClick={() => setSelectedImage(img)}
+                    className={`border p-1 rounded cursor-pointer hover:ring ring-black ${
+                      selectedImage === img ? "ring ring-black" : ""
+                    }`}
+                    style={{ width: "70px", height: "70px" }}
                   >
-                    <div className="border p-1 rounded cursor-pointer hover:ring-2 ring-[#e62245]">
-                      <img
-                        src={`${import.meta.env.VITE_OPEN_APIURL}${img}`}
-                        alt={`Thumb ${index}`}
-                        className="w-full h-16 object-contain"
-                      />
-                    </div>
-                  </SwiperSlide>
+                    <img
+                      src={`${import.meta.env.VITE_OPEN_APIURL}${img}`}
+                      alt={`Thumb ${index}`}
+                      className="w-full h-full object-contain"
+                    />
+                  </div>
                 ))}
-              </Swiper>
+              </div>
             )}
           </div>
           {/* Product Info */}
@@ -164,18 +139,6 @@ const ProductDetails = () => {
                 </span>
               </div>
             </div>
-            {/* <p className="text-[#8d7f90] text-lg mb-4">
-              {product.product_overview &&
-                product.product_overview
-                  .replace(/<[^>]+>/g, "")
-                  .substring(0, 150) + "..."}
-              <button
-                onClick={handleReadMoreClick}
-                className="text-[#e62245] cursor-pointer hover:underline"
-              >
-                Read more
-              </button>
-            </p> */}
             <hr className="border-t border-gray-300 my-3" />
             <div className="text-sm text-[#222] mb-1">
               <strong>SKU:</strong>{" "}
@@ -222,9 +185,9 @@ const ProductDetails = () => {
             {product?.isStock === 1 && (
               <button
                 onClick={handleAddToCart}
-                className="relative cursor-pointer overflow-hidden group text-white px-16 font-semibold py-[5px] rounded-[3px] text-[17px] bg-[#e62245]"
+                className="cursor-pointer overflow-hidden group text-white px-18 font-semibold py-[4px] rounded-[3px] text-[17px] bg-[#e62245] hover:bg-red-800"
               >
-                <span className="absolute left-0 top-0 h-full w-0 bg-black transition-all duration-500 ease-out group-hover:w-full z-0"></span>
+                {/* <span className="absolute left-0 top-0 h-full w-0 bg-black transition-all duration-500 ease-out group-hover:w-full z-0"></span> */}
                 <span className="relative z-10">ADD TO CART</span>
               </button>
             )}
