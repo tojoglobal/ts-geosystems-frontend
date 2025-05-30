@@ -83,7 +83,7 @@ const ProductDetails = () => {
           {/* Image Gallery */}
           <div className="flex flex-col items-start gap-2 relative">
             {/* Main Image */}
-            <div className="w-[550px] h-[550px] overflow-hidden border rounded">
+            <div className="w-[550px] h-[550px] overflow-hidden rounded">
               {selectedImage ? (
                 <img
                   src={`${import.meta.env.VITE_OPEN_APIURL}${selectedImage}`}
@@ -103,7 +103,7 @@ const ProductDetails = () => {
                   <div
                     key={index}
                     onClick={() => setSelectedImage(img)}
-                    className={`border p-1 rounded cursor-pointer hover:ring ring-black ${
+                    className={`p-1 rounded cursor-pointer hover:ring ring-black ${
                       selectedImage === img ? "ring ring-black" : ""
                     }`}
                     style={{ width: "70px", height: "70px" }}

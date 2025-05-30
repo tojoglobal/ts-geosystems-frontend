@@ -6,6 +6,7 @@ import CartSlice from "./features/AddToCart/AddToCart";
 import StickySlice from "./features/Sticky/Sticky";
 import cartToggleReducer from "./features/CartToggleSlice/CartToggleSlice";
 import authUserReducer from "./features/UserAuth/authSlice";
+import breadcrumbReducer from "./features/breadcrumb/breadcrumbSlice"; 
 
 import {
   FLUSH,
@@ -29,6 +30,7 @@ const rootReducer = combineReducers({
   cart: CartSlice,
   sticky: StickySlice,
   cartToggle: cartToggleReducer,
+  breadcrumb: breadcrumbReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
