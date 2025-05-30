@@ -32,7 +32,7 @@ const ProductDetails = () => {
     isError,
     error,
   } = useDataQuery(["productDetails", id], `/api/products/${id}`, !!id);
-
+  
   // Parse the image URLs from the product data
   const imageUrls = product?.image_urls ? JSON.parse(product.image_urls) : [];
   // Parse video URLs if available
