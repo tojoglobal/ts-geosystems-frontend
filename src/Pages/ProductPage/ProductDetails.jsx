@@ -4,7 +4,7 @@ import {
   FaFacebookF,
   FaXTwitter,
   FaLinkedinIn,
-  FaPinterestP,
+  FaWhatsapp,
 } from "react-icons/fa6";
 import Recommended from "./Recommended";
 import { useParams } from "react-router-dom";
@@ -198,43 +198,67 @@ const ProductDetails = () => {
               <div className="flex items-center gap-2">
                 <span className="font-medium text-[#8d7f90]">Share:</span>
                 <div className="flex gap-1">
-                  {/* LinkedIn */}
-                  <button
-                    className="flex justify-center items-center w-10 h-8 bg-[#0077B5] hover:bg-[#006097] transition-colors"
-                    style={{ transform: "skewX(-15deg)" }}
-                  >
-                    <div style={{ transform: "skewX(15deg)" }}>
-                      <FaLinkedinIn className="text-white text-sm" />
-                    </div>
-                  </button>
-
                   {/* Facebook */}
                   <button
-                    className="flex justify-center items-center w-10 h-8 bg-[#155dfc] hover:bg-[#0f4bc2] transition-colors"
+                    className="flex justify-center items-center w-10 h-[29px] bg-[#1877F2] hover:bg-[#166FE5] transition-colors"
                     style={{ transform: "skewX(-15deg)" }}
+                    onClick={() =>
+                      window.open(
+                        `https://www.facebook.com/sharer/sharer.php?u=${window.location.href}`,
+                        "_blank"
+                      )
+                    }
                   >
                     <div style={{ transform: "skewX(15deg)" }}>
                       <FaFacebookF className="text-white text-sm" />
                     </div>
                   </button>
 
+                  {/* LinkedIn */}
+                  <button
+                    className="flex justify-center items-center w-10 h-[29px] bg-[#0077B5] hover:bg-[#006097] transition-colors"
+                    style={{ transform: "skewX(-15deg)" }}
+                    onClick={() =>
+                      window.open(
+                        `https://www.linkedin.com/sharing/share-offsite/?url=${window.location.href}`,
+                        "_blank"
+                      )
+                    }
+                  >
+                    <div style={{ transform: "skewX(15deg)" }}>
+                      <FaLinkedinIn className="text-white text-sm" />
+                    </div>
+                  </button>
+
                   {/* Twitter */}
                   <button
-                    className="flex justify-center items-center w-10 h-8 bg-[#000000] hover:bg-[#333333] transition-colors"
+                    className="flex justify-center items-center w-10 h-[29px] bg-[#000000] hover:bg-[#333333] transition-colors"
                     style={{ transform: "skewX(-15deg)" }}
+                    onClick={() =>
+                      window.open(
+                        `https://twitter.com/intent/tweet?url=${window.location.href}`,
+                        "_blank"
+                      )
+                    }
                   >
                     <div style={{ transform: "skewX(15deg)" }}>
                       <FaXTwitter className="text-white text-sm" />
                     </div>
                   </button>
 
-                  {/* Pinterest */}
+                  {/* WhatsApp */}
                   <button
-                    className="flex justify-center items-center w-10 h-8 bg-[#E60023] hover:bg-[#cc001f] transition-colors"
+                    className="flex justify-center items-center w-10 h-[29px] bg-[#25D366] hover:bg-[#1DA851] transition-colors"
                     style={{ transform: "skewX(-15deg)" }}
+                    onClick={() =>
+                      window.open(
+                        `https://wa.me/?text=Check%20this%20out:%20${window.location.href}`,
+                        "_blank"
+                      )
+                    }
                   >
                     <div style={{ transform: "skewX(15deg)" }}>
-                      <FaPinterestP className="text-white text-sm" />
+                      <FaWhatsapp className="text-white text-sm" />
                     </div>
                   </button>
                 </div>
