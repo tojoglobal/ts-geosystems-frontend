@@ -4,7 +4,7 @@ import {
   FaFacebookF,
   FaXTwitter,
   FaLinkedinIn,
-  FaPinterestP,
+  FaWhatsapp,
 } from "react-icons/fa6";
 import Recommended from "./Recommended";
 import { useParams } from "react-router-dom";
@@ -16,6 +16,7 @@ import {
 import { addToCart } from "../../features/AddToCart/AddToCart";
 import { parsePrice } from "../../utils/parsePrice";
 import useDataQuery from "../../utils/useDataQuery";
+import { setBreadcrumb } from "../../features/breadcrumb/breadcrumbSlice";
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -32,7 +33,6 @@ const ProductDetails = () => {
     isError,
     error,
   } = useDataQuery(["productDetails", id], `/api/products/${id}`, !!id);
-
   // Parse the image URLs from the product data
   const imageUrls = product?.image_urls ? JSON.parse(product.image_urls) : [];
   // Parse video URLs if available
@@ -48,6 +48,30 @@ const ProductDetails = () => {
     // If product changes, ensure selectedImage resets
     // eslint-disable-next-line
   }, [product]);
+
+  // After product loads, set the breadcrumb
+  useEffect(() => {
+    if (product && product.product_name) {
+      let catData = product.category ? JSON.parse(product.category) : null;
+      let subcatData = product.sub_category
+        ? JSON.parse(product.sub_category)
+        : null;
+      dispatch(
+        setBreadcrumb({
+          category: catData
+            ? { slug: catData.cat, name: catData.cat.replace(/-/g, " ") }
+            : null,
+          subcategory: subcatData
+            ? {
+                slug: subcatData.slug,
+                name: subcatData.slug.replace(/-/g, " "),
+              }
+            : null,
+          product: { id: product.id, name: product.product_name },
+        })
+      );
+    }
+  }, [product, dispatch]);
 
   // Quantity handlers
   const incrementQuantity = () => setQuantity((prev) => prev + 1);
@@ -83,7 +107,7 @@ const ProductDetails = () => {
           {/* Image Gallery */}
           <div className="flex flex-col items-start gap-2 relative">
             {/* Main Image */}
-            <div className="w-[550px] h-[550px] overflow-hidden border rounded">
+            <div className="w-[550px] h-[550px] overflow-hidden rounded">
               {selectedImage ? (
                 <img
                   src={`${import.meta.env.VITE_OPEN_APIURL}${selectedImage}`}
@@ -103,7 +127,7 @@ const ProductDetails = () => {
                   <div
                     key={index}
                     onClick={() => setSelectedImage(img)}
-                    className={`border p-1 rounded cursor-pointer hover:ring ring-black ${
+                    className={`p-1 rounded cursor-pointer hover:ring ring-black ${
                       selectedImage === img ? "ring ring-black" : ""
                     }`}
                     style={{ width: "70px", height: "70px" }}
@@ -198,43 +222,67 @@ const ProductDetails = () => {
               <div className="flex items-center gap-2">
                 <span className="font-medium text-[#8d7f90]">Share:</span>
                 <div className="flex gap-1">
-                  {/* LinkedIn */}
-                  <button
-                    className="flex justify-center items-center w-10 h-8 bg-[#0077B5] hover:bg-[#006097] transition-colors"
-                    style={{ transform: "skewX(-15deg)" }}
-                  >
-                    <div style={{ transform: "skewX(15deg)" }}>
-                      <FaLinkedinIn className="text-white text-sm" />
-                    </div>
-                  </button>
-
                   {/* Facebook */}
                   <button
-                    className="flex justify-center items-center w-10 h-8 bg-[#155dfc] hover:bg-[#0f4bc2] transition-colors"
+                    className="flex justify-center items-center w-10 h-[29px] bg-[#1877F2] hover:bg-[#166FE5] transition-colors"
                     style={{ transform: "skewX(-15deg)" }}
+                    onClick={() =>
+                      window.open(
+                        `https://www.facebook.com/sharer/sharer.php?u=${window.location.href}`,
+                        "_blank"
+                      )
+                    }
                   >
                     <div style={{ transform: "skewX(15deg)" }}>
                       <FaFacebookF className="text-white text-sm" />
                     </div>
                   </button>
 
+                  {/* LinkedIn */}
+                  <button
+                    className="flex justify-center items-center w-10 h-[29px] bg-[#0077B5] hover:bg-[#006097] transition-colors"
+                    style={{ transform: "skewX(-15deg)" }}
+                    onClick={() =>
+                      window.open(
+                        `https://www.linkedin.com/sharing/share-offsite/?url=${window.location.href}`,
+                        "_blank"
+                      )
+                    }
+                  >
+                    <div style={{ transform: "skewX(15deg)" }}>
+                      <FaLinkedinIn className="text-white text-sm" />
+                    </div>
+                  </button>
+
                   {/* Twitter */}
                   <button
-                    className="flex justify-center items-center w-10 h-8 bg-[#000000] hover:bg-[#333333] transition-colors"
+                    className="flex justify-center items-center w-10 h-[29px] bg-[#000000] hover:bg-[#333333] transition-colors"
                     style={{ transform: "skewX(-15deg)" }}
+                    onClick={() =>
+                      window.open(
+                        `https://twitter.com/intent/tweet?url=${window.location.href}`,
+                        "_blank"
+                      )
+                    }
                   >
                     <div style={{ transform: "skewX(15deg)" }}>
                       <FaXTwitter className="text-white text-sm" />
                     </div>
                   </button>
 
-                  {/* Pinterest */}
+                  {/* WhatsApp */}
                   <button
-                    className="flex justify-center items-center w-10 h-8 bg-[#E60023] hover:bg-[#cc001f] transition-colors"
+                    className="flex justify-center items-center w-10 h-[29px] bg-[#25D366] hover:bg-[#1DA851] transition-colors"
                     style={{ transform: "skewX(-15deg)" }}
+                    onClick={() =>
+                      window.open(
+                        `https://wa.me/?text=Check%20this%20out:%20${window.location.href}`,
+                        "_blank"
+                      )
+                    }
                   >
                     <div style={{ transform: "skewX(15deg)" }}>
-                      <FaPinterestP className="text-white text-sm" />
+                      <FaWhatsapp className="text-white text-sm" />
                     </div>
                   </button>
                 </div>

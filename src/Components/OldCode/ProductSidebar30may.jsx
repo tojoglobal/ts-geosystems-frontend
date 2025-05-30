@@ -1,17 +1,14 @@
 import { useState, useEffect } from "react";
-import { Link, useParams, useLocation } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { SlArrowDown, SlArrowUp } from "react-icons/sl";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import { useQuery } from "@tanstack/react-query";
 import useDataQuery from "../../utils/useDataQuery";
-import { useSelector } from "react-redux";
 
 const ProductSidebar = () => {
   const { category, subcategory } = useParams();
-  const location = useLocation();
   const axiosPublicUrl = useAxiospublic();
   const [openSections, setOpenSections] = useState({});
-  const breadcrumb = useSelector((state) => state.breadcrumb);
 
   // Fetch categories
   const {
@@ -47,40 +44,12 @@ const ProductSidebar = () => {
     ["popularBrandPhoto"],
     "/api/brand/popular-photo"
   );
-  
-  useEffect(() => {
-    // Find out which category should be open.
-    let catSlug =
-      (location.pathname.startsWith("/products/") &&
-        breadcrumb?.category?.slug) ||
-      category;
-
-    if (catSlug && categoriesData?.categories) {
-      const foundCategory = categoriesData.categories.find(
-        (cat) => cat.slug_name === catSlug
-      );
-      if (foundCategory) {
-        setOpenSections({
-          [foundCategory.category_name]: true, // <-- Only this one open!
-        });
-      }
-    }
-    // If no category, close all
-    if (!catSlug) setOpenSections({});
-  }, [category, categoriesData, breadcrumb?.category, location.pathname]);
 
   useEffect(() => {
-    // Find out which category should be open.
-    let catSlug =
-      // If on details page, prefer breadcrumb (which is set by click or by details page on direct load)
-      (location.pathname.startsWith("/products/") &&
-        breadcrumb?.category?.slug) ||
-      // Else, use category param as usual
-      category;
-
-    if (catSlug && categoriesData?.categories) {
+    // Automatically open the section if category is in URL params
+    if (category && categoriesData?.categories) {
       const foundCategory = categoriesData.categories.find(
-        (cat) => cat.slug_name === catSlug
+        (cat) => cat.slug_name === category
       );
       if (foundCategory) {
         setOpenSections((prev) => ({
@@ -89,8 +58,7 @@ const ProductSidebar = () => {
         }));
       }
     }
-  }, [category, categoriesData, breadcrumb?.category, location.pathname]);
-  // --- END AUTO-OPEN LOGIC ---
+  }, [category, categoriesData]);
 
   const toggleSection = (label) => {
     setOpenSections((prev) => ({
@@ -137,16 +105,6 @@ const ProductSidebar = () => {
     },
   ];
 
-  // Figure out which category/subcategory should be highlighted
-  const activeCategorySlug =
-    (location.pathname.startsWith("/products/") &&
-      breadcrumb?.category?.slug) ||
-    category;
-  const activeSubcategorySlug =
-    (location.pathname.startsWith("/products/") &&
-      breadcrumb?.subcategory?.slug) ||
-    subcategory;
-
   return (
     <div className="w-full mt-3">
       {dynamicSidebarData.map((item, index) =>
@@ -168,17 +126,14 @@ const ProductSidebar = () => {
                       ? "border-b-2 border-[#e62245]"
                       : ""
                   } ${
-                    activeCategorySlug === item.categorySlug
+                    category === item.categorySlug
                       ? "text-[#e62245] font-bold"
                       : ""
                   }`}
                 >
                   <span>{item.label}</span>
                   <button
-                    onClick={(e) => {
-                      e.preventDefault();
-                      toggleSection(item.label);
-                    }}
+                    onClick={() => toggleSection(item.label)}
                     className="cursor-pointer"
                   >
                     {openSections[item.label] ? (
@@ -199,9 +154,9 @@ const ProductSidebar = () => {
                             : `/${item.categorySlug}/${child.slug}`
                         }
                         className={`font-normal capitalize block px-5 py-3 text-[13px] hover:bg-gray-50 border-t border-[#ebebeb] ${
-                          activeSubcategorySlug === child.slug &&
-                          activeCategorySlug === item.categorySlug
-                            ? "text-[#e62245] font-bold"
+                          subcategory === child.slug &&
+                          category === item.categorySlug
+                            ? "text-[#e62245]"
                             : ""
                         }`}
                       >
@@ -215,9 +170,7 @@ const ProductSidebar = () => {
               <Link
                 to={item.link}
                 className={`block p-[11px] hover:text-[#e62245] font-medium hover:underline ${
-                  item.link === `/${activeCategorySlug}`
-                    ? "text-[#e62245] font-bold"
-                    : ""
+                  item.link === `/${category}` ? "text-[#e62245] font-bold" : ""
                 }`}
               >
                 {item.label}

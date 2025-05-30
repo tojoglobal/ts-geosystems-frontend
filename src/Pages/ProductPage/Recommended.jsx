@@ -58,7 +58,7 @@ const Recommended = ({ category, currentProductId }) => {
   return (
     <div className="max-w-[1370px] mx-auto rounded-md py-6 relative">
       {/* Tab Header */}
-      <div className="flex items-center justify-between border border-gray-200">
+      <div className="flex items-center justify-between rounded-[4px] border border-gray-200">
         <div className="relative cursor-pointer group px-3 py-1">
           <div className="relative">
             <h2 className="text-[#e62245] text-base py-1 uppercase text-[20px] font-semibold w-fit pr-3 border-r border-gray-200">
@@ -92,10 +92,10 @@ const Recommended = ({ category, currentProductId }) => {
         </div>
       </div>
       {/* Swiper */}
-      <div className="mt-4">
+      <div className="mt-7">
         <Swiper
           modules={[Navigation]}
-          spaceBetween={10}
+          spaceBetween={33}
           slidesPerView={3}
           slidesPerGroup={3}
           onSwiper={(swiper) => {
@@ -141,7 +141,7 @@ const Recommended = ({ category, currentProductId }) => {
                       product.product_name || ""
                     )}`}
                   >
-                    <div className="relative group w-full max-w-[120px] sm:max-w-[140px] md:max-w-[260px] mx-auto">
+                    <div className="relative group w-full max-w-[120px] sm:max-w-[140px] md:max-w-[260px] mx-auto min-h-[300px]">
                       <img
                         src={mainImage}
                         alt={product.product_name}
