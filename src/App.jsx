@@ -92,6 +92,8 @@ import AdminUpdateSupport from "./Pages/Control/AdminUpdateSupport";
 import CreditAccountApplication from "./Pages/NavComponents/CreditAccountApplication";
 import AdminUpdateUsedEquipment from "./Pages/Control/AdminUpdateUsedEquipment";
 import AdminUpdateFooter from "./Pages/Control/AdminUpdateFooter";
+import SiteMap from "./Components/SiteMap";
+import HelpDeskButton from "./Pages/HelpDeskButton";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -142,6 +144,7 @@ const AppLayout = () => {
         <Route path="/thank-you" element={<ThankYou />} />
         {/* welcome rotue */}
         <Route path="/welcome" element={<WelcomePage />} />
+        <Route path="/sitemap" element={<SiteMap />} />
         {/* Auth user Routes */}
         {/* <Route path="/user/login" element={<Login />} /> */}
         {/* <Route path="/user/create_account" element={<Register />} /> */}
@@ -265,6 +268,7 @@ function App() {
           future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
         >
           <AppLayout />
+          <HelpDeskButton />
         </Router>
       </AppProvider>
     </>

@@ -237,9 +237,11 @@ const Footer = () => {
       </div>
       <hr className="border-gray-400 pt-2 mb-4" />
       <div className="max-w-[85%] mx-auto flex flex-col md:flex-row justify-between items-center text-sm pb-6">
-        <p>
-          TS Geosystem © All rights reserved |{" "}
-          <Link to="/sitemap">Sitemap</Link>
+        <p className="flex items-center gap-1">
+          TS Geosystem © All rights reserved |
+          <Link to="/sitemap" className="hover:text-crimson-red">
+            Sitemap
+          </Link>
         </p>
         <div className="text-white text-center">
           <p>
