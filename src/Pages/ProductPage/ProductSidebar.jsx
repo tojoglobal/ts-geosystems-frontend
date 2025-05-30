@@ -47,7 +47,7 @@ const ProductSidebar = () => {
     ["popularBrandPhoto"],
     "/api/brand/popular-photo"
   );
-  
+
   useEffect(() => {
     // Find out which category should be open.
     let catSlug =
@@ -163,17 +163,17 @@ const ProductSidebar = () => {
               <div>
                 <Link
                   to={item?.categorySlug}
-                  className={`w-full text-xs capitalize hover:text-[#e62245] flex items-center justify-between bg-[#ebebeb] font-medium text-left p-3 ${
+                  className={`w-full text-xs capitalize hover:text-[#e62245] flex items-center justify-between bg-[#ebebeb] font-bold text-left p-3 ${
                     openSections[item.label]
                       ? "border-b-2 border-[#e62245]"
                       : ""
                   } ${
                     activeCategorySlug === item.categorySlug
-                      ? "text-[#e62245] font-bold"
+                      ? "text-[#e62245]"
                       : ""
                   }`}
                 >
-                  <span>{item.label}</span>
+                  {item.label}
                   <button
                     onClick={(e) => {
                       e.preventDefault();
@@ -214,10 +214,8 @@ const ProductSidebar = () => {
             ) : (
               <Link
                 to={item.link}
-                className={`block p-[11px] hover:text-[#e62245] font-medium hover:underline ${
-                  item.link === `/${activeCategorySlug}`
-                    ? "text-[#e62245] font-bold"
-                    : ""
+                className={`block p-[11px] hover:text-[#e62245] font-bold hover:underline ${
+                  item.link === `/${activeCategorySlug}` ? "text-[#e62245]" : ""
                 }`}
               >
                 {item.label}
