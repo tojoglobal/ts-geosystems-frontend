@@ -201,7 +201,7 @@ const ProductSidebar = () => {
                             ? `/${child.slug}`
                             : `/${item.categorySlug}/${child.slug}`
                         }
-                        className={`font-normal capitalize block px-5 py-3 text-[13px] hover:bg-gray-50 border-t border-[#ebebeb] ${
+                        className={`font-normal capitalize block px-5 py-3 text-[13px] hover:bg-gray-50 hover:text-[#e62245] border-t border-[#ebebeb] ${
                           activeSubcategorySlug === child.slug &&
                           activeCategorySlug === item.categorySlug
                             ? "text-[#e62245] font-bold"
