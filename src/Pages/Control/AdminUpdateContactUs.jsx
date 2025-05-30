@@ -331,7 +331,7 @@ const AdminUpdateContactUs = () => {
         {/* Social Media Section */}
         <div>
           <h2 className="text-lg font-semibold mb-3 text-gray-100">
-            Social Media Links
+            Social Media Links (Both for Contact us and Footer)
           </h2>
           <div className="grid md:grid-cols-2 gap-4">
             {["facebook", "twitter", "youtube", "instagram"].map((platform) => (

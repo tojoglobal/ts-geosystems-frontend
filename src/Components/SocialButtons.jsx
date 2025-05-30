@@ -37,7 +37,7 @@ const SocialButtons = ({ contactInfo }) => {
   ];
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-4 gap-1 w-full max-w-md mx-auto z-10">
+    <div className="grid grid-cols-2 sm:grid-cols-4 gap-1 w-full max-w-[350px] z-10">
       {buttons.map(
         (btn) =>
           btn.url && (

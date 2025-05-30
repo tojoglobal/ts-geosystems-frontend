@@ -24,6 +24,7 @@ import {
 import CartWithPopover from "./CartWithPopover";
 
 const MobileNavbar = () => {
+  const submenuRef = useRef(null);
   const { trackProductView } = useTrackProductView();
   const searchInputRef = useRef(null);
   const axiosPublicUrl = useAxiospublic();
@@ -31,12 +32,11 @@ const MobileNavbar = () => {
   const { isCartVisible } = useSelector((state) => state.cartToggle);
   const { totalQuantity } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
-
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [openCategory, setOpenCategory] = useState(null);
-  const submenuRefs = useRef({});
-
+  const [submenuHeight, setSubmenuHeight] = useState(0);
+  const [animatingCategory, setAnimatingCategory] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [showResults, setShowResults] = useState(false);
@@ -48,6 +48,7 @@ const MobileNavbar = () => {
       if (isSearchOpen && !event.target.closest(".search-container")) {
         setShowResults(false);
       }
+      // Add cart click outside detection
       if (
         isCartVisible &&
         cartRef.current &&
@@ -62,7 +63,6 @@ const MobileNavbar = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isSearchOpen, isCartVisible, dispatch]);
-
   // Fetch categories
   const {
     data: categoriesData,
@@ -139,7 +139,7 @@ const MobileNavbar = () => {
     },
     { title: "TRADE IN", link: "/trade-in" },
     { title: "TS Blog", link: "/ts-blog" },
-    { title: "About Us", link: "/about-us" },
+    { title: "TS Blog", link: "/about-us" },
     { title: "Contact Us", link: "/contact-us" },
   ];
 
@@ -197,7 +197,6 @@ const MobileNavbar = () => {
       setIsSearchOpen(false);
       setSearchQuery("");
       setShowResults(false);
-      setOpenCategory(null); // Close any open submenus when the main menu closes
     }
   };
 
@@ -217,12 +216,40 @@ const MobileNavbar = () => {
   };
 
   const handleCategoryClick = (title) => {
-    setOpenCategory((prev) => (prev === title ? null : title));
+    if (openCategory === title) {
+      setAnimatingCategory(title);
+      setSubmenuHeight(0);
+      setTimeout(() => {
+        setOpenCategory(null);
+        setAnimatingCategory(null);
+      }, 500);
+    } else {
+      setOpenCategory(title);
+      setAnimatingCategory(title);
+      setTimeout(() => {
+        if (submenuRef.current) {
+          setSubmenuHeight(submenuRef.current.scrollHeight);
+        }
+      }, 10);
+    }
   };
 
   useEffect(() => {
     document.body.style.overflow = isMenuOpen ? "hidden" : "auto";
   }, [isMenuOpen]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (isSearchOpen && !event.target.closest(".search-container")) {
+        setShowResults(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isSearchOpen]);
 
   if (categoriesLoading || subcategoriesLoading || brandsLoading) {
     return (
@@ -378,7 +405,7 @@ const MobileNavbar = () => {
                       to={`/products/${product.id}/${slugify(
                         product.product_name || ""
                       )}`}
-                      className="p-1 cursor-pointer block" // Added block
+                      className="p-1 cursor-pointer"
                     >
                       <div className="font-medium capitalize text-black">
                         {product.product_name}
@@ -457,9 +484,9 @@ const MobileNavbar = () => {
                       product.product_name || ""
                     )}`}
                     key={product.id}
-                    className="p-2 hover:bg-gray-100 cursor-pointer border-b border-gray-100 block text-black"
+                    className="p-2 hover:bg-gray-100 cursor-pointer border-b border-gray-100"
                   >
-                    <div className="font-medium capitalize">
+                    <div className="font-medium text-black">
                       {product.product_name}
                     </div>
                     <div className="text-sm text-gray-600">
@@ -478,6 +505,7 @@ const MobileNavbar = () => {
                 </div>
               )}
           </div>
+
           {/* SHOP BY CATEGORY */}
           <div className="border border-crimson-red rounded-sm mb-2 px-3 py-1">
             <span className="text-base font-semibold">SHOP BY CATEGORY</span>
@@ -485,86 +513,58 @@ const MobileNavbar = () => {
           <ul className="space-y-2 mb-6">
             {dynamicCategories.map((item, idx) => (
               <li key={idx} className="relative group">
-                <div className="flex justify-between items-center text-white">
-                  {" "}
-                  {/* Set text color here */}
+                <div className="flex justify-between items-center">
                   <Link
                     to={item.link}
                     className="flex-1"
                     onClick={() => {
-                      if (!item.subLinks) {
-                        toggleMenu();
-                      } else {
+                      if (item.subLinks) {
                         handleCategoryClick(item.title);
+                      } else {
+                        toggleMenu();
                       }
                     }}
                   >
                     {item.title}
                   </Link>
-                  {/* Only show arrow if subLinks exist */}
-                  {item.subLinks && item.subLinks.length > 0 && (
+                  {item.subLinks && (
                     <button
                       onClick={() => handleCategoryClick(item.title)}
-                      className="cursor-pointer p-2 -mr-2"
+                      className="cursor-pointer"
                     >
-                      <IoIosArrowDown
-                        className={`text-lg transition-transform duration-300 ${
-                          openCategory === item.title ? "rotate-180" : ""
-                        }`}
-                      />
+                      <IoIosArrowDown className="text-lg" />
                     </button>
                   )}
                 </div>
-                {/* Animated Submenu */}
-                <div
-                  ref={(el) => (submenuRefs.current[item.title] = el)}
-                  style={{
-                    maxHeight:
-                      openCategory === item.title
-                        ? `${submenuRefs.current[item.title]?.scrollHeight}px`
-                        : "0px",
-                  }}
-                  className={`overflow-hidden transition-all duration-300 ease-in-out`}
-                >
-                  {item.subLinks && item.subLinks.length > 0 && (
-                    <ul className="bg-dark-charcoal text-white text-sm shadow-lg space-y-2 rounded-md mt-2">
-                      {" "}
-                      {/* Changed bg and text color */}
-                      {item.subLinks.map((sub, i) => (
-                        <li
-                          key={i}
-                          className="hover:bg-gray-700 hover:shadow-md hover:rounded-md transition-all duration-200 w-full"
-                        >
-                          <Link
-                            to={sub.link}
-                            className="block active:scale-95 transition-transform duration-100 text-base text-left px-2 py-1.5 rounded-sm border border-gray-600 mb-1"
-                            onClick={toggleMenu}
-                          >
-                            {sub.title}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
+                {item.subLinks && openCategory === item.title && (
+                  <ul className="text-sm shadow-lg px-4 py-2 space-y-1 z-50 rounded-md">
+                    {item.subLinks.map((sub, i) => (
+                      <li key={i} className="hover:text-red-500 transition">
+                        <Link to={sub.link} onClick={toggleMenu}>
+                          {sub.title}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </li>
             ))}
           </ul>
+
           {/* SHOP BY BRAND */}
           <div className="border border-crimson-red rounded-sm mb-2 px-3 py-1">
             <span className="text-base font-semibold">SHOP BY BRAND</span>
           </div>
           <ul className="space-y-2 mb-6">
             {dynamicBrands.map((item, idx) => (
-              <li key={idx} className="text-white">
-                {" "}
-                {/* Set text color here */}
+              <li key={idx}>
                 <Link to={item.link || "#"} onClick={toggleMenu}>
                   {item.title}
                 </Link>
               </li>
             ))}
           </ul>
+
           {/* MAIN MENU */}
           <div className="border border-crimson-red rounded-sm mb-2 px-3 py-1">
             <span className="text-base font-semibold">MAIN MENU</span>
@@ -572,18 +572,16 @@ const MobileNavbar = () => {
           <ul className="space-y-2 mb-6">
             {mainMenu.map((item, idx) => (
               <li key={idx} className="relative group">
-                <div className="flex justify-between items-center text-white">
-                  {" "}
-                  {/* Set text color here */}
+                <div className="flex justify-between items-center">
                   {item.link ? (
                     <Link
                       to={item.link}
                       className="flex-1"
                       onClick={() => {
-                        if (!item.subLinks) {
-                          toggleMenu();
-                        } else {
+                        if (item.subLinks) {
                           handleCategoryClick(item.title);
+                        } else {
+                          toggleMenu();
                         }
                       }}
                     >
@@ -592,55 +590,37 @@ const MobileNavbar = () => {
                   ) : (
                     <span className="flex-1">{item.title}</span>
                   )}
-                  {/* Only show arrow if subLinks exist */}
-                  {item.subLinks && item.subLinks.length > 0 && (
+                  {item.subLinks && (
                     <button
                       onClick={() => handleCategoryClick(item.title)}
-                      className="cursor-pointer p-2 -mr-2"
+                      className="cursor-pointer"
                     >
-                      <IoIosArrowDown
-                        className={`text-lg transition-transform duration-300 ${
-                          openCategory === item.title ? "rotate-180" : ""
-                        }`}
-                      />
+                      <IoIosArrowDown className="text-lg" />
                     </button>
                   )}
                 </div>
-                {/* Animated Submenu for Main Menu */}
-                <div
-                  ref={(el) => (submenuRefs.current[item.title] = el)}
-                  style={{
-                    maxHeight:
-                      openCategory === item.title
-                        ? `${submenuRefs.current[item.title]?.scrollHeight}px`
-                        : "0px",
-                  }}
-                  className={`overflow-hidden transition-all duration-300 ease-in-out`}
-                >
-                  {item.subLinks && item.subLinks.length > 0 && (
-                    <ul className="bg-dark-charcoal text-white text-sm shadow-lg px-4 py-2 space-y-1 rounded-md mt-2">
-                      {" "}
-                      {/* Changed bg and text color */}
-                      {item.subLinks.map((sub, i) => (
-                        <li
-                          key={i}
-                          className="hover:bg-gray-700 hover:shadow-md hover:rounded-md transition-all duration-200 w-full"
+                {item.subLinks && openCategory === item.title && (
+                  <ul className="bg-white text-crimson-red text-sm shadow-lg px-4 py-2 space-y-1 z-50 rounded-md">
+                    {item.subLinks.map((sub, i) => (
+                      <li
+                        key={i}
+                        className="hover:bg-gray-100 hover:shadow-md hover:rounded-md transition-all duration-200 w-full"
+                      >
+                        <Link
+                          to={sub.link}
+                          className="block text-center"
+                          onClick={toggleMenu}
                         >
-                          <Link
-                            to={sub.link}
-                            className="block text-center py-1"
-                            onClick={toggleMenu}
-                          >
-                            {sub.title}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
+                          {sub.title}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </li>
             ))}
           </ul>
+
           {/* Social Media Links */}
           <div className="flex mb-24 space-x-4 text-2xl mt-6 text-white">
             <a href="#" aria-label="LinkedIn">
@@ -661,14 +641,14 @@ const MobileNavbar = () => {
           </div>
         </div>
       </div>
-      {/* {isCartVisible && (
+      {isCartVisible && (
         <div
           ref={cartRef}
           className="fixed top-12 right-0 z-[100] w-[90vw] max-w-sm"
         >
           <CartWithPopover />
         </div>
-      )} */}
+      )}
     </div>
   );
 };
