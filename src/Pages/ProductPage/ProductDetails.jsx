@@ -1,8 +1,11 @@
 import Swal from "sweetalert2";
 import { useState, useRef, useEffect } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Thumbs } from "swiper/modules";
-import { FaFacebook, FaLinkedin, FaTwitter, FaPinterest } from "react-icons/fa";
+import {
+  FaFacebookF,
+  FaXTwitter,
+  FaLinkedinIn,
+  FaPinterestP,
+} from "react-icons/fa6";
 import Recommended from "./Recommended";
 import { useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -192,20 +195,49 @@ const ProductDetails = () => {
               </button>
             )}
             <div className="mt-6">
-              <div className="flex gap-2 text-white">
-                <span className="font-medium mr-2 text-[#8d7f90]">Share:</span>
-                <button className="bg-[#e62245] p-2 rounded">
-                  <FaLinkedin />
-                </button>
-                <button className="bg-[#e62245] p-2 rounded">
-                  <FaFacebook />
-                </button>
-                <button className="bg-[#e62245] p-2 rounded">
-                  <FaTwitter />
-                </button>
-                <button className="bg-[#e62245] p-2 rounded">
-                  <FaPinterest />
-                </button>
+              <div className="flex items-center gap-2">
+                <span className="font-medium text-[#8d7f90]">Share:</span>
+                <div className="flex gap-1">
+                  {/* LinkedIn */}
+                  <button
+                    className="flex justify-center items-center w-10 h-8 bg-[#0077B5] hover:bg-[#006097] transition-colors"
+                    style={{ transform: "skewX(-15deg)" }}
+                  >
+                    <div style={{ transform: "skewX(15deg)" }}>
+                      <FaLinkedinIn className="text-white text-sm" />
+                    </div>
+                  </button>
+
+                  {/* Facebook */}
+                  <button
+                    className="flex justify-center items-center w-10 h-8 bg-[#155dfc] hover:bg-[#0f4bc2] transition-colors"
+                    style={{ transform: "skewX(-15deg)" }}
+                  >
+                    <div style={{ transform: "skewX(15deg)" }}>
+                      <FaFacebookF className="text-white text-sm" />
+                    </div>
+                  </button>
+
+                  {/* Twitter */}
+                  <button
+                    className="flex justify-center items-center w-10 h-8 bg-[#000000] hover:bg-[#333333] transition-colors"
+                    style={{ transform: "skewX(-15deg)" }}
+                  >
+                    <div style={{ transform: "skewX(15deg)" }}>
+                      <FaXTwitter className="text-white text-sm" />
+                    </div>
+                  </button>
+
+                  {/* Pinterest */}
+                  <button
+                    className="flex justify-center items-center w-10 h-8 bg-[#E60023] hover:bg-[#cc001f] transition-colors"
+                    style={{ transform: "skewX(-15deg)" }}
+                  >
+                    <div style={{ transform: "skewX(15deg)" }}>
+                      <FaPinterestP className="text-white text-sm" />
+                    </div>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
