@@ -4,13 +4,15 @@ import { Link } from "react-router-dom";
 const HelpDeskButton = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
+  const [closing, setClosing] = useState(false);
+  const [opening, setOpening] = useState(false); // New state for opening animation
 
   useEffect(() => {
     // Show the button every 15 seconds
     const showInterval = setInterval(() => {
       setIsVisible(true);
 
-      // Hide after 5 seconds
+      // Hide after 5 seconds if info is not shown
       const hideTimeout = setTimeout(() => {
         if (!showInfo) {
           setIsVisible(false);
@@ -30,20 +32,42 @@ const HelpDeskButton = () => {
   }, [showInfo]);
 
   const toggleInfo = () => {
-    setShowInfo(!showInfo);
-    if (!showInfo) {
+    if (showInfo) {
+      setClosing(true); // Start closing animation
+      setTimeout(() => {
+        setShowInfo(false);
+        setClosing(false); // Reset closing state after animation
+        setIsVisible(false); // Hide the button after closing
+      }, 500); // Duration of closing animation
+    } else {
+      setShowInfo(true);
+      setOpening(true); // Start opening animation
+      setTimeout(() => {
+        setOpening(false); // Reset opening state after animation
+      }, 500);
       setIsVisible(true); // Keep visible when info is shown
     }
   };
 
   return (
     <div
-      className={`fixed bottom-4 left-4 z-50 transition-all duration-300 ${
+      className={`fixed bottom-4 left-4 z-50 transition-all duration-500 ease-in-out ${
         isVisible ? "opacity-100" : "opacity-0 pointer-events-none"
-      }`}
+      } ${
+        showInfo
+          ? "translate-x-0"
+          : isVisible
+          ? "translate-x-0"
+          : "-translate-x-full" // Move left when hidden
+      }
+      ${closing ? "-translate-x-full" : "translate-x-0"} `} // Slide left on closing
     >
       {showInfo ? (
-        <div className="bg-white p-3 rounded-xl shadow-lg max-w-sm w-[280px] border border-gray-200">
+        <div
+          className={`bg-white p-3 rounded-xl shadow-lg max-w-sm w-[280px] border border-gray-200 transition-all duration-300 ease-in-out ${
+            opening ? "animate-scaleIn" : closing ? "animate-scaleOut" : ""
+          }`}
+        >
           <div className="flex justify-between items-center mb-1 gap-1">
             <h3 className="font-bold text-lg text-gray-800">Contact Support</h3>
             <button
@@ -77,7 +101,11 @@ const HelpDeskButton = () => {
           </div>
         </div>
       ) : (
-        <div className="relative w-fit">
+        <div
+          className={`relative w-fit transition-transform duration-500 ease-in-out ${
+            isVisible ? "translate-x-0" : "-translate-x-full" // Slide in from left when it appears
+          }`}
+        >
           <div className="absolute -top-3 right-1 transform translate-x-full bg-white text-crimson-red text-xs font-semibold px-2 py-1 rounded shadow-md whitespace-nowrap">
             Need Support?
             <div className="absolute top-1/2 -left-1 w-2 h-2 bg-white transform -translate-y-1/2 rotate-45"></div>
