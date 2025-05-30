@@ -1,10 +1,10 @@
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import { FaGoogle } from "react-icons/fa";
+import { FaFacebook, FaGoogle } from "react-icons/fa";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import Swal from "sweetalert2";
 import { signInWithPopup } from "firebase/auth";
-import { auth, googleProvider } from "./firebase.config.js";
+import { auth, googleProvider, facebookProvider } from "./firebase.config.js";
 import { useDispatch } from "react-redux";
 import { loginSuccess } from "../../features/UserAuth/authSlice";
 
@@ -107,6 +107,31 @@ const Login = () => {
     }
   };
 
+  const handleFacebookLogin = async () => {
+    try {
+      const result = await signInWithPopup(auth, facebookProvider);
+      const user = result.user;
+      const idToken = await user.getIdToken();
+
+      const res = await axiosPublic.post("/api/social-login", {
+        token: idToken,
+      });
+
+      if (res.status === 200) {
+        navigate("/user/account/orders");
+        Swal.fire({ icon: "success", title: "Login successful!", timer: 1500 });
+        dispatch(
+          loginSuccess({
+            email: res.data.user.email,
+            role: res.data.user.role,
+          })
+        );
+      }
+    } catch (error) {
+      console.error("Facebook login error:", error);
+    }
+  };
+
   return (
     <div className="px-3 py-5 bg-white max-w-[1370px] text-gray-700 mx-auto">
       <div className="flex items-center gap-2 text-[11px] mb-4">
@@ -121,13 +146,13 @@ const Login = () => {
         <div className="w-full md:w-1/2">
           <h2 className="text-2xl font-normal mb-6">Login</h2>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="mb-3">
+            <div className="mb-4">
               <label className="block text-sm mb-1 text-gray-700">
                 Email Address:
               </label>
               <input
                 type="email"
-                className="w-full px-3 py-2 border border-gray-300 rounded-sm"
+                className="w-full px-3 py-2 border border-gray-300 rounded"
                 {...register("email", {
                   required: "Email is required",
                   pattern: {
@@ -148,7 +173,7 @@ const Login = () => {
               </label>
               <input
                 type="password"
-                className="w-full px-3 py-2 border border-gray-300 rounded-sm"
+                className="w-full px-3 py-2 border border-gray-300 rounded"
                 {...register("password", {
                   required: "Password is required",
                   minLength: {
@@ -163,34 +188,45 @@ const Login = () => {
                 </p>
               )}
             </div>
-            {/* Flex container for LOGIN button and Google button */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-              <div className="flex gap-3">
-                <button
-                  type="submit"
-                  className="bg-[#e62245] cursor-pointer text-white px-6 py-2 rounded hover:bg-[#d11a3b]"
-                >
-                  LOGIN
-                </button>
-                <Link className="text-sm text-[#e62245] underline">
-                  Forgot your password?
-                </Link>
-              </div>
-              <div className="flex gap-3">
-                <span className="text-sm text-gray-500 mt-5">
-                  OR LOGIN WITH
-                </span>{" "}
-                {/* Changed to span for text */}
-                <button
-                  onClick={handleGoogleLogin}
-                  className="flex cursor-pointer items-center justify-center px-6 py-2 bg-[#DB4437] text-white rounded hover:bg-[#c23328]"
-                >
-                  <FaGoogle className="mr-2" />
-                  Google
-                </button>
-              </div>
+            <div className="flex gap-4 mb-6">
+              <button
+                type="submit"
+                className="bg-[#e62245] cursor-pointer text-white px-6 py-2 rounded hover:bg-[#d11a3b]"
+              >
+                LOGIN
+              </button>
+              <Link
+                to="/forgot-password"
+                className="text-sm text-[#e62245] underline"
+              >
+                Forgot your password?
+              </Link>
             </div>
           </form>
+          {/* Social Login - Moved inside left column */}
+          <div className="mb-1">
+            <div className="flex items-center mb-4">
+              <div className="flex-grow border-t border-gray-300"></div>
+              <span className="mx-4 text-sm text-gray-500">OR LOGIN WITH</span>
+              <div className="flex-grow border-t border-gray-300"></div>
+            </div>
+            <div className="flex justify-center gap-4">
+              <button
+                onClick={handleFacebookLogin}
+                className="flex cursor-pointer items-center justify-center p-2 bg-[#3b5998] text-white rounded hover:bg-[#344e86]"
+              >
+                <FaFacebook className="mr-2" />
+                Facebook
+              </button>
+              <button
+                onClick={handleGoogleLogin}
+                className="flex cursor-pointer items-center justify-center p-2 bg-[#DB4437] text-white rounded hover:bg-[#c23328]"
+              >
+                <FaGoogle className="mr-2" />
+                Google
+              </button>
+            </div>
+          </div>
         </div>
 
         {/* Right Side - New Customer Info f5f5f5 */}

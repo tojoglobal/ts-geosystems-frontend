@@ -478,7 +478,6 @@ const MobileNavbar = () => {
                 </div>
               )}
           </div>
-          ---
           {/* SHOP BY CATEGORY */}
           <div className="border border-crimson-red rounded-sm mb-2 px-3 py-1">
             <span className="text-base font-semibold">SHOP BY CATEGORY</span>
@@ -528,7 +527,7 @@ const MobileNavbar = () => {
                   className={`overflow-hidden transition-all duration-300 ease-in-out`}
                 >
                   {item.subLinks && item.subLinks.length > 0 && (
-                    <ul className="bg-dark-charcoal text-white text-sm shadow-lg space-y-1 rounded-md mt-2">
+                    <ul className="bg-dark-charcoal text-white text-sm shadow-lg space-y-2 rounded-md mt-2">
                       {" "}
                       {/* Changed bg and text color */}
                       {item.subLinks.map((sub, i) => (
@@ -538,7 +537,7 @@ const MobileNavbar = () => {
                         >
                           <Link
                             to={sub.link}
-                            className="block text-left p-2 rounded-sm border border-gray-600"
+                            className="block active:scale-95 transition-transform duration-100 text-base text-left px-2 py-1.5 rounded-sm border border-gray-600 mb-1"
                             onClick={toggleMenu}
                           >
                             {sub.title}
@@ -551,7 +550,6 @@ const MobileNavbar = () => {
               </li>
             ))}
           </ul>
-          ---
           {/* SHOP BY BRAND */}
           <div className="border border-crimson-red rounded-sm mb-2 px-3 py-1">
             <span className="text-base font-semibold">SHOP BY BRAND</span>
@@ -567,7 +565,6 @@ const MobileNavbar = () => {
               </li>
             ))}
           </ul>
-          ---
           {/* MAIN MENU */}
           <div className="border border-crimson-red rounded-sm mb-2 px-3 py-1">
             <span className="text-base font-semibold">MAIN MENU</span>
@@ -644,7 +641,6 @@ const MobileNavbar = () => {
               </li>
             ))}
           </ul>
-          ---
           {/* Social Media Links */}
           <div className="flex mb-24 space-x-4 text-2xl mt-6 text-white">
             <a href="#" aria-label="LinkedIn">
