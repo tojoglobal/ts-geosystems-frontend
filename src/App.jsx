@@ -27,7 +27,7 @@ import QuickGuides from "./Pages/NavComponents/QuickGuides";
 import SoftwareDownloads from "./Pages/NavComponents/SoftwareDownloads";
 import AboutUs from "./Pages/NavComponents/AboutUs/AboutUs";
 import ContactUs from "./Pages/NavComponents/ContactUs";
-import Support from "./Pages/NavComponents/Support";
+import SupportRequestForm from "./Pages/NavComponents/SupportRequestForm";
 import ViewProfile from "./Dashboard/Profile/ViewProfile";
 import UpdateProfile from "./Dashboard/Profile/UpdateProfile";
 import TradeIn from "./Pages/NavComponents/TradeIn";
@@ -124,7 +124,7 @@ const AppLayout = () => {
             element={<CreditAccountApplication />}
           />
           <Route path="/service" element={<Service />} />
-          <Route path="/support" element={<Support />} />
+          <Route path="/support" element={<SupportRequestForm />} />
           <Route path="/quick-guides" element={<QuickGuides />} />
           <Route path="/software-downloads" element={<SoftwareDownloads />} />
           <Route path="/trade-in" element={<TradeIn />} />

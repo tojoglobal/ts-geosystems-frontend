@@ -5,7 +5,7 @@ import Swal from "sweetalert2";
 import useDataQuery from "../../utils/useDataQuery";
 import { SkeletonLoader } from "../../utils/Loader/SkeletonLoader";
 
-const Support = () => {
+const SupportRequestForm = () => {
   const axiosPublicUrl = useAxiospublic();
   const [formData, setFormData] = useState({
     name: "",
@@ -420,4 +420,4 @@ const Support = () => {
   );
 };
 
-export default Support;
+export default SupportRequestForm;
