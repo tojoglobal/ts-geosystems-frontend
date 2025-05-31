@@ -71,6 +71,11 @@ const menuItems = [
     to: "/dashboard/product",
   },
   {
+    label: "Product Question",
+    icon: <MdOutlineShoppingCart size={20} />,
+    to: "/dashboard/product/question",
+  },
+  {
     label: "Add Software",
     icon: <MonitorCogIcon size={20} />,
     to: "/dashboard/add-software",
