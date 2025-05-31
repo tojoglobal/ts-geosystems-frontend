@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
-import { toast } from "react-toastify";
 import Promo_product_banner_02 from "./Promo_product_banner_02";
 import SingleImages from "./SingleImages";
 import SlideContorols from "./SlideContorols";
@@ -11,6 +10,7 @@ import AdminUpdateWeProvide from "./HomePage/AdminUpdateWeProvide";
 import AdminUpdateOurAchievements from "./HomePage/AdminUpdateOurAchievements";
 import AdminUpdateOurAdService from "./HomePage/AdminUpdateOurAdService";
 import LastBannerControl from "./LastBannerControl";
+import Swal from "sweetalert2";
 
 // Define the exact order of components as they appear on the homepage
 const COMPONENT_ORDER = [
@@ -72,9 +72,12 @@ const HomePageControl = () => {
         components: enabledComponents,
       });
       if (res.data.success) {
-        toast.success("Settings saved successfully!");
+        Swal.fire("Success", "Settings saved successfully!", "success");
       } else {
-        toast.error("Failed to save settings");
+        Swal.fire({
+          icon: "Error",
+          text: "Failed to save settings",
+        });
       }
     } catch (error) {
       console.log(error);

@@ -4,7 +4,6 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AlertCircle } from "lucide-react";
 import { useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
-import { toast } from "react-toastify";
 import useDataQuery from "../utils/useDataQuery";
 import { useAxiospublic } from "../Hooks/useAxiospublic";
 
@@ -60,7 +59,11 @@ const UserInbox = () => {
       queryClient.invalidateQueries(["userMessages"]);
     },
     onError: (error) => {
-      toast.error(error.response?.data?.error || "Failed to send message");
+      Swal.fire({
+        title: "Error",
+        text: error.response?.data?.error || "Failed to send message",
+        icon: "error",
+      });
       if (error.response?.data?.errors) {
         error.response.data.errors.forEach((err) => {
           setError(err.path, { message: err.msg });

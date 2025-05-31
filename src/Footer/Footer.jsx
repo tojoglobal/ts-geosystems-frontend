@@ -114,15 +114,27 @@ const Footer = () => {
               </>
             )}
           </p>
-          <div className="flex gap-2 mt-4">
+          <div className="flex gap-1 mt-4">
             {iso_image_url_1 && (
-              <img src={iso_image_url_1} alt="ISO" className="h-12 w-14" />
+              <img
+                src={iso_image_url_1}
+                alt="ISO"
+                className="h-12 w-14 rounded-[4px]"
+              />
             )}
             {iso_image_url_2 && (
-              <img src={iso_image_url_2} alt="ISO" className="h-12 w-14" />
+              <img
+                src={iso_image_url_2}
+                alt="ISO"
+                className="h-12 w-14 rounded-[4px]"
+              />
             )}
             {iso_image_url_3 && (
-              <img src={iso_image_url_3} alt="ISO" className="h-12 w-14" />
+              <img
+                src={iso_image_url_3}
+                alt="ISO"
+                className="h-12 w-14 rounded-[4px]"
+              />
             )}
           </div>
         </div>
