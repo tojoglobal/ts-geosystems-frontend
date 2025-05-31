@@ -66,7 +66,7 @@ const menuItems = [
     to: "/dashboard/service-inquiries",
   },
   {
-    label: "Product",
+    label: "All Products",
     icon: <MdOutlineShoppingCart size={20} />,
     to: "/dashboard/product",
   },

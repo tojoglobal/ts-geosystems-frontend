@@ -222,10 +222,10 @@ const ProductDetails = () => {
             <div className="mt-6">
               <div className="flex items-center gap-2">
                 <span className="font-medium text-[#8d7f90]">Share:</span>
-                <div className="flex gap-1">
+                <div className="flex items-center gap-[6px]">
                   {/* Facebook */}
                   <button
-                    className="flex justify-center items-center w-10 h-[29px] bg-[#1877F2] hover:bg-[#166FE5] transition-colors"
+                    className="flex cursor-pointer justify-center items-center w-10 h-[29px] bg-[#1877F2] hover:bg-[#166FE5] transition-colors"
                     style={{ transform: "skewX(-15deg)" }}
                     onClick={() =>
                       window.open(
@@ -241,7 +241,7 @@ const ProductDetails = () => {
 
                   {/* LinkedIn */}
                   <button
-                    className="flex justify-center items-center w-10 h-[29px] bg-[#0077B5] hover:bg-[#006097] transition-colors"
+                    className="flex cursor-pointer justify-center items-center w-10 h-[29px] bg-[#0077B5] hover:bg-[#006097] transition-colors"
                     style={{ transform: "skewX(-15deg)" }}
                     onClick={() =>
                       window.open(
@@ -257,7 +257,7 @@ const ProductDetails = () => {
 
                   {/* Twitter */}
                   <button
-                    className="flex justify-center items-center w-10 h-[29px] bg-[#000000] hover:bg-[#333333] transition-colors"
+                    className="flex cursor-pointer justify-center items-center w-10 h-[29px] bg-[#000000] hover:bg-[#333333] transition-colors"
                     style={{ transform: "skewX(-15deg)" }}
                     onClick={() =>
                       window.open(
@@ -273,7 +273,7 @@ const ProductDetails = () => {
 
                   {/* WhatsApp */}
                   <button
-                    className="flex justify-center items-center w-10 h-[29px] bg-[#25D366] hover:bg-[#1DA851] transition-colors"
+                    className="flex cursor-pointer justify-center items-center w-10 h-[29px] bg-[#25D366] hover:bg-[#1DA851] transition-colors"
                     style={{ transform: "skewX(-15deg)" }}
                     onClick={() =>
                       window.open(

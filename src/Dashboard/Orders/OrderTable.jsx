@@ -186,7 +186,7 @@ const OrderTable = () => {
           onClick={() => handlePageChange(1)}
           className={`px-3 cursor-pointer py-1 rounded ${
             1 === currentPage
-              ? "bg-blue-600 text-white"
+              ? "bg-teal-600 text-white"
               : "bg-slate-700 hover:bg-slate-600"
           }`}
         >
@@ -210,7 +210,7 @@ const OrderTable = () => {
           onClick={() => handlePageChange(i)}
           className={`px-3 cursor-pointer py-1 rounded ${
             i === currentPage
-              ? "bg-blue-600 text-white"
+              ? "bg-teal-600 text-white"
               : "bg-slate-700 hover:bg-slate-600"
           }`}
         >
@@ -234,7 +234,7 @@ const OrderTable = () => {
           onClick={() => handlePageChange(totalPages)}
           className={`px-3 py-1 rounded ${
             totalPages === currentPage
-              ? "bg-blue-600 text-white"
+              ? "bg-teal-600 text-white"
               : "bg-slate-700 hover:bg-slate-600"
           }`}
         >

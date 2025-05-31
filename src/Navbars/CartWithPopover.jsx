@@ -164,6 +164,7 @@ const CartWithPopover = () => {
                         to={`/products/${item.id}/${slugify(
                           item.product_name || ""
                         )}`}
+                        onClick={() => dispatch(closeCart())}
                       >
                         <p className="text-xs font-medium text-crimson-red leading-tight mb-1">
                           {item.product_name}
@@ -180,12 +181,20 @@ const CartWithPopover = () => {
                 </div>
               ))}
               <div className="flex gap-2 pt-5 border-t">
-                <Link to="/checkout" className="w-1/2">
+                <Link
+                  to="/checkout"
+                  className="w-1/2"
+                  onClick={() => dispatch(closeCart())}
+                >
                   <button className="w-full bg-crimson-red text-sm text-white cursor-pointer font-semibold py-2 rounded">
                     CHECK OUT NOW
                   </button>
                 </Link>
-                <Link to="/cart" className="w-1/2">
+                <Link
+                  to="/cart"
+                  className="w-1/2"
+                  onClick={() => dispatch(closeCart())}
+                >
                   <button className="w-full bg-crimson-red text-sm text-white cursor-pointer font-semibold py-2 rounded">
                     VIEW CART
                   </button>
