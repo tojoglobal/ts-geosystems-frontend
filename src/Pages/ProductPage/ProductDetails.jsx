@@ -17,7 +17,6 @@ import { parsePrice } from "../../utils/parsePrice";
 import useDataQuery from "../../utils/useDataQuery";
 import { setBreadcrumb } from "../../features/breadcrumb/breadcrumbSlice";
 import useToastSwal from "../../Hooks/useToastSwal";
-import AskAQuestion from "./AskAQuestion";
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -35,6 +34,7 @@ const ProductDetails = () => {
     isError,
     error,
   } = useDataQuery(["productDetails", id], `/api/products/${id}`, !!id);
+  console.log(product);
   // Parse the image URLs from the product data
   const imageUrls = product?.image_urls ? JSON.parse(product.image_urls) : [];
   // Parse video URLs if available

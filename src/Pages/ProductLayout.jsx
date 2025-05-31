@@ -1,4 +1,3 @@
-// ProductLayout.jsx
 import { Link, Outlet, useLocation } from "react-router-dom";
 import ProductSidebar from "./ProductPage/ProductSidebar";
 import { useSelector } from "react-redux";
@@ -13,12 +12,9 @@ const ProductLayout = () => {
 
   return (
     <div className="relative">
-      {/* AskAQuestion component placed with fixed positioning to stay on the right */}
-      {/* Adjust top-1/2 and -translate-y-1/2 for vertical centering, or use a specific pixel value */}
       <div className="z-50">
         <AskAQuestion />
       </div>
-
       <div className="max-w-[1370px] mx-auto min-h-screen bg-white text-black mt-4 mb-10">
         {isDetailsPage && breadcrumb?.product && (
           <div className="flex items-center gap-1 text-[11px] mt-5 mb-2 flex-wrap">
