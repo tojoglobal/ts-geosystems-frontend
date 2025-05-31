@@ -76,20 +76,19 @@ const AdminUpdateWeProvide = () => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="space-y-6 p-4 bg-gray-800 rounded-lg shadow text-white"
+      className="space-y-6 p-4 rounded-lg"
     >
       <h2 className="text-2xl font-bold mb-4 text-teal-500">
         Update WE PROVIDE
       </h2>
-
-      {fields.map((item, idx) => (
+      {fields?.map((item, idx) => (
         <div
           key={item.id || idx}
           className="border border-gray-700 rounded-md p-4 mb-2"
         >
           <div className="flex flex-col md:flex-row gap-4 items-center">
             <div className="flex flex-col items-center">
-              <div className="w-24 h-24 mb-2 rounded bg-gray-700 flex items-center justify-center overflow-hidden border border-gray-700">
+              <div className="w-24 h-24 mb-2 rounded flex items-center justify-center overflow-hidden border">
                 <img
                   src={
                     watch(`items.${idx}.image`) ||
@@ -129,12 +128,12 @@ const AdminUpdateWeProvide = () => {
               <input
                 {...register(`items.${idx}.title`, { required: true })}
                 placeholder="Title"
-                className="border border-gray-700 p-2 rounded bg-gray-700 text-white placeholder-gray-400"
+                className="border border-gray-700 focus:outline-none p-2 rounded text-white placeholder-gray-400"
               />
               <textarea
                 {...register(`items.${idx}.description`, { required: true })}
                 placeholder="Description"
-                className="border border-gray-700 p-2 rounded bg-gray-700 text-white placeholder-gray-400"
+                className="border border-gray-700 p-2 focus:outline-none rounded text-white placeholder-gray-400"
                 rows={3}
               />
             </div>

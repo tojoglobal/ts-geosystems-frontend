@@ -32,7 +32,7 @@ const FeatureSortableImage = ({ image, onDelete }) => {
     <div
       ref={setNodeRef}
       style={style}
-      className="relative group border rounded-sm overflow-hidden shadow-sm hover:shadow-md transition-shadow"
+      className="relative group border border-gray-600 rounded-sm overflow-hidden shadow-sm hover:shadow-md transition-shadow"
     >
       {/* Drag handle */}
       <div
@@ -97,7 +97,7 @@ const Feature_highlight_banner_03_left_01 = () => {
     const formData = new FormData();
     files.forEach((file) => formData.append("featureImages", file));
 
-    console.log(formData);
+    // console.log(formData);
 
     try {
       await axiosPublicUrl.post("/api/feature-upload-images", formData, {

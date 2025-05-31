@@ -70,7 +70,7 @@ const SingleImages = () => {
           images.map((image) => (
             <div
               key={image.id}
-              className="relative border border-gray-500 p-3 sm:p-4 rounded-md shadow-md bg-gray-900 transition-shadow hover:shadow-lg"
+              className="relative border border-gray-600 p-3 sm:p-4 rounded-md shadow-md bg-gray-900 transition-shadow hover:shadow-lg"
             >
               <div className="absolute top-2 right-2 z-10">
                 <button

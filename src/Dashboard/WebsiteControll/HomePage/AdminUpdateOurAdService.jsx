@@ -54,7 +54,7 @@ const AdminUpdateOurAdService = () => {
   return (
     <form
       onSubmit={handleSubmit(mutation.mutate)}
-      className="space-y-6 p-4 bg-gray-800 rounded-lg shadow-lg"
+      className="space-y-6 p-4"
     >
       <h2 className="text-2xl font-bold mb-4 text-teal-400">
         OUR ADVANTAGE & SERVICES
@@ -66,7 +66,7 @@ const AdminUpdateOurAdService = () => {
         >
           <button
             type="button"
-            className="absolute top-3 right-3 text-red-400 hover:text-red-300"
+            className="absolute cursor-pointer top-3 right-3 text-red-400 hover:text-red-300"
             onClick={() => remove(idx)}
           >
             <FaTrash />

@@ -59,7 +59,7 @@ const AdminUpdateOurAchievements = () => {
   return (
     <form
       onSubmit={handleSubmit(mutation.mutate)}
-      className="space-y-6 p-4 bg-gray-800 rounded-lg shadow text-white"
+      className="space-y-6 p-4"
     >
       <h2 className="text-2xl font-bold mb-4 text-teal-500">
         Update Our Achievements
@@ -69,12 +69,12 @@ const AdminUpdateOurAchievements = () => {
           <input
             {...register(`items.${idx}.number`, { required: true })}
             placeholder="Number"
-            className="bg-gray-700 border border-gray-600 p-2 rounded w-32 text-white placeholder-gray-400"
+            className="bg-gray-700 border focus:outline-none border-gray-600 p-2 rounded w-32 text-white placeholder-gray-400"
           />
           <input
             {...register(`items.${idx}.text`, { required: true })}
             placeholder="Text"
-            className="bg-gray-700 border border-gray-600 p-2 rounded flex-1 text-white placeholder-gray-400"
+            className="bg-gray-700 border focus:outline-none border-gray-600 p-2 rounded flex-1 text-white placeholder-gray-400"
           />
         </div>
       ))}
