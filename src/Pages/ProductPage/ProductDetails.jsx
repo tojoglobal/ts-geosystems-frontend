@@ -1,4 +1,3 @@
-import Swal from "sweetalert2";
 import { useState, useRef, useEffect } from "react";
 import {
   FaFacebookF,

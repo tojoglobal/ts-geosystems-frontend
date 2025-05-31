@@ -94,6 +94,7 @@ import AdminUpdateUsedEquipment from "./Pages/Control/AdminUpdateUsedEquipment";
 import AdminUpdateFooter from "./Pages/Control/AdminUpdateFooter";
 import SiteMap from "./Components/SiteMap";
 import HelpDeskButton from "./Pages/HelpDeskButton";
+import ProductQuestion from "./Dashboard/Products/ProductQuestion";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -196,6 +197,7 @@ const AppLayout = () => {
           <Route path="update-profile" element={<UpdateProfile />} />
           {/* product route */}
           <Route path="product" element={<ProductTable />} />
+          <Route path="product/question" element={<ProductQuestion />} />
           <Route path="add-product" element={<ProductAddForm />} />
           <Route path="update-product/:id" element={<UpdateProductForm />} />
           {/* category add */}
