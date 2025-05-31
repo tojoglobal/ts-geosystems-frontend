@@ -7,7 +7,7 @@ const TOAST_CONFIGS = {
     position: "top-end",
     toast: true,
     showConfirmButton: false,
-    timer: 2000,
+    timer: 3000,
     customClass: { popup: "swal2-border-radius" },
     didOpen: (toast) => {
       toast.style.boxShadow = "0 4px 20px rgba(39,174,96,0.15)";
@@ -19,7 +19,7 @@ const TOAST_CONFIGS = {
     position: "top-end",
     toast: true,
     showConfirmButton: false,
-    timer: 2000,
+    timer: 3000,
     customClass: { popup: "swal2-border-radius" },
     didOpen: (toast) => {
       toast.style.boxShadow = "0 4px 20px rgba(192,57,43,0.13)";

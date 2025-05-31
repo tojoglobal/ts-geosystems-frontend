@@ -1,4 +1,3 @@
-import Swal from "sweetalert2";
 import { useState, useRef, useEffect } from "react";
 import {
   FaFacebookF,
@@ -18,6 +17,7 @@ import { parsePrice } from "../../utils/parsePrice";
 import useDataQuery from "../../utils/useDataQuery";
 import { setBreadcrumb } from "../../features/breadcrumb/breadcrumbSlice";
 import useToastSwal from "../../Hooks/useToastSwal";
+import AskAQuestion from "./AskAQuestion";
 
 const ProductDetails = () => {
   const { id } = useParams();
