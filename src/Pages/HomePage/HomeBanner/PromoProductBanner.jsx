@@ -4,9 +4,9 @@ import "swiper/css";
 import "swiper/css/pagination";
 import useDataQuery from "../../../utils/useDataQuery";
 
-const MobilesBanner = () => {
+const PromoProductBanner = () => {
   const { data = [], isLoading } = useDataQuery(
-    ["mobilesBanner"],
+    ["promoProductBanner"],
     "/api/getupload-images"
   );
 
@@ -39,4 +39,4 @@ const MobilesBanner = () => {
   );
 };
 
-export default MobilesBanner;
+export default PromoProductBanner;
