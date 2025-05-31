@@ -10,7 +10,7 @@ const AskAQuestion = ({ productName }) => {
   const {
     register,
     handleSubmit,
-    reset, // Use reset to clear form fields
+    reset,
     formState: { errors },
   } = useForm();
 
@@ -21,9 +21,8 @@ const AskAQuestion = ({ productName }) => {
         product_name: productName,
       });
       showToast("success", "Question Sent!", "We'll get back to you soon.");
-      // Close the drawer after successful submission
-      document.getElementById("my-drawer-4").checked = false; // Uncheck the drawer checkbox
-      reset(); // Reset form fields
+      document.getElementById("my-drawer-4").checked = false;
+      reset();
     } catch (error) {
       showToast(
         "error",
@@ -33,7 +32,6 @@ const AskAQuestion = ({ productName }) => {
     }
   };
 
-  // Function to close the drawer
   const closeDrawer = () => {
     document.getElementById("my-drawer-4").checked = false;
   };
@@ -44,7 +42,7 @@ const AskAQuestion = ({ productName }) => {
       <div className="drawer-content -rotate-90 fixed top-1/2 -right-10 transform -translate-y-1/2">
         <label
           htmlFor="my-drawer-4"
-          className="cursor-pointer bg-[#e62245] text-white py-[14px] px-3 shadow-2xl rounded-[4px] flex items-center gap-2 transform origin-top-left"
+          className="cursor-pointer bg-[#e62245] text-white py-[14px] px-3 shadow-2xl rounded-[4px] flex items-center gap-2"
         >
           <span className="flex items-center gap-2 whitespace-nowrap">
             <Mail size={18} /> Ask A Question
@@ -66,29 +64,22 @@ const AskAQuestion = ({ productName }) => {
               <X size={24} />
             </button>
           </div>
-          <h2 className="text-2xl font-bold mb-2 text-center">
+          <h2 className="text-2xl font-bold mb-2 text-center text-black">
             Ask A Question
           </h2>
-          <p className="text-sm mb-4 text-center w-[70%] mx-auto">
+          <p className="text-sm mb-4 text-center w-[70%] mx-auto text-gray-700">
             Please fill in the form below to have your query answered by one of
             our product experts.
           </p>
           <form onSubmit={handleSubmit(onSubmit)} className="w-[90%] mx-auto">
             <div className="grid grid-cols-2 gap-4 mb-4">
               <div>
-                <label
-                  htmlFor="name"
-                  className="block text-sm font-normal text-gray-700 sr-only"
-                >
-                  First name *
-                </label>
                 <input
                   type="text"
                   id="name"
                   placeholder="First name *"
-                  className={`w-full p-3 focus:outline-none focus:border focus:border-gray-400 border border-gray-300 rounded-sm ${
-                    errors.name ? "input-error" : ""
-                  }`}
+                  className={`w-full p-3 focus:outline-none focus:border focus:border-gray-400 border border-gray-300 rounded text-base font-medium placeholder-gray-500
+                    ${errors.name ? "border-red-500" : ""}`}
                   {...register("name", { required: "First name is required" })}
                 />
                 {errors.name && (
@@ -98,19 +89,12 @@ const AskAQuestion = ({ productName }) => {
                 )}
               </div>
               <div>
-                <label
-                  htmlFor="lastName"
-                  className="block text-sm font-normal text-gray-700 sr-only"
-                >
-                  Last name *
-                </label>
                 <input
                   type="text"
                   id="lastName"
                   placeholder="Last name *"
-                  className={`w-full p-3 focus:outline-none focus:border focus:border-gray-400 border border-gray-300 rounded-sm ${
-                    errors.lastName ? "input-error" : ""
-                  }`}
+                  className={`w-full p-3 focus:outline-none focus:border focus:border-gray-400 border border-gray-300 rounded text-base font-medium placeholder-gray-500
+                    ${errors.lastName ? "border-red-500" : ""}`}
                   {...register("lastName", {
                     required: "Last name is required",
                   })}
@@ -124,19 +108,12 @@ const AskAQuestion = ({ productName }) => {
             </div>
             <div className="grid grid-cols-2 gap-4 mb-4">
               <div>
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-normal text-gray-700 sr-only"
-                >
-                  Email Address *
-                </label>
                 <input
                   type="email"
                   id="email"
                   placeholder="Email Address *"
-                  className={`w-full p-3 focus:outline-none focus:border focus:border-gray-400 border border-gray-300 rounded-sm ${
-                    errors.email ? "input-error" : ""
-                  }`}
+                  className={`w-full p-3 focus:outline-none focus:border focus:border-gray-400 border border-gray-300 rounded text-base font-medium placeholder-gray-500
+                    ${errors.email ? "border-red-500" : ""}`}
                   {...register("email", {
                     required: "Email is required",
                     pattern: {
@@ -153,34 +130,21 @@ const AskAQuestion = ({ productName }) => {
                 )}
               </div>
               <div>
-                <label
-                  htmlFor="phone"
-                  className="block text-sm font-normal text-gray-700 sr-only"
-                >
-                  Phone Number
-                </label>
                 <input
                   type="tel"
                   id="phone"
                   placeholder="Phone Number (Optional)"
-                  className="w-full p-3 focus:outline-none focus:border focus:border-gray-400 border border-gray-300 rounded-sm"
+                  className="w-full p-3 focus:outline-none focus:border focus:border-gray-400 border border-gray-300 rounded text-base font-medium placeholder-gray-500"
                   {...register("phone")}
                 />
               </div>
             </div>
             <div className="mb-4">
-              <label
-                htmlFor="question"
-                className="block text-sm font-normal text-gray-700 sr-only"
-              >
-                Question *
-              </label>
               <textarea
                 id="question"
                 placeholder="Question *"
-                className={`textarea textarea-bordered h-24 w-full focus:outline-none focus:border focus:border-gray-400 border border-gray-300 rounded-sm ${
-                  errors.question ? "textarea-error" : ""
-                }`}
+                className={`h-24 w-full p-3 focus:outline-none focus:border focus:border-gray-400 border border-gray-300 rounded text-base font-medium placeholder-gray-500
+                  ${errors.question ? "border-red-500" : ""}`}
                 {...register("question", { required: "Question is required" })}
               ></textarea>
               {errors.question && (
@@ -191,17 +155,17 @@ const AskAQuestion = ({ productName }) => {
             </div>
             <button
               type="submit"
-              className="w-full cursor-pointer bg-[#e62245] text-white py-3 px-4 rounded-[4px] hover:bg-red-700 transition duration-200"
+              className="w-full cursor-pointer bg-[#e62245] text-white py-3 px-4 rounded font-semibold text-lg hover:bg-red-700 transition duration-200"
             >
               Submit
             </button>
             <p className="text-[10px] text-gray-500 mt-4 text-center">
               This site is protected by reCAPTCHA and the Google&nbsp;
-              <Link to="/policy" className="underline text-crimson-red mr-1">
+              <Link to="/policy" className="underline text-[#e62245] mr-1">
                 Privacy Policy
               </Link>
               and&nbsp;
-              <Link to="/terms" className="underline text-crimson-red mr-1">
+              <Link to="/terms" className="underline text-[#e62245] mr-1">
                 Terms of Service
               </Link>
               apply.
