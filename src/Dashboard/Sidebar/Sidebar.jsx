@@ -4,36 +4,38 @@ import {
   Menu,
   X,
   LayoutDashboard,
+  Package,
+  ShoppingCart,
+  Users,
+  Layers,
+  Drum,
+  Monitor,
+  BadgeCheck,
+  MessageSquare,
+  Repeat,
+  LifeBuoy,
+  BookOpen,
+  Bookmark,
+  Tag,
   Mail,
   Calendar,
   ChevronDown,
   ChevronUp,
+  FileText,
   MessageCircle,
-  File,
-  Users,
-  Layers,
-  Drum,
-  MonitorCogIcon,
-  PackageCheck,
-  MessageSquareText,
-  Repeat,
-  LifeBuoy,
-  BookUser,
-  BookmarkCheck,
-  Tags,
 } from "lucide-react";
-import logo from "/TS-WEB-LOGO.png";
-import smallLogo from "/favicon.png";
 import {
   MdArticle,
   MdCategory,
   MdLocalOffer,
-  MdOutlineShoppingCart,
   MdPercent,
   MdWebStories,
 } from "react-icons/md";
 import { BsQuestionCircle } from "react-icons/bs";
+import logo from "/TS-WEB-LOGO.png";
+import smallLogo from "/favicon.png";
 import SidebarProfileDropdown from "./SidebarProfileDropdown/SidebarProfileDropdown";
+
 const menuItems = [
   {
     label: "Dashboard",
@@ -42,12 +44,12 @@ const menuItems = [
   },
   {
     label: "Orders",
-    icon: <PackageCheck size={20} />,
+    icon: <Package size={20} />,
     to: "/dashboard/orders",
   },
   {
     label: "Client Messages",
-    icon: <MessageSquareText size={20} />,
+    icon: <MessageSquare size={20} />,
     to: "/dashboard/client-messages",
   },
   {
@@ -67,27 +69,27 @@ const menuItems = [
   },
   {
     label: "All Products",
-    icon: <MdOutlineShoppingCart size={20} />,
+    icon: <ShoppingCart size={20} />,
     to: "/dashboard/product",
   },
   {
     label: "Product Question",
-    icon: <MdOutlineShoppingCart size={20} />,
+    icon: <ShoppingCart size={20} />,
     to: "/dashboard/product/question",
   },
   {
     label: "Add Software",
-    icon: <MonitorCogIcon size={20} />,
+    icon: <Monitor size={20} />,
     to: "/dashboard/add-software",
   },
   {
     label: "Add UserManuals",
-    icon: <BookUser size={20} />,
+    icon: <BookOpen size={20} />,
     to: "/dashboard/add-userManuals",
   },
   {
     label: "Add QuickGuides",
-    icon: <BookmarkCheck size={20} />,
+    icon: <Bookmark size={20} />,
     to: "/dashboard/add-quickGuides",
   },
   {
@@ -107,7 +109,7 @@ const menuItems = [
   },
   {
     label: "Subscriber",
-    icon: <Tags size={20} />,
+    icon: <Tag size={20} />,
     to: "/dashboard/subscriber",
   },
   {
@@ -160,7 +162,7 @@ const menuItems = [
   },
   {
     label: "Files",
-    icon: <File size={20} />,
+    icon: <FileText size={20} />,
     submenu: [
       { label: "Documents", to: "/dashboard/files/documents" },
       { label: "Images", to: "/dashboard/files/images" },
