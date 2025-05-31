@@ -1,15 +1,37 @@
+import { SkeletonLoader } from "../../../utils/Loader/SkeletonLoader";
+import useDataQuery from "../../../utils/useDataQuery";
+
 const LastBanner = () => {
+  const { data = {}, isLoading } = useDataQuery(
+    ["lastBannerImages"],
+    "/api/get-last-banner-images"
+  );
+  const LastBanner = data?.data || [];
+
+  if (isLoading) {
+    return (
+      <div className="md:max-w-[1370px] md:mx-auto flex flex-col md:flex-row gap-4">
+        <SkeletonLoader className="w-full md:w-1/2 h-[180px]" />
+        <SkeletonLoader className="w-full md:w-1/2 h-[180px]" />
+      </div>
+    );
+  }
   return (
-    <div className="max-w-[1370px] mx-3 md:mx-auto flex items-center gap-3 overflow-hidden mt-3 rounded-lg">
-      {[1, 2].map((_, idx) => (
+    <div className="max-w-[1370px] mx-3 md:mx-auto flex items-center gap-[14px] overflow-hidden mt-2 rounded-lg">
+      {LastBanner.length === 0 && (
+        <div className="w-full text-center py-10 text-gray-400">
+          No banners available.
+        </div>
+      )}
+      {LastBanner.map((banner, idx) => (
         <div
-          key={idx}
+          key={banner.id}
           className="flex-1 overflow-hidden rounded-lg group transition-shadow duration-300 shadow hover:shadow-lg"
-          style={{ aspectRatio: "2.8/1", minHeight: "160px" }}
+          style={{ aspectRatio: "2.8/1", minHeight: "180px" }}
         >
           <img
-            src="https://ts-geosystems.com.bd/assets/images/afhEMonitors.png"
-            alt="GoHighBanner"
+            src={`${import.meta.env.VITE_OPEN_APIURL}${banner.photourl}`}
+            alt={`Last Banner ${idx + 1}`}
             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
           />
         </div>

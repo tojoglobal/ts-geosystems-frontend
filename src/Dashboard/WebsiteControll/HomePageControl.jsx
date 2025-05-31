@@ -10,6 +10,7 @@ import Feature_highlight_banner_03_left_01 from "./feature_highlight_banner_03_l
 import AdminUpdateWeProvide from "./HomePage/AdminUpdateWeProvide";
 import AdminUpdateOurAchievements from "./HomePage/AdminUpdateOurAchievements";
 import AdminUpdateOurAdService from "./HomePage/AdminUpdateOurAdService";
+import LastBannerControl from "./LastBannerControl";
 
 // Define the exact order of components as they appear on the homepage
 const COMPONENT_ORDER = [
@@ -161,6 +162,8 @@ const HomePageControl = () => {
         <SingleImages />
         <div className="my-6 border-t border-gray-200/20" />
         <ExperienceCenterControl />
+        <div className="my-6 border-t border-gray-200/20" />
+        <LastBannerControl />
         <div className="my-6 border-t border-gray-200/20" />
         <AdminUpdateWeProvide />
         <div className="my-6 border-t border-gray-200/20" />
