@@ -160,7 +160,7 @@ const AddUserManuals = () => {
                     }/uploads/${imagePreview}`
               }
               alt="Preview"
-              className="w-4/12 h-24 object-cover mt-2 rounded-sm"
+              className="h-44 object-cover mt-3 rounded-sm"
             />
           )}
           <div className="mt-4">

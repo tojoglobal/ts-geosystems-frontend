@@ -91,7 +91,7 @@ const menuItems = [
     to: "/dashboard/add-quickGuides",
   },
   {
-    label: "Add categorys",
+    label: "Add Categorys",
     icon: <MdCategory size={20} />,
     to: "/dashboard/add-categorys",
   },

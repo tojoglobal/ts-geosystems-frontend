@@ -81,7 +81,7 @@ const ProductQuestion = () => {
   return (
     <div className="bg-slate-800 text-white rounded-lg p-4">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold">Product Questions</h2>
+        <h2 className="text-xl font-semibold">Product Questions (From details Page)</h2>
         <div className="text-sm text-gray-400">
           Total Questions: {data.questions.length}
         </div>
