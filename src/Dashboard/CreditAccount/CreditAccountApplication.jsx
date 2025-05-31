@@ -1,7 +1,9 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import { useAxiospublic } from "../../Hooks/useAxiospublic";
 
 const CreditAccountApplication = () => {
+  const axiosPublicUrl = useAxiospublic();
     const [formData, setFormData] = useState({
       // Company Details
       companyName: "",
@@ -74,7 +76,7 @@ const CreditAccountApplication = () => {
       console.log("Form data to be sent:", formData);
 
       // Example of how you might send it:
-      /*
+      
       fetch('/api/credit-application', {
         method: 'POST',
         headers: {
@@ -91,7 +93,7 @@ const CreditAccountApplication = () => {
         console.error('Error:', error);
         // Handle error
       });
-      */
+      
     };
 
   return (
@@ -140,7 +142,6 @@ const CreditAccountApplication = () => {
                   Company Name *
                 </label>
               </div>
-
               {/* Trading Name */}
               <div className="relative w-full">
                 <input
@@ -159,7 +160,6 @@ const CreditAccountApplication = () => {
                   Trading Name (if different)
                 </label>
               </div>
-
               {/* Address Fields */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Invoice Address */}
@@ -202,7 +202,6 @@ const CreditAccountApplication = () => {
                   </label>
                 </div>
               </div>
-
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Registered Office */}
                 <div className="relative w-full">
@@ -238,7 +237,6 @@ const CreditAccountApplication = () => {
                   </label>
                 </div>
               </div>
-
               {/* Type of Company */}
               <div className="space-y-2">
                 <p className="font-medium">Type of Company *</p>
@@ -260,6 +258,8 @@ const CreditAccountApplication = () => {
                       type="radio"
                       name="companyType"
                       value="PLC"
+                      checked={formData.companyType === "PLC"}
+                      onChange={handleChange}
                       className="w-5 h-5 cursor-pointer appearance-none rounded-full border-[2px] border-gray-300 checked:border-[5px] checked:border-[#e62245] checked:bg-white bg-[#e7e7e7] transition-all duration-150"
                     />
                     <span className="text-sm">PLC</span>
@@ -269,6 +269,8 @@ const CreditAccountApplication = () => {
                       type="radio"
                       name="companyType"
                       value="Sole Trader"
+                      checked={formData.companyType === "Sole Trader"}
+                      onChange={handleChange}
                       className="w-5 h-5 cursor-pointer appearance-none rounded-full border-[2px] border-gray-300 checked:border-[5px] checked:border-[#e62245] checked:bg-white bg-[#e7e7e7] transition-all duration-150"
                     />
                     <span className="text-sm">Sole Trader</span>
@@ -278,6 +280,8 @@ const CreditAccountApplication = () => {
                       type="radio"
                       name="companyType"
                       value="Partnership"
+                      checked={formData.companyType === "Partnership"}
+                      onChange={handleChange}
                       className="w-5 h-5 cursor-pointer appearance-none rounded-full border-[2px] border-gray-300 checked:border-[5px] checked:border-[#e62245] checked:bg-white bg-[#e7e7e7] transition-all duration-150"
                     />
                     <span className="text-sm">Partnership</span>
@@ -287,13 +291,14 @@ const CreditAccountApplication = () => {
                       type="radio"
                       name="companyType"
                       value="Other"
+                      checked={formData.companyType === "Other"}
+                      onChange={handleChange}
                       className="w-5 h-5 cursor-pointer appearance-none rounded-full border-[2px] border-gray-300 checked:border-[5px] checked:border-[#e62245] checked:bg-white bg-[#e7e7e7] transition-all duration-150"
                     />
                     <span className="text-sm">Other</span>
                   </label>
                 </div>
               </div>
-
               {/* Partners/Proprietors */}
               <div className="relative w-full">
                 <textarea
@@ -311,7 +316,6 @@ const CreditAccountApplication = () => {
                   addresses of partners/proprietors
                 </label>
               </div>
-
               {/* Additional Company Info */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* VAT Number */}
