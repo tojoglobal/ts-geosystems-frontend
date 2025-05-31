@@ -4,33 +4,34 @@ import useToastSwal from "../../Hooks/useToastSwal";
 import { Mail, X } from "lucide-react";
 import { Link } from "react-router-dom";
 
-const AskAQuestion = ({ productName }) => {
-  const axiosPublicUrl = useAxiospublic();
-  const showToast = useToastSwal();
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm();
+const AskAQuestion = ({ productName, productId }) => {
+    const axiosPublicUrl = useAxiospublic();
+    const showToast = useToastSwal();
+    const {
+      register,
+      handleSubmit,
+      reset,
+      formState: { errors },
+    } = useForm();
 
-  const onSubmit = async (data) => {
-    try {
-      await axiosPublicUrl.post("/api/product-questions", {
-        ...data,
-        product_name: productName,
-      });
-      showToast("success", "Question Sent!", "We'll get back to you soon.");
-      document.getElementById("my-drawer-4").checked = false;
-      reset();
-    } catch (error) {
-      showToast(
-        "error",
-        "Error",
-        error.message || "Failed to send your question. Please try again."
-      );
-    }
-  };
+    const onSubmit = async (data) => {
+      try {
+        await axiosPublicUrl.post("/api/product-questions", {
+          ...data,
+          product_name: productName,
+          product_id: productId,
+        });
+        showToast("success", "Question Sent!", "We'll get back to you soon.");
+        document.getElementById("my-drawer-4").checked = false;
+        reset();
+      } catch (error) {
+        showToast(
+          "error",
+          "Error",
+          error.message || "Failed to send your question. Please try again."
+        );
+      }
+    };
 
   const closeDrawer = () => {
     document.getElementById("my-drawer-4").checked = false;

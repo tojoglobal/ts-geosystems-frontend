@@ -9,11 +9,16 @@ const ProductLayout = () => {
 
   // Read breadcrumb from Redux (set by details page or on product click)
   const breadcrumb = useSelector((state) => state.breadcrumb);
-
+  // Get productName and productId only if on product details page
+  const productName =
+    isDetailsPage && breadcrumb?.product?.name ? breadcrumb.product.name : "";
+  const productId =
+    isDetailsPage && breadcrumb?.product?.id ? breadcrumb.product.id : "";
+    
   return (
     <div className="relative">
       <div className="z-50">
-        <AskAQuestion />
+        <AskAQuestion productName={productName} productId={productId} />
       </div>
       <div className="max-w-[1370px] mx-auto min-h-screen bg-white text-black mt-4 mb-10">
         {isDetailsPage && breadcrumb?.product && (
