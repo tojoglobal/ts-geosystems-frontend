@@ -56,17 +56,17 @@ const MainHome = () => {
   return (
     <>
       <HomeBanner control={comp} />
-      {comp.featured_products_grid_section_07 && <ProductHighlights />}
-      <LastBanner />
-      {comp.experienced_center_popular_products_slider_08 && (
+      {comp.featured_products_grid_section_08 && <ProductHighlights />}
+      {comp.last_dual_banner_section_09 && <LastBanner />}
+      {comp.experienced_center_popular_products_slider_10 && (
         <ExperienceCenter />
       )}
-      {comp.why_choose_us_09 && <WeProvide />}
-      {comp.achievements_stats_10 && <OurAchievements />}
-      {comp.client_logo_carousel_11 && <TopClients />}
-      {comp.advantages_list_12 && <OurAdServices />}
-      {comp.popular_brands_row_13 && <PopularBrands />}
-      {comp.youtube_promotion_section_14 && <OurYoutube />}
+      {comp.why_choose_us_11 && <WeProvide />}
+      {comp.achievements_stats_12 && <OurAchievements />}
+      {comp.client_logo_carousel_13 && <TopClients />}
+      {comp.advantages_list_14 && <OurAdServices />}
+      {comp.popular_brands_row_15 && <PopularBrands />}
+      {comp.youtube_promotion_section_16 && <OurYoutube />}
     </>
   );
 };

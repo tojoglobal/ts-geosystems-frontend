@@ -7,7 +7,7 @@ const GadgetGoHighBanner = () => {
   if (isLoading) return null;
   return (
     <div className="md:w-full my-3 md:my-5 mx-3 max-w-[1370px] md:mx-auto">
-      <div className="flex h-96 md:h-64 w-full flex-col md:flex-row gap-3 md:gap-4">
+      <div className="flex h-96 md:h-72 w-full flex-col md:flex-row gap-3 md:gap-4">
         <div className="w-full md:w-[33%] overflow-hidden rounded-md group">
           <img
             src={`${import.meta.env.VITE_OPEN_APIURL}${

@@ -18,9 +18,9 @@ const HomeBanner = ({ control }) => {
       {control.promo_product_banner_02 && <MobilesBanner />}
       {control.feature_highlight_banner_03 && <GadgetBanner />}
       {control.feature_highlight_banner_04 && <GadgetGoHighBanner />}
-      {control.product_higlight_banner_section_06 && <GoHighBanner />}
-      {control.product_showcase_category_grid_05 && <CategoryBanner />}
-      {control.product_higlight_banner_section_06 && <GoHighBannerAnother />}
+      {control.product_showcase_banner_05 && <GoHighBanner />}
+      {control.product_showcase_category_grid_06 && <CategoryBanner />}
+      {control.product_higlight_banner_section_07 && <GoHighBannerAnother />}
     </>
   );
 };
