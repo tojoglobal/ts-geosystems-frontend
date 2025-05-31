@@ -63,6 +63,11 @@ const menuItems = [
     to: "/dashboard/support",
   },
   {
+    label: "Credit Account",
+    icon: <LifeBuoy size={20} />,
+    to: "/dashboard/credit-account",
+  },
+  {
     label: "Service Inquiries",
     icon: <BsQuestionCircle size={20} />,
     to: "/dashboard/service-inquiries",

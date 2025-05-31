@@ -89,12 +89,13 @@ import AddUserManuals from "./Dashboard/UserManuals/AddUserManuals";
 import AddQuickGuides from "./Dashboard/QuickGuides/AddQuickGuides";
 import AdminUpdateTradeIn from "./Pages/Control/AdminUpdateTradeIn";
 import AdminUpdateSupport from "./Pages/Control/AdminUpdateSupport";
-import CreditAccountApplication from "./Pages/NavComponents/CreditAccountApplication";
 import AdminUpdateUsedEquipment from "./Pages/Control/AdminUpdateUsedEquipment";
 import AdminUpdateFooter from "./Pages/Control/AdminUpdateFooter";
 import SiteMap from "./Components/SiteMap";
 import HelpDeskButton from "./Pages/HelpDeskButton";
 import ProductQuestion from "./Dashboard/Products/ProductQuestion";
+import CreditAccountApplication from "./Dashboard/CreditAccount/CreditAccountApplication";
+import AdminShowCreditAccount from "./Dashboard/CreditAccount/AdminShowCreditAccount";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -197,6 +198,7 @@ const AppLayout = () => {
           <Route path="update-profile" element={<UpdateProfile />} />
           {/* product route */}
           <Route path="product" element={<ProductTable />} />
+          <Route path="credit-account" element={<AdminShowCreditAccount />} />
           <Route path="product/question" element={<ProductQuestion />} />
           <Route path="add-product" element={<ProductAddForm />} />
           <Route path="update-product/:id" element={<UpdateProductForm />} />
