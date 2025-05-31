@@ -14,12 +14,14 @@ const ProductLayout = () => {
     isDetailsPage && breadcrumb?.product?.name ? breadcrumb.product.name : "";
   const productId =
     isDetailsPage && breadcrumb?.product?.id ? breadcrumb.product.id : "";
-    
+
   return (
-    <div className="relative">
-      <div className="z-50">
-        <AskAQuestion productName={productName} productId={productId} />
-      </div>
+    <div>
+      {isDetailsPage && (
+        <div className="z-50">
+          <AskAQuestion productName={productName} productId={productId} />
+        </div>
+      )}
       <div className="max-w-[1370px] mx-auto min-h-screen bg-white text-black mt-4 mb-10">
         {isDetailsPage && breadcrumb?.product && (
           <div className="flex items-center gap-1 text-[11px] mt-5 mb-2 flex-wrap">
