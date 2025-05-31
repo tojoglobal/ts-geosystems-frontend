@@ -1,274 +1,284 @@
-import React, { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { FaEdit, FaTrash } from "react-icons/fa";
-import { useAxiospublic } from "../../Hooks/useAxiospublic";
-import Swal from "sweetalert2";
-import "sweetalert2/dist/sweetalert2.min.css";
-import useDataQuery from "../../utils/useDataQuery";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useEffect, useState, useRef } from "react";
+import { useLocation, NavLink, Link } from "react-router-dom";
+import {
+  Menu,
+  X,
+  LayoutDashboard,
+  Mail,
+  Calendar,
+  ChevronDown,
+  ChevronUp,
+  MessageCircle,
+  File,
+  Users,
+  Layers,
+  Drum,
+  MonitorCogIcon,
+  PackageCheck,
+  MessageSquareText,
+  Repeat,
+  LifeBuoy,
+  BookUser,
+  BookmarkCheck,
+  Tags,
+} from "lucide-react";
+import SidebarProfileDropdown from "./SidebarProfileDropdown/SidebarProfileDropdown";
+import logo from "/TS-WEB-LOGO.png";
+import smallLogo from "/favicon.png";
+import {
+  MdArticle,
+  MdCategory,
+  MdLocalOffer,
+  MdOutlineShoppingCart,
+  MdPercent,
+  MdWebStories,
+} from "react-icons/md";
+import { BsQuestionCircle } from "react-icons/bs";
 
-const generateSlug = (text) =>
-  text
-    .toLowerCase()
-    .replace(/\s+/g, "-")
-    .replace(/[^a-z0-9-]/g, "");
+// Menu structure remains unchanged
+const menuItems = [
+  // ... [unchanged menuItems array]
+  // Copy your menuItems array here as in your original code
+  // For brevity, not shown in full
+];
 
-const AddUserManuals = () => {
-  const axiosPublicUrl = useAxiospublic();
-  const [imagePreview, setImagePreview] = useState(null);
-  const [editingBrand, setEditingBrand] = useState(null);
+// Helper to determine if a route is active (for submenu highlighting)
+const isSubActive = (location, submenu) =>
+  submenu.some((sub) => location.pathname.startsWith(sub.to));
 
-  const {
-    data = {},
-    isLoading,
-    error,
-    refetch: fetchuserManuals,
-  } = useDataQuery(["userManuals"], "/api/userManuals");
-  const userManuals = data?.data || [];
-  
-  const { register, handleSubmit, watch, reset, setValue } = useForm();
+const Sidebar = ({
+  collapsed,
+  toggleSidebar,
+  mobileOpen,
+  toggleMobileSidebar,
+}) => {
+  const location = useLocation();
+  const [openSubmenus, setOpenSubmenus] = useState({});
+  const scrollRef = useRef < HTMLDivElement > null;
 
-  const watchuserManualsName = watch("userManualsName", "");
-
-  const onSubmit = async (data) => {
-    try {
-      const formData = new FormData();
-      formData.append("userManuals_name", data.userManualsName);
-      formData.append("slug", generateSlug(data.userManualsName));
-      formData.append("userManualslink", data.userManualslink);
-      if (data.photo && data.photo[0]) {
-        formData.append("photo", data.photo[0]);
-      }
-
-      let message = "";
-      if (editingBrand) {
-        await axiosPublicUrl.put(
-          `/api/put-userManuals/${editingBrand.id}`,
-          formData,
-          {
-            headers: { "Content-Type": "multipart/form-data" },
-          }
-        );
-        message = "User Manual updated successfully!";
-      } else {
-        await axiosPublicUrl.post("/api/userManuals", formData, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
-        message = "User Manual added successfully!";
-      }
-
-      fetchuserManuals();
-      reset();
-      setEditingBrand(null);
-      setImagePreview(null);
-      Swal.fire("Success", message, "success");
-    } catch (error) {
-      Swal.fire("Error", error.message || "Error saving user manual.", "error");
-    }
-  };
-
-  const handleEdit = (manual) => {
-    setEditingBrand(manual);
-    setValue("userManualsName", manual?.user_manuals_name);
-    setValue("userManualslink", manual.user_manuals_link);
-    setImagePreview(manual?.photo);
-  };
-
-  const handleDelete = async (id) => {
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
-      confirmButtonText: "Yes, delete it!",
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        try {
-          await axiosPublicUrl.delete(`/api/userManuals/${id}`);
-          fetchuserManuals();
-          Swal.fire("Deleted!", "User manual has been deleted.", "success");
-        } catch (error) {
-          Swal.fire(
-            "Error",
-            error.message || "Error deleting user manual.",
-            "error"
-          );
-        }
-      }
-    });
-  };
-
+  // Keep scroll position when navigating between routes
   useEffect(() => {
-    const subscription = watch((value) => {
-      if (value.photo && value.photo.length > 0) {
-        const file = value.photo[0];
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          setImagePreview(reader.result);
-        };
-        reader.readAsDataURL(file);
+    if (scrollRef.current) {
+      // On first mount, restore last scroll position
+      const scrollY = sessionStorage.getItem("sidebar-scroll");
+      if (scrollY) scrollRef.current.scrollTop = parseInt(scrollY, 10);
+      // Save scroll position on unmount
+      return () => {
+        sessionStorage.setItem(
+          "sidebar-scroll",
+          String(scrollRef.current?.scrollTop || 0)
+        );
+      };
+    }
+  }, []);
+
+  // Open submenu if its child is active
+  useEffect(() => {
+    const activeSubmenus = {};
+    menuItems.forEach((item) => {
+      if (item.submenu && isSubActive(location, item.submenu)) {
+        activeSubmenus[item.label] = true;
       }
     });
-    return () => subscription.unsubscribe();
-  }, [watch]);
+    setOpenSubmenus((prev) => ({
+      ...prev,
+      ...activeSubmenus,
+    }));
+    // Don't scroll sidebar to top on route change
+  }, [location.pathname]);
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error loading user manuals</div>;
+  const toggleSubmenu = (label) => {
+    setOpenSubmenus((prev) => ({
+      ...prev,
+      [label]: !prev[label],
+    }));
+  };
 
   return (
-    <div className="max-w-4xl mx-auto mb-3">
-      <h2 className="text-2xl font-bold mb-3 md:mb-5">Add a userManualse</h2>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="mb-4">
-          <label className="block text-sm font-semibold mb-1">
-            User Manuals Name
-          </label>
-          <input
-            type="text"
-            {...register("userManualsName", { required: true })}
-            className="w-full input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
-            placeholder="Enter Manuals name"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-sm font-semibold mb-1">Slug</label>
-          <input
-            type="text"
-            value={generateSlug(watchuserManualsName)}
-            readOnly
-            className="w-full input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-sm font-semibold mb-1">
-            User Manuals Logo
-          </label>
-          <input
-            type="file"
-            accept="image/*"
-            {...register("photo")}
-            className="w-full input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
-          />
-          {imagePreview && (
-            <img
-              src={
-                imagePreview.startsWith("data:")
-                  ? imagePreview
-                  : `${
-                      import.meta.env.VITE_OPEN_APIURL
-                    }/uploads/${imagePreview}`
-              }
-              alt="Preview"
-              className="h-44 object-cover mt-3 rounded-sm"
-            />
-          )}
-          <div className="mt-4">
-            <label className="block text-sm font-semibold mb-1">
-              User Manuals Drive Link
-            </label>
-            <input
-              type="text"
-              {...register("userManualslink", { required: true })}
-              className="w-full input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
-              placeholder="Enter userManuals Link"
-            />
-          </div>
-        </div>
-        <button
-          type="submit"
-          className="w-full bg-teal-600 cursor-pointer text-white py-2 px-4 rounded-sm hover:bg-teal-700 transition"
+    <>
+      <div
+        className={`bg-gray-900 flex flex-col justify-between fixed md:relative z-[60] transition-all duration-300
+          ${collapsed ? "w-20 pt-5 md:pt-0" : "w-64 md:w-72"}
+          h-screen ${mobileOpen ? "translate-x-0" : "-translate-x-full"}
+          md:translate-x-0 shadow-2xl md:shadow-none
+        `}
+      >
+        {/* Top Section */}
+        <div
+          className={`${
+            collapsed
+              ? "flex items-center justify-center"
+              : "flex items-center justify-between"
+          } p-4 border-b border-gray-800 shrink-0`}
         >
-          {editingBrand ? "Update userManualse" : "Add userManualse"}
-        </button>
-      </form>
-      {/* Brands Table */}
-      <div className="mt-8">
-        <div className="relative overflow-x-auto shadow-md rounded-sm">
-          <div className="inline-block min-w-full align-middle">
-            <div className="overflow-hidden">
-              <table className="min-w-full border border-gray-600 table-auto">
-                <thead className="bg-gray-800 text-white">
-                  <tr>
-                    <th className="text-left p-2 sm:p-3 border border-gray-600 whitespace-nowrap">
-                      Name
-                    </th>
-                    <th className="text-left p-2 sm:p-3 border border-gray-600 whitespace-nowrap">
-                      Logo
-                    </th>
-                    <th className="text-center p-2 sm:p-3 border border-gray-600 whitespace-nowrap">
-                      Manuals Link
-                    </th>
-                    <th className="text-center p-2 sm:p-3 border border-gray-600 whitespace-nowrap">
-                      Actions
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {Array.isArray(userManuals) && userManuals.length > 0 ? (
-                    userManuals.map((manual) => (
-                      <tr
-                        key={manual?.id}
-                        className="border border-gray-600 bg-gray-900 text-white hover:bg-gray-800 transition-colors"
-                      >
-                        <td className="p-2 sm:p-3 border border-gray-600 whitespace-nowrap">
-                          {manual?.user_manuals_name}
-                        </td>
-                        <td className="p-2 sm:p-3 border border-gray-600">
-                          <img
-                            src={`${import.meta.env.VITE_OPEN_APIURL}/uploads/${
-                              manual?.photo
-                            }`}
-                            alt={manual?.user_manuals_name}
-                            className="w-20 h-12 object-cover rounded"
-                          />
-                        </td>
-                        <td className="text-center p-2 sm:p-3 border border-gray-600 whitespace-nowrap">
-                          <a
-                            href={manual?.user_manuals_link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-400 hover:text-blue-500"
-                          >
-                            {manual?.user_manuals_name.slice(0, 20)}
-                          </a>
-                        </td>
-                        <td className="text-center p-2 sm:p-3 border border-gray-600 whitespace-nowrap">
-                          <div className="flex justify-center items-center gap-3">
-                            <button
-                              onClick={() => handleEdit(manual)}
-                              className="text-blue-300 cursor-pointer hover:text-blue-500 p-1"
-                            >
-                              <FaEdit />
-                            </button>
-                            <button
-                              onClick={() => handleDelete(manual?.id)}
-                              className="text-red-600 cursor-pointer hover:text-red-800 p-1"
-                            >
-                              <FaTrash />
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))
-                  ) : (
-                    <tr className="border border-gray-600 bg-gray-900 text-white">
-                      <td
-                        colSpan="4"
-                        className="text-center p-3 border border-gray-600"
-                      >
-                        No userManualse found.
-                      </td>
-                    </tr>
+          <h2
+            className={`text-xl font-bold transition-all ${
+              collapsed ? "hidden md:block text-center" : ""
+            }`}
+          >
+            {collapsed ? (
+              <Link to="/">
+                <img src={smallLogo} alt="Logo" className="h-fit" />
+              </Link>
+            ) : (
+              <Link to="/">
+                <img src={logo} alt="Logo" className="w-[90%]" />
+              </Link>
+            )}
+          </h2>
+          <button
+            onClick={toggleSidebar}
+            className={`${
+              collapsed ? "hidden" : " hidden md:block"
+            } text-white cursor-pointer`}
+          >
+            <Menu size={20} />
+          </button>
+          <button
+            onClick={toggleMobileSidebar}
+            className="md:hidden text-white"
+          >
+            <X size={20} />
+          </button>
+        </div>
+
+        {/* Scrollable Menu */}
+        <div
+          ref={scrollRef}
+          className={`flex-1 overflow-y-auto overflow-x-hidden scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-900 px-2 py-2 space-y-1
+            custom-sidebar-scroll
+          `}
+        >
+          {menuItems.map(({ label, to, icon, submenu }) => (
+            <div key={label} className="relative group">
+              {!submenu ? (
+                <NavLink
+                  key={label}
+                  to={to}
+                  className={({ isActive }) =>
+                    `flex items-center gap-3 px-2 md:px-4 py-2 rounded-lg text-[15px] font-medium transition
+                    ${
+                      isActive && location.pathname === to
+                        ? "bg-gradient-to-r from-teal-600 to-teal-400 text-white shadow"
+                        : "text-gray-200 hover:bg-teal-700/80 hover:text-white"
+                    }`
+                  }
+                  style={{
+                    boxShadow:
+                      location.pathname === to
+                        ? "0 1px 8px 0 rgba(32,180,179,0.12)"
+                        : undefined,
+                  }}
+                >
+                  <span className="ml-1">{icon}</span>
+                  {!collapsed && <span>{label}</span>}
+                </NavLink>
+              ) : (
+                <div>
+                  <button
+                    onClick={() => toggleSubmenu(label)}
+                    className={`w-full cursor-pointer flex items-center justify-between gap-2 px-2 md:px-4 py-2 rounded-lg text-[15px] text-gray-200 hover:bg-teal-700/80 hover:text-white transition`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className="ml-1">{icon}</span>
+                      {!collapsed && <span>{label}</span>}
+                    </div>
+                    {!collapsed &&
+                      (openSubmenus[label] ? (
+                        <ChevronUp size={16} />
+                      ) : (
+                        <ChevronDown size={16} />
+                      ))}
+                  </button>
+                  {/* Improved Submenu */}
+                  {(openSubmenus[label] || collapsed) && (
+                    <div
+                      className={`${
+                        collapsed
+                          ? "absolute left-full top-1 ml-2 w-56 z-[1000] p-2 rounded-lg bg-gray-800 shadow-xl opacity-0 group-hover:opacity-100 transition-all"
+                          : "pl-6 mt-1"
+                      } space-y-1`}
+                    >
+                      {submenu.map((item) => (
+                        <NavLink
+                          key={item.to}
+                          to={item.to}
+                          className={({ isActive }) =>
+                            `block text-[15px] px-4 py-1.5 rounded-md font-normal transition
+                            ${
+                              isActive || location.pathname.startsWith(item.to)
+                                ? "bg-teal-600 text-white shadow"
+                                : "text-gray-300 hover:bg-teal-500/80 hover:text-white"
+                            }`
+                          }
+                          style={{
+                            marginLeft: collapsed ? 0 : 0,
+                          }}
+                        >
+                          {item.label}
+                        </NavLink>
+                      ))}
+                    </div>
                   )}
-                </tbody>
-              </table>
+                </div>
+              )}
+
+              {/* Tooltip on collapsed */}
+              {collapsed && (
+                <div className="absolute left-full top-1 z-50 ml-2 w-44 p-2 rounded bg-gray-800 text-sm text-white shadow-lg opacity-0 group-hover:opacity-100 transition pointer-events-none">
+                  {label}
+                  {submenu && (
+                    <div className="mt-2 space-y-1">
+                      {submenu.map((sub) => (
+                        <div
+                          key={sub.to}
+                          className="text-xs text-gray-300 hover:text-white"
+                        >
+                          {sub.label}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
-          </div>
+          ))}
+        </div>
+
+        {/* Bottom Profile Section */}
+        <div className="shrink-0">
+          {!collapsed && <SidebarProfileDropdown collapsed={collapsed} />}
         </div>
       </div>
-    </div>
+
+      {/* Overlay for mobile */}
+      {mobileOpen && (
+        <div
+          className="fixed inset-0 z-50 md:hidden"
+          onClick={toggleMobileSidebar}
+        />
+      )}
+
+      {/* Custom CSS for improved submenu, scrollbar, etc. */}
+      <style>{`
+        .custom-sidebar-scroll::-webkit-scrollbar-thumb {
+          background: #374151;
+          border-radius: 6px;
+        }
+        .custom-sidebar-scroll::-webkit-scrollbar-track {
+          background: #111827;
+        }
+        .custom-sidebar-scroll::-webkit-scrollbar {
+          width: 7px;
+        }
+        .custom-sidebar-scroll {
+          scrollbar-width: thin;
+          scrollbar-color: #374151 #111827;
+        }
+      `}</style>
+    </>
   );
 };
 
-export default AddUserManuals;
+export default Sidebar;

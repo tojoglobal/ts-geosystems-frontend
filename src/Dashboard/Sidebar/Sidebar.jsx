@@ -22,7 +22,6 @@ import {
   BookmarkCheck,
   Tags,
 } from "lucide-react";
-import SidebarProfileDropdown from "./SidebarProfileDropdown/SidebarProfileDropdown";
 import logo from "/TS-WEB-LOGO.png";
 import smallLogo from "/favicon.png";
 import {
@@ -34,6 +33,7 @@ import {
   MdWebStories,
 } from "react-icons/md";
 import { BsQuestionCircle } from "react-icons/bs";
+import SidebarProfileDropdown from "./SidebarProfileDropdown/SidebarProfileDropdown";
 const menuItems = [
   {
     label: "Dashboard",
@@ -318,7 +318,6 @@ const Sidebar = ({
                   )}
                 </div>
               )}
-
               {/* Tooltip when collapsed */}
               {collapsed && (
                 <div className="absolute left-full top-1 z-50 ml-2 w-40 p-2 rounded bg-gray-700 text-sm text-white shadow-lg opacity-0 group-hover:opacity-100 transition">
@@ -340,13 +339,11 @@ const Sidebar = ({
             </div>
           ))}
         </div>
-
         {/* Bottom Profile Section Fixed */}
         <div className="shrink-0">
           {!collapsed && <SidebarProfileDropdown collapsed={collapsed} />}
         </div>
       </div>
-
       {/* Invisible overlay for handling outside clicks */}
       {mobileOpen && (
         <div

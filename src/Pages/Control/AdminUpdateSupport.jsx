@@ -81,14 +81,14 @@ const AdminUpdateSupport = () => {
         Update Support Page Instrument Types
       </h1>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
-        <div className="rounded p-3 border">
+        <div className="rounded p-3 border border-gray-700">
           <h2 className="text-base font-semibold mb-2">Instrument Types</h2>
-          <div className="space-y-1">
+          <div className="space-y-2">
             {instrumentTypeFields.map((field, index) => (
-              <div key={field.id} className="flex gap-1">
+              <div key={field.id} className="flex gap-2">
                 <input
                   {...register(`instrument_types.${index}`)}
-                  className="flex-1 p-1.5 border rounded text-sm"
+                  className="flex-1 p-1.5 border border-gray-600 rounded text-sm"
                   placeholder="Enter instrument type"
                 />
                 <button
