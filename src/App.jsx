@@ -96,6 +96,7 @@ import HelpDeskButton from "./Pages/HelpDeskButton";
 import ProductQuestion from "./Dashboard/Products/ProductQuestion";
 import CreditAccountApplication from "./Dashboard/CreditAccount/CreditAccountApplication";
 import AdminShowCreditAccount from "./Dashboard/CreditAccount/AdminShowCreditAccount";
+import AdminUpdateHelpDesk from "./Pages/Control/AdminUpdateHelpDesk";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -216,6 +217,7 @@ const AppLayout = () => {
           <Route path="orders" element={<OrderTable />} />
           {/* hoem page controll */}
           <Route path="home-page" element={<HomePageControl />} />
+          <Route path="help-desk" element={<AdminUpdateHelpDesk />} />
           <Route path="client-messages" element={<ClientMessages />} />
           <Route path="trade-in" element={<TradeInData />} />
           {/* support route */}
