@@ -58,7 +58,7 @@ const AdminUpdateOurAchievements = () => {
   }, [data, reset]);
 
   return (
-    <form onSubmit={handleSubmit(mutation.mutate)} className="space-y-6 p-4">
+    <form onSubmit={handleSubmit(mutation.mutate)} className="space-y-6">
       <h2 className="text-2xl font-bold mb-4 text-teal-500">
         Update {data?.section_title || ""}
       </h2>

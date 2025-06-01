@@ -166,9 +166,9 @@ const HomePageControl = () => {
         <div className="my-6 border-t border-gray-200/20" />
         <SingleImages />
         <div className="my-6 border-t border-gray-200/20" />
-        <ExperienceCenterControl />
-        <div className="my-6 border-t border-gray-200/20" />
         <LastBannerControl />
+        <div className="my-6 border-t border-gray-200/20" />
+        <ExperienceCenterControl />
         <div className="my-6 border-t border-gray-200/20" />
         <AdminUpdateWeProvide />
         <div className="my-6 border-t border-gray-200/20" />
