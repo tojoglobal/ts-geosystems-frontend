@@ -15,18 +15,6 @@ const ExperienceCenterControl = () => {
     "/api/get-experience-center-images"
   );
   const images = data?.data || [];
-  // const {
-  //   data: images = [],
-  //   isLoading,
-  //   isError,
-  //   refetch,
-  // } = useQuery({
-  //   queryKey: ["experience_center_images"],
-  //   queryFn: async () => {
-  //     const res = await axiosPublicUrl.get("/api/get-experience-center-images");
-  //     return res?.data?.data || [];
-  //   },
-  // });
 
   const handleImageUpload = async (event) => {
     const files = Array.from(event.target.files);
