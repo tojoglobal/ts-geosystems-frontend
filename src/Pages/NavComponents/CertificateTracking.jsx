@@ -17,11 +17,10 @@ const CertificateTracking = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(formData);
+    // Implement search/submit logic if needed
   };
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  if (isLoading) return <div>Loading...</div>;
 
   return (
     <div className="max-w-[1370px] mx-auto p-5">
@@ -33,7 +32,7 @@ const CertificateTracking = () => {
         <span className="text-red-600 font-medium">Certificate Tracking</span>
       </div>
       <h1 className="text-[28px] font-light mt-2 text-[#e62245] mb-4 uppercase">
-        Certificate Tracking
+        {certificateData?.title || "Certificate Tracking"}
       </h1>
       {certificateData?.description && (
         <div className="text-center mb-6">
@@ -45,10 +44,11 @@ const CertificateTracking = () => {
       )}
       <hr className="my-8 border-gray-300" />
       <div className="text-center mb-10">
-        <h2 className="text-2xl font-semibold mb-2">Tracking Information</h2>
+        <h2 className="text-2xl font-semibold mb-2">
+          {certificateData?.tracking_title || "Tracking Information"}
+        </h2>
         <p className="text-gray-600 text-sm mb-6">
-          Tracking information of your Total Station, Auto Level, Digital Level,
-          Theodolite, RTK
+          {certificateData?.tracking_description || ""}
         </p>
         <form
           onSubmit={handleSubmit}
@@ -86,11 +86,15 @@ const CertificateTracking = () => {
         </form>
       </div>
       <div className="flex justify-center my-8">
-        <img
-          src="https://cdn11.bigcommerce.com/s-ew2v2d3jn1/product_images/uploaded_images/banner-hire-page-a.jpg"
-          alt="Certificate Equipment"
-          className="rounded max-w-4xl w-full"
-        />
+        {certificateData?.image_url && (
+          <img
+            src={`${import.meta.env.VITE_OPEN_APIURL}${
+              certificateData.image_url
+            }`}
+            alt="Certificate Equipment"
+            className="rounded max-w-4xl w-full"
+          />
+        )}
       </div>
     </div>
   );
