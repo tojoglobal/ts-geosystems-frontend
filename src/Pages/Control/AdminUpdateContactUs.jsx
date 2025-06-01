@@ -11,14 +11,14 @@ const AdminUpdateContactUs = () => {
   const queryClient = useQueryClient();
 
   // Fetch contact data using TanStack Query
-  const { data: contactData, isLoading } = useQuery({
+  const { data: contactData={}, isLoading } = useQuery({
     queryKey: ["contactInfo"],
     queryFn: async () => {
       const response = await axiosPublicUrl.get("/api/admin-contact-us");
       return response.data;
     },
   });
-
+  
   // Mutation for updating contact data
   const updateContactMutation = useMutation({
     mutationFn: (data) => axiosPublicUrl.put("/api/admin-contact-us", data),
@@ -47,7 +47,7 @@ const AdminUpdateContactUs = () => {
     reset,
     formState: { errors },
   } = useForm({
-    defaultValues: {
+    defaultValues: contactData || {
       phoneNumbers: [{ value: "" }],
       emails: [{ value: "" }],
       officeAddresses: [{ value: "" }],
@@ -164,7 +164,7 @@ const AdminUpdateContactUs = () => {
     updateContactMutation.mutate(filteredData);
   };
 
-  if (isLoading) return <Loader />;
+  if (isLoading || !contactData) return <Loader />;
 
   return (
     <div>
