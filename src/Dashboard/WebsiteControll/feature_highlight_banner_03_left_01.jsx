@@ -201,7 +201,10 @@ const Feature_highlight_banner_03_left_01 = () => {
             items={images.map((img) => img.id)}
             strategy={verticalListSortingStrategy}
           >
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 mt-6">
+            <p className="text-sm text-gray-400 mt-5 mb-1">
+              Recommended: 920×320px (desktop optimal, ~2.88:1 ratio)
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
               {images.map((image) => (
                 <FeatureSortableImage
                   key={image.id}

@@ -175,6 +175,9 @@ const SlideContorols = () => {
             {fields.includes("image") && (
               <div>
                 <Label>Slide Image</Label>
+                <p className="text-sm text-gray-400 mb-2">
+                  Recommended: 1920×540px (16:5 ratio) for optimal display
+                </p>
                 <div className="relative rounded-md">
                   <div className="absolute top-2 right-2">
                     <label className="cursor-pointer flex items-center gap-1 text-sm text-blue-500">

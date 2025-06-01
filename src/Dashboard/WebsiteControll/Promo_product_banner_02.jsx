@@ -201,7 +201,10 @@ const Promo_product_banner_02 = () => {
             items={images.map((img) => img.id)}
             strategy={verticalListSortingStrategy}
           >
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 mt-6">
+            <p className="text-sm text-gray-400 mb-1 mt-5">
+              Recommended: 1370×425px (desktop optimal, ~3.2:1 ratio)
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
               {images.map((image) => (
                 <SortableImage
                   key={image.id}
