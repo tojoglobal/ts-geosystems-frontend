@@ -121,31 +121,36 @@ const LastBannerControl = () => {
       ) : isError ? (
         <p className="text-center text-red-500 mt-4">Failed to load images</p>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {images.map((image, index) => (
-            <div key={image.id} className="relative group">
-              <img
-                src={`${import.meta.env.VITE_OPEN_APIURL}${image.photourl}`}
-                alt={`Last Banner ${index + 1}`}
-                className="w-full h-40 md:h-52 object-cover rounded-md"
-              />
-              <div className="absolute bottom-0 left-0 right-0 bg-black/50 text-white p-2 text-center">
-                Image {index + 1}
+        <>
+          <p className="text-sm text-gray-400 mb-2">
+            Recommended: 685×245px (desktop optimal, 2.8:1 ratio)
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {images.map((image, index) => (
+              <div key={image.id} className="relative group">
+                <img
+                  src={`${import.meta.env.VITE_OPEN_APIURL}${image.photourl}`}
+                  alt={`Last Banner ${index + 1}`}
+                  className="w-full h-40 md:h-52 object-cover rounded-md"
+                />
+                <div className="absolute bottom-0 left-0 right-0 bg-black/50 text-white p-2 text-center">
+                  Image {index + 1}
+                </div>
+                <button
+                  onClick={() => handleDeleteImage(image.id)}
+                  className="absolute cursor-pointer top-2 right-2 z-50 bg-red-500 text-white p-1.5 rounded-full opacity-0 group-hover:opacity-100 transition active:scale-95"
+                >
+                  <X className="w-4 h-4" />
+                </button>
               </div>
-              <button
-                onClick={() => handleDeleteImage(image.id)}
-                className="absolute cursor-pointer top-2 right-2 z-50 bg-red-500 text-white p-1.5 rounded-full opacity-0 group-hover:opacity-100 transition active:scale-95"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-          ))}
-          {images.length === 0 && (
-            <div className="col-span-2 text-center py-10 text-gray-500">
-              No images uploaded yet. You can upload up to 2 images.
-            </div>
-          )}
-        </div>
+            ))}
+            {images.length === 0 && (
+              <div className="col-span-2 text-center py-10 text-gray-500">
+                No images uploaded yet. You can upload up to 2 images.
+              </div>
+            )}
+          </div>
+        </>
       )}
     </div>
   );

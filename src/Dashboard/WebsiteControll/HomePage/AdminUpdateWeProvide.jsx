@@ -77,7 +77,7 @@ const AdminUpdateWeProvide = () => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="space-y-6 p-4 rounded-lg"
+      className="space-y-6"
     >
       <h2 className="text-2xl font-bold mb-4 text-teal-500">
         Update {data?.section_title || ""}
