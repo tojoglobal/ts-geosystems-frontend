@@ -28,8 +28,11 @@ const CertificateTracking = () => {
         <Link to="/" className="flex items-center gap-1">
           <CiHome className="text-base" /> Home
         </Link>
-        / <span className="text-red-600 font-medium">Support</span> /{" "}
-        <span className="text-red-600 font-medium">Certificate Tracking</span>
+        /{" "}
+        <Link to="/support" className="font-medium">
+          Support
+        </Link>{" "}
+        / <span className="text-red-600 font-medium">Certificate Tracking</span>
       </div>
       <h1 className="text-[28px] mt-2 text-[#e62245] mb-4 uppercase">
         {certificateData?.title || "Certificate Tracking"}
