@@ -4,36 +4,38 @@ import {
   Menu,
   X,
   LayoutDashboard,
+  Package,
+  ShoppingCart,
+  Users,
+  Layers,
+  Drum,
+  Monitor,
+  BadgeCheck,
+  MessageSquare,
+  Repeat,
+  LifeBuoy,
+  BookOpen,
+  Bookmark,
+  Tag,
   Mail,
   Calendar,
   ChevronDown,
   ChevronUp,
+  FileText,
   MessageCircle,
-  File,
-  Users,
-  Layers,
-  Drum,
-  MonitorCogIcon,
-  PackageCheck,
-  MessageSquareText,
-  Repeat,
-  LifeBuoy,
-  BookUser,
-  BookmarkCheck,
-  Tags,
 } from "lucide-react";
-import SidebarProfileDropdown from "./SidebarProfileDropdown/SidebarProfileDropdown";
-import logo from "/TS-WEB-LOGO.png";
-import smallLogo from "/favicon.png";
 import {
   MdArticle,
   MdCategory,
   MdLocalOffer,
-  MdOutlineShoppingCart,
   MdPercent,
   MdWebStories,
 } from "react-icons/md";
 import { BsQuestionCircle } from "react-icons/bs";
+import logo from "/TS-WEB-LOGO.png";
+import smallLogo from "/favicon.png";
+import SidebarProfileDropdown from "./SidebarProfileDropdown/SidebarProfileDropdown";
+
 const menuItems = [
   {
     label: "Dashboard",
@@ -42,12 +44,12 @@ const menuItems = [
   },
   {
     label: "Orders",
-    icon: <PackageCheck size={20} />,
+    icon: <Package size={20} />,
     to: "/dashboard/orders",
   },
   {
     label: "Client Messages",
-    icon: <MessageSquareText size={20} />,
+    icon: <MessageSquare size={20} />,
     to: "/dashboard/client-messages",
   },
   {
@@ -61,37 +63,42 @@ const menuItems = [
     to: "/dashboard/support",
   },
   {
+    label: "Credit Account",
+    icon: <LifeBuoy size={20} />,
+    to: "/dashboard/credit-account",
+  },
+  {
     label: "Service Inquiries",
     icon: <BsQuestionCircle size={20} />,
     to: "/dashboard/service-inquiries",
   },
   {
-    label: "Product",
-    icon: <MdOutlineShoppingCart size={20} />,
+    label: "All Products",
+    icon: <ShoppingCart size={20} />,
     to: "/dashboard/product",
   },
   {
     label: "Product Question",
-    icon: <MdOutlineShoppingCart size={20} />,
+    icon: <ShoppingCart size={20} />,
     to: "/dashboard/product/question",
   },
   {
     label: "Add Software",
-    icon: <MonitorCogIcon size={20} />,
+    icon: <Monitor size={20} />,
     to: "/dashboard/add-software",
   },
   {
     label: "Add UserManuals",
-    icon: <BookUser size={20} />,
+    icon: <BookOpen size={20} />,
     to: "/dashboard/add-userManuals",
   },
   {
     label: "Add QuickGuides",
-    icon: <BookmarkCheck size={20} />,
+    icon: <Bookmark size={20} />,
     to: "/dashboard/add-quickGuides",
   },
   {
-    label: "Add categorys",
+    label: "Add Categorys",
     icon: <MdCategory size={20} />,
     to: "/dashboard/add-categorys",
   },
@@ -107,7 +114,7 @@ const menuItems = [
   },
   {
     label: "Subscriber",
-    icon: <Tags size={20} />,
+    icon: <Tag size={20} />,
     to: "/dashboard/subscriber",
   },
   {
@@ -129,6 +136,7 @@ const menuItems = [
     icon: <MdWebStories size={20} />,
     submenu: [
       { label: "Home Page", to: "/dashboard/home-page" },
+      { label: "Help Desk", to: "/dashboard/help-desk" },
       { label: "Used Equipment", to: "/dashboard/used-equipment" },
       { label: "Hire", to: "/dashboard/hire" },
       { label: "Service", to: "/dashboard/service" },
@@ -160,7 +168,7 @@ const menuItems = [
   },
   {
     label: "Files",
-    icon: <File size={20} />,
+    icon: <FileText size={20} />,
     submenu: [
       { label: "Documents", to: "/dashboard/files/documents" },
       { label: "Images", to: "/dashboard/files/images" },
@@ -318,7 +326,6 @@ const Sidebar = ({
                   )}
                 </div>
               )}
-
               {/* Tooltip when collapsed */}
               {collapsed && (
                 <div className="absolute left-full top-1 z-50 ml-2 w-40 p-2 rounded bg-gray-700 text-sm text-white shadow-lg opacity-0 group-hover:opacity-100 transition">
@@ -340,13 +347,11 @@ const Sidebar = ({
             </div>
           ))}
         </div>
-
         {/* Bottom Profile Section Fixed */}
         <div className="shrink-0">
           {!collapsed && <SidebarProfileDropdown collapsed={collapsed} />}
         </div>
       </div>
-
       {/* Invisible overlay for handling outside clicks */}
       {mobileOpen && (
         <div

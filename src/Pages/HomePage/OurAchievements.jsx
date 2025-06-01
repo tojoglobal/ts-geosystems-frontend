@@ -10,34 +10,32 @@ const iconMap = [BsBriefcaseFill, FaUsers, FiSettings];
 
 const OurAchievements = () => {
   const axiosPublicUrl = useAxiospublic();
-  const { data = [], isLoading } = useQuery({
+  const { data = {}, isLoading } = useQuery({
     queryKey: ["ourAchievements"],
     queryFn: async () => {
       const res = await axiosPublicUrl.get("/api/our-achievements");
       return res.data;
     },
   });
-
-  if (isLoading) {
-    return <div className="text-center py-8">Loading...</div>;
-  }
+  const { section_title, items = [] } = data;
+  if (isLoading) return null;
 
   return (
     <div className="max-w-[1370px] text-black mx-auto px-3 py-6 md:py-12">
       <div className="flex items-center justify-center gap-2 md:gap-4 mb-6">
         <div className="flex-1 h-0.5 bg-[#e62245]" />
         <h2 className="text-center text-xl sm:text-2xl md:text-4xl font-bold text-[#e62245] whitespace-nowrap uppercase">
-          OUR ACHIEVEMENTS
+          {section_title}
         </h2>
         <div className="flex-1 h-0.5 bg-[#e62245]" />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8">
-        {data?.map((item, idx) => {
+        {items?.map((item, idx) => {
           const Icon = iconMap[idx] || iconMap[0];
           const rawNumber = item.number;
           const numericPart = parseInt(rawNumber, 10);
-          const hasPlus = rawNumber.includes("+");
+          const hasPlus = rawNumber?.includes("+");
 
           return (
             <InView triggerOnce={true} key={item.id || idx}>

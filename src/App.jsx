@@ -27,7 +27,7 @@ import QuickGuides from "./Pages/NavComponents/QuickGuides";
 import SoftwareDownloads from "./Pages/NavComponents/SoftwareDownloads";
 import AboutUs from "./Pages/NavComponents/AboutUs/AboutUs";
 import ContactUs from "./Pages/NavComponents/ContactUs";
-import Support from "./Pages/NavComponents/Support";
+import SupportRequestForm from "./Pages/NavComponents/SupportRequestForm";
 import ViewProfile from "./Dashboard/Profile/ViewProfile";
 import UpdateProfile from "./Dashboard/Profile/UpdateProfile";
 import TradeIn from "./Pages/NavComponents/TradeIn";
@@ -89,12 +89,14 @@ import AddUserManuals from "./Dashboard/UserManuals/AddUserManuals";
 import AddQuickGuides from "./Dashboard/QuickGuides/AddQuickGuides";
 import AdminUpdateTradeIn from "./Pages/Control/AdminUpdateTradeIn";
 import AdminUpdateSupport from "./Pages/Control/AdminUpdateSupport";
-import CreditAccountApplication from "./Pages/NavComponents/CreditAccountApplication";
 import AdminUpdateUsedEquipment from "./Pages/Control/AdminUpdateUsedEquipment";
 import AdminUpdateFooter from "./Pages/Control/AdminUpdateFooter";
 import SiteMap from "./Components/SiteMap";
 import HelpDeskButton from "./Pages/HelpDeskButton";
 import ProductQuestion from "./Dashboard/Products/ProductQuestion";
+import CreditAccountApplication from "./Dashboard/CreditAccount/CreditAccountApplication";
+import AdminShowCreditAccount from "./Dashboard/CreditAccount/AdminShowCreditAccount";
+import AdminUpdateHelpDesk from "./Pages/Control/AdminUpdateHelpDesk";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -124,7 +126,7 @@ const AppLayout = () => {
             element={<CreditAccountApplication />}
           />
           <Route path="/service" element={<Service />} />
-          <Route path="/support" element={<Support />} />
+          <Route path="/support" element={<SupportRequestForm />} />
           <Route path="/quick-guides" element={<QuickGuides />} />
           <Route path="/software-downloads" element={<SoftwareDownloads />} />
           <Route path="/trade-in" element={<TradeIn />} />
@@ -197,6 +199,7 @@ const AppLayout = () => {
           <Route path="update-profile" element={<UpdateProfile />} />
           {/* product route */}
           <Route path="product" element={<ProductTable />} />
+          <Route path="credit-account" element={<AdminShowCreditAccount />} />
           <Route path="product/question" element={<ProductQuestion />} />
           <Route path="add-product" element={<ProductAddForm />} />
           <Route path="update-product/:id" element={<UpdateProductForm />} />
@@ -214,6 +217,7 @@ const AppLayout = () => {
           <Route path="orders" element={<OrderTable />} />
           {/* hoem page controll */}
           <Route path="home-page" element={<HomePageControl />} />
+          <Route path="help-desk" element={<AdminUpdateHelpDesk />} />
           <Route path="client-messages" element={<ClientMessages />} />
           <Route path="trade-in" element={<TradeInData />} />
           {/* support route */}

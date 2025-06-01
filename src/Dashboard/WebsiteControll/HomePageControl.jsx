@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
-import { toast } from "react-toastify";
 import Promo_product_banner_02 from "./Promo_product_banner_02";
 import SingleImages from "./SingleImages";
 import SlideContorols from "./SlideContorols";
@@ -10,6 +9,8 @@ import Feature_highlight_banner_03_left_01 from "./feature_highlight_banner_03_l
 import AdminUpdateWeProvide from "./HomePage/AdminUpdateWeProvide";
 import AdminUpdateOurAchievements from "./HomePage/AdminUpdateOurAchievements";
 import AdminUpdateOurAdService from "./HomePage/AdminUpdateOurAdService";
+import LastBannerControl from "./LastBannerControl";
+import Swal from "sweetalert2";
 
 // Define the exact order of components as they appear on the homepage
 const COMPONENT_ORDER = [
@@ -17,16 +18,18 @@ const COMPONENT_ORDER = [
   "promo_product_banner_02",
   "feature_highlight_banner_03",
   "feature_highlight_banner_04",
-  "product_showcase_category_grid_05",
-  "product_higlight_banner_section_06",
-  "featured_products_grid_section_07",
-  "experienced_center_popular_products_slider_08",
-  "why_choose_us_09",
-  "achievements_stats_10",
-  "client_logo_carousel_11",
-  "advantages_list_12",
-  "popular_brands_row_13",
-  "youtube_promotion_section_14",
+  "product_showcase_banner_05",
+  "product_showcase_category_grid_06",
+  "product_higlight_banner_section_07",
+  "featured_products_grid_section_08",
+  "last_dual_banner_section_09",
+  "experienced_center_popular_products_slider_10",
+  "why_choose_us_11",
+  "achievements_stats_12",
+  "client_logo_carousel_13",
+  "advantages_list_14",
+  "popular_brands_row_15",
+  "youtube_promotion_section_16",
 ];
 
 const HomePageControl = () => {
@@ -69,9 +72,12 @@ const HomePageControl = () => {
         components: enabledComponents,
       });
       if (res.data.success) {
-        toast.success("Settings saved successfully!");
+        Swal.fire("Success", "Settings saved successfully!", "success");
       } else {
-        toast.error("Failed to save settings");
+        Swal.fire({
+          icon: "Error",
+          text: "Failed to save settings",
+        });
       }
     } catch (error) {
       console.log(error);
@@ -161,6 +167,8 @@ const HomePageControl = () => {
         <SingleImages />
         <div className="my-6 border-t border-gray-200/20" />
         <ExperienceCenterControl />
+        <div className="my-6 border-t border-gray-200/20" />
+        <LastBannerControl />
         <div className="my-6 border-t border-gray-200/20" />
         <AdminUpdateWeProvide />
         <div className="my-6 border-t border-gray-200/20" />

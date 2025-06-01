@@ -37,12 +37,12 @@ const slideLayouts = [
   { layout: "left", status: null, buttonText: "CONTACT US" }, // Slide 6
 ];
 
-const MainBanner = () => {
+const HeroBanner = () => {
   const {
     data = [],
     isLoading,
     error,
-  } = useDataQuery(["mainBanner"], "/api/slides");
+  } = useDataQuery(["heroBanner"], "/api/slides");
 
   useEffect(() => {
     const prev = document.querySelector(".custom-prev");
@@ -53,7 +53,7 @@ const MainBanner = () => {
     }
   }, []);
 
-  if (isLoading) return <ComponentLoader componentName="MainBanner" />;
+  if (isLoading) return <ComponentLoader componentName="HeroBanner" />;
   if (error) return <div>Error loading slides</div>;
 
   // Get slides from API
@@ -195,4 +195,4 @@ const MainBanner = () => {
   );
 };
 
-export default MainBanner;
+export default HeroBanner;

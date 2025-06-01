@@ -1,13 +1,12 @@
 import axios from "axios";
-import React, { useState } from "react";
+import { useState } from "react";
 import { FaFacebook, FaLinkedin, FaLock, FaEyeSlash } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { IoPersonSharp } from "react-icons/io5";
 import { useNavigate } from "react-router";
-import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 
-// this component not used yet 
+// this component not used yet
 const UserLogin = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
@@ -51,7 +50,7 @@ const UserLogin = () => {
 
       const data = await response.json();
       if (response.ok && data.success) {
-        toast.success("Login successful!");
+        Swal.fire("Success", "Login successful!");
         localStorage.setItem("user", JSON.stringify({ username }));
         navigate("/dashboard");
       } else {

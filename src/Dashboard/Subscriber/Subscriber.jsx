@@ -178,7 +178,7 @@ const Subscriber = () => {
   return (
     <div className="bg-slate-800 text-white rounded-lg p-4 my-2">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="md:text-xl font-semibold">Email Subscribers</h2>
+        <h2 className="md:text-xl font-semibold">Email Subscribers (Footer)</h2>
         <div className="flex items-center gap-2">
           <span className="text-sm text-gray-400">Show:</span>
           <select

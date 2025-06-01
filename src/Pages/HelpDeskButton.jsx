@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
+import useDataQuery from "../utils/useDataQuery";
 
 const HelpDeskButton = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -8,43 +9,39 @@ const HelpDeskButton = () => {
   const timeoutRef = useRef(null);
   const intervalRef = useRef(null);
 
+  // Fetch dynamic info
+  const { data: info, isLoading } = useDataQuery(
+    ["helpdeskInfo"],
+    "/api/helpdesk-info"
+  );
+
   useEffect(() => {
     const startLoop = () => {
-      // Show the button
       setIsVisible(true);
-
-      // Set timeout to hide after 5 seconds if panel is not open
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
       timeoutRef.current = setTimeout(() => {
-        if (!showInfo) {
-          setIsVisible(false);
-        }
-      }, 5000); // Show for 5 seconds
+        if (!showInfo) setIsVisible(false);
+      }, 5000);
     };
 
-    // Initial show after 15 seconds
-    const initialDelay = setTimeout(startLoop, 13000); // Wait 15 seconds before first show
+    const initialDelay = setTimeout(startLoop, 13000);
 
-    // Set interval for subsequent shows (13 seconds hide + 5 seconds show = 20 second cycle)
     intervalRef.current = setInterval(() => {
-      if (!showInfo) {
-        // Only run the loop if the info panel is not open
-        startLoop();
-      }
-    }, 18000); // 15 seconds hidden + 5 seconds visible = 20 seconds total cycle
+      if (!showInfo) startLoop();
+    }, 18000);
 
     return () => {
       clearTimeout(initialDelay);
       clearInterval(intervalRef.current);
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
     };
-  }, [showInfo]); // Re-run effect if showInfo changes
+  }, [showInfo]);
 
   const openPanel = () => {
     setShowInfo(true);
     setPanelAnim("animate-scaleIn");
-    setIsVisible(true); // Keep button visible while panel is open
-    if (timeoutRef.current) clearTimeout(timeoutRef.current); // Clear any pending hide timeout
+    setIsVisible(true);
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
     setTimeout(() => setPanelAnim(""), 300);
   };
 
@@ -53,11 +50,9 @@ const HelpDeskButton = () => {
     setTimeout(() => {
       setShowInfo(false);
       setPanelAnim("");
-      // After closing, restart the visibility logic from the start of a "hide" phase
-      setIsVisible(false); // Hide immediately after closing
-      if (intervalRef.current) clearInterval(intervalRef.current); // Clear existing interval
-      if (timeoutRef.current) clearTimeout(timeoutRef.current); // Clear existing timeout
-      // Restart the loop from the beginning of a 15-second hide
+      setIsVisible(false);
+      if (intervalRef.current) clearInterval(intervalRef.current);
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
       intervalRef.current = setInterval(() => {
         if (!showInfo) {
           setIsVisible(true);
@@ -65,9 +60,11 @@ const HelpDeskButton = () => {
             setIsVisible(false);
           }, 5000);
         }
-      }, 18000); // 15 seconds hidden + 5 seconds visible = 20 seconds total cycle
+      }, 18000);
     }, 300);
   };
+
+  if (isLoading) return null;
 
   return (
     <div
@@ -81,7 +78,7 @@ const HelpDeskButton = () => {
         >
           <div className="flex justify-between items-center mb-1 gap-1">
             <h3 className="font-bold text-center flex-1 text-gray-800">
-              Contact Support
+              {info?.title || "Support"}
             </h3>
             <button
               onClick={closePanel}
@@ -92,24 +89,32 @@ const HelpDeskButton = () => {
             </button>
           </div>
           <div className="space-y-1 text-sm">
-            <div className="flex items-center gap-1">
-              <p className="text-gray-600">Helpline Number:</p>
-              <p className="font-medium text-crimson-red">+1 (123) 456-7890</p>
-            </div>
-            <div className="flex items-center gap-1">
-              <p className="text-gray-600">WhatsApp:</p>
-              <p className="font-medium text-crimson-red">+1 (987) 654-3210</p>
-            </div>
-            <div className="flex items-center gap-1">
-              <p className="text-gray-600">Email:</p>
-              <p className="font-medium text-crimson-red">support@ts.com</p>
-            </div>
+            {info?.helpline_number && (
+              <div className="flex items-center gap-1">
+                <p className="text-gray-600">Helpline Number:</p>
+                <p className="font-medium text-crimson-red">
+                  {info.helpline_number}
+                </p>
+              </div>
+            )}
+            {info?.whatsapp && (
+              <div className="flex items-center gap-1">
+                <p className="text-gray-600">WhatsApp:</p>
+                <p className="font-medium text-crimson-red">{info.whatsapp}</p>
+              </div>
+            )}
+            {info?.email && (
+              <div className="flex items-center gap-1">
+                <p className="text-gray-600">Email:</p>
+                <p className="font-medium text-crimson-red">{info.email}</p>
+              </div>
+            )}
             <div className="w-full">
               <Link
-                to="/contact-us"
+                to={info?.contact_btn_link || "/contact-us"}
                 className="inline-block w-full justify-center text-center bg-crimson-red text-white px-4 py-1 rounded-[4px] font-semibold mt-2 shadow hover:bg-red-700 transition"
               >
-                Contact Us
+                {info?.contact_btn_label || "Contact Us"}
               </Link>
             </div>
           </div>
@@ -121,7 +126,7 @@ const HelpDeskButton = () => {
           }`}
         >
           <div className="absolute -top-3 right-1 transform translate-x-full bg-white text-crimson-red text-xs font-semibold px-2 py-1 rounded shadow-md whitespace-nowrap">
-            Need Support?
+            {info?.tooltip_text || "Need Support?"}
             <div className="absolute top-1/2 -left-1 w-2 h-2 bg-white transform -translate-y-1/2 rotate-45"></div>
           </div>
           <button

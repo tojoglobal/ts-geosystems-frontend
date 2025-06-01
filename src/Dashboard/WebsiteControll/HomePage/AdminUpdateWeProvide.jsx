@@ -10,13 +10,13 @@ const AdminUpdateWeProvide = () => {
   const queryClient = useQueryClient();
   const fileInputs = useRef([]);
 
-  const { data } = useQuery({
+  const { data = {} } = useQuery({
     queryKey: ["weProvide"],
     queryFn: async () => (await axiosPublicUrl.get("/api/we-provide")).data,
   });
 
   const { control, handleSubmit, reset, register, setValue, watch } = useForm({
-    defaultValues: { items: Array(3).fill({}) },
+    defaultValues: { section_title: "", items: Array(3).fill({}) },
   });
 
   const { fields } = useFieldArray({
@@ -31,16 +31,16 @@ const AdminUpdateWeProvide = () => {
       JSON.stringify(
         formData.items.map((item, index) => ({
           ...item,
-          oldImage: data[index]?.image || "", // send the original image if not updated
+          oldImage: data.items?.[index]?.image || "", // send the original image if not updated
+          section_title: formData.section_title,
         }))
       )
     );
     fileInputs.current.forEach((input, index) => {
       if (input?.files?.[0]) {
-        // Use a unique field name per file to keep the order/index
         dataToSend.append(`images[${index}]`, input.files[0]);
       }
-    });      
+    });
 
     try {
       await axiosPublicUrl.put("/api/we-provide", dataToSend, {
@@ -62,7 +62,8 @@ const AdminUpdateWeProvide = () => {
   useEffect(() => {
     if (data) {
       reset({
-        items: data.map((item) => ({
+        section_title: data.section_title || "",
+        items: data.items?.map((item) => ({
           ...item,
           image: item.image
             ? `${import.meta.env.VITE_OPEN_APIURL}${item.image}`
@@ -76,20 +77,29 @@ const AdminUpdateWeProvide = () => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="space-y-6 p-4 bg-gray-800 rounded-lg shadow text-white"
+      className="space-y-6 p-4 rounded-lg"
     >
       <h2 className="text-2xl font-bold mb-4 text-teal-500">
-        Update WE PROVIDE
+        Update {data?.section_title || ""}
       </h2>
-
-      {fields.map((item, idx) => (
+      <div className="mb-3">
+        <label className="block mb-1 font-semibold text-gray-200">
+          Section Title
+        </label>
+        <input
+          {...register("section_title", { required: true })}
+          placeholder="Section Title"
+          className="border border-gray-700 focus:outline-none p-2 rounded text-white placeholder-gray-400 w-full"
+        />
+      </div>
+      {fields?.map((item, idx) => (
         <div
           key={item.id || idx}
           className="border border-gray-700 rounded-md p-4 mb-2"
         >
           <div className="flex flex-col md:flex-row gap-4 items-center">
             <div className="flex flex-col items-center">
-              <div className="w-24 h-24 mb-2 rounded bg-gray-700 flex items-center justify-center overflow-hidden border border-gray-700">
+              <div className="w-24 h-24 mb-2 rounded flex items-center justify-center overflow-hidden border">
                 <img
                   src={
                     watch(`items.${idx}.image`) ||
@@ -129,12 +139,12 @@ const AdminUpdateWeProvide = () => {
               <input
                 {...register(`items.${idx}.title`, { required: true })}
                 placeholder="Title"
-                className="border border-gray-700 p-2 rounded bg-gray-700 text-white placeholder-gray-400"
+                className="border border-gray-700 focus:outline-none p-2 rounded text-white placeholder-gray-400"
               />
               <textarea
                 {...register(`items.${idx}.description`, { required: true })}
                 placeholder="Description"
-                className="border border-gray-700 p-2 rounded bg-gray-700 text-white placeholder-gray-400"
+                className="border border-gray-700 p-2 focus:outline-none rounded text-white placeholder-gray-400"
                 rows={3}
               />
             </div>

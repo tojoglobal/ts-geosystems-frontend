@@ -2,10 +2,11 @@ import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { Country, State, City } from "country-state-city";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import useToastSwal from "../Hooks/useToastSwal";
 
 const AddNewAddress = () => {
   const navigate = useNavigate();
+  const showToast = useToastSwal();
   const [countries, setCountries] = useState([]);
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
@@ -46,7 +47,7 @@ const AddNewAddress = () => {
 
   const onSubmit = (data) => {
     console.log("Address submitted:", data);
-    toast.success("Address added successfully!");
+    showToast("success", "Success!", "Address added successfully!");
     navigate("/user/account/address-book");
   };
 

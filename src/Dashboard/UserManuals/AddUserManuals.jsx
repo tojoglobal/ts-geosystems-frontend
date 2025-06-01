@@ -118,7 +118,7 @@ const AddUserManuals = () => {
 
   return (
     <div className="max-w-4xl mx-auto mb-3">
-      <h2 className="text-2xl font-bold mb-3 md:mb-5">Add a userManualse</h2>
+      <h2 className="text-2xl font-bold mb-3 md:mb-5">Add a User Manuals</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-4">
           <label className="block text-sm font-semibold mb-1">
@@ -160,7 +160,7 @@ const AddUserManuals = () => {
                     }/uploads/${imagePreview}`
               }
               alt="Preview"
-              className="w-4/12 h-24 object-cover mt-2 rounded-sm"
+              className="h-48 object-cover mt-2 rounded-sm"
             />
           )}
           <div className="mt-4">

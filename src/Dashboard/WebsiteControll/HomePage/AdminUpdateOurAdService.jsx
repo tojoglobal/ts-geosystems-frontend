@@ -9,14 +9,14 @@ const AdminUpdateOurAdService = () => {
   const axiosPublicUrl = useAxiospublic();
   const queryClient = useQueryClient();
 
-  const { data } = useQuery({
+  const { data={} } = useQuery({
     queryKey: ["ourAdServices"],
     queryFn: async () =>
       (await axiosPublicUrl.get("/api/our-ad-services")).data,
   });
-
+  
   const { control, handleSubmit, reset, register } = useForm({
-    defaultValues: { items: [] },
+    defaultValues: { section_title: "", items: [] },
   });
 
   const { fields, append, remove } = useFieldArray({
@@ -26,16 +26,17 @@ const AdminUpdateOurAdService = () => {
 
   const mutation = useMutation({
     mutationFn: (formData) =>
-      axiosPublicUrl.put("/api/our-ad-services", formData.items),
+      axiosPublicUrl.put("/api/our-ad-services", {
+        section_title: formData.section_title,
+        items: formData.items,
+      }),
     onSuccess: () => {
       queryClient.invalidateQueries(["ourAdServices"]);
-      Swal.fire({
-        icon: "success",
-        title: "Updated!",
-        text: "Our Advantage & Services updated successfully.",
-        timer: 2000,
-        showConfirmButton: false,
-      });
+      Swal.fire(
+        "Success",
+        "Our Advantage & Services updated successfully.",
+        "success"
+      );
     },
     onError: () => {
       Swal.fire({
@@ -45,20 +46,30 @@ const AdminUpdateOurAdService = () => {
       });
     },
   });
-  
 
   useEffect(() => {
-    if (data) reset({ items: data });
+    if (data)
+      reset({
+        section_title: data.section_title || "",
+        items: data.items || [],
+      });
   }, [data, reset]);
 
   return (
-    <form
-      onSubmit={handleSubmit(mutation.mutate)}
-      className="space-y-6 p-4 bg-gray-800 rounded-lg shadow-lg"
-    >
+    <form onSubmit={handleSubmit(mutation.mutate)} className="space-y-6 p-4">
       <h2 className="text-2xl font-bold mb-4 text-teal-400">
-        OUR ADVANTAGE & SERVICES
+        Update {data?.section_title || ""}
       </h2>
+      <div className="mb-3">
+        <label className="block mb-1 font-semibold text-gray-200">
+          Section Title
+        </label>
+        <input
+          {...register("section_title", { required: true })}
+          placeholder="Section Title"
+          className="border border-gray-600 bg-gray-800 focus:outline-none text-white p-2 rounded w-full"
+        />
+      </div>
       {fields.map((item, idx) => (
         <div
           key={item.id || idx}
@@ -66,7 +77,7 @@ const AdminUpdateOurAdService = () => {
         >
           <button
             type="button"
-            className="absolute top-3 right-3 text-red-400 hover:text-red-300"
+            className="absolute cursor-pointer top-3 right-3 text-red-400 hover:text-red-300"
             onClick={() => remove(idx)}
           >
             <FaTrash />

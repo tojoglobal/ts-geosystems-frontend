@@ -50,8 +50,8 @@ export default function BlogTypeManage() {
   };
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
-      <h2 className="text-2xl font-bold mb-4">
+    <div className="p-2 md:p-6 max-w-4xl mx-auto">
+      <h2 className="text-xl md:text-2xl font-bold mb-4">
         {editing ? "Edit Blog Type" : "Create New Blog Type"}
       </h2>
       <BlogTypeFrom

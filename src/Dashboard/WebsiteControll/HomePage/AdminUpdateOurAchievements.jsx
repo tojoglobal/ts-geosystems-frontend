@@ -8,14 +8,14 @@ const AdminUpdateOurAchievements = () => {
   const axiosPublicUrl = useAxiospublic();
   const queryClient = useQueryClient();
 
-  const { data } = useQuery({
+  const { data = {} } = useQuery({
     queryKey: ["ourAchievements"],
     queryFn: async () =>
       (await axiosPublicUrl.get("/api/our-achievements")).data,
   });
 
   const { control, handleSubmit, reset, register } = useForm({
-    defaultValues: { items: [{}, {}, {}] },
+    defaultValues: { section_title: "", items: [{}, {}, {}] },
   });
 
   const { fields } = useFieldArray({
@@ -25,16 +25,13 @@ const AdminUpdateOurAchievements = () => {
 
   const mutation = useMutation({
     mutationFn: (formData) =>
-      axiosPublicUrl.put("/api/our-achievements", formData.items),
+      axiosPublicUrl.put("/api/our-achievements", {
+        section_title: formData.section_title,
+        items: formData.items,
+      }),
     onSuccess: () => {
       queryClient.invalidateQueries(["ourAchievements"]);
-      Swal.fire({
-        icon: "success",
-        title: "Success!",
-        text: "Achievements updated successfully.",
-        timer: 2000,
-        showConfirmButton: false,
-      });
+      Swal.fire("Success", "Achievements updated successfully.", "success");
     },
     onError: () => {
       Swal.fire({
@@ -44,37 +41,48 @@ const AdminUpdateOurAchievements = () => {
       });
     },
   });
-  
+
   useEffect(() => {
     if (data) {
       reset({
+        section_title: data.section_title || "",
         items: [
-          ...data,
-          ...Array(3 - data.length).fill({ number: "", text: "" }),
+          ...(data.items || []),
+          ...Array(3 - (data.items?.length || 0)).fill({
+            number: "",
+            text: "",
+          }),
         ].slice(0, 3),
       });
     }
   }, [data, reset]);
 
   return (
-    <form
-      onSubmit={handleSubmit(mutation.mutate)}
-      className="space-y-6 p-4 bg-gray-800 rounded-lg shadow text-white"
-    >
+    <form onSubmit={handleSubmit(mutation.mutate)} className="space-y-6 p-4">
       <h2 className="text-2xl font-bold mb-4 text-teal-500">
-        Update Our Achievements
+        Update {data?.section_title || ""}
       </h2>
+      <div className="mb-3">
+        <label className="block mb-1 font-semibold text-gray-200">
+          Section Title
+        </label>
+        <input
+          {...register("section_title", { required: true })}
+          placeholder="Section Title"
+          className="bg-gray-700 border focus:outline-none border-gray-600 p-2 rounded w-full text-white placeholder-gray-400"
+        />
+      </div>
       {fields.map((item, idx) => (
         <div key={item.id || idx} className="flex gap-4 items-center mb-2">
           <input
             {...register(`items.${idx}.number`, { required: true })}
             placeholder="Number"
-            className="bg-gray-700 border border-gray-600 p-2 rounded w-32 text-white placeholder-gray-400"
+            className="bg-gray-700 border focus:outline-none border-gray-600 p-2 rounded w-32 text-white placeholder-gray-400"
           />
           <input
             {...register(`items.${idx}.text`, { required: true })}
             placeholder="Text"
-            className="bg-gray-700 border border-gray-600 p-2 rounded flex-1 text-white placeholder-gray-400"
+            className="bg-gray-700 border focus:outline-none border-gray-600 p-2 rounded flex-1 text-white placeholder-gray-400"
           />
         </div>
       ))}

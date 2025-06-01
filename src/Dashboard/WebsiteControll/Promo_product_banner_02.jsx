@@ -33,7 +33,7 @@ const SortableImage = ({ image, onDelete }) => {
     <div
       ref={setNodeRef}
       style={style}
-      className="relative group border rounded-sm overflow-hidden shadow-sm hover:shadow-md transition-shadow"
+      className="relative group border border-gray-600 rounded-sm overflow-hidden shadow-sm hover:shadow-md transition-shadow"
     >
       {/* Drag handle */}
       <div

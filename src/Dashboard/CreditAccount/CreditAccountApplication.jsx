@@ -1,98 +1,156 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import { useAxiospublic } from "../../Hooks/useAxiospublic";
+import Swal from "sweetalert2";
 
 const CreditAccountApplication = () => {
-    const [formData, setFormData] = useState({
-      // Company Details
-      companyName: "",
-      tradingName: "",
-      invoiceAddress: "",
-      deliveryAddress: "",
-      registeredOffice: "",
-      tradingAddress: "",
-      companyType: "",
-      partnersInfo: "",
-      vatNumber: "",
-      companyNumber: "",
-      incorporationDate: "",
-      website: "",
+  const axiosPublicUrl = useAxiospublic();
+  const [formData, setFormData] = useState({
+    // Company Details
+    companyName: "",
+    tradingName: "",
+    invoiceAddress: "",
+    deliveryAddress: "",
+    registeredOffice: "",
+    tradingAddress: "",
+    companyType: "",
+    partnersInfo: "",
+    vatNumber: "",
+    companyNumber: "",
+    incorporationDate: "",
+    website: "",
 
-      // Contact Details
-      buyersContactName: "",
-      buyersPhone: "",
-      buyersEmail: "",
-      accountsContactName: "",
-      accountsPhone: "",
-      accountsEmail: "",
-      emailInvoices: "",
-      invoiceEmail: "",
+    // Contact Details
+    buyersContactName: "",
+    buyersPhone: "",
+    buyersEmail: "",
+    accountsContactName: "",
+    accountsPhone: "",
+    accountsEmail: "",
+    emailInvoices: "",
+    invoiceEmail: "",
 
-      // Trade References
-      ref1Company: "",
-      ref1Phone: "",
-      ref1Contact: "",
-      ref1Email: "",
-      ref1Address: "",
-      ref2Company: "",
-      ref2Phone: "",
-      ref2Contact: "",
-      ref2Email: "",
-      ref2Address: "",
+    // Trade References
+    ref1Company: "",
+    ref1Phone: "",
+    ref1Contact: "",
+    ref1Email: "",
+    ref1Address: "",
+    ref2Company: "",
+    ref2Phone: "",
+    ref2Contact: "",
+    ref2Email: "",
+    ref2Address: "",
 
-      // Signatory
-      applicantName: "",
-      applicantPosition: "",
-      applicantPhone: "",
-      applicationDate: "",
-      files: null,
+    // Signatory
+    applicantName: "",
+    applicantPosition: "",
+    applicantPhone: "",
+    applicationDate: "",
+    files: null, // For single file, or set to [] and handle multiple if needed
 
-      // Marketing
-      discoveryMethod: "",
-      g2RepName: "",
+    // Marketing
+    discoveryMethod: "",
+    g2RepName: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value, type, files } = e.target;
+
+    if (type === "file") {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: files.length > 1 ? Array.from(files) : files[0], // handle single/multiple
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // Build FormData for file upload, even if no files
+    const fd = new FormData();
+    Object.entries(formData).forEach(([key, value]) => {
+      if (key === "files" && value) {
+        if (Array.isArray(value)) {
+          value.forEach((file) => fd.append("files", file));
+        } else {
+          fd.append("files", value);
+        }
+      } else {
+        fd.append(key, value);
+      }
     });
 
-    const handleChange = (e) => {
-      const { name, value, type, files } = e.target;
-
-      if (type === "file") {
-        setFormData((prev) => ({
-          ...prev,
-          [name]: files[0], // Store the first file
-        }));
-      } else {
-        setFormData((prev) => ({
-          ...prev,
-          [name]: value,
-        }));
-      }
-    };
-
-    const handleSubmit = (e) => {
-      e.preventDefault();
-
-      // Here you would typically send the data to your backend
-      console.log("Form data to be sent:", formData);
-
-      // Example of how you might send it:
-      /*
-      fetch('/api/credit-application', {
-        method: 'POST',
+    try {
+      const response = await axiosPublicUrl.post("/api/credit-accounts", fd, {
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "multipart/form-data",
         },
-        body: JSON.stringify(formData),
-      })
-      .then(response => response.json())
-      .then(data => {
-        console.log('Success:', data);
-        // Handle success (e.g., show success message, redirect, etc.)
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-        // Handle error
       });
-      */
-    };
+      Swal.fire({
+        title: "Success",
+        text: response.data?.message || "Application submitted!",
+        icon: "success",
+        timer: 2000,
+        showConfirmButton: false,
+      });
+      setFormData({
+        companyName: "",
+        tradingName: "",
+        invoiceAddress: "",
+        deliveryAddress: "",
+        registeredOffice: "",
+        tradingAddress: "",
+        companyType: "",
+        partnersInfo: "",
+        vatNumber: "",
+        companyNumber: "",
+        incorporationDate: "",
+        website: "",
+        buyersContactName: "",
+        buyersPhone: "",
+        buyersEmail: "",
+        accountsContactName: "",
+        accountsPhone: "",
+        accountsEmail: "",
+        emailInvoices: "",
+        invoiceEmail: "",
+        ref1Company: "",
+        ref1Phone: "",
+        ref1Contact: "",
+        ref1Email: "",
+        ref1Address: "",
+        ref2Company: "",
+        ref2Phone: "",
+        ref2Contact: "",
+        ref2Email: "",
+        ref2Address: "",
+        applicantName: "",
+        applicantPosition: "",
+        applicantPhone: "",
+        applicationDate: "",
+        files: null,
+        discoveryMethod: "",
+        g2RepName: "",
+      });
+    } catch (error) {
+      console.log(error);
+      Swal.fire({
+        title: "Error",
+        text:
+          error?.response?.data?.message ||
+          error.message ||
+          "An error occurred.",
+        icon: "error",
+      });
+    }
+  };
 
   return (
     <div className="p-2 md:p-3">
@@ -140,7 +198,6 @@ const CreditAccountApplication = () => {
                   Company Name *
                 </label>
               </div>
-
               {/* Trading Name */}
               <div className="relative w-full">
                 <input
@@ -159,7 +216,6 @@ const CreditAccountApplication = () => {
                   Trading Name (if different)
                 </label>
               </div>
-
               {/* Address Fields */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Invoice Address */}
@@ -202,7 +258,6 @@ const CreditAccountApplication = () => {
                   </label>
                 </div>
               </div>
-
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Registered Office */}
                 <div className="relative w-full">
@@ -238,7 +293,6 @@ const CreditAccountApplication = () => {
                   </label>
                 </div>
               </div>
-
               {/* Type of Company */}
               <div className="space-y-2">
                 <p className="font-medium">Type of Company *</p>
@@ -260,6 +314,8 @@ const CreditAccountApplication = () => {
                       type="radio"
                       name="companyType"
                       value="PLC"
+                      checked={formData.companyType === "PLC"}
+                      onChange={handleChange}
                       className="w-5 h-5 cursor-pointer appearance-none rounded-full border-[2px] border-gray-300 checked:border-[5px] checked:border-[#e62245] checked:bg-white bg-[#e7e7e7] transition-all duration-150"
                     />
                     <span className="text-sm">PLC</span>
@@ -269,6 +325,8 @@ const CreditAccountApplication = () => {
                       type="radio"
                       name="companyType"
                       value="Sole Trader"
+                      checked={formData.companyType === "Sole Trader"}
+                      onChange={handleChange}
                       className="w-5 h-5 cursor-pointer appearance-none rounded-full border-[2px] border-gray-300 checked:border-[5px] checked:border-[#e62245] checked:bg-white bg-[#e7e7e7] transition-all duration-150"
                     />
                     <span className="text-sm">Sole Trader</span>
@@ -278,6 +336,8 @@ const CreditAccountApplication = () => {
                       type="radio"
                       name="companyType"
                       value="Partnership"
+                      checked={formData.companyType === "Partnership"}
+                      onChange={handleChange}
                       className="w-5 h-5 cursor-pointer appearance-none rounded-full border-[2px] border-gray-300 checked:border-[5px] checked:border-[#e62245] checked:bg-white bg-[#e7e7e7] transition-all duration-150"
                     />
                     <span className="text-sm">Partnership</span>
@@ -287,13 +347,14 @@ const CreditAccountApplication = () => {
                       type="radio"
                       name="companyType"
                       value="Other"
+                      checked={formData.companyType === "Other"}
+                      onChange={handleChange}
                       className="w-5 h-5 cursor-pointer appearance-none rounded-full border-[2px] border-gray-300 checked:border-[5px] checked:border-[#e62245] checked:bg-white bg-[#e7e7e7] transition-all duration-150"
                     />
                     <span className="text-sm">Other</span>
                   </label>
                 </div>
               </div>
-
               {/* Partners/Proprietors */}
               <div className="relative w-full">
                 <textarea
@@ -311,7 +372,6 @@ const CreditAccountApplication = () => {
                   addresses of partners/proprietors
                 </label>
               </div>
-
               {/* Additional Company Info */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* VAT Number */}
@@ -809,33 +869,39 @@ const CreditAccountApplication = () => {
                 />
                 <label
                   htmlFor="applicationDate"
-                  className="absolute pl-2 left-2 top-2 text-gray-500 text-sm transition-all 
-      peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base peer-placeholder-shown:text-black 
-      peer-focus:top-2 peer-focus:text-xs peer-focus:text-black"
+                  className="absolute pl-2 left-2 top-2 text-gray-500 text-sm transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base peer-placeholder-shown:text-black  peer-focus:top-2 peer-focus:text-xs peer-focus:text-black"
                 >
                   Date *
                 </label>
               </div>
             </div>
-
-            {/* File Upload */}
-            <div>
-              <p className="mb-2 font-semibold">
-                Please attach photos if applicable:
-              </p>
-              <label className="border-2 border-dashed border-gray-300 rounded p-8 text-center text-sm text-black block cursor-pointer">
-                <span className="text-[#e62245]">Choose file</span> or drop here
-                <input
-                  type="file"
-                  name="photos"
-                  onChange={handleChange}
-                  className="hidden"
-                  multiple
-                />
-              </label>
-            </div>
           </div>
-
+          {/* File Upload */}
+          <div>
+            <p className="mb-2 font-semibold">
+              Please attach photos if applicable:
+            </p>
+            <label className="border-2 border-dashed border-gray-300 rounded p-8 text-center text-sm text-black block cursor-pointer">
+              <span className="text-[#e62245]">Choose file</span> or drop here
+              <input
+                type="file"
+                name="files"
+                onChange={handleChange}
+                className="hidden"
+                multiple
+              />
+            </label>
+            {formData.files &&
+              (Array.isArray(formData.files)
+                ? formData.files.length > 0
+                : !!formData.files.name) && (
+                <div className="text-xs mt-2 text-gray-700">
+                  {Array.isArray(formData.files)
+                    ? formData.files.map((f) => f.name).join(", ")
+                    : formData.files?.name}
+                </div>
+              )}
+          </div>
           {/* Marketing Section */}
           <div className="space-y-4">
             <h2 className="text-xl font-semibold">Marketing</h2>

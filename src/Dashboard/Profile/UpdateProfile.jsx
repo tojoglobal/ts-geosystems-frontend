@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import Swal from "sweetalert2";
-import { toast } from "react-toastify";
+import useToastSwal from "../../Hooks/useToastSwal";
 
 const UpdateProfile = () => {
+  const showToast = useToastSwal();
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [preview, setPreview] = useState(null);
@@ -69,13 +69,9 @@ const UpdateProfile = () => {
         headers: { "Content-Type": "multipart/form-data" },
         withCredentials: true,
       });
-      Swal.fire({
-        icon: "Success",
-        text: "Profile updated successfully!",
-        confirmButtonColor: "#14b8a6",
-      });
+      showToast("success", "Success!", "Profile updated successfully!");
     } catch (err) {
-      toast.error("Failed to update profile.");
+      showToast("error", "Error!", err.message || "Failed to update profile.");
     }
   };
 

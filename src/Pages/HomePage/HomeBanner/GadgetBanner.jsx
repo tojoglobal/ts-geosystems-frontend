@@ -17,17 +17,17 @@ const GadgetBanner = () => {
 
   if (isLoading || loading)
     return (
-      <div className="md:max-w-[1370px] md:mx-auto flex flex-col md:flex-row gap-4">
-        <SkeletonLoader className="w-full md:w-[67%] h-[320px]" />
-        <SkeletonLoader className="w-full md:w-[33%] h-[320px]" />
+      <div className="md:max-w-[1370px] md:mx-auto flex flex-col md:flex-row gap-4 h-[150px] md:h-[320px]">
+        <SkeletonLoader className="w-full md:w-[67%] h-full" />
+        <SkeletonLoader className="w-full md:w-[33%] h-full" />
       </div>
     );
 
   return (
     <div className="md:w-full my-3 md:my-5 mx-3 md:max-w-[1370px] md:mx-auto">
-      <div className="flex flex-col md:flex-row gap-3 md:gap-4">
+      <div className="flex flex-col md:flex-row gap-3 md:gap-4 h-[150px] md:h-[320px]">
         {/* Left: Swiper */}
-        <div className="w-full md:w-[67%] md:relative group overflow-hidden rounded-lg">
+        <div className="w-full md:w-[67%] md:relative group overflow-hidden rounded-lg h-full">
           <Swiper
             modules={[Autoplay, Pagination]}
             autoplay={{
@@ -36,7 +36,7 @@ const GadgetBanner = () => {
             }}
             loop={true}
             pagination={{ clickable: true }}
-            className="w-full h-[150px] md:h-[320px] rounded-lg"
+            className="w-full h-full rounded-lg"
           >
             {data.data.map((img, index) => (
               <SwiperSlide key={index}>
@@ -51,13 +51,13 @@ const GadgetBanner = () => {
           <div className="custom-pagination absolute bottom-3 left-1/2 transform -translate-x-1/2 flex gap-2 z-10"></div>
         </div>
         {/* Right: Static Image */}
-        <div className="w-full md:w-[33%] overflow-hidden rounded-lg group">
+        <div className="w-full md:w-[33%] overflow-hidden rounded-lg group h-full">
           <img
             src={`${import.meta.env.VITE_OPEN_APIURL}${
               banner?.data[0]?.imageUrl
             }`}
             alt="Right Side"
-            className="w-auto h-[150px] md:h-[320px] object-cover transition-transform duration-300 group-hover:scale-110"
+            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
           />
         </div>
       </div>

@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
@@ -34,7 +34,7 @@ const Brands = () => {
   }, []);
 
   const onSubmit = async (data) => {
-    console.log(data);
+    // console.log(data);
 
     try {
       const formData = new FormData();
@@ -103,9 +103,11 @@ const Brands = () => {
 
   return (
     <div className="max-w-4xl mx-auto">
-      <h2 className="text-xl sm:text-2xl font-bold mb-3 md:mb-5">
-        Add a Brand
-      </h2>
+      <h2 className="text-xl sm:text-2xl font-bold">Add a Brand</h2>
+      <p className="text-sm text-gray-300 mb-3 md:mb-5">
+        The image of the first brand marked as "Popular Brand" will appear at
+        the bottom of the product sidebar.
+      </p>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div className="space-y-2">
           <label className="block text-sm font-semibold">Brand Name</label>
@@ -143,11 +145,10 @@ const Brands = () => {
                     }/uploads/${imagePreview}`
               }
               alt="Preview"
-              className="w-32 sm:w-48 h-24 object-cover mt-2 rounded-sm"
+              className="h-24 object-cover mt-2 rounded-sm"
             />
           )}
         </div>
-
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           <label className="flex items-center gap-2 cursor-pointer">
             <input
@@ -184,7 +185,6 @@ const Brands = () => {
           {editingBrand ? "Update Brand" : "Add Brand"}
         </button>
       </form>
-
       {/* Brands Table */}
       <div className="mt-8 overflow-x-auto mb-2">
         <div className="inline-block min-w-full align-middle">
@@ -218,7 +218,7 @@ const Brands = () => {
                           brand.photo
                         }`}
                         alt={brand.brands_name}
-                        className="w-20 sm:w-32 h-12 object-cover rounded-sm mx-auto"
+                        className="w-20 sm:w-32 h-12 object-cover rounded-[4px] mx-auto"
                       />
                     </td>
                     <td className="text-center p-3 border border-gray-600 whitespace-nowrap">
