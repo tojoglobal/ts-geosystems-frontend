@@ -168,18 +168,18 @@ const AdminUpdateContactUs = () => {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-6 text-white">
-        Admin - Update Contact Us
+      <h1 className="text-2xl font-semibold mb-8 text-white">
+        Admin — Update Contact Us
       </h1>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-10">
         {/* Working Days Section */}
-        <div>
-          <h2 className="text-lg font-semibold mb-3 text-gray-100">
+        <section className="bg-transparent px-0 md:px-4">
+          <h2 className="text-lg font-semibold mb-3 text-gray-50">
             Working Days
           </h2>
-          <div className="grid gap-4">
+          <div className="grid gap-6 md:grid-cols-2">
             <div>
-              <label className="block mb-1 text-sm font-medium text-gray-300">
+              <label className="block mb-1 text-sm font-medium text-gray-400">
                 Regular Days
               </label>
               <input
@@ -187,11 +187,11 @@ const AdminUpdateContactUs = () => {
                 {...register("workingDays", {
                   required: "Working days information is required",
                 })}
-                className="w-full p-2 border border-gray-700 rounded-md text-sm bg-gray-900 text-white focus:outline-none focus:border-gray-500 focus:ring-1 focus:ring-gray-500"
+                className="w-full p-3 bg-gray-900 border-b border-gray-700 rounded-[4px] text-sm text-white focus:outline-none focus:border-[#e62245] focus:ring-0 transition"
               />
             </div>
             <div>
-              <label className="block mb-1 text-sm font-medium text-gray-300">
+              <label className="block mb-1 text-sm font-medium text-gray-400">
                 Holiday
               </label>
               <input
@@ -199,163 +199,209 @@ const AdminUpdateContactUs = () => {
                 {...register("weeklyHoliday", {
                   required: "Holiday information is required",
                 })}
-                className="w-full p-2 border border-gray-700 rounded-md text-sm bg-gray-900 text-white focus:outline-none focus:border-gray-500 focus:ring-1 focus:ring-gray-500"
+                className="w-full p-3 bg-gray-900 border-b border-gray-700 rounded-[4px] text-sm text-white focus:outline-none focus:border-[#e62245] focus:ring-0 transition"
               />
             </div>
           </div>
+        </section>
+
+        {/* Divider */}
+        <hr className="border-gray-800" />
+
+        {/* Contact Information Section (Phone, Email, Address) */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-x-4 gap-y-8">
+          {/* Phone Numbers Section */}
+          <section className="bg-transparent px-0 md:px-4">
+            <h2 className="text-lg font-semibold mb-3 text-gray-50">
+              Phone Numbers
+            </h2>
+            <div className="space-y-2">
+              {phoneFields.map((field, index) => (
+                <div key={field.id} className="flex items-center gap-2">
+                  <input
+                    type="text"
+                    {...register(`phoneNumbers.${index}.value`, {
+                      required: "Phone number is required",
+                    })}
+                    placeholder="Enter phone number"
+                    className={`w-full p-3 bg-gray-900 border-b border-gray-700 rounded-[4px] text-sm text-white focus:outline-none focus:border-[#e62245] focus:ring-0 transition ${
+                      errors.phoneNumbers?.[index]?.value
+                        ? "border-red-500"
+                        : ""
+                    }`}
+                  />
+                  {phoneFields.length > 1 && (
+                    <button
+                      type="button"
+                      title="Remove"
+                      onClick={() => removePhone(index)}
+                      className="p-2 rounded cursor-pointer hover:bg-red-800/20 text-red-400 transition"
+                    >
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth={2}
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M6 18L18 6M6 6l12 12"
+                        />
+                      </svg>
+                    </button>
+                  )}
+                </div>
+              ))}
+              <button
+                type="button"
+                onClick={() => addPhone({ value: "" })}
+                className="py-2 px-4 cursor-pointer rounded text-sm bg-[#e62245] text-white transition border-0"
+              >
+                + Add Phone
+              </button>
+            </div>
+          </section>
+
+          {/* Email Section */}
+          <section className="bg-transparent px-0 md:px-4">
+            <h2 className="text-lg font-semibold mb-3 text-gray-50">
+              Email Addresses
+            </h2>
+            <div className="space-y-2">
+              {emailFields.map((field, index) => (
+                <div key={field.id} className="flex items-center gap-2">
+                  <input
+                    type="email"
+                    {...register(`emails.${index}.value`, {
+                      required: "Email address is required",
+                    })}
+                    placeholder="Enter email address"
+                    className={`w-full p-3 bg-gray-900 border-b border-gray-700 rounded-[4px] text-sm text-white focus:outline-none focus:border-[#e62245] focus:ring-0 transition ${
+                      errors.emails?.[index]?.value ? "border-red-500" : ""
+                    }`}
+                  />
+                  {emailFields.length > 1 && (
+                    <button
+                      type="button"
+                      title="Remove"
+                      onClick={() => removeEmail(index)}
+                      className="p-2 rounded cursor-pointer hover:bg-red-800/20 text-red-400 transition"
+                    >
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth={2}
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M6 18L18 6M6 6l12 12"
+                        />
+                      </svg>
+                    </button>
+                  )}
+                </div>
+              ))}
+              <button
+                type="button"
+                onClick={() => addEmail({ value: "" })}
+                className="py-2 px-4 cursor-pointer rounded text-sm bg-[#e62245] text-white transition border-0"
+              >
+                + Add Email
+              </button>
+            </div>
+          </section>
+
+          {/* Office Address Section */}
+          <section className="bg-transparent px-0 md:px-4">
+            <h2 className="text-lg font-semibold mb-3 text-gray-50">
+              Office Addresses
+            </h2>
+            <div className="space-y-2">
+              {addressFields.map((field, index) => (
+                <div key={field.id} className="flex items-center gap-2">
+                  <textarea
+                    rows={2}
+                    {...register(`officeAddresses.${index}.value`, {
+                      required: "Office address is required",
+                    })}
+                    placeholder="Enter office address"
+                    className={`w-full p-3 bg-gray-900 border-b border-gray-700 rounded-[4px] text-sm text-white focus:outline-none focus:border-[#e62245] focus:ring-0 transition ${
+                      errors.officeAddresses?.[index]?.value
+                        ? "border-red-500"
+                        : ""
+                    }`}
+                  />
+                  {addressFields.length > 1 && (
+                    <button
+                      type="button"
+                      title="Remove"
+                      onClick={() => removeAddress(index)}
+                      className="p-2 rounded cursor-pointer hover:bg-red-800/20 text-red-400 transition"
+                    >
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth={2}
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M6 18L18 6M6 6l12 12"
+                        />
+                      </svg>
+                    </button>
+                  )}
+                </div>
+              ))}
+              <button
+                type="button"
+                onClick={() => addAddress({ value: "" })}
+                className="py-2 px-4 cursor-pointer rounded text-sm bg-[#e62245] text-white transition border-0"
+              >
+                + Add Address
+              </button>
+            </div>
+          </section>
         </div>
 
-        {/* Phone Numbers Section */}
-        <div>
-          <h2 className="text-lg font-semibold mb-3 text-gray-100">
-            Phone Numbers
-          </h2>
-          <div className="space-y-3">
-            {phoneFields.map((field, index) => (
-              <div key={field.id} className="flex flex-col md:flex-row gap-3">
-                <input
-                  type="text"
-                  {...register(`phoneNumbers.${index}.value`, {
-                    required: "Phone number is required",
-                  })}
-                  placeholder="Enter phone number"
-                  className={`w-full p-2 border rounded-md text-sm bg-gray-900 text-white focus:outline-none focus:border-gray-500 focus:ring-1 focus:ring-gray-500 ${
-                    errors.phoneNumbers?.[index]?.value
-                      ? "border-red-500"
-                      : "border-gray-700"
-                  }`}
-                />
-                {phoneFields.length > 1 && (
-                  <button
-                    type="button"
-                    onClick={() => removePhone(index)}
-                    className="bg-red-600 text-white text-xs px-3 py-2 rounded-md hover:bg-red-700"
-                  >
-                    Remove
-                  </button>
-                )}
-              </div>
-            ))}
-            <button
-              type="button"
-              onClick={() => addPhone({ value: "" })}
-              className="bg-teal-600 text-white px-4 py-2 rounded-md text-sm hover:bg-teal-700"
-            >
-              + Add Phone Number
-            </button>
-          </div>
-        </div>
-
-        {/* Email Section */}
-        <div>
-          <h2 className="text-lg font-semibold mb-3 text-gray-100">
-            Email Addresses
-          </h2>
-          <div className="space-y-3">
-            {emailFields.map((field, index) => (
-              <div key={field.id} className="flex flex-col md:flex-row gap-3">
-                <input
-                  type="email"
-                  {...register(`emails.${index}.value`, {
-                    required: "Email address is required",
-                  })}
-                  placeholder="Enter email address"
-                  className={`w-full p-2 border rounded-md text-sm bg-gray-900 text-white focus:outline-none focus:border-gray-500 focus:ring-1 focus:ring-gray-500 ${
-                    errors.emails?.[index]?.value
-                      ? "border-red-500"
-                      : "border-gray-700"
-                  }`}
-                />
-                {emailFields.length > 1 && (
-                  <button
-                    type="button"
-                    onClick={() => removeEmail(index)}
-                    className="bg-red-600 text-white text-xs px-3 py-2 rounded-md hover:bg-red-700"
-                  >
-                    Remove
-                  </button>
-                )}
-              </div>
-            ))}
-            <button
-              type="button"
-              onClick={() => addEmail({ value: "" })}
-              className="bg-teal-600 text-white px-4 py-2 rounded-md text-sm hover:bg-teal-700"
-            >
-              + Add Email Address
-            </button>
-          </div>
-        </div>
-
-        {/* Office Address Section */}
-        <div>
-          <h2 className="text-lg font-semibold mb-3 text-gray-100">
-            Office Addresses
-          </h2>
-          <div className="space-y-3">
-            {addressFields.map((field, index) => (
-              <div key={field.id} className="flex flex-col md:flex-row gap-3">
-                <textarea
-                  rows={2}
-                  {...register(`officeAddresses.${index}.value`, {
-                    required: "Office address is required",
-                  })}
-                  placeholder="Enter office address"
-                  className={`w-full p-2 border rounded-md text-sm bg-gray-900 text-white focus:outline-none focus:border-gray-500 focus:ring-1 focus:ring-gray-500 ${
-                    errors.officeAddresses?.[index]?.value
-                      ? "border-red-500"
-                      : "border-gray-700"
-                  }`}
-                />
-                {addressFields.length > 1 && (
-                  <button
-                    type="button"
-                    onClick={() => removeAddress(index)}
-                    className="bg-red-600 text-white text-xs px-3 py-2 rounded-md hover:bg-red-700"
-                  >
-                    Remove
-                  </button>
-                )}
-              </div>
-            ))}
-            <button
-              type="button"
-              onClick={() => addAddress({ value: "" })}
-              className="bg-teal-600 text-white px-4 py-2 rounded-md text-sm hover:bg-teal-700"
-            >
-              + Add Office Address
-            </button>
-          </div>
-        </div>
+        {/* Divider */}
+        <hr className="border-gray-800" />
 
         {/* Social Media Section */}
-        <div>
-          <h2 className="text-lg font-semibold mb-3 text-gray-100">
-            Social Media Links (Both for Contact us and Footer)
+        <section className="bg-transparent px-0 md:px-4">
+          <h2 className="text-lg font-semibold mb-3 text-gray-50">
+            Social Media Links (for Contact Us & Footer)
           </h2>
           <div className="grid md:grid-cols-2 gap-4">
             {["facebook", "twitter", "youtube", "instagram"].map((platform) => (
               <div key={platform}>
-                <label className="block mb-1 text-sm font-medium capitalize text-gray-300">
+                <label className="block mb-1 text-sm font-medium capitalize text-gray-400">
                   {platform}
                 </label>
                 <input
                   type="url"
                   {...register(`socialLinks.${platform}`)}
                   placeholder={`https://${platform}.com/yourpage`}
-                  className="w-full p-2 border border-gray-700 rounded-md text-sm bg-gray-900 text-white focus:outline-none focus:border-gray-500 focus:ring-1 focus:ring-gray-500"
+                  className="w-full p-3 bg-gray-900 border-b border-gray-700 rounded-[4px] text-sm text-white focus:outline-none focus:border-[#e62245] focus:ring-0 transition"
                 />
               </div>
             ))}
           </div>
-        </div>
+        </section>
 
         {/* Submit */}
-        <div>
+        <div className="pt-2 flex justify-end">
           <Button
-            text="Submit Contact Us"
+            text="Save Changes"
             disabled={updateContactMutation.isPending}
-            className="w-full md:w-auto bg-blue-600 hover:bg-blue-700 text-white text-sm px-6 py-2 rounded-md"
+            className="bg-[#e62245] hover:bg-[#c81e3c] text-white text-sm px-7 py-2 rounded-md shadow"
           />
         </div>
       </form>

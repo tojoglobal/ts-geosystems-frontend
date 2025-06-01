@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import Loader from "../../utils/Loader";
-import { FaCloudUploadAlt, FaTimesCircle } from "react-icons/fa"; // Added FaTimesCircle for remove button
+import { FaCloudUploadAlt, FaTimesCircle } from "react-icons/fa";
 
 const AdminUpdateFooter = () => {
   const axiosPublic = useAxiospublic();
@@ -205,32 +205,34 @@ const AdminUpdateFooter = () => {
 
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-6">Admin Update Footer</h2>
+      <h2 className="text-2xl font-bold mb-7 text-white">
+        Admin Update Footer
+      </h2>
       {loading ? (
         <Loader />
       ) : (
-        <form className="space-y-6" onSubmit={handleSubmit} autoComplete="off">
+        <form className="space-y-7" onSubmit={handleSubmit} autoComplete="off">
           {/* Color controls */}
           <div>
-            <label className="block font-medium mb-2">
+            <label className="block font-medium mb-1 text-gray-200">
               Footer Background Color
             </label>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
               <input
                 type="text"
                 name="bg_color"
                 value={formData.bg_color}
                 onChange={handleChange}
-                className="border border-neutral-700 bg-neutral-900 px-2 py-1 rounded text-white"
+                className="border border-neutral-700 bg-neutral-900 px-2 py-1 rounded text-white text-sm"
                 placeholder="#HEX or rgb()"
-                style={{ width: 140 }}
+                style={{ width: 120 }}
               />
               <input
                 type="color"
                 name="bg_color"
                 value={formData.bg_color}
                 onChange={handleChange}
-                className="h-10 w-14 border cursor-pointer rounded bg-neutral-900"
+                className="h-8 w-10 border cursor-pointer rounded bg-neutral-900"
                 style={{ backgroundColor: "transparent" }}
               />
               <span
@@ -244,46 +246,51 @@ const AdminUpdateFooter = () => {
           </div>
           <div className="w-full flex flex-col md:flex-row gap-3">
             <div className="w-full md:w-1/2">
-              <label className="block font-medium mb-2">Address Line 1</label>
+              <label className="block font-medium mb-1 text-gray-200">
+                Address Line 1
+              </label>
               <input
                 type="text"
                 name="address1"
                 value={formData.address1}
                 onChange={handleChange}
-                className="w-full border border-neutral-700 bg-neutral-900 px-3 py-2 rounded text-white"
+                className="w-full border border-neutral-700 bg-neutral-900 px-3 py-2 rounded text-white text-sm"
                 required
               />
             </div>
             <div className="w-full md:w-1/2">
-              <label className="block font-medium mb-2">Address Line 2</label>
+              <label className="block font-medium mb-1 text-gray-200">
+                Address Line 2
+              </label>
               <input
                 type="text"
                 name="address2"
                 value={formData.address2}
                 onChange={handleChange}
-                className="w-full border border-neutral-700 bg-neutral-900 px-3 py-2 rounded text-white"
+                className="w-full border border-neutral-700 bg-neutral-900 px-3 py-2 rounded text-white text-sm"
                 required
               />
             </div>
           </div>
           {/* Multiple ISO Image Uploads */}
-          <h3 className="text-xl font-semibold mt-8 mb-4">
+          <h3 className="text-xl font-semibold mt-6 mb-3 text-gray-100">
             ISO Images (Max 3)
           </h3>
-          <div className="flex w-full gap-4">
+          <div className="flex w-full gap-3">
             {[0, 1, 2].map((index) => (
               <div
                 key={index}
-                className="relative flex items-center gap-4 mb-4"
+                className="relative flex flex-col items-center gap-1"
+                style={{ minWidth: 120, maxWidth: 160 }}
               >
-                <label className="flex flex-col items-center p-4 bg-neutral-800 border-2 border-dashed border-neutral-600 rounded-lg cursor-pointer hover:bg-neutral-700 transition w-full">
-                  <FaCloudUploadAlt size={32} className="mb-2 text-teal-500" />
-                  <span className="text-sm text-gray-300 mb-1">
+                <label className="flex flex-col items-center p-3 bg-neutral-800 border-2 border-dashed border-neutral-600 rounded-lg cursor-pointer hover:bg-neutral-700 transition w-full">
+                  <FaCloudUploadAlt size={28} className="mb-1 text-teal-500" />
+                  <span className="text-xs text-gray-300 mb-1 text-center">
                     {imageFiles[index]
                       ? `Replace image ${index + 1}`
                       : imagePreviews[index]
                       ? `Change image ${index + 1}`
-                      : `Click to upload ISO image ${index + 1}`}
+                      : `Upload ISO image ${index + 1}`}
                   </span>
                   <input
                     type="file"
@@ -295,7 +302,7 @@ const AdminUpdateFooter = () => {
                     <img
                       src={imagePreviews[index]}
                       alt={`ISO Preview ${index + 1}`}
-                      className="h-16 mb-1 mt-2 rounded shadow border border-gray-600"
+                      className="h-14 mb-1 mt-2 rounded shadow border border-gray-600"
                     />
                   )}
                 </label>
@@ -306,7 +313,7 @@ const AdminUpdateFooter = () => {
                     className="absolute top-2 right-2 text-red-500 hover:text-red-700 p-1 rounded-full bg-neutral-800 hover:bg-neutral-700 transition"
                     title={`Remove image ${index + 1}`}
                   >
-                    <FaTimesCircle size={20} />
+                    <FaTimesCircle size={18} />
                   </button>
                 )}
               </div>
@@ -314,18 +321,20 @@ const AdminUpdateFooter = () => {
           </div>
           {/* Mailing */}
           <div>
-            <label className="block font-medium mb-2">Mailing Title</label>
+            <label className="block font-medium mb-1 text-gray-200">
+              Mailing Title
+            </label>
             <input
               type="text"
               name="mailing_title"
               value={formData.mailing_title}
               onChange={handleChange}
-              className="w-full border border-neutral-700 bg-neutral-900 px-3 py-2 rounded text-white"
+              className="w-full border border-neutral-700 bg-neutral-900 px-3 py-2 rounded text-white text-sm"
               required
             />
           </div>
           <div>
-            <label className="block font-medium mb-2">
+            <label className="block font-medium mb-1 text-gray-200">
               Mailing Description
             </label>
             <textarea
@@ -333,13 +342,13 @@ const AdminUpdateFooter = () => {
               value={formData.mailing_text}
               onChange={handleChange}
               rows={3}
-              className="w-full border border-neutral-700 bg-neutral-900 px-3 py-2 rounded text-white"
+              className="w-full border border-neutral-700 bg-neutral-900 px-3 py-2 rounded text-white text-sm"
               required
             />
           </div>
           <button
             type="submit"
-            className="bg-teal-600 hover:bg-teal-700 text-white px-8 py-2 rounded font-semibold transition disabled:opacity-50 mt-4 w-full"
+            className="bg-teal-600 hover:bg-teal-700 text-white px-8 py-2 rounded font-semibold transition disabled:opacity-50 mt-2 w-full"
             disabled={saving}
           >
             {saving ? "Saving..." : "Save Changes"}
