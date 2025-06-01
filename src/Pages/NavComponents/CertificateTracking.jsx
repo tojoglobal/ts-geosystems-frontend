@@ -31,7 +31,7 @@ const CertificateTracking = () => {
         / <span className="text-red-600 font-medium">Support</span> /{" "}
         <span className="text-red-600 font-medium">Certificate Tracking</span>
       </div>
-      <h1 className="text-[28px] font-light mt-2 text-[#e62245] mb-4 uppercase">
+      <h1 className="text-[28px] mt-2 text-[#e62245] mb-4 uppercase">
         {certificateData?.title || "Certificate Tracking"}
       </h1>
       {certificateData?.description && (

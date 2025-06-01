@@ -3,8 +3,9 @@ import Button from "../../Dashboard/Button/Button";
 import Swal from "sweetalert2";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import Loader from "../../utils/Loader";
+import { useDropzone } from "react-dropzone";
 
 const AdminUpdateCertificateTracking = () => {
   const axiosPublicUrl = useAxiospublic();
@@ -50,7 +51,7 @@ const AdminUpdateCertificateTracking = () => {
     },
   });
 
-  const { control, handleSubmit, reset, register, watch } = useForm({
+  const { control, handleSubmit, reset, register, watch, setValue } = useForm({
     defaultValues: {
       title: "",
       description: "",
@@ -69,14 +70,40 @@ const AdminUpdateCertificateTracking = () => {
         tracking_description: certificateData.tracking_description || "",
         image_url: certificateData.image_url || "",
       });
+      setFile(null); // reset local file state
     }
   }, [certificateData, reset]);
+
+  const onDrop = useCallback((acceptedFiles) => {
+    if (acceptedFiles.length) {
+      setFile(acceptedFiles[0]);
+    }
+  }, []);
+
+  const {
+    getRootProps,
+    getInputProps,
+    isDragActive,
+    open: openFileDialog,
+  } = useDropzone({
+    onDrop,
+    accept: { "image/*": [".jpeg", ".jpg", ".png", ".webp"] },
+    multiple: false,
+    noClick: true,
+    noKeyboard: true,
+  });
+
+  const image_url = watch("image_url");
+
+  const removeImage = (e) => {
+    e.preventDefault();
+    setFile(null);
+    setValue("image_url", "");
+  };
 
   const onSubmit = (data) => {
     updateMutation.mutate({ ...data, image: file });
   };
-
-  const image_url = watch("image_url");
 
   if (isLoading) return <Loader />;
 
@@ -147,26 +174,60 @@ const AdminUpdateCertificateTracking = () => {
           <label className="block font-medium text-sm sm:text-base">
             Banner Image
           </label>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(e) => setFile(e.target.files[0])}
-            className="block"
-          />
-          {(file || image_url) && (
-            <div className="mt-2">
-              <p className="text-xs text-gray-600 mb-1">Current Banner:</p>
-              <img
-                src={
-                  file
-                    ? URL.createObjectURL(file)
-                    : `${import.meta.env.VITE_OPEN_APIURL}${image_url}`
-                }
-                alt="Banner preview"
-                className="max-w-xs rounded"
-              />
-            </div>
-          )}
+          <div
+            {...getRootProps()}
+            className={`border-2 border-dashed rounded-md p-4 flex flex-col items-center justify-center cursor-pointer transition-colors
+            ${
+              isDragActive ? "border-[#e62245] bg-[#faebef]" : "border-gray-300"
+            }
+            `}
+            style={{ minHeight: 120 }}
+          >
+            <input {...getInputProps()} />
+            {file || image_url ? (
+              <div className="flex flex-col items-center space-y-2">
+                <img
+                  src={
+                    file
+                      ? URL.createObjectURL(file)
+                      : `${import.meta.env.VITE_OPEN_APIURL}${image_url}`
+                  }
+                  alt="Banner preview"
+                  className="max-h-40 rounded"
+                />
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={removeImage}
+                    className="px-3 py-1 cursor-pointer rounded bg-gray-200 text-gray-800 text-xs hover:bg-gray-300"
+                  >
+                    Remove
+                  </button>
+                  <button
+                    type="button"
+                    onClick={openFileDialog}
+                    className="px-3 py-1 cursor-pointer rounded bg-[#e62245] text-white text-xs hover:bg-[#c81e3c]"
+                  >
+                    Replace Image
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="text-center">
+                <button
+                  type="button"
+                  onClick={openFileDialog}
+                  className="px-4 py-2 rounded bg-[#e62245] text-white text-sm hover:bg-[#c81e3c]"
+                >
+                  Upload Image
+                </button>
+                <p className="mt-2 text-xs text-gray-400">
+                  Drag & drop or click to select a banner image (JPEG, PNG,
+                  WEBP)
+                </p>
+              </div>
+            )}
+          </div>
         </div>
         {/* Submit Button */}
         <div className="flex justify-start">
