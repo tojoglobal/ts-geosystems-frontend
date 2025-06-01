@@ -97,6 +97,7 @@ import ProductQuestion from "./Dashboard/Products/ProductQuestion";
 import CreditAccountApplication from "./Dashboard/CreditAccount/CreditAccountApplication";
 import AdminShowCreditAccount from "./Dashboard/CreditAccount/AdminShowCreditAccount";
 import AdminUpdateHelpDesk from "./Pages/Control/AdminUpdateHelpDesk";
+import EditAdress from "./UserAccount/EditAdress";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -180,6 +181,10 @@ const AppLayout = () => {
           <Route path="inbox" element={<UserInbox />} />
           <Route path="address-book" element={<UserAddress />} />
           <Route path="add-address" element={<AddNewAddress />} />
+          <Route
+            path="edit-address/:id"
+            element={<EditAdress />}
+          />
           <Route path="recent-viewed" element={<RecentlyViewed />} />
           <Route path="account-settings" element={<AccountSettings />} />
         </Route>

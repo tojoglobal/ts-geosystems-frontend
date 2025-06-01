@@ -1,12 +1,13 @@
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { Country, State, City } from "country-state-city";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import useToastSwal from "../Hooks/useToastSwal";
 import { useAxiospublic } from "../Hooks/useAxiospublic";
 
-const AddNewAddress = () => {
-  const axiosPublicUrl = useAxiospublic();
+const EditAddress = () => {
+  const { id } = useParams();
+    const axiosPublicUrl = useAxiospublic();
   const navigate = useNavigate();
   const showToast = useToastSwal();
   const [countries, setCountries] = useState([]);
@@ -18,16 +19,40 @@ const AddNewAddress = () => {
     handleSubmit,
     watch,
     setValue,
+    reset,
     formState: { errors },
   } = useForm();
 
-  const selectedCountry = watch("country");
-  const selectedState = watch("state");
-
   useEffect(() => {
     setCountries(Country.getAllCountries());
-    setValue("country", "US");
-  }, [setValue]);
+  }, []);
+
+  useEffect(() => {
+    const fetchAddress = async () => {
+      const { data } = await axiosPublicUrl.get(`/api/addresses`);
+      const address = data.find((a) => String(a.id) === String(id));
+      if (address) {
+        reset({
+          firstName: address.first_name,
+          lastName: address.last_name,
+          postcode: address.postcode,
+          phoneNumber: address.phone,
+          companyName: address.company,
+          addressLine1: address.address_line_1,
+          addressLine2: address.address_line_2,
+          country: address.country,
+          state: address.state,
+          city: address.city,
+        });
+        setStates(State.getStatesOfCountry(address.country));
+        setCities(City.getCitiesOfState(address.country, address.state));
+      }
+    };
+    fetchAddress();
+  }, [id, reset, axiosPublicUrl]);
+
+  const selectedCountry = watch("country");
+  const selectedState = watch("state");
 
   useEffect(() => {
     if (selectedCountry) {
@@ -48,7 +73,8 @@ const AddNewAddress = () => {
   }, [selectedCountry, selectedState, setValue]);
 
   const onSubmit = async (data) => {
-    await axiosPublicUrl.post("/api/addresses", {
+    await axiosPublicUrl.put("/api/addresses", {
+      id,
       firstName: data.firstName,
       lastName: data.lastName,
       postcode: data.postcode,
@@ -60,13 +86,13 @@ const AddNewAddress = () => {
       state: data.state,
       city: data.city,
     });
-    showToast("success", "Success!", "Address added successfully!");
+    showToast("success", "Success!", "Address updated successfully!");
     navigate("/user/account/address-book");
   };
 
   return (
     <div className="mx-auto py-4">
-      <h2 className="text-2xl font-semibold mb-6">Add a New Address</h2>
+      <h2 className="text-2xl font-semibold mb-6">Edit Address</h2>
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="grid grid-cols-1 md:grid-cols-2 gap-6"
@@ -237,7 +263,7 @@ const AddNewAddress = () => {
             type="submit"
             className="w-full bg-crimson-red hover:bg-red-700 text-white py-2 rounded"
           >
-            Save Address
+            Update Address
           </button>
         </div>
       </form>
@@ -245,4 +271,4 @@ const AddNewAddress = () => {
   );
 };
 
-export default AddNewAddress;
+export default EditAddress;
