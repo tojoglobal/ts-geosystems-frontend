@@ -7,6 +7,7 @@ import { useDropzone } from "react-dropzone";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import Button from "../Button/Button";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 const ProductAddForm = () => {
   const axiosPublicUrl = useAxiospublic();
@@ -27,37 +28,47 @@ const ProductAddForm = () => {
     },
   });
 
+  const navigate = useNavigate();
+
   const watchCategoryRaw = watch("category");
   const watchCategory = watchCategoryRaw ? JSON.parse(watchCategoryRaw) : null;
 
-  // Fetch All Products and Softwar
+  // Fetch Products
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchProducts = async () => {
       try {
-        const [productsRes, softwarRes] = await Promise.all([
-          axiosPublicUrl.get("/api/products"),
-          axiosPublicUrl.get("/api/softwar"),
-        ]);
-
+        const response = await axiosPublicUrl.get("/api/products");
         const mappedProducts =
-          productsRes.data?.products?.map((prod) => ({
-            value: prod.slug,
+          response.data?.products?.map((prod) => ({
+            value: prod.id,
             label: prod.product_name,
           })) || [];
+        setProductOptions(mappedProducts);
+      } catch (err) {
+        console.error("Error fetching products:", err);
+      }
+    };
 
+    fetchProducts();
+  }, []);
+
+  // Fetch Software
+  useEffect(() => {
+    const fetchSoftware = async () => {
+      try {
+        const response = await axiosPublicUrl.get("/api/software");
         const mappedSoftware =
-          softwarRes.data?.map((soft) => ({
+          response.data?.map((soft) => ({
             value: soft.slug,
             label: soft.softwar_name,
           })) || [];
-
-        setProductOptions(mappedProducts);
         setSoftwareOptions(mappedSoftware);
       } catch (err) {
-        console.error(err);
+        console.error("Error fetching software:", err);
       }
     };
-    fetchData();
+
+    fetchSoftware();
   }, []);
 
   // fetch the brands
@@ -176,6 +187,7 @@ const ProductAddForm = () => {
         title: "Product added successfully!",
         confirmButtonColor: "#14b8a6",
       });
+      navigate("/dashboard/product");
     } catch (error) {
       console.error("Upload failed:", error);
       Swal.fire({
@@ -216,14 +228,17 @@ const ProductAddForm = () => {
           ))}
         </div>
       </div>
+
       {/* Second Column */}
       <div className="col-span-1 md:col-span-2 space-y-4 grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
         <div className="col-span-1 space-y-3 sm:space-y-4">
+          {/* productName */}
           <input
             {...register("productName", { required: true })}
             placeholder="Product Name"
             className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
           />
+          {/* brandName */}
           <select
             {...register("brandName", { required: true })}
             className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
@@ -237,6 +252,7 @@ const ProductAddForm = () => {
               </option>
             ))}
           </select>
+          {/* category */}
           <select
             {...register("category", { required: true })}
             className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
@@ -253,7 +269,7 @@ const ProductAddForm = () => {
               </option>
             ))}
           </select>
-
+          {/*  subCategory*/}
           <select
             {...register("subCategory", { required: true })}
             className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
@@ -271,11 +287,13 @@ const ProductAddForm = () => {
               ))}
           </select>
 
+          {/*SKU / Unique Code  */}
           <input
             {...register("sku", { required: true })}
             placeholder="SKU / Unique Code"
             className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
           />
+          {/*videoUrls  */}
           <input
             {...register("videoUrls")}
             placeholder="YouTube Video URLs (comma separated)"
@@ -289,7 +307,6 @@ const ProductAddForm = () => {
             <option value="">Condition</option>
             <option value="new">New</option>
             <option value="used">Used</option>
-            <option value="old">Old</option>
           </select>
 
           {/* Moved Tax select here */}
@@ -425,6 +442,7 @@ const ProductAddForm = () => {
             />
             <label>Hide Product Options</label>
           </div>
+          {/* softwareOptions */}
           <Controller
             name="softwareOptions"
             control={control}
@@ -482,6 +500,7 @@ const ProductAddForm = () => {
             )}
           />
         </div>
+        {/*  productOverview*/}
         <div className="col-span-2 space-y-4">
           <label className="ml-1">Product Overview</label>
           <Controller

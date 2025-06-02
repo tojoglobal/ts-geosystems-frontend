@@ -6,7 +6,7 @@ import Select from "react-select";
 import { useDropzone } from "react-dropzone";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import { FaTimes } from "react-icons/fa";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Button from "../Button/Button";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
@@ -24,6 +24,8 @@ const UpdateProductForm = () => {
   const [softwareOptions, setSoftwareOptions] = useState([]);
   const [taxes, setTaxes] = useState([]);
 
+  const navigate = useNavigate();
+
   const { register, handleSubmit, setValue, control, watch, reset } = useForm({
     defaultValues: {
       priceShowHide: 0,
@@ -34,35 +36,43 @@ const UpdateProductForm = () => {
   const watchCategoryRaw = watch("category");
   const watchCategory = watchCategoryRaw ? JSON.parse(watchCategoryRaw) : null;
 
-  // Fetch All Products and Software Options
+  // Fetch Products
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchProducts = async () => {
       try {
-        const [productsRes, softwarRes] = await Promise.all([
-          axiosPublicUrl.get("/api/products"),
-          axiosPublicUrl.get("/api/softwar"),
-        ]);
-
+        const response = await axiosPublicUrl.get("/api/products");
         const mappedProducts =
-          productsRes.data?.products?.map((prod) => ({
-            value: prod.slug,
+          response.data?.products?.map((prod) => ({
+            value: prod.id,
             label: prod.product_name,
           })) || [];
+        setProductOptions(mappedProducts);
+      } catch (err) {
+        console.error("Error fetching products:", err);
+      }
+    };
 
+    fetchProducts();
+  }, []);
+
+  // Fetch Software
+  useEffect(() => {
+    const fetchSoftware = async () => {
+      try {
+        const response = await axiosPublicUrl.get("/api/software");
         const mappedSoftware =
-          softwarRes.data?.map((soft) => ({
+          response.data?.map((soft) => ({
             value: soft.slug,
             label: soft.softwar_name,
           })) || [];
-
-        setProductOptions(mappedProducts);
         setSoftwareOptions(mappedSoftware);
       } catch (err) {
-        console.error(err);
+        console.error("Error fetching software:", err);
       }
     };
-    fetchData();
-  }, [axiosPublicUrl]);
+
+    fetchSoftware();
+  }, []);
 
   // fetch the brands
   useEffect(() => {
@@ -124,7 +134,7 @@ const UpdateProductForm = () => {
       }
     };
     fetchProductData();
-  }, [id, axiosPublicUrl]);
+  }, []);
 
   useEffect(() => {
     if (productData) {
@@ -240,8 +250,6 @@ const UpdateProductForm = () => {
   });
 
   const onSubmit = async (data) => {
-    console.log("Form Data:", data);
-
     const parsedData = {
       ...data,
       category: data.category ? JSON.parse(data.category) : null,
@@ -287,12 +295,14 @@ const UpdateProductForm = () => {
           "Content-Type": "multipart/form-data",
         },
       });
-      console.log(res);
-      Swal.fire({
-        icon: "success",
-        title: "Product update successfully!",
-        confirmButtonColor: "#14b8a6",
-      });
+      if (res.status === 201) {
+        Swal.fire({
+          icon: "success",
+          title: "Product update successfully!",
+          confirmButtonColor: "#14b8a6",
+        });
+        navigate("/dashboard/product");
+      }
     } catch (error) {
       console.error("Update failed:", error);
       Swal.fire({
@@ -349,11 +359,13 @@ const UpdateProductForm = () => {
       {/* Second Column */}
       <div className="col-span-2 space-y-4 grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="col-span-1 space-y-4">
+          {/* productName */}
           <input
             {...register("productName")}
             placeholder="Product Name"
             className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500"
           />
+          {/*  brandName*/}
           <select
             {...register("brandName")}
             className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500"
@@ -367,6 +379,7 @@ const UpdateProductForm = () => {
               </option>
             ))}
           </select>
+          {/*category  */}
           <select
             {...register("category")}
             className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500"
@@ -383,7 +396,7 @@ const UpdateProductForm = () => {
               </option>
             ))}
           </select>
-
+          {/* subCategory */}
           <select
             {...register("subCategory")}
             className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500"
@@ -400,12 +413,13 @@ const UpdateProductForm = () => {
                 </option>
               ))}
           </select>
-
+          {/* SKU / Unique Code */}
           <input
             {...register("sku")}
             placeholder="SKU / Unique Code"
             className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500"
           />
+          {/* videoUrls */}
           <input
             {...register("videoUrls")}
             placeholder="YouTube Video URLs (comma separated)"
@@ -416,7 +430,6 @@ const UpdateProductForm = () => {
             <option value="">Condition</option>
             <option value="new">New</option>
             <option value="used">Used</option>
-            <option value="old">Old</option>
           </select>
 
           {/* Tax selection */}
@@ -475,6 +488,7 @@ const UpdateProductForm = () => {
             />
             <label>On Sale</label>
           </div>
+          {/* price */}
           <input
             {...register("price")}
             placeholder="Price"
@@ -621,6 +635,7 @@ const UpdateProductForm = () => {
             )}
           />
         </div>
+        {/* productOverview */}
         <div className="col-span-2 space-y-4">
           <label className="ml-1">Product Overview</label>
           <Controller

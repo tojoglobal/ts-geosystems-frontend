@@ -15,6 +15,8 @@ import { FaTimes } from "react-icons/fa";
 import useDataQuery from "../../utils/useDataQuery";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import { Dialog, Transition } from "@headlessui/react";
+import PremiumProductViewModal from "./ProductViewModal";
+import PremiumProductTable from "./PremiumProductTable";
 
 const ProductTable = () => {
   const axiosPublicUrl = useAxiospublic();
@@ -204,7 +206,16 @@ const ProductTable = () => {
           </Link>
         </div>
       </div>
-      <div className="overflow-x-auto border border-gray-700">
+      <PremiumProductTable
+        products={products}
+        productsLoading={productsLoading}
+        getCategoryName={getCategoryName}
+        getSubCategoryName={getSubCategoryName}
+        getBrandName={getBrandName}
+        handleDelete={handleDelete}
+        handleView={handleView}
+      />
+      {/* <div className="overflow-x-auto border border-gray-700">
         <table className="w-full text-sm text-left text-white min-w-[800px]">
           <thead className="text-sm uppercase bg-gray-800 text-gray-200">
             <tr>
@@ -285,7 +296,7 @@ const ProductTable = () => {
             )}
           </tbody>
         </table>
-      </div>
+      </div> */}
       {/* Pagination controls */}
       {totalPages > 1 && (
         <div className="mt-4 flex flex-col sm:flex-row items-center justify-between gap-4">
@@ -327,149 +338,14 @@ const ProductTable = () => {
         </div>
       )}
       {/* View Modal */}
-      <Transition appear show={isModalOpen} as={React.Fragment}>
-        <Dialog
-          as="div"
-          className="relative z-50"
-          onClose={() => setIsModalOpen(false)}
-        >
-          <Transition.Child
-            as={React.Fragment}
-            enter="ease-out duration-300"
-            enterFrom="opacity-0"
-            enterTo="opacity-100"
-            leave="ease-in duration-200"
-            leaveFrom="opacity-100"
-            leaveTo="opacity-0"
-          >
-            <div className="fixed inset-0 backdrop-blur-sm" />
-          </Transition.Child>
-
-          <div className="fixed inset-0 overflow-y-auto">
-            <div className="flex min-h-full items-center justify-center p-4 text-center">
-              <Transition.Child
-                as={React.Fragment}
-                enter="ease-out duration-300"
-                enterFrom="opacity-0 scale-95"
-                enterTo="opacity-100 scale-100"
-                leave="ease-in duration-200"
-                leaveFrom="opacity-100 scale-100"
-                leaveTo="opacity-0 scale-95"
-              >
-                <Dialog.Panel className="w-full max-w-2xl transform overflow-hidden rounded-2xl bg-gray-800 p-6 text-left align-middle shadow-xl transition-all">
-                  <div className="flex justify-between items-start">
-                    <Dialog.Title
-                      as="h3"
-                      className="text-lg font-medium leading-6 text-white"
-                    >
-                      {viewProduct?.product_name}
-                    </Dialog.Title>
-                    <button
-                      onClick={() => setIsModalOpen(false)}
-                      className="text-gray-400 cursor-pointer hover:text-white"
-                    >
-                      <FaTimes className="h-5 w-5" />
-                    </button>
-                  </div>
-                  {viewProduct && (
-                    <div className="mt-4 space-y-4 text-sm text-gray-200">
-                      <p>
-                        <strong className="text-gray-300">Price:</strong> ৳{" "}
-                        {viewProduct.price}
-                      </p>
-                      <p>
-                        <strong className="text-gray-300">Category:</strong>{" "}
-                        {getCategoryName(viewProduct.category)}
-                      </p>
-                      <p>
-                        <strong className="text-gray-300">Sub Category:</strong>{" "}
-                        {getSubCategoryName(viewProduct.sub_category)}
-                      </p>
-                      <p>
-                        <strong className="text-gray-300">SKU:</strong>{" "}
-                        {viewProduct.sku}
-                      </p>
-                      <p>
-                        <strong className="text-gray-300">Condition:</strong>{" "}
-                        {viewProduct.product_condition}
-                      </p>
-                      <p>
-                        <strong className="text-gray-300">Brand:</strong>{" "}
-                        {getBrandName(viewProduct.brand_name)}
-                      </p>
-                      <div>
-                        <strong className="text-gray-300">Overview:</strong>
-                        <article
-                          dangerouslySetInnerHTML={{
-                            __html: DOMPurify.sanitize(
-                              viewProduct.product_overview || ""
-                            ),
-                          }}
-                          className="prose max-w-none prose-sm sm:prose-base leading-relaxed bg-gray-700 text-white p-3 rounded mt-2"
-                        />
-                      </div>
-                      <div>
-                        <strong className="text-gray-300">
-                          Warranty Info:
-                        </strong>
-                        <article
-                          dangerouslySetInnerHTML={{
-                            __html: DOMPurify.sanitize(
-                              viewProduct.warranty_info || ""
-                            ),
-                          }}
-                          className="prose max-w-none prose-sm sm:prose-base leading-relaxed bg-gray-700 text-white p-3 rounded mt-2"
-                        />
-                      </div>
-                      {viewProduct.video_urls && (
-                        <p>
-                          <strong className="text-gray-300">Video:</strong>{" "}
-                          <a
-                            href={viewProduct.video_urls}
-                            className="text-blue-400 hover:text-blue-300"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            Watch Video
-                          </a>
-                        </p>
-                      )}
-                      <div className="grid grid-cols-2 gap-3 sm:gap-4 mt-4">
-                        {Array.isArray(
-                          (() => {
-                            try {
-                              return JSON.parse(viewProduct.image_urls);
-                            } catch {
-                              return [];
-                            }
-                          })()
-                        ) &&
-                          JSON.parse(viewProduct.image_urls).map((img, idx) => (
-                            <img
-                              key={idx}
-                              src={img}
-                              alt="Product"
-                              className="rounded-md object-cover h-32 w-full border border-gray-600"
-                            />
-                          ))}
-                      </div>
-                    </div>
-                  )}
-                  <div className="mt-6 flex justify-end">
-                    <button
-                      type="button"
-                      className="inline-flex cursor-pointer justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                      onClick={() => setIsModalOpen(false)}
-                    >
-                      Close
-                    </button>
-                  </div>
-                </Dialog.Panel>
-              </Transition.Child>
-            </div>
-          </div>
-        </Dialog>
-      </Transition>
+      <PremiumProductViewModal
+        isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
+        viewProduct={viewProduct}
+        getCategoryName={getCategoryName}
+        getSubCategoryName={getSubCategoryName}
+        getBrandName={getBrandName}
+      />
     </div>
   );
 };
