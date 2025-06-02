@@ -10,13 +10,19 @@ import useDataQuery from "../../utils/useDataQuery";
 import { parsePrice } from "../../utils/parsePrice";
 import { useTrackProductView } from "../../Hooks/useTrackProductView";
 import { slugify } from "../../utils/slugify";
+import { getProductType } from "../../utils/productOption";
+import useToastSwal from "../../Hooks/useToastSwal";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../../features/AddToCart/AddToCart";
 
 const Recommended = ({ category, currentProductId }) => {
   const swiperRef = useRef(null);
+  const dispatch = useDispatch();
   const { trackProductView } = useTrackProductView();
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
   const [recommendedProducts, setRecommendedProducts] = useState([]);
+  const showToast = useToastSwal();
 
   // Fetch recommended products when category changes
   const { data = {}, isLoading } = useDataQuery(
@@ -40,12 +46,32 @@ const Recommended = ({ category, currentProductId }) => {
       setIsBeginning(swiperRef.current.isBeginning);
       setIsEnd(swiperRef.current.isEnd);
     }
-  }, [recommendedProducts]); // Update when recommendedProducts change
+  }, [recommendedProducts]);
 
   const handleSlideChange = (swiper) => {
     setIsBeginning(swiper.isBeginning);
     setIsEnd(swiper.isEnd);
   };
+
+  const handleAddToCart = (product) => {
+    const itemToAdd = {
+      id: product.id,
+      product_name: product.product_name,
+      price: parsePrice(product.price),
+      quantity: 1,
+    };
+
+    dispatch(addToCart(itemToAdd));
+
+    showToast(
+      "success",
+      "Added to Cart!",
+      `<b style="color:#333">${product.product_name}</b> has been added to your cart.`,
+      { timer: 2000 }
+    );
+  };
+
+  console.log(recommendedProducts);
 
   if (isLoading) {
     return <div>Loading recommended products...</div>;
@@ -131,6 +157,7 @@ const Recommended = ({ category, currentProductId }) => {
               imageUrls.length > 0
                 ? `${import.meta.env.VITE_OPEN_APIURL}${imageUrls[0]}`
                 : "https://via.placeholder.com/150";
+            const { isSimpleProduct } = getProductType(product);
 
             return (
               <SwiperSlide key={idx}>
@@ -185,9 +212,51 @@ const Recommended = ({ category, currentProductId }) => {
                       ৳{(parsePrice(product.price) * 1.2).toFixed(2)}{" "}
                       <span className="underline">(Inc. VAT)</span>
                     </div>
-                    <button className="mt-1 cursor-pointer bg-[#e62245] hover:bg-[#c91d3a] text-white text-sm font-semibold py-[6px] px-4 rounded w-full">
+                    {product?.isStock === 1 && (
+                      <div>
+                        {isSimpleProduct ? (
+                          <>
+                            {Number(product?.priceShowHide) === 1 ? (
+                              // Case 2: GET QUOTATION
+                              <Link
+                                onClick={() => trackProductView(product.id)}
+                                to={`/products/${product.id}/${slugify(
+                                  product.product_name || ""
+                                )}`}
+                              >
+                                <button className="bg-[#e62245] cursor-pointer text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors">
+                                  GET QUOTATION
+                                </button>
+                              </Link>
+                            ) : (
+                              // Case 3: ADD TO CART
+                              <button
+                                onClick={() => handleAddToCart(product)}
+                                className="bg-[#e62245] cursor-pointer text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
+                              >
+                                ADD TO CART
+                              </button>
+                            )}
+                          </>
+                        ) : (
+                          // Case 1: CHOOSE OPTION
+                          <Link
+                            onClick={() => trackProductView(product.id)}
+                            to={`/products/${product.id}/${slugify(
+                              product.product_name || ""
+                            )}`}
+                          >
+                            <button className="bg-[#e62245] cursor-pointer text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors">
+                              CHOOSE OPTION
+                            </button>
+                          </Link>
+                        )}
+                      </div>
+                    )}
+
+                    {/* <button className="mt-1 cursor-pointer bg-[#e62245] hover:bg-[#c91d3a] text-white text-sm font-semibold py-[6px] px-4 rounded w-full">
                       ADD TO CART
-                    </button>
+                    </button> */}
                   </div>
                 </div>
               </SwiperSlide>

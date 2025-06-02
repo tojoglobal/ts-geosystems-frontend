@@ -6,7 +6,7 @@ import {
   FaWhatsapp,
 } from "react-icons/fa6";
 import Recommended from "./Recommended";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import {
   MdOutlineKeyboardArrowDown,
@@ -40,6 +40,8 @@ const ProductDetails = () => {
   const videoUrls = product?.video_urls ? product.video_urls.split(",") : [];
   const category = product?.category ? JSON.parse(product.category).cat : null;
   const currentProductId = product?.id;
+  const priceOption = product?.priceShowHide;
+  console.log(priceOption);
 
   // Set default selected image if not set, only on initial load or when product changes
   useEffect(() => {
@@ -210,15 +212,23 @@ const ProductDetails = () => {
                 </button>
               </div>
             </div>
-            {product?.isStock === 1 && (
-              <button
-                onClick={handleAddToCart}
-                className="cursor-pointer overflow-hidden group text-white px-18 font-semibold py-[4px] rounded-[3px] text-[17px] bg-[#e62245] hover:bg-red-800"
-              >
-                {/* <span className="absolute left-0 top-0 h-full w-0 bg-black transition-all duration-500 ease-out group-hover:w-full z-0"></span> */}
-                <span className="relative z-10">ADD TO CART</span>
-              </button>
-            )}
+
+            {product?.isStock === 1 &&
+              (priceOption === 0 ? (
+                <button
+                  onClick={handleAddToCart}
+                  className="cursor-pointer overflow-hidden group text-white px-18 font-semibold py-[4px] rounded-[3px] text-[17px] bg-[#e62245] hover:bg-red-800"
+                >
+                  <span className="relative z-10">ADD TO CART</span>
+                </button>
+              ) : (
+                <Link to="/contact-us">
+                  <button className="cursor-pointer overflow-hidden group text-white px-18 font-semibold py-[4px] rounded-[3px] text-[17px] bg-[#e62245] hover:bg-red-800">
+                    <span className="relative z-10">GET QUOTATION</span>
+                  </button>
+                </Link>
+              ))}
+
             <div className="mt-6">
               <div className="flex items-center gap-2">
                 <span className="font-medium text-[#8d7f90]">Share:</span>

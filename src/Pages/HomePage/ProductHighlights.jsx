@@ -236,24 +236,44 @@ const ProductHighlights = () => {
                       ৳{item.price}{" "}
                       <span className="underline">(Inc. VAT)</span>
                     </div>
+
                     {item?.isStock === 1 && (
                       <div>
                         {isSimpleProduct ? (
-                          <button
-                            onClick={() => handleAddToCart(item)}
-                            className="w-full cursor-pointer bg-[#e62245] text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
-                          >
-                            ADD TO CART
-                          </button>
+                          <>
+                            {Number(item?.priceShowHide) === 1 ? (
+                              // Case 2: GET QUOTATION
+                              <Link
+                                onClick={() => trackProductView(item.id)}
+                                to={`/products/${item.id}/${slugify(
+                                  item.product_name || ""
+                                )}`}
+                              >
+                                <button className="bg-[#e62245] cursor-pointer text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors">
+                                  GET QUOTATION
+                                </button>
+                              </Link>
+                            ) : (
+                              // Case 3: ADD TO CART
+                              <button
+                                onClick={() => handleAddToCart(item)}
+                                className="bg-[#e62245] cursor-pointer text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
+                              >
+                                ADD TO CART
+                              </button>
+                            )}
+                          </>
                         ) : (
+                          // Case 1: CHOOSE OPTION
                           <Link
                             onClick={() => trackProductView(item.id)}
                             to={`/products/${item.id}/${slugify(
                               item.product_name || ""
                             )}`}
-                            className="w-full block text-center cursor-pointer bg-[#e62245] text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
                           >
-                            CHOOSE OPTION
+                            <button className="bg-[#e62245] cursor-pointer text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors">
+                              CHOOSE OPTION
+                            </button>
                           </Link>
                         )}
                       </div>

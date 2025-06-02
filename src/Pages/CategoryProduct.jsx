@@ -145,7 +145,9 @@ const CategoryProduct = () => {
       <h1 className="text-xl md:text-3xl font-bold mb-4">
         {(subcategory || category).replace(/-/g, " ").toUpperCase()}
       </h1>
+      {/* product part  */}
       <section>
+        {/* product category list  */}
         <div className="flex items-center justify-between md:justify-normal md:gap-52 mb-6">
           {/* View Mode Buttons */}
           <div className="flex gap-2">
@@ -203,6 +205,7 @@ const CategoryProduct = () => {
         >
           {products?.map((product) => {
             const { isSimpleProduct } = getProductType(product);
+
             let images = [];
             try {
               images = JSON.parse(product.image_urls);
@@ -351,25 +354,45 @@ const CategoryProduct = () => {
                         {product?.isStock === 1 && (
                           <div>
                             {isSimpleProduct ? (
-                              <button
-                                onClick={() => handleAddToCart(product)}
-                                className="bg-[#e62245] cursor-pointer text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
-                              >
-                                ADD TO CART
-                              </button>
+                              <>
+                                {Number(product?.priceShowHide) === 1 ? (
+                                  // Case 2: GET QUOTATION
+                                  <Link
+                                    onClick={() => trackProductView(product.id)}
+                                    to={`/products/${product.id}/${slugify(
+                                      product.product_name || ""
+                                    )}`}
+                                  >
+                                    <button className="bg-[#e62245] cursor-pointer text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors">
+                                      GET QUOTATION
+                                    </button>
+                                  </Link>
+                                ) : (
+                                  // Case 3: ADD TO CART
+                                  <button
+                                    onClick={() => handleAddToCart(product)}
+                                    className="bg-[#e62245] cursor-pointer text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
+                                  >
+                                    ADD TO CART
+                                  </button>
+                                )}
+                              </>
                             ) : (
+                              // Case 1: CHOOSE OPTION
                               <Link
                                 onClick={() => trackProductView(product.id)}
                                 to={`/products/${product.id}/${slugify(
                                   product.product_name || ""
                                 )}`}
-                                className="w-full block text-center cursor-pointer bg-[#e62245] text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
                               >
-                                CHOOSE OPTION
+                                <button className="bg-[#e62245] cursor-pointer text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors">
+                                  CHOOSE OPTION
+                                </button>
                               </Link>
                             )}
                           </div>
                         )}
+
                         <div className="flex items-center gap-2 mt-1">
                           <input
                             type="checkbox"
@@ -422,21 +445,40 @@ const CategoryProduct = () => {
                         {product?.isStock === 1 && (
                           <div>
                             {isSimpleProduct ? (
-                              <button
-                                onClick={() => handleAddToCart(product)}
-                                className="bg-[#e62245] w-full cursor-pointer text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
-                              >
-                                ADD TO CART
-                              </button>
+                              <>
+                                {Number(product?.priceShowHide) === 1 ? (
+                                  // Case 2: GET QUOTATION
+                                  <Link
+                                    onClick={() => trackProductView(product.id)}
+                                    to={`/products/${product.id}/${slugify(
+                                      product.product_name || ""
+                                    )}`}
+                                  >
+                                    <button className="bg-[#e62245] cursor-pointer text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors">
+                                      GET QUOTATION
+                                    </button>
+                                  </Link>
+                                ) : (
+                                  // Case 3: ADD TO CART
+                                  <button
+                                    onClick={() => handleAddToCart(product)}
+                                    className="bg-[#e62245] cursor-pointer text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
+                                  >
+                                    ADD TO CART
+                                  </button>
+                                )}
+                              </>
                             ) : (
+                              // Case 1: CHOOSE OPTION
                               <Link
                                 onClick={() => trackProductView(product.id)}
                                 to={`/products/${product.id}/${slugify(
                                   product.product_name || ""
                                 )}`}
-                                className="w-full block text-center cursor-pointer bg-[#e62245] text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
                               >
-                                CHOOSE OPTION
+                                <button className="bg-[#e62245] cursor-pointer text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors">
+                                  CHOOSE OPTION
+                                </button>
                               </Link>
                             )}
                           </div>
@@ -465,7 +507,7 @@ const CategoryProduct = () => {
           })}
         </div>
       </section>
-      {/* Pagination */}
+      {/* Pagination part */}
       <div className="flex items-center justify-between mt-10">
         <div className="flex items-center">
           {/* Previous button (only show if not on page 1) */}
@@ -506,6 +548,7 @@ const CategoryProduct = () => {
           <div></div>
         )}
       </div>
+      {/* compare part  */}
       <div className="mt-8 flex justify-end">
         <div className="mt-8 flex justify-end">
           <button
