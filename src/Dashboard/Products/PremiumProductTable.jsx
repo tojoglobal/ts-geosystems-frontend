@@ -72,21 +72,22 @@ const PremiumProductTable = ({
                 </td>
                 <td className="py-4 px-4">
                   <div className="flex flex-wrap gap-2 justify-center">
-                    <Link to={`/dashboard/update-product/${product.id}`}>
-                      <button className="bg-gradient-to-r from-green-600 to-green-400 text-white p-2 rounded-full shadow hover:scale-110 duration-150">
-                        <Edit size={16} />
-                      </button>
+                    <Link
+                      to={`/dashboard/update-product/${product.id}`}
+                      className="bg-gradient-to-r from-green-600 to-green-400 text-white p-2 rounded-full shadow hover:scale-110 duration-150 cursor-pointer"
+                    >
+                      <Edit size={16} />
                     </Link>
                     <button
                       onClick={() => handleDelete(product.id)}
-                      className="bg-gradient-to-r from-rose-700 to-pink-500 text-white p-2 rounded-full shadow hover:scale-110 duration-150"
+                      className="bg-gradient-to-r from-rose-700 to-pink-500 text-white p-2 rounded-full shadow hover:scale-110 duration-150 cursor-pointer"
                     >
                       <Trash size={16} />
                     </button>
                     <button
                       onClick={() => handleView(product)}
                       title="View"
-                      className="bg-gradient-to-r from-yellow-400 to-yellow-600 text-white p-2 rounded-full shadow hover:scale-110 duration-150"
+                      className="bg-gradient-to-r from-yellow-400 to-yellow-600 text-white p-2 rounded-full shadow hover:scale-110 duration-150 cursor-pointer"
                     >
                       <Eye size={16} />
                     </button>

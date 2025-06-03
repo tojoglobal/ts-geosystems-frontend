@@ -238,7 +238,7 @@ const ProductHighlights = () => {
                     </div>
 
                     {item?.isStock === 1 && (
-                      <div>
+                      <div className="w-full">
                         {isSimpleProduct ? (
                           <>
                             {Number(item?.priceShowHide) === 1 ? (
@@ -249,7 +249,7 @@ const ProductHighlights = () => {
                                   item.product_name || ""
                                 )}`}
                               >
-                                <button className="bg-[#e62245] cursor-pointer text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors">
+                                <button className="w-full bg-[#e62245] cursor-pointer text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors">
                                   GET QUOTATION
                                 </button>
                               </Link>
@@ -257,7 +257,7 @@ const ProductHighlights = () => {
                               // Case 3: ADD TO CART
                               <button
                                 onClick={() => handleAddToCart(item)}
-                                className="bg-[#e62245] cursor-pointer text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
+                                className="w-full bg-[#e62245] cursor-pointer text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
                               >
                                 ADD TO CART
                               </button>
@@ -271,7 +271,7 @@ const ProductHighlights = () => {
                               item.product_name || ""
                             )}`}
                           >
-                            <button className="bg-[#e62245] cursor-pointer text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors">
+                            <button className="w-full bg-[#e62245] cursor-pointer text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors">
                               CHOOSE OPTION
                             </button>
                           </Link>
