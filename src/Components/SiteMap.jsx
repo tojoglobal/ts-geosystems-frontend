@@ -82,7 +82,7 @@ const SiteMap = () => {
                     {page.children.map((child, cidx) => (
                       <li
                         key={child.name + cidx}
-                        className="relative before:content-[''] before:absolute before:w-2 before:h-2 before:bg-black before:rounded-full before:-left-4 before:top-2"
+                        className="relative before:content-[''] before:absolute before:w-1 before:h-1 before:bg-black before:rounded-none before:-left-4 before:top-2"
                       >
                         <Link
                           to={child.to}
@@ -102,7 +102,7 @@ const SiteMap = () => {
           <span className="font-light text-[22px] text-black">Categories</span>
           <ul className="pl-7 space-y-2 mt-2">
             <li className="relative before:content-[''] before:absolute before:w-2 before:h-2 before:bg-white before:border before:border-gray-400 before:rounded-full before:-left-4 before:top-2">
-              <Link to="/shop" className="text-[#e62245] underline">
+              <Link to="/shop-all" className="text-[#e62245] underline">
                 Shop All
               </Link>
             </li>
@@ -115,7 +115,7 @@ const SiteMap = () => {
                   className="text-[14px] relative before:content-[''] before:absolute before:w-2 before:h-2 before:bg-white before:border before:border-gray-400 before:rounded-full before:-left-4 before:top-2"
                 >
                   <Link
-                    to={`/category/${cat.slug_name}`}
+                    to={`/${cat.slug_name}`}
                     className="text-[#e62245] underline"
                   >
                     {cat.category_name}
@@ -125,10 +125,10 @@ const SiteMap = () => {
                       {getSubcategories(cat.id).map((sub) => (
                         <li
                           key={sub.id}
-                          className="relative before:content-[''] before:absolute before:w-2 before:h-2 before:bg-black before:rounded-full before:-left-4 before:top-2"
+                          className="relative before:content-[''] before:absolute before:w-1 before:h-1 before:bg-black before:rounded-none before:-left-4 before:top-2"
                         >
                           <Link
-                            to={`/category/${cat.slug_name}/${getSubSlug(sub)}`}
+                            to={`/${cat.slug_name}/${getSubSlug(sub)}`}
                             className="text-[#e62245] underline"
                           >
                             {getSubName(sub)}
