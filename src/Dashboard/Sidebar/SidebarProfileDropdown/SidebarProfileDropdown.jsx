@@ -108,17 +108,6 @@ const SidebarProfileDropdown = () => {
               }
             />
             <DropdownItem
-              icon={<Settings size={16} />}
-              label={
-                <span className="flex items-center gap-1">
-                  Settings
-                  <span className="text-xs bg-blue-500 text-white px-1 rounded">
-                    New
-                  </span>
-                </span>
-              }
-            />
-            <DropdownItem
               icon={<Lock size={16} />}
               label="Lock screen"
               onClick={() => {
