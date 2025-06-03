@@ -35,6 +35,7 @@ import { BsQuestionCircle } from "react-icons/bs";
 import logo from "/TS-WEB-LOGO.png";
 import smallLogo from "/favicon.png";
 import SidebarProfileDropdown from "./SidebarProfileDropdown/SidebarProfileDropdown";
+import { FaTelegram } from "react-icons/fa6";
 
 const menuItems = [
   {
@@ -114,7 +115,7 @@ const menuItems = [
   },
   {
     label: "Subscriber",
-    icon: <Tag size={20} />,
+    icon: <FaTelegram size={20} />,
     to: "/dashboard/subscriber",
   },
   {
@@ -238,11 +239,11 @@ const Sidebar = ({
             }`}
           >
             {collapsed ? (
-              <Link to="/">
+              <Link to="/dashboard">
                 <img src={smallLogo} alt="Logo" className="h-fit" />
               </Link>
             ) : (
-              <Link to="/">
+              <Link to="/dashboard">
                 <img src={logo} alt="Logo" className="w-[90%]" />
               </Link>
             )}
