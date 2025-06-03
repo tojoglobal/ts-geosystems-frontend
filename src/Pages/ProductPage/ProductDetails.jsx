@@ -176,46 +176,66 @@ const ProductDetails = () => {
               product.flash_sale_end &&
               timeLeft &&
               typeof timeLeft.seconds !== "undefined" && (
-                <div className="flex items-center gap-2 mb-4">
-                  <span className="bg-[#e62245] text-white px-3 py-1 rounded font-bold mr-2">
-                    Flash Sale!
-                  </span>
-                  <div className="flex items-center gap-1">
-                    {timeLeft.days > 0 && (
-                      <span className="countdown font-mono text-lg">
-                        <span
-                          style={{ "--value": timeLeft.days }}
-                          className="bg-gray-200 text-[#e62245] px-2 py-1 rounded"
-                        ></span>
-                        <span className="text-xs text-gray-500 ml-1 mr-2">
-                          d
+                <div className="w-full flex mb-4">
+                  <div className="flex flex-col items-center">
+                    <div className="grid grid-flow-col gap-3 text-center auto-cols-max">
+                      <div className="flex flex-col border-x border-b">
+                        <span className="countdown font-mono py-1 px-3 text-2xl bg-crimson-red text-white rounded-t-sm">
+                          <span
+                            style={{ "--value": timeLeft.days || 0 }}
+                            aria-live="polite"
+                            aria-label="days"
+                          >
+                            {timeLeft.days || 0}
+                          </span>
                         </span>
-                      </span>
-                    )}
-                    <span className="countdown font-mono text-lg">
-                      <span
-                        style={{ "--value": timeLeft.hours }}
-                        className="bg-gray-200 text-[#e62245] px-2 py-1 rounded"
-                      ></span>
-                      <span className="text-xs text-gray-500 ml-1 mr-2">h</span>
-                    </span>
-                    <span className="countdown font-mono text-lg">
-                      <span
-                        style={{ "--value": timeLeft.minutes }}
-                        className="bg-gray-200 text-[#e62245] px-2 py-1 rounded"
-                      ></span>
-                      <span className="text-xs text-gray-500 ml-1 mr-2">m</span>
-                    </span>
-                    <span className="countdown font-mono text-lg">
-                      <span
-                        style={{ "--value": timeLeft.seconds }}
-                        className="bg-gray-200 text-[#e62245] px-2 py-1 rounded"
-                      ></span>
-                      <span className="text-xs text-gray-500 ml-1">s</span>
-                    </span>
-                    <span className="ml-1 text-[#e62245] font-semibold">
-                      left!
-                    </span>
+                        <span className="uppercase text-xs py-[2px] px-3 tracking-wide mt-1">
+                          days
+                        </span>
+                      </div>
+                      <div className="flex flex-col border-x border-b">
+                        <span className="countdown font-mono py-1 px-3 text-2xl bg-crimson-red text-white rounded-t-sm">
+                          <span
+                            style={{ "--value": timeLeft.hours || 0 }}
+                            aria-live="polite"
+                            aria-label="hours"
+                          >
+                            {timeLeft.hours || 0}
+                          </span>
+                        </span>
+                        <span className="uppercase text-xs py-[2px] px-3 tracking-wide mt-1">
+                          hrs
+                        </span>
+                      </div>
+                      <div className="flex flex-col border-x border-b">
+                        <span className="countdown font-mono py-1 px-3 text-2xl bg-crimson-red text-white rounded-t-sm">
+                          <span
+                            style={{ "--value": timeLeft.minutes || 0 }}
+                            aria-live="polite"
+                            aria-label="minutes"
+                          >
+                            {timeLeft.minutes || 0}
+                          </span>
+                        </span>
+                        <span className="uppercase text-xs py-[2px] px-3 tracking-wide mt-1">
+                          min
+                        </span>
+                      </div>
+                      <div className="flex flex-col border-x border-b">
+                        <span className="countdown font-mono py-1 px-3 text-2xl bg-crimson-red text-white rounded-t-sm">
+                          <span
+                            style={{ "--value": timeLeft.seconds || 0 }}
+                            aria-live="polite"
+                            aria-label="seconds"
+                          >
+                            {timeLeft.seconds || 0}
+                          </span>
+                        </span>
+                        <span className="uppercase text-xs py-[2px] px-3 tracking-wide mt-1">
+                          sec
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               )}
