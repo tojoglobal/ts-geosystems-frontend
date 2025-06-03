@@ -7,7 +7,7 @@ import useDataQuery from "../../utils/useDataQuery";
 import { useSelector } from "react-redux";
 
 const ProductSidebar = () => {
-  const { category, subcategory } = useParams();
+  const { category, subcategory, brand } = useParams();
   const location = useLocation();
   const axiosPublicUrl = useAxiospublic();
   const [openSections, setOpenSections] = useState({});
@@ -204,6 +204,11 @@ const ProductSidebar = () => {
                             : `/${item.categorySlug}/${child.slug}`
                         }
                         className={`font-normal capitalize block px-5 py-3 text-[13px] hover:bg-gray-50 hover:text-[#e62245] border-t border-[#ebebeb] ${
+                          item.label === "Shop by Brand" && brand === child.slug
+                            ? "text-[#e62245] font-bold"
+                            : ""
+                        } ${
+                          item.label !== "Shop by Brand" &&
                           activeSubcategorySlug === child.slug &&
                           activeCategorySlug === item.categorySlug
                             ? "text-[#e62245] font-bold"

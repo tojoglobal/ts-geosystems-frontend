@@ -130,7 +130,7 @@ export default function NewEquipmentDropdown() {
           ))}
         </ul>
         <h3 className="font-bold text-base mt-6 mb-3 text-charcoal underline">
-          SHOP BY BRAND
+          SHOP BY BRANDa
         </h3>
         <ul className="space-y-1 text-sm text-gray-600">
           {brandsData?.map((brand) => (
@@ -142,7 +142,7 @@ export default function NewEquipmentDropdown() {
               className="cursor-pointer text-[13px] transition-all duration-[0.2s] ease-in-out group"
             >
               <Link
-                to={`/${brand.slug}`}
+                to={`brand/${brand.slug}`}
                 className="group-hover:text-[#e62245] group-hover:tracking-wide group-hover:mr-[5px]"
               >
                 {brand.name}
