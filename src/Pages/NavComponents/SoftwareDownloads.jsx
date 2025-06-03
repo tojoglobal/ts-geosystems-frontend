@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import useDataQuery from "../../utils/useDataQuery";
 import { useSelector } from "react-redux";
+import ResourceCard from "./ResourceCard";
 
 const SoftwareDownloads = () => {
   const { isAuth } = useSelector((state) => state.authUser);
@@ -15,23 +16,15 @@ const SoftwareDownloads = () => {
   } = useDataQuery(["software"], "/api/software");
 
   if (isLoading) return null;
+  if (isError) return <div>Error fetching software data</div>;
 
-  if (isError) {
-    return <div>Error fetching software data</div>;
-  }
-
-  // Calculate the data to display for the current page
   const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIdx = startIdx + ITEMS_PER_PAGE;
   const currentData = softwareData.slice(startIdx, endIdx);
-
-  // Calculate the total number of pages
   const totalPages = Math.ceil(softwareData.length / ITEMS_PER_PAGE);
 
   const handlePageChange = (page) => {
-    if (page > 0 && page <= totalPages) {
-      setCurrentPage(page);
-    }
+    if (page > 0 && page <= totalPages) setCurrentPage(page);
   };
 
   return (
@@ -49,7 +42,7 @@ const SoftwareDownloads = () => {
           Software Downloads
         </Link>
       </div>
-      <p className="text-[#e62245] font-light mt-3 mb-3 text-[28px]">
+      <p className="text-[#e62245] font-light my-3 text-[28px]">
         Software Downloads
       </p>
       <h1 className="text-[#e62245] font-bold text-xl mb-5">
@@ -57,36 +50,18 @@ const SoftwareDownloads = () => {
       </h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {currentData.map((software) => (
-          <div
+          <ResourceCard
             key={software.id}
-            className="border rounded-sm flex flex-col h-full"
-          >
-            <div className="flex flex-col p-4 flex-grow">
-              <img
-                src={`${import.meta.env.VITE_OPEN_APIURL}/uploads/${
-                  software.photo
-                }`}
-                alt={software.softwar_name}
-                className="w-full h-32 object-contain mb-3"
-              />
-              <div className="border-b w-full mb-3"></div>
-              <h3 className="capitalize text-sm mb-2 flex-grow">
-                {software.softwar_name}
-              </h3>
-            </div>
-            <a
-              onClick={() =>
-                isAuth
-                  ? window.open(software.softwarlink, "_blank")
-                  : window.location.replace("/user/login")
-              }
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-[#e62245] hover:bg-[#d41d3f] text-white text-sm font-semibold py-1 w-full text-center rounded block transition-colors"
-            >
-              DOWNLOAD
-            </a>
-          </div>
+            imageUrl={`${import.meta.env.VITE_OPEN_APIURL}/uploads/${
+              software.photo
+            }`}
+            title={software.softwar_name}
+            onDownload={() =>
+              isAuth
+                ? window.open(software.softwarlink, "_blank")
+                : window.location.replace("/user/login")
+            }
+          />
         ))}
       </div>
       {/* Pagination */}

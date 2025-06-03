@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import useDataQuery from "../../utils/useDataQuery";
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import ResourceCard from "./ResourceCard";
 
 const QuickGuides = () => {
   const { isAuth } = useSelector((state) => state.authUser);
@@ -10,7 +11,6 @@ const QuickGuides = () => {
     ["quickGuides", currentPage],
     `/api/quickGuides?page=${currentPage}`
   );
-
   const { data: guides = [], pagination } = data;
 
   const handlePageChange = (page) => {
@@ -29,6 +29,7 @@ const QuickGuides = () => {
     }
   };
 
+
   if (isLoading) return null;
 
   return (
@@ -46,40 +47,28 @@ const QuickGuides = () => {
           Quick Guides
         </Link>
       </div>
-      <p className="text-[#e62245] font-light mt-3 mb-4 text-[28px]">
+      <p className="text-[#e62245] font-light my-3 text-[28px]">
         Quick Guides
       </p>
-      <h1 className="text-[#e62245] font-bold text-xl mb-4">
+      <h1 className="text-[#e62245] font-bold text-xl mb-5">
         G2 Survey 3D Laser Scanner Quick Guides
       </h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {guides.map((guide) => (
-          <div key={guide.id} className="flex flex-col items-center">
-            <img
-              src={`${import.meta.env.VITE_OPEN_APIURL}/uploads/${guide.photo}`}
-              alt={guide.quick_guides_name}
-              className="w-full h-52 object-contain mb-4"
-            />
-            <div className="border-b w-full mb-4"></div>
-            <h3 className="text-center capitalize text-sm mb-4">
-              {guide.quick_guides_name}
-            </h3>
-            <a
-              onClick={() =>
-                isAuth
-                  ? window.open(guide.quick_guides_link, "_blank")
-                  : window.location.replace("/user/login")
-              }
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-[#e62245] hover:bg-[#d41d3f] text-white text-sm font-semibold py-1 w-full text-center rounded block transition-colors"
-            >
-              DOWNLOAD
-            </a>
-          </div>
+          <ResourceCard
+            key={guide.id}
+            imageUrl={`${import.meta.env.VITE_OPEN_APIURL}/uploads/${
+              guide.photo
+            }`}
+            title={guide.quick_guides_name}
+            onDownload={() =>
+              isAuth
+                ? window.open(guide.quick_guides_link, "_blank")
+                : window.location.replace("/user/login")
+            }
+          />
         ))}
       </div>
-      {/* Pagination */}
       {pagination && (
         <div className="flex justify-between items-center mt-8">
           <button

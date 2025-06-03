@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import useDataQuery from "../../utils/useDataQuery";
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import ResourceCard from "./ResourceCard";
 
 const UserManuals = () => {
   const { isAuth } = useSelector((state) => state.authUser);
@@ -10,7 +11,6 @@ const UserManuals = () => {
     ["userManuals", currentPage],
     `/api/usermanuals?page=${currentPage}`
   );
-
   const { data: manuals = [], pagination } = data;
 
   const handlePageChange = (page) => {
@@ -46,44 +46,26 @@ const UserManuals = () => {
           User Manuals
         </Link>
       </div>
-      <p className="text-[#e62245] font-light mt-3 mb-4 text-[28px]">
+      <p className="text-[#e62245] font-light my-3 text-[28px]">
         User Manuals
       </p>
-      <h1 className="text-[#e62245] font-bold text-xl mb-4">
+      <h1 className="text-[#e62245] font-bold text-xl mb-5">
         G2 Survey 3D Laser Scanner User Manuals
       </h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {manuals?.map((manual) => (
-          <div
+        {manuals.map((manual) => (
+          <ResourceCard
             key={manual.id}
-            className="border rounded-sm flex flex-col h-full"
-          >
-            <div className="flex flex-col flex-grow items-center">
-              <img
-                src={`${import.meta.env.VITE_OPEN_APIURL}/uploads/${
-                  manual.photo
-                }`}
-                alt={manual.user_manuals_name}
-                className="w-full h-40 object-contain mb-4"
-              />
-              <div className="border-b w-full mb-4"></div>
-              <h3 className="text-center capitalize text-sm mb-4">
-                {manual.user_manuals_name}
-              </h3>
-            </div>
-            <a
-              onClick={() =>
-                isAuth
-                  ? window.open(manual.user_manuals_link, "_blank")
-                  : window.location.replace("/user/login")
-              }
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-[#e62245] cursor-pointer hover:bg-[#d41d3f] text-white text-sm font-semibold py-1 w-full text-center rounded block transition-colors"
-            >
-              DOWNLOAD
-            </a>
-          </div>
+            imageUrl={`${import.meta.env.VITE_OPEN_APIURL}/uploads/${
+              manual.photo
+            }`}
+            title={manual.user_manuals_name}
+            onDownload={() =>
+              isAuth
+                ? window.open(manual.user_manuals_link, "_blank")
+                : window.location.replace("/user/login")
+            }
+          />
         ))}
       </div>
       {/* Pagination */}
