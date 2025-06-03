@@ -488,13 +488,36 @@ const UpdateProductForm = () => {
             />
             <label>On Sale</label>
           </div>
+          <div className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              {...register("flashSale")}
+              defaultChecked={
+                productData.flash_sale === 1 || productData.flash_sale === true
+              }
+              className="w-5 h-5 cursor-pointer accent-teal-600"
+            />
+            <label>Flash Sale</label>
+          </div>
+          <input
+            type="datetime-local"
+            {...register("flashSaleEnd")}
+            defaultValue={
+              productData.flash_sale_end
+                ? new Date(productData.flash_sale_end)
+                    .toISOString()
+                    .slice(0, 16)
+                : ""
+            }
+            className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500"
+            min={new Date().toISOString().slice(0, 16)}
+          />
           {/* price */}
           <input
             {...register("price")}
             placeholder="Price"
             className="w-full input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500"
           />
-
           {/* NEW FIELD: Price Show/Hide */}
           <div className="flex items-center gap-2">
             <input
@@ -507,7 +530,6 @@ const UpdateProductForm = () => {
             />
             <label>Hide Price</label>
           </div>
-
           {/* product option */}
           <Controller
             name="productOptions"

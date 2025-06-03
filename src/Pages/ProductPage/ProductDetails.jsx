@@ -41,7 +41,29 @@ const ProductDetails = () => {
   const category = product?.category ? JSON.parse(product.category).cat : null;
   const currentProductId = product?.id;
   const priceOption = product?.priceShowHide;
-  console.log(priceOption);
+  // Countdown logic
+  const [timeLeft, setTimeLeft] = useState({});
+  
+  useEffect(() => {
+    if (product.flash_sale && product.flash_sale_end) {
+      const interval = setInterval(() => {
+        const end = new Date(product.flash_sale_end).getTime();
+        const now = Date.now();
+        const diff = end - now;
+        if (diff > 0) {
+          const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+          const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+          const minutes = Math.floor((diff / (1000 * 60)) % 60);
+          const seconds = Math.floor((diff / 1000) % 60);
+          setTimeLeft({ days, hours, minutes, seconds });
+        } else {
+          setTimeLeft({});
+          clearInterval(interval);
+        }
+      }, 1000);
+      return () => clearInterval(interval);
+    }
+  }, [product.flash_sale, product.flash_sale_end]);
 
   // Set default selected image if not set, only on initial load or when product changes
   useEffect(() => {
@@ -150,6 +172,53 @@ const ProductDetails = () => {
             <h1 className="text-[28px] font-semibold text-[#333] mb-4">
               {product.product_name}
             </h1>
+            {product.flash_sale === 1 &&
+              product.flash_sale_end &&
+              timeLeft &&
+              typeof timeLeft.seconds !== "undefined" && (
+                <div className="flex items-center gap-2 mb-4">
+                  <span className="bg-[#e62245] text-white px-3 py-1 rounded font-bold mr-2">
+                    Flash Sale!
+                  </span>
+                  <div className="flex items-center gap-1">
+                    {timeLeft.days > 0 && (
+                      <span className="countdown font-mono text-lg">
+                        <span
+                          style={{ "--value": timeLeft.days }}
+                          className="bg-gray-200 text-[#e62245] px-2 py-1 rounded"
+                        ></span>
+                        <span className="text-xs text-gray-500 ml-1 mr-2">
+                          d
+                        </span>
+                      </span>
+                    )}
+                    <span className="countdown font-mono text-lg">
+                      <span
+                        style={{ "--value": timeLeft.hours }}
+                        className="bg-gray-200 text-[#e62245] px-2 py-1 rounded"
+                      ></span>
+                      <span className="text-xs text-gray-500 ml-1 mr-2">h</span>
+                    </span>
+                    <span className="countdown font-mono text-lg">
+                      <span
+                        style={{ "--value": timeLeft.minutes }}
+                        className="bg-gray-200 text-[#e62245] px-2 py-1 rounded"
+                      ></span>
+                      <span className="text-xs text-gray-500 ml-1 mr-2">m</span>
+                    </span>
+                    <span className="countdown font-mono text-lg">
+                      <span
+                        style={{ "--value": timeLeft.seconds }}
+                        className="bg-gray-200 text-[#e62245] px-2 py-1 rounded"
+                      ></span>
+                      <span className="text-xs text-gray-500 ml-1">s</span>
+                    </span>
+                    <span className="ml-1 text-[#e62245] font-semibold">
+                      left!
+                    </span>
+                  </div>
+                </div>
+              )}
             <p className="text-[#d71a28] text-sm mb-2 capitalize">
               {product.brand_name || "Brand"}
             </p>
@@ -358,6 +427,7 @@ const ProductDetails = () => {
                         {product.product_name}
                       </td>
                     </tr>
+
                     <tr className="border-t">
                       <td className="p-4 text-gray-700">Brand:</td>
                       <td className="p-4 text-gray-700">

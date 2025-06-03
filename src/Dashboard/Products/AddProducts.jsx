@@ -158,6 +158,8 @@ const ProductAddForm = () => {
       formData.append("videoUrls", data.videoUrls || "");
       formData.append("warrantyInfo", data.warrantyInfo || "");
       formData.append("clearance", data.clearance ? "1" : "0");
+      formData.append("flashSale", data.flashSale ? "1" : "0");
+      formData.append("flashSaleEnd", data.flashSaleEnd || "");
 
       // Handle arrays/objects
       formData.append(
@@ -354,6 +356,20 @@ const ProductAddForm = () => {
             />
             <label>On Sale</label>
           </div>
+          <div className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              {...register("flashSale")}
+              className="w-5 h-5 cursor-pointer accent-teal-600"
+            />
+            <label>Flash Sale</label>
+          </div>
+          <input
+            type="datetime-local"
+            {...register("flashSaleEnd")}
+            className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
+            min={new Date().toISOString().slice(0, 16)}
+          />
           {/* Price and other fields remain the same */}
           <input
             {...register("price", { required: true })}
