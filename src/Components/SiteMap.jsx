@@ -31,11 +31,15 @@ const SiteMap = () => {
     ["subcategories"],
     "/api/subcategory"
   );
+  const { data: brandData, isLoading: brandLoading } = useDataQuery(
+    ["brands"],
+    "/api/brands"
+  );
 
   const categories = catData?.categories || [];
   const subcategories = subData?.subcategories || [];
+  const brands = brandData || [];
 
-  // determine subcategory field names, fallback to user-supplied sample if needed
   const getSubcategories = (categoryId) =>
     subcategories.filter(
       (s) =>
@@ -53,15 +57,18 @@ const SiteMap = () => {
       <h1 className="text-[28px] font-light mb-7">Sitemap</h1>
       <ul className="pl-5 text-[15px] text-black space-y-2">
         <li className="mb-4 relative before:content-[''] before:absolute before:w-2 before:h-2 before:bg-white before:border before:border-gray-400 before:rounded-full before:-left-4 before:top-2">
-          <span className="font-light text-xl text-black">Pages</span>
-          <ul className="pl-7 space-y-2 mt-2">
+          <span className="font-light text-[22px] text-black">Pages</span>
+          <ul className="pl-7 space-y-2 mt-2 text-[14px]">
             {PAGES.map((page, idx) =>
               !page.children ? (
                 <li
                   key={page.name + idx}
                   className="relative before:content-[''] before:absolute before:w-2 before:h-2 before:bg-white before:border before:border-gray-400 before:rounded-full before:-left-4 before:top-2"
                 >
-                  <Link to={page.to} className="text-[#e62245] underline">
+                  <Link
+                    to={page.to}
+                    className="text-[#e62245] underline text-[14px]"
+                  >
                     {page.name}
                   </Link>
                 </li>
@@ -92,7 +99,7 @@ const SiteMap = () => {
           </ul>
         </li>
         <li className="relative before:content-[''] before:absolute before:w-2 before:h-2 before:bg-white before:border before:border-gray-400 before:rounded-full before:-left-4 before:top-2">
-          <span className="font-light text-xl text-black">Categories</span>
+          <span className="font-light text-[22px] text-black">Categories</span>
           <ul className="pl-7 space-y-2 mt-2">
             <li className="relative before:content-[''] before:absolute before:w-2 before:h-2 before:bg-white before:border before:border-gray-400 before:rounded-full before:-left-4 before:top-2">
               <Link to="/shop" className="text-[#e62245] underline">
@@ -105,7 +112,7 @@ const SiteMap = () => {
               categories.map((cat) => (
                 <li
                   key={cat.id}
-                  className="relative before:content-[''] before:absolute before:w-2 before:h-2 before:bg-white before:border before:border-gray-400 before:rounded-full before:-left-4 before:top-2"
+                  className="text-[14px] relative before:content-[''] before:absolute before:w-2 before:h-2 before:bg-white before:border before:border-gray-400 before:rounded-full before:-left-4 before:top-2"
                 >
                   <Link
                     to={`/category/${cat.slug_name}`}
@@ -132,6 +139,30 @@ const SiteMap = () => {
                   )}
                 </li>
               ))
+            )}
+          </ul>
+        </li>
+        <li className="relative before:content-[''] before:absolute before:w-2 before:h-2 before:bg-white before:border before:border-gray-400 before:rounded-full before:-left-4 before:top-2 mt-4">
+          <span className="font-light text-[22px] text-black">Brands</span>
+          <ul className="pl-7 space-y-2 text-[14px] mt-2">
+            {brandLoading ? (
+              <li className="text-gray-400">Loading...</li>
+            ) : (
+              brands
+                .filter((brand) => brand.status === 1)
+                .map((brand) => (
+                  <li
+                    key={brand.id}
+                    className="relative before:content-[''] before:absolute before:w-2 before:h-2 before:bg-white before:border before:border-gray-400 before:rounded-full before:-left-4 before:top-2"
+                  >
+                    <Link
+                      to={`/brand/${brand.slug}`}
+                      className="text-[#e62245] underline"
+                    >
+                      {brand.brands_name}
+                    </Link>
+                  </li>
+                ))
             )}
           </ul>
         </li>
