@@ -62,10 +62,11 @@ const ProductSidebar = () => {
       if (foundCategory) {
         setOpenSections({
           [foundCategory.category_name]: true,
+          "Shop by Brand": true,
         });
       }
     }
-    if (!catSlug) setOpenSections({});
+    if (!catSlug) setOpenSections({ "Shop by Brand": true });
   }, [category, categoriesData, breadcrumb?.category, location.pathname]);
 
   useEffect(() => {
@@ -82,6 +83,7 @@ const ProductSidebar = () => {
         setOpenSections((prev) => ({
           ...prev,
           [foundCategory.category_name]: true,
+          "Shop by Brand": true,
         }));
       }
     }

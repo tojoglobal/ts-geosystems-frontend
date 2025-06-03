@@ -22,9 +22,6 @@ const sortOptions = [
   { label: "PRICE: DESCENDING", value: "price_desc" },
   { label: "A TO Z", value: "name_asc" },
   { label: "Z TO A", value: "name_desc" },
-  // Remove or comment out these until you implement them:
-  // { label: "BEST SELLING", value: "best_selling" },
-  // { label: "BY REVIEW", value: "by_review" },
 ];
 
 const CategoryProduct = () => {
@@ -41,8 +38,6 @@ const CategoryProduct = () => {
   const { category, subcategory, brand } = useParams();
   const productsPerPage = 8;
 
-  // const isShopAll = category === "shop-all";
-  // Replace the current useQuery with this:
   const { data: productsData = {}, isLoading } = useQuery({
     queryKey: ["products", category, subcategory, brand, currentPage, sortBy],
     queryFn: async () => {
@@ -72,7 +67,6 @@ const CategoryProduct = () => {
     setCurrentPage(1); // Reset to first page when sort changes
   }, [sortBy]);
 
-  // Destructure the response
   const { products = [], total = 0, totalPages = 1 } = productsData;
 
   const handleAddToCart = (product) => {
@@ -117,7 +111,30 @@ const CategoryProduct = () => {
   };
 
   const label = useBreadcrumbLabel(category);
+
   if (isLoading) return <div>Loading...</div>;
+
+  const showNoProduct =
+    !products ||
+    !Array.isArray(products) ||
+    products.length === 0 ||
+    !productsData.success;
+
+  if (showNoProduct) {
+    return (
+      <div className="flex justify-center items-center min-h-[250px] text-center text-lg text-gray-500">
+        No product found in this{" "}
+        {brand
+          ? "brand"
+          : subcategory
+          ? "subcategory"
+          : category
+          ? "category"
+          : "section"}
+        .
+      </div>
+    );
+  }
 
   return (
     <div className="p-1 md:p-3">
@@ -370,7 +387,6 @@ const CategoryProduct = () => {
                             {isSimpleProduct ? (
                               <>
                                 {Number(product?.priceShowHide) === 1 ? (
-                                  // Case 2: GET QUOTATION
                                   <Link
                                     onClick={() => trackProductView(product.id)}
                                     to={`/products/${product.id}/${slugify(
@@ -382,7 +398,6 @@ const CategoryProduct = () => {
                                     </button>
                                   </Link>
                                 ) : (
-                                  // Case 3: ADD TO CART
                                   <button
                                     onClick={() => handleAddToCart(product)}
                                     className="bg-[#e62245] cursor-pointer text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
@@ -392,7 +407,6 @@ const CategoryProduct = () => {
                                 )}
                               </>
                             ) : (
-                              // Case 1: CHOOSE OPTION
                               <Link
                                 onClick={() => trackProductView(product.id)}
                                 to={`/products/${product.id}/${slugify(
@@ -473,7 +487,6 @@ const CategoryProduct = () => {
                                     </button>
                                   </Link>
                                 ) : (
-                                  // Case 3: ADD TO CART
                                   <button
                                     onClick={() => handleAddToCart(product)}
                                     className="bg-[#e62245] cursor-pointer text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
@@ -483,7 +496,6 @@ const CategoryProduct = () => {
                                 )}
                               </>
                             ) : (
-                              // Case 1: CHOOSE OPTION
                               <Link
                                 onClick={() => trackProductView(product.id)}
                                 to={`/products/${product.id}/${slugify(
