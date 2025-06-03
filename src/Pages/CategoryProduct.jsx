@@ -38,26 +38,30 @@ const CategoryProduct = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [compareItems, setCompareItems] = useState([]);
   const navigate = useNavigate();
-  const { category, subcategory } = useParams();
+  const { category, subcategory, brand } = useParams();
   const productsPerPage = 8;
 
   // const isShopAll = category === "shop-all";
   // Replace the current useQuery with this:
   const { data: productsData = {}, isLoading } = useQuery({
-    queryKey: ["products", category, subcategory, currentPage, sortBy],
+    queryKey: ["products", category, subcategory, brand, currentPage, sortBy],
     queryFn: async () => {
-      const endpoint =
-        category === "shop-all"
-          ? "/api/shop-all/product"
-          : subcategory
-          ? `/api/category-products/${category}/${subcategory}`
-          : `/api/category-products/${category}`;
+      let endpoint;
+      if (brand) {
+        endpoint = `/api/brand-products/${brand}`;
+      } else if (category === "shop-all") {
+        endpoint = "/api/shop-all/product";
+      } else if (subcategory) {
+        endpoint = `/api/category-products/${category}/${subcategory}`;
+      } else {
+        endpoint = `/api/category-products/${category}`;
+      }
 
       const res = await axiosPublicUrl.get(endpoint, {
         params: {
           page: currentPage,
           limit: productsPerPage,
-          sortBy: sortBy.value, // Use the value from the sortOptions
+          sortBy: sortBy.value,
         },
       });
       return res?.data;
@@ -122,28 +126,38 @@ const CategoryProduct = () => {
           Home
         </Link>
         <span>/</span>
-        <Link
-          to={`/${category}`}
-          className={`${
-            subcategory ? "hover:text-[#e62245]" : "text-[#e62245]"
-          } capitalize`}
-        >
-          {label}
-        </Link>
-        {subcategory && (
+        {brand ? (
+          <Link to={`/brand/${brand}`} className="text-[#e62245] capitalize">
+            {brand.replace(/-/g, " ")}
+          </Link>
+        ) : (
           <>
-            <span>/</span>
             <Link
-              to={`/${category}/${subcategory}`}
-              className="text-[#e62245] capitalize"
+              to={`/${category}`}
+              className={`${
+                subcategory ? "hover:text-[#e62245]" : "text-[#e62245]"
+              } capitalize`}
             >
-              {subcategory}
+              {label}
             </Link>
+            {subcategory && (
+              <>
+                <span>/</span>
+                <Link
+                  to={`/${category}/${subcategory}`}
+                  className="text-[#e62245] capitalize"
+                >
+                  {subcategory}
+                </Link>
+              </>
+            )}
           </>
         )}
       </div>
       <h1 className="text-xl md:text-3xl font-bold mb-4">
-        {(subcategory || category).replace(/-/g, " ").toUpperCase()}
+        {subcategory || category || brand
+          ? (subcategory || category || brand).replace(/-/g, " ").toUpperCase()
+          : ""}
       </h1>
       {/* product part  */}
       <section>
