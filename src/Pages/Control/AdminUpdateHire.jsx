@@ -300,7 +300,7 @@ const AdminUpdateHire = () => {
                   type="text"
                   {...register("links.privacyPolicy")}
                   className="w-full border border-gray-600 rounded-sm p-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#e62245] transition"
-                  placeholder="/privacy"
+                  placeholder="/ts/privacy"
                 />
               </div>
               <div>
@@ -311,7 +311,7 @@ const AdminUpdateHire = () => {
                   type="text"
                   {...register("links.termsOfService")}
                   className="w-full border border-gray-600 rounded-sm p-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#e62245] transition"
-                  placeholder="/terms"
+                  placeholder="/ts/terms"
                 />
               </div>
             </div>

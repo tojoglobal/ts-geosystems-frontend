@@ -503,14 +503,14 @@ const Hire = () => {
             <p className="text-[13px] text-gray-500">
               This site is protected by reCAPTCHA and the Google{" "}
               <Link
-                to={hireContent?.links?.privacyPolicy || "/privacy"}
+                to={hireContent?.links?.privacyPolicy || "/ts/privacy"}
                 className="text-[#e62245] underline"
               >
                 Privacy Policy
               </Link>{" "}
               and{" "}
               <Link
-                to={hireContent?.links?.termsOfService || "/terms"}
+                to={hireContent?.links?.termsOfService || "/ts/terms"}
                 className="text-[#e62245] underline"
               >
                 Terms of Service

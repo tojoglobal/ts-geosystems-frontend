@@ -399,11 +399,11 @@ const SupportRequestForm = () => {
             </p>
             <p className="text-sm text-gray-500">
               This site is protected by reCAPTCHA and the Google{" "}
-              <Link to="/privacy" className="text-[#e62245] underline">
+              <Link to="/ts/privacy" className="text-[#e62245] underline">
                 Privacy Policy
               </Link>{" "}
               and{" "}
-              <Link to="/terms" className="text-[#e62245] underline">
+              <Link to="/ts/terms" className="text-[#e62245] underline">
                 Terms of Service
               </Link>{" "}
               apply.

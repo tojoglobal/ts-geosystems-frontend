@@ -166,7 +166,7 @@ const AskAQuestion = ({ productName, productId }) => {
                 Privacy Policy
               </Link>
               and&nbsp;
-              <Link to="/terms" className="underline text-[#e62245] mr-1">
+              <Link to="/ts/terms" className="underline text-[#e62245] mr-1">
                 Terms of Service
               </Link>
               apply.
