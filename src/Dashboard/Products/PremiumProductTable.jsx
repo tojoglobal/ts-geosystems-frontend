@@ -1,4 +1,3 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import { Edit, Eye, Trash } from "lucide-react";
 
@@ -12,7 +11,7 @@ const PremiumProductTable = ({
   handleView,
 }) => {
   return (
-    <div className="overflow-x-auto rounded-3xl border-2 border-[#0ea5e9] bg-gradient-to-b from-[#181c2a] via-[#22223b] to-[#151825] shadow-2xl">
+    <div className="overflow-x-auto rounded-md border border-[#0776a9] bg-gradient-to-b from-[#181c2a] via-[#22223b] to-[#151825] shadow-2xl">
       <table className="w-full min-w-[900px] text-sm text-left text-white font-medium">
         <thead>
           <tr className="uppercase text-xs tracking-wider bg-gradient-to-r from-[#232946] to-[#22223b] text-[#bae6fd] border-b border-[#0ea5e9]">
@@ -41,37 +40,37 @@ const PremiumProductTable = ({
                 key={product.id}
                 className="border-b border-[#232946] hover:bg-[#1e293b]/50 transition"
               >
-                <td className="py-4 px-4 sm:px-6 font-semibold text-[#bae6fd]">
+                <td className="py-3 px-2 sm:px-4 font-semibold text-[#bae6fd]">
                   {product.product_name}
                 </td>
-                <td className="py-4 px-4 sm:px-6 whitespace-nowrap">
+                <td className="py-3 px-2 sm:px-4 whitespace-nowrap">
                   <span className="bg-gradient-to-r from-[#0ea5e9] to-[#22d3ee] text-white px-3 py-1 rounded-lg shadow font-bold">
                     ৳ {product.price}
                   </span>
                 </td>
-                <td className="py-4 px-4 sm:px-6">
+                <td className="py-3 px-2 sm:px-4">
                   <span className="bg-[#0ea5e9]/15 text-[#0ea5e9] px-2 py-0.5 rounded font-semibold">
                     {getCategoryName(product.category)}
                   </span>
                 </td>
-                <td className="py-4 px-4 sm:px-6">
+                <td className="py-3 px-2 sm:px-4">
                   <span className="bg-[#22d3ee]/15 text-[#22d3ee] px-2 py-0.5 rounded font-semibold">
                     {getSubCategoryName(product.sub_category)}
                   </span>
                 </td>
-                <td className="py-4 px-4 sm:px-6 text-[#facc15] font-mono">
+                <td className="py-3 px-2 sm:px-4 text-[#facc15] font-mono">
                   {product.sku}
                 </td>
-                <td className="py-4 px-4 sm:px-6">
+                <td className="py-3 px-2 sm:px-4">
                   <span className="bg-[#38bdf8]/10 text-[#38bdf8] px-2 py-0.5 rounded">
                     {product.product_condition}
                   </span>
                 </td>
-                <td className="py-4 px-4 sm:px-6 font-bold text-[#e0f2fe]">
+                <td className="py-3 px-2 sm:px-4 font-bold text-[#e0f2fe]">
                   {getBrandName(product.brand_name)}
                 </td>
-                <td className="py-4 px-4">
-                  <div className="flex flex-wrap gap-2 justify-center">
+                <td className="py-3 px-2 sm:px-4">
+                  <div className="flex flex-wrap gap-1 justify-center">
                     <Link
                       to={`/dashboard/update-product/${product.id}`}
                       className="bg-gradient-to-r from-green-600 to-green-400 text-white p-2 rounded-full shadow hover:scale-110 duration-150 cursor-pointer"
@@ -109,7 +108,7 @@ const PremiumProductTable = ({
       </table>
 
       {/* Responsive card view for small screens */}
-      <div className="md:hidden flex flex-col gap-4 p-4">
+      <div className="md:hidden flex flex-col gap-3 p-2">
         {productsLoading ? (
           <div className="flex justify-center p-10">
             <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-[#0ea5e9] mx-auto"></div>
@@ -118,7 +117,7 @@ const PremiumProductTable = ({
           products.map((product) => (
             <div
               key={product.id}
-              className="rounded-2xl border border-[#0ea5e9] bg-gradient-to-r from-[#232946] to-[#22223b] shadow-md p-4 flex flex-col gap-2"
+              className="rounded-2xl border border-[#0ea5e9] bg-gradient-to-r from-[#232946] to-[#22223b] shadow-md p-3 flex flex-col gap-1"
             >
               <div className="flex justify-between items-center">
                 <div className="font-bold text-lg text-[#bae6fd]">
@@ -128,7 +127,7 @@ const PremiumProductTable = ({
                   ৳ {product.price}
                 </span>
               </div>
-              <div className="flex gap-2 flex-wrap text-xs mt-2">
+              <div className="flex gap-2 flex-wrap text-xs mt-1">
                 <span className="bg-[#0ea5e9]/15 text-[#0ea5e9] px-2 py-0.5 rounded font-semibold">
                   {getCategoryName(product.category)}
                 </span>
@@ -145,7 +144,7 @@ const PremiumProductTable = ({
                   {getBrandName(product.brand_name)}
                 </span>
               </div>
-              <div className="flex justify-center gap-3 mt-3">
+              <div className="flex justify-center gap-2 mt-1">
                 <Link to={`/dashboard/update-product/${product.id}`}>
                   <button className="bg-gradient-to-r from-green-600 to-green-400 text-white p-2 rounded-full shadow hover:scale-110 duration-150">
                     <Edit size={16} />
