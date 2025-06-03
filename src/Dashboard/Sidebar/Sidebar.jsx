@@ -23,6 +23,7 @@ import {
   ChevronUp,
   FileText,
   MessageCircle,
+  Settings,
 } from "lucide-react";
 import {
   MdArticle,
@@ -184,6 +185,11 @@ const menuItems = [
     label: "Layouts",
     icon: <Layers size={20} />,
     to: "/dashboard/layouts",
+  },
+  {
+    label: "Settings",
+    icon: <Settings size={16} />,
+    to: "/dashboard/settings",
   },
 ];
 

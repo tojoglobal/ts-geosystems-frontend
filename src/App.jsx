@@ -99,6 +99,7 @@ import AdminShowCreditAccount from "./Dashboard/CreditAccount/AdminShowCreditAcc
 import AdminUpdateHelpDesk from "./Pages/Control/AdminUpdateHelpDesk";
 import EditAdress from "./UserAccount/EditAdress";
 import DynamicPage from "./Footer/DynamicPage";
+import SettingsPage from "./Dashboard/SettingsPage/SettingsPage";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -244,16 +245,17 @@ const AppLayout = () => {
           <Route path="blog-type" element={<BlogTypeManage />} />
           {/* service-inquiries route  */}
           <Route path="service-inquiries" element={<AdminServiceInquiries />} />
-
           {/* email routes */}
           <Route path="email/inbox" element={<MailView />} />
           <Route
             path="email/sent"
             element={<Inbox userEmail={"no-reply@tsgb.site"} />}
           />
+          {/* SettingsPage */}
+          <Route path="settings" element={<SettingsPage />} />
           {/* dynamic about page */}
-          <Route path="used-equipment" element={<AdminUpdateUsedEquipment />} />
           <Route path="hire" element={<AdminUpdateHire />} />
+          <Route path="used-equipment" element={<AdminUpdateUsedEquipment />} />
           <Route path="service" element={<AdminUpdateService />} />
           <Route path="tradein" element={<AdminUpdateTradeIn />} />
           <Route path="about-us" element={<AdminUpdateAboutUs />} />
