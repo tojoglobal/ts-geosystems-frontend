@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import useDataQuery from "../utils/useDataQuery";
 
 const PAGES = [
   { name: "CONTACT US", to: "/contact-us" },
@@ -23,49 +22,64 @@ const PAGES = [
   { name: "Home", to: "/" },
 ];
 
-const categoryApi = "/api/category";
-const subcategoryApi = "/api/subcategory";
-const brandsApi = "/api/brands"; // Not shown in image, but you can add if needed
-
 const SiteMap = () => {
-  const [categories, setCategories] = useState([]);
-  const [subcategories, setSubcategories] = useState([]);
+  const { data: catData, isLoading: catLoading } = useDataQuery(
+    ["categories"],
+    "/api/category"
+  );
+  const { data: subData, isLoading: subLoading } = useDataQuery(
+    ["subcategories"],
+    "/api/subcategory"
+  );
 
-  useEffect(() => {
-    axios.get(categoryApi).then((res) => {
-      setCategories(res.data.categories || []);
-    });
-    axios.get(subcategoryApi).then((res) => {
-      setSubcategories(res.data.subcategories || []);
-    });
-  }, []);
+  const categories = catData?.categories || [];
+  const subcategories = subData?.subcategories || [];
 
+  // determine subcategory field names, fallback to user-supplied sample if needed
   const getSubcategories = (categoryId) =>
-    subcategories.filter((s) => s.main_category_id === categoryId);
+    subcategories.filter(
+      (s) =>
+        (s.main_category_id === categoryId ||
+          s.mainCategoryId === categoryId) &&
+        (s.status === 1 || s.status === true)
+    );
+
+  // pick slug/subcategory name field depending on API
+  const getSubSlug = (sub) => sub.slug || sub.slug_name;
+  const getSubName = (sub) => sub.name || sub.subcategory_name;
 
   return (
     <div className="max-w-[1370px] mx-auto py-12">
-      <h1 className="text-2xl font-light text-[#e62245] mb-7">Sitemap</h1>
-      <ul className="pl-8 text-[15px] text-black space-y-2">
+      <h1 className="text-[28px] font-light mb-7">Sitemap</h1>
+      <ul className="pl-5 text-[15px] text-black space-y-2">
         <li className="mb-4 relative before:content-[''] before:absolute before:w-2 before:h-2 before:bg-white before:border before:border-gray-400 before:rounded-full before:-left-4 before:top-2">
-          <span className="font-semibold text-lg text-black">Pages</span>
+          <span className="font-light text-xl text-black">Pages</span>
           <ul className="pl-7 space-y-2 mt-2">
             {PAGES.map((page, idx) =>
               !page.children ? (
-                <li key={page.name + idx} className="relative before:content-[''] before:absolute before:w-2 before:h-2 before:bg-white before:border before:border-gray-400 before:rounded-full before:-left-4 before:top-2">
-                  <Link to={page.to} className="text-[#e62245] hover:underline">
+                <li
+                  key={page.name + idx}
+                  className="relative before:content-[''] before:absolute before:w-2 before:h-2 before:bg-white before:border before:border-gray-400 before:rounded-full before:-left-4 before:top-2"
+                >
+                  <Link to={page.to} className="text-[#e62245] underline">
                     {page.name}
                   </Link>
                 </li>
               ) : (
-                <li key={page.name + idx} className="relative before:content-[''] before:absolute before:w-2 before:h-2 before:bg-white before:border before:border-gray-400 before:rounded-full before:-left-4 before:top-2">
+                <li
+                  key={page.name + idx}
+                  className="relative before:content-[''] before:absolute before:w-2 before:h-2 before:bg-white before:border before:border-gray-400 before:rounded-full before:-left-4 before:top-2"
+                >
                   <span className="text-[#e62245]">{page.name}</span>
                   <ul className="pl-7 space-y-2 mt-2">
                     {page.children.map((child, cidx) => (
-                      <li key={child.name + cidx} className="relative before:content-[''] before:absolute before:w-2 before:h-2 before:bg-black before:rounded-full before:-left-4 before:top-2">
+                      <li
+                        key={child.name + cidx}
+                        className="relative before:content-[''] before:absolute before:w-2 before:h-2 before:bg-black before:rounded-full before:-left-4 before:top-2"
+                      >
                         <Link
                           to={child.to}
-                          className="text-[#e62245] hover:underline"
+                          className="text-[#e62245] underline"
                         >
                           {child.name}
                         </Link>
@@ -78,37 +92,47 @@ const SiteMap = () => {
           </ul>
         </li>
         <li className="relative before:content-[''] before:absolute before:w-2 before:h-2 before:bg-white before:border before:border-gray-400 before:rounded-full before:-left-4 before:top-2">
-          <span className="font-semibold text-lg text-black">Categories</span>
+          <span className="font-light text-xl text-black">Categories</span>
           <ul className="pl-7 space-y-2 mt-2">
             <li className="relative before:content-[''] before:absolute before:w-2 before:h-2 before:bg-white before:border before:border-gray-400 before:rounded-full before:-left-4 before:top-2">
-              <Link to="/shop" className="text-[#e62245] hover:underline">
+              <Link to="/shop" className="text-[#e62245] underline">
                 Shop All
               </Link>
             </li>
-            {categories.map((cat) => (
-              <li key={cat.id} className="relative before:content-[''] before:absolute before:w-2 before:h-2 before:bg-white before:border before:border-gray-400 before:rounded-full before:-left-4 before:top-2">
-                <Link
-                  to={`/category/${cat.slug_name}`}
-                  className="text-[#e62245] hover:underline"
+            {catLoading || subLoading ? (
+              <li className="text-gray-400">Loading...</li>
+            ) : (
+              categories.map((cat) => (
+                <li
+                  key={cat.id}
+                  className="relative before:content-[''] before:absolute before:w-2 before:h-2 before:bg-white before:border before:border-gray-400 before:rounded-full before:-left-4 before:top-2"
                 >
-                  {cat.category_name}
-                </Link>
-                {getSubcategories(cat.id).length > 0 && (
-                  <ul className="pl-7 space-y-2 mt-2">
-                    {getSubcategories(cat.id).map((sub) => (
-                      <li key={sub.id} className="relative before:content-[''] before:absolute before:w-2 before:h-2 before:bg-black before:rounded-full before:-left-4 before:top-2">
-                        <Link
-                          to={`/category/${cat.slug_name}/${sub.slug_name}`}
-                          className="text-[#e62245] hover:underline"
+                  <Link
+                    to={`/category/${cat.slug_name}`}
+                    className="text-[#e62245] underline"
+                  >
+                    {cat.category_name}
+                  </Link>
+                  {getSubcategories(cat.id).length > 0 && (
+                    <ul className="pl-7 space-y-2 mt-2">
+                      {getSubcategories(cat.id).map((sub) => (
+                        <li
+                          key={sub.id}
+                          className="relative before:content-[''] before:absolute before:w-2 before:h-2 before:bg-black before:rounded-full before:-left-4 before:top-2"
                         >
-                          {sub.subcategory_name}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </li>
-            ))}
+                          <Link
+                            to={`/category/${cat.slug_name}/${getSubSlug(sub)}`}
+                            className="text-[#e62245] underline"
+                          >
+                            {getSubName(sub)}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </li>
+              ))
+            )}
           </ul>
         </li>
       </ul>
