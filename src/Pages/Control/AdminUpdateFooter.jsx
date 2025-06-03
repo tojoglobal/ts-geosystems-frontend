@@ -3,6 +3,7 @@ import Swal from "sweetalert2";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import Loader from "../../utils/Loader";
 import { FaCloudUploadAlt, FaTimesCircle } from "react-icons/fa";
+import AdminUpdateFooterRoute from "./AdminUpdateFooterRoute";
 
 const AdminUpdateFooter = () => {
   const axiosPublic = useAxiospublic();
@@ -355,6 +356,7 @@ const AdminUpdateFooter = () => {
           </button>
         </form>
       )}
+      <AdminUpdateFooterRoute />
     </div>
   );
 };

@@ -20,6 +20,12 @@ const Footer = () => {
   const [email, setEmail] = useState(user?.email || "");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const { data: dynamicLinks } = useDataQuery(
+    ["dynamicLinks"],
+    "/api/dynamic-links"
+  );
+  const accountsLinks = dynamicLinks?.data?.filter((l) => l.show_in_footer);
+
   // Contact info for social links (kept as before)
   const { data: contactInfo, isLoading: contactInfoLoading } = useDataQuery(
     ["contactInfo"],
@@ -142,23 +148,21 @@ const Footer = () => {
         <div>
           <h2 className="text-xl font-semibold mb-4">ACCOUNTS & ORDERS</h2>
           <ul className="space-y-2 text-sm">
-            <li className="flex items-center gap-1">
-              <Link to="/user/login">Login</Link>
-              <span>or</span>
-              <Link to="/user/create_account">Sign Up</Link>
-            </li>
-            <li>
-              <Link to="/account/orders">My Account</Link>
-            </li>
-            <li>
-              <Link to="/order-status">Order Status</Link>
-            </li>
-            <li>
-              <Link to="/privacy-policy">Privacy Policy</Link>
-            </li>
-            <li>
-              <Link to="/terms">Terms & Service</Link>
-            </li>
+            <ul className="space-y-2 text-sm">
+              <li className="flex items-center gap-1">
+                <Link to="/user/login">Login</Link>
+                <span>or</span>
+                <Link to="/user/create_account">Sign Up</Link>
+              </li>
+              <li>
+                <Link to="/user/account/orders">My Account</Link>
+              </li>
+              {accountsLinks?.map((link) => (
+                <li key={link.slug}>
+                  <Link to={`/ts/${link.slug}`}>{link.name}</Link>
+                </li>
+              ))}
+            </ul>
           </ul>
         </div>
         {/* Navigate */}

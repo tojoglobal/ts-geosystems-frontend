@@ -98,6 +98,7 @@ import CreditAccountApplication from "./Dashboard/CreditAccount/CreditAccountApp
 import AdminShowCreditAccount from "./Dashboard/CreditAccount/AdminShowCreditAccount";
 import AdminUpdateHelpDesk from "./Pages/Control/AdminUpdateHelpDesk";
 import EditAdress from "./UserAccount/EditAdress";
+import DynamicPage from "./Footer/DynamicPage";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -114,6 +115,7 @@ const AppLayout = () => {
 
         {/* product layout route */}
         <Route element={<ProductLayout />}>
+          <Route path="/ts/:slug" element={<DynamicPage />} />
           <Route path="/remote-support" element={<RemoteSupport />} />
           <Route path="/:category" element={<CategoryProduct />} />
           <Route path="/:category/:subcategory" element={<CategoryProduct />} />
@@ -181,10 +183,7 @@ const AppLayout = () => {
           <Route path="inbox" element={<UserInbox />} />
           <Route path="address-book" element={<UserAddress />} />
           <Route path="add-address" element={<AddNewAddress />} />
-          <Route
-            path="edit-address/:id"
-            element={<EditAdress />}
-          />
+          <Route path="edit-address/:id" element={<EditAdress />} />
           <Route path="recent-viewed" element={<RecentlyViewed />} />
           <Route path="account-settings" element={<AccountSettings />} />
         </Route>

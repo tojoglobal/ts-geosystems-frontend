@@ -12,12 +12,18 @@ import CartWithPopover from "./CartWithPopover";
 import { setSticky } from "../features/Sticky/Sticky";
 import { PiShoppingCart } from "react-icons/pi";
 import { toggleCart } from "../features/CartToggleSlice/CartToggleSlice";
+import useDataQuery from "../utils/useDataQuery";
 
 const MainNavContainer = () => {
   const { totalQuantity } = useSelector((state) => state.cart);
   const { isSticky } = useSelector((state) => state.sticky);
   const { isCartVisible } = useSelector((state) => state.cartToggle);
 
+  const { data: dynamicLinks } = useDataQuery(
+    ["dynamicLinks"],
+    "/api/dynamic-links"
+  );
+  const headerLinks = dynamicLinks?.data?.filter((l) => l.show_in_header);
   const { setShowSearch } = useAppContext();
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [menuIcon, setMenuIcon] = useState(false);
@@ -145,6 +151,30 @@ const MainNavContainer = () => {
                   >
                     SERVICE
                   </Link>
+                  {headerLinks && headerLinks.length > 0 && (
+                    <div className="relative group py-2">
+                      <div className="flex hover:text-crimson-red cursor-pointer">
+                        Info <MdOutlineKeyboardArrowDown className="text-xl" />
+                      </div>
+                      <div className="absolute -left-10 top-full w-50 bg-white rounded-sm border border-slightly-dark shadow-lg pl-4 py-2 hidden group-hover:block z-50">
+                        <ul>
+                          {headerLinks.map((link) => (
+                            <li
+                              key={link.slug}
+                              className="hover:text-crimson-red cursor-pointer transition-colors duration-300 font-normal text-[13px] text-charcoal"
+                            >
+                              <Link
+                                to={`/ts/${link.slug}`}
+                                className="hover:text-crimson-red"
+                              >
+                                {link.name}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  )}
                   {/* Dropdown Wrapper */}
                   <div className="relative group py-2">
                     <div className="flex hover:text-crimson-red transition-colors duration-300 cursor-pointer">
