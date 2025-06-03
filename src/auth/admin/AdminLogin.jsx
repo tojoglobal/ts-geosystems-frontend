@@ -11,16 +11,11 @@ import { usePasswordToggle } from "../../utils/usePasswordToggle";
 const AdminLogin = () => {
   const axiosPublicUrl = useAxiospublic();
   const navigate = useNavigate();
-  // const [showPassword, setShowPassword] = useState(false);
-
-  // const togglePassword = () => {
-  //   setShowPassword(!showPassword);
-  // };
 
   const [passwordType, ToggleIcon] = usePasswordToggle();
   // form data
   const [formData, setFormData] = useState({
-    useremail: "",
+    adminemail: "",
     password: "",
   });
 
@@ -36,39 +31,56 @@ const AdminLogin = () => {
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { useremail, password } = formData;
+    const { adminemail, password } = formData;
+
+    if (!adminemail || !password) {
+      Swal.fire({
+        icon: "warning",
+        title: "Missing fields",
+        text: "Please enter both email and password.",
+      });
+      return;
+    }
+
     try {
       const response = await axiosPublicUrl.post("/api/adminlogin", {
-        email: useremail,
-        password: password,
+        email: adminemail.trim(),
+        password: password.trim(),
       });
-      const data = response.data;
 
-      if (data.success) {
-        localStorage.setItem("userEmail", JSON.stringify({ useremail }));
-        navigate("/dashboard");
+      const { adminInfo } = response.data;
+
+      if (response.status === 200 && adminInfo) {
+        // Store only needed info
+        localStorage.setItem(
+          "admin",
+          JSON.stringify({
+            adminId: adminInfo.adminId,
+            role: adminInfo.role,
+            adminEmail: adminInfo.adminEmail,
+          })
+        );
+
         Swal.fire({
           icon: "success",
           title: "Login successful!",
           showConfirmButton: false,
           timer: 1500,
         });
+
+        navigate("/dashboard");
       } else {
-        console.log("Login failed:", data.message);
-        Swal.fire({
-          position: "top-end",
-          icon: "error",
-          title: data.message || "Invalid username or password",
-          showConfirmButton: false,
-          timer: 1500,
-        });
+        throw new Error("Invalid response from server");
       }
     } catch (error) {
-      console.error("Login failed:", error);
+      console.error("Login error:", error);
+
       Swal.fire({
         icon: "error",
-        title: "Oops...",
-        text: "Something went wrong. Please try again!",
+        title: "Login failed!",
+        text:
+          error.response?.data?.message ||
+          "Invalid email or password. Please try again.",
       });
     }
   };
@@ -88,10 +100,10 @@ const AdminLogin = () => {
           <h1>Login</h1>
           <input
             type="email"
-            value={formData.useremail}
+            value={formData.adminemail}
             onChange={handleChange}
-            name="useremail"
-            id="useremail"
+            name="adminemail"
+            id="adminemail"
             placeholder="Write your email"
           />
           <span className="material-symbols-outlined person">

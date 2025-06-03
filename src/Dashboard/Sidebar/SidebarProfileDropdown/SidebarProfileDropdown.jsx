@@ -1,28 +1,29 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ChevronDown,
   ChevronUp,
   User,
-  MessageSquare,
-  HelpCircle,
   CreditCard,
   Settings,
   Lock,
   LogOut,
+  Home,
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useAxiospublic } from "../../../Hooks/useAxiospublic";
+import ScreenLockOverlay from "./ScreenLockOverlay";
+import { AppContext } from "../../../context/AppContext";
+import { useAppContext } from "../../../context/useAppContext";
 
-const handleLogout = async (navigate, b) => {
-  console.log(b);
-
+const handleLogout = async (navigate) => {
   try {
     await axios.post(
       `${import.meta.env.VITE_OPEN_APIURL}/api/logout`,
       {},
       { withCredentials: true }
     );
-    localStorage.removeItem("userEmail");
+    localStorage.removeItem("admin");
     navigate("/admin/login");
   } catch (error) {
     console.error("Logout failed:", error);
@@ -30,12 +31,28 @@ const handleLogout = async (navigate, b) => {
 };
 
 const SidebarProfileDropdown = () => {
+  const { lockScreen } = useAppContext();
+  const axiosPublicUrl = useAxiospublic();
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
+  const [dbUser, setDbUser] = useState(null);
 
   const onLogoutClick = () => {
-    handleLogout(navigate, "swapnil");
+    handleLogout(navigate);
   };
+
+  useEffect(() => {
+    const fetchAdminData = async () => {
+      try {
+        const response = await axiosPublicUrl.get("/api/admin/profile");
+        const data = response.data.data;
+        setDbUser(data);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+    fetchAdminData();
+  }, []);
 
   return (
     <div className=" relative p-3">
@@ -46,11 +63,21 @@ const SidebarProfileDropdown = () => {
       >
         <div className="flex items-center gap-2">
           <img
-            src="https://randomuser.me/api/portraits/women/44.jpg"
+            src={
+              dbUser?.photo
+                ? dbUser.photo.startsWith("http")
+                  ? dbUser.photo
+                  : `${import.meta.env.VITE_OPEN_APIURL}/uploads/${
+                      dbUser.photo
+                    }`
+                : "https://randomuser.me/api/portraits/women/44.jpg"
+            }
             alt="avatar"
-            className={`w-8 h-8 rounded-full`}
+            className="w-8 h-8 rounded-full"
           />
-          <span className="font-semibold text-sm">Steven Deese</span>
+          <span className="font-semibold text-sm">
+            {dbUser?.name || "swapnil ahmed"}
+          </span>
         </div>
         {open ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
       </button>
@@ -61,9 +88,9 @@ const SidebarProfileDropdown = () => {
             <Link to="/dashboard/viewprofile">
               <DropdownItem icon={<User size={16} />} label="Profile" />
             </Link>
-            <DropdownItem icon={<MessageSquare size={16} />} label="Messages" />
-            {/* <DropdownItem icon={<HelpCircle size={16} />} label="Help" /> */}
-
+            <Link to="/">
+              <DropdownItem icon={<Home size={16} />} label="Home" />
+            </Link>
             <DropdownItem
               icon={<LogOut size={16} />}
               label="Logout"
@@ -91,7 +118,14 @@ const SidebarProfileDropdown = () => {
                 </span>
               }
             />
-            <DropdownItem icon={<Lock size={16} />} label="Lock screen" />
+            <DropdownItem
+              icon={<Lock size={16} />}
+              label="Lock screen"
+              onClick={() => {
+                lockScreen();
+                setOpen(false);
+              }}
+            />
           </div>
         </div>
       )}
