@@ -4,6 +4,12 @@ import { useRef, useState } from "react";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import Swal from "sweetalert2";
 
+// Utility to merge custom label focus with tailwind/peer
+function focusInputById(id) {
+  const el = document.getElementById(id);
+  if (el) el.focus();
+}
+
 const defaultValues = {
   companyName: "",
   tradingName: "",
@@ -100,6 +106,13 @@ const CreditAccountApplication = () => {
     }
   };
 
+  // Custom label class for black color and pointer
+  const labelClass =
+    "absolute pl-2 left-2 top-2 text-black text-sm transition-all cursor-pointer peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base peer-placeholder-shown:text-black peer-focus:top-2 peer-focus:text-xs peer-focus:text-black select-none";
+
+  // For radio/checkbox label
+  const radioLabelClass = "text-black text-sm cursor-pointer select-none";
+
   return (
     <div className="p-2 md:p-3">
       <div className="flex items-center gap-2 text-[11px] mb-3">
@@ -131,13 +144,15 @@ const CreditAccountApplication = () => {
               <div className="relative w-full">
                 <input
                   type="text"
+                  id="companyName"
                   {...register("companyName", { required: true })}
                   className="peer w-full border border-gray-300 p-2 pt-5 placeholder-transparent focus:outline-none focus:ring focus:ring-[#e62245] rounded"
                   placeholder="Company Name *"
                 />
                 <label
                   htmlFor="companyName"
-                  className="absolute pl-2 left-2 top-2 text-gray-500 text-sm transition-all peer-focus:top-2 peer-focus:text-xs peer-focus:text-black"
+                  className={labelClass}
+                  onClick={() => focusInputById("companyName")}
                 >
                   Company Name *
                 </label>
@@ -146,13 +161,15 @@ const CreditAccountApplication = () => {
               <div className="relative w-full">
                 <input
                   type="text"
+                  id="tradingName"
                   {...register("tradingName")}
                   className="peer w-full border border-gray-300 p-2 pt-5 placeholder-transparent focus:outline-none focus:ring focus:ring-[#e62245] rounded"
                   placeholder="Trading Name (if different)"
                 />
                 <label
                   htmlFor="tradingName"
-                  className="absolute pl-2 left-2 top-2 text-gray-500 text-sm transition-all peer-focus:top-2 peer-focus:text-xs peer-focus:text-black"
+                  className={labelClass}
+                  onClick={() => focusInputById("tradingName")}
                 >
                   Trading Name (if different)
                 </label>
@@ -161,6 +178,7 @@ const CreditAccountApplication = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="relative w-full">
                   <textarea
+                    id="invoiceAddress"
                     {...register("invoiceAddress", { required: true })}
                     className="peer w-full border border-gray-300 p-2 pt-5 placeholder-transparent focus:outline-none focus:ring focus:ring-[#e62245] rounded"
                     placeholder="Invoice Address *"
@@ -168,13 +186,15 @@ const CreditAccountApplication = () => {
                   />
                   <label
                     htmlFor="invoiceAddress"
-                    className="absolute pl-2 left-2 top-2 text-gray-500 text-sm transition-all peer-focus:top-2 peer-focus:text-xs peer-focus:text-black"
+                    className={labelClass}
+                    onClick={() => focusInputById("invoiceAddress")}
                   >
                     Invoice Address *
                   </label>
                 </div>
                 <div className="relative w-full">
                   <textarea
+                    id="deliveryAddress"
                     {...register("deliveryAddress", { required: true })}
                     className="peer w-full border border-gray-300 p-2 pt-5 placeholder-transparent focus:outline-none focus:ring focus:ring-[#e62245] rounded"
                     placeholder="Delivery Address *"
@@ -182,7 +202,8 @@ const CreditAccountApplication = () => {
                   />
                   <label
                     htmlFor="deliveryAddress"
-                    className="absolute pl-2 left-2 top-2 text-gray-500 text-sm transition-all peer-focus:top-2 peer-focus:text-xs peer-focus:text-black"
+                    className={labelClass}
+                    onClick={() => focusInputById("deliveryAddress")}
                   >
                     Delivery Address *
                   </label>
@@ -191,6 +212,7 @@ const CreditAccountApplication = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="relative w-full">
                   <textarea
+                    id="registeredOffice"
                     {...register("registeredOffice")}
                     className="peer w-full border border-gray-300 p-2 pt-5 placeholder-transparent focus:outline-none focus:ring focus:ring-[#e62245] rounded"
                     placeholder="Registered Office (if different)"
@@ -198,13 +220,15 @@ const CreditAccountApplication = () => {
                   />
                   <label
                     htmlFor="registeredOffice"
-                    className="absolute pl-2 left-2 top-2 text-gray-500 text-sm transition-all peer-focus:top-2 peer-focus:text-xs peer-focus:text-black"
+                    className={labelClass}
+                    onClick={() => focusInputById("registeredOffice")}
                   >
                     Registered Office (if different)
                   </label>
                 </div>
                 <div className="relative w-full">
                   <textarea
+                    id="tradingAddress"
                     {...register("tradingAddress")}
                     className="peer w-full border border-gray-300 p-2 pt-5 placeholder-transparent focus:outline-none focus:ring focus:ring-[#e62245] rounded"
                     placeholder="Trading Address (if different)"
@@ -212,7 +236,8 @@ const CreditAccountApplication = () => {
                   />
                   <label
                     htmlFor="tradingAddress"
-                    className="absolute pl-2 left-2 top-2 text-gray-500 text-sm transition-all peer-focus:top-2 peer-focus:text-xs peer-focus:text-black"
+                    className={labelClass}
+                    onClick={() => focusInputById("tradingAddress")}
                   >
                     Trading Address (if different)
                   </label>
@@ -220,7 +245,7 @@ const CreditAccountApplication = () => {
               </div>
               {/* Type of Company */}
               <div className="space-y-2">
-                <p className="font-medium">Type of Company *</p>
+                <p className="font-medium text-black">Type of Company *</p>
                 <div className="grid grid-cols-2 gap-4">
                   {[
                     "Limited",
@@ -230,12 +255,15 @@ const CreditAccountApplication = () => {
                     "Other",
                   ].map((type) => (
                     <label
-                      className="flex items-center gap-2 cursor-pointer"
+                      className={radioLabelClass}
                       key={type}
+                      htmlFor={`companyType-${type}`}
+                      onClick={() => focusInputById(`companyType-${type}`)}
                     >
                       <input
                         type="radio"
                         value={type}
+                        id={`companyType-${type}`}
                         {...register("companyType", { required: true })}
                         className="w-5 h-5 cursor-pointer appearance-none rounded-full border-[2px] border-gray-300 checked:border-[5px] checked:border-[#e62245] checked:bg-white bg-[#e7e7e7] transition-all duration-150"
                       />
@@ -247,6 +275,7 @@ const CreditAccountApplication = () => {
               {/* Partners/Proprietors */}
               <div className="relative w-full">
                 <textarea
+                  id="partnersInfo"
                   {...register("partnersInfo")}
                   className="peer w-full border border-gray-300 p-2 pt-5 placeholder-transparent focus:outline-none focus:ring focus:ring-[#e62245] rounded"
                   placeholder="If a partnership or proprietorship, please provide names and addresses of partners/proprietors"
@@ -254,7 +283,8 @@ const CreditAccountApplication = () => {
                 />
                 <label
                   htmlFor="partnersInfo"
-                  className="absolute pl-2 left-2 top-2 text-gray-500 text-sm transition-all peer-focus:top-2 peer-focus:text-xs peer-focus:text-black"
+                  className={labelClass}
+                  onClick={() => focusInputById("partnersInfo")}
                 >
                   If a partnership or proprietorship, please provide names and
                   addresses of partners/proprietors
@@ -264,13 +294,15 @@ const CreditAccountApplication = () => {
                 <div className="relative w-full">
                   <input
                     type="text"
+                    id="vatNumber"
                     {...register("vatNumber")}
                     className="peer w-full border border-gray-300 p-2 pt-5 placeholder-transparent focus:outline-none focus:ring focus:ring-[#e62245] rounded"
                     placeholder="VAT Number"
                   />
                   <label
                     htmlFor="vatNumber"
-                    className="absolute pl-2 left-2 top-2 text-gray-500 text-sm transition-all peer-focus:top-2 peer-focus:text-xs peer-focus:text-black"
+                    className={labelClass}
+                    onClick={() => focusInputById("vatNumber")}
                   >
                     VAT Number
                   </label>
@@ -278,13 +310,15 @@ const CreditAccountApplication = () => {
                 <div className="relative w-full">
                   <input
                     type="text"
+                    id="companyNumber"
                     {...register("companyNumber")}
                     className="peer w-full border border-gray-300 p-2 pt-5 placeholder-transparent focus:outline-none focus:ring focus:ring-[#e62245] rounded"
                     placeholder="Company Number"
                   />
                   <label
                     htmlFor="companyNumber"
-                    className="absolute pl-2 left-2 top-2 text-gray-500 text-sm transition-all peer-focus:top-2 peer-focus:text-xs peer-focus:text-black"
+                    className={labelClass}
+                    onClick={() => focusInputById("companyNumber")}
                   >
                     Company Number
                   </label>
@@ -292,6 +326,7 @@ const CreditAccountApplication = () => {
                 <div className="relative w-full">
                   <input
                     type="date"
+                    id="incorporationDate"
                     {...register("incorporationDate")}
                     className="peer w-full border border-gray-300 p-2 pt-5 pr-10 placeholder-transparent focus:outline-none focus:ring focus:ring-[#e62245] rounded bg-white cursor-pointer"
                     placeholder="Date of Incorporation"
@@ -299,7 +334,8 @@ const CreditAccountApplication = () => {
                   />
                   <label
                     htmlFor="incorporationDate"
-                    className="absolute left-2 top-2 text-gray-500 text-sm transition-all peer-focus:top-2 peer-focus:text-xs peer-focus:text-black"
+                    className={labelClass}
+                    onClick={() => focusInputById("incorporationDate")}
                   >
                     Date of Incorporation
                   </label>
@@ -307,13 +343,15 @@ const CreditAccountApplication = () => {
                 <div className="relative w-full">
                   <input
                     type="url"
+                    id="website"
                     {...register("website")}
                     className="peer w-full border border-gray-300 p-2 pt-5 placeholder-transparent focus:outline-none focus:ring focus:ring-[#e62245] rounded"
                     placeholder="Website"
                   />
                   <label
                     htmlFor="website"
-                    className="absolute pl-2 left-2 top-2 text-gray-500 text-sm transition-all peer-focus:top-2 peer-focus:text-xs peer-focus:text-black"
+                    className={labelClass}
+                    onClick={() => focusInputById("website")}
                   >
                     Website
                   </label>
@@ -329,13 +367,15 @@ const CreditAccountApplication = () => {
               <div className="relative w-full">
                 <input
                   type="text"
+                  id="buyersContactName"
                   {...register("buyersContactName")}
                   className="peer w-full border border-gray-300 p-2 pt-5 placeholder-transparent focus:outline-none focus:ring focus:ring-[#e62245] rounded"
                   placeholder="Buyers Contact Name"
                 />
                 <label
                   htmlFor="buyersContactName"
-                  className="absolute pl-2 left-2 top-2 text-gray-500 text-sm transition-all peer-focus:top-2 peer-focus:text-xs peer-focus:text-black"
+                  className={labelClass}
+                  onClick={() => focusInputById("buyersContactName")}
                 >
                   Buyers Contact Name
                 </label>
@@ -343,13 +383,15 @@ const CreditAccountApplication = () => {
               <div className="relative w-full">
                 <input
                   type="tel"
+                  id="buyersPhone"
                   {...register("buyersPhone")}
                   className="peer w-full border border-gray-300 p-2 pt-5 placeholder-transparent focus:outline-none focus:ring focus:ring-[#e62245] rounded"
                   placeholder="Buyers Phone"
                 />
                 <label
                   htmlFor="buyersPhone"
-                  className="absolute pl-2 left-2 top-2 text-gray-500 text-sm transition-all peer-focus:top-2 peer-focus:text-xs peer-focus:text-black"
+                  className={labelClass}
+                  onClick={() => focusInputById("buyersPhone")}
                 >
                   Buyers Phone
                 </label>
@@ -357,13 +399,15 @@ const CreditAccountApplication = () => {
               <div className="relative w-full">
                 <input
                   type="email"
+                  id="buyersEmail"
                   {...register("buyersEmail")}
                   className="peer w-full border border-gray-300 p-2 pt-5 placeholder-transparent focus:outline-none focus:ring focus:ring-[#e62245] rounded"
                   placeholder="Buyers Email"
                 />
                 <label
                   htmlFor="buyersEmail"
-                  className="absolute pl-2 left-2 top-2 text-gray-500 text-sm transition-all peer-focus:top-2 peer-focus:text-xs peer-focus:text-black"
+                  className={labelClass}
+                  onClick={() => focusInputById("buyersEmail")}
                 >
                   Buyers Email
                 </label>
@@ -371,13 +415,15 @@ const CreditAccountApplication = () => {
               <div className="relative w-full">
                 <input
                   type="text"
+                  id="accountsContactName"
                   {...register("accountsContactName", { required: true })}
                   className="peer w-full border border-gray-300 p-2 pt-5 placeholder-transparent focus:outline-none focus:ring focus:ring-[#e62245] rounded"
                   placeholder="Accounts Contact Name *"
                 />
                 <label
                   htmlFor="accountsContactName"
-                  className="absolute pl-2 left-2 top-2 text-gray-500 text-sm transition-all peer-focus:top-2 peer-focus:text-xs peer-focus:text-black"
+                  className={labelClass}
+                  onClick={() => focusInputById("accountsContactName")}
                 >
                   Accounts Contact Name *
                 </label>
@@ -385,13 +431,15 @@ const CreditAccountApplication = () => {
               <div className="relative w-full">
                 <input
                   type="tel"
+                  id="accountsPhone"
                   {...register("accountsPhone")}
                   className="peer w-full border border-gray-300 p-2 pt-5 placeholder-transparent focus:outline-none focus:ring focus:ring-[#e62245] rounded"
                   placeholder="Accounts Phone"
                 />
                 <label
                   htmlFor="accountsPhone"
-                  className="absolute pl-2 left-2 top-2 text-gray-500 text-sm transition-all peer-focus:top-2 peer-focus:text-xs peer-focus:text-black"
+                  className={labelClass}
+                  onClick={() => focusInputById("accountsPhone")}
                 >
                   Accounts Phone
                 </label>
@@ -399,52 +447,55 @@ const CreditAccountApplication = () => {
               <div className="relative w-full">
                 <input
                   type="email"
+                  id="accountsEmail"
                   {...register("accountsEmail", { required: true })}
                   className="peer w-full border border-gray-300 p-2 pt-5 placeholder-transparent focus:outline-none focus:ring focus:ring-[#e62245] rounded"
                   placeholder="Accounts Email *"
                 />
                 <label
                   htmlFor="accountsEmail"
-                  className="absolute pl-2 left-2 top-2 text-gray-500 text-sm transition-all peer-focus:top-2 peer-focus:text-xs peer-focus:text-black"
+                  className={labelClass}
+                  onClick={() => focusInputById("accountsEmail")}
                 >
                   Accounts Email *
                 </label>
               </div>
             </div>
             <div className="space-y-2">
-              <p className="font-medium">
+              <p className="font-medium text-black">
                 Are we able to email invoices/statements? *
               </p>
               <div className="grid grid-cols-2 gap-4">
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input
-                    type="radio"
-                    value="Yes"
-                    {...register("emailInvoices", { required: true })}
-                    className="w-5 h-5 cursor-pointer appearance-none rounded-full border-[2px] border-gray-300 checked:border-[5px] checked:border-[#e62245] checked:bg-white bg-[#e7e7e7] transition-all duration-150"
-                  />
-                  <span className="text-sm">Yes</span>
-                </label>
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input
-                    type="radio"
-                    value="No"
-                    {...register("emailInvoices")}
-                    className="w-5 h-5 cursor-pointer appearance-none rounded-full border-[2px] border-gray-300 checked:border-[5px] checked:border-[#e62245] checked:bg-white bg-[#e7e7e7] transition-all duration-150"
-                  />
-                  <span className="text-sm">No</span>
-                </label>
+                {["Yes", "No"].map((val) => (
+                  <label
+                    className={radioLabelClass}
+                    htmlFor={`emailInvoices-${val}`}
+                    key={val}
+                    onClick={() => focusInputById(`emailInvoices-${val}`)}
+                  >
+                    <input
+                      type="radio"
+                      value={val}
+                      id={`emailInvoices-${val}`}
+                      {...register("emailInvoices", { required: true })}
+                      className="w-5 h-5 cursor-pointer appearance-none rounded-full border-[2px] border-gray-300 checked:border-[5px] checked:border-[#e62245] checked:bg-white bg-[#e7e7e7] transition-all duration-150"
+                    />
+                    <span className="text-sm">{val}</span>
+                  </label>
+                ))}
               </div>
               <div className="relative w-full mt-5">
                 <input
                   type="email"
+                  id="invoiceEmail"
                   {...register("invoiceEmail")}
                   className="peer w-full border border-gray-300 p-2 pt-5 placeholder-transparent focus:outline-none focus:ring focus:ring-[#e62245] rounded"
                   placeholder="If yes, please provide email"
                 />
                 <label
                   htmlFor="invoiceEmail"
-                  className="absolute pl-2 left-2 top-2 text-gray-500 text-sm transition-all peer-focus:top-2 peer-focus:text-xs peer-focus:text-black"
+                  className={labelClass}
+                  onClick={() => focusInputById("invoiceEmail")}
                 >
                   If yes, please provide email
                 </label>
@@ -457,18 +508,20 @@ const CreditAccountApplication = () => {
             <h2 className="text-xl font-semibold">Trade References</h2>
             {/* Reference 1 */}
             <div className="space-y-4">
-              <p className="font-medium">Trade Reference 1</p>
+              <p className="font-medium text-black">Trade Reference 1</p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="relative w-full">
                   <input
                     type="text"
+                    id="ref1Company"
                     {...register("ref1Company")}
                     className="peer w-full border border-gray-300 p-2 pt-5 placeholder-transparent focus:outline-none focus:ring focus:ring-[#e62245] rounded"
                     placeholder="Company Name 1"
                   />
                   <label
                     htmlFor="ref1Company"
-                    className="absolute pl-2 left-2 top-2 text-gray-500 text-sm transition-all peer-focus:top-2 peer-focus:text-xs peer-focus:text-black"
+                    className={labelClass}
+                    onClick={() => focusInputById("ref1Company")}
                   >
                     Company Name 1
                   </label>
@@ -476,13 +529,15 @@ const CreditAccountApplication = () => {
                 <div className="relative w-full">
                   <input
                     type="tel"
+                    id="ref1Phone"
                     {...register("ref1Phone")}
                     className="peer w-full border border-gray-300 p-2 pt-5 placeholder-transparent focus:outline-none focus:ring focus:ring-[#e62245] rounded"
                     placeholder="Phone 1"
                   />
                   <label
                     htmlFor="ref1Phone"
-                    className="absolute pl-2 left-2 top-2 text-gray-500 text-sm transition-all peer-focus:top-2 peer-focus:text-xs peer-focus:text-black"
+                    className={labelClass}
+                    onClick={() => focusInputById("ref1Phone")}
                   >
                     Phone 1
                   </label>
@@ -490,13 +545,15 @@ const CreditAccountApplication = () => {
                 <div className="relative w-full">
                   <input
                     type="text"
+                    id="ref1Contact"
                     {...register("ref1Contact")}
                     className="peer w-full border border-gray-300 p-2 pt-5 placeholder-transparent focus:outline-none focus:ring focus:ring-[#e62245] rounded"
                     placeholder="Contact Name 1"
                   />
                   <label
                     htmlFor="ref1Contact"
-                    className="absolute pl-2 left-2 top-2 text-gray-500 text-sm transition-all peer-focus:top-2 peer-focus:text-xs peer-focus:text-black"
+                    className={labelClass}
+                    onClick={() => focusInputById("ref1Contact")}
                   >
                     Contact Name 1
                   </label>
@@ -504,13 +561,15 @@ const CreditAccountApplication = () => {
                 <div className="relative w-full">
                   <input
                     type="email"
+                    id="ref1Email"
                     {...register("ref1Email")}
                     className="peer w-full border border-gray-300 p-2 pt-5 placeholder-transparent focus:outline-none focus:ring focus:ring-[#e62245] rounded"
                     placeholder="Email 1"
                   />
                   <label
                     htmlFor="ref1Email"
-                    className="absolute pl-2 left-2 top-2 text-gray-500 text-sm transition-all peer-focus:top-2 peer-focus:text-xs peer-focus:text-black"
+                    className={labelClass}
+                    onClick={() => focusInputById("ref1Email")}
                   >
                     Email 1
                   </label>
@@ -518,6 +577,7 @@ const CreditAccountApplication = () => {
               </div>
               <div className="relative w-full">
                 <textarea
+                  id="ref1Address"
                   {...register("ref1Address")}
                   className="peer w-full border border-gray-300 p-2 pt-5 placeholder-transparent focus:outline-none focus:ring focus:ring-[#e62245] rounded"
                   placeholder="Address 1"
@@ -525,7 +585,8 @@ const CreditAccountApplication = () => {
                 />
                 <label
                   htmlFor="ref1Address"
-                  className="absolute pl-2 left-2 top-2 text-gray-500 text-sm transition-all peer-focus:top-2 peer-focus:text-xs peer-focus:text-black"
+                  className={labelClass}
+                  onClick={() => focusInputById("ref1Address")}
                 >
                   Address 1
                 </label>
@@ -533,18 +594,20 @@ const CreditAccountApplication = () => {
             </div>
             {/* Reference 2 */}
             <div className="space-y-4">
-              <p className="font-medium">Trade Reference 2</p>
+              <p className="font-medium text-black">Trade Reference 2</p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="relative w-full">
                   <input
                     type="text"
+                    id="ref2Company"
                     {...register("ref2Company")}
                     className="peer w-full border border-gray-300 p-2 pt-5 placeholder-transparent focus:outline-none focus:ring focus:ring-[#e62245] rounded"
                     placeholder="Company Name 2"
                   />
                   <label
                     htmlFor="ref2Company"
-                    className="absolute pl-2 left-2 top-2 text-gray-500 text-sm transition-all peer-focus:top-2 peer-focus:text-xs peer-focus:text-black"
+                    className={labelClass}
+                    onClick={() => focusInputById("ref2Company")}
                   >
                     Company Name 2
                   </label>
@@ -552,13 +615,15 @@ const CreditAccountApplication = () => {
                 <div className="relative w-full">
                   <input
                     type="tel"
+                    id="ref2Phone"
                     {...register("ref2Phone")}
                     className="peer w-full border border-gray-300 p-2 pt-5 placeholder-transparent focus:outline-none focus:ring focus:ring-[#e62245] rounded"
                     placeholder="Phone 2"
                   />
                   <label
                     htmlFor="ref2Phone"
-                    className="absolute pl-2 left-2 top-2 text-gray-500 text-sm transition-all peer-focus:top-2 peer-focus:text-xs peer-focus:text-black"
+                    className={labelClass}
+                    onClick={() => focusInputById("ref2Phone")}
                   >
                     Phone 2
                   </label>
@@ -566,13 +631,15 @@ const CreditAccountApplication = () => {
                 <div className="relative w-full">
                   <input
                     type="text"
+                    id="ref2Contact"
                     {...register("ref2Contact")}
                     className="peer w-full border border-gray-300 p-2 pt-5 placeholder-transparent focus:outline-none focus:ring focus:ring-[#e62245] rounded"
                     placeholder="Contact Name 2"
                   />
                   <label
                     htmlFor="ref2Contact"
-                    className="absolute pl-2 left-2 top-2 text-gray-500 text-sm transition-all peer-focus:top-2 peer-focus:text-xs peer-focus:text-black"
+                    className={labelClass}
+                    onClick={() => focusInputById("ref2Contact")}
                   >
                     Contact Name 2
                   </label>
@@ -580,13 +647,15 @@ const CreditAccountApplication = () => {
                 <div className="relative w-full">
                   <input
                     type="email"
+                    id="ref2Email"
                     {...register("ref2Email")}
                     className="peer w-full border border-gray-300 p-2 pt-5 placeholder-transparent focus:outline-none focus:ring focus:ring-[#e62245] rounded"
                     placeholder="Email 2"
                   />
                   <label
                     htmlFor="ref2Email"
-                    className="absolute pl-2 left-2 top-2 text-gray-500 text-sm transition-all peer-focus:top-2 peer-focus:text-xs peer-focus:text-black"
+                    className={labelClass}
+                    onClick={() => focusInputById("ref2Email")}
                   >
                     Email 2
                   </label>
@@ -594,6 +663,7 @@ const CreditAccountApplication = () => {
               </div>
               <div className="relative w-full">
                 <textarea
+                  id="ref2Address"
                   {...register("ref2Address")}
                   className="peer w-full border border-gray-300 p-2 pt-5 placeholder-transparent focus:outline-none focus:ring focus:ring-[#e62245] rounded"
                   placeholder="Address 2"
@@ -601,7 +671,8 @@ const CreditAccountApplication = () => {
                 />
                 <label
                   htmlFor="ref2Address"
-                  className="absolute pl-2 left-2 top-2 text-gray-500 text-sm transition-all peer-focus:top-2 peer-focus:text-xs peer-focus:text-black"
+                  className={labelClass}
+                  onClick={() => focusInputById("ref2Address")}
                 >
                   Address 2
                 </label>
@@ -616,13 +687,15 @@ const CreditAccountApplication = () => {
               <div className="relative w-full">
                 <input
                   type="text"
+                  id="applicantName"
                   {...register("applicantName", { required: true })}
                   className="peer w-full border border-gray-300 p-2 pt-5 placeholder-transparent focus:outline-none focus:ring focus:ring-[#e62245] rounded"
                   placeholder="Name of Person Making Application *"
                 />
                 <label
                   htmlFor="applicantName"
-                  className="absolute pl-2 left-2 top-2 text-gray-500 text-sm transition-all peer-focus:top-2 peer-focus:text-xs peer-focus:text-black"
+                  className={labelClass}
+                  onClick={() => focusInputById("applicantName")}
                 >
                   Name of Person Making Application *
                 </label>
@@ -630,13 +703,15 @@ const CreditAccountApplication = () => {
               <div className="relative w-full">
                 <input
                   type="text"
+                  id="applicantPosition"
                   {...register("applicantPosition", { required: true })}
                   className="peer w-full border border-gray-300 p-2 pt-5 placeholder-transparent focus:outline-none focus:ring focus:ring-[#e62245] rounded"
                   placeholder="Position *"
                 />
                 <label
                   htmlFor="applicantPosition"
-                  className="absolute pl-2 left-2 top-2 text-gray-500 text-sm transition-all peer-focus:top-2 peer-focus:text-xs peer-focus:text-black"
+                  className={labelClass}
+                  onClick={() => focusInputById("applicantPosition")}
                 >
                   Position *
                 </label>
@@ -644,13 +719,15 @@ const CreditAccountApplication = () => {
               <div className="relative w-full">
                 <input
                   type="tel"
+                  id="applicantPhone"
                   {...register("applicantPhone", { required: true })}
                   className="peer w-full border border-gray-300 p-2 pt-5 placeholder-transparent focus:outline-none focus:ring focus:ring-[#e62245] rounded"
                   placeholder="Contact Phone *"
                 />
                 <label
                   htmlFor="applicantPhone"
-                  className="absolute pl-2 left-2 top-2 text-gray-500 text-sm transition-all peer-focus:top-2 peer-focus:text-xs peer-focus:text-black"
+                  className={labelClass}
+                  onClick={() => focusInputById("applicantPhone")}
                 >
                   Contact Phone *
                 </label>
@@ -658,6 +735,7 @@ const CreditAccountApplication = () => {
               <div className="relative w-full">
                 <input
                   type="date"
+                  id="applicationDate"
                   {...register("applicationDate", { required: true })}
                   className="peer w-full border border-gray-300 p-2 pt-5 pr-10 placeholder-transparent focus:outline-none focus:ring focus:ring-[#e62245] rounded bg-white cursor-pointer"
                   placeholder="Date *"
@@ -665,7 +743,8 @@ const CreditAccountApplication = () => {
                 />
                 <label
                   htmlFor="applicationDate"
-                  className="absolute pl-2 left-2 top-2 text-gray-500 text-sm transition-all peer-focus:top-2 peer-focus:text-xs peer-focus:text-black"
+                  className={labelClass}
+                  onClick={() => focusInputById("applicationDate")}
                 >
                   Date *
                 </label>
@@ -674,7 +753,7 @@ const CreditAccountApplication = () => {
           </div>
           {/* File Upload */}
           <div>
-            <p className="mb-2 font-semibold">
+            <p className="mb-2 font-semibold text-black">
               Please attach photos if applicable:
             </p>
             <label className="border-2 border-dashed border-gray-300 rounded p-8 text-center text-sm text-black block cursor-pointer">
@@ -700,6 +779,7 @@ const CreditAccountApplication = () => {
             <div className="space-y-4">
               <div className="relative w-full">
                 <select
+                  id="discoveryMethod"
                   {...register("discoveryMethod")}
                   className="peer w-full border border-gray-300 p-2 pt-5 placeholder-transparent focus:outline-none focus:ring focus:ring-[#e62245] rounded appearance-none"
                 >
@@ -713,7 +793,8 @@ const CreditAccountApplication = () => {
                 </select>
                 <label
                   htmlFor="discoveryMethod"
-                  className="absolute pl-2 left-2 top-2 text-gray-500 text-sm transition-all peer-focus:top-2 peer-focus:text-xs peer-focus:text-black"
+                  className={labelClass}
+                  onClick={() => focusInputById("discoveryMethod")}
                 >
                   How Did You Discover TS Survey?
                 </label>
@@ -721,13 +802,15 @@ const CreditAccountApplication = () => {
               <div className="relative w-full md:w-1/2">
                 <input
                   type="text"
+                  id="g2RepName"
                   {...register("g2RepName")}
                   className="peer w-full border border-gray-300 p-2 pt-5 placeholder-transparent focus:outline-none focus:ring focus:ring-[#e62245] rounded"
                   placeholder="Name of G2 Rep (if applicable)"
                 />
                 <label
                   htmlFor="g2RepName"
-                  className="absolute pl-2 left-2 top-2 text-gray-500 text-sm transition-all peer-focus:top-2 peer-focus:text-xs peer-focus:text-black"
+                  className={labelClass}
+                  onClick={() => focusInputById("g2RepName")}
                 >
                   Name of G2 Rep (if applicable)
                 </label>
