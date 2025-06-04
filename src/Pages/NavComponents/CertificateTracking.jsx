@@ -2,22 +2,48 @@ import { useState } from "react";
 import { CiHome } from "react-icons/ci";
 import { Link } from "react-router-dom";
 import useDataQuery from "../../utils/useDataQuery";
+import { useAxiospublic } from "../../Hooks/useAxiospublic";
 
 const CertificateTracking = () => {
+  const axiosPublicUrl = useAxiospublic();
   const [formData, setFormData] = useState({
     trackingNumber: "",
     serialNumber: "",
   });
+  const [result, setResult] = useState(null);
+  const [searching, setSearching] = useState(false);
+  const [error, setError] = useState("");
 
   const { data: certificateData, isLoading } = useDataQuery(
     ["certificateDescription"],
     "/api/certificate-description"
   );
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
-    // Implement search/submit logic if needed
+    setError("");
+    setResult(null);
+    setSearching(true);
+
+    try {
+      const res = await axiosPublicUrl.get(
+        `/api/equipments/search?trackingNo=${encodeURIComponent(
+          formData.trackingNumber
+        )}&serialNo=${encodeURIComponent(formData.serialNumber)}`
+      );
+      console.log(res.data);
+
+      if (res.status === 200) {
+        setResult(res.data[0]);
+      } else {
+        setResult(null);
+        setError("No matching equipment found.");
+      }
+    } catch (err) {
+      setError("Error fetching equipment information.");
+    } finally {
+      setSearching(false);
+    }
   };
 
   if (isLoading) return <div>Loading...</div>;
@@ -80,13 +106,80 @@ const CertificateTracking = () => {
             }
             className="border border-gray-300 rounded px-4 py-2 w-full md:w-1/3"
           />
-          <button
+          {/* <button
             type="submit"
             className="bg-[#e62245] text-white px-6 py-2 rounded w-full md:w-auto"
           >
             SUBMIT
+          </button> */}
+          <button
+            type="submit"
+            className="bg-[#e62245] text-white px-6 py-2 rounded w-full md:w-auto"
+            disabled={searching}
+          >
+            {searching ? "SEARCHING..." : "SUBMIT"}
           </button>
         </form>
+        {error && <div className="text-red-200 mb-4">{error}</div>}
+
+        {result && (
+          <div className="flex justify-center mt-5">
+            <table className="border-collapse border border-gray-200 bg-[#28506a] text-white min-w-[900px]">
+              <thead>
+                <tr>
+                  <th className="border border-gray-300 px-4 py-2 font-semibold">
+                    Tracking No
+                  </th>
+                  <th className="border border-gray-300 px-4 py-2 font-semibold">
+                    Equipment
+                  </th>
+                  <th className="border border-gray-300 px-4 py-2 font-semibold">
+                    Serial Number
+                  </th>
+                  <th className="border border-gray-300 px-4 py-2 font-semibold">
+                    Accuracy
+                  </th>
+                  <th className="border border-gray-300 px-4 py-2 font-semibold">
+                    Manufacturer
+                  </th>
+                  <th className="border border-gray-300 px-4 py-2 font-semibold">
+                    Company Name
+                  </th>
+                  <th className="border border-gray-300 px-4 py-2 font-semibold">
+                    Validity
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td className="border border-gray-300 px-4 py-2">
+                    {result.trackingNo}
+                  </td>
+                  <td className="border border-gray-300 px-4 py-2">
+                    {result.equipment}
+                  </td>
+                  <td className="border border-gray-300 px-4 py-2">
+                    {result.serialNo}
+                  </td>
+                  <td className="border border-gray-300 px-4 py-2">
+                    {result.accuracy}
+                  </td>
+                  <td className="border border-gray-300 px-4 py-2">
+                    {result.manufacturer}
+                  </td>
+                  <td className="border border-gray-300 px-4 py-2">
+                    {result.companyName}
+                  </td>
+                  <td className="border border-gray-300 px-4 py-2">
+                    {result.validity
+                      ? new Date(result.validity).toISOString().slice(0, 10)
+                      : ""}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
       <div className="flex justify-center my-8">
         {certificateData?.image_url && (

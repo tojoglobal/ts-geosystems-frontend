@@ -11,7 +11,9 @@ import RelatedArticles from "./RelatedArticles";
 import BlogSearch from "./BlogSearch";
 import useDataQuery from "../../../utils/useDataQuery";
 import BlogContentWithImages from "./BlogContentWithImages";
-import AudioPlayer, { getDescriptionTextFromHtml } from "./AudioPlayer";
+import VoiceInput from "./VoiceInput";
+import AudioPlayer from "./AudioPlayer";
+import getReadingTime from "../../../utils/useReadingTime";
 
 const SocialShareButtons = ({ blogUrl, blogTitle }) => {
   const shareButtons = [
@@ -123,6 +125,8 @@ const BlogDetails = () => {
     }
   };
 
+  const stats = getReadingTime(blog?.content || "");
+
   if (isLoading) return <div className="p-3 text-center">Loading blog...</div>;
   if (!blog.id) return <div className="p-3 text-center">Blog not found</div>;
 
@@ -184,10 +188,10 @@ const BlogDetails = () => {
               day: "numeric",
               year: "numeric",
             })}{" "}
-            · 5 minute read
+            · {stats.text}
           </p>
         </div>
-        <AudioPlayer text={getDescriptionTextFromHtml(blog.content || "")} />
+        <AudioPlayer text={blog?.content || ""} />
         <BlogContentWithImages blog={blog} middleImages={middleImages} />
         {/* Tags */}
         {tags.length > 0 && (
