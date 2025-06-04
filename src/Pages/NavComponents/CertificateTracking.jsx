@@ -40,6 +40,7 @@ const CertificateTracking = () => {
         setError("No matching equipment found.");
       }
     } catch (err) {
+      console.log(err);
       setError("Error fetching equipment information.");
     } finally {
       setSearching(false);
