@@ -126,7 +126,7 @@ const MainNavContainer = () => {
               </div>
               {/* Right side */}
               {!isSticky ? (
-                <div className="flex gap-7 lg:gap-10 text-[14px] font-bold text-charcoal relative">
+                <div className="flex gap-7 lg:gap-9 text-[14px] font-bold text-charcoal relative">
                   <Link
                     to="/used"
                     className="cursor-pointer hover:text-crimson-red transition-colors duration-300 py-2"
@@ -153,7 +153,7 @@ const MainNavContainer = () => {
                   </Link>
                   {headerLinks && headerLinks.length > 0 && (
                     <div className="relative group py-2">
-                      <div className="flex hover:text-crimson-red cursor-pointer">
+                      <div className="flex uppercase hover:text-crimson-red cursor-pointer">
                         Info <MdOutlineKeyboardArrowDown className="text-xl" />
                       </div>
                       <div className="absolute -left-10 top-full w-50 bg-white rounded-sm border border-slightly-dark shadow-lg pl-4 py-2 hidden group-hover:block z-50">
