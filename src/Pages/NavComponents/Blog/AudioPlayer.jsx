@@ -26,25 +26,33 @@ const WaveIcon = () => (
 
 const SkipIcon = ({ seconds }) => (
   <svg
-    width="28"
-    height="28"
-    viewBox="0 0 24 24"
-    style={{ transform: seconds > 0 ? "" : "scaleX(-1)" }}
+    width="36"
+    height="36"
+    viewBox="0 0 36 36"
+    style={{
+      transform: seconds > 0 ? "" : "scaleX(-1)",
+      background: "#fff",
+      borderRadius: "50%",
+      boxShadow: "0 2px 8px 0 rgba(40,40,73,0.10)",
+      padding: 3,
+      display: "block",
+    }}
   >
     <path
-      d="M12 5v2a7 7 0 1 1-6.938 7.75"
+      d="M18 7v3a8 8 0 1 1-7.938 8.86"
       stroke="#222"
-      strokeWidth="1.5"
+      strokeWidth="1.7"
       fill="none"
     />
-    <polygon points="12,2 15,7 9,7" fill="#222" />
+    <polygon points="18,2 23,10 13,10" fill="#222" />
     <text
-      x="12"
-      y="21"
-      fontSize="10"
+      x="18"
+      y="31"
+      fontSize="11"
       fill="#222"
       textAnchor="middle"
       alignmentBaseline="middle"
+      fontWeight="bold"
     >
       {Math.abs(seconds)}
     </text>
@@ -64,22 +72,17 @@ const estimateDuration = (txt, speed = 1) => {
   return words > 0 ? Math.ceil((words / wpm) * 60) : 0;
 };
 
-// --- FIX: Extract only main <p> content for description ---
 export function getDescriptionTextFromHtml(html) {
   if (!html) return "";
-  // Find all <p>...</p>
   const matches = html.match(/<p[^>]*>([\s\S]*?)<\/p>/gi);
   if (matches && matches.length > 0) {
-    // Join all paragraphs for richer audio (or use only matches[0] for just the first paragraph)
     const tempDiv = document.createElement("div");
-    // Remove any <p> in "matches" that are empty or too short (e.g. less than 10 chars)
     const filtered = matches.filter((p) => {
       tempDiv.innerHTML = p;
       return (
         (tempDiv.textContent || tempDiv.innerText || "").trim().length > 10
       );
     });
-    // Join all significant paragraphs, or fallback to all matches
     const text = filtered.length
       ? filtered
           .map((p) => {
@@ -95,7 +98,6 @@ export function getDescriptionTextFromHtml(html) {
           .join(" ");
     return text;
   }
-  // fallback to all text content
   const tempDiv = document.createElement("div");
   tempDiv.innerHTML = html;
   return tempDiv.textContent || tempDiv.innerText || "";
@@ -104,14 +106,11 @@ export function getDescriptionTextFromHtml(html) {
 const AudioPlayer = ({ text }) => {
   const { supported, voices } = useSpeechSynthesis();
   const [isPlaying, setIsPlaying] = useState(false);
-  const [charIndex, setCharIndex] = useState(0); // where in text
-  const [position, setPosition] = useState(0); // seconds
-  const [duration, setDuration] = useState(0); // seconds
-
-  // Always fixed at 1x for this design
+  const [charIndex, setCharIndex] = useState(0);
+  const [position, setPosition] = useState(0);
+  const [duration, setDuration] = useState(0);
   const speed = 1;
 
-  // Pick a female English voice if available
   const selectedVoice =
     voices.find(
       (v) =>
@@ -123,10 +122,8 @@ const AudioPlayer = ({ text }) => {
     voices.find((v) => v.lang.startsWith("en")) ||
     voices[0];
 
-  // Utterance ref to allow control/cancel
   const utteranceRef = useRef(null);
 
-  // Reset when text changes
   useEffect(() => {
     setCharIndex(0);
     setPosition(0);
@@ -135,14 +132,12 @@ const AudioPlayer = ({ text }) => {
     window.speechSynthesis.cancel();
   }, [text]);
 
-  // Stop TTS on unmount (navigation away)
   useEffect(() => {
     return () => {
       window.speechSynthesis.cancel();
     };
   }, []);
 
-  // Main play logic
   const handlePlay = () => {
     if (!supported || !text) return;
     window.speechSynthesis.cancel();
@@ -158,7 +153,6 @@ const AudioPlayer = ({ text }) => {
       if (event.name === "word" && event.charIndex !== undefined) {
         const charsRead = charIndex + event.charIndex;
         setCharIndex(charsRead);
-        // Estimate position in seconds
         const pct = charsRead / text.length;
         setPosition(Math.floor(duration * pct));
       }
@@ -188,7 +182,6 @@ const AudioPlayer = ({ text }) => {
     }
   };
 
-  // Seek: cancel and resume from new position
   const handleSeek = (seconds) => {
     if (!text) return;
     let newPos = position + seconds;
@@ -210,7 +203,6 @@ const AudioPlayer = ({ text }) => {
     );
   }
 
-  // Main design
   return (
     <div
       style={{
@@ -221,7 +213,8 @@ const AudioPlayer = ({ text }) => {
         alignItems: "center",
         padding: "12px 24px",
         gap: 18,
-        maxWidth: 520,
+        width: "100%",
+        maxWidth: "100%",
         margin: "24px 0 16px 0",
       }}
     >
@@ -255,7 +248,7 @@ const AudioPlayer = ({ text }) => {
       </div>
       <div
         style={{
-          minWidth: 40,
+          minWidth: 36,
           textAlign: "center",
           color: "#222",
           fontSize: 15,
@@ -263,38 +256,47 @@ const AudioPlayer = ({ text }) => {
       >
         1x
       </div>
-      <button
-        aria-label="Replay 10 seconds"
-        onClick={() => handleSeek(-10)}
-        style={{
-          background: "none",
-          border: "none",
-          cursor: "pointer",
-          padding: 0,
-          margin: "0 3px",
-        }}
-      >
-        <SkipIcon seconds={-10} />
-      </button>
-      <button
-        aria-label="Forward 30 seconds"
-        onClick={() => handleSeek(30)}
-        style={{
-          background: "none",
-          border: "none",
-          cursor: "pointer",
-          padding: 0,
-          margin: "0 3px",
-        }}
-      >
-        <SkipIcon seconds={30} />
-      </button>
       <div
         style={{
-          minWidth: 40,
+          display: "flex",
+          gap: 6,
+          alignItems: "center",
+        }}
+      >
+        <button
+          aria-label="Replay 10 seconds"
+          onClick={() => handleSeek(-10)}
+          style={{
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+            padding: 0,
+            boxShadow: "none",
+          }}
+        >
+          <SkipIcon seconds={-10} />
+        </button>
+        <button
+          aria-label="Forward 30 seconds"
+          onClick={() => handleSeek(30)}
+          style={{
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+            padding: 0,
+            boxShadow: "none",
+          }}
+        >
+          <SkipIcon seconds={30} />
+        </button>
+      </div>
+      <div
+        style={{
+          minWidth: 48,
           textAlign: "right",
           color: "#222",
           fontSize: 15,
+          marginLeft: 4,
         }}
       >
         {formatSeconds(isPlaying ? position : duration)}
