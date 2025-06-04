@@ -12,6 +12,7 @@ import AdminUpdateOurAdService from "./HomePage/AdminUpdateOurAdService";
 import LastBannerControl from "./LastBannerControl";
 import Swal from "sweetalert2";
 import AdminUpdateYoutube from "../../Pages/Control/AdminUpdateYoutube";
+import AdminUpdateTopClients from "../../Pages/Control/AdminUpdateTopClients";
 
 // Define the exact order of components as they appear on the homepage
 const COMPONENT_ORDER = [
@@ -174,6 +175,8 @@ const HomePageControl = () => {
         <AdminUpdateWeProvide />
         <div className="my-6 border-t border-gray-200/20" />
         <AdminUpdateOurAchievements />
+        <div className="my-6 border-t border-gray-200/20" />
+        <AdminUpdateTopClients />
         <div className="my-6 border-t border-gray-200/20" />
         <AdminUpdateOurAdService />
         <div className="my-6 border-t border-gray-200/20" />
