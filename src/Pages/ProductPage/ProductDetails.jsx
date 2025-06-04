@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 import { useState, useRef, useEffect } from "react";
 import {
   FaFacebookF,
@@ -18,6 +19,15 @@ import useDataQuery from "../../utils/useDataQuery";
 import { setBreadcrumb } from "../../features/breadcrumb/breadcrumbSlice";
 import useToastSwal from "../../Hooks/useToastSwal";
 
+// Helper function to extract YouTube video ID from url
+function getYouTubeId(url) {
+  const regex =
+    /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([A-Za-z0-9_-]{11})/;
+  const match = url.match(regex);
+  if (match && match[1]) return match[1];
+  return null;
+}
+
 const ProductDetails = () => {
   const { id } = useParams();
   const showToast = useToastSwal();
@@ -25,8 +35,8 @@ const ProductDetails = () => {
   const [selectedImage, setSelectedImage] = useState("");
   const [activeTab, setActiveTab] = useState("OVERVIEW");
   const overviewRef = useRef(null);
-  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
   const [quantity, setQuantity] = useState(1);
+  const [playingVideoIdx, setPlayingVideoIdx] = useState(-1);
 
   const {
     data: product = {},
@@ -36,14 +46,18 @@ const ProductDetails = () => {
   } = useDataQuery(["productDetails", id], `/api/products/${id}`, !!id);
   // Parse the image URLs from the product data
   const imageUrls = product?.image_urls ? JSON.parse(product.image_urls) : [];
-  // Parse video URLs if available
-  const videoUrls = product?.video_urls ? product.video_urls.split(",") : [];
+  // Parse and clean video URLs if available
+  const videoUrls = product?.video_urls
+    ? product.video_urls
+        .split(",")
+        .map((v) => v.trim())
+        .filter((v) => v.length > 0)
+    : [];
   const category = product?.category ? JSON.parse(product.category).cat : null;
   const currentProductId = product?.id;
   const priceOption = product?.priceShowHide;
   // Countdown logic
   const [timeLeft, setTimeLeft] = useState({});
-  
   useEffect(() => {
     if (product.flash_sale && product.flash_sale_end) {
       const interval = setInterval(() => {
@@ -123,7 +137,7 @@ const ProductDetails = () => {
 
   if (isLoading) return null;
   if (isError)
-    return <div>{error.message} ||Error loading product details</div>;
+    return <div>{error.message} || Error loading product details</div>;
 
   return (
     <div className="bg-white p-3">
@@ -392,7 +406,7 @@ const ProductDetails = () => {
         </div>
         {/* Tabs */}
         <div className="mt-12" ref={overviewRef}>
-          <div className="flex gap-2 border-t border-l border-r border-gray-300 rounded-[4px] overflow-hidden">
+          <div className="flex gap-2 border-t border-l border-r border-gray-200 rounded-[4px] overflow-hidden">
             {["OVERVIEW", "SPECIFICATIONS", "PRODUCT VIDEOS"].map(
               (tab, idx) => (
                 <div
@@ -485,29 +499,82 @@ const ProductDetails = () => {
               </div>
             )}
             {activeTab === "PRODUCT VIDEOS" && videoUrls.length > 0 && (
-              <div className="flex justify-center">
-                {!isVideoPlaying ? (
-                  <div
-                    className="w-[640px] h-[360px] bg-gray-100 rounded-lg flex items-center justify-center"
-                    onClick={() => setIsVideoPlaying(true)}
-                  >
-                    <div className="w-24 h-24 bg-red-600 rounded-full flex items-center justify-center cursor-pointer">
-                      <div className="w-0 h-0 border-t-[20px] border-t-transparent border-l-[30px] border-l-white border-b-[20px] border-b-transparent ml-2"></div>
+              <div className="flex flex-col justify-center">
+                {videoUrls?.map((url, idx) => {
+                  const youtubeId = getYouTubeId(url);
+                  const thumbnail = youtubeId
+                    ? `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`
+                    : null;
+                  return (
+                    <div
+                      key={idx}
+                      style={{ minWidth: 480, maxWidth: 600 }}
+                      className="flex flex-col items-center"
+                    >
+                      <div className="relative w-[580px] h-[280px] rounded-md bg-gray-100 border border-gray-300 overflow-hidden shadow">
+                        {playingVideoIdx === idx ? (
+                          youtubeId ? (
+                            <iframe
+                              width="100%"
+                              height="100%"
+                              src={`https://www.youtube.com/embed/${youtubeId}?autoplay=1`}
+                              title={`Product video ${idx + 1}`}
+                              frameBorder="0"
+                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                              allowFullScreen
+                            ></iframe>
+                          ) : (
+                            <video
+                              width="100%"
+                              height="100%"
+                              controls
+                              autoPlay
+                              onEnded={() => setPlayingVideoIdx(-1)}
+                            >
+                              <source src={url} />
+                              Your browser does not support the video tag.
+                            </video>
+                          )
+                        ) : (
+                          <div
+                            className="group relative w-full h-full cursor-pointer"
+                            onClick={() => setPlayingVideoIdx(idx)}
+                            title="Play video"
+                          >
+                            {youtubeId && (
+                              <img
+                                src={thumbnail}
+                                alt={`Video thumbnail ${idx + 1}`}
+                                className="w-full h-full object-cover"
+                              />
+                            )}
+                            {!youtubeId && (
+                              <div className="w-full h-full flex items-center justify-center bg-gray-200">
+                                <span className="text-gray-500">Video</span>
+                              </div>
+                            )}
+                            <div className="absolute inset-0 flex items-center justify-center">
+                              <div className="w-16 h-16 bg-red-600/90 rounded-full flex items-center justify-center shadow-lg">
+                                <div className="w-0 h-0 border-t-[16px] border-t-transparent border-l-[24px] border-l-white border-b-[16px] border-b-transparent ml-2"></div>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                      <div className="mt-2 text-center">
+                        {playingVideoIdx === idx && (
+                          <button
+                            className="block cursor-pointer my-2 text-xs text-red-600 mt-1 underline"
+                            onClick={() => setPlayingVideoIdx(-1)}
+                            type="button"
+                          >
+                            Close Video
+                          </button>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                ) : (
-                  <div className="w-[640px] h-[360px] rounded-lg overflow-hidden">
-                    <iframe
-                      width="100%"
-                      height="100%"
-                      src={videoUrls[0]}
-                      title="Product video"
-                      frameBorder="0"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                    ></iframe>
-                  </div>
-                )}
+                  );
+                })}
               </div>
             )}
           </div>

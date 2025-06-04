@@ -9,16 +9,6 @@ import Button from "../Button/Button";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 
-// Helper to validate only YouTube URLs (returns true if empty or valid YouTube URL)
-const validateYouTubeUrls = (value) => {
-  if (!value || value.trim() === "") return true; // not required
-  const urls = value.split(",").map((v) => v.trim());
-  // YouTube patterns: youtu.be/xxxx  youtube.com/watch?v=xxxx  youtube.com/embed/xxxx
-  const ytPattern =
-    /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/(embed\/|watch\?v=)?[A-Za-z0-9\-_]{11,}/;
-  return urls.every((url) => url === "" || ytPattern.test(url));
-};
-
 const ProductAddForm = () => {
   const axiosPublicUrl = useAxiospublic();
   const [images, setImages] = useState([]);
@@ -26,18 +16,11 @@ const ProductAddForm = () => {
   const [subCategories, setSubCategories] = useState([]);
   const [brands, setBrands] = useState([]);
   const [taxes, setTaxes] = useState([]);
+
   const [productOptions, setProductOptions] = useState([]);
   const [softwareOptions, setSoftwareOptions] = useState([]);
 
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    control,
-    watch,
-    reset,
-    formState: { errors },
-  } = useForm({
+  const { register, handleSubmit, setValue, control, watch, reset } = useForm({
     defaultValues: {
       priceShowHide: 0,
       productOptionShowHide: 0,
@@ -197,6 +180,7 @@ const ProductAddForm = () => {
       // Reset the form after successful submission
       reset();
       setImages([]); // Clear the images
+      // In your onSubmit function after reset():
       setValue("productOptions", []);
       setValue("softwareOptions", []);
 
@@ -252,19 +236,13 @@ const ProductAddForm = () => {
         <div className="col-span-1 space-y-3 sm:space-y-4">
           {/* productName */}
           <input
-            {...register("productName", {
-              required: "Product Name is required",
-            })}
+            {...register("productName", { required: true })}
             placeholder="Product Name"
             className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
           />
-          {errors.productName && (
-            <p className="text-red-500">{errors.productName.message}</p>
-          )}
-
           {/* brandName */}
           <select
-            {...register("brandName", { required: "Brand is required" })}
+            {...register("brandName", { required: true })}
             className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
           >
             <option value="" className="hover:bg-amber-200">
@@ -276,13 +254,9 @@ const ProductAddForm = () => {
               </option>
             ))}
           </select>
-          {errors.brandName && (
-            <p className="text-red-500">{errors.brandName.message}</p>
-          )}
-
           {/* category */}
           <select
-            {...register("category", { required: "Category is required" })}
+            {...register("category", { required: true })}
             className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
           >
             <option value="" className="hover:bg-amber-200">
@@ -297,15 +271,9 @@ const ProductAddForm = () => {
               </option>
             ))}
           </select>
-          {errors.category && (
-            <p className="text-red-500">{errors.category.message}</p>
-          )}
-
           {/*  subCategory*/}
           <select
-            {...register("subCategory", {
-              required: "Sub Category is required",
-            })}
+            {...register("subCategory", { required: true })}
             className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
           >
             <option value="">Select Sub Category</option>
@@ -320,48 +288,32 @@ const ProductAddForm = () => {
                 </option>
               ))}
           </select>
-          {errors.subCategory && (
-            <p className="text-red-500">{errors.subCategory.message}</p>
-          )}
 
           {/*SKU / Unique Code  */}
           <input
-            {...register("sku", { required: "SKU is required" })}
+            {...register("sku", { required: true })}
             placeholder="SKU / Unique Code"
             className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
           />
-          {errors.sku && <p className="text-red-500">{errors.sku.message}</p>}
-
           {/*videoUrls  */}
           <input
-            {...register("videoUrls", {
-              validate: (value) =>
-                validateYouTubeUrls(value) ||
-                "Only YouTube URLs are allowed (comma separated)",
-            })}
+            {...register("videoUrls")}
             placeholder="YouTube Video URLs (comma separated)"
             className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
           />
-          {errors.videoUrls && (
-            <p className="text-red-500">{errors.videoUrls.message}</p>
-          )}
-
-          {/* Condition select */}
+          {/* Moved Condition select here */}
           <select
-            {...register("condition", { required: "Condition is required" })}
+            {...register("condition", { required: true })}
             className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
           >
             <option value="">Condition</option>
             <option value="new">New</option>
             <option value="used">Used</option>
           </select>
-          {errors.condition && (
-            <p className="text-red-500">{errors.condition.message}</p>
-          )}
 
-          {/* Tax select */}
+          {/* Moved Tax select here */}
           <select
-            {...register("tax", { required: "Tax is required" })}
+            {...register("tax", { required: true })}
             className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
           >
             <option value="">Select Tax</option>
@@ -374,7 +326,6 @@ const ProductAddForm = () => {
               </option>
             ))}
           </select>
-          {errors.tax && <p className="text-red-500">{errors.tax.message}</p>}
         </div>
 
         {/* Third Column */}
@@ -421,13 +372,10 @@ const ProductAddForm = () => {
           />
           {/* Price and other fields remain the same */}
           <input
-            {...register("price", { required: "Price is required" })}
+            {...register("price", { required: true })}
             placeholder="Price"
             className="w-full input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
           />
-          {errors.price && (
-            <p className="text-red-500">{errors.price.message}</p>
-          )}
           <div className="flex items-center gap-2">
             <input
               type="checkbox"
@@ -500,6 +448,8 @@ const ProductAddForm = () => {
           <div className="flex items-center gap-2">
             <input
               type="checkbox"
+              // {...register("productOptionShowHide")}
+              // value="1"
               checked={watch("productOptionShowHide") === 1}
               onChange={(e) =>
                 setValue("productOptionShowHide", e.target.checked ? 1 : 0)
@@ -606,6 +556,11 @@ const ProductAddForm = () => {
               />
             )}
           />
+          {/* <textarea
+              {...register("warrantyInfo")}
+              placeholder="Warranty Information"
+              className="input border border-gray-600 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
+            /> */}{" "}
         </div>
         <div className="col-span-1 space-y-4">
           <Button text={"Submit Product"} />

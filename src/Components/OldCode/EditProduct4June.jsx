@@ -12,16 +12,6 @@ import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 const MySwal = withReactContent(Swal);
 
-// Helper to validate only YouTube URLs (returns true if empty or valid YouTube URL)
-const validateYouTubeUrls = (value) => {
-  if (!value || value.trim() === "") return true; // not required
-  const urls = value.split(",").map((v) => v.trim());
-  // YouTube patterns: youtu.be/xxxx  youtube.com/watch?v=xxxx  youtube.com/embed/xxxx
-  const ytPattern =
-    /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/(embed\/|watch\?v=)?[A-Za-z0-9\-_]{11,}/;
-  return urls.every((url) => url === "" || ytPattern.test(url));
-};
-
 const UpdateProductForm = () => {
   const { id } = useParams();
   const axiosPublicUrl = useAxiospublic();
@@ -33,17 +23,10 @@ const UpdateProductForm = () => {
   const [productOptions, setProductOptions] = useState([]);
   const [softwareOptions, setSoftwareOptions] = useState([]);
   const [taxes, setTaxes] = useState([]);
+
   const navigate = useNavigate();
 
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    control,
-    watch,
-    reset,
-    formState: { errors },
-  } = useForm({
+  const { register, handleSubmit, setValue, control, watch, reset } = useForm({
     defaultValues: {
       priceShowHide: 0,
       productOptionShowHide: 0,
@@ -68,6 +51,7 @@ const UpdateProductForm = () => {
         console.error("Error fetching products:", err);
       }
     };
+
     fetchProducts();
   }, []);
 
@@ -86,6 +70,7 @@ const UpdateProductForm = () => {
         console.error("Error fetching software:", err);
       }
     };
+
     fetchSoftware();
   }, []);
 
@@ -150,21 +135,6 @@ const UpdateProductForm = () => {
     };
     fetchProductData();
   }, []);
-  
-  useEffect(() => {
-    if (productData && productData.sub_category && subCategories.length > 0) {
-      // The current subcategory value as string
-      const subCatValue =
-        typeof productData.sub_category === "string"
-          ? productData.sub_category
-          : JSON.stringify({
-              id: productData.sub_category.id,
-              slug: productData.sub_category.slug,
-            });
-
-      setValue("subCategory", subCatValue);
-    }
-  }, [productData, subCategories, setValue]);
 
   useEffect(() => {
     if (productData) {
@@ -208,13 +178,6 @@ const UpdateProductForm = () => {
         tax: productData.tax || null,
         isStock: productData.isStock !== undefined ? productData.isStock : true,
         sale: productData.sale !== undefined ? productData.sale : false,
-        clearance:
-          productData.clearance === 1 || productData.clearance === true,
-        flashSale:
-          productData.flash_sale === 1 || productData.flash_sale === true,
-        flashSaleEnd: productData.flash_sale_end
-          ? new Date(productData.flash_sale_end).toISOString().slice(0, 16)
-          : "",
       });
 
       setImages(
@@ -303,10 +266,6 @@ const UpdateProductForm = () => {
       isStock:
         data.isStock === true || data.isStock === "true" || data.isStock === 1,
       sale: data.sale === true || data.sale === "true" || data.sale === 1,
-      flashSale:
-        data.flashSale === true ||
-        data.flashSale === "true" ||
-        data.flashSale === 1,
     };
 
     const formData = new FormData();
@@ -402,19 +361,13 @@ const UpdateProductForm = () => {
         <div className="col-span-1 space-y-4">
           {/* productName */}
           <input
-            {...register("productName", {
-              required: "Product Name is required",
-            })}
+            {...register("productName")}
             placeholder="Product Name"
             className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500"
           />
-          {errors.productName && (
-            <p className="text-red-500">{errors.productName.message}</p>
-          )}
-
           {/*  brandName*/}
           <select
-            {...register("brandName", { required: "Brand is required" })}
+            {...register("brandName")}
             className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500"
           >
             <option value="" className="hover:bg-amber-200">
@@ -426,13 +379,9 @@ const UpdateProductForm = () => {
               </option>
             ))}
           </select>
-          {errors.brandName && (
-            <p className="text-red-500">{errors.brandName.message}</p>
-          )}
-
           {/*category  */}
           <select
-            {...register("category", { required: "Category is required" })}
+            {...register("category")}
             className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500"
           >
             <option value="" className="hover:bg-amber-200">
@@ -447,15 +396,9 @@ const UpdateProductForm = () => {
               </option>
             ))}
           </select>
-          {errors.category && (
-            <p className="text-red-500">{errors.category.message}</p>
-          )}
-
           {/* subCategory */}
           <select
-            {...register("subCategory", {
-              required: "Sub Category is required",
-            })}
+            {...register("subCategory")}
             className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500"
           >
             <option value="">Select Sub Category</option>
@@ -470,47 +413,28 @@ const UpdateProductForm = () => {
                 </option>
               ))}
           </select>
-          {errors.subCategory && (
-            <p className="text-red-500">{errors.subCategory.message}</p>
-          )}
-
           {/* SKU / Unique Code */}
           <input
-            {...register("sku", { required: "SKU is required" })}
+            {...register("sku")}
             placeholder="SKU / Unique Code"
             className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500"
           />
-          {errors.sku && <p className="text-red-500">{errors.sku.message}</p>}
-
           {/* videoUrls */}
           <input
-            {...register("videoUrls", {
-              validate: (value) =>
-                validateYouTubeUrls(value) ||
-                "Only YouTube URLs are allowed (comma separated)",
-            })}
+            {...register("videoUrls")}
             placeholder="YouTube Video URLs (comma separated)"
             className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500"
           />
-          {errors.videoUrls && (
-            <p className="text-red-500">{errors.videoUrls.message}</p>
-          )}
 
-          <select
-            {...register("condition", { required: "Condition is required" })}
-            className="input"
-          >
+          <select {...register("condition")} className="input">
             <option value="">Condition</option>
             <option value="new">New</option>
             <option value="used">Used</option>
           </select>
-          {errors.condition && (
-            <p className="text-red-500">{errors.condition.message}</p>
-          )}
 
           {/* Tax selection */}
           <select
-            {...register("tax", { required: "Tax is required" })}
+            {...register("tax")}
             className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
           >
             <option value="">Select Tax</option>
@@ -523,7 +447,6 @@ const UpdateProductForm = () => {
               </option>
             ))}
           </select>
-          {errors.tax && <p className="text-red-500">{errors.tax.message}</p>}
         </div>
         {/* Third Column */}
         <div className="col-span-1 space-y-4">
@@ -591,13 +514,10 @@ const UpdateProductForm = () => {
           />
           {/* price */}
           <input
-            {...register("price", { required: "Price is required" })}
+            {...register("price")}
             placeholder="Price"
             className="w-full input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500"
           />
-          {errors.price && (
-            <p className="text-red-500">{errors.price.message}</p>
-          )}
           {/* NEW FIELD: Price Show/Hide */}
           <div className="flex items-center gap-2">
             <input
