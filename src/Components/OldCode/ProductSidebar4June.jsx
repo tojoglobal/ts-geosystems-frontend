@@ -49,35 +49,45 @@ const ProductSidebar = () => {
     "/api/brand/popular-photo"
   );
 
-  // Main fix: Only open "Shop by Brand" if a brand is selected, or if user explicitly toggles it.
   useEffect(() => {
     let catSlug =
       (location.pathname.startsWith("/products/") &&
         breadcrumb?.category?.slug) ||
       category;
 
-    let newOpenSections = {};
+    if (catSlug && categoriesData?.categories) {
+      const foundCategory = categoriesData.categories.find(
+        (cat) => cat.slug_name === catSlug
+      );
+      if (foundCategory) {
+        setOpenSections({
+          [foundCategory.category_name]: true,
+          "Shop by Brand": true,
+        });
+      }
+    }
+    if (!catSlug) setOpenSections({ "Shop by Brand": true });
+  }, [category, categoriesData, breadcrumb?.category, location.pathname]);
+
+  useEffect(() => {
+    let catSlug =
+      (location.pathname.startsWith("/products/") &&
+        breadcrumb?.category?.slug) ||
+      category;
 
     if (catSlug && categoriesData?.categories) {
       const foundCategory = categoriesData.categories.find(
         (cat) => cat.slug_name === catSlug
       );
       if (foundCategory) {
-        newOpenSections[foundCategory.category_name] = true;
+        setOpenSections((prev) => ({
+          ...prev,
+          [foundCategory.category_name]: true,
+          "Shop by Brand": true,
+        }));
       }
     }
-    // Only open 'Shop by Brand' if a brand is selected
-    if (brand) {
-      newOpenSections["Shop by Brand"] = true;
-    }
-    setOpenSections(newOpenSections);
-  }, [
-    category,
-    categoriesData,
-    breadcrumb?.category,
-    location.pathname,
-    brand,
-  ]);
+  }, [category, categoriesData, breadcrumb?.category, location.pathname]);
 
   const toggleSection = (label) => {
     setOpenSections((prev) => ({
@@ -151,18 +161,17 @@ const ProductSidebar = () => {
                     openSections[item.label]
                       ? "border-b-2 border-[#e62245]"
                       : ""
+                    // } ${
+                    //   activeCategorySlug === item.categorySlug
+                    //     ? "text-[#e62245]"
+                    //     : ""
                   }`}
                 >
                   {item.label}
                   <button
                     onClick={(e) => {
                       e.preventDefault();
-                      // For Shop by Brand: only allow manual toggle
-                      if (item.label === "Shop by Brand") {
-                        toggleSection(item.label);
-                      } else {
-                        toggleSection(item.label);
-                      }
+                      toggleSection(item.label);
                     }}
                     className="cursor-pointer"
                   >
@@ -173,25 +182,16 @@ const ProductSidebar = () => {
                     )}
                   </button>
                 </Link>
-                {/* Only allow Shop by Brand to open if toggled or if a brand is selected */}
+                {/* Apply animation classes here */}
                 <div
                   ref={(el) => (subcategoryRefs.current[item.label] = el)}
                   style={{
-                    maxHeight:
-                      openSections[item.label] &&
-                      (item.label !== "Shop by Brand" ||
-                        openSections["Shop by Brand"])
-                        ? `${
-                            subcategoryRefs.current[item.label]?.scrollHeight
-                          }px`
-                        : "0",
+                    maxHeight: openSections[item.label]
+                      ? `${subcategoryRefs.current[item.label]?.scrollHeight}px`
+                      : "0",
                   }}
                   className={`overflow-hidden transition-all duration-300 ease-in-out ${
-                    openSections[item.label] &&
-                    (item.label !== "Shop by Brand" ||
-                      openSections["Shop by Brand"])
-                      ? "opacity-100"
-                      : "opacity-0"
+                    openSections[item.label] ? "opacity-100" : "opacity-0"
                   }`}
                 >
                   <div className="bg-[#f6f6f6]">
