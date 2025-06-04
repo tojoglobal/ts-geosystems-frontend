@@ -120,7 +120,7 @@ const UserInbox = () => {
           </p>
         </div>
       ) : (
-        <div>
+        <div className="mx-2 md:mx-0">
           <h2 className="text-[26px] font-light mb-6">Send A Message</h2>
           <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
             {/* Order Selection */}

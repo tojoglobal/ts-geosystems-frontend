@@ -37,7 +37,7 @@ const UserAccountLayout = () => {
           Home
         </Link>
         <span>/</span>
-        <Link to="/account" className="hover:text-crimson-red">
+        <Link to="/user/account/orders" className="hover:text-crimson-red">
           Your Account
         </Link>
         <span>/</span>

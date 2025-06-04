@@ -77,7 +77,7 @@ const RecentlyViewed = () => {
   if (isLoading) return <Loader />;
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-3 mx-2 md:mx-0">
       <div className="flex justify-between items-center">
         <div className="text-sm text-gray-600">
           Showing {(page - 1) * limit + 1} to{" "}

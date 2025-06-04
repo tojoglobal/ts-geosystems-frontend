@@ -616,21 +616,19 @@ const MobileNavbar = () => {
                   className={`overflow-hidden transition-all duration-300 ease-in-out`}
                 >
                   {item.subLinks && item.subLinks.length > 0 && (
-                    <ul className="bg-dark-charcoal text-white text-sm shadow-lg px-4 py-2 space-y-1 rounded-md mt-2">
-                      {" "}
-                      {/* Changed bg and text color */}
+                    <ul className="bg-dark-charcoal text-white text-sm shadow-lg space-y-2 rounded-md mt-2">
                       {item.subLinks.map((sub, i) => (
                         <li
                           key={i}
-                          className="hover:bg-gray-700 hover:shadow-md hover:rounded-md transition-all duration-200 w-full"
+                          className="hover:bg-gray-700 hover:shadow-md hover:rounded-md transition-all duration-200 w-full flex items-center"
                         >
                           <Link
                             to={sub.link}
-                            className="block active:scale-95
-                            transition-transform duration-100 text-base
-                            text-left px-2 py-1.5 rounded-sm border
-                            border-gray-600 mb-1"
-                            onClick={toggleMenu}
+                            className="flex-1 block active:scale-95 transition-transform duration-100 text-base text-left px-2 py-1.5 rounded-sm border border-gray-600 mb-1"
+                            onClick={() => {
+                              setOpenCategory(null);
+                              toggleMenu();
+                            }}
                           >
                             {sub.title}
                           </Link>

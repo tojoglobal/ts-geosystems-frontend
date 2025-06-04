@@ -57,8 +57,6 @@ const AccountSettings = () => {
   }, [UserInfo, reset]);
 
   const onSubmit = async (data) => {
-    console.log(data);
-
     try {
       const response = await axiosPublicUrl.put("/api/updateUserInfo", {
         id: UserInfo.id,
@@ -81,12 +79,10 @@ const AccountSettings = () => {
     }
   };
 
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
+  if (isLoading) return null;
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 mx-2 md:mx-0">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* First Name */}
         <div>
