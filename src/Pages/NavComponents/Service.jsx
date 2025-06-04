@@ -219,7 +219,10 @@ const Service = () => {
       {imagesLoading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-12">
           {[1, 2, 3, 4].map((i) => (
-            <SkeletonLoader key={i} className="w-full h-64 rounded-[4px]" />
+            <SkeletonLoader
+              key={i}
+              className="w-full h-[230px] md:h-64 rounded-[4px]"
+            />
           ))}
         </div>
       ) : (
@@ -230,7 +233,7 @@ const Service = () => {
                 <img
                   src={`${import.meta.env.VITE_OPEN_APIURL}${image.filePath}`}
                   alt={`Service grid image ${image.order}`}
-                  className="w-full h-64 rounded-[4px]"
+                  className="w-full h-[230px] md:h-64 rounded-[4px]"
                 />
               </div>
             ))}
@@ -260,7 +263,10 @@ const Service = () => {
       {imagesLoading ? (
         <div className="space-y-6 mb-12">
           {[1, 2].map((i) => (
-            <SkeletonLoader key={i} className="w-full h-[490px] rounded-sm" />
+            <SkeletonLoader
+              key={i}
+              className="w-full h-[230px] md:h-[490px] rounded-sm"
+            />
           ))}
         </div>
       ) : (
@@ -271,7 +277,7 @@ const Service = () => {
                 key={image.order}
                 src={`${import.meta.env.VITE_OPEN_APIURL}${image.filePath}`}
                 alt={`Service banner ${image.order}`}
-                className="w-full h-[490px] rounded-sm"
+                className="w-full h-[230px] md:h-[490px] rounded-sm"
               />
             ))}
           </div>

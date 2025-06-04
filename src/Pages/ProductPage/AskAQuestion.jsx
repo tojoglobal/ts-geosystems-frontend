@@ -38,7 +38,7 @@ const AskAQuestion = ({ productName, productId }) => {
   };
 
   return (
-    <div className="drawer drawer-end">
+    <div className="drawer drawer-end z-50">
       <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content -rotate-90 fixed top-1/2 -right-10 transform -translate-y-1/2">
         <label

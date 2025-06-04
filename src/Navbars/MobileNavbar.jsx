@@ -118,7 +118,7 @@ const MobileNavbar = () => {
   // Dynamic brands data
   const dynamicBrands = brandsData?.map((brand) => ({
     title: brand.name,
-    link: `/${brand.slug}`,
+    link: `brand/${brand.slug}`,
   })) || [{ title: "Leica Geosystems" }];
 
   // Main menu (static)
@@ -482,7 +482,7 @@ const MobileNavbar = () => {
           <div className="border border-crimson-red rounded-sm mb-2 px-3 py-1">
             <span className="text-base font-semibold">SHOP BY CATEGORY</span>
           </div>
-          <ul className="space-y-2 mb-6">
+          <ul className="space-y-2 mt-4 mb-6">
             {dynamicCategories.map((item, idx) => (
               <li key={idx} className="relative group">
                 <div className="flex justify-between items-center text-white">
@@ -554,7 +554,7 @@ const MobileNavbar = () => {
           <div className="border border-crimson-red rounded-sm mb-2 px-3 py-1">
             <span className="text-base font-semibold">SHOP BY BRAND</span>
           </div>
-          <ul className="space-y-2 mb-6">
+          <ul className="space-y-2 mt-4 mb-6">
             {dynamicBrands.map((item, idx) => (
               <li key={idx} className="text-white">
                 {" "}
@@ -569,12 +569,10 @@ const MobileNavbar = () => {
           <div className="border border-crimson-red rounded-sm mb-2 px-3 py-1">
             <span className="text-base font-semibold">MAIN MENU</span>
           </div>
-          <ul className="space-y-2 mb-6">
+          <ul className="space-y-3 mt-4 mb-6">
             {mainMenu.map((item, idx) => (
               <li key={idx} className="relative group">
-                <div className="flex justify-between items-center text-white">
-                  {" "}
-                  {/* Set text color here */}
+                <div className="flex justify-between uppercase items-center text-white">
                   {item.link ? (
                     <Link
                       to={item.link}
@@ -628,7 +626,10 @@ const MobileNavbar = () => {
                         >
                           <Link
                             to={sub.link}
-                            className="block text-center py-1"
+                            className="block active:scale-95
+                            transition-transform duration-100 text-base
+                            text-left px-2 py-1.5 rounded-sm border
+                            border-gray-600 mb-1"
                             onClick={toggleMenu}
                           >
                             {sub.title}

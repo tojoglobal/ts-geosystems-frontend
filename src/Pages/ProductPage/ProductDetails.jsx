@@ -140,13 +140,13 @@ const ProductDetails = () => {
     return <div>{error.message} || Error loading product details</div>;
 
   return (
-    <div className="bg-white p-3">
+    <div className="bg-white p-2 sm:p-3">
       <div className="max-w-[1370px] mx-auto">
         <div className="flex flex-col md:flex-row gap-5">
           {/* Image Gallery */}
-          <div className="flex flex-col items-start gap-2 relative">
+          <div className="flex flex-col items-start gap-2 relative w-full md:w-[550px]">
             {/* Main Image */}
-            <div className="md:w-[550px] md:h-[550px] overflow-hidden rounded">
+            <div className="w-full h-[300px] sm:h-[400px] md:w-[550px] md:h-[550px] overflow-hidden rounded bg-white">
               {selectedImage ? (
                 <img
                   src={`${import.meta.env.VITE_OPEN_APIURL}${selectedImage}`}
@@ -161,7 +161,7 @@ const ProductDetails = () => {
             </div>
             {/* Thumbnails */}
             {imageUrls.length > 1 && (
-              <div className="flex justify-center gap-2 mt-2 w-[550px]">
+              <div className="flex justify-center gap-2 mt-2 w-full">
                 {imageUrls.map((img, index) => (
                   <div
                     key={index}
@@ -169,7 +169,7 @@ const ProductDetails = () => {
                     className={`p-1 rounded cursor-pointer hover:ring ring-black ${
                       selectedImage === img ? "ring ring-black" : ""
                     }`}
-                    style={{ width: "70px", height: "70px" }}
+                    style={{ width: "60px", height: "60px" }}
                   >
                     <img
                       src={`${import.meta.env.VITE_OPEN_APIURL}${img}`}
@@ -182,8 +182,8 @@ const ProductDetails = () => {
             )}
           </div>
           {/* Product Info */}
-          <div className="flex-1">
-            <h1 className="text-[28px] font-semibold text-[#333] mb-4">
+          <div className="flex-1 w-full">
+            <h1 className="text-[22px] sm:text-[28px] font-semibold text-[#333] mb-4 break-words">
               {product.product_name}
             </h1>
             {product.flash_sale === 1 &&
@@ -257,14 +257,14 @@ const ProductDetails = () => {
               {product.brand_name || "Brand"}
             </p>
             <div className="mb-2">
-              <div className="text-[24px] font-semibold text-[#222]">
+              <div className="text-[20px] sm:text-[24px] font-semibold text-[#222]">
                 Price:{" "}
                 <span className="text-[#111]">
                   ৳{parsePrice(product.price)}.00{" "}
                   <span className="text-sm text-gray-500">(Ex. VAT)</span>
                 </span>
               </div>
-              <div className="text-[24px] font-semibold text-[#999] line-through">
+              <div className="text-[18px] sm:text-[24px] font-semibold text-[#999] line-through">
                 Price:{" "}
                 <span className="text-[#999]">
                   ৳{(parsePrice(product.price) * 1.2).toFixed(2)}{" "}
@@ -320,20 +320,20 @@ const ProductDetails = () => {
               (priceOption === 0 ? (
                 <button
                   onClick={handleAddToCart}
-                  className="cursor-pointer overflow-hidden group text-white px-18 font-semibold py-[4px] rounded-[3px] text-[17px] bg-[#e62245] hover:bg-red-800"
+                  className="cursor-pointer overflow-hidden group text-white px-8 font-semibold py-[6px] rounded-[3px] text-[17px] bg-[#e62245] hover:bg-red-800 w-full sm:w-auto"
                 >
                   <span className="relative z-10">ADD TO CART</span>
                 </button>
               ) : (
                 <Link to="/contact-us">
-                  <button className="cursor-pointer overflow-hidden group text-white px-18 font-semibold py-[4px] rounded-[3px] text-[17px] bg-[#e62245] hover:bg-red-800">
+                  <button className="cursor-pointer overflow-hidden group text-white px-8 font-semibold py-[6px] rounded-[3px] text-[17px] bg-[#e62245] hover:bg-red-800 w-full sm:w-auto">
                     <span className="relative z-10">GET QUOTATION</span>
                   </button>
                 </Link>
               ))}
 
             <div className="mt-6">
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <span className="font-medium text-[#8d7f90]">Share:</span>
                 <div className="flex items-center gap-[6px]">
                   {/* Facebook */}
@@ -405,19 +405,19 @@ const ProductDetails = () => {
           </div>
         </div>
         {/* Tabs */}
-        <div className="mt-12" ref={overviewRef}>
-          <div className="flex gap-2 border-t border-l border-r border-gray-200 rounded-[4px] overflow-hidden">
+        <div className="mt-8 sm:mt-12" ref={overviewRef}>
+          <div className="flex gap-2 border-t border-l border-r border-gray-200 rounded-[4px] overflow-hidden text-xs sm:text-base">
             {["OVERVIEW", "SPECIFICATIONS", "PRODUCT VIDEOS"].map(
               (tab, idx) => (
                 <div
                   key={tab}
-                  className={`relative group px-4 py-2 cursor-pointer ${
+                  className={`relative group px-2 sm:px-4 py-2 cursor-pointer ${
                     idx === 1 ? "border-x border-gray-300" : ""
                   }`}
                   onClick={() => setActiveTab(tab)}
                 >
                   <span
-                    className={`text-[20px] font-semibold transition-colors duration-200 ${
+                    className={`font-semibold transition-colors duration-200 ${
                       activeTab === tab
                         ? "text-[#e62245]"
                         : "text-gray-600 group-hover:text-[#e62245]"
@@ -425,24 +425,19 @@ const ProductDetails = () => {
                   >
                     {tab}
                   </span>
-                  <span
-                    className={`absolute ${
-                      idx === 2 ? "-left-2" : "left-0"
-                    } -bottom-[3px] h-[6px] bg-[#e62245] transition-all duration-300 w-0 group-hover:w-full`}
-                  />
                 </div>
               )
             )}
           </div>
-          <div className="border-2 border-[#e5e5e5] rounded-[3px] p-4">
+          <div className="border-2 border-[#e5e5e5] rounded-[3px] p-2 sm:p-4">
             {activeTab === "OVERVIEW" && (
               <div
-                className="text-gray-700 leading-relaxed"
+                className="text-gray-700 leading-relaxed break-words"
                 dangerouslySetInnerHTML={{ __html: product.product_overview }}
               />
             )}
             {activeTab === "SPECIFICATIONS" && (
-              <div className="border rounded-lg overflow-hidden m-4">
+              <div className="border rounded-lg overflow-x-auto m-2 sm:m-4">
                 <table className="w-full">
                   <thead>
                     <tr className="bg-gray-50">
@@ -508,11 +503,15 @@ const ProductDetails = () => {
                   return (
                     <div
                       key={idx}
-                      style={{ minWidth: 480, maxWidth: 600 }}
-                      className="flex flex-col items-center my-2"
+                      className="flex flex-col items-center my-2 w-full"
+                      style={{
+                        minWidth: 0,
+                        maxWidth: "640px",
+                        width: "100%",
+                      }}
                     >
                       <div className="flex justify-center w-full">
-                        <div className="relative w-[580px] h-[280px] rounded-md bg-gray-100 border border-gray-300 overflow-hidden shadow flex justify-center items-center">
+                        <div className="relative w-full aspect-video rounded-md bg-gray-100 border border-gray-300 overflow-hidden shadow flex justify-center items-center max-w-[640px]">
                           {playingVideoIdx === idx ? (
                             youtubeId ? (
                               <iframe
@@ -554,8 +553,8 @@ const ProductDetails = () => {
                                 </div>
                               )}
                               <div className="absolute inset-0 flex items-center justify-center">
-                                <div className="w-16 h-16 bg-red-600/90 rounded-full flex items-center justify-center shadow-lg">
-                                  <div className="w-0 h-0 border-t-[16px] border-t-transparent border-l-[24px] border-l-white border-b-[16px] border-b-transparent ml-2"></div>
+                                <div className="w-12 h-12 sm:w-16 sm:h-16 bg-red-600/90 rounded-full flex items-center justify-center shadow-lg">
+                                  <div className="w-0 h-0 border-t-[12px] sm:border-t-[16px] border-t-transparent border-l-[18px] sm:border-l-[24px] border-l-white border-b-[12px] sm:border-b-[16px] border-b-transparent ml-2"></div>
                                 </div>
                               </div>
                             </div>
