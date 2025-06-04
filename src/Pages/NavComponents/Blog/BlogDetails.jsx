@@ -11,6 +11,7 @@ import RelatedArticles from "./RelatedArticles";
 import BlogSearch from "./BlogSearch";
 import useDataQuery from "../../../utils/useDataQuery";
 import BlogContentWithImages from "./BlogContentWithImages";
+import AudioPlayer, { getDescriptionTextFromHtml } from "./AudioPlayer";
 
 const SocialShareButtons = ({ blogUrl, blogTitle }) => {
   const shareButtons = [
@@ -186,6 +187,7 @@ const BlogDetails = () => {
             · 5 minute read
           </p>
         </div>
+        <AudioPlayer text={getDescriptionTextFromHtml(blog.content || "")} />
         <BlogContentWithImages blog={blog} middleImages={middleImages} />
         {/* Tags */}
         {tags.length > 0 && (
