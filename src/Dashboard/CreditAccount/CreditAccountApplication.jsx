@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useRef, useState } from "react";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
-import Swal from "sweetalert2";
+import useToastSwal from "../../Hooks/useToastSwal";
 
 // Utility to merge custom label focus with tailwind/peer
 function focusInputById(id) {
@@ -50,6 +50,7 @@ const defaultValues = {
 };
 
 const CreditAccountApplication = () => {
+  const showToast = useToastSwal();
   const axiosPublicUrl = useAxiospublic();
   const fileInputRef = useRef();
   const [selectedFiles, setSelectedFiles] = useState([]);
@@ -83,26 +84,20 @@ const CreditAccountApplication = () => {
           "Content-Type": "multipart/form-data",
         },
       });
-      Swal.fire({
-        title: "Success",
-        text: response.data?.message || "Application submitted!",
-        icon: "success",
-        timer: 2000,
-        showConfirmButton: false,
-      });
+      showToast(
+        "success",
+        "success",
+        response.data?.message || "Application submitted!"
+      );
       reset();
       setSelectedFiles([]);
       if (fileInputRef.current) fileInputRef.current.value = "";
     } catch (error) {
-      console.log(error);
-      Swal.fire({
-        title: "Error",
-        text:
-          error?.response?.data?.message ||
-          error.message ||
-          "An error occurred.",
-        icon: "error",
-      });
+      showToast(
+        "error",
+        "Error",
+        error?.response?.data?.message || error.message || "An error occurred."
+      );
     }
   };
 
