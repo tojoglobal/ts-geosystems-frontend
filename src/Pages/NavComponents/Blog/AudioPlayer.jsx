@@ -66,8 +66,8 @@ function formatSeconds(sec) {
   return `${m}:${s.toString().padStart(2, "0")}`;
 }
 
-const estimateDuration = (txt, speed = 1) => {
-  const wpm = 150 * speed;
+const estimateDuration = (txt, rate = 1) => {
+  const wpm = 150 * rate;
   const words = txt ? txt.trim().split(/\s+/).length : 0;
   return words > 0 ? Math.ceil((words / wpm) * 60) : 0;
 };
@@ -103,13 +103,16 @@ export function getDescriptionTextFromHtml(html) {
   return tempDiv.textContent || tempDiv.innerText || "";
 }
 
+const speedSteps = [1, 1.5, 2];
+
 const AudioPlayer = ({ text }) => {
   const { supported, voices } = useSpeechSynthesis();
   const [isPlaying, setIsPlaying] = useState(false);
   const [charIndex, setCharIndex] = useState(0);
   const [position, setPosition] = useState(0);
   const [duration, setDuration] = useState(0);
-  const speed = 1;
+  const [speedIdx, setSpeedIdx] = useState(0); // index of speedSteps
+  const speed = speedSteps[speedIdx];
 
   const selectedVoice =
     voices.find(
@@ -130,7 +133,7 @@ const AudioPlayer = ({ text }) => {
     setIsPlaying(false);
     setDuration(estimateDuration(text, speed));
     window.speechSynthesis.cancel();
-  }, [text]);
+  }, [text, speed]);
 
   useEffect(() => {
     return () => {
@@ -195,6 +198,11 @@ const AudioPlayer = ({ text }) => {
     setTimeout(() => handlePlay(), 100);
   };
 
+  const handleCycleSpeed = () => {
+    let nextIdx = (speedIdx + 1) % speedSteps.length;
+    setSpeedIdx(nextIdx);
+  };
+
   if (!supported) {
     return (
       <div className="my-4 p-2 bg-red-100 text-red-700 rounded">
@@ -246,16 +254,22 @@ const AudioPlayer = ({ text }) => {
       >
         Listen to article
       </div>
-      <div
+      <button
+        onClick={handleCycleSpeed}
+        aria-label="Change speed"
         style={{
           minWidth: 36,
           textAlign: "center",
           color: "#222",
           fontSize: 15,
+          fontWeight: 600,
+          background: "none",
+          border: "none",
+          cursor: "pointer",
         }}
       >
-        1x
-      </div>
+        {speed}x
+      </button>
       <div
         style={{
           display: "flex",
