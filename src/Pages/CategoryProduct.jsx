@@ -24,6 +24,12 @@ const sortOptions = [
   { label: "Z TO A", value: "name_desc" },
 ];
 
+// Utility to strip HTML tags (including <p>)
+const stripHtml = (html) => {
+  if (!html) return "";
+  return html.replace(/<[^>]+>/g, "");
+};
+
 const CategoryProduct = () => {
   const axiosPublicUrl = useAxiospublic();
   const dispatch = useDispatch();
@@ -259,6 +265,13 @@ const CategoryProduct = () => {
 
             const isHovered = hoveredProductId === product.id;
             const displayImage = isHovered ? secondImage : firstImage;
+
+            // Strip <p> and other tags from description and slice
+            const desc = stripHtml(product?.product_overview || "").slice(
+              0,
+              400
+            );
+
             return (
               <div
                 key={product.id}
@@ -324,7 +337,7 @@ const CategoryProduct = () => {
                 )}
                 {/* Product Details - Different structure for list vs grid */}
                 {viewMode === "list" ? (
-                  <div className="w-full md:w-2/3 flex flex-col justify-between">
+                  <div className="w-full md:w-2/3 flex flex-col gap-2">
                     <div>
                       {/* <div className="text-xs text-gray-600">
                         {product.brand_name} | Sku: {product.sku}
@@ -339,28 +352,14 @@ const CategoryProduct = () => {
                           {product.product_name}
                         </h3>
                       </Link>
-                      {/* with image */}
-                      {/* <p className="text-sm text-[#2f2f2b] mt-2">
-                        <span
-                          dangerouslySetInnerHTML={{
-                            __html: `${product.product_overview?.slice(
-                              0,
-                              400
-                            )}${
-                              product.product_overview?.length > 400
-                                ? "..."
-                                : ""
-                            }`,
-                          }}
-                        />
-                      </p> */}
-                      <p className="text-sm text-[#2f2f2b] mt-2">
-                        {`${product.product_overview
-                          ?.replace(/<\/?[^>]+(>|$)/g, "")
-                          .slice(0, 400)}${
-                          product.product_overview?.length > 400 ? "..." : ""
-                        }`}
-                      </p>
+                      {/* Description, plain text, no <p> tags, compact */}
+                      <div className="text-sm text-[#2f2f2b] mt-1">
+                        {desc}
+                        {product.product_overview &&
+                        product.product_overview.length > 400
+                          ? "..."
+                          : ""}
+                      </div>
                     </div>
                     <div>
                       <div className="flex flex-col">

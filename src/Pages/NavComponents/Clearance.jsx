@@ -15,6 +15,12 @@ import { slugify } from "../../utils/slugify";
 import { getProductType } from "../../utils/productOption";
 import useToastSwal from "../../Hooks/useToastSwal";
 
+// Utility to strip HTML tags (including <p>)
+const stripHtml = (html) => {
+  if (!html) return "";
+  return html.replace(/<[^>]+>/g, "");
+};
+
 const sortOptions = [
   "FEATURED ITEMS",
   "NEWEST ITEMS",
@@ -186,12 +192,18 @@ const Clearance = () => {
             const price = parseFloat(product.price) || 0;
             const priceExVat = price * (1 + (taxData?.value || 0) / 100);
 
+            // Strip <p> and other tags from description and slice
+            const desc = stripHtml(product?.product_overview || "").slice(
+              0,
+              300
+            );
+
             return (
               <div
                 key={product.id}
                 className={`mx-1 relative ${
                   viewMode === "list"
-                    ? "flex flex-col md:flex-row gap-8"
+                    ? "flex flex-col md:flex-row gap-4 py-4"
                     : "flex flex-col h-full"
                 }`}
               >
@@ -208,24 +220,103 @@ const Clearance = () => {
                   </div>
                 )}
                 {viewMode === "list" ? (
-                  <Link
-                    onClick={() => trackProductView(product.id)}
-                    to={`/products/${product.id}/${slugify(
-                      product.product_name || ""
-                    )}`}
-                    className="w-full md:w-1/3"
-                  >
-                    <div
-                      onMouseEnter={() => setHoveredProductId(product.id)}
-                      onMouseLeave={() => setHoveredProductId(null)}
+                  <>
+                    <Link
+                      onClick={() => trackProductView(product.id)}
+                      to={`/products/${product.id}/${slugify(
+                        product.product_name || ""
+                      )}`}
+                      className="w-full md:w-1/3"
                     >
-                      <img
-                        src={displayImage}
-                        alt={product.product_name}
-                        className="w-full h-64 object-contain transition-all duration-300 ease-in-out"
-                      />
+                      <div
+                        onMouseEnter={() => setHoveredProductId(product.id)}
+                        onMouseLeave={() => setHoveredProductId(null)}
+                      >
+                        <img
+                          src={displayImage}
+                          alt={product.product_name}
+                          className="w-full h-64 object-contain transition-all duration-300 ease-in-out"
+                        />
+                      </div>
+                    </Link>
+                    {/* Product Details */}
+                    <div className="w-full md:w-2/3 flex flex-col gap-2">
+                      <div>
+                        <Link
+                          onClick={() => trackProductView(product.id)}
+                          to={`/products/${product.id}/${slugify(
+                            product.product_name || ""
+                          )}`}
+                        >
+                          <h3 className="text-xl text-gray-800 font-medium hover:text-[#e62245] cursor-pointer">
+                            {product.product_name}
+                          </h3>
+                        </Link>
+                        {/* Compact, gapless description, no <p> */}
+                        <div className="text-sm text-[#2f2f2b] mt-1">
+                          {desc}...
+                        </div>
+                      </div>
+                      <div>
+                        <div className="flex flex-col mt-2">
+                          <div className="flex items-center gap-1">
+                            <p className="font-bold text-lg">
+                              Price ৳{price.toFixed(2)}
+                            </p>
+                            <p className="text-sm text-gray-500 underline">
+                              (Ex. VAT)
+                            </p>
+                          </div>
+                          <div className="flex items-center gap-1 text-sm text-[#b3b3b5]">
+                            <p className="text-[#2f2f2b] text-lg font-semibold">
+                              Price:
+                            </p>
+                            ৳{priceExVat.toFixed(2)}{" "}
+                            <span className="underline">(Inc. VAT)</span>
+                          </div>
+                        </div>
+                        <div className="flex gap-4 mt-2 flex-row">
+                          {product?.isStock === 1 && (
+                            <div>
+                              {isSimpleProduct ? (
+                                <button
+                                  onClick={() => handleAddToCart(product)}
+                                  className="bg-[#e62245] cursor-pointer text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
+                                >
+                                  ADD TO CART
+                                </button>
+                              ) : (
+                                <Link
+                                  onClick={() => trackProductView(product.id)}
+                                  to={`/products/${product.id}/${slugify(
+                                    product.product_name || ""
+                                  )}`}
+                                  className="w-full block text-center cursor-pointer bg-[#e62245] text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
+                                >
+                                  CHOOSE OPTION
+                                </Link>
+                              )}
+                            </div>
+                          )}
+                          <div className="flex items-center gap-2">
+                            <input
+                              type="checkbox"
+                              id={`compare-${product.id}`}
+                              className="accent-[#0075ff] cursor-pointer"
+                              checked={compareItems.includes(product.id)}
+                              onChange={() => toggleCompare(product.id)}
+                            />
+                            <label
+                              htmlFor={`compare-${product.id}`}
+                              className="text-sm cursor-pointer"
+                            >
+                              COMPARE
+                            </label>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                  </Link>
+                  </>
                 ) : (
                   <div className="w-full h-56 flex items-center justify-center bg-white">
                     <Link
@@ -249,87 +340,8 @@ const Clearance = () => {
                     </Link>
                   </div>
                 )}
-                {/* Product Details */}
-                {viewMode === "list" ? (
-                  <div className="w-full md:w-2/3 flex flex-col justify-between">
-                    <div>
-                      <div className="text-xs text-gray-600">
-                        {product.brand_name} | Sku: {product.sku}
-                      </div>
-                      <Link
-                        onClick={() => trackProductView(product.id)}
-                        to={`/products/${product.id}/${slugify(
-                          product.product_name || ""
-                        )}`}
-                      >
-                        <h3 className="text-xl text-gray-800 font-medium hover:text-[#e62245] cursor-pointer">
-                          {product.product_name}
-                        </h3>
-                      </Link>
-                      <p className="text-sm text-[#2f2f2b] mt-2">
-                        {product?.product_overview?.slice(0, 300)}...
-                      </p>
-                    </div>
-                    <div>
-                      <div className="flex flex-col">
-                        <div className="flex items-center gap-1">
-                          <p className="font-bold text-lg">
-                            Price ৳{price.toFixed(2)}
-                          </p>
-                          <p className="text-sm text-gray-500 underline">
-                            (Ex. VAT)
-                          </p>
-                        </div>
-                        <div className="flex items-center gap-1 text-sm text-[#b3b3b5]">
-                          <p className="text-[#2f2f2b] text-lg font-semibold">
-                            Price:
-                          </p>
-                          ৳{priceExVat.toFixed(2)}{" "}
-                          <span className="underline">(Inc. VAT)</span>
-                        </div>
-                      </div>
-                      <div className="flex gap-4 mt-2 flex-row">
-                        {product?.isStock === 1 && (
-                          <div>
-                            {isSimpleProduct ? (
-                              <button
-                                onClick={() => handleAddToCart(product)}
-                                className="bg-[#e62245] cursor-pointer text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
-                              >
-                                ADD TO CART
-                              </button>
-                            ) : (
-                              <Link
-                                onClick={() => trackProductView(product.id)}
-                                to={`/products/${product.id}/${slugify(
-                                  product.product_name || ""
-                                )}`}
-                                className="w-full block text-center cursor-pointer bg-[#e62245] text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
-                              >
-                                CHOOSE OPTION
-                              </Link>
-                            )}
-                          </div>
-                        )}
-                        <div className="flex items-center gap-2">
-                          <input
-                            type="checkbox"
-                            id={`compare-${product.id}`}
-                            className="accent-[#0075ff] cursor-pointer"
-                            checked={compareItems.includes(product.id)}
-                            onChange={() => toggleCompare(product.id)}
-                          />
-                          <label
-                            htmlFor={`compare-${product.id}`}
-                            className="text-sm cursor-pointer"
-                          >
-                            COMPARE
-                          </label>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ) : (
+                {/* Product Details for grid mode (unchanged) */}
+                {viewMode !== "list" && (
                   <div className="flex flex-col flex-grow pt-8 mb-4">
                     <div className="flex-grow">
                       <div className="border-t border-[#f3f3f3] pt-2 text-xs text-gray-600 mb-1">
