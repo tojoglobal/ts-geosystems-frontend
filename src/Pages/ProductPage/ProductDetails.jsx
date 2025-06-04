@@ -499,8 +499,8 @@ const ProductDetails = () => {
               </div>
             )}
             {activeTab === "PRODUCT VIDEOS" && videoUrls.length > 0 && (
-              <div className="flex flex-col justify-center">
-                {videoUrls?.map((url, idx) => {
+              <div className="flex flex-col items-center justify-center">
+                {videoUrls.map((url, idx) => {
                   const youtubeId = getYouTubeId(url);
                   const thumbnail = youtubeId
                     ? `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`
@@ -509,62 +509,63 @@ const ProductDetails = () => {
                     <div
                       key={idx}
                       style={{ minWidth: 480, maxWidth: 600 }}
-                      className="flex flex-col items-center"
+                      className="flex flex-col items-center my-2"
                     >
-                      <div className="relative w-[580px] h-[280px] rounded-md bg-gray-100 border border-gray-300 overflow-hidden shadow">
-                        {playingVideoIdx === idx ? (
-                          youtubeId ? (
-                            <iframe
-                              width="100%"
-                              height="100%"
-                              src={`https://www.youtube.com/embed/${youtubeId}?autoplay=1`}
-                              title={`Product video ${idx + 1}`}
-                              frameBorder="0"
-                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                              allowFullScreen
-                            ></iframe>
+                      <div className="flex justify-center w-full">
+                        <div className="relative w-[580px] h-[280px] rounded-md bg-gray-100 border border-gray-300 overflow-hidden shadow flex justify-center items-center">
+                          {playingVideoIdx === idx ? (
+                            youtubeId ? (
+                              <iframe
+                                width="100%"
+                                height="100%"
+                                src={`https://www.youtube.com/embed/${youtubeId}?autoplay=1`}
+                                title={`Product video ${idx + 1}`}
+                                frameBorder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowFullScreen
+                              ></iframe>
+                            ) : (
+                              <video
+                                width="100%"
+                                height="100%"
+                                controls
+                                autoPlay
+                                onEnded={() => setPlayingVideoIdx(-1)}
+                              >
+                                <source src={url} />
+                                Your browser does not support the video tag.
+                              </video>
+                            )
                           ) : (
-                            <video
-                              width="100%"
-                              height="100%"
-                              controls
-                              autoPlay
-                              onEnded={() => setPlayingVideoIdx(-1)}
+                            <div
+                              className="group relative w-full h-full cursor-pointer flex items-center justify-center"
+                              onClick={() => setPlayingVideoIdx(idx)}
+                              title="Play video"
                             >
-                              <source src={url} />
-                              Your browser does not support the video tag.
-                            </video>
-                          )
-                        ) : (
-                          <div
-                            className="group relative w-full h-full cursor-pointer"
-                            onClick={() => setPlayingVideoIdx(idx)}
-                            title="Play video"
-                          >
-                            {youtubeId && (
-                              <img
-                                src={thumbnail}
-                                alt={`Video thumbnail ${idx + 1}`}
-                                className="w-full h-full object-cover"
-                              />
-                            )}
-                            {!youtubeId && (
-                              <div className="w-full h-full flex items-center justify-center bg-gray-200">
-                                <span className="text-gray-500">Video</span>
-                              </div>
-                            )}
-                            <div className="absolute inset-0 flex items-center justify-center">
-                              <div className="w-16 h-16 bg-red-600/90 rounded-full flex items-center justify-center shadow-lg">
-                                <div className="w-0 h-0 border-t-[16px] border-t-transparent border-l-[24px] border-l-white border-b-[16px] border-b-transparent ml-2"></div>
+                              {youtubeId ? (
+                                <img
+                                  src={thumbnail}
+                                  alt={`Video thumbnail ${idx + 1}`}
+                                  className="w-full h-full object-cover"
+                                />
+                              ) : (
+                                <div className="w-full h-full flex items-center justify-center bg-gray-200">
+                                  <span className="text-gray-500">Video</span>
+                                </div>
+                              )}
+                              <div className="absolute inset-0 flex items-center justify-center">
+                                <div className="w-16 h-16 bg-red-600/90 rounded-full flex items-center justify-center shadow-lg">
+                                  <div className="w-0 h-0 border-t-[16px] border-t-transparent border-l-[24px] border-l-white border-b-[16px] border-b-transparent ml-2"></div>
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        )}
+                          )}
+                        </div>
                       </div>
                       <div className="mt-2 text-center">
                         {playingVideoIdx === idx && (
                           <button
-                            className="block cursor-pointer my-2 text-xs text-red-600 mt-1 underline"
+                            className="block cursor-pointer text-xs text-red-600 mt-1 underline"
                             onClick={() => setPlayingVideoIdx(-1)}
                             type="button"
                           >
