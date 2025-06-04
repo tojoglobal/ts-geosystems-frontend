@@ -121,7 +121,7 @@ const CertificateTracking = () => {
             {searching ? "SEARCHING..." : "SUBMIT"}
           </button>
         </form>
-        {error && <div className="text-red-200 mb-4">{error}</div>}
+        {error && <div className="text-crimson-red mt-2">{error}</div>}
 
         {result && (
           <div className="flex justify-center mt-5">
