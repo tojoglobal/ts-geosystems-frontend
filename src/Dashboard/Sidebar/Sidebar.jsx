@@ -24,6 +24,7 @@ import {
   FileText,
   MessageCircle,
   Settings,
+  BookUserIcon,
 } from "lucide-react";
 import {
   MdArticle,
@@ -37,6 +38,7 @@ import logo from "/TS-WEB-LOGO.png";
 import smallLogo from "/favicon.png";
 import SidebarProfileDropdown from "./SidebarProfileDropdown/SidebarProfileDropdown";
 import { FaTelegram } from "react-icons/fa6";
+import { FaCertificate, FaUserCheck } from "react-icons/fa";
 
 const menuItems = [
   {
@@ -100,6 +102,11 @@ const menuItems = [
     to: "/dashboard/add-quickGuides",
   },
   {
+    label: "TS Client",
+    icon: <FaUserCheck size={20} />,
+    to: "/dashboard/ts-client",
+  },
+  {
     label: "Add Categorys",
     icon: <MdCategory size={20} />,
     to: "/dashboard/add-categorys",
@@ -118,6 +125,11 @@ const menuItems = [
     label: "Subscriber",
     icon: <FaTelegram size={20} />,
     to: "/dashboard/subscriber",
+  },
+  {
+    label: "TS CC",
+    icon: <FaCertificate size={20} />,
+    to: "/dashboard/ts-cc",
   },
   {
     label: "Add Brands",
@@ -154,10 +166,7 @@ const menuItems = [
   {
     label: "Email",
     icon: <Mail size={20} />,
-    submenu: [
-      { label: "Inbox", to: "/dashboard/email/inbox" },
-      { label: "Sent", to: "/dashboard/email/sent" },
-    ],
+    submenu: [{ label: "Inbox", to: "/dashboard/email/inbox" }],
   },
   {
     label: "Calendar",

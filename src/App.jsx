@@ -101,6 +101,8 @@ import EditAdress from "./UserAccount/EditAdress";
 import DynamicPage from "./Footer/DynamicPage";
 import SettingsPage from "./Dashboard/SettingsPage/SettingsPage";
 import BlogTagManage from "./Dashboard/BlogTags/BlogTagManage";
+import EquipmentManagement from "./Dashboard/TSCC/EquipmentManagement";
+import ClientInformationManager from "./Dashboard/ClientInformationManager/ClientInformationManager";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -248,11 +250,14 @@ const AppLayout = () => {
           {/* service-inquiries route  */}
           <Route path="service-inquiries" element={<AdminServiceInquiries />} />
           {/* email routes */}
-          <Route path="email/inbox" element={<MailView />} />
           <Route
-            path="email/sent"
+            path="email/inbox"
             element={<Inbox userEmail={"no-reply@tsgb.site"} />}
           />
+          {/* ts-cc */}
+          <Route path="ts-cc" element={<EquipmentManagement />} />
+          {/* ts-cc */}
+          <Route path="ts-client" element={<ClientInformationManager />} />
           {/* SettingsPage */}
           <Route path="settings" element={<SettingsPage />} />
           {/* dynamic about page */}

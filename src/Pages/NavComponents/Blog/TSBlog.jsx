@@ -4,6 +4,7 @@ import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { slugify } from "../../../utils/slugify";
 import useDataQuery from "../../../utils/useDataQuery";
 import BlogSearch from "./BlogSearch";
+import getReadingTime from "../../../utils/useReadingTime";
 
 const TSBlog = () => {
   const [searchParams] = useSearchParams();
@@ -51,11 +52,12 @@ const TSBlog = () => {
   // Create tabs - "All" + blog types
   const tabs = ["All", ...blogTypes.map((type) => type.name)];
 
-  // Parse blog data with safe image handling
   const parsedBlogs = blogs.map((blog) => {
     try {
       const images = JSON.parse(blog.images || "[]");
       const firstImage = images[0];
+
+      const stats = getReadingTime(blog?.content || ""); // ✅ Hook used per blog
 
       return {
         ...blog,
@@ -66,11 +68,14 @@ const TSBlog = () => {
           : "https://via.placeholder.com/400x300?text=No+Image",
         meta: `${blog.author} • ${new Date(
           blog.created_at
-        ).toLocaleDateString()} - 5 minute read`,
+        ).toLocaleDateString()} - ${stats.text}`,
         type: blog.blog_type || "Features",
       };
     } catch (error) {
       console.error("Error parsing blog data:", error);
+
+      const stats = getReadingTime(blog?.content || ""); // ✅ Even in error case
+
       return {
         ...blog,
         images: [],
@@ -78,7 +83,7 @@ const TSBlog = () => {
         image: "https://via.placeholder.com/400x300?text=No+Image",
         meta: `${blog.author} • ${new Date(
           blog.created_at
-        ).toLocaleDateString()} - 5 minute read`,
+        ).toLocaleDateString()} - ${stats.text}`,
         type: blog.blog_type || "Features",
       };
     }
