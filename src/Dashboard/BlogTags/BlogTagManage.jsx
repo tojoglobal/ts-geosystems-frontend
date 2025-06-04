@@ -3,6 +3,7 @@ import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import { useQuery } from "@tanstack/react-query";
 import BlogTagList from "./BlogTagList";
 import BlogTagForm from "./BlogTagForm";
+import Swal from "sweetalert2";
 
 export default function BlogTagManage() {
   const axiosPublicUrl = useAxiospublic();
@@ -26,22 +27,38 @@ export default function BlogTagManage() {
       if (editing) {
         await axiosPublicUrl.put(`/api/tags/${editing.id}`, data);
         setEditing(null);
+        Swal.fire("Success", "Tag updated successfully!", "success");
       } else {
         await axiosPublicUrl.post("/api/tags", data);
         setResetFormTrigger((prev) => !prev);
+        Swal.fire("Success", "Tag added successfully!", "success");
       }
       refetch();
     } catch (err) {
       console.error("Save error:", err);
+      Swal.fire("Error", "Failed to save tag", "error");
     }
   };
 
   const handleDelete = async (id) => {
     try {
-      await axiosPublicUrl.delete(`/api/tags/${id}`);
-      refetch();
+      const result = await Swal.fire({
+        title: "Are you sure?",
+        text: "Do you really want to delete this tag?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#e62245",
+        cancelButtonColor: "#6c757d",
+        confirmButtonText: "Yes, delete it!",
+      });
+      if (result.isConfirmed) {
+        await axiosPublicUrl.delete(`/api/tags/${id}`);
+        refetch();
+        Swal.fire("Deleted!", "Tag has been deleted.", "success");
+      }
     } catch (err) {
       console.error("Delete error:", err);
+      Swal.fire("Error", "Failed to delete tag", "error");
     }
   };
 

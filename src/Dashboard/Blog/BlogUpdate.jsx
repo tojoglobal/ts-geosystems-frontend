@@ -25,10 +25,7 @@ const BlogUpdate = () => {
   );
 
   // Fetch tags dynamically
-  const { data: tagData = {}, refetch: refetchTags } = useDataQuery(
-    ["blogTags"],
-    "/api/tags"
-  );
+  const { data: tagData = {} } = useDataQuery(["blogTags"], "/api/tags");
   const availableTags = tagData?.tags || [];
 
   const [isUploading, setIsUploading] = useState(false);
@@ -184,8 +181,6 @@ const BlogUpdate = () => {
 
   return (
     <div className="max-w-5xl mx-auto">
-      {/* Optionally allow direct tag management */}
-      <AdminTags refetch={refetchTags} />
       <h1 className="text-xl font-bold mb-4">Update Blog Post</h1>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {/* Title */}
@@ -274,7 +269,11 @@ const BlogUpdate = () => {
                 className="bg-teal-600 px-3 py-1 rounded-full text-sm"
               >
                 {tag}{" "}
-                <button type="button" onClick={() => removeTag(tag)}>
+                <button
+                  type="button"
+                  className="cursor-pointer"
+                  onClick={() => removeTag(tag)}
+                >
                   x
                 </button>
               </span>

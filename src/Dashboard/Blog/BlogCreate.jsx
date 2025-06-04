@@ -15,10 +15,7 @@ const BlogCreate = () => {
     ["blogTypes"],
     "/api/blog-types"
   );
-  const { data: tagData = {}, refetch: refetchTags } = useDataQuery(
-    ["blogTags"],
-    "/api/tags"
-  );
+  const { data: tagData = {} } = useDataQuery(["blogTags"], "/api/tags");
   const availableTags = tagData?.tags || [];
 
   const [isUploading, setIsUploading] = useState(false);
@@ -210,7 +207,11 @@ const BlogCreate = () => {
                 className="bg-teal-600 px-3 py-1 rounded-full text-sm"
               >
                 {tag}{" "}
-                <button type="button" onClick={() => removeTag(tag)}>
+                <button
+                  type="button"
+                  className="cursor-pointer"
+                  onClick={() => removeTag(tag)}
+                >
                   x
                 </button>
               </span>
