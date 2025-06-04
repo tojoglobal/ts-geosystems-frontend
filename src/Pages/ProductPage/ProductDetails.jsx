@@ -146,7 +146,7 @@ const ProductDetails = () => {
           {/* Image Gallery */}
           <div className="flex flex-col items-start gap-2 relative">
             {/* Main Image */}
-            <div className="w-[550px] h-[550px] overflow-hidden rounded">
+            <div className="md:w-[550px] md:h-[550px] overflow-hidden rounded">
               {selectedImage ? (
                 <img
                   src={`${import.meta.env.VITE_OPEN_APIURL}${selectedImage}`}

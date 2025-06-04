@@ -179,7 +179,7 @@ const UsedEquipment = () => {
         </div>
         {/* Products Grid/List */}
         <div
-          className={`grid mx-5 ${
+          className={`grid mx-1 md:mx-5 ${
             viewMode === "grid"
               ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-4 items-stretch"
               : "grid-cols-1 gap-7"
@@ -263,9 +263,6 @@ const UsedEquipment = () => {
                     {/* Product Details */}
                     <div className="w-full md:w-2/3 flex flex-col gap-2">
                       <div>
-                        <div className="text-xs text-gray-600">
-                          {product.brand_name} | Sku: {product.sku}
-                        </div>
                         <Link
                           onClick={() => trackProductView(product.id)}
                           to={`/products/${product.id}/${slugify(
