@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import Swal from "sweetalert2";
 
@@ -46,35 +46,31 @@ const defaultValues = {
 const CreditAccountApplication = () => {
   const axiosPublicUrl = useAxiospublic();
   const fileInputRef = useRef();
+  const [selectedFiles, setSelectedFiles] = useState([]);
   const {
     register,
     handleSubmit,
     reset,
     formState: { isSubmitting },
-    watch,
-  } = useForm({
-    defaultValues,
-  });
+  } = useForm({ defaultValues });
 
-  // For showing selected files
-  const files = watch("files");
+  const onFileChange = (e) => {
+    setSelectedFiles(Array.from(e.target.files));
+  };
 
   const onSubmit = async (data) => {
     try {
       const fd = new FormData();
 
-      // Append all fields except files
+      // Append all text fields
       Object.entries(data).forEach(([key, value]) => {
-        if (key === "files") return;
         fd.append(key, value ?? "");
       });
 
       // Append files (multiple supported)
-      if (data.files && data.files.length > 0) {
-        Array.from(data.files).forEach((file) => {
-          fd.append("files", file);
-        });
-      }
+      selectedFiles.forEach((file) => {
+        fd.append("files", file);
+      });
 
       const response = await axiosPublicUrl.post("/api/credit-accounts", fd, {
         headers: {
@@ -89,6 +85,7 @@ const CreditAccountApplication = () => {
         showConfirmButton: false,
       });
       reset();
+      setSelectedFiles([]);
       if (fileInputRef.current) fileInputRef.current.value = "";
     } catch (error) {
       console.log(error);
@@ -684,17 +681,16 @@ const CreditAccountApplication = () => {
               <span className="text-[#e62245]">Choose file</span> or drop here
               <input
                 type="file"
-                {...register("files")}
-                className="hidden"
+                name="files"
                 ref={fileInputRef}
+                onChange={onFileChange}
+                className="hidden"
                 multiple
               />
             </label>
-            {files && files.length > 0 && (
+            {selectedFiles.length > 0 && (
               <div className="text-xs mt-2 text-gray-700">
-                {Array.from(files)
-                  .map((f) => f.name)
-                  .join(", ")}
+                {selectedFiles.map((f) => f.name).join(", ")}
               </div>
             )}
           </div>
