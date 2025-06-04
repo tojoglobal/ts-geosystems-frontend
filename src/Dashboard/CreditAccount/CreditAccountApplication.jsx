@@ -255,7 +255,7 @@ const CreditAccountApplication = () => {
                     "Other",
                   ].map((type) => (
                     <label
-                      className={radioLabelClass}
+                      className={`${radioLabelClass} flex items-center gap-2`}
                       key={type}
                       htmlFor={`companyType-${type}`}
                       onClick={() => focusInputById(`companyType-${type}`)}
@@ -468,7 +468,7 @@ const CreditAccountApplication = () => {
               <div className="grid grid-cols-2 gap-4">
                 {["Yes", "No"].map((val) => (
                   <label
-                    className={radioLabelClass}
+                    className={`${radioLabelClass} flex items-center gap-2`}
                     htmlFor={`emailInvoices-${val}`}
                     key={val}
                     onClick={() => focusInputById(`emailInvoices-${val}`)}
@@ -784,12 +784,16 @@ const CreditAccountApplication = () => {
                   className="peer w-full border border-gray-300 p-2 pt-5 placeholder-transparent focus:outline-none focus:ring focus:ring-[#e62245] rounded appearance-none"
                 >
                   <option value=""></option>
-                  <option value="1">Friends & Colleague</option>
-                  <option value="2">Search Engine (Google, Bing etc.)</option>
-                  <option value="3">Social Media</option>
-                  <option value="4">Email</option>
-                  <option value="5">Trade Show</option>
-                  <option value="6">Other</option>
+                  <option value="Friends & Colleague">
+                    Friends & Colleague
+                  </option>
+                  <option value="Search Engine (Google, Bing etc.)">
+                    Search Engine (Google, Bing etc.)
+                  </option>
+                  <option value="Social Media">Social Media</option>
+                  <option value="Email">Email</option>
+                  <option value="Trade Show">Trade Show</option>
+                  <option value="Other">Other</option>
                 </select>
                 <label
                   htmlFor="discoveryMethod"

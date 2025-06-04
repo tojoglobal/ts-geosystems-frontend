@@ -2,6 +2,15 @@ import { Eye } from "lucide-react";
 import Swal from "sweetalert2";
 import useDataQuery from "../../utils/useDataQuery";
 
+const DISCOVERY_METHOD_LABELS = {
+  1: "Friends & Colleague",
+  2: "Search Engine (Google, Bing etc.)",
+  3: "Social Media",
+  4: "Email",
+  5: "Trade Show",
+  6: "Other",
+};
+
 const AdminShowCreditAccount = () => {
   const { data = [], isLoading } = useDataQuery(
     ["creditAccountApplications"],
@@ -55,6 +64,7 @@ const AdminShowCreditAccount = () => {
                 application.applicationDate
               }</p>
               <p class="mb-2"><strong>Discovery Method:</strong> ${
+                DISCOVERY_METHOD_LABELS[application.discoveryMethod] ||
                 application.discoveryMethod
               }</p>
               <p class="mb-2"><strong>G2 Rep Name:</strong> ${
@@ -121,7 +131,9 @@ const AdminShowCreditAccount = () => {
               <th className="px-3 md:px-4 py-2">Company</th>
               <th className="px-3 md:px-4 py-2">Trading Name</th>
               <th className="px-3 md:px-4 py-2">Applicant</th>
+              <th className="px-3 md:px-4 py-2">Phone</th>
               <th className="px-3 md:px-4 py-2">Email</th>
+              <th className="px-3 md:px-4 py-2">Discovery Method</th>
               <th className="px-3 md:px-4 py-2">Date</th>
               <th className="px-3 md:px-4 py-2">View</th>
             </tr>
@@ -138,7 +150,14 @@ const AdminShowCreditAccount = () => {
                   {application.applicantName}
                 </td>
                 <td className="px-3 md:px-4 py-2">
+                  {application.applicantPhone}
+                </td>
+                <td className="px-3 md:px-4 py-2">
                   {application.accountsEmail}
+                </td>
+                <td className="px-3 md:px-4 py-2">
+                  {DISCOVERY_METHOD_LABELS[application.discoveryMethod] ||
+                    application.discoveryMethod}
                 </td>
                 <td className="px-3 md:px-4 py-2">
                   {new Date(application.createdAt).toLocaleDateString()}
