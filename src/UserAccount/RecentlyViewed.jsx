@@ -6,7 +6,6 @@ import Loader from "../utils/Loader";
 import { getProductType } from "../utils/productOption";
 import { parsePrice } from "../utils/parsePrice";
 import { addToCart } from "../features/AddToCart/AddToCart";
-import Swal from "sweetalert2";
 import { slugify } from "../utils/slugify";
 import { Link } from "react-router-dom";
 import useToastSwal from "../Hooks/useToastSwal";
@@ -94,15 +93,15 @@ const RecentlyViewed = () => {
             onChange={handleLimitChange}
             className="border cursor-pointer appearance-none rounded outline-none px-5 py-[1px] text-sm"
           >
-            <option value="4">4</option>
-            <option value="8">8</option>
-            <option value="12">12</option>
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="15">15</option>
           </select>
         </div>
       </div>
-      {/* Product grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-7">
-        {recentItems.map((item) => {
+      {/* Product grid card view */}
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
+        {recentItems?.map((item) => {
           const { isSimpleProduct } = getProductType(item);
           let images = [];
           try {
@@ -133,7 +132,11 @@ const RecentlyViewed = () => {
           const vat = taxData?.value || 0;
           const priceIncVat = price * (1 + vat / 100);
 
-          const onSale = item.on_sale || false;
+          const onSale =
+            item.sale === 1 ||
+            item.on_sale === 1 ||
+            item.sale === true ||
+            item.on_sale === true;
 
           return (
             <div
@@ -156,52 +159,56 @@ const RecentlyViewed = () => {
                   <img
                     src={displayImage}
                     alt={item.product_name}
-                    className="min-h-[160px] object-cover"
+                    className="min-h-[160px] max-h-[200px] w-full object-contain transition-all duration-300 ease-in-out"
                   />
                 </Link>
               </div>
-              <div className="p-[5px]">
-                <div className="capitalize text-sm text-gray-600 mb-1 border-t border-gray-200 pt-3">
-                  {item.brand_name} | Sku: {item.sku}
-                </div>
-                <Link
-                  to={`/products/${item.id}/${slugify(
-                    item.product_name || ""
-                  )}`}
-                >
-                  <h3 className="text-sm min-h-10 font-medium text-gray-900 mb-2">
-                    {item.product_name}
-                  </h3>{" "}
-                </Link>
-                <div className="text-sm text-gray-900 font-semibold">
-                  ৳{formatPrice(price)}{" "}
-                  <span className="text-xs text-gray-500">(Ex. VAT)</span>
-                </div>
-                <div className="text-sm text-gray-900 font-semibold mb-2">
-                  ৳{formatPrice(priceIncVat)}{" "}
-                  <span className="text-xs text-gray-500">(Inc. VAT)</span>
-                </div>
-                {item?.isStock === 1 && (
-                  <div>
-                    {isSimpleProduct ? (
-                      <button
-                        onClick={() => handleAddToCart(item)}
-                        className="bg-[#e62245] w-full cursor-pointer text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
-                      >
-                        ADD TO CART
-                      </button>
-                    ) : (
-                      <Link
-                        to={`/products/${item.id}/${slugify(
-                          item.product_name || ""
-                        )}`}
-                        className="w-full block text-center cursor-pointer bg-[#e62245] text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
-                      >
-                        CHOOSE OPTION
-                      </Link>
-                    )}
+              <div className="flex flex-col flex-1 justify-between">
+                <div className="px-2">
+                  <div className="capitalize text-xs text-gray-600 mb-1 border-t border-gray-200 pt-3">
+                    {item.brand_name} | Sku: {item.sku}
                   </div>
-                )}
+                  <Link
+                    to={`/products/${item.id}/${slugify(
+                      item.product_name || ""
+                    )}`}
+                  >
+                    <h3 className="text-base min-h-10 font-medium text-gray-900 mb-2 hover:text-[#e62245] cursor-pointer">
+                      {item.product_name}
+                    </h3>{" "}
+                  </Link>
+                </div>
+                <div>
+                  <div className="flex items-center gap-1 px-2">
+                    <p className="font-bold">৳{formatPrice(price)}</p>
+                    <p className="text-xs text-gray-500 underline">(Ex. VAT)</p>
+                  </div>
+                  <div className="flex items-center gap-1 text-xs text-[#b3b3b5] mt-1 px-2">
+                    ৳{formatPrice(priceIncVat)}{" "}
+                    <span className="underline">(Inc. VAT)</span>
+                  </div>
+                  {item?.isStock === 1 && (
+                    <div className="mt-4">
+                      {isSimpleProduct ? (
+                        <button
+                          onClick={() => handleAddToCart(item)}
+                          className="bg-[#e62245] w-full cursor-pointer text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
+                        >
+                          ADD TO CART
+                        </button>
+                      ) : (
+                        <Link
+                          to={`/products/${item.id}/${slugify(
+                            item.product_name || ""
+                          )}`}
+                          className="w-full block text-center cursor-pointer bg-[#e62245] text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
+                        >
+                          CHOOSE OPTION
+                        </Link>
+                      )}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           );

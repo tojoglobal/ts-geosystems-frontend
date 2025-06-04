@@ -300,7 +300,7 @@ const ProductDetails = () => {
               <div className="flex items-center border border-gray-300 rounded">
                 <button
                   onClick={decrementQuantity}
-                  className="px-[5px] py-[2px] text-gray-600 hover:bg-gray-100 transition-colors"
+                  className="px-[5px] cursor-pointer py-[2px] text-gray-600 hover:bg-gray-100 transition-colors"
                 >
                   <MdOutlineKeyboardArrowDown />
                 </button>
@@ -309,7 +309,7 @@ const ProductDetails = () => {
                 </span>
                 <button
                   onClick={incrementQuantity}
-                  className="px-[5px] py-[2px] text-gray-600 hover:bg-gray-100 transition-colors"
+                  className="px-[5px] cursor-pointer py-[2px] text-gray-600 hover:bg-gray-100 transition-colors"
                 >
                   <MdOutlineKeyboardArrowUp />
                 </button>
