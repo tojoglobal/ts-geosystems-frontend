@@ -6,24 +6,16 @@ import { useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import Swal from "sweetalert2";
 import Button from "../../Dashboard/Button/Button";
+import { useParams } from "react-router-dom";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import useDataQuery from "../../utils/useDataQuery";
-import { useParams } from "react-router-dom";
-
-const availableTags = [
-  "#GeoBusiness",
-  "#GeospatialTech",
-  "#SeeYouThere",
-  "#ExCeLLondon",
-  "#MappingTheFuture",
-];
 
 const BlogUpdate = () => {
   const { id } = useParams();
   const axiosPublicUrl = useAxiospublic();
 
-  const { data: authors = [] } = useDataQuery(["authors"], "/api/authors");
-  const { data: blogTypes = [] } = useDataQuery(
+  const { data: authors = {} } = useDataQuery(["authors"], "/api/authors");
+  const { data: blogTypes = {} } = useDataQuery(
     ["blogTypes"],
     "/api/blog-types"
   );
@@ -31,6 +23,13 @@ const BlogUpdate = () => {
     ["blogView", id],
     `/api/blogs/${id}`
   );
+
+  // Fetch tags dynamically
+  const { data: tagData = {}, refetch: refetchTags } = useDataQuery(
+    ["blogTags"],
+    "/api/tags"
+  );
+  const availableTags = tagData?.tags || [];
 
   const [isUploading, setIsUploading] = useState(false);
   const [selectedTags, setSelectedTags] = useState([]);
@@ -87,8 +86,10 @@ const BlogUpdate = () => {
   }, [blog, reset]);
 
   const handleTagSelect = (tag) => {
-    if (!selectedTags.includes(tag)) {
-      const updatedTags = [...selectedTags, tag];
+    // Support tag as object or string
+    const tagVal = tag.name || tag;
+    if (!selectedTags.includes(tagVal)) {
+      const updatedTags = [...selectedTags, tagVal];
       setSelectedTags(updatedTags);
       setValue("tags", updatedTags);
     }
@@ -183,6 +184,8 @@ const BlogUpdate = () => {
 
   return (
     <div className="max-w-5xl mx-auto">
+      {/* Optionally allow direct tag management */}
+      <AdminTags refetch={refetchTags} />
       <h1 className="text-xl font-bold mb-4">Update Blog Post</h1>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {/* Title */}
@@ -255,12 +258,12 @@ const BlogUpdate = () => {
           <div className="flex flex-wrap gap-2">
             {availableTags.map((tag) => (
               <button
-                key={tag}
+                key={tag.id || tag.name || tag}
                 type="button"
                 onClick={() => handleTagSelect(tag)}
                 className="px-3 py-1 cursor-pointer bg-gray-700 rounded text-white text-sm"
               >
-                {tag}
+                {tag.name || tag}
               </button>
             ))}
           </div>

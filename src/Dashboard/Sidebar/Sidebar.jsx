@@ -131,6 +131,7 @@ const menuItems = [
       { label: "TS Blog", to: "/dashboard/ts-blog" },
       { label: "Author", to: "/dashboard/author" },
       { label: "Blog Type", to: "/dashboard/blog-type" },
+      { label: "Blog Tags", to: "/dashboard/blog-tags" },
     ],
   },
   {

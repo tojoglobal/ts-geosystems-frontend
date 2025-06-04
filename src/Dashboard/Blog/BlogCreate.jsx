@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { useForm, Controller } from "react-hook-form";
 import { Editor } from "@tinymce/tinymce-react";
 import { useState } from "react";
@@ -7,21 +8,18 @@ import Button from "../../Dashboard/Button/Button";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import useDataQuery from "../../utils/useDataQuery";
 
-const availableTags = [
-  "#GeoBusiness",
-  "#GeospatialTech",
-  "#SeeYouThere",
-  "#ExCeLLondon",
-  "#MappingTheFuture",
-];
-
 const BlogCreate = () => {
   const axiosPublicUrl = useAxiospublic();
-  const { data: authors = [] } = useDataQuery(["authors"], "/api/authors");
-  const { data: blogTypes = [] } = useDataQuery(
+  const { data: authors = {} } = useDataQuery(["authors"], "/api/authors");
+  const { data: blogTypes = {} } = useDataQuery(
     ["blogTypes"],
     "/api/blog-types"
   );
+  const { data: tagData = {}, refetch: refetchTags } = useDataQuery(
+    ["blogTags"],
+    "/api/tags"
+  );
+  const availableTags = tagData?.tags || [];
 
   const [isUploading, setIsUploading] = useState(false);
   const [selectedTags, setSelectedTags] = useState([]);
@@ -176,7 +174,6 @@ const BlogCreate = () => {
             render={({ field }) => (
               <Editor
                 apiKey={import.meta.env.VITE_TINY_APIKEY}
-                // {...field}
                 value={field.value}
                 init={{
                   height: 300,
@@ -199,10 +196,10 @@ const BlogCreate = () => {
               <button
                 key={tag}
                 type="button"
-                onClick={() => handleTagSelect(tag)}
+                onClick={() => handleTagSelect(tag.name || tag)}
                 className="px-3 py-1 bg-gray-700 rounded text-white text-sm"
               >
-                {tag}
+                {tag.name || tag}
               </button>
             ))}
           </div>

@@ -100,6 +100,7 @@ import AdminUpdateHelpDesk from "./Pages/Control/AdminUpdateHelpDesk";
 import EditAdress from "./UserAccount/EditAdress";
 import DynamicPage from "./Footer/DynamicPage";
 import SettingsPage from "./Dashboard/SettingsPage/SettingsPage";
+import BlogTagManage from "./Dashboard/BlogTags/BlogTagManage";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -243,6 +244,7 @@ const AppLayout = () => {
           <Route path="author" element={<AuthorManager />} />
           {/* Blog Type route */}
           <Route path="blog-type" element={<BlogTypeManage />} />
+          <Route path="blog-tags" element={<BlogTagManage />} />
           {/* service-inquiries route  */}
           <Route path="service-inquiries" element={<AdminServiceInquiries />} />
           {/* email routes */}
