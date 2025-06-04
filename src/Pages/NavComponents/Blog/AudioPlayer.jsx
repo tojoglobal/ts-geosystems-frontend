@@ -109,10 +109,12 @@ const AudioPlayer = ({ text }) => {
   const { supported, voices } = useSpeechSynthesis();
   const [isPlaying, setIsPlaying] = useState(false);
   const [charIndex, setCharIndex] = useState(0);
-  const [position, setPosition] = useState(0);
-  const [duration, setDuration] = useState(0);
   const [speedIdx, setSpeedIdx] = useState(0); // index of speedSteps
   const speed = speedSteps[speedIdx];
+
+  // Timer state
+  const [duration, setDuration] = useState(0); // seconds
+  const [remaining, setRemaining] = useState(0); // seconds left
 
   const selectedVoice =
     voices.find(
@@ -126,38 +128,61 @@ const AudioPlayer = ({ text }) => {
     voices[0];
 
   const utteranceRef = useRef(null);
+  const timerRef = useRef(null);
 
+  // Init on text/speed change
   useEffect(() => {
+    const est = estimateDuration(text, speed);
+    setDuration(est);
+    setRemaining(est);
     setCharIndex(0);
-    setPosition(0);
     setIsPlaying(false);
-    setDuration(estimateDuration(text, speed));
     window.speechSynthesis.cancel();
+    clearInterval(timerRef.current);
   }, [text, speed]);
 
-  useEffect(() => {
-    return () => {
+  // Clean up on unmount
+  useEffect(
+    () => () => {
       window.speechSynthesis.cancel();
-    };
-  }, []);
+      clearInterval(timerRef.current);
+    },
+    []
+  );
 
-  const handlePlay = () => {
+  // Timer effect (sync with isPlaying + speed)
+  useEffect(() => {
+    clearInterval(timerRef.current);
+    if (isPlaying) {
+      timerRef.current = setInterval(() => {
+        setRemaining((rem) => {
+          const newRem = rem - 0.2 * speed;
+          if (newRem > 0) return newRem;
+          clearInterval(timerRef.current);
+          return 0;
+        });
+      }, 200);
+    }
+    return () => clearInterval(timerRef.current);
+  }, [isPlaying, speed]);
+
+  const handlePlay = (preserveCharIndex = false) => {
     if (!supported || !text) return;
     window.speechSynthesis.cancel();
-    const utter = new window.SpeechSynthesisUtterance(text.slice(charIndex));
+    // preserveCharIndex is true when cycling speed
+    const currentChar = preserveCharIndex ? charIndex : 0;
+    const utter = new window.SpeechSynthesisUtterance(text.slice(currentChar));
     utter.voice = selectedVoice;
     utter.rate = speed;
     utter.onend = () => {
       setIsPlaying(false);
       setCharIndex(0);
-      setPosition(duration);
+      setRemaining(0);
     };
     utter.onboundary = (event) => {
       if (event.name === "word" && event.charIndex !== undefined) {
-        const charsRead = charIndex + event.charIndex;
+        const charsRead = currentChar + event.charIndex;
         setCharIndex(charsRead);
-        const pct = charsRead / text.length;
-        setPosition(Math.floor(duration * pct));
       }
     };
     utteranceRef.current = utter;
@@ -187,20 +212,26 @@ const AudioPlayer = ({ text }) => {
 
   const handleSeek = (seconds) => {
     if (!text) return;
-    let newPos = position + seconds;
-    if (newPos < 0) newPos = 0;
-    if (newPos > duration) newPos = duration;
-    const pct = duration > 0 ? newPos / duration : 0;
+    // Calculate new position in seconds
+    let newRem = remaining - seconds;
+    const newRemaining = Math.max(0, Math.min(duration, newRem));
+    setRemaining(newRemaining);
+    // calc charIdx for new position
+    const pct = duration ? (duration - newRemaining) / duration : 0;
     const newChar = Math.floor(text.length * pct);
     setCharIndex(newChar);
-    setPosition(newPos);
     window.speechSynthesis.cancel();
-    setTimeout(() => handlePlay(), 100);
+    setTimeout(() => handlePlay(true), 100);
   };
 
   const handleCycleSpeed = () => {
     let nextIdx = (speedIdx + 1) % speedSteps.length;
     setSpeedIdx(nextIdx);
+    // If currently playing, do not pause, let useEffect above re-speak at new speed
+    if (isPlaying) {
+      window.speechSynthesis.cancel();
+      setTimeout(() => handlePlay(true), 100);
+    }
   };
 
   if (!supported) {
@@ -313,7 +344,7 @@ const AudioPlayer = ({ text }) => {
           marginLeft: 4,
         }}
       >
-        {formatSeconds(isPlaying ? position : duration)}
+        {formatSeconds(isPlaying ? remaining : duration)}
       </div>
     </div>
   );
