@@ -21,6 +21,8 @@ import {
   closeCart,
   toggleCart,
 } from "../features/CartToggleSlice/CartToggleSlice";
+import { SkeletonLoader } from "../utils/Loader/SkeletonLoader";
+import SocialButtons from "../Components/SocialButtons";
 // import CartWithPopover from "./CartWithPopover";
 
 const MobileNavbar = () => {
@@ -102,6 +104,11 @@ const MobileNavbar = () => {
       }));
     },
   });
+
+  const { data: contactInfo, isLoading: contactInfoLoading } = useDataQuery(
+    ["contactInfo"],
+    "/api/admin-contact-us"
+  );
 
   // Fetch dynamic links for header
   const { data: dynamicLinks } = useDataQuery(
@@ -607,22 +614,16 @@ const MobileNavbar = () => {
             ))}
           </ul>
           {/* Social Media Links */}
-          <div className="flex mb-24 space-x-4 text-2xl mt-6 text-white">
-            <a href="#" aria-label="LinkedIn">
-              <FaLinkedinIn />
-            </a>
-            <a href="#" aria-label="Facebook">
-              <FaFacebookF />
-            </a>
-            <a href="#" aria-label="Instagram">
-              <FaInstagram />
-            </a>
-            <a href="#" aria-label="Pinterest">
-              <FaPinterestP />
-            </a>
-            <a href="#" aria-label="YouTube">
-              <FaYoutube />
-            </a>
+          <div className="flex space-x-4 pt-2">
+            {contactInfoLoading ? (
+              <div className="flex gap-4">
+                {[1, 2, 3, 4].map((i) => (
+                  <SkeletonLoader key={i} className="w-8 h-8 rounded-full" />
+                ))}
+              </div>
+            ) : (
+              <SocialButtons contactInfo={contactInfo} />
+            )}
           </div>
         </div>
       </div>
