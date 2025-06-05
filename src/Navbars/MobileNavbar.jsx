@@ -31,6 +31,7 @@ const MobileNavbar = () => {
   const { isCartVisible } = useSelector((state) => state.cartToggle);
   const { totalQuantity } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
+  const subMenuRefs = useRef({});
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -450,7 +451,7 @@ const MobileNavbar = () => {
             : "opacity-0 pointer-events-none"
         }`}
       >
-        <div className="overflow-y-auto max-h-screen px-4 py-4">
+        <div className="overflow-y-auto max-h-screen p-4">
           {/* SHOP BY CATEGORY */}
           <div className="border border-crimson-red rounded-sm mb-2 px-3 py-1">
             <span className="text-base font-semibold">SHOP BY CATEGORY</span>
@@ -494,14 +495,16 @@ const MobileNavbar = () => {
                   )}
                 </div>
                 <div
-                  className="mobile-category-dropdown bg-dark-charcoal text-white text-sm shadow-lg rounded-md mt-2"
+                  ref={(el) => {
+                    if (el) subMenuRefs.current[item.title] = el;
+                  }}
+                  className="mobile-mainmenu-dropdown bg-dark-charcoal text-white text-sm shadow-lg rounded-md mt-2 overflow-hidden"
                   style={{
                     maxHeight:
                       openCategory === item.title
                         ? `${(item.subLinks?.length || 0) * 48}px`
                         : "0px",
                     transition: "max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1)",
-                    overflow: "hidden",
                   }}
                 >
                   {item.subLinks && item.subLinks.length > 0 && (
@@ -509,11 +512,11 @@ const MobileNavbar = () => {
                       {item.subLinks.map((sub, i) => (
                         <li
                           key={i}
-                          className="hover:bg-gray-700 hover:shadow-md hover:rounded-md transition-all duration-200 w-full"
+                          className="hover:bg-gray-700 hover:shadow-md hover:rounded-md transition-all duration-200 w-full flex items-center"
                         >
                           <Link
                             to={sub.link}
-                            className="block active:scale-95 transition-transform duration-100 text-base text-left px-2 py-3 rounded-sm border border-gray-600 mb-1"
+                            className="flex-1 block active:scale-95 transition-transform duration-100 text-base text-left p-2 border border-gray-600"
                             onClick={toggleMenu}
                           >
                             {sub.title}
@@ -578,7 +581,7 @@ const MobileNavbar = () => {
                           >
                             <Link
                               to={sub.link}
-                              className="flex-1 block active:scale-95 transition-transform duration-100 text-base text-left px-4 py-2"
+                              className="flex-1 block active:scale-95 transition-transform duration-100 text-base text-left p-2 border border-gray-600"
                               onClick={() => {
                                 setOpenDropdown(null);
                                 toggleMenu();
