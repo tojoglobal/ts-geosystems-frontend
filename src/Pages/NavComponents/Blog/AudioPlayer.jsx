@@ -219,7 +219,8 @@ const AudioPlayer = ({ text }) => {
     setRemaining(duration * (1 - pct));
     setCharIndex(Math.floor(text.length * pct));
     window.speechSynthesis.cancel();
-    setTimeout(() => handlePlay(true), 100);
+    handlePlay(true); // removed setTimeout here
+    // setTimeout(() => handlePlay(true), 100);
   };
 
   const handlePlay = (preserveCharIndex = false) => {
@@ -274,7 +275,7 @@ const AudioPlayer = ({ text }) => {
     const newChar = Math.floor(text.length * pct);
     setCharIndex(newChar);
     window.speechSynthesis.cancel();
-    setTimeout(() => handlePlay(true), 100);
+    handlePlay(true); // removed setTimeout here
   };
 
   const handleCycleSpeed = () => {
@@ -282,7 +283,7 @@ const AudioPlayer = ({ text }) => {
     setSpeedIdx(nextIdx);
     if (isPlaying) {
       window.speechSynthesis.cancel();
-      setTimeout(() => handlePlay(true), 100);
+      handlePlay(true); // removed setTimeout here
     }
   };
 
