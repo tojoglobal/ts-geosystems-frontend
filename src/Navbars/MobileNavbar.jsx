@@ -1,11 +1,5 @@
+/* eslint-disable no-unused-vars */
 import { useEffect, useRef, useState } from "react";
-import {
-  FaLinkedinIn,
-  FaFacebookF,
-  FaInstagram,
-  FaPinterestP,
-  FaYoutube,
-} from "react-icons/fa";
 import { IoIosArrowDown } from "react-icons/io";
 import { IoSearchOutline } from "react-icons/io5";
 import { LuUserRound } from "react-icons/lu";
@@ -37,8 +31,8 @@ const MobileNavbar = () => {
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [openDropdown, setOpenDropdown] = useState(null); // for INFO/SUPPORT/MAIN
-  const [openCategory, setOpenCategory] = useState(null); // for SHOP BY CATEGORY
+  const [openDropdown, setOpenDropdown] = useState(null);
+  const [openCategory, setOpenCategory] = useState(null);
 
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
@@ -81,14 +75,12 @@ const MobileNavbar = () => {
     isLoading: categoriesLoading,
     error: categoriesError,
   } = useDataQuery(["categories"], "/api/category");
-
   // Fetch subcategories
   const {
     data: subcategoriesData,
     isLoading: subcategoriesLoading,
     error: subcategoriesError,
   } = useDataQuery(["subcategories"], "/api/subcategory");
-
   // Fetch brands
   const {
     data: brandsData,
@@ -109,7 +101,6 @@ const MobileNavbar = () => {
     ["contactInfo"],
     "/api/admin-contact-us"
   );
-
   // Fetch dynamic links for header
   const { data: dynamicLinks } = useDataQuery(
     ["dynamicLinks"],
@@ -196,7 +187,6 @@ const MobileNavbar = () => {
       setSearchResults(response.data.products || []);
       setShowResults(true);
     } catch (error) {
-      console.log(error);
       setSearchResults([]);
     } finally {
       setIsSearching(false);
@@ -276,7 +266,7 @@ const MobileNavbar = () => {
             </div>
           </div>
         </div>
-        <div className="flex w-full justify-center items-center mt-12 pt-4 pb-10 px-13 bg-white border-y border-slightly-dark">
+        <div className="flex w-full justify-center items-center mt-12 pt-4 pb-10 px-4 bg-white border-y border-slightly-dark">
           <div className="w-64 h-12 bg-gray-200 rounded"></div>
         </div>
       </div>
@@ -311,7 +301,7 @@ const MobileNavbar = () => {
             </div>
           </div>
         </div>
-        <div className="flex w-full justify-center items-center mt-12 pt-4 pb-10 px-13 bg-white border-y border-slightly-dark">
+        <div className="flex w-full justify-center items-center mt-12 pt-4 pb-10 px-4 bg-white border-y border-slightly-dark">
           <div className="text-gray-400">Error loading navigation</div>
         </div>
       </div>
@@ -439,7 +429,7 @@ const MobileNavbar = () => {
       {/* Logo Section */}
       <Link
         to="/"
-        className="flex w-full justify-center items-center mt-12 pt-4 pb-10 px-13 bg-white border-y border-slightly-dark"
+        className="flex w-full justify-center items-center mt-12 pt-4 pb-8 px-4 bg-white border-y border-slightly-dark"
         aria-label="Home"
       >
         <img
@@ -458,130 +448,67 @@ const MobileNavbar = () => {
             : "opacity-0 pointer-events-none"
         }`}
       >
-        <div className="overflow-y-auto max-h-screen p-4">
-          {/* SHOP BY CATEGORY */}
-          <div className="border border-crimson-red rounded-sm mb-2 px-3 py-1">
-            <span className="text-base font-semibold">SHOP BY CATEGORY</span>
-          </div>
-          <ul className="space-y-1 mt-4 mb-6">
-            {dynamicCategories.map((item, idx) => (
-              <li key={idx} className="relative group mobile-category-item">
-                <div className="flex justify-between items-center text-white">
-                  <Link
-                    to={item.link}
-                    className="flex-1"
-                    onClick={(e) => {
-                      if (item.subLinks && item.subLinks.length > 0) {
-                        e.preventDefault();
-                        setOpenCategory(
-                          openCategory === item.title ? null : item.title
-                        );
-                      } else {
-                        toggleMenu();
-                      }
+        <div className="overflow-y-auto max-h-screen p-4 pb-20 flex flex-col justify-between">
+          <div>
+            {/* SHOP BY CATEGORY */}
+            <div className="border border-crimson-red rounded-sm mb-2 px-3 py-1">
+              <span className="text-base font-semibold">SHOP BY CATEGORY</span>
+            </div>
+            <ul className="space-y-1 my-5">
+              {dynamicCategories.map((item, idx) => (
+                <li key={idx} className="relative group mobile-category-item">
+                  <div className="flex justify-between items-center text-white">
+                    <Link
+                      to={item.link}
+                      className="flex-1"
+                      onClick={(e) => {
+                        if (item.subLinks && item.subLinks.length > 0) {
+                          e.preventDefault();
+                          setOpenCategory(
+                            openCategory === item.title ? null : item.title
+                          );
+                        } else {
+                          toggleMenu();
+                        }
+                      }}
+                    >
+                      {item.title}
+                    </Link>
+                    {item.subLinks && item.subLinks.length > 0 && (
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setOpenCategory(
+                            openCategory === item.title ? null : item.title
+                          );
+                        }}
+                        className="cursor-pointer p-2 -mr-2"
+                      >
+                        <IoIosArrowDown
+                          className={`text-lg transition-transform duration-300 ${
+                            openCategory === item.title ? "rotate-180" : ""
+                          }`}
+                        />
+                      </button>
+                    )}
+                  </div>
+                  <div
+                    ref={(el) => {
+                      if (el) subMenuRefs.current[item.title] = el;
+                    }}
+                    className="mobile-mainmenu-dropdown bg-dark-charcoal text-white text-sm shadow-lg rounded-md mt-2 overflow-hidden"
+                    style={{
+                      maxHeight:
+                        openCategory === item.title
+                          ? `${(item.subLinks?.length || 0) * 48}px`
+                          : "0px",
+                      transition:
+                        "max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1)",
                     }}
                   >
-                    {item.title}
-                  </Link>
-                  {item.subLinks && item.subLinks.length > 0 && (
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setOpenCategory(
-                          openCategory === item.title ? null : item.title
-                        );
-                      }}
-                      className="cursor-pointer p-2 -mr-2"
-                    >
-                      <IoIosArrowDown
-                        className={`text-lg transition-transform duration-300 ${
-                          openCategory === item.title ? "rotate-180" : ""
-                        }`}
-                      />
-                    </button>
-                  )}
-                </div>
-                <div
-                  ref={(el) => {
-                    if (el) subMenuRefs.current[item.title] = el;
-                  }}
-                  className="mobile-mainmenu-dropdown bg-dark-charcoal text-white text-sm shadow-lg rounded-md mt-2 overflow-hidden"
-                  style={{
-                    maxHeight:
-                      openCategory === item.title
-                        ? `${(item.subLinks?.length || 0) * 48}px`
-                        : "0px",
-                    transition: "max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1)",
-                  }}
-                >
-                  {item.subLinks && item.subLinks.length > 0 && (
-                    <ul>
-                      {item.subLinks.map((sub, i) => (
-                        <li
-                          key={i}
-                          className="hover:bg-gray-700 hover:shadow-md hover:rounded-md transition-all duration-200 w-full flex items-center"
-                        >
-                          <Link
-                            to={sub.link}
-                            className="flex-1 block active:scale-95 transition-transform duration-100 text-base text-left p-2 border border-gray-600"
-                            onClick={toggleMenu}
-                          >
-                            {sub.title}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
-              </li>
-            ))}
-          </ul>
-          {/* SHOP BY BRAND */}
-          <div className="border border-crimson-red rounded-sm mb-2 px-3 py-1">
-            <span className="text-base font-semibold">SHOP BY BRAND</span>
-          </div>
-          <ul className="space-y-2 mt-4 mb-6">
-            {dynamicBrands.map((item, idx) => (
-              <li key={idx} className="text-white">
-                <Link to={item.link || "#"} onClick={toggleMenu}>
-                  {item.title}
-                </Link>
-              </li>
-            ))}
-          </ul>
-          {/* MAIN MENU */}
-          <div className="border border-crimson-red rounded-sm mb-2 px-3 py-1">
-            <span className="text-base font-semibold">MAIN MENU</span>
-          </div>
-          <ul className="space-y-3 mt-4 mb-6">
-            {mainMenu.map((item, idx) => (
-              <li key={idx} className="relative group mobile-mainmenu-item">
-                {item.isDropdown ? (
-                  <>
-                    <div
-                      className="flex justify-between uppercase items-center text-white cursor-pointer"
-                      onClick={() => handleDropdownClick(item.title)}
-                    >
-                      <span>{item.title}</span>
-                      <IoIosArrowDown
-                        className={`text-lg transition-transform duration-300 ${
-                          openDropdown === item.title ? "rotate-180" : ""
-                        }`}
-                      />
-                    </div>
-                    <div
-                      className="mobile-mainmenu-dropdown bg-dark-charcoal text-white text-sm shadow-lg rounded-md mt-2 overflow-hidden"
-                      style={{
-                        maxHeight:
-                          openDropdown === item.title
-                            ? `${(item.dropdownItems?.length || 0) * 48}px`
-                            : "0px",
-                        transition:
-                          "max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1)",
-                      }}
-                    >
+                    {item.subLinks && item.subLinks.length > 0 && (
                       <ul>
-                        {item.dropdownItems.map((sub, i) => (
+                        {item.subLinks.map((sub, i) => (
                           <li
                             key={i}
                             className="hover:bg-gray-700 hover:shadow-md hover:rounded-md transition-all duration-200 w-full flex items-center"
@@ -589,32 +516,98 @@ const MobileNavbar = () => {
                             <Link
                               to={sub.link}
                               className="flex-1 block active:scale-95 transition-transform duration-100 text-base text-left p-2 border border-gray-600"
-                              onClick={() => {
-                                setOpenDropdown(null);
-                                toggleMenu();
-                              }}
+                              onClick={toggleMenu}
                             >
                               {sub.title}
                             </Link>
                           </li>
                         ))}
                       </ul>
-                    </div>
-                  </>
-                ) : (
-                  <Link
-                    to={item.link}
-                    className="flex-1 uppercase block"
-                    onClick={toggleMenu}
-                  >
+                    )}
+                  </div>
+                </li>
+              ))}
+            </ul>
+            {/* SHOP BY BRAND */}
+            <div className="border border-crimson-red rounded-sm mb-2 px-3 py-1">
+              <span className="text-base font-semibold">SHOP BY BRAND</span>
+            </div>
+            <ul className="space-y-2 my-4 mb-6">
+              {dynamicBrands.map((item, idx) => (
+                <li key={idx} className="text-white">
+                  <Link to={item.link || "#"} onClick={toggleMenu}>
                     {item.title}
                   </Link>
-                )}
-              </li>
-            ))}
-          </ul>
+                </li>
+              ))}
+            </ul>
+            {/* MAIN MENU */}
+            <div className="border border-crimson-red rounded-sm mb-2 px-3 py-1">
+              <span className="text-base font-semibold">MAIN MENU</span>
+            </div>
+            <ul className="space-y-3 my-5">
+              {mainMenu.map((item, idx) => (
+                <li key={idx} className="relative group mobile-mainmenu-item">
+                  {item.isDropdown ? (
+                    <>
+                      <div
+                        className="flex justify-between uppercase items-center text-white cursor-pointer"
+                        onClick={() => handleDropdownClick(item.title)}
+                      >
+                        <span>{item.title}</span>
+                        <IoIosArrowDown
+                          className={`text-lg transition-transform duration-300 ${
+                            openDropdown === item.title ? "rotate-180" : ""
+                          }`}
+                        />
+                      </div>
+                      <div
+                        className="mobile-mainmenu-dropdown bg-dark-charcoal text-white text-sm shadow-lg rounded-md mt-2 overflow-hidden"
+                        style={{
+                          maxHeight:
+                            openDropdown === item.title
+                              ? `${(item.dropdownItems?.length || 0) * 48}px`
+                              : "0px",
+                          transition:
+                            "max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1)",
+                        }}
+                      >
+                        <ul>
+                          {item.dropdownItems.map((sub, i) => (
+                            <li
+                              key={i}
+                              className="hover:bg-gray-700 hover:shadow-md hover:rounded-md transition-all duration-200 w-full flex items-center"
+                            >
+                              <Link
+                                to={sub.link}
+                                className="flex-1 block active:scale-95 transition-transform duration-100 text-base text-left p-2 border border-gray-600"
+                                onClick={() => {
+                                  setOpenDropdown(null);
+                                  toggleMenu();
+                                }}
+                              >
+                                {sub.title}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </>
+                  ) : (
+                    <Link
+                      to={item.link}
+                      className="flex-1 uppercase block"
+                      onClick={toggleMenu}
+                    >
+                      {item.title}
+                    </Link>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
           {/* Social Media Links */}
-          <div className="flex space-x-4 pt-2">
+          <div className="flex space-x-4 pt-2 mb-6">
             {contactInfoLoading ? (
               <div className="flex gap-4">
                 {[1, 2, 3, 4].map((i) => (
