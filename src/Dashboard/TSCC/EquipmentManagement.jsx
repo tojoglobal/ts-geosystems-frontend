@@ -62,19 +62,17 @@ function EquipmentForm({
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-gradient-to-br from-[#f0f4f8] to-[#e1ecf7] max-w-2xl mx-auto rounded-2xl shadow-xl px-6 py-8 mb-8 border border-[#e3eaf5]"
+      className="max-w-2xl mx-auto rounded-xl p-4 md:p-6 mb-8 border border-gray-600"
       style={{
         boxShadow: "0 6px 32px 0 rgba(25,118,210,0.11)",
       }}
     >
-      <h2 className="font-semibold text-xl mb-8 text-gray-800 text-center tracking-wide">
+      <h2 className="font-semibold text-xl mb-8 text-center tracking-wide">
         {isEditing ? "Edit Equipment" : "Add New Equipment"}
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <label className="block text-gray-600 font-medium mb-1">
-            Tracking No
-          </label>
+          <label className="block font-medium mb-1">Tracking No</label>
           <input
             name="trackingNo"
             type="text"
@@ -87,9 +85,7 @@ function EquipmentForm({
           />
         </div>
         <div>
-          <label className="block text-gray-600 font-medium mb-1">
-            Equipment
-          </label>
+          <label className="block font-medium mb-1">Equipment</label>
           <input
             name="equipment"
             type="text"
@@ -101,9 +97,7 @@ function EquipmentForm({
           />
         </div>
         <div>
-          <label className="block text-gray-600 font-medium mb-1">
-            Serial No
-          </label>
+          <label className="block font-medium mb-1">Serial No</label>
           <input
             name="serialNo"
             type="text"
@@ -115,9 +109,7 @@ function EquipmentForm({
           />
         </div>
         <div>
-          <label className="block text-gray-600 font-medium mb-1">
-            Accuracy
-          </label>
+          <label className="block font-medium mb-1">Accuracy</label>
           <input
             name="accuracy"
             type="text"
@@ -128,9 +120,7 @@ function EquipmentForm({
           />
         </div>
         <div>
-          <label className="block text-gray-600 font-medium mb-1">
-            Manufacturer
-          </label>
+          <label className="block font-medium mb-1">Manufacturer</label>
           <input
             name="manufacturer"
             type="text"
@@ -142,9 +132,7 @@ function EquipmentForm({
           />
         </div>
         <div>
-          <label className="block text-gray-600 font-medium mb-1">
-            Company Name
-          </label>
+          <label className="block font-medium mb-1">Company Name</label>
           <input
             name="companyName"
             type="text"
@@ -155,9 +143,7 @@ function EquipmentForm({
           />
         </div>
         <div>
-          <label className="block text-gray-600 font-medium mb-1">
-            Validity
-          </label>
+          <label className="block font-medium mb-1">Validity</label>
           <input
             name="validity"
             type="date"
@@ -210,64 +196,52 @@ function EquipmentForm({
 function EquipmentList({ data, onEdit, onDelete }) {
   return (
     <div className="mt-5 mb-3">
-      <h3 className="text-xl font-semibold mb-4 text-gray-200">
-        Equipment List
-      </h3>
-      <div className="overflow-x-auto rounded-xl shadow-xl border border-[#e3eaf5] bg-white">
+      <h3 className="text-xl font-semibold mb-4">Equipment List</h3>
+      <div className="overflow-x-auto rounded-xl shadow-xl border border-gray-600">
         <table className="min-w-full text-sm text-left">
-          <thead className="bg-gradient-to-r from-[#e8f0fe] to-[#fafdff]">
+          <thead>
             <tr className="text-left">
-              <th className="p-3 whitespace-nowrap text-gray-700 font-semibold">
+              <th className="p-3 whitespace-nowrap font-semibold">
                 Tracking No
               </th>
-              <th className="p-3 whitespace-nowrap text-gray-700 font-semibold">
-                Equipment
-              </th>
-              <th className="p-3 whitespace-nowrap text-gray-700 font-semibold">
-                Serial No
-              </th>
-              <th className="p-3 whitespace-nowrap text-gray-700 font-semibold">
-                Accuracy
-              </th>
-              <th className="p-3 whitespace-nowrap text-gray-700 font-semibold">
+              <th className="p-3 whitespace-nowrap font-semibold">Equipment</th>
+              <th className="p-3 whitespace-nowrap font-semibold">Serial No</th>
+              <th className="p-3 whitespace-nowrap font-semibold">Accuracy</th>
+              <th className="p-3 whitespace-nowrap font-semibold">
                 Manufacturer
               </th>
-              <th className="p-3 whitespace-nowrap text-gray-700 font-semibold">
+              <th className="p-3 whitespace-nowrap font-semibold">
                 Company Name
               </th>
-              <th className="p-3 whitespace-nowrap text-gray-700 font-semibold">
-                Validity
-              </th>
-              <th className="p-3 whitespace-nowrap text-gray-700 font-semibold">
-                Actions
-              </th>
+              <th className="p-3 whitespace-nowrap font-semibold">Validity</th>
+              <th className="p-3 whitespace-nowrap font-semibold">Actions</th>
             </tr>
           </thead>
           <tbody>
             {data.map((eqp) => (
               <tr
                 key={eqp.id || eqp.trackingNo}
-                className="hover:bg-[#f5faff] transition"
+                className="transition"
               >
-                <td className="p-3 border-b border-[#e3eaf5] text-gray-900 font-semibold">
+                <td className="p-3 border-b font-semibold">
                   {eqp.trackingNo}
                 </td>
-                <td className="p-3 border-b border-[#e3eaf5] text-gray-900 font-semibold">
+                <td className="p-3 border-b font-semibold">
                   {eqp.equipment}
                 </td>
-                <td className="p-3 border-b border-[#e3eaf5] text-gray-900 font-semibold">
+                <td className="p-3 border-b font-semibold">
                   {eqp.serialNo}
                 </td>
-                <td className="p-3 border-b border-[#e3eaf5] text-gray-900 font-semibold">
+                <td className="p-3 border-b font-semibold">
                   {eqp.accuracy}
                 </td>
-                <td className="p-3 border-b border-[#e3eaf5] text-gray-900 font-semibold">
+                <td className="p-3 border-b font-semibold">
                   {eqp.manufacturer}
                 </td>
-                <td className="p-3 border-b border-[#e3eaf5] text-gray-900 font-semibold">
+                <td className="p-3 border-b font-semibold">
                   {eqp.companyName}
                 </td>
-                <td className="p-3 border-b border-[#e3eaf5] text-gray-900 font-semibold">
+                <td className="p-3 border-b font-semibold">
                   {eqp.validity
                     ? new Date(eqp.validity).toLocaleDateString()
                     : ""}
@@ -352,7 +326,7 @@ export default function EquipmentManagement() {
 
   return (
     <div className="max-w-6xl mx-auto px-2 py-8">
-      <h2 className="text-xl md:text-2xl font-bold mb-6 text-center text-gray-700">
+      <h2 className="text-xl md:text-2xl font-bold mb-6 text-center">
         Equipment Management
       </h2>
       <EquipmentForm

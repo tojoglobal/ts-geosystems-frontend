@@ -43,17 +43,17 @@ function ClientForm({
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-gradient-to-br from-[#f0f4f8] to-[#e1ecf7] max-w-2xl mx-auto rounded-2xl shadow-xl px-6 py-8 mb-8 border border-[#e3eaf5]"
+      className="max-w-2xl mx-auto rounded-xl p-6 mb-8 border border-gray-600"
       style={{
         boxShadow: "0 6px 32px 0 rgba(25,118,210,0.11)",
       }}
     >
-      <h2 className="font-semibold text-xl mb-8 text-gray-800 text-center tracking-wide">
+      <h2 className="font-semibold text-xl mb-8 text-center tracking-wide">
         {isEditing ? "Edit Client" : "Add New Client"}
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <label className="block text-gray-600 font-medium mb-1">
+          <label className="block font-medium mb-1">
             Company Name
           </label>
           <input
@@ -68,7 +68,7 @@ function ClientForm({
           />
         </div>
         <div>
-          <label className="block text-gray-600 font-medium mb-1">
+          <label className="block font-medium mb-1">
             Company Owner Name
           </label>
           <input
@@ -82,7 +82,7 @@ function ClientForm({
           />
         </div>
         <div>
-          <label className="block text-gray-600 font-medium mb-1">
+          <label className="block font-medium mb-1">
             Mobile Number
           </label>
           <input
@@ -96,7 +96,7 @@ function ClientForm({
           />
         </div>
         <div>
-          <label className="block text-gray-600 font-medium mb-1">
+          <label className="block font-medium mb-1">
             Address
           </label>
           <input
@@ -154,7 +154,7 @@ function ClientList({ data, onEdit, onDelete, onSearch, searchValue }) {
   return (
     <div className="mt-5 mb-3">
       <div className="flex justify-between items-center mb-4">
-        <h3 className="text-xl font-semibold text-gray-800">Client List</h3>
+        <h3 className="text-xl font-semibold">Client List</h3>
         <div>
           <input
             type="text"
@@ -165,23 +165,23 @@ function ClientList({ data, onEdit, onDelete, onSearch, searchValue }) {
           />
         </div>
       </div>
-      <div className="overflow-x-auto rounded-xl shadow-xl border border-[#e3eaf5] bg-white">
+      <div className="overflow-x-auto rounded-xl shadow-xl border border-gray-600">
         <table className="min-w-full text-sm text-left">
-          <thead className="bg-gradient-to-r from-[#e8f0fe] to-[#fafdff]">
+          <thead>
             <tr className="text-left">
-              <th className="p-3 whitespace-nowrap text-gray-700 font-semibold">
+              <th className="p-3 whitespace-nowrap font-semibold">
                 Company Name
               </th>
-              <th className="p-3 whitespace-nowrap text-gray-700 font-semibold">
+              <th className="p-3 whitespace-nowrap font-semibold">
                 Owner Name
               </th>
-              <th className="p-3 whitespace-nowrap text-gray-700 font-semibold">
+              <th className="p-3 whitespace-nowrap font-semibold">
                 Mobile Number
               </th>
-              <th className="p-3 whitespace-nowrap text-gray-700 font-semibold">
+              <th className="p-3 whitespace-nowrap font-semibold">
                 Address
               </th>
-              <th className="p-3 whitespace-nowrap text-gray-700 font-semibold">
+              <th className="p-3 whitespace-nowrap font-semibold">
                 Actions
               </th>
             </tr>
@@ -192,16 +192,16 @@ function ClientList({ data, onEdit, onDelete, onSearch, searchValue }) {
                 key={client.id || client.companyName}
                 className="hover:bg-[#f5faff] transition"
               >
-                <td className="p-3 border-b border-[#e3eaf5] text-gray-900 font-semibold">
+                <td className="p-3 border-b border-[#e3eaf5] font-semibold">
                   {client.companyName}
                 </td>
-                <td className="p-3 border-b border-[#e3eaf5] text-gray-900 font-semibold">
+                <td className="p-3 border-b border-[#e3eaf5] font-semibold">
                   {client.ownerName}
                 </td>
-                <td className="p-3 border-b border-[#e3eaf5] text-gray-900 font-semibold">
+                <td className="p-3 border-b border-[#e3eaf5] font-semibold">
                   {client.mobileNumber}
                 </td>
-                <td className="p-3 border-b border-[#e3eaf5] text-gray-900 font-semibold">
+                <td className="p-3 border-b border-[#e3eaf5] font-semibold">
                   {client.address}
                 </td>
                 <td className="p-3 border-b border-[#e3eaf5]">
@@ -306,8 +306,8 @@ export default function ClientInformationManager() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-2 py-8">
-      <h2 className="text-xl md:text-2xl font-bold mb-6 text-center text-gray-700">
+    <div className="max-w-4xl mx-auto p-2">
+      <h2 className="text-xl md:text-2xl font-bold mb-6 text-center">
         Client Information Management
       </h2>
       <ClientForm
@@ -318,7 +318,7 @@ export default function ClientInformationManager() {
         resetTrigger={resetFormTrigger}
       />
       {loading ? (
-        <div className="text-center py-8 text-gray-500">Loading...</div>
+        <div className="text-center py-8">Loading...</div>
       ) : (
         <ClientList
           data={clients}
