@@ -56,7 +56,7 @@ const AskAQuestion = ({ productName, productId }) => {
           aria-label="close sidebar"
           className="drawer-overlay"
         ></label>
-        <div className="menu bg-white text-black min-h-full w-[500px] p-4">
+        <div className="menu bg-white text-black min-h-full md:w-[500px] p-3 md:p-4">
           <div className="flex justify-end mb-4">
             <button
               onClick={closeDrawer}
@@ -68,11 +68,11 @@ const AskAQuestion = ({ productName, productId }) => {
           <h2 className="text-2xl font-bold mb-2 text-center text-black">
             Ask A Question
           </h2>
-          <p className="text-sm mb-4 text-center w-[70%] mx-auto text-gray-700">
+          <p className="text-sm mb-4 text-center md:w-[70%] mx-auto text-gray-700">
             Please fill in the form below to have your query answered by one of
             our product experts.
           </p>
-          <form onSubmit={handleSubmit(onSubmit)} className="w-[90%] mx-auto">
+          <form onSubmit={handleSubmit(onSubmit)} className="w-full md:w-[90%] mx-auto">
             <div className="grid grid-cols-2 gap-4 mb-4">
               <div>
                 <input

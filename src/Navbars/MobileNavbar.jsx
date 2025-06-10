@@ -607,7 +607,7 @@ const MobileNavbar = () => {
             </ul>
           </div>
           {/* Social Media Links */}
-          <div className="flex space-x-4 pt-2 mb-6">
+          <div className="flex space-x-4 pt-2 mb-8">
             {contactInfoLoading ? (
               <div className="flex gap-4">
                 {[1, 2, 3, 4].map((i) => (

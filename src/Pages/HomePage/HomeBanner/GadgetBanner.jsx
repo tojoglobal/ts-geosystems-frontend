@@ -25,7 +25,7 @@ const GadgetBanner = () => {
 
   return (
     <div className="md:w-full my-3 md:my-5 mx-3 md:max-w-[1370px] md:mx-auto">
-      <div className="flex flex-col md:flex-row gap-3 md:gap-4 h-[150px] md:h-[320px]">
+      <div className="flex flex-col md:flex-row gap-3 md:gap-4 h-[280px] md:h-[320px]">
         {/* Left: Swiper */}
         <div className="w-full md:w-[67%] md:relative group overflow-hidden rounded-lg h-full">
           <Swiper
