@@ -10,7 +10,7 @@ const ExperienceCenter = () => {
 
   return (
     <div className="py-3 md:py-12 bg-white">
-      <div className="w-full max-w-[95%] 2xl:max-w-[1370px] mx-auto px-3 md:px-4">
+      <div className="w-full md:max-w-[95%] 2xl:max-w-[1370px] mx-auto px-3 md:px-4">
         <div className="flex items-center justify-center gap-4 mb-6">
           <div className="flex-1 h-0.5 bg-[#e62245]"></div>
           <h2 className="text-center text-xl sm:text-2xl md:text-3xl font-bold text-[#e62245] whitespace-nowrap uppercase">

@@ -30,7 +30,7 @@ const UserAccountLayout = () => {
   const pageInfo = getPageInfo();
 
   return (
-    <div className="px-2 md:px-0 py-2 w-full max-w-[95%] 2xl:max-w-[1370px] mx-auto md:py-5">
+    <div className="px-2 md:px-0 py-2 w-full md:max-w-[95%] 2xl:max-w-[1370px] mx-auto md:py-5">
       {/* Breadcrumb Navigation */}
       <div className="flex items-center gap-2 text-[11px] mb-5">
         <Link to="/" className="hover:text-crimson-red">

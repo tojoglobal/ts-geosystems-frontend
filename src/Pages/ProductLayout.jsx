@@ -22,7 +22,7 @@ const ProductLayout = () => {
           <AskAQuestion productName={productName} productId={productId} />
         </div>
       )}
-      <div className="w-full max-w-[95%] 2xl:max-w-[1370px] mx-auto min-h-screen bg-white text-black mt-4 mb-10">
+      <div className="w-full md:max-w-[95%] 2xl:max-w-[1370px] mx-auto min-h-screen bg-white text-black mt-4 mb-10">
         {isDetailsPage && breadcrumb?.product && (
           <div className="flex items-center gap-1 text-[11px] md:mt-5 mb-2 flex-wrap mx-2 md:mx-0 px-1">
             <Link to="/" className="hover:text-[#e62245]">

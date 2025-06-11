@@ -82,7 +82,7 @@ const Recommended = ({ category, currentProductId }) => {
   }
 
   return (
-    <div className="w-full max-w-[95%] 2xl:max-w-[1370px] mx-auto rounded-md py-6 relative">
+    <div className="w-full md:max-w-[95%] 2xl:max-w-[1370px] mx-auto rounded-md py-6 relative">
       {/* Tab Header */}
       <div className="flex items-center justify-between rounded-[4px] border border-gray-200">
         <div className="relative cursor-pointer group px-3 py-1">

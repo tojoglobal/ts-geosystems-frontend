@@ -141,7 +141,7 @@ const ProductDetails = () => {
 
   return (
     <div className="bg-white p-2 sm:p-3">
-      <div className="w-full max-w-[95%] 2xl:max-w-[1370px] mx-auto">
+      <div className="w-full md:max-w-[95%] 2xl:max-w-[1370px] mx-auto">
         <div className="flex flex-col md:flex-row gap-5">
           {/* Image Gallery */}
           <div className="flex flex-col items-start gap-2 relative w-full md:w-[550px]">

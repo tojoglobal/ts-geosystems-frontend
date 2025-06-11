@@ -121,7 +121,7 @@ const Register = () => {
 
   return (
     <div className="min-h-screen bg-white">
-      <div className="w-full max-w-[95%] 2xl:max-w-[1370px] mx-auto px-4 py-8">
+      <div className="w-full md:max-w-[95%] 2xl:max-w-[1370px] mx-auto px-4 py-8">
         <div className="flex items-center gap-2 mb-6 text-sm">
           <Link to="/" className="hover:text-[#e62245]">
             Home

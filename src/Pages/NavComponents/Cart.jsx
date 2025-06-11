@@ -92,7 +92,7 @@ const Cart = () => {
   const grandTotal = subTotal + vat + shippingCost - discount;
 
   return (
-    <div className="p-2">
+    <div className="md:p-2">
       <div className="flex items-center gap-2 text-xs mb-4">
         <Link to="/" className="hover:text-[#e62245]">
           Home
@@ -100,7 +100,6 @@ const Cart = () => {
         <span>/</span>
         <span className="text-[#e62245]">Your Cart</span>
       </div>
-
       {mergedCart.length === 0 ? (
         <p className="text-xl">Your cart is empty.</p>
       ) : (
@@ -158,7 +157,6 @@ const Cart = () => {
                       </button>
                     </div>
                   </td>
-
                   <td>৳{item?.totalVat.toFixed(2)}</td>
                   <td className="text-right">
                     <div className="flex items-center justify-end gap-3">
@@ -175,9 +173,8 @@ const Cart = () => {
               ))}
             </tbody>
           </table>
-
           {/* Coupon and Shipping */}
-          <div className="max-w-lg ml-auto p-4 rounded space-y-4">
+          <div className="max-w-lg ml-auto p-2 md:p-4 rounded space-y-4">
             {/* Totals */}
             <div className="flex justify-between mb-2 border-b pb-2">
               <span>Subtotal:</span>
@@ -333,11 +330,11 @@ const Cart = () => {
         </>
       )}
       {/* Mobile Cart View */}
-      <div className="md:hidden space-y-4">
+      <div className="md:hidden space-y-4 mt-2">
         {mergedCart.map((item) => (
           <div
             key={item.id}
-            className="border rounded-lg p-4 flex flex-col sm:flex-row gap-4 shadow-sm"
+            className="border rounded-lg p-3 flex flex-col sm:flex-row gap-4 shadow-sm"
           >
             <img
               src={

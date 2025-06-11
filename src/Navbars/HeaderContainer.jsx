@@ -63,7 +63,7 @@ const HeaderContainer = () => {
   };
 
   return (
-    <div className="w-full max-w-[95%] 2xl:max-w-[1370px] mx-auto z-50">
+    <div className="w-full md:max-w-[95%] 2xl:max-w-[1370px] mx-auto z-50">
       <div className="flex justify-between items-center py-4">
         {/* Logo */}
         <Link to="/">

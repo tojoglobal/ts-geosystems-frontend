@@ -355,12 +355,12 @@ const MobileNavbar = () => {
             <Link to="/user/login" aria-label="User account">
               <LuUserRound className="text-2xl text-red-600" />
             </Link>
-            <Link to="/cart">
-              <button
-                className="relative cursor-pointer"
-                // aria-label="Shopping cart"
-                onClick={() => dispatch(toggleCart())}
-              >
+            <Link
+              to="/cart"
+              className="group cursor-pointer"
+              onClick={() => dispatch(toggleCart())}
+            >
+              <button aria-label="Shopping cart" className="relative">
                 <PiShoppingCart className="text-2xl text-red-600" />
                 <span className="absolute -top-1 -right-1 bg-[#e62245] text-white text-xs w-4 h-4 flex items-center justify-center rounded-full font-bold">
                   {totalQuantity}

@@ -74,14 +74,14 @@ const ProductHighlights = () => {
 
   if (error) {
     return (
-      <div className="w-full max-w-[95%] 2xl:max-w-[1370px] mx-auto py-12">
+      <div className="w-full md:max-w-[95%] 2xl:max-w-[1370px] mx-auto py-12">
         Error loading product highlights
       </div>
     );
   }
 
   return (
-    <div className="w-full max-w-[95%] 2xl:max-w-[1370px] mx-auto rounded-md px-3 md:px-0 py-6 md:py-12 bg-white relative">
+    <div className="w-full md:max-w-[95%] 2xl:max-w-[1370px] mx-auto rounded-md px-3 md:px-0 py-6 md:py-12 bg-white relative">
       {/* Tab Header */}
       <div className="flex flex-row justify-between md:items-center md:justify-between border border-gray-200 rounded-l-[4px] relative">
         <div className="flex flex-col md:flex-row gap-3 sm:gap-4 px-3 py-[2px]">
@@ -92,7 +92,7 @@ const ProductHighlights = () => {
               className="relative group cursor-pointer"
             >
               <h2
-                className={`text-base py-1 uppercase text-[20px] font-semibold w-fit pr-4 border-r border-gray-200 ${
+                className={`text-base py-1 uppercase md:text-[20px] font-semibold w-fit pr-4 border-r border-gray-200 ${
                   activeTab === tab.key ? "text-[#e62245]" : "text-black"
                 }`}
               >

@@ -50,7 +50,7 @@ const CertificateTracking = () => {
   if (isLoading) return <div>Loading...</div>;
 
   return (
-    <div className="w-full max-w-[95%] 2xl:max-w-[1370px] mx-auto p-5">
+    <div className="w-full md:max-w-[95%] 2xl:max-w-[1370px] mx-auto p-5">
       <div className="flex items-center gap-2 text-[11px] mb-2 text-gray-500">
         <Link to="/" className="flex items-center gap-1">
           <CiHome className="text-base" /> Home

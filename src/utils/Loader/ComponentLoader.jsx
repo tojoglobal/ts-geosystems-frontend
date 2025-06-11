@@ -13,7 +13,7 @@ export const ComponentLoader = ({ type = "spinner", componentName }) => {
 
   if (componentName === "ProductHighlights") {
     return (
-      <div className="w-full max-w-[95%] 2xl:max-w-[1370px] mx-auto px-3 py-12">
+      <div className="w-full md:max-w-[95%] 2xl:max-w-[1370px] mx-auto px-3 py-12">
         <div className="flex gap-4 mb-6">
           {[1, 2, 3].map((i) => (
             <SkeletonLoader key={i} className="h-8 w-32" />
