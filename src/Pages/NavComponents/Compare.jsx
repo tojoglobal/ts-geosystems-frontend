@@ -67,7 +67,7 @@ const Compare = () => {
   const [viewMode, setViewMode] = useState("grid");
   const [hovered, setHovered] = useState(null);
   const products = data || [];
-    const { trackProductView } = useTrackProductView();
+  const { trackProductView } = useTrackProductView();
   const dispatch = useDispatch();
 
   // Add to Cart handler
@@ -216,75 +216,73 @@ const Compare = () => {
                   }}
                 />
               </Link>
-              <div className="space-y-4">
-                <h3 className="font-medium">
-                  <Link
-                    to={link}
-                    onClick={() => trackProductView(product.id)}
-                    className="hover:text-[#e62245] transition"
-                  >
-                    {product.name || product.product_name}
-                  </Link>
-                </h3>
-                <div>
-                  <div className="flex items-center gap-1">
-                    <p className="text-gray-500 line-through">
-                      Was: ৳
-                      {(product.oldPrice
-                        ? Number(product.oldPrice)
-                        : product.oldPriceInc
-                        ? Number(product.oldPriceInc)
-                        : product.old_price
-                        ? Number(product.old_price)
-                        : ""
-                      ).toFixed
-                        ? (
-                            product.oldPrice ||
-                            product.oldPriceInc ||
-                            product.old_price ||
-                            0
-                          ).toFixed(2)
-                        : ""}
-                    </p>
+              <div className="flex flex-col flex-grow px-4 pb-4">
+                <div className="flex-grow flex flex-col space-y-4">
+                  <h3 className="font-medium leading-tight min-h-[2.5em]">
+                    <Link to={link} className="hover:text-[#e62245] transition">
+                      {product.name || product.product_name}
+                    </Link>
+                  </h3>
+                  <div>
+                    <div className="flex items-center gap-1">
+                      <p className="text-gray-500 line-through">
+                        Was: ৳
+                        {(product.oldPrice
+                          ? Number(product.oldPrice)
+                          : product.oldPriceInc
+                          ? Number(product.oldPriceInc)
+                          : product.old_price
+                          ? Number(product.old_price)
+                          : ""
+                        ).toFixed
+                          ? (
+                              product.oldPrice ||
+                              product.oldPriceInc ||
+                              product.old_price ||
+                              0
+                            ).toFixed(2)
+                          : ""}
+                      </p>
+                      <p className="font-bold">
+                        ৳
+                        {(product.price ? Number(product.price) : "").toFixed
+                          ? Number(product.price).toFixed(2)
+                          : ""}{" "}
+                        (Ex. VAT)
+                      </p>
+                    </div>
                     <p className="font-bold">
                       ৳
                       {(product.price ? Number(product.price) : "").toFixed
                         ? Number(product.price).toFixed(2)
-                        : ""}{" "}
-                      (Ex. VAT)
+                        : ""}
+                    </p>
+                    <p className="text-gray-500">
+                      ৳
+                      {(product.priceExVat
+                        ? Number(product.priceExVat)
+                        : product.price_ex_vat
+                        ? Number(product.price_ex_vat)
+                        : ""
+                      ).toFixed
+                        ? (
+                            product.priceExVat ||
+                            product.price_ex_vat ||
+                            ""
+                          ).toFixed(2)
+                        : ""}
+                      (Inc. VAT)
                     </p>
                   </div>
-                  <p className="font-bold">
-                    ৳
-                    {(product.price ? Number(product.price) : "").toFixed
-                      ? Number(product.price).toFixed(2)
-                      : ""}
-                  </p>
-                  <p className="text-gray-500">
-                    ৳
-                    {(product.priceExVat
-                      ? Number(product.priceExVat)
-                      : product.price_ex_vat
-                      ? Number(product.price_ex_vat)
-                      : ""
-                    ).toFixed
-                      ? (
-                          product.priceExVat ||
-                          product.price_ex_vat ||
-                          ""
-                        ).toFixed(2)
-                      : ""}
-                    (Inc. VAT)
-                  </p>
+                  {product?.isStock === 1 && (
+                    <button
+                      onClick={() => handleAddToCart(product)}
+                      className="bg-[#e62245] w-full cursor-pointer text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
+                    >
+                      ADD TO CART
+                    </button>
+                  )}
                 </div>
-                {product?.isStock === 1 && (
-                  <button
-                    onClick={() => handleAddToCart(product)}
-                    className="bg-[#e62245] w-full cursor-pointer text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
-                  >
-                    ADD TO CART
-                  </button>
-                )}
                 <div className="p-1">
                   <div className="w-full space-y-3 text-sm text-gray-800">
                     <div>
