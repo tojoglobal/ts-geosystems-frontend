@@ -67,23 +67,25 @@ const AdminUpdateContactUs = () => {
     if (contactData) {
       reset({
         phoneNumbers:
-          contactData.phoneNumbers.length > 0
-            ? contactData.phoneNumbers
+          contactData?.phoneNumbers?.length > 0
+            ? contactData?.phoneNumbers
             : [{ value: "" }],
         emails:
-          contactData.emails.length > 0 ? contactData.emails : [{ value: "" }],
-        officeAddresses:
-          contactData.officeAddresses.length > 0
-            ? contactData.officeAddresses
+          contactData?.emails?.length > 0
+            ? contactData.emails
             : [{ value: "" }],
-        socialLinks: contactData.socialLinks || {
+        officeAddresses:
+          contactData?.officeAddresses?.length > 0
+            ? contactData?.officeAddresses
+            : [{ value: "" }],
+        socialLinks: contactData?.socialLinks || {
           facebook: "",
           twitter: "",
           youtube: "",
           instagram: "",
         },
-        workingDays: contactData.workingDays,
-        weeklyHoliday: contactData.weeklyHoliday,
+        workingDays: contactData?.workingDays,
+        weeklyHoliday: contactData?.weeklyHoliday,
       });
     }
   }, [contactData, reset]);
@@ -171,7 +173,7 @@ const AdminUpdateContactUs = () => {
       <h1 className="text-2xl font-semibold mb-8 text-white">
         Admin — Update Contact Us
       </h1>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-10">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
         {/* Working Days Section */}
         <section className="bg-transparent px-0 md:px-4">
           <h2 className="text-lg font-semibold mb-3 text-gray-50">
@@ -235,7 +237,7 @@ const AdminUpdateContactUs = () => {
                       type="button"
                       title="Remove"
                       onClick={() => removePhone(index)}
-                      className="p-2 rounded cursor-pointer hover:bg-red-800/20 text-red-400 transition"
+                      className="p-2 rounded cursor-pointer bg-red-800/20 text-red-400 transition"
                     >
                       <svg
                         className="w-4 h-4"
@@ -287,7 +289,7 @@ const AdminUpdateContactUs = () => {
                       type="button"
                       title="Remove"
                       onClick={() => removeEmail(index)}
-                      className="p-2 rounded cursor-pointer hover:bg-red-800/20 text-red-400 transition"
+                      className="p-2 rounded cursor-pointer bg-red-800/20 text-red-400 transition"
                     >
                       <svg
                         className="w-4 h-4"
@@ -341,7 +343,7 @@ const AdminUpdateContactUs = () => {
                       type="button"
                       title="Remove"
                       onClick={() => removeAddress(index)}
-                      className="p-2 rounded cursor-pointer hover:bg-red-800/20 text-red-400 transition"
+                      className="p-2 rounded cursor-pointer bg-red-800/20 text-red-400 transition"
                     >
                       <svg
                         className="w-4 h-4"
@@ -377,7 +379,7 @@ const AdminUpdateContactUs = () => {
         {/* Social Media Section */}
         <section className="bg-transparent px-0 md:px-4">
           <h2 className="text-lg font-semibold mb-3 text-gray-50">
-            Social Media Links (for Contact Us & Footer)
+            Social Media Links (Will effect on ContactUs, Mobile Navbar & Footer)
           </h2>
           <div className="grid md:grid-cols-2 gap-4">
             {["facebook", "twitter", "youtube", "instagram"].map((platform) => (
