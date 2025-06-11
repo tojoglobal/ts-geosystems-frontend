@@ -342,14 +342,14 @@ const AdminUpdateFooter = () => {
               name="mailing_text"
               value={formData.mailing_text}
               onChange={handleChange}
-              rows={3}
+              rows={5}
               className="w-full border border-neutral-700 bg-neutral-900 px-3 py-2 rounded text-white text-sm"
               required
             />
           </div>
           <button
             type="submit"
-            className="bg-teal-600 hover:bg-teal-700 text-white px-8 py-2 rounded font-semibold transition disabled:opacity-50 mt-2 w-full"
+            className="bg-teal-600 hover:bg-teal-700 text-white px-8 py-2 rounded font-semibold transition disabled:opacity-50 w-full"
             disabled={saving}
           >
             {saving ? "Saving..." : "Save Changes"}

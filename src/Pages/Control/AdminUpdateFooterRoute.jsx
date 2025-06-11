@@ -131,7 +131,7 @@ const AdminUpdateFooterRoute = () => {
   };
 
   return (
-    <div className="my-7">
+    <div className="mt-7">
       <div>
         <h2 className="text-2xl font-semibold mb-2">Manage Dynamic Links</h2>
         <p className="text-gray-400 mb-6">
@@ -143,13 +143,11 @@ const AdminUpdateFooterRoute = () => {
             <Loader className="my-12" />
           ) : (
             <div className="space-y-8">
-              <div id="link-form" className="rounded-lg border border-gray-700">
-                <div className="p-6">
-                  <h3 className="text-lg font-semibold mb-2">
-                    {editingId ? "Edit Link" : "Create New Link"}
-                  </h3>
-                </div>
-                <div className="p-6 pt-0">
+              <div id="link-form">
+                <h3 className="text-lg font-semibold mb-2">
+                  {editingId ? "Edit Link" : "Create New Link"}
+                </h3>
+                <div className="py-6 pt-0">
                   <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-2">
@@ -260,14 +258,12 @@ const AdminUpdateFooterRoute = () => {
                   </form>
                 </div>
               </div>
-              <div className="rounded-lg border border-gray-700">
-                <div className="p-6">
-                  <h3 className="text-lg font-semibold mb-2">Existing Links</h3>
-                  <p className="text-gray-400">
-                    {links.length} link{links.length !== 1 ? "s" : ""} found
-                  </p>
-                </div>
-                <div className="p-6 pt-0">
+              <div>
+                <h3 className="text-lg font-semibold mb-2">Existing Links</h3>
+                <p className="text-gray-400 mb-3">
+                  {links.length} link{links.length !== 1 ? "s" : ""} found
+                </p>
+                <div className="py-6 pt-0">
                   <div className="rounded-md border border-gray-700 overflow-hidden">
                     <table className="w-full">
                       <thead className="bg-gray-800">
