@@ -83,7 +83,7 @@ const MainNavContainer = () => {
       >
         <div className="relative" ref={dropdownRef}>
           <div className="relative">
-            <div className="max-w-[1370px] mx-auto flex justify-between items-center">
+            <div className="w-full max-w-[95%] 2xl:max-w-[1370px] mx-auto flex justify-between items-center">
               {/* Left side */}
               <div
                 className="relative cursor-pointer py-2"
@@ -126,7 +126,7 @@ const MainNavContainer = () => {
               </div>
               {/* Right side */}
               {!isSticky ? (
-                <div className="flex gap-7 lg:gap-9 text-[14px] font-bold text-charcoal relative">
+                <div className="flex gap-6 lg:gap-9 text-[14px] font-bold text-charcoal relative">
                   <Link
                     to="/used"
                     className="cursor-pointer hover:text-crimson-red transition-colors duration-300 py-2"

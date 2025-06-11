@@ -133,7 +133,7 @@ const Login = () => {
   };
 
   return (
-    <div className="px-3 py-5 bg-white max-w-[1370px] text-gray-700 mx-auto">
+    <div className="px-3 py-5 bg-white w-full max-w-[95%] 2xl:max-w-[1370px] text-gray-700 mx-auto">
       <div className="flex items-center gap-2 text-[11px] mb-4">
         <Link to="/" className="hover:underline">
           Home

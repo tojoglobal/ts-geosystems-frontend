@@ -10,7 +10,7 @@ const GadgetGoHighBanner = () => {
   // Optionally, show a skeleton loader here
   if (isLoading)
     return (
-      <div className="md:w-full my-3 md:my-5 mx-3 max-w-[1370px] md:mx-auto">
+      <div className="md:w-full my-3 md:my-5 mx-3 w-full max-w-[95%] 2xl:max-w-[1370px] md:mx-auto">
         <div className="flex h-96 md:h-72 w-full flex-col md:flex-row gap-3 md:gap-4">
           <div className="w-full md:w-[33%] h-full bg-gray-200 animate-pulse rounded-md" />
           <div className="w-full md:w-[67%] h-full bg-gray-200 animate-pulse rounded-md" />
@@ -19,7 +19,7 @@ const GadgetGoHighBanner = () => {
     );
 
   return (
-    <div className="md:w-full my-3 md:my-5 mx-3 max-w-[1370px] md:mx-auto">
+    <div className="md:w-full my-3 md:my-5 mx-3 w-full max-w-[95%] 2xl:max-w-[1370px] md:mx-auto">
       <div className="flex h-80 md:h-72 w-full flex-col md:flex-row gap-3 md:gap-4">
         <div className="w-full md:w-[33%] overflow-hidden rounded-md group h-full">
           {left?.imageUrl ? (

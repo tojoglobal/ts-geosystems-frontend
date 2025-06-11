@@ -21,7 +21,7 @@ const OurAchievements = () => {
   if (isLoading) return null;
 
   return (
-    <div className="max-w-[1370px] text-black mx-auto px-3 py-6 md:py-12">
+    <div className="w-full max-w-[95%] 2xl:max-w-[1370px] text-black mx-auto px-3 py-6 md:py-12">
       <div className="flex items-center justify-center gap-2 md:gap-4 mb-6">
         <div className="flex-1 h-0.5 bg-[#e62245]" />
         <h2 className="text-center text-xl sm:text-2xl md:text-4xl font-bold text-[#e62245] whitespace-nowrap uppercase">

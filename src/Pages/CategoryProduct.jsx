@@ -15,6 +15,7 @@ import { useBreadcrumbLabel } from "../utils/useBreadcrumbLabel";
 import { useTrackProductView } from "../Hooks/useTrackProductView";
 import { getProductType } from "../utils/productOption";
 import useToastSwal from "../Hooks/useToastSwal";
+import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 
 const sortOptions = [
   { label: "NEWEST ITEMS", value: "newest" },
@@ -539,9 +540,9 @@ const CategoryProduct = () => {
           {currentPage > 1 ? (
             <button
               onClick={() => setCurrentPage(currentPage - 1)}
-              className="border cursor-pointer px-3 py-1 rounded hover:bg-gray-100 transition text-sm"
+              className="border flex items-center gap-1 px-1.5 p-1 rounded hover:bg-gray-100 transition text-sm"
             >
-              ← Previous
+              <MdKeyboardArrowLeft /> Previous
             </button>
           ) : (
             <div></div>
@@ -552,8 +553,10 @@ const CategoryProduct = () => {
               <button
                 key={idx}
                 onClick={() => setCurrentPage(idx + 1)}
-                className={`border cursor-pointer px-3 py-1 rounded text-sm ${
-                  currentPage === idx + 1 ? "bg-gray-200" : "hover:bg-gray-100"
+                className={`border px-2 py-1.5 rounded text-sm ${
+                  currentPage === idx + 1
+                    ? "border border-gray-300 bg-[#ebebeb] hover:text-red-500"
+                    : "hover:text-red-500 cursor-pointer"
                 }`}
               >
                 {idx + 1}
@@ -565,9 +568,9 @@ const CategoryProduct = () => {
         {currentPage < totalPages ? (
           <button
             onClick={() => setCurrentPage(currentPage + 1)}
-            className="border cursor-pointer px-3 py-1 rounded hover:bg-gray-100 transition text-sm"
+            className="border flex items-center gap-1 px-1.5 p-1 rounded hover:bg-gray-100 transition text-sm"
           >
-            Next →
+            Next <MdKeyboardArrowRight />
           </button>
         ) : (
           <div></div>

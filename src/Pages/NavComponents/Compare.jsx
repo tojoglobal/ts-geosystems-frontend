@@ -1,51 +1,96 @@
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { BsGrid3X3GapFill } from "react-icons/bs";
 import { FaThList } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
-import { useState } from "react";
+import { useState, useMemo } from "react";
+import useDataQuery from "../../utils/useDataQuery";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../../features/AddToCart/AddToCart";
 
-const demoProducts = [
-  {
-    id: 1,
-    name: "Leica GK1 Lemo to Serial Converter",
-    brand: "Leica Geosystems",
-    price: 5.0,
-    priceExVat: 6.0,
-    oldPrice: 67.5,
-    oldPriceInc: 81.0,
-    image:
-      "https://cdn11.bigcommerce.com/s-ew2v2d3jn1/images/stencil/500x659/products/552/3303/leica-gk1-lemo-serial-converter__63317.1689995970.jpg?c=1",
-    description:
-      "The Lemo Canon Converter for Leica Total Stations is a 30-degree Lemo to RS232 converter that connects any Leica total station to any computer. This accessory is used with the GEV186 cable to...",
-    availability: "Usually ships in 24 hours",
-    otherDetails: "N/A",
-    reviews: "No Reviews",
-  },
-  {
-    id: 2,
-    name: "Leica CCD1 Radio Handle - Used",
-    brand: "Leica Geosystems",
-    price: 100.0,
-    priceExVat: 120.0,
-    oldPrice: 295.0,
-    oldPriceInc: 354.0,
-    image:
-      "https://cdn11.bigcommerce.com/s-ew2v2d3jn1/images/stencil/500x659/products/565/3376/recon-leica-ccd1-radio-handle__01533.1691120389.jpg?c=1",
-    description:
-      "WLAN communications handle for use with iCON Robotic Total Stations.",
-    manufactured: "2013",
-    condition: "Good",
-    availability: "Usually ships in 24 hours",
-    otherDetails: "N/A",
-    reviews: "No Reviews",
-  },
-];
+// Helper: supports array or JSON string for image URLs, returns full API URL
+const getFirstImage = (img) => {
+  if (!img) return "";
+  let url = "";
+  if (Array.isArray(img)) url = img[0];
+  else {
+    try {
+      const arr = JSON.parse(img);
+      url = Array.isArray(arr) ? arr[0] : arr;
+    } catch {
+      url = img;
+    }
+  }
+  if (!url) return "";
+  // If already absolute URL (starts with http), just use it
+  if (typeof url === "string" && url.startsWith("http")) return url;
+  // Otherwise, build with API URL
+  return `${import.meta.env.VITE_OPEN_APIURL || ""}${url}`;
+};
+
+const normalizeProducts = (raw) => raw?.products || [];
 
 const Compare = () => {
-  //   const { ids } = useParams();
-  //   const idArray = ids.split("/").map((id) => Number(id));
+  const { ids } = useParams();
+  const idString = ids ? ids.replaceAll("/", ",") : "";
+  const queryUrl = useMemo(
+    () => `/api/productsids/?ids=${idString}`,
+    [idString]
+  );
+  const { data, isLoading, error, refetch } = useDataQuery(
+    ["compare-products", idString],
+    queryUrl,
+    !!idString,
+    normalizeProducts
+  );
+  const [viewMode, setViewMode] = useState("grid");
+  const products = data || [];
+  const dispatch = useDispatch();
 
-  const [viewMode, setViewMode] = useState("grid"); // 'grid' or 'list'
+  // Add to Cart handler
+  const handleAddToCart = (product) => {
+    dispatch(
+      addToCart({
+        id: product.id,
+        product_name: product.product_name || product.name,
+        price: Number(product.price),
+        quantity: 1,
+      })
+    );
+  };
+
+  if (!idString) {
+    return (
+      <div className="p-3">
+        <h1 className="text-2xl text-center mt-10 text-red-600">
+          No product IDs specified in URL.
+        </h1>
+      </div>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <div className="p-3">
+        <h1 className="text-xl">Loading products...</h1>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="p-3">
+        <h1 className="text-xl text-red-600">
+          Error loading products. Please try again.
+        </h1>
+        <button
+          className="bg-[#e62245] text-white px-4 py-2 rounded"
+          onClick={refetch}
+        >
+          Retry
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="p-3">
@@ -56,26 +101,26 @@ const Compare = () => {
         <span>/</span>
         <span className="text-[#e62245]">Compare Products</span>
       </div>
-      <div className="">
+      <div>
         <h1 className="text-3xl mb-3">
-          Comparing {demoProducts.length} Products
+          Comparing {products.length} Product{products.length !== 1 && "s"}
         </h1>
         <div className="flex items-center gap-2">
           <button
-            className={`p-3 rounded-sm ${
+            className={`p-2 rounded-sm ${
               viewMode === "grid"
-                ? "bg-[#e62245] text-white"
-                : "border text-black"
+                ? "bg-[#e62245] text-white rounded-sm"
+                : "text-gray-600 border"
             }`}
             onClick={() => setViewMode("grid")}
           >
             <BsGrid3X3GapFill size={20} />
           </button>
           <button
-            className={`p-3 rounded-sm ${
+            className={`p-2 rounded-sm ${
               viewMode === "list"
-                ? "bg-[#e62245] text-white"
-                : "border text-black"
+                ? "bg-[#e62245] text-white rounded-sm"
+                : "text-gray-600 border"
             }`}
             onClick={() => setViewMode("list")}
           >
@@ -85,60 +130,120 @@ const Compare = () => {
       </div>
 
       <div
-        className={`${
-          viewMode === "grid" ? "grid grid-cols-4 gap-6" : "flex flex-col gap-6"
-        }`}
+        className={
+          viewMode === "grid"
+            ? "grid grid-cols-4 gap-6"
+            : "grid grid-cols-1 gap-6"
+        }
       >
-        {demoProducts.map((product) => (
-          <div
-            key={product.id}
-            className={`relative ${viewMode === "list" ? "w-1/4" : ""}`}
-          >
-            <button className="absolute right-0 top-0 p-2 text-gray-500 hover:text-[#e62245]">
+        {products.map((product) => (
+          <div key={product.id} className="relative">
+            <button className="absolute cursor-pointer right-0 top-0 p-2 text-gray-500 hover:text-[#e62245]">
               <IoClose size={24} />
             </button>
-            <img
-              src={product.image}
-              alt={product.name}
-              className="w-full h-48 object-contain mb-4"
-            />
+            <div className="w-full h-48 flex justify-center items-center mb-4 bg-white">
+              <img
+                src={
+                  product.image
+                    ? product.image
+                    : getFirstImage(product.image_urls)
+                }
+                alt={product.name || product.product_name}
+                className="w-auto max-h-full object-contain"
+                loading="lazy"
+                onError={(e) => {
+                  e.target.src =
+                    "https://via.placeholder.com/150?text=No+Image";
+                }}
+              />
+            </div>
             <div className="space-y-4">
-              <h3 className="font-medium">{product.name}</h3>
+              <h3 className="font-medium">
+                {product.name || product.product_name}
+              </h3>
               <div>
                 <div className="flex items-center gap-1">
                   <p className="text-gray-500 line-through">
-                    Was: ৳{product.oldPrice.toFixed(2)}
+                    Was: ৳
+                    {(product.oldPrice
+                      ? Number(product.oldPrice)
+                      : product.oldPriceInc
+                      ? Number(product.oldPriceInc)
+                      : product.old_price
+                      ? Number(product.old_price)
+                      : ""
+                    ).toFixed
+                      ? (
+                          product.oldPrice ||
+                          product.oldPriceInc ||
+                          product.old_price ||
+                          0
+                        ).toFixed(2)
+                      : ""}
                   </p>
                   <p className="font-bold">
-                    ৳{product.price.toFixed(2)} (Ex. VAT)
+                    ৳
+                    {(product.price ? Number(product.price) : "").toFixed
+                      ? Number(product.price).toFixed(2)
+                      : ""}{" "}
+                    (Ex. VAT)
                   </p>
                 </div>
-                <p className="font-bold">৳{product.price.toFixed(2)}</p>
+                <p className="font-bold">
+                  ৳
+                  {(product.price ? Number(product.price) : "").toFixed
+                    ? Number(product.price).toFixed(2)
+                    : ""}
+                </p>
                 <p className="text-gray-500">
-                  ৳{product.priceExVat.toFixed(2)} (Inc. VAT)
+                  ৳
+                  {(product.priceExVat
+                    ? Number(product.priceExVat)
+                    : product.price_ex_vat
+                    ? Number(product.price_ex_vat)
+                    : ""
+                  ).toFixed
+                    ? (
+                        product.priceExVat ||
+                        product.price_ex_vat ||
+                        ""
+                      ).toFixed(2)
+                    : ""}
+                  (Inc. VAT)
                 </p>
               </div>
               {product?.isStock === 1 && (
-                <button className="w-full cursor-pointer bg-[#e62245] text-white py-2 hover:bg-[#d41d3f] transition-colors font-semibold mb-4">
+                <button
+                  onClick={() => handleAddToCart(product)}
+                  className="bg-[#e62245] w-full cursor-pointer text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
+                >
                   ADD TO CART
                 </button>
               )}
-              <div className="p-6">
+              <div className="p-1">
                 <div className="w-full space-y-3 text-sm text-gray-800">
                   <div>
                     <h4 className="font-bold">Brand:</h4>
-                    <p className="text-[#e62245] underline">{product.brand}</p>
+                    <p className="text-[#e62245] underline">
+                      {product.brand || product.brand_name}
+                    </p>
                   </div>
                   <div>
                     <h4 className="font-bold">Description</h4>
-                    <p className="text-gray-600">{product.description}</p>
+                    <p className="text-gray-600">
+                      {product.description || product.product_overview || ""}
+                    </p>
                   </div>
                   <div>
-                    <p className="font-medium">No Reviews</p>
+                    <p className="font-medium">
+                      {product.reviews || "No Reviews"}
+                    </p>
                   </div>
                   <div>
                     <h4 className="font-bold">Availability</h4>
-                    <p className="text-gray-600">{product.availability}</p>
+                    <p className="text-gray-600">
+                      {product.availability || "Usually ships in 24 hours"}
+                    </p>
                   </div>
                   {product.manufactured && (
                     <div>
@@ -146,16 +251,18 @@ const Compare = () => {
                       <p className="text-gray-600">{product.manufactured}</p>
                     </div>
                   )}
-                  {product.condition && (
+                  {(product.condition || product.product_condition) && (
                     <div>
                       <h4 className="font-medium">Condition</h4>
-                      <p className="text-gray-600">{product.condition}</p>
+                      <p className="text-gray-600">
+                        {product.condition || product.product_condition}
+                      </p>
                     </div>
                   )}
                   <div>
                     <h4 className="font-bold">Other Details</h4>
                     <p className="text-gray-600 font-bold">
-                      {product.otherDetails || "N/A"}
+                      {product.otherDetails || product.other_details || "N/A"}
                     </p>
                   </div>
                 </div>

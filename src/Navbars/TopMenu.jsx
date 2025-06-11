@@ -7,7 +7,7 @@ const TopMenu = () => {
 
   return (
     <div className="border-b border-slightly-dark">
-      <div className="max-w-[1370px] mx-auto py-1 flex items-center justify-between">
+      <div className="w-full max-w-[95%] 2xl:max-w-[1370px] mx-auto py-1 flex items-center justify-between">
         <div className="align-middle">
           <a
             href="tel:+443330232200"

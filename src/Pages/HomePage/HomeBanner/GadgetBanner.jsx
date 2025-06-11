@@ -17,14 +17,14 @@ const GadgetBanner = () => {
 
   if (isLoading || loading)
     return (
-      <div className="md:max-w-[1370px] md:mx-auto flex flex-col md:flex-row gap-4 h-[150px] md:h-[320px]">
+      <div className="md:w-full max-w-[95%] 2xl:max-w-[1370px] md:mx-auto flex flex-col md:flex-row gap-4 h-[150px] md:h-[320px]">
         <SkeletonLoader className="w-full md:w-[67%] h-full" />
         <SkeletonLoader className="w-full md:w-[33%] h-full" />
       </div>
     );
 
   return (
-    <div className="md:w-full my-3 md:my-5 mx-3 md:max-w-[1370px] md:mx-auto">
+    <div className="md:w-full my-3 md:my-5 mx-3 md:w-full max-w-[95%] 2xl:max-w-[1370px] md:mx-auto">
       <div className="flex flex-col md:flex-row gap-3 md:gap-4 h-[280px] md:h-[320px]">
         {/* Left: Swiper */}
         <div className="w-full md:w-[67%] md:relative group overflow-hidden rounded-lg h-full">
