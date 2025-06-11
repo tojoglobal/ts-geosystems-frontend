@@ -1,4 +1,3 @@
-import { useDashboardMetrics } from "./DBComponents/useDashboardData";
 import {
   ArrowDownRight,
   ArrowUpRight,
@@ -20,8 +19,6 @@ import DashboardWidgets from "./DBComponents/DashboardWidgets";
 import LatestTransactions from "./DBComponents/LatestTransactions";
 
 export default function Dashboard() {
-  const { data: metrics } = useDashboardMetrics();
-  console.log(metrics);
   return (
     <div className="p-1 pt-0 grid md:gap-4 grid-cols-1 xl:grid-cols-4">
       {/* Top Metrics */}
@@ -30,29 +27,29 @@ export default function Dashboard() {
           <MetricBox
             icon={<DollarSign />}
             title="Total Earnings"
-            value={metrics?.totalEarnings || "$0.00 USD"}
-            change={metrics?.earningsChange || "+0.0%"}
-            up={!metrics?.earningsChange?.startsWith("-")}
+            value="$34,123.20 USD"
+            change="+7.2%"
+            up
           />
           <MetricBox
             icon={<ShoppingCart />}
             title="Total Orders"
-            value={metrics?.totalOrders || "0"}
-            change={metrics?.orderChange || "+0.0%"}
-            up={!metrics?.orderChange?.startsWith("-")}
+            value="63,234 NOU"
+            change="-7.2%"
           />
           <MetricBox
             icon={<Users />}
-            title="Total Users"
-            value={metrics?.totalUsers || "0"}
-            change={metrics?.userChange || "+0.0%"}
-            up={!metrics?.userChange?.startsWith("-")}
+            title="Today Visitor"
+            value="425,234 KDU"
+            change="+2.4%"
+            up
           />
           <MetricBox
             icon={<CreditCard />}
             title="Total Expense"
-            value="$0.00 USD" // You'll need to implement this
-            change="+0.0%" // You'll need to implement this
+            value="$26,482.46 USD"
+            change="+2.2%"
+            up
           />
         </CardContent>
       </Card>
@@ -71,6 +68,7 @@ export default function Dashboard() {
     </div>
   );
 }
+
 function MetricBox({ icon, title, value, change, up = false }) {
   const ArrowIcon = up ? ArrowUpRight : ArrowDownRight;
   const arrowClass = up ? "text-green-400" : "text-red-400";

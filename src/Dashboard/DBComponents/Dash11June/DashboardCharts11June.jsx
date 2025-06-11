@@ -1,4 +1,3 @@
-import { useAudienceMetrics, useSalesSource } from "./useDashboardData";
 import React from "react";
 import {
   Chart as ChartJS,
@@ -28,8 +27,34 @@ ChartJS.register(
 );
 
 const DashboardCharts = () => {
-  const { data: barData, isLoading: barLoading } = useAudienceMetrics();
-  const { data: pieData, isLoading: pieLoading } = useSalesSource();
+  const barData = {
+    labels: [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ],
+    datasets: [
+      {
+        label: "Active Users",
+        data: [20, 35, 30, 25, 45, 40, 30, 35, 40, 25, 30, 50],
+        backgroundColor: "#0f766e",
+      },
+      {
+        label: "Inactive Users",
+        data: [10, 15, 20, 10, 25, 20, 15, 20, 25, 15, 20, 30],
+        backgroundColor: "#2dd4bf",
+      },
+    ],
+  };
 
   const barOptions = {
     responsive: true,
@@ -42,16 +67,10 @@ const DashboardCharts = () => {
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
       <div className="col-span-1 md:col-span-2 bg-slate-800 text-white rounded-lg p-4">
         <div className="text-xl font-semibold mb-4">Audience Metrics</div>
-        {barLoading ? (
-          <div className="h-64 flex items-center justify-center">
-            Loading...
-          </div>
-        ) : (
-          <Bar data={barData} options={barOptions} />
-        )}
+        <Bar data={barData} options={barOptions} />
       </div>
 
-      <SourceOfPurchases data={pieData} loading={pieLoading} />
+      <SourceOfPurchases />
     </div>
   );
 };
