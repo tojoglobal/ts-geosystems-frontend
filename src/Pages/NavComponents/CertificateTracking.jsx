@@ -50,7 +50,7 @@ const CertificateTracking = () => {
   if (isLoading) return <div>Loading...</div>;
 
   return (
-    <div className="w-full md:max-w-[95%] 2xl:max-w-[1370px] mx-auto p-5">
+    <div className="w-full md:max-w-[95%] 2xl:max-w-[1370px] mx-auto p-4 md:p-5">
       <div className="flex items-center gap-2 text-[11px] mb-2 text-gray-500">
         <Link to="/" className="flex items-center gap-1">
           <CiHome className="text-base" /> Home
@@ -82,7 +82,7 @@ const CertificateTracking = () => {
         </p>
         <form
           onSubmit={handleSubmit}
-          className="flex flex-col md:flex-row justify-center gap-1 max-w-5xl mx-auto"
+          className="flex flex-col md:flex-row justify-center gap-2 max-w-5xl mx-auto"
         >
           <input
             type="text"

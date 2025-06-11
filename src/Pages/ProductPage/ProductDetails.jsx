@@ -406,7 +406,7 @@ const ProductDetails = () => {
         </div>
         {/* Tabs */}
         <div className="mt-8 sm:mt-12" ref={overviewRef}>
-          <div className="flex gap-2 border-t border-l border-r border-gray-200 rounded-[4px] overflow-hidden text-xs sm:text-base">
+          <div className="flex gap-2 border-t border-l border-r border-gray-200 rounded-[4px] overflow-hidden text-sm sm:text-base">
             {["OVERVIEW", "SPECIFICATIONS", "PRODUCT VIDEOS"].map(
               (tab, idx) => (
                 <div

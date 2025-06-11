@@ -13,7 +13,7 @@ const PromoProductBanner = () => {
   if (isLoading) return null;
 
   return (
-    <div className="md:w-full md:relative my-3 md:my-5 mx-3 md:w-full md:max-w-[95%] 2xl:max-w-[1370px] md:mx-auto">
+    <div className="md:w-full md:relative my-3 md:my-5 px-3 md:px-0 md:max-w-[95%] 2xl:max-w-[1370px] md:mx-auto">
       <Swiper
         modules={[Autoplay, Pagination]}
         autoplay={{

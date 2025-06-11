@@ -17,7 +17,7 @@ const GadgetBanner = () => {
 
   if (isLoading || loading)
     return (
-      <div className="md:w-full md:max-w-[95%] 2xl:max-w-[1370px] md:mx-auto flex flex-col md:flex-row gap-4 h-[150px] md:h-[320px]">
+      <div className="md:w-full md:max-w-[95%] 2xl:max-w-[1370px] px-3 md:px-0 md:mx-auto flex flex-col md:flex-row gap-4 h-[150px] md:h-[320px]">
         <SkeletonLoader className="w-full md:w-[67%] h-full" />
         <SkeletonLoader className="w-full md:w-[33%] h-full" />
       </div>

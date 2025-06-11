@@ -104,7 +104,7 @@ const Cart = () => {
         <p className="text-xl">Your cart is empty.</p>
       ) : (
         <>
-          <h1 className="text-3xl mb-4">
+          <h1 className="text-xl md:text-3xl mb-4">
             Your Cart ({mergedCart.length} Items)
           </h1>
           <table className="w-full border-collapse mb-6 hidden md:table">
@@ -353,12 +353,11 @@ const Cart = () => {
                 <h2 className="font-semibold text-base">{item.product_name}</h2>
                 <button
                   onClick={() => handleRemove(item.id)}
-                  className="text-red-500"
+                  className="text-red-500 cursor-pointer"
                 >
                   <RxCross2 />
                 </button>
               </div>
-
               <p className="text-sm text-gray-700 mb-1">
                 Price: ৳{item?.price.toFixed(2)}
               </p>
