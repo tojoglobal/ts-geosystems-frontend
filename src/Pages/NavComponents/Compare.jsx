@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { BsGrid3X3GapFill } from "react-icons/bs";
 import { FaThList } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
@@ -27,11 +27,33 @@ const getFirstImage = (img) => {
   return `${import.meta.env.VITE_OPEN_APIURL || ""}${url}`;
 };
 
+// Helper: removes all <p> tags and trims
+const stripPTags = (str) => {
+  if (!str) return "";
+  return String(str)
+    .replace(/<p>/gi, "")
+    .replace(/<\/p>/gi, "")
+    .replace(/undefined/gi, "")
+    .trim();
+};
+
 const normalizeProducts = (raw) => raw?.products || [];
 
 const Compare = () => {
   const { ids } = useParams();
-  const idString = ids ? ids.replaceAll("/", ",") : "";
+  const navigate = useNavigate();
+  // Use local state to track which products are being compared
+  const [compareIds, setCompareIds] = useState(() =>
+    ids
+      ? ids
+          .replaceAll("/", ",")
+          .split(",")
+          .map((id) => id.trim())
+          .filter(Boolean)
+      : []
+  );
+
+  const idString = compareIds.join(",");
   const queryUrl = useMemo(
     () => `/api/productsids/?ids=${idString}`,
     [idString]
@@ -56,6 +78,17 @@ const Compare = () => {
         quantity: 1,
       })
     );
+  };
+
+  // Remove product from compare
+  const handleRemoveFromCompare = (removeId) => {
+    const newIds = compareIds.filter((id) => String(id) !== String(removeId));
+    setCompareIds(newIds);
+    if (newIds.length === 0) {
+      navigate("/compare/");
+    } else {
+      navigate(`/compare/${newIds.join(",")}`, { replace: true });
+    }
   };
 
   if (!idString) {
@@ -107,7 +140,7 @@ const Compare = () => {
         </h1>
         <div className="flex items-center gap-2">
           <button
-            className={`p-2 rounded-sm ${
+            className={`p-2 cursor-pointer rounded-sm ${
               viewMode === "grid"
                 ? "bg-[#e62245] text-white rounded-sm"
                 : "text-gray-600 border"
@@ -117,7 +150,7 @@ const Compare = () => {
             <BsGrid3X3GapFill size={20} />
           </button>
           <button
-            className={`p-2 rounded-sm ${
+            className={`p-2 cursor-pointer rounded-sm ${
               viewMode === "list"
                 ? "bg-[#e62245] text-white rounded-sm"
                 : "text-gray-600 border"
@@ -138,7 +171,10 @@ const Compare = () => {
       >
         {products.map((product) => (
           <div key={product.id} className="relative">
-            <button className="absolute cursor-pointer right-0 top-0 p-2 text-gray-500 hover:text-[#e62245]">
+            <button
+              className="absolute cursor-pointer right-0 top-0 p-2 text-gray-500 hover:text-[#e62245]"
+              onClick={() => handleRemoveFromCompare(product.id)}
+            >
               <IoClose size={24} />
             </button>
             <div className="w-full h-48 flex justify-center items-center mb-4 bg-white">
@@ -231,7 +267,9 @@ const Compare = () => {
                   <div>
                     <h4 className="font-bold">Description</h4>
                     <p className="text-gray-600">
-                      {product.description || product.product_overview || ""}
+                      {stripPTags(product.description) ||
+                        stripPTags(product.product_overview) ||
+                        ""}
                     </p>
                   </div>
                   <div>
