@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import ComposeModal from "./ComposeModal";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
@@ -14,39 +15,42 @@ const MailView = ({ id, userEmail, onClose, onSent }) => {
   if (!mail) return null;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black/40 z-50">
-      <div className="bg-white rounded shadow-xl w-full max-w-lg p-8 relative">
+    <div className="fixed inset-0 flex items-center justify-center bg-black/70 z-50">
+      <div className="bg-neutral-900 text-gray-100 rounded shadow-xl w-full max-w-lg p-8 relative border border-gray-700">
         <button
-          className="absolute top-2 right-2 text-gray-500"
+          className="absolute top-2 right-2 text-gray-400 hover:text-red-400"
           onClick={onClose}
         >
           ×
         </button>
         <div className="mb-6">
           <div className="mb-2">
-            <span className="font-bold">From: </span>
+            <span className="font-bold text-gray-200">From: </span>
             {mail.sender}
           </div>
           <div className="mb-2">
-            <span className="font-bold">To: </span>
+            <span className="font-bold text-gray-200">To: </span>
             {mail.recipient}
           </div>
           <div className="mb-2">
-            <span className="font-bold">Subject: </span>
+            <span className="font-bold text-gray-200">Subject: </span>
             {mail.subject}
           </div>
-          <div className="text-gray-700 whitespace-pre-line mt-4">
+          <div className="text-gray-300 whitespace-pre-line mt-4">
             {mail.body}
           </div>
         </div>
         <div className="flex gap-2">
           <button
-            className="bg-blue-500 text-white px-4 py-2 rounded"
+            className="bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-800"
             onClick={() => setShowReply(true)}
           >
             Reply
           </button>
-          <button className="bg-gray-200 px-4 py-2 rounded" onClick={onClose}>
+          <button
+            className="bg-gray-800 text-gray-200 px-4 py-2 rounded hover:bg-gray-700"
+            onClick={onClose}
+          >
             Close
           </button>
         </div>

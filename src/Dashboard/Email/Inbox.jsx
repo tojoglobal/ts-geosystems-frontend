@@ -15,8 +15,6 @@ const FOLDERS = [
 ];
 
 const Inbox = ({ userEmail }) => {
-  console.log(userEmail);
-
   const axiosPublicUrl = useAxiospublic();
   const [emails, setEmails] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
@@ -44,7 +42,7 @@ const Inbox = ({ userEmail }) => {
   );
 
   return (
-    <div className="flex w-full min-h-screen bg-gradient-to-tr from-gray-50 to-blue-50">
+    <div className="flex w-full min-h-screen bg-gradient-to-tr from-neutral-900 via-gray-900 to-blue-950 text-gray-100">
       <InboxSidebar
         emails={emails}
         onCompose={() => setShowCompose(true)}
@@ -56,15 +54,15 @@ const Inbox = ({ userEmail }) => {
       <main className="flex-1 p-8">
         <div className="flex items-center gap-4 mb-6">
           <input
-            className="w-full border border-gray-300 rounded-lg px-4 py-2 shadow-sm focus:ring-2 focus:ring-blue-200"
+            className="w-full border border-gray-700 bg-neutral-900 text-gray-100 rounded-lg px-4 py-2 shadow-sm focus:ring-2 focus:ring-blue-700"
             placeholder="Search mail..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
-          <button className="p-2 rounded hover:bg-gray-100 text-blue-600">
-            <i className="fa fa-archive" /> {/* FontAwesome or similar */}
+          <button className="p-2 rounded hover:bg-gray-800 text-blue-400">
+            <i className="fa fa-archive" />
           </button>
-          <button className="p-2 rounded hover:bg-gray-100 text-red-600">
+          <button className="p-2 rounded hover:bg-gray-800 text-red-400">
             <i className="fa fa-trash" />
           </button>
         </div>

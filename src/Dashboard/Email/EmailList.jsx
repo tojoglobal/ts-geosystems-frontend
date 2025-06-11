@@ -1,7 +1,7 @@
 import EmailItem from "./EmailItem";
 
 const EmailList = ({ emails, selectedId, onSelect }) => (
-  <div className="bg-white rounded shadow min-h-[400px]">
+  <div className="text-gray-100 rounded shadow min-h-[400px] border border-gray-800">
     <table className="min-w-full">
       <tbody>
         {emails.map((mail) => (

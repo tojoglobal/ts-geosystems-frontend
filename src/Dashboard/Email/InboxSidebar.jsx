@@ -31,9 +31,9 @@ const InboxSidebar = ({
   onSelectFolder,
   currentFolder,
 }) => (
-  <aside className="w-80 bg-white border-r shadow-lg p-4 flex flex-col">
+  <aside className="w-80 bg-neutral-900 border-r border-gray-800 shadow-lg p-4 flex flex-col text-gray-100">
     <button
-      className="bg-gradient-to-r from-red-500 to-orange-500 text-white w-full py-3 rounded-lg mb-8 font-semibold shadow hover:scale-105 transition"
+      className="bg-gradient-to-r from-blue-700 to-blue-500 text-white w-full py-3 rounded-lg mb-8 font-semibold shadow hover:scale-105 transition"
       onClick={onCompose}
     >
       <i className="fa fa-plus mr-2" />
@@ -44,10 +44,10 @@ const InboxSidebar = ({
         {folders.map((folder) => (
           <li
             key={folder.key}
-            className={`flex items-center cursor-pointer px-3 py-2 rounded-lg ${
+            className={`flex items-center cursor-pointer px-3 py-2 rounded-lg transition ${
               currentFolder === folder.key
-                ? "bg-blue-100 text-blue-700"
-                : "hover:bg-gray-100 text-gray-700"
+                ? "bg-blue-900 text-blue-300"
+                : "hover:bg-gray-800 text-gray-300"
             }`}
             onClick={() => onSelectFolder(folder.key)}
           >
@@ -65,7 +65,17 @@ const InboxSidebar = ({
           {labels.map((label) => (
             <li key={label.name} className="flex items-center gap-2">
               <span
-                className={`inline-block w-3 h-3 rounded-full bg-${label.color}-500`}
+                className={`inline-block w-3 h-3 rounded-full`}
+                style={{
+                  backgroundColor:
+                    label.color === "blue"
+                      ? "#3b82f6"
+                      : label.color === "yellow"
+                      ? "#facc15"
+                      : label.color === "green"
+                      ? "#22c55e"
+                      : "#64748b",
+                }}
               />
               {label.name}
             </li>
@@ -80,10 +90,10 @@ const InboxSidebar = ({
               <img
                 src={chat.avatar}
                 alt={chat.name}
-                className="w-9 h-9 rounded-full border border-gray-200"
+                className="w-9 h-9 rounded-full border border-gray-700"
               />
               <span className="flex flex-col">
-                <span className="font-semibold">{chat.name}</span>
+                <span className="font-semibold text-gray-100">{chat.name}</span>
                 <span className="text-xs text-gray-400">{chat.last}</span>
               </span>
             </li>

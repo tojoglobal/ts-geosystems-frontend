@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
-import { X } from "lucide-react"; // modern icon
+import { X } from "lucide-react";
 import Swal from "sweetalert2";
 
 const ComposeModal = ({ onClose, onSent, initialData }) => {
@@ -17,12 +17,13 @@ const ComposeModal = ({ onClose, onSent, initialData }) => {
 
       if (onSent) onSent();
 
-      // SweetAlert2
       Swal.fire({
         icon: "success",
         title: "Email Sent!",
         text: "Your message has been successfully delivered.",
-        confirmButtonColor: "#3B82F6", // Tailwind blue-500
+        confirmButtonColor: "#3B82F6",
+        background: "#18181b",
+        color: "#fff",
       });
 
       onClose();
@@ -30,25 +31,27 @@ const ComposeModal = ({ onClose, onSent, initialData }) => {
       Swal.fire({
         icon: "error",
         title: "Oops...",
-        text: "Something went wrong while sending the email.",
-        confirmButtonColor: "#EF4444", // Tailwind red-500
+        text: error.message || "Something went wrong while sending the email.",
+        confirmButtonColor: "#EF4444",
+        background: "#18181b",
+        color: "#fff",
       });
     }
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
-      <div className="bg-white w-full max-w-2xl rounded-2xl shadow-lg p-6 md:p-8 relative">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4">
+      <div className="text-gray-100 w-full max-w-2xl rounded-2xl shadow-lg p-6 md:p-8 relative border border-gray-700">
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-3 right-3 text-gray-500 hover:text-red-500 transition-colors"
+          className="absolute top-3 right-3 text-gray-400 hover:text-red-400 transition-colors"
         >
           <X size={24} />
         </button>
 
         {/* Title */}
-        <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-6">
+        <h2 className="text-xl md:text-2xl font-bold text-gray-100 mb-6">
           Compose Email
         </h2>
 
@@ -56,13 +59,13 @@ const ComposeModal = ({ onClose, onSent, initialData }) => {
         <form onSubmit={handleSend} className="space-y-5">
           {/* To */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-300 mb-1">
               To
             </label>
             <input
               type="email"
               placeholder="Recipient email"
-              className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
+              className="w-full rounded-lg border border-gray-700 bg-neutral-800 text-gray-100 px-4 py-2 focus:ring-2 focus:ring-blue-700 focus:outline-none transition"
               value={form.recipient}
               onChange={(e) => setForm({ ...form, recipient: e.target.value })}
               required
@@ -71,12 +74,12 @@ const ComposeModal = ({ onClose, onSent, initialData }) => {
 
           {/* Subject */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-300 mb-1">
               Subject
             </label>
             <input
               placeholder="Email subject"
-              className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
+              className="w-full rounded-lg border border-gray-700 bg-neutral-800 text-gray-100 px-4 py-2 focus:ring-2 focus:ring-blue-700 focus:outline-none transition"
               value={form.subject}
               onChange={(e) => setForm({ ...form, subject: e.target.value })}
               required
@@ -85,12 +88,12 @@ const ComposeModal = ({ onClose, onSent, initialData }) => {
 
           {/* Message Body */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-300 mb-1">
               Message
             </label>
             <textarea
               placeholder="Type your message here..."
-              className="w-full rounded-lg border border-gray-300 px-4 py-2 resize-none focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
+              className="w-full rounded-lg border border-gray-700 bg-neutral-800 text-gray-100 px-4 py-2 resize-none focus:ring-2 focus:ring-blue-700 focus:outline-none transition"
               rows={6}
               value={form.body}
               onChange={(e) => setForm({ ...form, body: e.target.value })}
@@ -103,13 +106,13 @@ const ComposeModal = ({ onClose, onSent, initialData }) => {
             <button
               type="button"
               onClick={onClose}
-              className="w-full sm:w-auto bg-gray-100 text-gray-700 px-5 py-2 rounded-lg hover:bg-gray-200 transition"
+              className="w-full sm:w-auto bg-gray-800 text-gray-300 px-5 py-2 rounded-lg hover:bg-gray-900 transition"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="w-full sm:w-auto bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition"
+              className="w-full sm:w-auto bg-blue-700 text-white px-5 py-2 rounded-lg hover:bg-blue-800 transition"
             >
               Send Email
             </button>
