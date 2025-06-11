@@ -1,5 +1,4 @@
-import { useAudienceMetrics, useSalesSource } from "./useDashboardData";
-import React from "react";
+import { useAudienceMetrics } from "./useDashboardData";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -29,8 +28,6 @@ ChartJS.register(
 
 const DashboardCharts = () => {
   const { data: barData, isLoading: barLoading } = useAudienceMetrics();
-  const { data: pieData, isLoading: pieLoading } = useSalesSource();
-
   const barOptions = {
     responsive: true,
     plugins: {
@@ -50,8 +47,7 @@ const DashboardCharts = () => {
           <Bar data={barData} options={barOptions} />
         )}
       </div>
-
-      <SourceOfPurchases data={pieData} loading={pieLoading} />
+      <SourceOfPurchases />
     </div>
   );
 };

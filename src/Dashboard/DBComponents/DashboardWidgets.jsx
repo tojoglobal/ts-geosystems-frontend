@@ -5,7 +5,6 @@ import { useSalesStatistics, useTopUsers } from "./useDashboardData";
 export default function DashboardWidgets() {
   const { data: salesStats, isLoading: statsLoading } = useSalesStatistics();
   const { data: topUsers, isLoading: usersLoading } = useTopUsers();
-  console.log(salesStats, topUsers);
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-10 gap-4">
       <Card className="bg-slate-800 col-span-1 sm:col-span-2 xl:col-span-5 border-0 text-white">

@@ -1,31 +1,32 @@
-// hooks/useDashboardData.js
 import { useQuery } from "@tanstack/react-query";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
 
-export const useDashboardMetrics = () => {
+export const useDashboardMetrics = (period = "year", usersPeriod = "year") => {
   const axiosPublicUrl = useAxiospublic();
 
   return useQuery({
-    queryKey: ["dashboard-metrics"],
+    queryKey: ["dashboard-metrics", period, usersPeriod],
     queryFn: async () => {
-      // Fetch all necessary data in parallel
-      const [ordersRes, usersRes] = await Promise.all([
-        axiosPublicUrl.get("/api/orderinfo"),
-        axiosPublicUrl.get("/api/all-users"),
-        axiosPublicUrl.get("/api/orderinfo"), // This would need to be adjusted to get earnings data
-      ]);
+      // Orders and earnings
+      const ordersRes = await axiosPublicUrl.get(
+        `/api/order-metrics?period=${period}`
+      );
+      const orders = ordersRes.data.orders || [];
 
-      // Calculate metrics
-      const totalOrders = ordersRes.data?.length || 0;
-      const totalUsers = usersRes.data?.length || 0;
-      const totalEarnings =
-        ordersRes.data?.reduce(
-          (sum, order) => sum + parseFloat(order.total || 0),
-          0
-        ) || 0;
+      // Users
+      const usersRes = await axiosPublicUrl.get(
+        `/api/user-metrics?period=${usersPeriod}`
+      );
+      const users = usersRes.data.users || [];
 
-      // Calculate changes (you would need historical data for real changes)
-      // For demo, we'll use random changes
+      const totalOrders = orders.length;
+      const totalUsers = users.length;
+      const totalEarnings = orders.reduce(
+        (sum, order) => sum + parseFloat(order.total || 0),
+        0
+      );
+
+      // Demo change values, replace with real calculations if needed
       const orderChange = (Math.random() * 10 - 5).toFixed(1);
       const userChange = (Math.random() * 10).toFixed(1);
       const earningsChange = (Math.random() * 5 + 2).toFixed(1);
@@ -87,17 +88,19 @@ export const useAudienceMetrics = () => {
   });
 };
 
-export const useSalesSource = () => {
+export const useOrdersByPaymentMethod = () => {
+  const axiosPublicUrl = useAxiospublic();
   return useQuery({
-    queryKey: ["sales-source"],
+    queryKey: ["orders-by-status"],
     queryFn: async () => {
-      // This would ideally come from your analytics
-      // For demo, we'll generate random data
-      return [
-        { name: "E-Commerce", value: Math.floor(Math.random() * 50) + 30 },
-        { name: "Facebook", value: Math.floor(Math.random() * 40) + 20 },
-        { name: "Instagram", value: Math.floor(Math.random() * 60) + 30 },
-      ];
+      const res = await axiosPublicUrl.get("/api/orderinfo");
+      const orders = res?.data?.data || res.data || [];
+      const counts = {};
+      orders.forEach((order) => {
+        const status = order.status || "Unknown";
+        counts[status] = (counts[status] || 0) + 1;
+      });
+      return Object.entries(counts).map(([name, value]) => ({ name, value }));
     },
   });
 };
@@ -165,7 +168,6 @@ export const useTopUsers = () => {
 
       const users = usersRes?.data || [];
       const orders = ordersRes.data?.data || [];
-      console.log(orders);
 
       // Calculate user spending (simplified for demo)
       const userSpending = {};
