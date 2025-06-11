@@ -8,28 +8,27 @@ import { useDispatch } from "react-redux";
 import { addToCart } from "../../features/AddToCart/AddToCart";
 import { parsePrice } from "../../utils/parsePrice";
 import useToastSwal from "../../Hooks/useToastSwal";
+import { useTrackProductView } from "../../Hooks/useTrackProductView";
 
-// Helper: supports array or JSON string for image URLs, returns full API URL
-const getFirstImage = (img) => {
-  if (!img) return "";
-  let url = "";
-  if (Array.isArray(img)) url = img[0];
-  else {
-    try {
-      const arr = JSON.parse(img);
-      url = Array.isArray(arr) ? arr[0] : arr;
-    } catch {
-      url = img;
-    }
+// Get array of image URLs, can be stringified JSON or array
+const getImages = (img) => {
+  if (!img) return [];
+  if (Array.isArray(img)) return img;
+  try {
+    const arr = JSON.parse(img);
+    return Array.isArray(arr) ? arr : [arr];
+  } catch {
+    return [img];
   }
-  if (!url) return "";
-  // If already absolute URL (starts with http), just use it
-  if (typeof url === "string" && url.startsWith("http")) return url;
-  // Otherwise, build with API URL
-  return `${import.meta.env.VITE_OPEN_APIURL || ""}${url}`;
 };
+const getImageFullUrl = (url) =>
+  !url
+    ? ""
+    : url.startsWith("http")
+    ? url
+    : `${import.meta.env.VITE_OPEN_APIURL || ""}${url}`;
 
-// Helper: removes all <p> tags and trims
+// Remove <p> tags and undefined
 const stripPTags = (str) => {
   if (!str) return "";
   return String(str)
@@ -44,7 +43,6 @@ const normalizeProducts = (raw) => raw?.products || [];
 const Compare = () => {
   const { ids } = useParams();
   const navigate = useNavigate();
-  // Use local state to track which products are being compared
   const [compareIds, setCompareIds] = useState(() =>
     ids
       ? ids
@@ -54,7 +52,6 @@ const Compare = () => {
           .filter(Boolean)
       : []
   );
-
   const idString = compareIds.join(",");
   const queryUrl = useMemo(
     () => `/api/productsids/?ids=${idString}`,
@@ -68,7 +65,9 @@ const Compare = () => {
   );
   const showToast = useToastSwal();
   const [viewMode, setViewMode] = useState("grid");
+  const [hovered, setHovered] = useState(null);
   const products = data || [];
+    const { trackProductView } = useTrackProductView();
   const dispatch = useDispatch();
 
   // Add to Cart handler
@@ -79,7 +78,6 @@ const Compare = () => {
       price: parsePrice(product.price),
       quantity: 1,
     };
-
     dispatch(addToCart(itemToAdd));
     showToast(
       "success",
@@ -175,145 +173,171 @@ const Compare = () => {
             : "grid grid-cols-1 gap-6"
         }
       >
-        {products.map((product) => (
-          <div key={product.id} className="relative">
-            <button
-              className="absolute cursor-pointer right-0 top-0 p-2 text-gray-500 hover:text-[#e62245]"
-              onClick={() => handleRemoveFromCompare(product.id)}
-            >
-              <IoClose size={24} />
-            </button>
-            <div className="w-full h-48 flex justify-center items-center mb-4 bg-white">
-              <img
-                src={
-                  product.image
-                    ? product.image
-                    : getFirstImage(product.image_urls)
-                }
-                alt={product.name || product.product_name}
-                className="w-auto max-h-full object-contain"
-                loading="lazy"
-                onError={(e) => {
-                  e.target.src =
-                    "https://via.placeholder.com/150?text=No+Image";
-                }}
-              />
-            </div>
-            <div className="space-y-4">
-              <h3 className="font-medium">
-                {product.name || product.product_name}
-              </h3>
-              <div>
-                <div className="flex items-center gap-1">
-                  <p className="text-gray-500 line-through">
-                    Was: ৳
-                    {(product.oldPrice
-                      ? Number(product.oldPrice)
-                      : product.oldPriceInc
-                      ? Number(product.oldPriceInc)
-                      : product.old_price
-                      ? Number(product.old_price)
-                      : ""
-                    ).toFixed
-                      ? (
-                          product.oldPrice ||
-                          product.oldPriceInc ||
-                          product.old_price ||
-                          0
-                        ).toFixed(2)
-                      : ""}
-                  </p>
+        {products.map((product) => {
+          const images = getImages(product.image_urls);
+          const mainImage = getImageFullUrl(images[0]);
+          const secondImage = images[1]
+            ? getImageFullUrl(images[1])
+            : mainImage;
+          const link =
+            "/products/" +
+            product.id +
+            "/" +
+            encodeURIComponent(
+              (product.product_name || product.name || "")
+                .toLowerCase()
+                .replace(/\s+/g, "-")
+                .replace(/[^a-z0-9-]/g, "")
+            );
+          return (
+            <div key={product.id} className="relative group">
+              <button
+                className="absolute cursor-pointer right-0 top-0 p-2 text-gray-500 hover:text-[#e62245] z-10"
+                onClick={() => handleRemoveFromCompare(product.id)}
+              >
+                <IoClose size={24} />
+              </button>
+              <Link
+                to={link}
+                onClick={() => trackProductView(product.id)}
+                className="w-full h-48 flex justify-center items-center mb-4 bg-white"
+                onMouseEnter={() => setHovered(product.id)}
+                onMouseLeave={() => setHovered(null)}
+                tabIndex={-1}
+              >
+                <img
+                  src={hovered === product.id ? secondImage : mainImage}
+                  alt={product.name || product.product_name}
+                  className="w-auto max-h-full object-contain transition-all duration-300 ease-in-out"
+                  loading="lazy"
+                  onError={(e) => {
+                    e.target.src =
+                      "https://via.placeholder.com/150?text=No+Image";
+                  }}
+                />
+              </Link>
+              <div className="space-y-4">
+                <h3 className="font-medium">
+                  <Link
+                    to={link}
+                    onClick={() => trackProductView(product.id)}
+                    className="hover:text-[#e62245] transition"
+                  >
+                    {product.name || product.product_name}
+                  </Link>
+                </h3>
+                <div>
+                  <div className="flex items-center gap-1">
+                    <p className="text-gray-500 line-through">
+                      Was: ৳
+                      {(product.oldPrice
+                        ? Number(product.oldPrice)
+                        : product.oldPriceInc
+                        ? Number(product.oldPriceInc)
+                        : product.old_price
+                        ? Number(product.old_price)
+                        : ""
+                      ).toFixed
+                        ? (
+                            product.oldPrice ||
+                            product.oldPriceInc ||
+                            product.old_price ||
+                            0
+                          ).toFixed(2)
+                        : ""}
+                    </p>
+                    <p className="font-bold">
+                      ৳
+                      {(product.price ? Number(product.price) : "").toFixed
+                        ? Number(product.price).toFixed(2)
+                        : ""}{" "}
+                      (Ex. VAT)
+                    </p>
+                  </div>
                   <p className="font-bold">
                     ৳
                     {(product.price ? Number(product.price) : "").toFixed
                       ? Number(product.price).toFixed(2)
-                      : ""}{" "}
-                    (Ex. VAT)
+                      : ""}
+                  </p>
+                  <p className="text-gray-500">
+                    ৳
+                    {(product.priceExVat
+                      ? Number(product.priceExVat)
+                      : product.price_ex_vat
+                      ? Number(product.price_ex_vat)
+                      : ""
+                    ).toFixed
+                      ? (
+                          product.priceExVat ||
+                          product.price_ex_vat ||
+                          ""
+                        ).toFixed(2)
+                      : ""}
+                    (Inc. VAT)
                   </p>
                 </div>
-                <p className="font-bold">
-                  ৳
-                  {(product.price ? Number(product.price) : "").toFixed
-                    ? Number(product.price).toFixed(2)
-                    : ""}
-                </p>
-                <p className="text-gray-500">
-                  ৳
-                  {(product.priceExVat
-                    ? Number(product.priceExVat)
-                    : product.price_ex_vat
-                    ? Number(product.price_ex_vat)
-                    : ""
-                  ).toFixed
-                    ? (
-                        product.priceExVat ||
-                        product.price_ex_vat ||
-                        ""
-                      ).toFixed(2)
-                    : ""}
-                  (Inc. VAT)
-                </p>
-              </div>
-              {product?.isStock === 1 && (
-                <button
-                  onClick={() => handleAddToCart(product)}
-                  className="bg-[#e62245] w-full cursor-pointer text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
-                >
-                  ADD TO CART
-                </button>
-              )}
-              <div className="p-1">
-                <div className="w-full space-y-3 text-sm text-gray-800">
-                  <div>
-                    <h4 className="font-bold">Brand:</h4>
-                    <p className="text-[#e62245] underline">
-                      {product.brand || product.brand_name}
-                    </p>
-                  </div>
-                  <div>
-                    <h4 className="font-bold">Description</h4>
-                    <p className="text-gray-600">
-                      {stripPTags(product.description) ||
-                        stripPTags(product.product_overview) ||
-                        ""}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="font-medium">
-                      {product.reviews || "No Reviews"}
-                    </p>
-                  </div>
-                  <div>
-                    <h4 className="font-bold">Availability</h4>
-                    <p className="text-gray-600">
-                      {product.availability || "Usually ships in 24 hours"}
-                    </p>
-                  </div>
-                  {product.manufactured && (
+                {product?.isStock === 1 && (
+                  <button
+                    onClick={() => handleAddToCart(product)}
+                    className="bg-[#e62245] w-full cursor-pointer text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
+                  >
+                    ADD TO CART
+                  </button>
+                )}
+                <div className="p-1">
+                  <div className="w-full space-y-3 text-sm text-gray-800">
                     <div>
-                      <h4 className="font-medium">Manufactured</h4>
-                      <p className="text-gray-600">{product.manufactured}</p>
-                    </div>
-                  )}
-                  {(product.condition || product.product_condition) && (
-                    <div>
-                      <h4 className="font-medium">Condition</h4>
-                      <p className="text-gray-600">
-                        {product.condition || product.product_condition}
+                      <h4 className="font-bold">Brand:</h4>
+                      <p className="text-[#e62245] underline">
+                        {product.brand || product.brand_name}
                       </p>
                     </div>
-                  )}
-                  <div>
-                    <h4 className="font-bold">Other Details</h4>
-                    <p className="text-gray-600 font-bold">
-                      {product.otherDetails || product.other_details || "N/A"}
-                    </p>
+                    <div>
+                      <h4 className="font-bold">Description</h4>
+                      <p className="text-gray-600">
+                        {stripPTags(product.description) ||
+                          stripPTags(product.product_overview) ||
+                          ""}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="font-medium">
+                        {product.reviews || "No Reviews"}
+                      </p>
+                    </div>
+                    <div>
+                      <h4 className="font-bold">Availability</h4>
+                      <p className="text-gray-600">
+                        {product.availability || "Usually ships in 24 hours"}
+                      </p>
+                    </div>
+                    {product.manufactured && (
+                      <div>
+                        <h4 className="font-medium">Manufactured</h4>
+                        <p className="text-gray-600">{product.manufactured}</p>
+                      </div>
+                    )}
+                    {(product.condition || product.product_condition) && (
+                      <div>
+                        <h4 className="font-medium">Condition</h4>
+                        <p className="text-gray-600">
+                          {product.condition || product.product_condition}
+                        </p>
+                      </div>
+                    )}
+                    <div>
+                      <h4 className="font-bold">Other Details</h4>
+                      <p className="text-gray-600 font-bold">
+                        {product.otherDetails || product.other_details || "N/A"}
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
