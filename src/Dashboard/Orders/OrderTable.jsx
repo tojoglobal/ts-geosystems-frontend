@@ -21,7 +21,7 @@ const OrderTable = () => {
   const axiospublic = useAxiospublic();
   const [editStatusId, setEditStatusId] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [itemsPerPage, setItemsPerPage] = useState(13);
 
   
   const {
@@ -262,9 +262,9 @@ const OrderTable = () => {
           >
             <option value="5">5</option>
             <option value="10">10</option>
+            <option value="13">13</option>
             <option value="20">20</option>
             <option value="50">50</option>
-            <option value="100">100</option>
           </select>
           <span className="text-sm text-gray-400">
             {pagination.total ? `Total: ${pagination.total} orders` : ""}
