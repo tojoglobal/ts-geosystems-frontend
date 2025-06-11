@@ -6,6 +6,8 @@ import { useState, useMemo } from "react";
 import useDataQuery from "../../utils/useDataQuery";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../../features/AddToCart/AddToCart";
+import { parsePrice } from "../../utils/parsePrice";
+import useToastSwal from "../../Hooks/useToastSwal";
 
 // Helper: supports array or JSON string for image URLs, returns full API URL
 const getFirstImage = (img) => {
@@ -64,19 +66,26 @@ const Compare = () => {
     !!idString,
     normalizeProducts
   );
+  const showToast = useToastSwal();
   const [viewMode, setViewMode] = useState("grid");
   const products = data || [];
   const dispatch = useDispatch();
 
   // Add to Cart handler
   const handleAddToCart = (product) => {
-    dispatch(
-      addToCart({
-        id: product.id,
-        product_name: product.product_name || product.name,
-        price: Number(product.price),
-        quantity: 1,
-      })
+    const itemToAdd = {
+      id: product.id,
+      product_name: product.product_name,
+      price: parsePrice(product.price),
+      quantity: 1,
+    };
+
+    dispatch(addToCart(itemToAdd));
+    showToast(
+      "success",
+      "Added to Cart!",
+      `<b style="color:#333">${product.product_name}</b> has been added to your cart.`,
+      { timer: 2000 }
     );
   };
 
@@ -134,34 +143,31 @@ const Compare = () => {
         <span>/</span>
         <span className="text-[#e62245]">Compare Products</span>
       </div>
-      <div>
-        <h1 className="text-3xl mb-3">
-          Comparing {products.length} Product{products.length !== 1 && "s"}
-        </h1>
-        <div className="flex items-center gap-2">
-          <button
-            className={`p-2 cursor-pointer rounded-sm ${
-              viewMode === "grid"
-                ? "bg-[#e62245] text-white rounded-sm"
-                : "text-gray-600 border"
-            }`}
-            onClick={() => setViewMode("grid")}
-          >
-            <BsGrid3X3GapFill size={20} />
-          </button>
-          <button
-            className={`p-2 cursor-pointer rounded-sm ${
-              viewMode === "list"
-                ? "bg-[#e62245] text-white rounded-sm"
-                : "text-gray-600 border"
-            }`}
-            onClick={() => setViewMode("list")}
-          >
-            <FaThList size={20} />
-          </button>
-        </div>
+      <h1 className="text-3xl mb-3">
+        Comparing {products.length} Product{products.length !== 1 && "s"}
+      </h1>
+      <div className="flex items-center gap-2 mb-4">
+        <button
+          className={`p-2 cursor-pointer rounded-sm ${
+            viewMode === "grid"
+              ? "bg-[#e62245] text-white rounded-sm"
+              : "text-gray-600 border"
+          }`}
+          onClick={() => setViewMode("grid")}
+        >
+          <BsGrid3X3GapFill size={20} />
+        </button>
+        <button
+          className={`p-2 cursor-pointer rounded-sm ${
+            viewMode === "list"
+              ? "bg-[#e62245] text-white rounded-sm"
+              : "text-gray-600 border"
+          }`}
+          onClick={() => setViewMode("list")}
+        >
+          <FaThList size={20} />
+        </button>
       </div>
-
       <div
         className={
           viewMode === "grid"
