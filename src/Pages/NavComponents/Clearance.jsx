@@ -14,6 +14,7 @@ import { useTrackProductView } from "../../Hooks/useTrackProductView";
 import { slugify } from "../../utils/slugify";
 import { getProductType } from "../../utils/productOption";
 import useToastSwal from "../../Hooks/useToastSwal";
+import CompareCheckbox from "./CompareCheckbox";
 
 // Utility to strip HTML tags (including <p>)
 const stripHtml = (html) => {
@@ -298,21 +299,11 @@ const Clearance = () => {
                               )}
                             </div>
                           )}
-                          <div className="flex items-center gap-2">
-                            <input
-                              type="checkbox"
-                              id={`compare-${product.id}`}
-                              className="accent-[#0075ff] cursor-pointer"
-                              checked={compareItems.includes(product.id)}
-                              onChange={() => toggleCompare(product.id)}
-                            />
-                            <label
-                              htmlFor={`compare-${product.id}`}
-                              className="text-sm cursor-pointer"
-                            >
-                              COMPARE
-                            </label>
-                          </div>
+                          <CompareCheckbox
+                            id={product.id}
+                            checked={compareItems.includes(product.id)}
+                            onChange={() => toggleCompare(product.id)}
+                          />
                         </div>
                       </div>
                     </div>
@@ -392,21 +383,11 @@ const Clearance = () => {
                             )}
                           </div>
                         )}
-                        <div className="flex items-center gap-2 mt-1">
-                          <input
-                            type="checkbox"
-                            id={`compare-${product.id}`}
-                            className="accent-[#0075ff] cursor-pointer"
-                            checked={compareItems.includes(product.id)}
-                            onChange={() => toggleCompare(product.id)}
-                          />
-                          <label
-                            htmlFor={`compare-${product.id}`}
-                            className="text-sm cursor-pointer"
-                          >
-                            COMPARE
-                          </label>
-                        </div>
+                        <CompareCheckbox
+                          id={product.id}
+                          checked={compareItems.includes(product.id)}
+                          onChange={() => toggleCompare(product.id)}
+                        />
                       </div>
                     </div>
                   </div>

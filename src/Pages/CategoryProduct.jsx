@@ -16,6 +16,7 @@ import { useTrackProductView } from "../Hooks/useTrackProductView";
 import { getProductType } from "../utils/productOption";
 import useToastSwal from "../Hooks/useToastSwal";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
+import CompareCheckbox from "./NavComponents/CompareCheckbox";
 
 const sortOptions = [
   { label: "NEWEST ITEMS", value: "newest" },
@@ -420,22 +421,11 @@ const CategoryProduct = () => {
                             )}
                           </div>
                         )}
-
-                        <div className="flex items-center gap-2 mt-1">
-                          <input
-                            type="checkbox"
-                            id={`compare-${product.id}`}
-                            className="accent-[#0075ff] cursor-pointer"
-                            checked={compareItems.includes(product.id)}
-                            onChange={() => toggleCompare(product.id)}
-                          />
-                          <label
-                            htmlFor={`compare-${product.id}`}
-                            className="text-sm cursor-pointer"
-                          >
-                            COMPARE
-                          </label>
-                        </div>
+                        <CompareCheckbox
+                          id={product.id}
+                          checked={compareItems.includes(product.id)}
+                          onChange={() => toggleCompare(product.id)}
+                        />
                       </div>
                     </div>
                   </div>
@@ -509,21 +499,11 @@ const CategoryProduct = () => {
                             )}
                           </div>
                         )}
-                        <div className="flex items-center gap-2 mt-1">
-                          <input
-                            type="checkbox"
-                            id={`compare-${product.id}`}
-                            className="accent-[#0075ff] cursor-pointer"
-                            checked={compareItems.includes(product.id)}
-                            onChange={() => toggleCompare(product.id)}
-                          />
-                          <label
-                            htmlFor={`compare-${product.id}`}
-                            className="text-sm cursor-pointer"
-                          >
-                            COMPARE
-                          </label>
-                        </div>
+                        <CompareCheckbox
+                          id={product.id}
+                          checked={compareItems.includes(product.id)}
+                          onChange={() => toggleCompare(product.id)}
+                        />
                       </div>
                     </div>
                   </div>
