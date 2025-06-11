@@ -53,7 +53,7 @@ const SiteMap = () => {
   const getSubName = (sub) => sub.name || sub.subcategory_name;
 
   return (
-    <div className="w-full md:max-w-[95%] 2xl:max-w-[1370px] mx-auto py-12">
+    <div className="w-full md:max-w-[95%] 2xl:max-w-[1370px] px-3 mx-auto py-12">
       <h1 className="text-[28px] font-light mb-7">Sitemap</h1>
       <ul className="pl-5 text-[15px] text-black space-y-2">
         <li className="mb-4 relative before:content-[''] before:absolute before:w-2 before:h-2 before:bg-white before:border before:border-gray-400 before:rounded-full before:-left-4 before:top-2">

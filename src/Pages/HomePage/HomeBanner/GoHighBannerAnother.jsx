@@ -5,14 +5,18 @@ const GoHighBannerAnother = () => {
     ["homepageSingleImages"],
     "/api/get-homepage-single-images"
   );
-  if (isLoading) return null;
+
+  if (isLoading || !data?.data?.[4]?.imageUrl) return null;
+
   return (
-    <div className="mt-6 md:mt-10 w-full md:max-w-[95%] 2xl:max-w-[1370px] mx-3 md:mx-auto overflow-hidden rounded-lg">
-      <img
-        src={`${import.meta.env.VITE_OPEN_APIURL}${data?.data[4]?.imageUrl}`}
-        alt="GoHighBannerAnother"
-        className="transition-transform w-full h-36 object-cover md:h-80 duration-300 hover:scale-110"
-      />
+    <div className="mt-6 md:mt-10 w-full md:max-w-[95%] 2xl:max-w-[1370px] mx-auto px-3 md:px-0 overflow-hidden rounded-md">
+      <div className="rounded-md overflow-hidden">
+        <img
+          src={`${import.meta.env.VITE_OPEN_APIURL}${data.data[4].imageUrl}`}
+          alt="GoHighBannerAnother"
+          className="transition-transform w-full h-36 object-cover md:h-80 duration-300 hover:scale-110"
+        />
+      </div>
     </div>
   );
 };
