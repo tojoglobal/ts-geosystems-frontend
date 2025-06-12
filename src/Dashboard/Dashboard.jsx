@@ -30,8 +30,7 @@ export default function Dashboard() {
   const { data: ordersMetrics, isLoading: ordersLoading } =
     useDashboardMetrics(ordersPeriod);
   const { data: usersMetrics, isLoading: usersLoading } =
-    useDashboardMetrics("all"); // "all" is a dummy param, always fetches all users
-
+    useDashboardMetrics("all");
   return (
     <div className="p-1 pt-0 grid md:gap-4 grid-cols-1 xl:grid-cols-4">
       {/* Top Metrics */}

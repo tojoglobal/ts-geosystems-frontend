@@ -12,7 +12,6 @@ export const useDashboardMetrics = (period = "year", usersPeriod = "year") => {
         `/api/order-metrics?period=${period}`
       );
       const orders = ordersRes.data.orders || [];
-
       // Users
       const usersRes = await axiosPublicUrl.get(`/api/all-users`);
       const users = usersRes.data || [];
@@ -86,17 +85,35 @@ export const useAudienceMetrics = () => {
   });
 };
 
-export const useOrdersByPaymentMethod = () => {
+export const useOrdersByPaymentStatus = () => {
   const axiosPublicUrl = useAxiospublic();
   return useQuery({
-    queryKey: ["orders-by-status"],
+    queryKey: ["orders-by-payment-status"],
     queryFn: async () => {
       const res = await axiosPublicUrl.get("/api/orderinfo");
       const orders = res?.data?.data || res.data || [];
       const counts = {};
       orders.forEach((order) => {
-        const status = order.status || "Unknown";
+        // Use paymentStatus instead of status
+        const status = order.paymentStatus || "Unknown";
         counts[status] = (counts[status] || 0) + 1;
+      });
+      return Object.entries(counts).map(([name, value]) => ({ name, value }));
+    },
+  });
+};
+
+export const useOrdersByPaymentMethod = () => {
+  const axiosPublicUrl = useAxiospublic();
+  return useQuery({
+    queryKey: ["orders-by-payment-method"],
+    queryFn: async () => {
+      const res = await axiosPublicUrl.get("/api/orderinfo");
+      const orders = res?.data?.data || res.data || [];
+      const counts = {};
+      orders.forEach((order) => {
+        const method = order.payment_method || "Unknown";
+        counts[method] = (counts[method] || 0) + 1;
       });
       return Object.entries(counts).map(([name, value]) => ({ name, value }));
     },
