@@ -8,6 +8,7 @@ import {
   Sun,
   Moon,
 } from "lucide-react";
+import NotificationBell from "./NotificationBell";
 // import { useAppContext } from "../../context/useAppContext";
 
 const TopMenuBar = ({ toggleMobileSidebar, collapsed, toggleSidebar }) => {
@@ -59,11 +60,11 @@ const TopMenuBar = ({ toggleMobileSidebar, collapsed, toggleSidebar }) => {
             />
           </div>
         </div>
-        {/* Notification Icon */}
-        <button className="relative cursor-pointer text-gray-300 dark:text-gray-400 hover:text-white dark:hover:text-white">
+        {/* <button className="relative cursor-pointer text-gray-300 dark:text-gray-400 hover:text-white dark:hover:text-white">
           <Bell size={22} />
           <span className="absolute top-0 right-0 inline-block w-2.5 h-2.5 bg-red-500 rounded-full"></span>
-        </button>
+        </button> */}
+        <NotificationBell />
         {/* Fullscreen Icon */}
         <button
           onClick={handleFullscreen}

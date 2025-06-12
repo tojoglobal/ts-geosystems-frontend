@@ -79,7 +79,7 @@ import PublicOnlyRoute from "./ProtectedRoute/PublicOnlyRoute";
 import TradeInData from "./Dashboard/TradeIn/TradeInData";
 import AdminSupportData from "./Dashboard/Support/AdminSupportData";
 import AddNewAddress from "./UserAccount/AddNewAddress";
-// import Chat from "./Dashboard/Chat/Chat";
+import Chat from "./Dashboard/Chat/Chat";
 import Subscriber from "./Dashboard/Subscriber/Subscriber";
 import AdminServiceInquiries from "./Dashboard/Services/AdminServiceInquiries";
 import MailView from "./Dashboard/Email/MailView";
@@ -205,6 +205,7 @@ const AppLayout = () => {
         >
           <Route index element={<Dashboard />} />
           <Route path="viewprofile" element={<ViewProfile />} />
+          <Route path="chat" element={<Chat />} />
           <Route path="update-profile" element={<UpdateProfile />} />
           {/* product route */}
           <Route path="product" element={<ProductTable />} />
