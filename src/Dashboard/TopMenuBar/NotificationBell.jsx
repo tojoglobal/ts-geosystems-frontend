@@ -13,6 +13,7 @@ export default function NotificationBell() {
   const [open, setOpen] = useState(false);
   const queryClient = useQueryClient();
   const containerRef = useRef(null);
+  const bellButtonRef = useRef(null);
 
   // Infinite notifications fetch
   const { data, isLoading, isFetchingNextPage, fetchNextPage, hasNextPage } =
@@ -70,9 +71,28 @@ export default function NotificationBell() {
     return () => container.removeEventListener("scroll", onScroll);
   }, [open, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    if (!open) return;
+    const handleClick = (event) => {
+      // If click is outside the dropdown and bell button, close
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(event.target) &&
+        bellButtonRef.current &&
+        !bellButtonRef.current.contains(event.target)
+      ) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, [open]);
+
   return (
     <div className="relative">
       <button
+        ref={bellButtonRef}
         className="relative cursor-pointer flex items-center justify-center text-gray-300 dark:text-gray-400 hover:text-white dark:hover:text-white transition"
         onClick={() => setOpen((o) => !o)}
         aria-label="Notifications"
@@ -85,7 +105,10 @@ export default function NotificationBell() {
         )}
       </button>
       {open && (
-        <div className="absolute right-0 mt-2 w-96 bg-white dark:bg-gray-800 shadow-xl rounded-lg z-50 max-h-80 border border-gray-200 dark:border-gray-700 flex flex-col">
+        <div
+          ref={containerRef}
+          className="absolute right-0 mt-2 w-96 bg-white dark:bg-gray-800 shadow-xl rounded-lg z-50 max-h-80 border border-gray-200 dark:border-gray-700 flex flex-col"
+        >
           <div className="flex items-center justify-between p-3 border-b border-gray-200 dark:border-gray-700">
             <span className="font-semibold text-gray-700 dark:text-gray-200">
               Notifications
@@ -102,7 +125,6 @@ export default function NotificationBell() {
           <div
             className="divide-y divide-gray-200 dark:divide-gray-700 overflow-y-auto flex-1"
             style={{ maxHeight: "20rem" }}
-            ref={containerRef}
           >
             {isLoading && <div className="p-4 text-center">Loading...</div>}
             {!isLoading && notifications.length === 0 && (

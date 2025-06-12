@@ -12,8 +12,8 @@ Modal.setAppElement("#root");
 
 const modalStyles = {
   content: {
-    maxWidth: "850px",
-    width: "95%",
+    maxWidth: "1200px",
+    width: "98%",
     borderRadius: "18px",
     border: "none",
     top: "48%",
@@ -25,7 +25,6 @@ const modalStyles = {
     background: "white",
     transform: "translate(-50%, -50%)",
     boxShadow: "0 12px 40px 0 rgba(0,0,0,0.20)",
-    // The key line for scrollability inside modal:
     maxHeight: "90vh",
     overflowY: "auto",
   },
@@ -62,8 +61,7 @@ export default function GetQuotationModal({ isOpen, onRequestClose, product }) {
 
   // For VAT and price calculation
   const { data: vatEnabled = true } = useVatEnabled();
-  // eslint-disable-next-line no-unused-vars
-  const [shippingCost, setShippingCost] = useState(5.99);
+  const [shippingCost] = useState(5.99);
 
   // The "cart" will be only this product (quotation is for single product, quantity 1)
   const mergedCart = useMemo(
@@ -283,6 +281,7 @@ export default function GetQuotationModal({ isOpen, onRequestClose, product }) {
                     name="newsletter"
                     checked={formData.newsletter}
                     onChange={handleInputChange}
+                    className="cursor-pointer"
                   />
                   <label>Subscribe to our newsletter</label>
                 </div>
