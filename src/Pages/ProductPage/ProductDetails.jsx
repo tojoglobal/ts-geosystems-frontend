@@ -331,12 +331,11 @@ const ProductDetails = () => {
                 </button>
               ) : (
                 <Link to="/contact-us">
-                  <button className="cursor-pointer overflow-hidden group text-white px-8 font-semibold py-[6px] rounded-[3px] text-[17px] bg-[#e62245] hover:bg-red-800 w-full sm:w-auto">
+                  <button className="cursor-pointer overflow-hidden group text-white px-16 font-semibold py-[5px] rounded-[3px] text-[16px] bg-[#e62245] hover:bg-red-800 w-full sm:w-auto">
                     <span className="relative z-10">GET QUOTATION</span>
                   </button>
                 </Link>
               ))}
-
             <div className="mt-6">
               <div className="flex flex-wrap items-center gap-2">
                 <span className="font-medium text-[#8d7f90]">Share:</span>
