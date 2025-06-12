@@ -1,18 +1,18 @@
 import { Card, CardContent } from "@/Components/ui/card";
 import { PieChart, Cell, Pie, ResponsiveContainer } from "recharts";
 import {
-  useOrdersByPaymentStatus,
+  useOrdersByStatus,
   useOrdersByPaymentMethod,
 } from "./useDashboardData";
 
 const COLORS = ["#0f766e", "#2dd4bf", "#facc15", "#f472b6", "#818cf8"];
 
 const SourceOfPurchases = () => {
-  // Orders grouped by payment status (paid, unpaid, pending, etc.)
-  const { data, isLoading: statusLoading } = useOrdersByPaymentStatus();
+  // Orders grouped by STATUS (completed, pending, etc)
+  const { data, isLoading: statusLoading } = useOrdersByStatus();
   const statusData = data?.statusData || [];
-  const totalOrders = data?.pagination?.total || 0;
-  // Orders grouped by payment method (sslcommerz, bank, etc.)
+  const totalOrders = data?.total || 0;
+  // Orders grouped by payment method
   const { data: methodData = [], isLoading: methodLoading } =
     useOrdersByPaymentMethod();
 
@@ -20,9 +20,7 @@ const SourceOfPurchases = () => {
     <Card className="bg-slate-800 border-0 text-white">
       <CardContent className="p-4">
         <div className="flex justify-between items-center pb-3">
-          <div className="text-[18px] font-semibold">
-            Orders by Payment Status
-          </div>
+          <div className="text-[18px] font-semibold">Orders by Status</div>
         </div>
         {statusLoading ? (
           <div className="h-64 flex items-center justify-center">

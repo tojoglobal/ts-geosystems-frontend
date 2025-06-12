@@ -25,11 +25,11 @@ export default function Dashboard() {
   const [ordersPeriod, setOrdersPeriod] = useState("year");
 
   // Always fetch all users (no period param)
-  const { data: earningsMetrics, isLoading: earningsLoading } =
+  const { data: earningsMetrics = {}, isLoading: earningsLoading } =
     useDashboardMetrics(earningsPeriod);
-  const { data: ordersMetrics, isLoading: ordersLoading } =
+  const { data: ordersMetrics = {}, isLoading: ordersLoading } =
     useDashboardMetrics(ordersPeriod);
-  const { data: usersMetrics, isLoading: usersLoading } =
+  const { data: usersMetrics = {}, isLoading: usersLoading } =
     useDashboardMetrics("all");
   return (
     <div className="p-1 pt-0 grid md:gap-4 grid-cols-1 xl:grid-cols-4">

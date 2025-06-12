@@ -85,6 +85,22 @@ export const useAudienceMetrics = () => {
   });
 };
 
+export const useOrdersByStatus = () => {
+  const axiosPublicUrl = useAxiospublic();
+  return useQuery({
+    queryKey: ["orders-by-status"],
+    queryFn: async () => {
+      const res = await axiosPublicUrl.get("/api/orders-status-summary");
+      const statusData = res.data.map(row => ({
+        name: row.status || "Unknown",
+        value: row.count,
+      }));
+      const total = statusData.reduce((sum, item) => sum + item.value, 0);
+      return { statusData, total };
+    },
+  });
+}
+
 export const useOrdersByPaymentStatus = () => {
   const axiosPublicUrl = useAxiospublic();
   return useQuery({
@@ -114,14 +130,13 @@ export const useOrdersByPaymentMethod = () => {
   return useQuery({
     queryKey: ["orders-by-payment-method"],
     queryFn: async () => {
-      const res = await axiosPublicUrl.get("/api/orderinfo");
-      const orders = res?.data?.data || res.data || [];
-      const counts = {};
-      orders.forEach((order) => {
-        const method = order.payment_method || "Unknown";
-        counts[method] = (counts[method] || 0) + 1;
-      });
-      return Object.entries(counts).map(([name, value]) => ({ name, value }));
+      const res = await axiosPublicUrl.get(
+        "/api/orders-payment-method-summary"
+      );
+      return res.data.map((row) => ({
+        name: row.payment_method || "Unknown",
+        value: row.count,
+      }));
     },
   });
 };
