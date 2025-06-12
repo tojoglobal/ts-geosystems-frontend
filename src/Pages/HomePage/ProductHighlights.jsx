@@ -15,6 +15,7 @@ import { slugify } from "../../utils/slugify";
 import { getProductType } from "../../utils/productOption";
 import { ComponentLoader } from "../../utils/Loader/ComponentLoader";
 import useToastSwal from "../../Hooks/useToastSwal";
+import { useVatEnabled } from "../../Hooks/useVatEnabled";
 
 const tabOptions = [
   { name: "Featured Products", key: "featured" },
@@ -31,7 +32,7 @@ const ProductHighlights = () => {
   const [isBeginning, setIsBeginning] = useState(true);
   const showToast = useToastSwal();
   const [isEnd, setIsEnd] = useState(false);
-
+  const { data: vatEnabled = true, isLoading: vatLoading } = useVatEnabled();
   const {
     data = {},
     isLoading,
@@ -40,7 +41,7 @@ const ProductHighlights = () => {
   const highlightsData = data?.data;
 
   useEffect(() => {
-    if (!isLoading && !error) {
+    if (!isLoading && !error && highlightsData) {
       if (activeTab === "featured") setItems(highlightsData.featured || []);
       else if (activeTab === "top") setItems(highlightsData.top || []);
       else if (activeTab === "new") setItems(highlightsData.new || []);
@@ -70,7 +71,8 @@ const ProductHighlights = () => {
     setIsEnd(swiper.isEnd);
   };
 
-  if (isLoading) return <ComponentLoader componentName="ProductHighlights" />;
+  if (isLoading || vatLoading)
+    return <ComponentLoader componentName="ProductHighlights" />;
 
   if (error) {
     return (
@@ -165,6 +167,10 @@ const ProductHighlights = () => {
         >
           {items.map((item, idx) => {
             const { isSimpleProduct } = getProductType(item);
+            const taxData = item.tax ? JSON.parse(item.tax) : null;
+            const price = parseFloat(item.price) || 0;
+            const priceExVat = price * (1 + (taxData?.value || 0) / 100);
+
             return (
               <SwiperSlide key={idx}>
                 <div className="relative flex flex-col items-center bg-white h-full">
@@ -220,23 +226,30 @@ const ProductHighlights = () => {
                       </Link>
                     </div>
                     <div className="space-x-2">
-                      <p className="flex items-center gap-2 text-sm font-bold text-[#222]">
-                        <span> ৳{item.price}</span>
-                        <span className="underline text-gray-400 text-sm">
-                          (Ex. VAT)
-                        </span>
-                      </p>
+                      {vatEnabled ? (
+                        <p className="flex items-center gap-2 text-sm font-bold text-[#222]">
+                          <span>৳{price}</span>
+                          <span className="underline text-gray-400 text-sm">
+                            (Ex. VAT)
+                          </span>
+                        </p>
+                      ) : (
+                        <p className="flex items-center gap-2 text-sm font-bold text-[#222]">
+                          <span>৳{price}</span>
+                        </p>
+                      )}
                       {item.discountPrice && (
                         <span className="text-xs line-through text-gray-400">
                           ৳{item.discountPrice}
                         </span>
                       )}
                     </div>
-                    <div className="flex items-center gap-1 text-sm text-[#b3b3b5]">
-                      ৳{item.price}{" "}
-                      <span className="underline">(Inc. VAT)</span>
-                    </div>
-
+                    {vatEnabled && (
+                      <div className="flex items-center gap-1 text-sm text-[#b3b3b5]">
+                        ৳{priceExVat.toFixed(2)}{" "}
+                        <span className="underline">(Inc. VAT)</span>
+                      </div>
+                    )}
                     {item?.isStock === 1 && (
                       <div className="w-full">
                         {isSimpleProduct ? (

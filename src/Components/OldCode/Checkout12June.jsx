@@ -7,13 +7,11 @@ import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import { selectMergedCart } from "../../utils/selectMergedCart";
 import { clearCart, clearCoupon } from "../../features/AddToCart/AddToCart";
 import useToastSwal from "../../Hooks/useToastSwal";
-import { useVatEnabled } from "../../Hooks/useVatEnabled";
 
 const Checkout = () => {
   const axiosPublicUrl = useAxiospublic();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { data: vatEnabled = true, isLoading: vatLoading } = useVatEnabled();
   const showToast = useToastSwal();
   const { items, coupon, totalQuantity } = useSelector((state) => state.cart);
   const { user, isAuth } = useSelector((state) => state.authUser);
@@ -59,7 +57,7 @@ const Checkout = () => {
       discount = coupon.discount;
     }
   }
-  const total = subtotal + (vatEnabled ? vat : 0) + shippingCost - discount;
+  const total = subtotal + vat + shippingCost - discount;
 
   // Set email if user is authenticated
   useEffect(() => {
@@ -201,8 +199,6 @@ const Checkout = () => {
     );
   }
 
-  if (vatLoading) return <div>Loading...</div>;
-  
   return (
     <div className="w-full md:max-w-[95%] 2xl:max-w-[1370px] mx-auto py-6 mb-5 px-3">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -504,6 +500,7 @@ const Checkout = () => {
               ))}
             </>
           )}
+
           <hr />
           <div className="space-y-3 text-sm">
             <div className="flex justify-between">
@@ -514,12 +511,6 @@ const Checkout = () => {
               <span>Shipping</span>
               <span>৳{shippingCost}</span>
             </div>
-            {vatEnabled && (
-              <div className="flex justify-between">
-                <span>VAT</span>
-                <span>৳{vat.toLocaleString()}</span>
-              </div>
-            )}
             {/* <div className="flex justify-between">
               <span>VAT</span>
               <span>৳{vat.toLocaleString()}</span>
@@ -564,16 +555,15 @@ const Checkout = () => {
               ৳{total.toLocaleString(undefined, { maximumFractionDigits: 2 })}
             </span>
           </div>
+
           <hr />
-          {vatEnabled && (
-            <div className="text-sm">
-              <p className="font-semibold mb-1">TAX INCLUDED IN TOTAL:</p>
-              <div className="flex justify-between">
-                <span>VAT</span>
-                <span>৳{vat.toLocaleString()}</span>
-              </div>
+          <div className="text-sm">
+            <p className="font-semibold mb-1">TAX INCLUDED IN TOTAL:</p>
+            <div className="flex justify-between">
+              <span>VAT</span>
+              <span>৳{vat.toLocaleString()}</span>
             </div>
-          )}
+          </div>
         </div>
       </div>
     </div>

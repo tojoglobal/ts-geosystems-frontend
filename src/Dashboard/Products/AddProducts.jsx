@@ -8,6 +8,8 @@ import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import Button from "../Button/Button";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import { useVatEnabled } from "../../Hooks/useVatEnabled";
+import AdminVatSwitch from "./AdminVatSwitch";
 
 // Helper to validate only YouTube URLs (returns true if empty or valid YouTube URL)
 const validateYouTubeUrls = (value) => {
@@ -28,6 +30,7 @@ const ProductAddForm = () => {
   const [taxes, setTaxes] = useState([]);
   const [productOptions, setProductOptions] = useState([]);
   const [softwareOptions, setSoftwareOptions] = useState([]);
+  const { data: vatEnabled} = useVatEnabled();
 
   const {
     register,
@@ -217,401 +220,413 @@ const ProductAddForm = () => {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="p-2 sm:p-6 grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6"
-    >
-      {/* Image Upload Column */}
-      <div className="col-span-1">
-        <label className="block mb-2 font-medium">Upload Images</label>
-        <div
-          {...getRootProps()}
-          className="border-2 border-dashed border-gray-600 rounded-md p-4 sm:p-6 text-center cursor-pointer hover:border-teal-500"
-        >
-          <input {...getInputProps()} />
-          <p className="text-sm sm:text-base">
-            Drag & drop or{" "}
-            <span className="underline text-teal-500">Browse</span> images (max
-            20)
-          </p>
+    <div>
+      <AdminVatSwitch />
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="p-2 sm:p-6 grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6"
+      >
+        {/* Image Upload Column */}
+        <div className="col-span-1">
+          <label className="block mb-2 font-medium">Upload Images</label>
+          <div
+            {...getRootProps()}
+            className="border-2 border-dashed border-gray-600 rounded-md p-4 sm:p-6 text-center cursor-pointer hover:border-teal-500"
+          >
+            <input {...getInputProps()} />
+            <p className="text-sm sm:text-base">
+              Drag & drop or{" "}
+              <span className="underline text-teal-500">Browse</span> images
+              (max 20)
+            </p>
+          </div>
+          <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 gap-2">
+            {images.map((file, index) => (
+              <img
+                key={index}
+                src={URL.createObjectURL(file)}
+                alt="preview"
+                className="h-16 sm:h-20 w-full object-cover rounded"
+              />
+            ))}
+          </div>
         </div>
-        <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 gap-2">
-          {images.map((file, index) => (
-            <img
-              key={index}
-              src={URL.createObjectURL(file)}
-              alt="preview"
-              className="h-16 sm:h-20 w-full object-cover rounded"
+
+        {/* Second Column */}
+        <div className="col-span-1 md:col-span-2 space-y-4 grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+          <div className="col-span-1 space-y-3 sm:space-y-4">
+            {/* productName */}
+            <input
+              {...register("productName", {
+                required: "Product Name is required",
+              })}
+              placeholder="Product Name"
+              className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
             />
-          ))}
-        </div>
-      </div>
+            {errors.productName && (
+              <p className="text-red-500">{errors.productName.message}</p>
+            )}
 
-      {/* Second Column */}
-      <div className="col-span-1 md:col-span-2 space-y-4 grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-        <div className="col-span-1 space-y-3 sm:space-y-4">
-          {/* productName */}
-          <input
-            {...register("productName", {
-              required: "Product Name is required",
-            })}
-            placeholder="Product Name"
-            className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
-          />
-          {errors.productName && (
-            <p className="text-red-500">{errors.productName.message}</p>
-          )}
-
-          {/* brandName */}
-          <select
-            {...register("brandName", { required: "Brand is required" })}
-            className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
-          >
-            <option value="" className="hover:bg-amber-200">
-              Select Brand
-            </option>
-            {brands.map((br) => (
-              <option key={br.id} value={br.slug}>
-                {br.brands_name}
+            {/* brandName */}
+            <select
+              {...register("brandName", { required: "Brand is required" })}
+              className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
+            >
+              <option value="" className="hover:bg-amber-200">
+                Select Brand
               </option>
-            ))}
-          </select>
-          {errors.brandName && (
-            <p className="text-red-500">{errors.brandName.message}</p>
-          )}
-
-          {/* category */}
-          <select
-            {...register("category", { required: "Category is required" })}
-            className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
-          >
-            <option value="" className="hover:bg-amber-200">
-              Select Category
-            </option>
-            {Categories.map((cat) => (
-              <option
-                key={cat.id}
-                value={JSON.stringify({ id: cat.id, cat: cat.slug_name })}
-              >
-                {cat.category_name}
-              </option>
-            ))}
-          </select>
-          {errors.category && (
-            <p className="text-red-500">{errors.category.message}</p>
-          )}
-
-          {/*  subCategory*/}
-          <select
-            {...register("subCategory", {
-              required: "Sub Category is required",
-            })}
-            className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
-          >
-            <option value="">Select Sub Category</option>
-            {subCategories
-              .filter((sub) => sub.main_category_id === watchCategory?.id)
-              .map((sub) => (
-                <option
-                  key={sub.id}
-                  value={JSON.stringify({ id: sub.id, slug: sub.slug })}
-                >
-                  {sub.name}
+              {brands.map((br) => (
+                <option key={br.id} value={br.slug}>
+                  {br.brands_name}
                 </option>
               ))}
-          </select>
-          {errors.subCategory && (
-            <p className="text-red-500">{errors.subCategory.message}</p>
-          )}
+            </select>
+            {errors.brandName && (
+              <p className="text-red-500">{errors.brandName.message}</p>
+            )}
 
-          {/*SKU / Unique Code  */}
-          <input
-            {...register("sku", { required: "SKU is required" })}
-            placeholder="SKU / Unique Code"
-            className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
-          />
-          {errors.sku && <p className="text-red-500">{errors.sku.message}</p>}
-
-          {/*videoUrls  */}
-          <input
-            {...register("videoUrls", {
-              validate: (value) =>
-                validateYouTubeUrls(value) ||
-                "Only YouTube URLs are allowed (comma separated)",
-            })}
-            placeholder="YouTube Video URLs (comma separated)"
-            className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
-          />
-          {errors.videoUrls && (
-            <p className="text-red-500">{errors.videoUrls.message}</p>
-          )}
-
-          {/* Condition select */}
-          <select
-            {...register("condition", { required: "Condition is required" })}
-            className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
-          >
-            <option value="">Condition</option>
-            <option value="new">New</option>
-            <option value="used">Used</option>
-          </select>
-          {errors.condition && (
-            <p className="text-red-500">{errors.condition.message}</p>
-          )}
-
-          {/* Tax select */}
-          <select
-            {...register("tax", { required: "Tax is required" })}
-            className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
-          >
-            <option value="">Select Tax</option>
-            {taxes.map((tax) => (
-              <option
-                key={tax.id}
-                value={JSON.stringify({ id: tax.id, value: tax.value })}
-              >
-                {tax.name} ({tax.value}%)
+            {/* category */}
+            <select
+              {...register("category", { required: "Category is required" })}
+              className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
+            >
+              <option value="" className="hover:bg-amber-200">
+                Select Category
               </option>
-            ))}
-          </select>
-          {errors.tax && <p className="text-red-500">{errors.tax.message}</p>}
-        </div>
+              {Categories.map((cat) => (
+                <option
+                  key={cat.id}
+                  value={JSON.stringify({ id: cat.id, cat: cat.slug_name })}
+                >
+                  {cat.category_name}
+                </option>
+              ))}
+            </select>
+            {errors.category && (
+              <p className="text-red-500">{errors.category.message}</p>
+            )}
 
-        {/* Third Column */}
-        <div className="col-span-1 space-y-3 sm:space-y-4">
-          {/* Clearance, In Stock, On Sale checkboxes remain the same */}
-          <div className="flex items-center gap-2">
+            {/*  subCategory*/}
+            <select
+              {...register("subCategory", {
+                required: "Sub Category is required",
+              })}
+              className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
+            >
+              <option value="">Select Sub Category</option>
+              {subCategories
+                .filter((sub) => sub.main_category_id === watchCategory?.id)
+                .map((sub) => (
+                  <option
+                    key={sub.id}
+                    value={JSON.stringify({ id: sub.id, slug: sub.slug })}
+                  >
+                    {sub.name}
+                  </option>
+                ))}
+            </select>
+            {errors.subCategory && (
+              <p className="text-red-500">{errors.subCategory.message}</p>
+            )}
+
+            {/*SKU / Unique Code  */}
             <input
-              type="checkbox"
-              {...register("clearance")}
-              className="w-5 h-5 cursor-pointer accent-teal-600"
+              {...register("sku", { required: "SKU is required" })}
+              placeholder="SKU / Unique Code"
+              className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
             />
-            <label>Clearance Item</label>
-          </div>
-          <div className="flex items-center gap-2">
+            {errors.sku && <p className="text-red-500">{errors.sku.message}</p>}
+
+            {/*videoUrls  */}
             <input
-              type="checkbox"
-              {...register("isStock")}
-              defaultChecked={true}
-              className="w-5 h-5 cursor-pointer accent-teal-600"
+              {...register("videoUrls", {
+                validate: (value) =>
+                  validateYouTubeUrls(value) ||
+                  "Only YouTube URLs are allowed (comma separated)",
+              })}
+              placeholder="YouTube Video URLs (comma separated)"
+              className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
             />
-            <label>In Stock</label>
+            {errors.videoUrls && (
+              <p className="text-red-500">{errors.videoUrls.message}</p>
+            )}
+
+            {/* Condition select */}
+            <select
+              {...register("condition", { required: "Condition is required" })}
+              className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
+            >
+              <option value="">Condition</option>
+              <option value="new">New</option>
+              <option value="used">Used</option>
+            </select>
+            {errors.condition && (
+              <p className="text-red-500">{errors.condition.message}</p>
+            )}
+
+            {/* Tax select */}
+            {vatEnabled && (
+              <select
+                {...register("tax", { required: "Tax is required" })}
+                className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
+              >
+                <option value="">Select Tax</option>
+                {taxes.map((tax) => (
+                  <option
+                    key={tax.id}
+                    value={JSON.stringify({ id: tax.id, value: tax.value })}
+                  >
+                    {tax.name} ({tax.value}%)
+                  </option>
+                ))}
+              </select>
+            )}
+            {!vatEnabled && (
+              <input type="hidden" {...register("tax")} value={""} />
+            )}
+            {errors.tax && <p className="text-red-500">{errors.tax.message}</p>}
           </div>
-          <div className="flex items-center gap-2">
+
+          {/* Third Column */}
+          <div className="col-span-1 space-y-3 sm:space-y-4">
+            {/* Clearance, In Stock, On Sale checkboxes remain the same */}
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                {...register("clearance")}
+                className="w-5 h-5 cursor-pointer accent-teal-600"
+              />
+              <label>Clearance Item</label>
+            </div>
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                {...register("isStock")}
+                defaultChecked={true}
+                className="w-5 h-5 cursor-pointer accent-teal-600"
+              />
+              <label>In Stock</label>
+            </div>
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                {...register("sale")}
+                className="w-5 h-5 cursor-pointer accent-teal-600"
+              />
+              <label>On Sale</label>
+            </div>
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                {...register("flashSale")}
+                className="w-5 h-5 cursor-pointer accent-teal-600"
+              />
+              <label>Flash Sale</label>
+            </div>
             <input
-              type="checkbox"
-              {...register("sale")}
-              className="w-5 h-5 cursor-pointer accent-teal-600"
+              type="datetime-local"
+              {...register("flashSaleEnd")}
+              className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
+              min={new Date().toISOString().slice(0, 16)}
             />
-            <label>On Sale</label>
-          </div>
-          <div className="flex items-center gap-2">
+            {/* Price and other fields remain the same */}
             <input
-              type="checkbox"
-              {...register("flashSale")}
-              className="w-5 h-5 cursor-pointer accent-teal-600"
+              {...register("price", { required: "Price is required" })}
+              placeholder="Price"
+              className="w-full input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
             />
-            <label>Flash Sale</label>
-          </div>
-          <input
-            type="datetime-local"
-            {...register("flashSaleEnd")}
-            className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
-            min={new Date().toISOString().slice(0, 16)}
-          />
-          {/* Price and other fields remain the same */}
-          <input
-            {...register("price", { required: "Price is required" })}
-            placeholder="Price"
-            className="w-full input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
-          />
-          {errors.price && (
-            <p className="text-red-500">{errors.price.message}</p>
-          )}
-          <div className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              checked={watch("priceShowHide") === 1}
-              onChange={(e) =>
-                setValue("priceShowHide", e.target.checked ? 1 : 0)
-              }
-              className="w-5 h-5 accent-teal-600"
-            />
-            <label>Hide Price</label>
-          </div>
-          {/* Product Options and other fields remain the same */}
-          <Controller
-            name="productOptions"
-            control={control}
-            render={({ field }) => (
-              <Select
-                {...field}
-                isMulti
-                isSearchable={true}
-                options={productOptions}
-                placeholder="Product Options"
-                className="react-select-container"
-                classNamePrefix="react-select"
-                styles={{
-                  control: (base, state) => ({
-                    ...base,
-                    backgroundColor: "rgb(255, 255, 255)", // Tailwind: dark:bg-gray-800
-                    borderColor: state.isFocused ? "#14b8a6" : "rgb(75 85 99)",
-                    color: "white",
-                    boxShadow: state.isFocused ? "0 0 0 1px #14b8a6" : "none",
-                  }),
-                  menu: (base) => ({
-                    ...base,
-                    backgroundColor: "rgb(255,255,255)",
-                    color: "white",
-                    zIndex: 10,
-                  }),
-                  option: (base, state) => ({
-                    ...base,
-                    backgroundColor: state.isSelected
-                      ? "#0f766e" // Tailwind: bg-teal-700
-                      : state.isFocused
-                      ? "#115e59" // Tailwind: hover:bg-teal-800
-                      : "rgb(209, 213, 219)",
-                    color: state.isFocused ? "white" : "black",
-                  }),
-                  multiValue: (base) => ({
-                    ...base,
-                    backgroundColor: "#363636", // dark teal
-                    color: "white",
-                  }),
-                  multiValueLabel: (base) => ({
-                    ...base,
-                    color: "white",
-                  }),
-                  multiValueRemove: (base) => ({
-                    ...base,
-                    color: "white",
-                    ":hover": {
-                      backgroundColor: "#0f766e",
+            {errors.price && (
+              <p className="text-red-500">{errors.price.message}</p>
+            )}
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                checked={watch("priceShowHide") === 1}
+                onChange={(e) =>
+                  setValue("priceShowHide", e.target.checked ? 1 : 0)
+                }
+                className="w-5 h-5 accent-teal-600"
+              />
+              <label>Hide Price</label>
+            </div>
+            {/* Product Options and other fields remain the same */}
+            <Controller
+              name="productOptions"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  {...field}
+                  isMulti
+                  isSearchable={true}
+                  options={productOptions}
+                  placeholder="Product Options"
+                  className="react-select-container"
+                  classNamePrefix="react-select"
+                  styles={{
+                    control: (base, state) => ({
+                      ...base,
+                      backgroundColor: "rgb(255, 255, 255)", // Tailwind: dark:bg-gray-800
+                      borderColor: state.isFocused
+                        ? "#14b8a6"
+                        : "rgb(75 85 99)",
                       color: "white",
-                    },
-                  }),
-                }}
-              />
-            )}
-          />
-          {/* Product Option Show/Hide */}
-          <div className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              checked={watch("productOptionShowHide") === 1}
-              onChange={(e) =>
-                setValue("productOptionShowHide", e.target.checked ? 1 : 0)
-              }
-              className="w-5 h-5 accent-teal-600"
-            />
-            <label>Hide Product Options</label>
-          </div>
-          {/* softwareOptions */}
-          <Controller
-            name="softwareOptions"
-            control={control}
-            render={({ field }) => (
-              <Select
-                {...field}
-                isMulti
-                isSearchable={true}
-                options={softwareOptions}
-                placeholder="Software Options"
-                className="react-select-container"
-                classNamePrefix="react-select"
-                styles={{
-                  control: (base, state) => ({
-                    ...base,
-                    backgroundColor: "rgb(255, 255, 255)", // Tailwind: dark:bg-gray-800
-                    borderColor: state.isFocused ? "#14b8a6" : "rgb(75 85 99)",
-                    color: "white",
-                    boxShadow: state.isFocused ? "0 0 0 1px #14b8a6" : "none",
-                  }),
-                  menu: (base) => ({
-                    ...base,
-                    backgroundColor: "rgb(255,255,255)",
-                    color: "white",
-                    zIndex: 10,
-                  }),
-                  option: (base, state) => ({
-                    ...base,
-                    backgroundColor: state.isSelected
-                      ? "#0f766e" // Tailwind: bg-teal-700
-                      : state.isFocused
-                      ? "#115e59" // Tailwind: hover:bg-teal-800
-                      : "rgb(209, 213, 219)",
-                    color: state.isFocused ? "white" : "black",
-                  }),
-                  multiValue: (base) => ({
-                    ...base,
-                    backgroundColor: "#363636", // dark teal
-                    color: "white",
-                  }),
-                  multiValueLabel: (base) => ({
-                    ...base,
-                    color: "white",
-                  }),
-                  multiValueRemove: (base) => ({
-                    ...base,
-                    color: "white",
-                    ":hover": {
-                      backgroundColor: "#0f766e",
+                      boxShadow: state.isFocused ? "0 0 0 1px #14b8a6" : "none",
+                    }),
+                    menu: (base) => ({
+                      ...base,
+                      backgroundColor: "rgb(255,255,255)",
                       color: "white",
-                    },
-                  }),
-                }}
+                      zIndex: 10,
+                    }),
+                    option: (base, state) => ({
+                      ...base,
+                      backgroundColor: state.isSelected
+                        ? "#0f766e" // Tailwind: bg-teal-700
+                        : state.isFocused
+                        ? "#115e59" // Tailwind: hover:bg-teal-800
+                        : "rgb(209, 213, 219)",
+                      color: state.isFocused ? "white" : "black",
+                    }),
+                    multiValue: (base) => ({
+                      ...base,
+                      backgroundColor: "#363636", // dark teal
+                      color: "white",
+                    }),
+                    multiValueLabel: (base) => ({
+                      ...base,
+                      color: "white",
+                    }),
+                    multiValueRemove: (base) => ({
+                      ...base,
+                      color: "white",
+                      ":hover": {
+                        backgroundColor: "#0f766e",
+                        color: "white",
+                      },
+                    }),
+                  }}
+                />
+              )}
+            />
+            {/* Product Option Show/Hide */}
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                checked={watch("productOptionShowHide") === 1}
+                onChange={(e) =>
+                  setValue("productOptionShowHide", e.target.checked ? 1 : 0)
+                }
+                className="w-5 h-5 accent-teal-600"
               />
-            )}
-          />
+              <label>Hide Product Options</label>
+            </div>
+            {/* softwareOptions */}
+            <Controller
+              name="softwareOptions"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  {...field}
+                  isMulti
+                  isSearchable={true}
+                  options={softwareOptions}
+                  placeholder="Software Options"
+                  className="react-select-container"
+                  classNamePrefix="react-select"
+                  styles={{
+                    control: (base, state) => ({
+                      ...base,
+                      backgroundColor: "rgb(255, 255, 255)", // Tailwind: dark:bg-gray-800
+                      borderColor: state.isFocused
+                        ? "#14b8a6"
+                        : "rgb(75 85 99)",
+                      color: "white",
+                      boxShadow: state.isFocused ? "0 0 0 1px #14b8a6" : "none",
+                    }),
+                    menu: (base) => ({
+                      ...base,
+                      backgroundColor: "rgb(255,255,255)",
+                      color: "white",
+                      zIndex: 10,
+                    }),
+                    option: (base, state) => ({
+                      ...base,
+                      backgroundColor: state.isSelected
+                        ? "#0f766e" // Tailwind: bg-teal-700
+                        : state.isFocused
+                        ? "#115e59" // Tailwind: hover:bg-teal-800
+                        : "rgb(209, 213, 219)",
+                      color: state.isFocused ? "white" : "black",
+                    }),
+                    multiValue: (base) => ({
+                      ...base,
+                      backgroundColor: "#363636", // dark teal
+                      color: "white",
+                    }),
+                    multiValueLabel: (base) => ({
+                      ...base,
+                      color: "white",
+                    }),
+                    multiValueRemove: (base) => ({
+                      ...base,
+                      color: "white",
+                      ":hover": {
+                        backgroundColor: "#0f766e",
+                        color: "white",
+                      },
+                    }),
+                  }}
+                />
+              )}
+            />
+          </div>
+          {/*  productOverview*/}
+          <div className="col-span-2 space-y-4">
+            <label className="ml-1">Product Overview</label>
+            <Controller
+              name="productOverview"
+              control={control}
+              render={({ field }) => (
+                <Editor
+                  apiKey={import.meta.env.VITE_TINY_APIKEY}
+                  value={field.value}
+                  init={{
+                    height: 200,
+                    menubar: false,
+                    plugins: "link image code",
+                    toolbar:
+                      "undo redo | formatselect | bold italic | alignleft aligncenter alignright | code",
+                  }}
+                  onEditorChange={(content) => field.onChange(content)}
+                />
+              )}
+            />
+            <label className="ml-1">Warranty Info</label>
+            <Controller
+              name="warrantyInfo"
+              control={control}
+              render={({ field }) => (
+                <Editor
+                  apiKey={import.meta.env.VITE_TINY_APIKEY}
+                  value={field.value}
+                  init={{
+                    height: 200,
+                    menubar: false,
+                    plugins: "link image code",
+                    toolbar:
+                      "undo redo | formatselect | bold italic | alignleft aligncenter alignright | code",
+                  }}
+                  onEditorChange={(content) => field.onChange(content)}
+                />
+              )}
+            />
+          </div>
+          <div className="col-span-1 space-y-4">
+            <Button text={"Submit Product"} />
+          </div>
         </div>
-        {/*  productOverview*/}
-        <div className="col-span-2 space-y-4">
-          <label className="ml-1">Product Overview</label>
-          <Controller
-            name="productOverview"
-            control={control}
-            render={({ field }) => (
-              <Editor
-                apiKey={import.meta.env.VITE_TINY_APIKEY}
-                value={field.value}
-                init={{
-                  height: 200,
-                  menubar: false,
-                  plugins: "link image code",
-                  toolbar:
-                    "undo redo | formatselect | bold italic | alignleft aligncenter alignright | code",
-                }}
-                onEditorChange={(content) => field.onChange(content)}
-              />
-            )}
-          />
-          <label className="ml-1">Warranty Info</label>
-          <Controller
-            name="warrantyInfo"
-            control={control}
-            render={({ field }) => (
-              <Editor
-                apiKey={import.meta.env.VITE_TINY_APIKEY}
-                value={field.value}
-                init={{
-                  height: 200,
-                  menubar: false,
-                  plugins: "link image code",
-                  toolbar:
-                    "undo redo | formatselect | bold italic | alignleft aligncenter alignright | code",
-                }}
-                onEditorChange={(content) => field.onChange(content)}
-              />
-            )}
-          />
-        </div>
-        <div className="col-span-1 space-y-4">
-          <Button text={"Submit Product"} />
-        </div>
-      </div>
-    </form>
+      </form>
+    </div>
   );
 };
 

@@ -71,8 +71,6 @@ const Recommended = ({ category, currentProductId }) => {
     );
   };
 
-  console.log(recommendedProducts);
-
   if (isLoading) {
     return <div>Loading recommended products...</div>;
   }

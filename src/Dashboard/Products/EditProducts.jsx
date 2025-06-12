@@ -10,6 +10,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import Button from "../Button/Button";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
+import { useVatEnabled } from "../../Hooks/useVatEnabled";
 const MySwal = withReactContent(Swal);
 
 // Helper to validate only YouTube URLs (returns true if empty or valid YouTube URL)
@@ -33,6 +34,7 @@ const UpdateProductForm = () => {
   const [productOptions, setProductOptions] = useState([]);
   const [softwareOptions, setSoftwareOptions] = useState([]);
   const [taxes, setTaxes] = useState([]);
+    const { data: vatEnabled} = useVatEnabled();
   const navigate = useNavigate();
 
   const {
@@ -509,20 +511,25 @@ const UpdateProductForm = () => {
           )}
 
           {/* Tax selection */}
-          <select
-            {...register("tax", { required: "Tax is required" })}
-            className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
-          >
-            <option value="">Select Tax</option>
-            {taxes.map((tax) => (
-              <option
-                key={tax.id}
-                value={JSON.stringify({ id: tax.id, value: tax.value })}
-              >
-                {tax.name} ({tax.value}%)
-              </option>
-            ))}
-          </select>
+          {vatEnabled && (
+            <select
+              {...register("tax", { required: "Tax is required" })}
+              className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
+            >
+              <option value="">Select Tax</option>
+              {taxes.map((tax) => (
+                <option
+                  key={tax.id}
+                  value={JSON.stringify({ id: tax.id, value: tax.value })}
+                >
+                  {tax.name} ({tax.value}%)
+                </option>
+              ))}
+            </select>
+          )}
+          {!vatEnabled && (
+            <input type="hidden" {...register("tax")} value={""} />
+          )}
           {errors.tax && <p className="text-red-500">{errors.tax.message}</p>}
         </div>
         {/* Third Column */}

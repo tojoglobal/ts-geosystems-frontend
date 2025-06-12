@@ -12,13 +12,11 @@ import {
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import { selectMergedCart } from "../../utils/selectMergedCart";
 import useToastSwal from "../../Hooks/useToastSwal";
-import { useVatEnabled } from "../../Hooks/useVatEnabled";
 
 const Cart = () => {
   const axiosPublicUrl = useAxiospublic();
   const dispatch = useDispatch();
   const showToast = useToastSwal();
-  const { data: vatEnabled = true } = useVatEnabled();
   const { items, coupon } = useSelector((state) => state.cart);
   const [shippingCost, setShippingCost] = useState(5.99);
   const [showCouponInput, setShowCouponInput] = useState(false);
@@ -91,8 +89,7 @@ const Cart = () => {
     }
   }
 
-  const grandTotal =
-    subTotal + (vatEnabled ? vat : 0) + shippingCost - discount;
+  const grandTotal = subTotal + vat + shippingCost - discount;
 
   return (
     <div className="md:p-2">
@@ -117,7 +114,7 @@ const Cart = () => {
                 <th className="py-2">Item Name</th>
                 <th className="py-2">Price</th>
                 <th className="py-2">Quantity</th>
-                {vatEnabled && <th className="py-2">Vat</th>}
+                <th className="py-2">Vat</th>
                 <th className="py-2 text-right">Total</th>
               </tr>
             </thead>
@@ -142,6 +139,7 @@ const Cart = () => {
                     <p className="font-medium pr-3">{item.product_name}</p>
                   </td>
                   <td>৳{item?.price.toFixed(2)}</td>
+
                   <td>
                     <div className="flex items-center">
                       <button
@@ -159,7 +157,7 @@ const Cart = () => {
                       </button>
                     </div>
                   </td>
-                  {vatEnabled && <td>৳{item?.totalVat.toFixed(2)}</td>}
+                  <td>৳{item?.totalVat.toFixed(2)}</td>
                   <td className="text-right">
                     <div className="flex items-center justify-end gap-3">
                       <p>৳{(item.price * item.quantity).toFixed(2)}</p>
@@ -182,12 +180,6 @@ const Cart = () => {
               <span>Subtotal:</span>
               <span>৳{subTotal.toFixed(2)}</span>
             </div>
-            {vatEnabled && (
-              <div className="flex justify-between mb-2 border-b pb-2">
-                <span>VAT:</span>
-                <span>৳{vat.toFixed(2)}</span>
-              </div>
-            )}
             {/* Coupon Section */}
             <div className="mb-2 border-b pb-2">
               <label className="mb-1 text-base font-medium flex justify-between cursor-pointer">
@@ -309,12 +301,10 @@ const Cart = () => {
               )}
             </div> */}
 
-            {vatEnabled && (
-              <div className="flex justify-between mb-2 border-b pb-2">
-                <span>VAT:</span>
-                <span>৳{vat.toFixed(2)}</span>
-              </div>
-            )}
+            <div className="flex justify-between mb-2 border-b pb-2">
+              <span>VAT:</span>
+              <span>৳{vat.toFixed(2)}</span>
+            </div>
             <div className="flex justify-between mb-2 border-b pb-2">
               <span>Shipping:</span>
               <span>৳{shippingCost.toFixed(2)}</span>
@@ -371,11 +361,10 @@ const Cart = () => {
               <p className="text-sm text-gray-700 mb-1">
                 Price: ৳{item?.price.toFixed(2)}
               </p>
-              {vatEnabled && (
-                <p className="text-sm text-gray-700 mb-1">
-                  VAT: ৳{item?.totalVat.toFixed(2)}
-                </p>
-              )}
+              <p className="text-sm text-gray-700 mb-1">
+                VAT: ৳{item?.totalVat.toFixed(2)}
+              </p>
+
               <div className="flex items-center gap-2 mt-2">
                 <span className="text-sm">Qty:</span>
                 <button

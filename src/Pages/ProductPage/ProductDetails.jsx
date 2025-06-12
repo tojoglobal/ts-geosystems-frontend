@@ -18,6 +18,7 @@ import { parsePrice } from "../../utils/parsePrice";
 import useDataQuery from "../../utils/useDataQuery";
 import { setBreadcrumb } from "../../features/breadcrumb/breadcrumbSlice";
 import useToastSwal from "../../Hooks/useToastSwal";
+import { useVatEnabled } from "../../Hooks/useVatEnabled";
 
 // Helper function to extract YouTube video ID from url
 function getYouTubeId(url) {
@@ -36,6 +37,7 @@ const ProductDetails = () => {
   const [activeTab, setActiveTab] = useState("OVERVIEW");
   const overviewRef = useRef(null);
   const [quantity, setQuantity] = useState(1);
+  const { data: vatEnabled = true } = useVatEnabled();
   const [playingVideoIdx, setPlayingVideoIdx] = useState(-1);
 
   const {
@@ -261,16 +263,20 @@ const ProductDetails = () => {
                 Price:{" "}
                 <span className="text-[#111]">
                   ৳{parsePrice(product.price)}.00{" "}
-                  <span className="text-sm text-gray-500">(Ex. VAT)</span>
+                  {vatEnabled && (
+                    <span className="text-sm text-gray-500">(Ex. VAT)</span>
+                  )}
                 </span>
               </div>
-              <div className="text-[18px] sm:text-[24px] font-semibold text-[#999] line-through">
-                Price:{" "}
-                <span className="text-[#999]">
-                  ৳{(parsePrice(product.price) * 1.2).toFixed(2)}{" "}
-                  <span className="text-sm text-gray-400">(Inc. VAT)</span>
-                </span>
-              </div>
+              {vatEnabled && (
+                <div className="text-[18px] sm:text-[24px] font-semibold text-[#999] line-through">
+                  Price:{" "}
+                  <span className="text-[#999]">
+                    ৳{(parsePrice(product.price) * 1.2).toFixed(2)}{" "}
+                    <span className="text-sm text-gray-400">(Inc. VAT)</span>
+                  </span>
+                </div>
+              )}
             </div>
             <hr className="border-t border-gray-300 my-3" />
             <div className="text-sm text-[#222] mb-1">

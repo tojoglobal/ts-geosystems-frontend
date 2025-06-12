@@ -17,6 +17,7 @@ import { getProductType } from "../utils/productOption";
 import useToastSwal from "../Hooks/useToastSwal";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 import CompareCheckbox from "./NavComponents/CompareCheckbox";
+import { useVatEnabled } from "../Hooks/useVatEnabled";
 
 const sortOptions = [
   { label: "NEWEST ITEMS", value: "newest" },
@@ -43,6 +44,7 @@ const CategoryProduct = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [compareItems, setCompareItems] = useState([]);
   const navigate = useNavigate();
+  const { data: vatEnabled = true, isLoading: vatLoading } = useVatEnabled();
   const { category, subcategory, brand } = useParams();
   const productsPerPage = 8;
 
@@ -120,7 +122,7 @@ const CategoryProduct = () => {
 
   const label = useBreadcrumbLabel(category);
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading || vatLoading) return null;
 
   const showNoProduct =
     !products ||
@@ -368,19 +370,31 @@ const CategoryProduct = () => {
                         <div className="text-[#2f2f2b] font-semibold">
                           Was: ৳{(parseFloat(product.price) * 1.5).toFixed(2)}
                         </div>
-                        <div className="flex items-center gap-1">
-                          <p className="font-bold">
-                            Price ৳{parsePrice(product.price).toFixed(2)}
-                          </p>
-                          <p className="text-sm text-gray-500 underline">
-                            (Ex. VAT)
-                          </p>
-                        </div>
-                        <div className="flex items-center gap-1 text-sm text-[#b3b3b5]">
-                          <p className="text-[#2f2f2b] font-semibold">Price:</p>
-                          ৳{(parseFloat(product.price) * 1.2).toFixed(2)}{" "}
-                          <span className="underline">(Inc. VAT)</span>
-                        </div>
+                        {vatEnabled ? (
+                          <>
+                            <div className="flex items-center gap-1">
+                              <p className="font-bold">
+                                Price ৳{parsePrice(product.price).toFixed(2)}
+                              </p>
+                              <p className="text-sm text-gray-500 underline">
+                                (Ex. VAT)
+                              </p>
+                            </div>
+                            <div className="flex items-center gap-1 text-sm text-[#b3b3b5]">
+                              <p className="text-[#2f2f2b] font-semibold">
+                                Price:
+                              </p>
+                              ৳{(parseFloat(product.price) * 1.2).toFixed(2)}{" "}
+                              <span className="underline">(Inc. VAT)</span>
+                            </div>
+                          </>
+                        ) : (
+                          <div className="flex items-center gap-1">
+                            <p className="font-bold">
+                              Price ৳{parsePrice(product.price).toFixed(2)}
+                            </p>
+                          </div>
+                        )}
                       </div>
                       <div className="flex gap-4 mt-2 flex-row">
                         {product?.isStock === 1 && (
@@ -447,18 +461,28 @@ const CategoryProduct = () => {
                       </Link>
                     </div>
                     <div className="mt-1">
-                      <div className="flex items-center gap-1">
-                        <p className="text-sm font-bold">
-                          ৳{parsePrice(product.price).toFixed(2)}
-                        </p>
-                        <p className="text-sm text-gray-500 underline">
-                          (Ex. VAT)
-                        </p>
-                      </div>
-                      <div className="flex items-center gap-1 text-sm text-[#b3b3b5] mt-1">
-                        ৳{(parseFloat(product.price) * 1.2).toFixed(2)}{" "}
-                        <span className="underline">(Inc. VAT)</span>
-                      </div>
+                      {vatEnabled ? (
+                        <>
+                          <div className="flex items-center gap-1">
+                            <p className="text-sm font-bold">
+                              ৳{parsePrice(product.price).toFixed(2)}
+                            </p>
+                            <p className="text-sm text-gray-500 underline">
+                              (Ex. VAT)
+                            </p>
+                          </div>
+                          <div className="flex items-center gap-1 text-sm text-[#b3b3b5] mt-1">
+                            ৳{(parseFloat(product.price) * 1.2).toFixed(2)}{" "}
+                            <span className="underline">(Inc. VAT)</span>
+                          </div>
+                        </>
+                      ) : (
+                        <div className="flex items-center gap-1">
+                          <p className="text-sm font-bold">
+                            ৳{parsePrice(product.price).toFixed(2)}
+                          </p>
+                        </div>
+                      )}
                       <div className="flex flex-col gap-2 mt-2">
                         {product?.isStock === 1 && (
                           <div>
