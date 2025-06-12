@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Modal from "react-modal";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
@@ -12,7 +12,7 @@ Modal.setAppElement("#root");
 
 const modalStyles = {
   content: {
-    maxWidth: "1200px",
+    maxWidth: "1150px",
     width: "98%",
     borderRadius: "18px",
     border: "none",
