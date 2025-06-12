@@ -97,7 +97,14 @@ const OrderTable = () => {
           const res = await axiospublic.delete(`/api/orders/${order_id}`);
           if (res.status === 200) {
             refetch();
-            Swal.fire("Deleted!", res?.data?.message, "success");
+            Swal.fire({
+              title: "Deleted!",
+              text: res?.data?.message,
+              icon: "success",
+              background: "#1e293b",
+              color: "#f8fafc",
+              confirmButtonColor: "#e11d48",
+            });
           } else {
             throw new Error("Failed to delete order");
           }

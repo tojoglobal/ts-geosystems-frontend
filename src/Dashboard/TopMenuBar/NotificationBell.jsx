@@ -15,7 +15,7 @@ export default function NotificationBell() {
   const containerRef = useRef(null);
   const bellButtonRef = useRef(null);
 
-  // Infinite notifications fetch
+  // Infinite notifications fetch: always enabled, polling in background
   const { data, isLoading, isFetchingNextPage, fetchNextPage, hasNextPage } =
     useInfiniteQuery({
       queryKey: ["admin-notifications"],
@@ -29,8 +29,8 @@ export default function NotificationBell() {
         if (lastPage.hasMore) return lastPage.page + 1;
         return undefined;
       },
-      refetchInterval: 15000,
-      enabled: open,
+      refetchInterval: 15000, // poll every 15s in background
+      // enabled: open, // <-- REMOVED to enable always
     });
 
   // Flatten notifications
