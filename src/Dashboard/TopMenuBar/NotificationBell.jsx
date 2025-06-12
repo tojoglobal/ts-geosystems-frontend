@@ -1,28 +1,41 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { Bell } from "lucide-react";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
 
 export default function NotificationBell() {
-    const axiosPublicUrl = useAxiospublic();
+  const axiosPublicUrl = useAxiospublic();
   const [open, setOpen] = useState(false);
   const queryClient = useQueryClient();
+  const containerRef = useRef(null);
 
-  const { data = [], isLoading } = useQuery({
-    queryKey: ["admin-notifications"],
-    queryFn: async () => {
-      const res = await axiosPublicUrl.get("/api/admin/notifications");
-      // Always return an array
-      if (Array.isArray(res.data)) return res.data;
-      if (Array.isArray(res.data?.notifications)) return res.data.notifications;
-      if (Array.isArray(res.data?.data)) return res.data.data;
-      return [];
-    },
-    refetchInterval: 15000,
-  });
-  
-  const notifications = Array.isArray(data) ? data : [];
+  // Infinite notifications fetch
+  const { data, isLoading, isFetchingNextPage, fetchNextPage, hasNextPage } =
+    useInfiniteQuery({
+      queryKey: ["admin-notifications"],
+      queryFn: async ({ pageParam = 1 }) => {
+        const res = await axiosPublicUrl.get(
+          `/api/admin/notifications?page=${pageParam}&limit=10`
+        );
+        return res.data;
+      },
+      getNextPageParam: (lastPage) => {
+        if (lastPage.hasMore) return lastPage.page + 1;
+        return undefined;
+      },
+      refetchInterval: 15000,
+      enabled: open,
+    });
+
+  // Flatten notifications
+  const notifications = (data?.pages || []).flatMap(
+    (p) => p.notifications || []
+  );
   const unreadCount = notifications.filter((n) => !n.is_read).length || 0;
 
   // Mark as read on click
@@ -38,8 +51,24 @@ export default function NotificationBell() {
     onSuccess: () => queryClient.invalidateQueries(["admin-notifications"]),
   });
 
-  // Show top 4 notifications, scrollable
-  const latest = notifications.slice(0, 4);
+  // Infinite scroll handler
+  useEffect(() => {
+    if (!open) return;
+    const container = containerRef.current;
+    if (!container) return;
+    const onScroll = () => {
+      if (
+        container.scrollTop + container.clientHeight >=
+          container.scrollHeight - 20 &&
+        hasNextPage &&
+        !isFetchingNextPage
+      ) {
+        fetchNextPage();
+      }
+    };
+    container.addEventListener("scroll", onScroll);
+    return () => container.removeEventListener("scroll", onScroll);
+  }, [open, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   return (
     <div className="relative">
@@ -56,7 +85,7 @@ export default function NotificationBell() {
         )}
       </button>
       {open && (
-        <div className="absolute right-0 mt-2 w-96 bg-white dark:bg-gray-800 shadow-xl rounded-lg z-50 max-h-80 overflow-y-auto border border-gray-200 dark:border-gray-700">
+        <div className="absolute right-0 mt-2 w-96 bg-white dark:bg-gray-800 shadow-xl rounded-lg z-50 max-h-80 border border-gray-200 dark:border-gray-700 flex flex-col">
           <div className="flex items-center justify-between p-3 border-b border-gray-200 dark:border-gray-700">
             <span className="font-semibold text-gray-700 dark:text-gray-200">
               Notifications
@@ -70,60 +99,70 @@ export default function NotificationBell() {
               </button>
             )}
           </div>
-          <div className="divide-y divide-gray-200 dark:divide-gray-700">
-            {isLoading ? (
-              <div className="p-4 text-center">Loading...</div>
-            ) : latest.length === 0 ? (
+          <div
+            className="divide-y divide-gray-200 dark:divide-gray-700 overflow-y-auto flex-1"
+            style={{ maxHeight: "20rem" }}
+            ref={containerRef}
+          >
+            {isLoading && <div className="p-4 text-center">Loading...</div>}
+            {!isLoading && notifications.length === 0 && (
               <div className="p-4 text-center text-gray-400">
                 No notifications
               </div>
-            ) : (
-              latest.map((n) => (
-                <Link
-                  to={n.link || "#"}
-                  key={n.id}
-                  onClick={() => {
-                    markReadMutation.mutate(n.id);
-                    setOpen(false);
-                  }}
-                  className={`block px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition ${
-                    !n.is_read
-                      ? "bg-gray-50 dark:bg-gray-900 font-semibold"
-                      : ""
-                  }`}
+            )}
+            {notifications.map((n) => (
+              <Link
+                to={n.link || "#"}
+                key={n.id}
+                onClick={() => {
+                  markReadMutation.mutate(n.id);
+                  setOpen(false);
+                }}
+                className={
+                  `block px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition ` +
+                  (!n.is_read
+                    ? "bg-blue-50 dark:bg-teal-900 font-semibold border-l-4 border-blue-600"
+                    : "bg-white dark:bg-gray-800")
+                }
+              >
+                <div className="flex items-center gap-3">
+                  <span
+                    className={`w-2.5 h-2.5 rounded-full ${
+                      n.type === "order"
+                        ? "bg-green-500"
+                        : n.type === "question"
+                        ? "bg-blue-500"
+                        : "bg-yellow-500"
+                    }`}
+                  ></span>
+                  <span className="text-sm text-gray-800 dark:text-gray-100">
+                    {n.content}
+                  </span>
+                  <span className="ml-auto text-xs text-gray-400">
+                    {new Date(n.created_at).toLocaleString()}
+                  </span>
+                </div>
+              </Link>
+            ))}
+            {isFetchingNextPage && (
+              <div className="p-2 text-center">Loading more...</div>
+            )}
+            {!isFetchingNextPage && hasNextPage && (
+              <div className="text-center py-2">
+                <button
+                  className="text-teal-600 hover:underline text-sm"
+                  onClick={() => fetchNextPage()}
                 >
-                  <div className="flex items-center gap-3">
-                    <span
-                      className={`w-2.5 h-2.5 rounded-full ${
-                        n.type === "order"
-                          ? "bg-green-500"
-                          : n.type === "question"
-                          ? "bg-blue-500"
-                          : "bg-yellow-500"
-                      }`}
-                    ></span>
-                    <span className="text-sm text-gray-800 dark:text-gray-100">
-                      {n.content}
-                    </span>
-                    <span className="ml-auto text-xs text-gray-400">
-                      {new Date(n.created_at).toLocaleString()}
-                    </span>
-                  </div>
-                </Link>
-              ))
+                  View more notifications
+                </button>
+              </div>
+            )}
+            {!hasNextPage && notifications.length > 10 && (
+              <div className="text-center py-2 text-gray-400 text-xs">
+                No more notifications
+              </div>
             )}
           </div>
-          {notifications.length > 4 && (
-            <div className="text-center py-2">
-              <Link
-                to="/admin/notifications"
-                className="text-teal-600 hover:underline text-sm"
-                onClick={() => setOpen(false)}
-              >
-                View all notifications
-              </Link>
-            </div>
-          )}
         </div>
       )}
     </div>

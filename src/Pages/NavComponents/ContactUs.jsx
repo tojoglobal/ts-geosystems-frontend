@@ -91,7 +91,7 @@ const ContactUs = () => {
             type="text"
             name="firstName"
             placeholder="First Name*"
-            className="border px-2 py-3 rounded border-gray-300 placeholder:text-black"
+            className="border focus:outline-none px-2 py-3 rounded border-gray-300 placeholder:text-black"
             required
           />
           <input
@@ -99,27 +99,27 @@ const ContactUs = () => {
             name="lastName"
             placeholder="Last Name*"
             required
-            className="border px-2 py-3 rounded border-gray-300 placeholder:text-black"
+            className="border focus:outline-none px-2 py-3 rounded border-gray-300 placeholder:text-black"
           />
           <input
             type="email"
             name="email"
             required
             placeholder="E-mail*"
-            className="border px-2 py-3 rounded border-gray-300 placeholder:text-black"
+            className="border focus:outline-none px-2 py-3 rounded border-gray-300 placeholder:text-black"
           />
           <input
             type="tel"
             name="phone"
             required
             placeholder="Phone*"
-            className="border px-2 py-3 rounded border-gray-300 placeholder:text-black"
+            className="border focus:outline-none px-2 py-3 rounded border-gray-300 placeholder:text-black"
           />
           <textarea
             name="message"
             required
             placeholder="Comments/Questions*"
-            className="border px-2 py-3 rounded md:col-span-2 border-gray-300 placeholder:text-black"
+            className="border focus:outline-none px-2 py-3 rounded md:col-span-2 border-gray-300 placeholder:text-black"
             rows={4}
           ></textarea>
           <div className="flex justify-center md:col-span-2">
