@@ -21,7 +21,7 @@ export default function NotificationBell() {
     },
     refetchInterval: 15000,
   });
-  console.log(data);
+  
   const notifications = Array.isArray(data) ? data : [];
   const unreadCount = notifications.filter((n) => !n.is_read).length || 0;
 
@@ -44,13 +44,13 @@ export default function NotificationBell() {
   return (
     <div className="relative">
       <button
-        className="relative cursor-pointer text-gray-300 dark:text-gray-400 hover:text-white dark:hover:text-white"
+        className="relative flex items-center justify-center text-gray-300 dark:text-gray-400 hover:text-white dark:hover:text-white transition"
         onClick={() => setOpen((o) => !o)}
         aria-label="Notifications"
       >
-        <Bell size={24} />
+        <Bell size={23} />
         {unreadCount > 0 && (
-          <span className="absolute top-0 right-0 inline-flex items-center justify-center px-1 py-0.5 text-xs font-bold leading-none text-white bg-red-500 rounded-full">
+          <span className="absolute top-1 right-1 inline-flex items-center justify-center px-1 py-0.5 text-xs font-bold leading-none text-white bg-red-500 rounded-full">
             {unreadCount > 9 ? "9+" : unreadCount}
           </span>
         )}
