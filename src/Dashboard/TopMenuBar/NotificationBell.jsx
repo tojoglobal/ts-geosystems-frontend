@@ -44,13 +44,13 @@ export default function NotificationBell() {
   return (
     <div className="relative">
       <button
-        className="relative flex items-center justify-center text-gray-300 dark:text-gray-400 hover:text-white dark:hover:text-white transition"
+        className="relative cursor-pointer flex items-center justify-center text-gray-300 dark:text-gray-400 hover:text-white dark:hover:text-white transition"
         onClick={() => setOpen((o) => !o)}
         aria-label="Notifications"
       >
         <Bell size={23} />
         {unreadCount > 0 && (
-          <span className="absolute top-1 right-1 inline-flex items-center justify-center px-1 py-0.5 text-xs font-bold leading-none text-white bg-red-500 rounded-full">
+          <span className="absolute -top-1 -right-[2px] inline-flex items-center justify-center px-1 py-0.5 text-xs font-bold leading-none text-white bg-red-500 rounded-full">
             {unreadCount > 9 ? "9+" : unreadCount}
           </span>
         )}
@@ -63,7 +63,7 @@ export default function NotificationBell() {
             </span>
             {unreadCount > 0 && (
               <button
-                className="text-xs text-teal-600 hover:underline"
+                className="text-xs cursor-pointer text-teal-600 hover:underline"
                 onClick={() => markAllReadMutation.mutate()}
               >
                 Mark all as read

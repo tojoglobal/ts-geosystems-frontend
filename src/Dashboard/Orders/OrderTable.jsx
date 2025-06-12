@@ -137,6 +137,21 @@ const OrderTable = () => {
       width: 600,
       confirmButtonText: "Close",
       showCloseButton: true,
+      background: "#1d293d", // black background
+      color: "#fff", // white text
+      customClass: {
+        popup: "swal2-custom-popup",
+      },
+      didOpen: () => {
+        // In case html content or buttons need forced white text
+        const swalPopup = document.querySelector(
+          ".swal2-popup.swal2-custom-popup"
+        );
+        if (swalPopup) {
+          swalPopup.style.background = "#1d293d";
+          swalPopup.style.color = "#fff";
+        }
+      },
     });
   };
 
