@@ -23,20 +23,14 @@ import LatestTransactions from "./DBComponents/LatestTransactions";
 export default function Dashboard() {
   const [earningsPeriod, setEarningsPeriod] = useState("year");
   const [ordersPeriod, setOrdersPeriod] = useState("year");
-  const [usersPeriod, setUsersPeriod] = useState("year");
 
-  const { data: earningsMetrics } = useDashboardMetrics(
-    earningsPeriod,
-    usersPeriod
-  );
-  const { data: ordersMetrics } = useDashboardMetrics(
-    ordersPeriod,
-    usersPeriod
-  );
-  const { data: usersMetrics } = useDashboardMetrics(
-    earningsPeriod,
-    usersPeriod
-  );
+  // Always fetch all users (no period param)
+  const { data: earningsMetrics, isLoading: earningsLoading } =
+    useDashboardMetrics(earningsPeriod);
+  const { data: ordersMetrics, isLoading: ordersLoading } =
+    useDashboardMetrics(ordersPeriod);
+  const { data: usersMetrics, isLoading: usersLoading } =
+    useDashboardMetrics("all"); // "all" is a dummy param, always fetches all users
 
   return (
     <div className="p-1 pt-0 grid md:gap-4 grid-cols-1 xl:grid-cols-4">
@@ -51,6 +45,8 @@ export default function Dashboard() {
             up={!earningsMetrics?.earningsChange?.startsWith("-")}
             period={earningsPeriod}
             setPeriod={setEarningsPeriod}
+            loading={earningsLoading}
+            showPeriodDropdown={true}
           />
           <MetricBox
             icon={<ShoppingCart />}
@@ -60,6 +56,8 @@ export default function Dashboard() {
             up={!ordersMetrics?.orderChange?.startsWith("-")}
             period={ordersPeriod}
             setPeriod={setOrdersPeriod}
+            loading={ordersLoading}
+            showPeriodDropdown={true}
           />
           <MetricBox
             icon={<Users />}
@@ -67,8 +65,10 @@ export default function Dashboard() {
             value={usersMetrics?.totalUsers || "0"}
             change={usersMetrics?.userChange || "+0.0%"}
             up={!usersMetrics?.userChange?.startsWith("-")}
-            period={usersPeriod}
-            setPeriod={setUsersPeriod}
+            period="all"
+            setPeriod={null}
+            loading={usersLoading}
+            showPeriodDropdown={false}
           />
           <MetricBox
             icon={<CreditCard />}
@@ -83,6 +83,8 @@ export default function Dashboard() {
                 : "$0.00"
             }
             change=""
+            loading={earningsLoading || ordersLoading}
+            showPeriodDropdown={false}
           />
         </CardContent>
       </Card>
@@ -111,10 +113,10 @@ function MetricBox({
   period,
   setPeriod,
   loading,
+  showPeriodDropdown = true,
 }) {
   const ArrowIcon = up ? ArrowUpRight : ArrowDownRight;
   const arrowClass = up ? "text-green-400" : "text-red-400";
-  const showDropdown = true; // Allow for all metrics
 
   const periodLabel =
     {
@@ -122,7 +124,8 @@ function MetricBox({
       month: "Monthly",
       week: "Weekly",
       today: "Today",
-    }[period] || "Yearly";
+      all: "All Time",
+    }[period] || "All Time";
 
   return (
     <div className="bg-slate-800 rounded-xl p-3 md:p-4 flex flex-col gap-2">
@@ -135,7 +138,7 @@ function MetricBox({
       </div>
       <div className="flex justify-between items-center gap-1">
         <div className={`flex items-center gap-1 text-sm ${arrowClass}`}>
-          {showDropdown && loading ? (
+          {showPeriodDropdown && loading ? (
             <span className="animate-pulse">...</span>
           ) : (
             <>
@@ -144,7 +147,7 @@ function MetricBox({
             </>
           )}
         </div>
-        {showDropdown && setPeriod && (
+        {showPeriodDropdown && setPeriod && (
           <DropdownMenu>
             <DropdownMenuTrigger className="focus:outline-none flex items-center gap-1">
               <MoreVertical className="h-5 w-5 text-gray-400 hover:text-gray-300 cursor-pointer" />
@@ -177,6 +180,9 @@ function MetricBox({
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+        )}
+        {!showPeriodDropdown && (
+          <span className="text-xs ml-1 text-gray-400">{periodLabel}</span>
         )}
       </div>
     </div>

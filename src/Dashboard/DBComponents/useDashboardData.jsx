@@ -14,10 +14,8 @@ export const useDashboardMetrics = (period = "year", usersPeriod = "year") => {
       const orders = ordersRes.data.orders || [];
 
       // Users
-      const usersRes = await axiosPublicUrl.get(
-        `/api/user-metrics?period=${usersPeriod}`
-      );
-      const users = usersRes.data.users || [];
+      const usersRes = await axiosPublicUrl.get(`/api/all-users`);
+      const users = usersRes.data || [];
 
       const totalOrders = orders.length;
       const totalUsers = users.length;
