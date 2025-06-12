@@ -103,6 +103,7 @@ import SettingsPage from "./Dashboard/SettingsPage/SettingsPage";
 import BlogTagManage from "./Dashboard/BlogTags/BlogTagManage";
 import EquipmentManagement from "./Dashboard/TSCC/EquipmentManagement";
 import ClientInformationManager from "./Dashboard/ClientInformationManager/ClientInformationManager";
+import Calendar from "./Dashboard/Calendar/Calendar";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -248,6 +249,7 @@ const AppLayout = () => {
           {/* Blog Type route */}
           <Route path="blog-type" element={<BlogTypeManage />} />
           <Route path="blog-tags" element={<BlogTagManage />} />
+          <Route path="calendar" element={<Calendar />} />
           {/* service-inquiries route  */}
           <Route path="service-inquiries" element={<AdminServiceInquiries />} />
           {/* email routes */}
