@@ -99,10 +99,10 @@ const UpdateProfile = () => {
     );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#181c2a] via-[#22223b] to-[#151825] flex justify-center items-center p-4">
-      <div className="w-full max-w-lg mx-auto bg-black/70 border-2 border-[#0ea5e9] shadow-2xl rounded-3xl px-6 py-8 relative z-10">
+    <div>
+      <div className="w-full max-w-lg mx-auto bg-black/70 border border-[#0ea5e9] shadow-2xl rounded-xl px-4 md:px-6 py-6 md:py-8">
         <div className="flex flex-col items-center gap-2 mb-8">
-          <h2 className="text-3xl font-bold bg-gradient-to-r from-[#0ea5e9] to-[#22d3ee] bg-clip-text text-transparent tracking-wide text-center drop-shadow">
+          <h2 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-[#0ea5e9] to-[#22d3ee] bg-clip-text text-transparent tracking-wide text-center drop-shadow">
             Update Profile
           </h2>
           <span className="text-gray-400 text-sm text-center">
@@ -166,7 +166,7 @@ const UpdateProfile = () => {
             <input
               type="text"
               {...register("name", { required: "Name is required" })}
-              className={`input mt-1 block w-full rounded-lg border ${
+              className={`input focus:outline-none mt-1 block w-full rounded-lg border ${
                 errors.name ? "border-red-500" : "border-[#232946]"
               } bg-[#1e213a] text-white shadow-sm focus:border-[#0ea5e9] focus:ring-[#0ea5e9] sm:text-sm`}
             />
@@ -189,7 +189,7 @@ const UpdateProfile = () => {
                   message: "Invalid email address",
                 },
               })}
-              className={`input mt-1 block w-full rounded-lg border ${
+              className={`input focus:outline-none mt-1 block w-full rounded-lg border ${
                 errors.email ? "border-red-500" : "border-[#232946]"
               } bg-[#1e213a] text-white shadow-sm focus:border-[#0ea5e9] focus:ring-[#0ea5e9] sm:text-sm`}
             />
@@ -214,7 +214,7 @@ const UpdateProfile = () => {
                   message: "Phone number must be 10-15 digits",
                 },
               })}
-              className={`input mt-1 block w-full rounded-lg border ${
+              className={`input focus:outline-none mt-1 block w-full rounded-lg border ${
                 errors.phone ? "border-red-500" : "border-[#232946]"
               } bg-[#1e213a] text-white shadow-sm focus:border-[#0ea5e9] focus:ring-[#0ea5e9] sm:text-sm`}
             />
@@ -235,7 +235,7 @@ const UpdateProfile = () => {
                 type="url"
                 {...register("facebook")}
                 placeholder="https://facebook.com/username"
-                className="input mt-1 block w-full rounded-lg border border-[#232946] bg-[#1e213a] text-white shadow-sm focus:border-[#0ea5e9] focus:ring-[#0ea5e9] sm:text-sm"
+                className="input focus:outline-none mt-1 block w-full rounded-lg border border-[#232946] bg-[#1e213a] text-white shadow-sm focus:border-[#0ea5e9] focus:ring-[#0ea5e9] sm:text-sm"
               />
             </div>
             <div>
@@ -246,7 +246,7 @@ const UpdateProfile = () => {
                 type="url"
                 {...register("instagram")}
                 placeholder="https://instagram.com/username"
-                className="input mt-1 block w-full rounded-lg border border-[#232946] bg-[#1e213a] text-white shadow-sm focus:border-[#0ea5e9] focus:ring-[#0ea5e9] sm:text-sm"
+                className="input focus:outline-none mt-1 block w-full rounded-lg border border-[#232946] bg-[#1e213a] text-white shadow-sm focus:border-[#0ea5e9] focus:ring-[#0ea5e9] sm:text-sm"
               />
             </div>
             <div>
@@ -257,7 +257,7 @@ const UpdateProfile = () => {
                 type="url"
                 {...register("linkedin")}
                 placeholder="https://linkedin.com/in/username"
-                className="input mt-1 block w-full rounded-lg border border-[#232946] bg-[#1e213a] text-white shadow-sm focus:border-[#0ea5e9] focus:ring-[#0ea5e9] sm:text-sm"
+                className="input focus:outline-none mt-1 block w-full rounded-lg border border-[#232946] bg-[#1e213a] text-white shadow-sm focus:border-[#0ea5e9] focus:ring-[#0ea5e9] sm:text-sm"
               />
             </div>
             <div>
@@ -268,7 +268,7 @@ const UpdateProfile = () => {
                 type="url"
                 {...register("twitter")}
                 placeholder="https://twitter.com/username"
-                className="input mt-1 block w-full rounded-lg border border-[#232946] bg-[#1e213a] text-white shadow-sm focus:border-[#0ea5e9] focus:ring-[#0ea5e9] sm:text-sm"
+                className="input focus:outline-none mt-1 block w-full rounded-lg border border-[#232946] bg-[#1e213a] text-white shadow-sm focus:border-[#0ea5e9] focus:ring-[#0ea5e9] sm:text-sm"
               />
             </div>
           </div>

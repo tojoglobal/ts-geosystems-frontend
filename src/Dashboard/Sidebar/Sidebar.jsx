@@ -198,7 +198,7 @@ const menuItems = [
   },
   {
     label: "Settings",
-    icon: <Settings size={16} />,
+    icon: <Settings size={20} />,
     to: "/dashboard/settings",
   },
 ];

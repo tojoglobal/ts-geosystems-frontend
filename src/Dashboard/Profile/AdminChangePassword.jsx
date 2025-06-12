@@ -156,7 +156,7 @@ const AdminChangePassword = () => {
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-gradient-to-r from-[#0ea5e9] to-[#22d3ee] hover:from-[#22d3ee] hover:to-[#0ea5e9] text-white py-3 rounded-xl font-semibold text-lg shadow-lg transition-all duration-200"
+          className="w-full cursor-pointer bg-gradient-to-r from-[#0ea5e9] to-[#22d3ee] hover:from-[#22d3ee] hover:to-[#0ea5e9] text-white py-2 rounded-lg font-semibold text-lg shadow-lg transition-all duration-200"
         >
           {loading ? "Updating..." : "Change Password"}
         </button>
