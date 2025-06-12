@@ -9,11 +9,9 @@ const COLORS = ["#0f766e", "#2dd4bf", "#facc15", "#f472b6", "#818cf8"];
 
 const SourceOfPurchases = () => {
   // Orders grouped by payment status (paid, unpaid, pending, etc.)
-  const { data: statusData = [], isLoading: statusLoading } =
-    useOrdersByPaymentStatus();
-  const statusTotal =
-    statusData?.reduce((sum, item) => sum + item.value, 0) || 0;
-
+  const { data, isLoading: statusLoading } = useOrdersByPaymentStatus();
+  const statusData = data?.statusData || [];
+  const totalOrders = data?.pagination?.total || 0;
   // Orders grouped by payment method (sslcommerz, bank, etc.)
   const { data: methodData = [], isLoading: methodLoading } =
     useOrdersByPaymentMethod();
@@ -54,7 +52,7 @@ const SourceOfPurchases = () => {
                 </PieChart>
               </ResponsiveContainer>
               <div className="absolute w-[150px] text-center text-white text-2xl">
-                Total Orders {statusTotal}
+                Total Orders {totalOrders}
               </div>
             </div>
             <div className="flex pt-6 justify-between text-gray-400 text-sm mt-4">

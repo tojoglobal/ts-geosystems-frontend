@@ -91,14 +91,20 @@ export const useOrdersByPaymentStatus = () => {
     queryKey: ["orders-by-payment-status"],
     queryFn: async () => {
       const res = await axiosPublicUrl.get("/api/orderinfo");
-      const orders = res?.data?.data || res.data || [];
+      const orders = res?.data?.data || [];
       const counts = {};
       orders.forEach((order) => {
-        // Use paymentStatus instead of status
         const status = order.paymentStatus || "Unknown";
         counts[status] = (counts[status] || 0) + 1;
       });
-      return Object.entries(counts).map(([name, value]) => ({ name, value }));
+      // Return both the status breakdown and the real total
+      return {
+        statusData: Object.entries(counts).map(([name, value]) => ({
+          name,
+          value,
+        })),
+        pagination: res.data.pagination || {},
+      };
     },
   });
 };
