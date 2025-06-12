@@ -139,7 +139,7 @@ const Hire = () => {
               onClick={() =>
                 formRef.current?.scrollIntoView({ behavior: "smooth" })
               }
-              className="md:ml-56 bg-[#e62245] flex items-center gap-2 text-white px-2 md:px-[18.5px] md:py-[7.66667px] rounded-[4px] shadow-xl hover:bg-[#c81e3c] transition-all text-[13px] font-medium"
+              className="md:ml-56 cursor-pointer bg-[#e62245] flex items-center gap-2 text-white px-2 md:px-[18.5px] md:py-[7.66667px] rounded-[4px] shadow-xl hover:bg-[#c81e3c] transition-all text-[13px] font-medium"
             >
               <FaRegFileLines />
               Hire Enquiry

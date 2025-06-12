@@ -111,7 +111,7 @@ const CreditAccountApplication = () => {
   return (
     <div className="p-2 md:p-3">
       <div className="flex items-center gap-2 text-[11px] mb-3">
-        <Link to="/" className="text-[#e62245] hover:underline">
+        <Link to="/" className="text-[#e62245]">
           Home
         </Link>
         <span>/</span>
