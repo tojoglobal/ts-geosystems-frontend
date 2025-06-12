@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
@@ -48,10 +49,10 @@ const ViewProfile = () => {
           Profile
         </h1>
         <div className="flex justify-between items-center py-4">
-          <div className="text-sm text-gray-400 mb-2">
+          {/* <div className="text-sm text-gray-400 mb-2">
             / dashboard /{" "}
             <span className="text-[#0ea5e9] font-medium">view-profile</span>
-          </div>
+          </div> */}
           <div className="text-right border border-gray-300 dark:border-gray-600 rounded-lg py-1 px-3 text-sm text-[#fff] font-medium bg-white/60 dark:bg-[#1e1d2e]/60">
             Today :{" "}
             {new Date().toLocaleDateString("en-GB", {
@@ -152,10 +153,15 @@ const ViewProfile = () => {
           </div>
         </div>
 
-        <div className="mt-32 text-center">
+        <div className="mt-24 flex items-center gap-4 justify-center text-center">
           <Link to="/dashboard/update-profile">
-            <button className="bg-gradient-to-r from-[#0ea5e9] to-[#22d3ee] cursor-pointer text-white px-8 py-3 rounded-2xl font-bold text-lg shadow hover:from-[#22d3ee] hover:to-[#0ea5e9] transition">
+            <button className="bg-gradient-to-r from-[#0ea5e9] to-[#22d3ee] cursor-pointer text-white px-8 py-2 rounded-lg font-bold text-lg shadow hover:from-[#22d3ee] hover:to-[#0ea5e9] transition">
               Edit Profile
+            </button>
+          </Link>
+          <Link to="/dashboard/change-password">
+            <button className="bg-gradient-to-r from-[#0ea5e9] to-[#22d3ee] cursor-pointer text-white px-8 py-2 rounded-lg font-bold text-lg shadow hover:from-[#22d3ee] hover:to-[#0ea5e9] transition">
+              Change Password
             </button>
           </Link>
         </div>

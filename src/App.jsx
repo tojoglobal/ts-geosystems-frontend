@@ -104,6 +104,7 @@ import BlogTagManage from "./Dashboard/BlogTags/BlogTagManage";
 import EquipmentManagement from "./Dashboard/TSCC/EquipmentManagement";
 import ClientInformationManager from "./Dashboard/ClientInformationManager/ClientInformationManager";
 import Calendar from "./Dashboard/Calendar/Calendar";
+import AdminChangePassword from "./Dashboard/Profile/AdminChangePassword";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -274,6 +275,10 @@ const AppLayout = () => {
           <Route path="cc" element={<AdminUpdateCertificateTracking />} />
           <Route path="cc" element={<AdminUpdateCertificateTracking />} />
           <Route path="footer" element={<AdminUpdateFooter />} />
+          <Route
+            path="change-password"
+            element={<AdminChangePassword />}
+          />
         </Route>
 
         <Route path="*" element={<Error />} />
