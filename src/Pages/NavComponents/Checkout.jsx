@@ -13,7 +13,6 @@ const Checkout = () => {
   const axiosPublicUrl = useAxiospublic();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { data: vatEnabled = true, isLoading: vatLoading } = useVatEnabled();
   const showToast = useToastSwal();
   const { items, coupon, totalQuantity } = useSelector((state) => state.cart);
   const { user, isAuth } = useSelector((state) => state.authUser);
@@ -37,7 +36,8 @@ const Checkout = () => {
     paymentMethod: "",
   });
 
-  console.log(user, isAuth);
+  // VAT toggle from global
+  const { data: vatEnabled = true } = useVatEnabled();
 
   // get a cart product
   const productIds = useMemo(() => items.map((item) => item.id), [items]);
@@ -45,12 +45,15 @@ const Checkout = () => {
 
   const mergedCart = useSelector((state) => selectMergedCart(state, products));
 
+  // Do NOT do custom VAT exclusion here, let backend decide!
   const subtotal = mergedCart.reduce(
     (total, item) => total + item.price * item.quantity,
     0
   );
-
-  const vat = mergedCart.reduce((total, item) => total + item.totalVat, 0);
+  const vat = mergedCart.reduce(
+    (total, item) => total + (item.totalVat || 0),
+    0
+  );
   let discount = 0;
   if (coupon && coupon.code_name) {
     if (coupon.type === "percentage") {
@@ -75,6 +78,7 @@ const Checkout = () => {
       [name]: type === "checkbox" ? checked : value,
     });
   };
+
   const handleContinue = (currentStep) => {
     if (currentStep === 1) {
       if ((user && isAuth) || formData.email) {
@@ -86,7 +90,6 @@ const Checkout = () => {
       }
       return;
     }
-    // if (currentStep === 1 && formData.email) setStep(2);
     if (currentStep === 2 && formData.shippingAddress) setStep(3);
     if (currentStep === 3) {
       if (formData.billingSameAsShipping) {
@@ -118,7 +121,7 @@ const Checkout = () => {
       paymentMethod: formData.paymentMethod,
       paymentStatus: "pending",
       items: mergedCart,
-      coupon: coupon?.code_name || null,
+      coupon: coupon || null, // full coupon object or null
       shipping_cost: shippingCost || null,
       total,
     };
@@ -140,6 +143,7 @@ const Checkout = () => {
         quantity: item.quantity,
       })),
       coupon: coupon || null,
+      vatEnabled, // <-- send to backend!
     };
 
     if (formData.paymentMethod === "sslcommerz") {
@@ -201,8 +205,6 @@ const Checkout = () => {
     );
   }
 
-  if (vatLoading) return <div>Loading...</div>;
-  
   return (
     <div className="w-full md:max-w-[95%] 2xl:max-w-[1370px] mx-auto py-6 mb-5 px-3">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
