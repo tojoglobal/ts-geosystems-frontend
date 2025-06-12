@@ -34,6 +34,9 @@ const modalStyles = {
   },
 };
 
+// Set your site-wide VAT rate here (e.g. 15% VAT)
+const DEFAULT_VAT_RATE = 0.15;
+
 export default function GetQuotationModal({ isOpen, onRequestClose, product }) {
   const axiosPublicUrl = useAxiospublic();
   const dispatch = useDispatch();
@@ -59,29 +62,44 @@ export default function GetQuotationModal({ isOpen, onRequestClose, product }) {
     paymentMethod: "",
   });
 
-  // For VAT and price calculation
+  // For VAT and price calculation (from API)
   const { data: vatEnabled = true } = useVatEnabled();
   const [shippingCost] = useState(5.99);
 
   // The "cart" will be only this product (quotation is for single product, quantity 1)
   const mergedCart = useMemo(
-    () => [
-      {
-        ...product,
-        quantity: 1,
-      },
-    ],
+    () =>
+      product
+        ? [
+            {
+              ...product,
+              quantity: 1,
+            },
+          ]
+        : [],
     [product]
   );
 
+  // Subtotal
   const subtotal = mergedCart.reduce(
-    (total, item) => total + item.price * item.quantity,
+    (total, item) => total + (parseFloat(item.price) || 0) * item.quantity,
     0
   );
-  const vat = mergedCart.reduce(
-    (total, item) => total + (item.totalVat || 0),
-    0
-  );
+
+  // Calculate VAT per product with fallback to default rate
+  const vat = useMemo(() => {
+    if (!vatEnabled) return 0;
+    return mergedCart.reduce((total, item) => {
+      const price = parseFloat(item.price) || 0;
+      let vatRate = DEFAULT_VAT_RATE;
+      // If product has a tax property (e.g. {value: 15}), use that percentage
+      if (item.tax && item.tax.value) {
+        vatRate = parseFloat(item.tax.value) / 100;
+      }
+      return total + price * vatRate * item.quantity;
+    }, 0);
+  }, [mergedCart, vatEnabled]);
+
   let discount = 0; // Add coupon support if you wish
   const total = subtotal + (vatEnabled ? vat : 0) + shippingCost - discount;
 
@@ -229,6 +247,8 @@ export default function GetQuotationModal({ isOpen, onRequestClose, product }) {
     }
     // eslint-disable-next-line
   }, [isOpen]);
+
+  if (!product) return null;
 
   return (
     <Modal
@@ -505,7 +525,14 @@ export default function GetQuotationModal({ isOpen, onRequestClose, product }) {
               {vatEnabled && (
                 <div className="flex justify-between">
                   <span>VAT</span>
-                  <span>৳{vat.toLocaleString()}</span>
+                  <span>
+                    ৳
+                    {vat > 0
+                      ? vat.toLocaleString(undefined, {
+                          maximumFractionDigits: 2,
+                        })
+                      : "0"}
+                  </span>
                 </div>
               )}
               <div className="flex justify-between text-green-600">
@@ -526,7 +553,14 @@ export default function GetQuotationModal({ isOpen, onRequestClose, product }) {
                 <p className="font-semibold mb-1">TAX INCLUDED IN TOTAL:</p>
                 <div className="flex justify-between">
                   <span>VAT</span>
-                  <span>৳{vat.toLocaleString()}</span>
+                  <span>
+                    ৳
+                    {vat > 0
+                      ? vat.toLocaleString(undefined, {
+                          maximumFractionDigits: 2,
+                        })
+                      : "0"}
+                  </span>
                 </div>
               </div>
             )}
