@@ -63,7 +63,8 @@ const AdminUpdateUsedEquipment = () => {
       queryClient.invalidateQueries(["usedEquipmentContent"]);
       Swal.fire({
         icon: "success",
-        title: "Updated!",
+        title: "Success!",
+        text: "Updated",
         timer: 1000,
         showConfirmButton: false,
       });

@@ -53,9 +53,7 @@ function ClientForm({
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <label className="block font-medium mb-1">
-            Company Name
-          </label>
+          <label className="block font-medium mb-1">Company Name</label>
           <input
             name="companyName"
             type="text"
@@ -68,9 +66,7 @@ function ClientForm({
           />
         </div>
         <div>
-          <label className="block font-medium mb-1">
-            Company Owner Name
-          </label>
+          <label className="block font-medium mb-1">Company Owner Name</label>
           <input
             name="ownerName"
             type="text"
@@ -82,9 +78,7 @@ function ClientForm({
           />
         </div>
         <div>
-          <label className="block font-medium mb-1">
-            Mobile Number
-          </label>
+          <label className="block font-medium mb-1">Mobile Number</label>
           <input
             name="mobileNumber"
             type="tel"
@@ -96,9 +90,7 @@ function ClientForm({
           />
         </div>
         <div>
-          <label className="block font-medium mb-1">
-            Address
-          </label>
+          <label className="block font-medium mb-1">Address</label>
           <input
             name="address"
             type="text"
@@ -113,7 +105,7 @@ function ClientForm({
       <div className="flex flex-wrap gap-3 mt-8 justify-center">
         <button
           type="submit"
-          className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white py-2 px-8 rounded-lg shadow hover:brightness-110 font-semibold text-base transition"
+          className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white py-2 px-8 rounded-lg cursor-pointer shadow hover:brightness-110 font-semibold text-base transition"
         >
           {isEditing ? "Update Client" : "Add New Client"}
         </button>
@@ -190,7 +182,7 @@ function ClientList({ data, onEdit, onDelete, onSearch, searchValue }) {
             {data.map((client) => (
               <tr
                 key={client.id || client.companyName}
-                className="hover:bg-[#f5faff] transition"
+                className="transition"
               >
                 <td className="p-3 border-b border-[#e3eaf5] font-semibold">
                   {client.companyName}
