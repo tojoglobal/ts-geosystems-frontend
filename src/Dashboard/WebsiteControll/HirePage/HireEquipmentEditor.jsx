@@ -85,11 +85,11 @@ const HireEquipmentEditor = () => {
       <h2 className="text-xl font-bold mb-4">Manage Equipment (Admin)</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {equipments.map((eq) => (
-          <div key={eq.id} className="border p-4 rounded shadow-sm">
+          <div key={eq.id} className="border border-gray-600 p-4 rounded shadow-sm">
             <label className="block mb-1 font-medium">Name</label>
             <input
               type="text"
-              className="w-full mb-2 p-2 border rounded"
+              className="w-full mb-2 p-2 border border-gray-600 rounded"
               value={eq.name || ""}
               onChange={(e) => handleChange(eq.id, "name", e.target.value)}
             />
@@ -98,7 +98,7 @@ const HireEquipmentEditor = () => {
             <img
               src={import.meta.env.VITE_OPEN_APIURL + eq.image_url}
               alt="equipment"
-              className="w-full h-40 object-contain mb-2 border rounded"
+              className="w-full h-40 object-contain mb-2 border border-gray-600 rounded"
             />
 
             <label className="block mb-1 font-medium">Upload New Image</label>
@@ -135,7 +135,7 @@ const HireEquipmentEditor = () => {
 
             <button
               onClick={() => saveChanges(eq.id)}
-              className="bg-teal-600 hover:bg-teal-700 text-white px-4 py-1.5 rounded transition"
+              className="bg-teal-600 cursor-pointer hover:bg-teal-700 text-white px-4 py-1.5 rounded transition"
             >
               Save
             </button>
