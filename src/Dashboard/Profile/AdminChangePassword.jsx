@@ -88,9 +88,9 @@ const AdminChangePassword = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#181c2a] via-[#22223b] to-[#151825] flex justify-center items-center p-4">
+    <div className="min-h-[80vh] flex justify-center items-center md:p-4">
       <form
-        className="w-full max-w-md mx-auto bg-black/60 border-2 border-[#0ea5e9] shadow-xl rounded-3xl px-8 py-10"
+        className="w-full max-w-md mx-auto bg-black/60 border-2 border-[#0ea5e9] shadow-xl rounded-3xl px-4 md:px-8 py-6 md:py-10"
         onSubmit={handleSubmit}
       >
         <h2 className="text-2xl font-bold text-center mb-8 bg-gradient-to-r from-[#0ea5e9] to-[#22d3ee] bg-clip-text text-transparent">
