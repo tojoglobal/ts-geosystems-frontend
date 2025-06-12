@@ -19,6 +19,7 @@ import useDataQuery from "../../utils/useDataQuery";
 import { setBreadcrumb } from "../../features/breadcrumb/breadcrumbSlice";
 import useToastSwal from "../../Hooks/useToastSwal";
 import { useVatEnabled } from "../../Hooks/useVatEnabled";
+import GetQuotationModal from "./GetQuotationModal";
 
 // Helper function to extract YouTube video ID from url
 function getYouTubeId(url) {
@@ -39,6 +40,7 @@ const ProductDetails = () => {
   const [quantity, setQuantity] = useState(1);
   const { data: vatEnabled = true } = useVatEnabled();
   const [playingVideoIdx, setPlayingVideoIdx] = useState(-1);
+  const [isQuotationOpen, setIsQuotationOpen] = useState(false);
 
   const {
     data: product = {},
@@ -321,21 +323,29 @@ const ProductDetails = () => {
                 </button>
               </div>
             </div>
-            {product?.isStock === 1 &&
-              (priceOption === 0 ? (
+            {product?.isStock === 1 && priceOption === 0 && (
+              <button
+                onClick={handleAddToCart}
+                className="cursor-pointer overflow-hidden group text-white px-16 font-semibold py-[5px] rounded-[3px] text-[16px] bg-[#e62245] hover:bg-red-800 w-full sm:w-auto"
+              >
+                <span className="relative z-10">ADD TO CART</span>
+              </button>
+            )}
+            {product?.isStock === 1 && priceOption === 1 && (
+              <>
                 <button
-                  onClick={handleAddToCart}
                   className="cursor-pointer overflow-hidden group text-white px-16 font-semibold py-[5px] rounded-[3px] text-[16px] bg-[#e62245] hover:bg-red-800 w-full sm:w-auto"
+                  onClick={() => setIsQuotationOpen(true)}
                 >
-                  <span className="relative z-10">ADD TO CART</span>
+                  <span className="relative z-10">GET QUOTATION</span>
                 </button>
-              ) : (
-                <Link to="/contact-us">
-                  <button className="cursor-pointer overflow-hidden group text-white px-16 font-semibold py-[5px] rounded-[3px] text-[16px] bg-[#e62245] hover:bg-red-800 w-full sm:w-auto">
-                    <span className="relative z-10">GET QUOTATION</span>
-                  </button>
-                </Link>
-              ))}
+                <GetQuotationModal
+                  isOpen={isQuotationOpen}
+                  onRequestClose={() => setIsQuotationOpen(false)}
+                  product={product}
+                />
+              </>
+            )}
             <div className="mt-6">
               <div className="flex flex-wrap items-center gap-2">
                 <span className="font-medium text-[#8d7f90]">Share:</span>
