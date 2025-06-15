@@ -28,6 +28,8 @@ const TradeIn = () => {
     "/api/trade-in-content"
   );
   const tradeInContent = data?.data || {};
+  console.log(tradeInContent);
+
   const handleChange = (e) => {
     const { name, value, type } = e.target;
 
@@ -126,7 +128,11 @@ const TradeIn = () => {
           <h1 className="text-[26px] mt-2 text-[#e62245] mb-2 font-bold">
             {tradeInContent.title1}
           </h1>
-          <p className="mb-4 text-sm">{tradeInContent.description1}</p>
+
+          <div
+            className="mb-4 text-sm"
+            dangerouslySetInnerHTML={{ __html: tradeInContent?.description1 }}
+          ></div>
           <h2 className="text-[#e62245] font-bold text-[18px] mb-1">
             {tradeInContent.title2}
           </h2>
@@ -140,7 +146,10 @@ const TradeIn = () => {
           <h2 className="text-[#e62245] font-bold mb-1 text-[18px]">
             {tradeInContent.title3}
           </h2>
-          <p className="text-sm">{tradeInContent.description3}</p>
+          <div
+            className="mt-2 text-sm"
+            dangerouslySetInnerHTML={{ __html: tradeInContent?.description3 }}
+          ></div>
         </>
       )}
 

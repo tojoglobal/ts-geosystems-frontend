@@ -373,7 +373,7 @@ const Service = () => {
               Surveying Equipment Details
             </label>
             <select
-              className="w-full border p-3 appearance-none bg-white"
+              className="w-full border p-3 appearance-none focus:outline-none focus:ring focus:ring-[#e62245] rounded bg-white"
               name="equipment"
               value={formData.equipment}
               onChange={handleInputChange}
