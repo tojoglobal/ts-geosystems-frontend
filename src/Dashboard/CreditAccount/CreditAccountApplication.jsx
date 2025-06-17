@@ -795,7 +795,7 @@ const CreditAccountApplication = () => {
                   className={labelClass}
                   onClick={() => focusInputById("discoveryMethod")}
                 >
-                  How Did You Discover TS Survey?
+                  How Did you Discover TS Geosystems?
                 </label>
               </div>
               <div className="relative w-full md:w-1/2">
@@ -811,7 +811,7 @@ const CreditAccountApplication = () => {
                   className={labelClass}
                   onClick={() => focusInputById("g2RepName")}
                 >
-                  Name of G2 Rep (if applicable)
+                  Name of TSGB Representative (if applicable)
                 </label>
               </div>
             </div>

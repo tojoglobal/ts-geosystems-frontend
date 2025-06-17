@@ -230,7 +230,7 @@ const AboutUs = () => {
           >
             {brands.map((brand) => (
               <SwiperSlide key={brand.id}>
-                <div className="w-56 rounded shadow flex items-center justify-center">
+                <div className="w-56  flex items-center justify-center">
                   <Link to={brand.slug}>
                     <img
                       src={`${import.meta.env.VITE_OPEN_APIURL}/uploads/${

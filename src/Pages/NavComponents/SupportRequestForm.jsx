@@ -123,6 +123,8 @@ const SupportRequestForm = () => {
     }
   };
 
+  console.log(supportContent);
+
   return (
     <div className="p-2 md:p-3">
       <div className="flex items-center gap-2 text-[11px]">
@@ -139,7 +141,7 @@ const SupportRequestForm = () => {
       </h1>
       <div className="flex flex-col items-center text-center md:flex-row md:justify-center gap-2 md:gap-7 text-sm font-normal text-[#e62245] mb-7 md:mb-16">
         <Link to="/software-downloads">SOFTWARE DOWNLOADS</Link>
-        <Link to="/remote-support">QUICK GUIDES</Link>
+        <Link to="/quick-guides">QUICK GUIDES</Link>
         <Link to="/user-manuals">USER MANUALS</Link>
         <Link to="/remote-support">REMOTE SUPPORT</Link>
       </div>
@@ -177,18 +179,11 @@ const SupportRequestForm = () => {
           </Link>
         </div>
       </div>
-      <div className="border-b pb-5 text-sm text-gray-700 text-center space-y-2">
-        <p>
-          G2 Survey will always make every effort to offer the full solution for
-          our clients. It's not enough to just hire or sell surveying equipment
-          and send you on your way.
-        </p>
-        <p>
-          Our technical support team has over 100 years of combined experience,
-          so whether it takes a simple phone call, remote active assistance, or
-          site visits, we are here to provide world class support.
-        </p>
-      </div>
+      <div
+        className="pb-5 text-sm text-gray-700 text-center space-y-2"
+        dangerouslySetInnerHTML={{ __html: supportContent?.description }}
+      ></div>
+
       <div className="max-w-3xl mx-auto my-6">
         <h2 className="text-2xl font-semibold mb-2">Support Request Form</h2>
         <p className="mb-6 text-[15px] font-normal">

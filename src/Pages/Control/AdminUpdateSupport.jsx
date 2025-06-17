@@ -1,10 +1,11 @@
 import { useEffect } from "react";
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import Swal from "sweetalert2";
 import Button from "../../Dashboard/Button/Button";
 import Loader from "../../utils/Loader";
+import { Editor } from "@tinymce/tinymce-react";
 
 const AdminUpdateSupport = () => {
   const axiosPublicUrl = useAxiospublic();
@@ -65,6 +66,7 @@ const AdminUpdateSupport = () => {
     if (supportContent) {
       reset({
         instrument_types: supportContent.instrument_types || [],
+        description: supportContent.description || "",
       });
     }
   }, [supportContent, reset]);
@@ -81,6 +83,38 @@ const AdminUpdateSupport = () => {
         Update Support Page Instrument Types
       </h1>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
+        {/* Description Section */}
+        <div className="space-y-2">
+          <label htmlFor="description" className="block font-medium text-sm">
+            Support Request Form top Description
+          </label>
+          <Controller
+            name="description"
+            control={control}
+            render={({ field }) => (
+              <Editor
+                apiKey={import.meta.env.VITE_TINY_APIKEY}
+                value={field.value}
+                init={{
+                  height: 300,
+                  menubar: true,
+                  plugins: [
+                    "advlist autolink lists link image charmap print preview anchor",
+                    "searchreplace visualblocks code fullscreen",
+                    "insertdatetime media table paste code help wordcount media",
+                  ],
+                  toolbar:
+                    "undo redo | formatselect | bold italic underline strikethrough | " +
+                    "forecolor backcolor | alignleft aligncenter alignright alignjustify | " +
+                    "bullist numlist outdent indent | blockquote | removeformat | " +
+                    "link image media table | code fullscreen | help",
+                }}
+                onEditorChange={(content) => field.onChange(content)}
+              />
+            )}
+          />
+        </div>
+
         <div className="rounded p-3 border border-gray-700">
           <h2 className="text-base font-semibold mb-2">Instrument Types</h2>
           <div className="space-y-2">
