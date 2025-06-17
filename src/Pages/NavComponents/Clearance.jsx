@@ -16,6 +16,7 @@ import { getProductType } from "../../utils/productOption";
 import useToastSwal from "../../Hooks/useToastSwal";
 import CompareCheckbox from "./CompareCheckbox";
 import { useVatEnabled } from "../../Hooks/useVatEnabled";
+import { formatBDT } from "../../utils/formatBDT";
 
 // Utility to strip HTML tags (including <p>)
 const stripHtml = (html) => {
@@ -191,9 +192,16 @@ const Clearance = () => {
             const isHovered = hoveredProductId === product.id;
             const displayImage = isHovered ? secondImage : firstImage;
 
-            const taxData = parseField(product.tax);
-            const price = parseFloat(product.price) || 0;
-            const priceExVat = price * (1 + (taxData?.value || 0) / 100);
+            // vat part
+            let vat = 0;
+            try {
+              vat = product?.tax ? JSON.parse(product.tax).value : 0;
+            } catch {
+              vat = 0;
+            }
+            const basePrice = parsePrice(product.price) || 0;
+            const vatAmount = basePrice * (vat / 100);
+            const priceIncVat = basePrice + vatAmount;
 
             // Strip <p> and other tags from description and slice
             const desc = stripHtml(product?.product_overview || "").slice(
@@ -266,7 +274,10 @@ const Clearance = () => {
                             <>
                               <div className="flex items-center gap-1">
                                 <p className="font-bold text-lg">
-                                  Price ৳{price.toFixed(2)}
+                                  Price ৳
+                                  {product?.priceShowHide
+                                    ? ""
+                                    : formatBDT(basePrice)}
                                 </p>
                                 <p className="text-sm text-gray-500 underline">
                                   (Ex. VAT)
@@ -276,14 +287,20 @@ const Clearance = () => {
                                 <p className="text-[#2f2f2b] text-lg font-semibold">
                                   Price:
                                 </p>
-                                ৳{priceExVat.toFixed(2)}{" "}
+                                ৳{" "}
+                                {product?.priceShowHide
+                                  ? ""
+                                  : formatBDT(priceIncVat)}
                                 <span className="underline">(Inc. VAT)</span>
                               </div>
                             </>
                           ) : (
                             <div className="flex items-center gap-1">
                               <p className="font-bold text-lg">
-                                Price ৳{price.toFixed(2)}
+                                Price ৳{" "}
+                                {product?.priceShowHide
+                                  ? ""
+                                  : formatBDT(basePrice)}
                               </p>
                             </div>
                           )}
@@ -365,19 +382,30 @@ const Clearance = () => {
                       {vatEnabled ? (
                         <>
                           <div className="flex items-center gap-1">
-                            <p className="font-bold">৳{price.toFixed(2)}</p>
+                            <p className="font-bold">
+                              ৳{" "}
+                              {product?.priceShowHide
+                                ? ""
+                                : formatBDT(basePrice)}
+                            </p>
                             <p className="text-sm text-gray-500 underline">
                               (Ex. VAT)
                             </p>
                           </div>
                           <div className="flex items-center gap-1 text-sm text-[#b3b3b5] mt-1">
-                            ৳{priceExVat.toFixed(2)}{" "}
+                            ৳{" "}
+                            {product?.priceShowHide
+                              ? ""
+                              : formatBDT(priceIncVat)}
                             <span className="underline">(Inc. VAT)</span>
                           </div>
                         </>
                       ) : (
                         <div className="flex items-center gap-1">
-                          <p className="font-bold">৳{price.toFixed(2)}</p>
+                          <p className="font-bold">
+                            ৳{" "}
+                            {product?.priceShowHide ? "" : formatBDT(basePrice)}
+                          </p>
                         </div>
                       )}
                       <div className="flex flex-col gap-2 mt-2">

@@ -14,6 +14,8 @@ import { getProductType } from "../../utils/productOption";
 import useToastSwal from "../../Hooks/useToastSwal";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../../features/AddToCart/AddToCart";
+import { formatBDT } from "../../utils/formatBDT";
+import { useVatEnabled } from "../../Hooks/useVatEnabled";
 
 const Recommended = ({ category, currentProductId }) => {
   const swiperRef = useRef(null);
@@ -23,6 +25,7 @@ const Recommended = ({ category, currentProductId }) => {
   const [isEnd, setIsEnd] = useState(false);
   const [recommendedProducts, setRecommendedProducts] = useState([]);
   const showToast = useToastSwal();
+  const { data: vatEnabled = true } = useVatEnabled();
 
   // Fetch recommended products when category changes
   const { data = {}, isLoading } = useDataQuery(
@@ -157,6 +160,17 @@ const Recommended = ({ category, currentProductId }) => {
                 : "https://via.placeholder.com/150";
             const { isSimpleProduct } = getProductType(product);
 
+            // vat part
+            let vat = 0;
+            try {
+              vat = product?.tax ? JSON.parse(product.tax).value : 0;
+            } catch {
+              vat = 0;
+            }
+            const basePrice = parsePrice(product.price) || 0;
+            const vatAmount = basePrice * (vat / 100);
+            const priceIncVat = basePrice + vatAmount;
+
             return (
               <SwiperSlide key={idx}>
                 <div className="relative flex flex-col items-center bg-white h-full">
@@ -200,14 +214,16 @@ const Recommended = ({ category, currentProductId }) => {
                     </div>
                     <div className="space-x-2">
                       <span className="text-sm font-bold text-[#222]">
-                        ৳{parsePrice(product.price)}.00
-                      </span>
-                      <span className="text-xs line-through text-gray-400">
-                        ৳{(parsePrice(product.price) * 1.2).toFixed(2)}
+                        ৳ {product?.priceShowHide ? "" : formatBDT(basePrice)}
+                        {vatEnabled && (
+                          <span className="text-sm text-gray-500">
+                            (Ex. VAT)
+                          </span>
+                        )}
                       </span>
                     </div>
                     <div className="flex items-center gap-1 text-sm text-[#b3b3b5]">
-                      ৳{(parsePrice(product.price) * 1.2).toFixed(2)}{" "}
+                      ৳{product?.priceShowHide ? "" : formatBDT(priceIncVat)}
                       <span className="underline">(Inc. VAT)</span>
                     </div>
                     {product?.isStock === 1 && (

@@ -16,6 +16,7 @@ import { getProductType } from "../../utils/productOption";
 import { ComponentLoader } from "../../utils/Loader/ComponentLoader";
 import useToastSwal from "../../Hooks/useToastSwal";
 import { useVatEnabled } from "../../Hooks/useVatEnabled";
+import { formatBDT } from "../../utils/formatBDT";
 
 const tabOptions = [
   { name: "Featured Products", key: "featured" },
@@ -167,9 +168,17 @@ const ProductHighlights = () => {
         >
           {items.map((item, idx) => {
             const { isSimpleProduct } = getProductType(item);
-            const taxData = item.tax ? JSON.parse(item.tax) : null;
-            const price = parseFloat(item.price) || 0;
-            const priceExVat = price * (1 + (taxData?.value || 0) / 100);
+
+            // vat part
+            let vat = 0;
+            try {
+              vat = item?.tax ? JSON.parse(item.tax).value : 0;
+            } catch {
+              vat = 0;
+            }
+            const basePrice = parsePrice(item.price) || 0;
+            const vatAmount = basePrice * (vat / 100);
+            const priceIncVat = basePrice + vatAmount;
 
             return (
               <SwiperSlide key={idx}>
@@ -228,25 +237,29 @@ const ProductHighlights = () => {
                     <div className="space-x-2">
                       {vatEnabled ? (
                         <p className="flex items-center gap-2 text-sm font-bold text-[#222]">
-                          <span>৳{price}</span>
+                          <span>
+                            ৳ {item?.priceShowHide ? "" : formatBDT(basePrice)}
+                          </span>
                           <span className="underline text-gray-400 text-sm">
                             (Ex. VAT)
                           </span>
                         </p>
                       ) : (
                         <p className="flex items-center gap-2 text-sm font-bold text-[#222]">
-                          <span>৳{price}</span>
+                          <span>
+                            ৳ {item?.priceShowHide ? "" : formatBDT(basePrice)}
+                          </span>
                         </p>
                       )}
                       {item.discountPrice && (
                         <span className="text-xs line-through text-gray-400">
-                          ৳{item.discountPrice}
+                          ৳{item?.discountPrice}
                         </span>
                       )}
                     </div>
                     {vatEnabled && (
                       <div className="flex items-center gap-1 text-sm text-[#b3b3b5]">
-                        ৳{priceExVat.toFixed(2)}{" "}
+                        ৳ {item?.priceShowHide ? "" : formatBDT(priceIncVat)}
                         <span className="underline">(Inc. VAT)</span>
                       </div>
                     )}

@@ -9,6 +9,7 @@ import { addToCart } from "../../features/AddToCart/AddToCart";
 import { parsePrice } from "../../utils/parsePrice";
 import useToastSwal from "../../Hooks/useToastSwal";
 import { useTrackProductView } from "../../Hooks/useTrackProductView";
+import { formatBDT } from "../../utils/formatBDT";
 
 // Get array of image URLs, can be stringified JSON or array
 const getImages = (img) => {
@@ -189,6 +190,18 @@ const Compare = () => {
                 .replace(/\s+/g, "-")
                 .replace(/[^a-z0-9-]/g, "")
             );
+
+          // vat part
+          let vat = 0;
+          try {
+            vat = product?.tax ? JSON.parse(product.tax).value : 0;
+          } catch {
+            vat = 0;
+          }
+          const basePrice = parsePrice(product.price) || 0;
+          const vatAmount = basePrice * (vat / 100);
+          const priceIncVat = basePrice + vatAmount;
+
           return (
             <div key={product.id} className="relative group">
               <button
@@ -211,8 +224,10 @@ const Compare = () => {
                   className="w-auto max-h-full object-contain transition-all duration-300 ease-in-out"
                   loading="lazy"
                   onError={(e) => {
-                    e.target.src =
-                      "https://via.placeholder.com/150?text=No+Image";
+                    const fallback = "/image/no-image1.jpg";
+                    if (e.target.src !== window.location.origin + fallback) {
+                      e.target.src = fallback;
+                    }
                   }}
                 />
               </Link>
@@ -225,52 +240,14 @@ const Compare = () => {
                   </h3>
                   <div>
                     <div className="flex items-center gap-1">
-                      <p className="text-gray-500 line-through">
-                        Was: ৳
-                        {(product.oldPrice
-                          ? Number(product.oldPrice)
-                          : product.oldPriceInc
-                          ? Number(product.oldPriceInc)
-                          : product.old_price
-                          ? Number(product.old_price)
-                          : ""
-                        ).toFixed
-                          ? (
-                              product.oldPrice ||
-                              product.oldPriceInc ||
-                              product.old_price ||
-                              0
-                            ).toFixed(2)
-                          : ""}
-                      </p>
                       <p className="font-bold">
-                        ৳
-                        {(product.price ? Number(product.price) : "").toFixed
-                          ? Number(product.price).toFixed(2)
-                          : ""}{" "}
+                        ৳{product?.priceShowHide ? "" : formatBDT(basePrice)}
                         (Ex. VAT)
                       </p>
                     </div>
-                    <p className="font-bold">
-                      ৳
-                      {(product.price ? Number(product.price) : "").toFixed
-                        ? Number(product.price).toFixed(2)
-                        : ""}
-                    </p>
+
                     <p className="text-gray-500">
-                      ৳
-                      {(product.priceExVat
-                        ? Number(product.priceExVat)
-                        : product.price_ex_vat
-                        ? Number(product.price_ex_vat)
-                        : ""
-                      ).toFixed
-                        ? (
-                            product.priceExVat ||
-                            product.price_ex_vat ||
-                            ""
-                          ).toFixed(2)
-                        : ""}
+                      ৳{product?.priceShowHide ? "" : formatBDT(priceIncVat)}
                       (Inc. VAT)
                     </p>
                   </div>

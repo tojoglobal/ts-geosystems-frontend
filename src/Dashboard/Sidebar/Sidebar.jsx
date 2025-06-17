@@ -31,6 +31,7 @@ import {
   MdCategory,
   MdLocalOffer,
   MdPercent,
+  MdQueryStats,
   MdWebStories,
 } from "react-icons/md";
 import { BsQuestionCircle } from "react-icons/bs";
@@ -60,6 +61,11 @@ const menuItems = [
     label: "Trade In",
     icon: <Repeat size={20} />,
     to: "/dashboard/trade-in",
+  },
+  {
+    label: "Quotation",
+    icon: <MdQueryStats size={20} />,
+    to: "/dashboard/quotation",
   },
   {
     label: "Support",

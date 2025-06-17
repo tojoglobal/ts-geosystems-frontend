@@ -18,6 +18,7 @@ import { useTrackProductView } from "../Hooks/useTrackProductView";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../features/AddToCart/AddToCart";
 import useToastSwal from "../Hooks/useToastSwal";
+import { formatBDT } from "../utils/formatBDT";
 
 const POPULAR_SEARCHES = [
   "rtc360",
@@ -296,61 +297,11 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                   <div className="text-center py-10">Loading...</div>
                 ) : displayProducts.length <= 4 ? (
                   <div className="grid grid-cols-4 gap-4">
-                    {displayProducts.map((product, index) => (
-                      <Link
-                        onClick={() => {
-                          trackProductView(product.id);
-                          onClose();
-                        }}
-                        to={`/products/${product.id}/${slugify(
-                          product.product_name || ""
-                        )}`}
-                        key={index}
-                        className="h-full min-h-[350px] flex flex-col bg-white p-6 shadow-sm border border-gray-200 hover:border-gray-300 transition-all duration-200"
-                      >
-                        <img
-                          src={
-                            product.image_urls
-                              ? `${
-                                  import.meta.env.VITE_OPEN_APIURL
-                                }${JSON.parse(product.image_urls)[0].replace(
-                                  /^["\[]+|["\]]+$/g,
-                                  ""
-                                )}`
-                              : product.image
-                          }
-                          alt={product.product_name || product.name}
-                          className="mx-auto h-44 object-contain mb-3"
-                        />
-                        <p
-                          className="text-sm font-medium mb-1 hover:text-[#e62245]
-                    cursor-pointer"
-                        >
-                          {product.product_name || product.name}
-                        </p>
-                        <div className="flex justify-between items-center mt-auto">
-                          <p className="font-semibold">{product.price}</p>
-                          {product?.isStock === 1 && (
-                            <button
-                              onClick={() => handleAddToCart(product)}
-                              className="mt-2 cursor-pointer w-10 ml-auto p-[6px] flex items-center justify-center gap-2 bg-[#e62245] text-white rounded hover:bg-[#d41f3f] transition-colors"
-                            >
-                              <MdAddShoppingCart size={27} />
-                            </button>
-                          )}
-                        </div>
-                      </Link>
-                    ))}
-                  </div>
-                ) : (
-                  <Slider {...settings}>
-                    {displayProducts.map((product, index) => (
-                      <div key={index} className="px-2 relative">
-                        {product?.sale === 1 && (
-                          <div className="absolute top-2 right-4 bg-[#e62245] text-white px-2 py-[1px] font-semibold rounded-sm text-sm">
-                            SALE
-                          </div>
-                        )}
+                    {displayProducts.map((product, index) => {
+                      const priceOption = product?.priceShowHide;
+                      // product price
+                      const basePrice = parsePrice(product.price) || 0;
+                      return (
                         <Link
                           onClick={() => {
                             trackProductView(product.id);
@@ -359,6 +310,7 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                           to={`/products/${product.id}/${slugify(
                             product.product_name || ""
                           )}`}
+                          key={index}
                           className="h-full min-h-[350px] flex flex-col bg-white p-6 shadow-sm border border-gray-200 hover:border-gray-300 transition-all duration-200"
                         >
                           <img
@@ -375,23 +327,134 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                             alt={product.product_name || product.name}
                             className="mx-auto h-44 object-contain mb-3"
                           />
-
-                          <p className="text-sm font-medium mb-1 hover:text-[#e62245] cursor-pointer">
+                          <p
+                            className="text-sm font-medium mb-1 hover:text-[#e62245]
+                    cursor-pointer"
+                          >
                             {product.product_name || product.name}
                           </p>
-                          <div className="flex justify-between items-center mt-auto pt-4">
-                            <p className="text-sm font-semibold text-gray-800">
-                              ৳{product.price}
+                          <div className="flex justify-between items-center mt-auto">
+                            <p className="font-semibold">
+                              {" "}
+                              {product?.priceShowHide
+                                ? ""
+                                : formatBDT(basePrice)}
                             </p>
+                            {/* {product?.isStock === 1 && (
+                              <button
+                                onClick={() => handleAddToCart(product)}
+                                className="mt-2 cursor-pointer w-10 ml-auto p-[6px] flex items-center justify-center gap-2 bg-[#e62245] text-white rounded hover:bg-[#d41f3f] transition-colors"
+                              >
+                                <MdAddShoppingCart size={27} />
+                              </button>
+                            )} */}
+
                             {product?.isStock === 1 && (
-                              <button className="bg-[#e62245] cursor-pointer p-[6px] rounded text-white hover:bg-[#d41d3f]">
+                              <button
+                                onClick={() =>
+                                  priceOption !== 1 && handleAddToCart(product)
+                                }
+                                className={`p-[6px] rounded text-white transition-colors duration-200 ${
+                                  priceOption === 1
+                                    ? "bg-gray-400 cursor-not-allowed"
+                                    : "bg-[#e62245] hover:bg-[#d41d3f] cursor-pointer"
+                                }`}
+                                disabled={priceOption === 1}
+                                aria-disabled={priceOption === 1}
+                                title={
+                                  priceOption === 1
+                                    ? "Unavailable for direct purchase"
+                                    : "Add to cart"
+                                }
+                              >
                                 <MdAddShoppingCart size={24} />
                               </button>
                             )}
                           </div>
                         </Link>
-                      </div>
-                    ))}
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <Slider {...settings}>
+                    {displayProducts.map((product, index) => {
+                      const priceOption = product?.priceShowHide;
+
+                      // product price
+                      const basePrice = parsePrice(product.price) || 0;
+                      return (
+                        <div key={index} className="px-2 relative">
+                          {product?.sale === 1 && (
+                            <div className="absolute top-2 right-4 bg-[#e62245] text-white px-2 py-[1px] font-semibold rounded-sm text-sm">
+                              SALE
+                            </div>
+                          )}
+                          <Link
+                            onClick={() => {
+                              trackProductView(product.id);
+                              onClose();
+                            }}
+                            to={`/products/${product.id}/${slugify(
+                              product.product_name || ""
+                            )}`}
+                            className="h-full min-h-[350px] flex flex-col bg-white p-6 shadow-sm border border-gray-200 hover:border-gray-300 transition-all duration-200"
+                          >
+                            <img
+                              src={
+                                product.image_urls
+                                  ? `${
+                                      import.meta.env.VITE_OPEN_APIURL
+                                    }${JSON.parse(
+                                      product.image_urls
+                                    )[0].replace(/^["\[]+|["\]]+$/g, "")}`
+                                  : product.image
+                              }
+                              alt={product.product_name || product.name}
+                              className="mx-auto h-44 object-contain mb-3"
+                            />
+
+                            <p className="text-sm font-medium mb-1 hover:text-[#e62245] cursor-pointer">
+                              {product.product_name || product.name}
+                            </p>
+                            <div className="flex justify-between items-center mt-auto pt-4">
+                              <p className="text-sm font-semibold text-gray-800">
+                                ৳{" "}
+                                {product?.priceShowHide
+                                  ? ""
+                                  : formatBDT(basePrice)}
+                              </p>
+                              {/* {product?.isStock === 1 && (
+                                <button className={`bg-[#e62245] cursor-pointer p-[6px] rounded text-white hover:bg-[#d41d3f]`}>
+                                  <MdAddShoppingCart size={24} />
+                                </button>
+                              )} */}
+                              {product?.isStock === 1 && (
+                                <button
+                                  onClick={() =>
+                                    priceOption !== 1 &&
+                                    handleAddToCart(product)
+                                  }
+                                  className={`p-[6px] rounded text-white transition-colors duration-200      ${
+                                    priceOption === 1
+                                      ? "bg-gray-400 cursor-not-allowed"
+                                      : "bg-[#e62245] hover:bg-[#d41d3f] cursor-pointer"
+                                  }`}
+                                  disabled={priceOption === 1}
+                                  aria-disabled={priceOption === 1}
+                                  title={
+                                    priceOption === 1
+                                      ? "Unavailable for direct purchase"
+                                      : "Add to cart"
+                                  }
+                                >
+                                  <MdAddShoppingCart size={24} />
+                                </button>
+                              )}
+                            </div>
+                          </Link>
+                        </div>
+                      );
+                    })}
                   </Slider>
                 )}
               </div>

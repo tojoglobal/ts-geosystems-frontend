@@ -105,6 +105,7 @@ import EquipmentManagement from "./Dashboard/TSCC/EquipmentManagement";
 import ClientInformationManager from "./Dashboard/ClientInformationManager/ClientInformationManager";
 import Calendar from "./Dashboard/Calendar/Calendar";
 import AdminChangePassword from "./Dashboard/Profile/AdminChangePassword";
+import QuotationData from "./Dashboard/Quotation/Quotation";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -158,9 +159,8 @@ const AppLayout = () => {
         {/* welcome rotue */}
         <Route path="/welcome" element={<WelcomePage />} />
         <Route path="/sitemap" element={<SiteMap />} />
+        {/* user  Routes */}
         {/* Auth user Routes */}
-        {/* <Route path="/user/login" element={<Login />} /> */}
-        {/* <Route path="/user/create_account" element={<Register />} /> */}
         <Route
           path="/user/login"
           element={
@@ -269,16 +269,14 @@ const AppLayout = () => {
           <Route path="used-equipment" element={<AdminUpdateUsedEquipment />} />
           <Route path="service" element={<AdminUpdateService />} />
           <Route path="tradein" element={<AdminUpdateTradeIn />} />
+          <Route path="quotation" element={<QuotationData />} />
           <Route path="about-us" element={<AdminUpdateAboutUs />} />
           <Route path="contact-us" element={<AdminUpdateContactUs />} />
           <Route path="update/support" element={<AdminUpdateSupport />} />
           <Route path="cc" element={<AdminUpdateCertificateTracking />} />
           <Route path="cc" element={<AdminUpdateCertificateTracking />} />
           <Route path="footer" element={<AdminUpdateFooter />} />
-          <Route
-            path="change-password"
-            element={<AdminChangePassword />}
-          />
+          <Route path="change-password" element={<AdminChangePassword />} />
         </Route>
 
         <Route path="*" element={<Error />} />

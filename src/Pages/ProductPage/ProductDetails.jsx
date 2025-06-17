@@ -20,6 +20,7 @@ import { setBreadcrumb } from "../../features/breadcrumb/breadcrumbSlice";
 import useToastSwal from "../../Hooks/useToastSwal";
 import { useVatEnabled } from "../../Hooks/useVatEnabled";
 import GetQuotationModal from "./GetQuotationModal";
+import { formatBDT } from "../../utils/formatBDT";
 
 // Helper function to extract YouTube video ID from url
 function getYouTubeId(url) {
@@ -138,6 +139,17 @@ const ProductDetails = () => {
       { timer: 2000 }
     );
   };
+
+  // vat part
+  let vat = 0;
+  try {
+    vat = product?.tax ? JSON.parse(product.tax).value : 0;
+  } catch {
+    vat = 0;
+  }
+  const basePrice = parsePrice(product.price) || 0;
+  const vatAmount = basePrice * (vat / 100);
+  const priceIncVat = basePrice + vatAmount;
 
   if (isLoading) return null;
   if (isError)
@@ -264,21 +276,27 @@ const ProductDetails = () => {
               <div className="text-[20px] sm:text-[24px] font-semibold text-[#222]">
                 Price:{" "}
                 <span className="text-[#111]">
-                  ৳{parsePrice(product.price)}.00{" "}
+                  ৳{product?.priceShowHide ? "" : formatBDT(basePrice)}
                   {vatEnabled && (
                     <span className="text-sm text-gray-500">(Ex. VAT)</span>
                   )}
                 </span>
               </div>
-              {vatEnabled && (
+
+              {vatEnabled && !product?.priceShowHide && (
                 <div className="text-[18px] sm:text-[24px] font-semibold text-[#999] line-through">
-                  Price:{" "}
-                  <span className="text-[#999]">
-                    ৳{(parsePrice(product.price) * 1.2).toFixed(2)}{" "}
-                    <span className="text-sm text-gray-400">(Inc. VAT)</span>
+                  Price: ৳ {formatBDT(priceIncVat)}
+                  <span className="text-sm text-gray-400 ml-2">
+                    (Inc. VAT | ৳ {formatBDT(vatAmount)} ({vat}%))
                   </span>
                 </div>
               )}
+
+              {/* {vatEnabled && (
+                <div className="text-sm text-gray-500">
+                  VAT: ৳{formatBDT(vatAmount)} ({vat}%)
+                </div>
+              )} */}
             </div>
             <hr className="border-t border-gray-300 my-3" />
             <div className="text-sm text-[#222] mb-1">
@@ -287,7 +305,7 @@ const ProductDetails = () => {
             </div>
             <div className="text-sm text-[#222] mb-1">
               <strong>Condition:</strong>{" "}
-              <span className="text-[#e62245]">
+              <span className="text-[#e62245] capitalize">
                 {product.product_condition || "New"}
               </span>
             </div>
@@ -297,7 +315,7 @@ const ProductDetails = () => {
             </div>
             <div className="text-sm text-[#222] mb-1">
               <strong>Brand:</strong>{" "}
-              <span className="text-[#e62245]">
+              <span className="text-[#e62245] capitalize">
                 {product.brand_name || "N/A"}
               </span>
             </div>
