@@ -10,6 +10,7 @@ import { toggleCart } from "../features/CartToggleSlice/CartToggleSlice";
 import { useState, useEffect, useRef } from "react";
 import { useAxiospublic } from "../Hooks/useAxiospublic";
 import { logout } from "../features/UserAuth/authSlice";
+import axios from "axios";
 
 const HeaderContainer = () => {
   const axiosPublic = useAxiospublic();
@@ -21,6 +22,7 @@ const HeaderContainer = () => {
   const [isSticky] = useState(false);
   const userMenuRef = useRef(null);
   const userIconRef = useRef(null);
+  const [settings, setSettings] = useState(null);
 
   // Close menu when clicking outside
   useEffect(() => {
@@ -62,16 +64,26 @@ const HeaderContainer = () => {
     }
   };
 
+  useEffect(() => {
+    axios
+      .get(`${import.meta.env.VITE_OPEN_APIURL}/api/settings`)
+      .then((res) => setSettings(res.data))
+      .catch(() => {});
+  }, []);
+
+  const logoUrl =
+    settings?.main_logo &&
+    (settings.main_logo.startsWith("/") ||
+      settings.main_logo.startsWith("http"))
+      ? `${import.meta.env.VITE_OPEN_APIURL || ""}${settings.main_logo}`
+      : "";
+
   return (
     <div className="w-full md:max-w-[95%] 2xl:max-w-[1370px] mx-auto z-50">
       <div className="flex justify-between items-center py-4">
         {/* Logo */}
         <Link to="/">
-          <img
-            src="https://cdn11.bigcommerce.com/s-ew2v2d3jn1/images/stencil/250x64/g2-survey-logo_1611121872__30054.original.png"
-            alt="G2 Survey"
-            className="w-full"
-          />
+          <img src={logoUrl} alt="G2 Survey" className="w-full" />
         </Link>
         <div className="flex items-center gap-4 relative">
           {/* Search */}

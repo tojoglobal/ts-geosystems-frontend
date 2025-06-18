@@ -190,8 +190,6 @@ const UsedEquipment = () => {
           } gap-4`}
         >
           {currentProducts.map((product) => {
-            console.log(product);
-
             const { isSimpleProduct } = getProductType(product);
             let images = [];
             try {

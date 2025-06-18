@@ -106,6 +106,11 @@ import ClientInformationManager from "./Dashboard/ClientInformationManager/Clien
 import Calendar from "./Dashboard/Calendar/Calendar";
 import AdminChangePassword from "./Dashboard/Profile/AdminChangePassword";
 import QuotationData from "./Dashboard/Quotation/Quotation";
+import ContactTrackingData from "./Pages/ContactTrackingData/ContactTrackingData";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import SiteMeta from "./SiteMeta/SiteMeta";
+import { Helmet } from "react-helmet-async";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -118,6 +123,7 @@ const AppLayout = () => {
       <Routes location={location} key={location.pathname}>
         <Route path="/" element={<MainHome />} />
         <Route path="/cc" element={<CertificateTracking />} />
+        <Route path="/cd" element={<ContactTrackingData />} />
         <Route path="/checkout" element={<Checkout />} />
 
         {/* product layout route */}
@@ -288,9 +294,22 @@ const AppLayout = () => {
 };
 
 function App() {
+  const [settings, setSettings] = useState(null);
+
+  useEffect(() => {
+    axios
+      .get(`${import.meta.env.VITE_OPEN_APIURL}/api/settings`)
+      .then((res) => setSettings(res.data))
+      .catch(() => {});
+  }, []);
+
   return (
     <>
       <AppProvider>
+        {/* Place SiteMeta here for global effect */}
+
+        <SiteMeta settings={settings} />
+
         <Router
           future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
         >

@@ -201,6 +201,12 @@ const Brands = () => {
                   Home Page
                 </th>
                 <th className="text-center p-3 border border-gray-600 whitespace-nowrap">
+                  Is Populer
+                </th>
+                <th className="text-center p-3 border border-gray-600 whitespace-nowrap">
+                  Active
+                </th>
+                <th className="text-center p-3 border border-gray-600 whitespace-nowrap">
                   Actions
                 </th>
               </tr>
@@ -229,6 +235,28 @@ const Brands = () => {
                       ) : (
                         <span className="text-red-600 font-semibold">
                           Hidden
+                        </span>
+                      )}
+                    </td>
+                    <td className="text-center p-3 border border-gray-600 whitespace-nowrap">
+                      {brand.is_populer === 1 ? (
+                        <span className="text-green-600 font-semibold">
+                          Shown is populer
+                        </span>
+                      ) : (
+                        <span className="text-red-600 font-semibold">
+                          Hidden is populer
+                        </span>
+                      )}
+                    </td>
+                    <td className="text-center p-3 border border-gray-600 whitespace-nowrap">
+                      {brand.status === 1 ? (
+                        <span className="text-green-600 font-semibold">
+                          Brands is Active
+                        </span>
+                      ) : (
+                        <span className="text-red-600 font-semibold">
+                          Brands is inactive
                         </span>
                       )}
                     </td>

@@ -21,6 +21,7 @@ import useToastSwal from "../../Hooks/useToastSwal";
 import { useVatEnabled } from "../../Hooks/useVatEnabled";
 import GetQuotationModal from "./GetQuotationModal";
 import { formatBDT } from "../../utils/formatBDT";
+import RichTextRenderer from "../../utils/RichTextRenderer";
 
 // Helper function to extract YouTube video ID from url
 function getYouTubeId(url) {
@@ -463,11 +464,9 @@ const ProductDetails = () => {
           </div>
           <div className="border-2 border-[#e5e5e5] rounded-[3px] p-2 sm:p-4">
             {activeTab === "OVERVIEW" && (
-              <div
-                className="text-gray-700 leading-relaxed break-words"
-                dangerouslySetInnerHTML={{ __html: product.product_overview }}
-              />
+              <RichTextRenderer html={product?.product_overview} />
             )}
+
             {activeTab === "SPECIFICATIONS" && (
               <div className="border rounded-lg overflow-x-auto m-2 sm:m-4">
                 <table className="w-full">

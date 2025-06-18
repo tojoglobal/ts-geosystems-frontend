@@ -80,98 +80,71 @@ const CertificateTracking = () => {
         <p className="text-gray-600 text-sm mb-6">
           {certificateData?.tracking_description || ""}
         </p>
-        <form
-          onSubmit={handleSubmit}
-          className="flex flex-col md:flex-row justify-center gap-2 max-w-5xl mx-auto"
-        >
-          <input
-            type="text"
-            name="trackingNumber"
-            placeholder="Tracking Number"
-            value={formData.trackingNumber}
-            onChange={(e) =>
-              setFormData((prev) => ({
-                ...prev,
-                trackingNumber: e.target.value,
-              }))
-            }
-            className="border border-gray-300 rounded px-4 py-2 w-full md:w-1/3"
-          />
-          <input
-            type="text"
-            name="serialNumber"
-            placeholder="Equipment Serial Number"
-            value={formData.serialNumber}
-            onChange={(e) =>
-              setFormData((prev) => ({ ...prev, serialNumber: e.target.value }))
-            }
-            className="border border-gray-300 rounded px-4 py-2 w-full md:w-1/3"
-          />
-          {/* <button
-            type="submit"
-            className="bg-[#e62245] text-white px-6 py-2 rounded w-full md:w-auto"
+        <div className="w-full w-max-7xl">
+          <form
+            onSubmit={handleSubmit}
+            className={`flex flex-col md:flex-row justify-center gap-4 `}
           >
-            SUBMIT
-          </button> */}
-          <button
-            type="submit"
-            className="bg-[#e62245] text-white px-6 py-2 rounded w-full md:w-auto"
-            disabled={searching}
-          >
-            {searching ? "SEARCHING..." : "SUBMIT"}
-          </button>
-        </form>
-        {error && <div className="text-crimson-red mt-2">{error}</div>}
+            <input
+              type="text"
+              name="trackingNumber"
+              placeholder="Tracking Number"
+              value={formData.trackingNumber}
+              onChange={(e) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  trackingNumber: e.target.value,
+                }))
+              }
+              className="border border-gray-300 rounded px-4 py-2 w-full md:w-1/3 "
+            />
+            <input
+              type="text"
+              name="serialNumber"
+              placeholder="Equipment Serial Number"
+              value={formData.serialNumber}
+              onChange={(e) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  serialNumber: e.target.value,
+                }))
+              }
+              className="border border-gray-300 rounded px-4 py-2 w-full md:w-1/3"
+            />
 
+            <button
+              type="submit"
+              className="bg-[#e62245] text-white px-6 py-2 rounded w-full md:w-auto"
+              disabled={searching}
+            >
+              {searching ? "SEARCHING..." : "SUBMIT"}
+            </button>
+          </form>
+          {error && <div className="text-crimson-red mt-2">{error}</div>}
+        </div>
         {result && (
-          <div className="flex justify-center mt-5">
-            <table className="border-collapse border border-gray-200 bg-[#28506a] text-white min-w-[900px]">
-              <thead>
+          <div className="flex justify-center w-max-7xl mx-auto mt-5">
+            <table className="border-collapse border border-crimson-red   bg-[#28506a] text-left  min-w-[900px]">
+              <thead className="text-crimson-red">
                 <tr>
-                  <th className="border border-gray-300 px-4 py-2 font-semibold">
-                    Tracking No
-                  </th>
-                  <th className="border border-gray-300 px-4 py-2 font-semibold">
-                    Equipment
-                  </th>
-                  <th className="border border-gray-300 px-4 py-2 font-semibold">
-                    Serial Number
-                  </th>
-                  <th className="border border-gray-300 px-4 py-2 font-semibold">
-                    Accuracy
-                  </th>
-                  <th className="border border-gray-300 px-4 py-2 font-semibold">
-                    Manufacturer
-                  </th>
-                  <th className="border border-gray-300 px-4 py-2 font-semibold">
-                    Company Name
-                  </th>
-                  <th className="border border-gray-300 px-4 py-2 font-semibold">
-                    Validity
-                  </th>
+                  <th className=" px-4 py-2 font-semibold">Tracking No</th>
+                  <th className=" px-4 py-2 font-semibold">Equipment</th>
+                  <th className=" px-4 py-2 font-semibold">Serial Number</th>
+                  <th className=" px-4 py-2 font-semibold">Accuracy</th>
+                  <th className=" px-4 py-2 font-semibold">Manufacturer</th>
+                  <th className=" px-4 py-2 font-semibold">Company Name</th>
+                  <th className=" px-4 py-2 font-semibold">Validity</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="text-[#fff] border border-crimson-red">
                 <tr>
-                  <td className="border border-gray-300 px-4 py-2">
-                    {result.trackingNo}
-                  </td>
-                  <td className="border border-gray-300 px-4 py-2">
-                    {result.equipment}
-                  </td>
-                  <td className="border border-gray-300 px-4 py-2">
-                    {result.serialNo}
-                  </td>
-                  <td className="border border-gray-300 px-4 py-2">
-                    {result.accuracy}
-                  </td>
-                  <td className="border border-gray-300 px-4 py-2">
-                    {result.manufacturer}
-                  </td>
-                  <td className="border border-gray-300 px-4 py-2">
-                    {result.companyName}
-                  </td>
-                  <td className="border border-gray-300 px-4 py-2">
+                  <td className=" px-4 py-2">{result.trackingNo}</td>
+                  <td className=" px-4 py-2">{result.equipment}</td>
+                  <td className=" px-4 py-2">{result.serialNo}</td>
+                  <td className=" px-4 py-2">{result.accuracy}</td>
+                  <td className=" px-4 py-2">{result.manufacturer}</td>
+                  <td className=" px-4 py-2">{result.companyName}</td>
+                  <td className=" px-4 py-2">
                     {result.validity
                       ? new Date(result.validity).toISOString().slice(0, 10)
                       : ""}

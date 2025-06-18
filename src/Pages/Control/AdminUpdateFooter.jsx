@@ -15,22 +15,26 @@ const AdminUpdateFooter = () => {
     mailing_title: "",
     mailing_text: "",
     bg_color: "#16181a",
-    // Array to hold the image URLs from the backend
-    iso_image_urls: ["", "", ""], // Initialize with 3 empty strings
+    iso_image_urls: ["", "", ""],
+    payment_method_image_url: "",
   });
 
-  // State to hold new image files selected by the user, indexed 0 to 2
+  // ISO images (3)
   const [imageFiles, setImageFiles] = useState([null, null, null]);
-  // State to hold image previews (data URLs or fetched URLs)
   const [imagePreviews, setImagePreviews] = useState(["", "", ""]);
-  // Track old image URLs loaded from the database
   const [oldImageUrls, setOldImageUrls] = useState(["", "", ""]);
-  // State to signal if an image at a specific index should be removed
   const [shouldRemoveImage, setShouldRemoveImage] = useState([
     false,
     false,
     false,
   ]);
+
+  // Payment method image (single)
+  const [paymentImageFile, setPaymentImageFile] = useState(null);
+  const [paymentImagePreview, setPaymentImagePreview] = useState("");
+  const [oldPaymentImageUrl, setOldPaymentImageUrl] = useState("");
+  const [shouldRemovePaymentImage, setShouldRemovePaymentImage] =
+    useState(false);
 
   useEffect(() => {
     const fetchFooter = async () => {
@@ -47,16 +51,25 @@ const AdminUpdateFooter = () => {
 
           setFormData((prev) => ({
             ...prev,
-            ...fetchedData, // Copy all other fields
+            ...fetchedData,
             bg_color: fetchedData.bg_color || "#16181a",
             iso_image_urls: urls,
+            payment_method_image_url:
+              fetchedData.payment_method_image_url || "",
           }));
-          setOldImageUrls(urls); // Store original URLs
-          // Create previews from fetched URLs
+          setOldImageUrls(urls);
           setImagePreviews(
             urls.map((url) =>
               url ? `${import.meta.env.VITE_OPEN_APIURL || ""}${url}` : ""
             )
+          );
+          setOldPaymentImageUrl(fetchedData.payment_method_image_url || "");
+          setPaymentImagePreview(
+            fetchedData.payment_method_image_url
+              ? `${import.meta.env.VITE_OPEN_APIURL || ""}${
+                  fetchedData.payment_method_image_url
+                }`
+              : ""
           );
         }
       } catch (error) {
@@ -94,11 +107,10 @@ const AdminUpdateFooter = () => {
 
       setShouldRemoveImage((prev) => {
         const newRemoveFlags = [...prev];
-        newRemoveFlags[index] = false; // If a new image is selected, don't remove it
+        newRemoveFlags[index] = false;
         return newRemoveFlags;
       });
 
-      // Clear the current image URL in formData for this specific index if a new file is selected
       setFormData((prev) => {
         const newUrls = [...prev.iso_image_urls];
         newUrls[index] = "";
@@ -122,15 +134,33 @@ const AdminUpdateFooter = () => {
 
     setFormData((prev) => {
       const newUrls = [...prev.iso_image_urls];
-      newUrls[index] = ""; // Clear the URL in form data for this index
+      newUrls[index] = "";
       return { ...prev, iso_image_urls: newUrls };
     });
 
     setShouldRemoveImage((prev) => {
       const newRemoveFlags = [...prev];
-      newRemoveFlags[index] = true; // Signal that this image should be removed
+      newRemoveFlags[index] = true;
       return newRemoveFlags;
     });
+  };
+
+  // Payment method image handlers
+  const handlePaymentImageChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      setPaymentImageFile(file);
+      setPaymentImagePreview(URL.createObjectURL(file));
+      setShouldRemovePaymentImage(false);
+      setFormData((prev) => ({ ...prev, payment_method_image_url: "" }));
+    }
+  };
+
+  const handleRemovePaymentImage = () => {
+    setPaymentImageFile(null);
+    setPaymentImagePreview("");
+    setFormData((prev) => ({ ...prev, payment_method_image_url: "" }));
+    setShouldRemovePaymentImage(true);
   };
 
   const handleSubmit = async (e) => {
@@ -145,26 +175,28 @@ const AdminUpdateFooter = () => {
       fd.append("mailing_text", formData.mailing_text);
       fd.append("bg_color", formData.bg_color);
 
-      // Loop through each potential image slot (0, 1, 2)
+      // ISO images (3)
       for (let i = 0; i < 3; i++) {
-        // Scenario 1: A new image file is selected for this slot
         if (imageFiles[i]) {
           fd.append(`iso_image_${i + 1}`, imageFiles[i]);
-          fd.append(`old_iso_image_url_${i + 1}`, oldImageUrls[i] || ""); // Send old for deletion on backend
+          fd.append(`old_iso_image_url_${i + 1}`, oldImageUrls[i] || "");
+        } else if (shouldRemoveImage[i]) {
+          fd.append(`remove_iso_image_${i + 1}`, "true");
+          fd.append(`old_iso_image_url_${i + 1}`, oldImageUrls[i] || "");
+        } else {
+          fd.append(`iso_image_url_${i + 1}`, oldImageUrls[i] || "");
         }
-        // Scenario 2: User explicitly clicked "Remove" for this slot
-        else if (shouldRemoveImage[i]) {
-          fd.append(`remove_iso_image_${i + 1}`, "true"); // Signal removal
-          fd.append(`old_iso_image_url_${i + 1}`, oldImageUrls[i] || ""); // Send old URL to delete
-        }
-        // Scenario 3: No new image, and not explicitly removed (keep existing)
-        else {
-          // If no new file and not marked for removal, send the existing URL back
-          fd.append(
-            `iso_image_url_${i + 1}`,
-            oldImageUrls[i] || "" // Send the original URL if no change
-          );
-        }
+      }
+
+      // Payment method image logic (single file)
+      if (paymentImageFile) {
+        fd.append("payment_method_image", paymentImageFile);
+        fd.append("old_payment_method_image_url", oldPaymentImageUrl || "");
+      } else if (shouldRemovePaymentImage) {
+        fd.append("remove_payment_method_image", "true");
+        fd.append("old_payment_method_image_url", oldPaymentImageUrl || "");
+      } else {
+        fd.append("payment_method_image_url", oldPaymentImageUrl || "");
       }
 
       const res = await axiosPublic.put("/api/footer", fd, {
@@ -173,13 +205,14 @@ const AdminUpdateFooter = () => {
 
       if (res.data.success) {
         Swal.fire("Success", "Footer updated successfully!", "success");
-        // Update states with the new URLs returned from the backend
+
+        // Update ISO images state
         const newUrls = [
           res.data.iso_image_url_1 || "",
           res.data.iso_image_url_2 || "",
           res.data.iso_image_url_3 || "",
         ];
-        setOldImageUrls(newUrls); // Update original URLs for next edit
+        setOldImageUrls(newUrls);
         setFormData((prev) => ({
           ...prev,
           iso_image_urls: newUrls,
@@ -189,11 +222,29 @@ const AdminUpdateFooter = () => {
             url ? `${import.meta.env.VITE_OPEN_APIURL || ""}${url}` : ""
           )
         );
-        setImageFiles([null, null, null]); // Clear new files after successful upload
-        setShouldRemoveImage([false, false, false]); // Reset remove flags
+        setImageFiles([null, null, null]);
+        setShouldRemoveImage([false, false, false]);
+
+        // Update Payment Method image state
+        const newPaymentMethodImageUrl =
+          res.data.payment_method_image_url || "";
+        setOldPaymentImageUrl(newPaymentMethodImageUrl);
+        setFormData((prev) => ({
+          ...prev,
+          payment_method_image_url: newPaymentMethodImageUrl,
+        }));
+        setPaymentImagePreview(
+          newPaymentMethodImageUrl
+            ? `${
+                import.meta.env.VITE_OPEN_APIURL || ""
+              }${newPaymentMethodImageUrl}`
+            : ""
+        );
+        setPaymentImageFile(null);
+        setShouldRemovePaymentImage(false);
       }
     } catch (error) {
-      console.error("Update error:", error); // Log the full error for debugging
+      console.error("Update error:", error);
       Swal.fire(
         "Error",
         error?.response?.data?.message || "Update failed",
@@ -273,7 +324,7 @@ const AdminUpdateFooter = () => {
               />
             </div>
           </div>
-          {/* Multiple ISO Image Uploads */}
+          {/* ISO Images */}
           <h3 className="text-xl font-semibold mt-6 mb-3 text-gray-100">
             ISO Images (Max 3)
           </h3>
@@ -319,6 +370,50 @@ const AdminUpdateFooter = () => {
                 )}
               </div>
             ))}
+          </div>
+          {/* Payment Method Image (ISO) */}
+          <h3 className="text-xl font-semibold mt-6 mb-3 text-gray-100">
+            Payment Method Image
+          </h3>
+          <div className="flex w-full gap-3">
+            <div
+              className="relative flex flex-col items-center gap-1"
+              style={{ minWidth: 120, maxWidth: 160 }}
+            >
+              <label className="flex flex-col items-center p-3 bg-neutral-800 border-2 border-dashed border-neutral-600 rounded-lg cursor-pointer hover:bg-neutral-700 transition w-full">
+                <FaCloudUploadAlt size={28} className="mb-1 text-teal-500" />
+                <span className="text-xs text-gray-300 mb-1 text-center">
+                  {paymentImageFile
+                    ? "Replace Payment Method Image"
+                    : paymentImagePreview
+                    ? "Change Payment Method Image"
+                    : "Upload Payment Method Image"}
+                </span>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handlePaymentImageChange}
+                  className="hidden"
+                />
+                {paymentImagePreview && (
+                  <img
+                    src={paymentImagePreview}
+                    alt="Payment Method Preview"
+                    className="h-14 mb-1 mt-2 rounded shadow border border-gray-600"
+                  />
+                )}
+              </label>
+              {(paymentImageFile || oldPaymentImageUrl) && (
+                <button
+                  type="button"
+                  onClick={handleRemovePaymentImage}
+                  className="absolute top-2 right-2 text-red-500 hover:text-red-700 p-1 rounded-full bg-neutral-800 hover:bg-neutral-700 transition"
+                  title="Remove Payment Method Image"
+                >
+                  <FaTimesCircle size={18} />
+                </button>
+              )}
+            </div>
           </div>
           {/* Mailing */}
           <div>

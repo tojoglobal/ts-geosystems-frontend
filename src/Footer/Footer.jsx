@@ -92,6 +92,12 @@ const Footer = () => {
   const iso_image_url_3 = footerData.iso_image_url_3
     ? `${import.meta.env.VITE_OPEN_APIURL || ""}${footerData.iso_image_url_3}`
     : "";
+  const payment_method_image = footerData?.payment_method_image_url
+    ? `${import.meta.env.VITE_OPEN_APIURL || ""}${
+        footerData?.payment_method_image_url
+      }`
+    : "";
+
   const mailing_title = footerData.mailing_title || "";
   const mailing_text = footerData.mailing_text || "";
   const bg_color = footerData.bg_color || "#000000";
@@ -120,27 +126,34 @@ const Footer = () => {
               </>
             )}
           </p>
-          <div className="flex gap-1 mt-4">
+
+          <div className="flex flex-wrap gap-2 mt-4">
             {iso_image_url_1 && (
-              <img
-                src={iso_image_url_1}
-                alt="ISO"
-                className="h-12 w-14 rounded-[4px]"
-              />
+              <div className="w-[64px] h-[64px] sm:w-[72px] sm:h-[72px] md:w-[80px] md:h-[80px] flex items-center justify-center">
+                <img
+                  src={iso_image_url_1}
+                  alt="ISO"
+                  className="w-full h-full object-contain rounded-[4px]"
+                />
+              </div>
             )}
             {iso_image_url_2 && (
-              <img
-                src={iso_image_url_2}
-                alt="ISO"
-                className="h-12 w-14 rounded-[4px]"
-              />
+              <div className="w-[64px] h-[64px] sm:w-[72px] sm:h-[72px] md:w-[80px] md:h-[80px] flex items-center justify-center">
+                <img
+                  src={iso_image_url_2}
+                  alt="ISO"
+                  className="w-full h-full object-contain rounded-[4px]"
+                />
+              </div>
             )}
             {iso_image_url_3 && (
-              <img
-                src={iso_image_url_3}
-                alt="ISO"
-                className="h-12 w-14 rounded-[4px]"
-              />
+              <div className="w-[64px] h-[64px] sm:w-[72px] sm:h-[72px] md:w-[80px] md:h-[80px] flex items-center justify-center">
+                <img
+                  src={iso_image_url_3}
+                  alt="ISO"
+                  className="w-full h-full object-contain rounded-[4px]"
+                />
+              </div>
             )}
           </div>
         </div>
@@ -273,11 +286,17 @@ const Footer = () => {
           </p>
         </div>
         <div className="flex gap-4 mt-4 md:mt-0">
-          <img
+          {/* <img
             src="https://ts-geosystems.com.bd/assets/images/16305963101621960148credit-cards-footer.png"
             alt="Visa"
             className="h-6"
-          />
+          /> */}
+          <img src={payment_method_image} alt="Visa" className="h-6" />
+          {/* <img
+            src={iso_image_url_1}
+            alt="ISO"
+            className="w-full h-full object-contain rounded-[4px]"
+          /> */}
         </div>
       </div>
     </footer>
