@@ -39,6 +39,111 @@ export default function SiteMeta({ settings }) {
     if (title) {
       document.title = home_title || app_name || "TS Geosystems Bangladesh";
     }
+
+    // Google Analytics
+    if (settings.enable_google_analytics && settings.google_analytics_code) {
+      const script = document.createElement("script");
+      script.async = true;
+      script.src = `https://www.googletagmanager.com/gtag/js?id=${settings.google_analytics_code}`;
+      document.head.appendChild(script);
+
+      const inlineScript = document.createElement("script");
+      inlineScript.innerHTML = `
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', '${settings.google_analytics_code}');
+  `;
+      document.head.appendChild(inlineScript);
+    }
+
+    // Google Adsense
+    if (settings.enable_google_adsense && settings.google_adsense_code) {
+      const adsenseScript = document.createElement("script");
+      adsenseScript.async = true;
+      adsenseScript.src =
+        "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js";
+      adsenseScript.setAttribute(
+        "data-ad-client",
+        settings.google_adsense_code
+      );
+      document.head.appendChild(adsenseScript);
+    }
+
+    // Facebook Pixel
+    if (settings.display_facebook_pixel && settings.facebook_pixel_code) {
+      const pixelScript = document.createElement("script");
+      pixelScript.innerHTML = `
+    !function(f,b,e,v,n,t,s){
+      if(f.fbq)return;n=f.fbq=function(){n.callMethod ?
+      n.callMethod.apply(n,arguments) : n.queue.push(arguments)};
+      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+      n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t,s)
+    }(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '${settings.facebook_pixel_code}');
+    fbq('track', 'PageView');
+  `;
+      document.head.appendChild(pixelScript);
+    }
+
+    // Facebook Messenger
+    if (
+      settings.display_facebook_messenger &&
+      settings.facebook_messenger_page_id
+    ) {
+      const messengerDiv = document.createElement("div");
+      messengerDiv.id = "fb-root";
+      document.body.appendChild(messengerDiv);
+
+      const messengerScript = document.createElement("script");
+      messengerScript.innerHTML = `
+    window.fbAsyncInit = function() {
+      FB.init({
+        xfbml            : true,
+        version          : 'v17.0'
+      });
+    };
+    (function(d, s, id){
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) {return;}
+      js = d.createElement(s); js.id = id;
+      js.src = "https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+  `;
+      document.body.appendChild(messengerScript);
+
+      const chatPlugin = document.createElement("div");
+      chatPlugin.className = "fb-customerchat";
+      chatPlugin.setAttribute("attribution", "setup_tool");
+      chatPlugin.setAttribute("page_id", settings.facebook_messenger_page_id);
+      document.body.appendChild(chatPlugin);
+    }
+
+    // Google reCAPTCHA
+    if (
+      settings.display_google_recaptcha &&
+      settings.google_recaptcha_site_key
+    ) {
+      const recaptchaScript = document.createElement("script");
+      recaptchaScript.src = `https://www.google.com/recaptcha/api.js?render=${settings.google_recaptcha_site_key}`;
+      recaptchaScript.async = true;
+      recaptchaScript.defer = true;
+      document.head.appendChild(recaptchaScript);
+    }
+
+    // Disqus
+    if (settings.display_disqus && settings.disqus_link) {
+      const disqusScript = document.createElement("script");
+      disqusScript.src = `https://${settings.disqus_link}.disqus.com/embed.js`;
+      disqusScript.setAttribute("data-timestamp", +new Date());
+      disqusScript.async = true;
+      document.body.appendChild(disqusScript);
+    }
+
     if (description) {
       document.description =
         meta_description || "Leading Survey Equipment Supplier in Bangladesh";

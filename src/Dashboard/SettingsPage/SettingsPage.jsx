@@ -57,6 +57,7 @@ const sidebarItems = [
   { key: "basic", label: "Basic Information" },
   { key: "media", label: "Media" },
   { key: "seo", label: "SEO" },
+  { key: "script", label: "Script" }, // new tab
 ];
 
 const defaultValues = {
@@ -66,6 +67,31 @@ const defaultValues = {
   favicon: "",
   metaKeywords: [],
   metaDescription: "",
+
+  // New fields for extra features
+  decimalSeparatorEnable: false,
+  decimalSeparator: "off",
+  currencyDirectionEnable: false,
+  currencyDirection: "left",
+  decimalSeparatorSelectorEnable: false,
+  decimalSeparatorSelector: "dot",
+  thousandSeparatorEnable: false,
+  thousandSeparator: "dot",
+
+  // Script tab
+  enableGoogleAnalytics: false,
+  googleAnalyticsCode: "",
+  enableGoogleAdsense: false,
+  googleAdsenseCode: "",
+  displayGoogleRecaptcha: false,
+  googleRecaptchaSiteKey: "",
+  googleRecaptchaSecretKey: "",
+  displayFacebookPixel: false,
+  facebookPixelCode: "",
+  displayFacebookMessenger: false,
+  facebookMessengerPageId: "",
+  displayDisqus: false,
+  disqusLink: "",
 };
 
 const API_URL = `${import.meta.env.VITE_OPEN_APIURL}/api/settings`;
@@ -86,15 +112,20 @@ const SettingsPage = () => {
     handleSubmit,
     formState: { errors },
     reset,
+    watch,
   } = useForm({ defaultValues });
 
   // Fetch current settings on mount
+
   useEffect(() => {
     setLoading(true);
     axios
       .get(API_URL)
       .then((res) => {
         const d = res.data;
+        // Helper to ensure boolean
+        const toBool = (v) => v === true || v === 1 || v === "1";
+
         reset({
           appName: d.app_name || "",
           homeTitle: d.home_title || "",
@@ -102,6 +133,33 @@ const SettingsPage = () => {
           favicon: d.favicon || "",
           metaKeywords: Array.isArray(d.meta_keywords) ? d.meta_keywords : [],
           metaDescription: d.meta_description || "",
+
+          // Extra fields, all checkbox fields use toBool
+          decimalSeparatorEnable: toBool(d.decimal_separator_enable),
+          decimalSeparator: d.decimal_separator || "off",
+          currencyDirectionEnable: toBool(d.currency_direction_enable),
+          currencyDirection: d.currency_direction || "left",
+          decimalSeparatorSelectorEnable: toBool(
+            d.decimal_separator_selector_enable
+          ),
+          decimalSeparatorSelector: d.decimal_separator_selector || "dot",
+          thousandSeparatorEnable: toBool(d.thousand_separator_enable),
+          thousandSeparator: d.thousand_separator || "dot",
+
+          // Script tab
+          enableGoogleAnalytics: toBool(d.enable_google_analytics),
+          googleAnalyticsCode: d.google_analytics_code || "",
+          enableGoogleAdsense: toBool(d.enable_google_adsense),
+          googleAdsenseCode: d.google_adsense_code || "",
+          displayGoogleRecaptcha: toBool(d.display_google_recaptcha),
+          googleRecaptchaSiteKey: d.google_recaptcha_site_key || "",
+          googleRecaptchaSecretKey: d.google_recaptcha_secret_key || "",
+          displayFacebookPixel: toBool(d.display_facebook_pixel),
+          facebookPixelCode: d.facebook_pixel_code || "",
+          displayFacebookMessenger: toBool(d.display_facebook_messenger),
+          facebookMessengerPageId: d.facebook_messenger_page_id || "",
+          displayDisqus: toBool(d.display_disqus),
+          disqusLink: d.disqus_link || "",
         });
         setLogoPreview(d.main_logo || "");
         setFaviconPreview(d.favicon || "");
@@ -151,7 +209,7 @@ const SettingsPage = () => {
       let mainLogoUrl = await uploadFile(logoFile, "mainLogo");
       let faviconUrl = await uploadFile(faviconFile, "favicon");
 
-      // Save settings (text fields + file paths)
+      // Save settings (text fields + file paths + new fields)
       const res = await axios.put(API_URL, {
         appName: data.appName,
         homeTitle: data.homeTitle,
@@ -159,6 +217,29 @@ const SettingsPage = () => {
         favicon: faviconUrl,
         metaKeywords: data.metaKeywords,
         metaDescription: data.metaDescription,
+        decimalSeparatorEnable: data.decimalSeparatorEnable,
+        decimalSeparator: data.decimalSeparator,
+        currencyDirectionEnable: data.currencyDirectionEnable,
+        currencyDirection: data.currencyDirection,
+        decimalSeparatorSelectorEnable: data.decimalSeparatorSelectorEnable,
+        decimalSeparatorSelector: data.decimalSeparatorSelector,
+        thousandSeparatorEnable: data.thousandSeparatorEnable,
+        thousandSeparator: data.thousandSeparator,
+
+        // Script tab fields
+        enableGoogleAnalytics: data.enableGoogleAnalytics,
+        googleAnalyticsCode: data.googleAnalyticsCode,
+        enableGoogleAdsense: data.enableGoogleAdsense,
+        googleAdsenseCode: data.googleAdsenseCode,
+        displayGoogleRecaptcha: data.displayGoogleRecaptcha,
+        googleRecaptchaSiteKey: data.googleRecaptchaSiteKey,
+        googleRecaptchaSecretKey: data.googleRecaptchaSecretKey,
+        displayFacebookPixel: data.displayFacebookPixel,
+        facebookPixelCode: data.facebookPixelCode,
+        displayFacebookMessenger: data.displayFacebookMessenger,
+        facebookMessengerPageId: data.facebookMessengerPageId,
+        displayDisqus: data.displayDisqus,
+        disqusLink: data.disqusLink,
       });
 
       if (res.status === 200) {
@@ -250,6 +331,106 @@ const SettingsPage = () => {
                     </p>
                   )}
                 </div>
+
+                {/* ----------- EXTRA BASIC INFO FIELDS ----------- */}
+                <div className="mt-8 grid gap-4">
+                  {/* Decimal Separator enable */}
+                  <div className="flex items-center gap-4">
+                    <input
+                      type="checkbox"
+                      {...register("decimalSeparatorEnable")}
+                      id="decimalSeparatorEnable"
+                      className="mr-2"
+                    />
+                    <label
+                      htmlFor="decimalSeparatorEnable"
+                      className="block text-sm font-bold text-gray-100"
+                    >
+                      Enable Decimal Separator Selection
+                    </label>
+                    {watch("decimalSeparatorEnable") && (
+                      <select
+                        {...register("decimalSeparator")}
+                        className="ml-4 border px-2 py-1 rounded bg-gray-50 dark:bg-gray-800"
+                      >
+                        <option value="off">Off</option>
+                        <option value="on">On</option>
+                      </select>
+                    )}
+                  </div>
+                  {/* Currency Direction */}
+                  <div className="flex items-center gap-4">
+                    <input
+                      type="checkbox"
+                      {...register("currencyDirectionEnable")}
+                      id="currencyDirectionEnable"
+                      className="mr-2"
+                    />
+                    <label
+                      htmlFor="currencyDirectionEnable"
+                      className="block text-sm font-bold text-gray-100"
+                    >
+                      Enable Currency Direction
+                    </label>
+                    {watch("currencyDirectionEnable") && (
+                      <select
+                        {...register("currencyDirection")}
+                        className="ml-4 border px-2 py-1 rounded bg-gray-50 dark:bg-gray-800"
+                      >
+                        <option value="left">Left</option>
+                        <option value="right">Right</option>
+                      </select>
+                    )}
+                  </div>
+                  {/* Decimal Separator selector */}
+                  <div className="flex items-center gap-4">
+                    <input
+                      type="checkbox"
+                      {...register("decimalSeparatorSelectorEnable")}
+                      id="decimalSeparatorSelectorEnable"
+                      className="mr-2"
+                    />
+                    <label
+                      htmlFor="decimalSeparatorSelectorEnable"
+                      className="block text-sm font-bold text-gray-100"
+                    >
+                      Enable Decimal Separator Selector
+                    </label>
+                    {watch("decimalSeparatorSelectorEnable") && (
+                      <select
+                        {...register("decimalSeparatorSelector")}
+                        className="ml-4 border px-2 py-1 rounded bg-gray-50 dark:bg-gray-800"
+                      >
+                        <option value="dot">Dot (.)</option>
+                        <option value="comma">Comma (,)</option>
+                      </select>
+                    )}
+                  </div>
+                  {/* Thousand Separator selector */}
+                  <div className="flex items-center gap-4">
+                    <input
+                      type="checkbox"
+                      {...register("thousandSeparatorEnable")}
+                      id="thousandSeparatorEnable"
+                      className="mr-2"
+                    />
+                    <label
+                      htmlFor="thousandSeparatorEnable"
+                      className="block text-sm font-bold text-gray-100"
+                    >
+                      Enable Thousand Separator Selector
+                    </label>
+                    {watch("thousandSeparatorEnable") && (
+                      <select
+                        {...register("thousandSeparator")}
+                        className="ml-4 border px-2 py-1 rounded bg-gray-50 dark:bg-gray-800"
+                      >
+                        <option value="dot">Dot (.)</option>
+                        <option value="comma">Comma (,)</option>
+                      </select>
+                    )}
+                  </div>
+                </div>
               </section>
             )}
 
@@ -259,6 +440,16 @@ const SettingsPage = () => {
                 <h3 className="text-lg font-semibold mb-6 text-gray-100">
                   Media
                 </h3>
+                <div className="max-w-2xl h-40 mb-3">
+                  <p>Current logo </p>
+                  <div className="w-full">
+                    <img
+                      src={`${import.meta.env.VITE_OPEN_APIURL}${logoPreview}`}
+                      alt="Logo Preview"
+                      className="object-cover w-full h-full"
+                    />
+                  </div>
+                </div>
                 <div className="mb-6">
                   <label className="block text-sm font-bold text-gray-100 mb-2">
                     App Main Logo (140x140)
@@ -368,6 +559,179 @@ const SettingsPage = () => {
                       {errors.metaDescription.message}
                     </p>
                   )}
+                </div>
+              </section>
+            )}
+
+            {/* SCRIPT TAB */}
+            {activeTab === "script" && (
+              <section>
+                <h3 className="text-lg font-semibold mb-6 text-gray-100">
+                  Script
+                </h3>
+                <div className="space-y-5">
+                  {/* Google Analytics */}
+                  <div>
+                    <div className="flex items-center gap-4 mb-2">
+                      <input
+                        type="checkbox"
+                        {...register("enableGoogleAnalytics")}
+                        id="enableGoogleAnalytics"
+                        className="mr-2"
+                      />
+                      <label
+                        htmlFor="enableGoogleAnalytics"
+                        className="block text-sm font-bold text-gray-100"
+                      >
+                        Enable Google Analytics
+                      </label>
+                    </div>
+                    {watch("enableGoogleAnalytics") && (
+                      <textarea
+                        {...register("googleAnalyticsCode")}
+                        className="w-full border rounded-lg px-4 py-2 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white"
+                        rows={3}
+                        placeholder="Paste Google Analytics code here"
+                      />
+                    )}
+                  </div>
+                  {/* Google Adsense */}
+                  <div>
+                    <div className="flex items-center gap-4 mb-2">
+                      <input
+                        type="checkbox"
+                        {...register("enableGoogleAdsense")}
+                        id="enableGoogleAdsense"
+                        className="mr-2"
+                      />
+                      <label
+                        htmlFor="enableGoogleAdsense"
+                        className="block text-sm font-bold text-gray-100"
+                      >
+                        Enable Google Adsense Code
+                      </label>
+                    </div>
+                    {watch("enableGoogleAdsense") && (
+                      <textarea
+                        {...register("googleAdsenseCode")}
+                        className="w-full border rounded-lg px-4 py-2 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white"
+                        rows={3}
+                        placeholder="Paste Google Adsense code here"
+                      />
+                    )}
+                  </div>
+                  {/* Google Recaptcha */}
+                  <div>
+                    <div className="flex items-center gap-4 mb-2">
+                      <input
+                        type="checkbox"
+                        {...register("displayGoogleRecaptcha")}
+                        id="displayGoogleRecaptcha"
+                        className="mr-2"
+                      />
+                      <label
+                        htmlFor="displayGoogleRecaptcha"
+                        className="block text-sm font-bold text-gray-100"
+                      >
+                        Display Google Recaptcha
+                      </label>
+                    </div>
+                    {watch("displayGoogleRecaptcha") && (
+                      <div className="grid grid-cols-1 gap-3">
+                        <input
+                          {...register("googleRecaptchaSiteKey", {
+                            required: watch("displayGoogleRecaptcha"),
+                          })}
+                          placeholder="Google Recaptcha Site Key *"
+                          className="w-full border rounded-lg px-4 py-2 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white"
+                        />
+                        <input
+                          {...register("googleRecaptchaSecretKey", {
+                            required: watch("displayGoogleRecaptcha"),
+                          })}
+                          placeholder="Google Recaptcha Secret Key"
+                          className="w-full border rounded-lg px-4 py-2 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white"
+                        />
+                      </div>
+                    )}
+                  </div>
+                  {/* Facebook Pixel */}
+                  <div>
+                    <div className="flex items-center gap-4 mb-2">
+                      <input
+                        type="checkbox"
+                        {...register("displayFacebookPixel")}
+                        id="displayFacebookPixel"
+                        className="mr-2"
+                      />
+                      <label
+                        htmlFor="displayFacebookPixel"
+                        className="block text-sm font-bold text-gray-100"
+                      >
+                        Display Facebook Pixel
+                      </label>
+                    </div>
+                    {watch("displayFacebookPixel") && (
+                      <textarea
+                        {...register("facebookPixelCode")}
+                        className="w-full border rounded-lg px-4 py-2 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white"
+                        rows={3}
+                        placeholder="Paste Facebook Pixel code here"
+                      />
+                    )}
+                  </div>
+                  {/* Facebook Messenger */}
+                  <div>
+                    <div className="flex items-center gap-4 mb-2">
+                      <input
+                        type="checkbox"
+                        {...register("displayFacebookMessenger")}
+                        id="displayFacebookMessenger"
+                        className="mr-2"
+                      />
+                      <label
+                        htmlFor="displayFacebookMessenger"
+                        className="block text-sm font-bold text-gray-100"
+                      >
+                        Display Facebook Messenger
+                      </label>
+                    </div>
+                    {watch("displayFacebookMessenger") && (
+                      <input
+                        {...register("facebookMessengerPageId", {
+                          required: watch("displayFacebookMessenger"),
+                        })}
+                        className="w-full border rounded-lg px-4 py-2 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white"
+                        placeholder="Facebook Messenger Page Id *"
+                      />
+                    )}
+                  </div>
+                  {/* Disqus */}
+                  <div>
+                    <div className="flex items-center gap-4 mb-2">
+                      <input
+                        type="checkbox"
+                        {...register("displayDisqus")}
+                        id="displayDisqus"
+                        className="mr-2"
+                      />
+                      <label
+                        htmlFor="displayDisqus"
+                        className="block text-sm font-bold text-gray-100"
+                      >
+                        Display Disqus
+                      </label>
+                    </div>
+                    {watch("displayDisqus") && (
+                      <input
+                        {...register("disqusLink", {
+                          required: watch("displayDisqus"),
+                        })}
+                        className="w-full border rounded-lg px-4 py-2 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white"
+                        placeholder="Disqus Link *"
+                      />
+                    )}
+                  </div>
                 </div>
               </section>
             )}

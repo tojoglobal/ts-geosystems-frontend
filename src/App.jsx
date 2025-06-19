@@ -111,6 +111,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import SiteMeta from "./SiteMeta/SiteMeta";
 import { Helmet } from "react-helmet-async";
+import ScriptInjector from "./SiteMeta/ScriptInjector";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -309,6 +310,7 @@ function App() {
         {/* Place SiteMeta here for global effect */}
 
         <SiteMeta settings={settings} />
+        {/* <ScriptInjector settings={settings} /> */}
 
         <Router
           future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
