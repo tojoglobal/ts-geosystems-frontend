@@ -20,7 +20,7 @@ const GadgetGoHighBanner = () => {
 
   return (
     <div className="md:w-full my-3 md:my-5 px-3 md:px-0 w-full md:max-w-[95%] 2xl:max-w-[1370px] mx-auto">
-      <div className="flex h-80 md:h-72 w-full flex-col md:flex-row gap-3 md:gap-4">
+      <div className="flex h-80 sm:h-[410px] md:h-72 w-full flex-col md:flex-row gap-3 md:gap-4">
         <div className="w-full md:w-[33%] overflow-hidden rounded-md group h-full">
           {left?.imageUrl ? (
             <img

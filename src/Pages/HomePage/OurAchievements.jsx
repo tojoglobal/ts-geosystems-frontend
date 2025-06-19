@@ -29,8 +29,7 @@ const OurAchievements = () => {
         </h2>
         <div className="flex-1 h-0.5 bg-[#e62245]" />
       </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:grid-cols-3 md:gap-8">
         {items?.map((item, idx) => {
           const Icon = iconMap[idx] || iconMap[0];
           const rawNumber = item.number;
@@ -49,7 +48,7 @@ const OurAchievements = () => {
                   </div>
                   <h3 className="text-2xl md:text-4xl font-bold mb-2">
                     {!isNaN(numericPart) ? (
-                      <div className="text-5xl font-normal">
+                      <div className="text-4xl md:text-5xl font-normal">
                         {inView ? (
                           <CountUp
                             start={0}

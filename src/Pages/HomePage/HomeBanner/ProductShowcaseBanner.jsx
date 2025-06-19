@@ -11,7 +11,7 @@ const ProductShowcaseBanner = () => {
       <img
         src={`${import.meta.env.VITE_OPEN_APIURL}${data?.data[3]?.imageUrl}`}
         alt="ProductShowcaseBanner"
-        className="transition-transform rounded-lg w-full h-36 object-cover md:h-80 duration-300 hover:scale-110"
+        className="transition-transform rounded-lg w-full h-36 sm:h-48 object-cover md:h-80 duration-300 hover:scale-110"
       />
     </div>
   );

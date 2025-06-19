@@ -14,7 +14,7 @@ const GoHighBannerAnother = () => {
         <img
           src={`${import.meta.env.VITE_OPEN_APIURL}${data.data[4].imageUrl}`}
           alt="GoHighBannerAnother"
-          className="transition-transform w-full h-36 object-cover md:h-80 duration-300 hover:scale-110"
+          className="transition-transform w-full h-36 sm:h-48 object-cover md:h-80 duration-300 hover:scale-110"
         />
       </div>
     </div>

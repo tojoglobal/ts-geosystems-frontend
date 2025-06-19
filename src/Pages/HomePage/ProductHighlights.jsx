@@ -87,7 +87,7 @@ const ProductHighlights = () => {
     <div className="w-full md:max-w-[95%] 2xl:max-w-[1370px] mx-auto rounded-md px-3 md:px-0 py-6 md:py-12 bg-white relative">
       {/* Tab Header */}
       <div className="flex flex-row justify-between md:items-center md:justify-between border border-gray-200 rounded-l-[4px] relative">
-        <div className="flex flex-col md:flex-row gap-3 sm:gap-4 px-3 py-[2px]">
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 px-3 py-[2px]">
           {tabOptions.map((tab, idx) => (
             <div
               key={tab.key}
@@ -149,12 +149,12 @@ const ProductHighlights = () => {
           }}
           breakpoints={{
             320: {
-              slidesPerView: 1,
-              slidesPerGroup: 1,
-            },
-            640: {
               slidesPerView: 2,
               slidesPerGroup: 2,
+            },
+            640: {
+              slidesPerView: 4,
+              slidesPerGroup: 4,
             },
             1024: {
               slidesPerView: 4,
@@ -184,7 +184,7 @@ const ProductHighlights = () => {
               <SwiperSlide key={idx}>
                 <div className="relative flex flex-col items-center bg-white h-full">
                   {item?.sale === 1 && (
-                    <p className="absolute top-1 right-3 px-2 py-[1px] font-bold rounded-[4px] text-white text-[14px] bg-[#e62245] z-50">
+                    <p className="absolute top-1 right-3 px-2 py-[1px] font-bold rounded-[4px] text-white text-[10px] md:text-[14px] bg-[#e62245] z-50">
                       SALE
                     </p>
                   )}
@@ -202,7 +202,7 @@ const ProductHighlights = () => {
                                 JSON.parse(item.image_urls)[0]
                               }`}
                               alt={item.product_name}
-                              className="w-full h-44 md:h-[256.19px] transition-opacity duration-300 group-hover:opacity-0"
+                              className="w-full h-36 sm:h-32 md:h-[256.19px] transition-opacity duration-300 group-hover:opacity-0"
                             />
                             {JSON.parse(item.image_urls).length > 1 && (
                               <img
@@ -229,23 +229,23 @@ const ProductHighlights = () => {
                         to={`/products/${item.id}/${slugify(
                           item.product_name || ""
                         )}`}
-                        className="font-semibold min-h-10 text-sm text-gray-600 hover:text-[#e62245]"
+                        className="font-semibold min-h-10 text-xs md:text-sm text-gray-600 hover:text-[#e62245]"
                       >
                         {item.product_name}
                       </Link>
                     </div>
                     <div className="space-x-2">
                       {vatEnabled ? (
-                        <p className="flex items-center gap-2 text-sm font-bold text-[#222]">
+                        <p className="flex items-center gap-2 text-xs md:text-sm font-bold text-[#222]">
                           <span>
                             ৳ {item?.priceShowHide ? "" : formatBDT(basePrice)}
                           </span>
-                          <span className="underline text-gray-400 text-sm">
+                          <span className="underline text-gray-400 text-xs md:text-sm">
                             (Ex. VAT)
                           </span>
                         </p>
                       ) : (
-                        <p className="flex items-center gap-2 text-sm font-bold text-[#222]">
+                        <p className="flex items-center gap-2 text-xs md:text-sm font-bold text-[#222]">
                           <span>
                             ৳ {item?.priceShowHide ? "" : formatBDT(basePrice)}
                           </span>
@@ -258,7 +258,7 @@ const ProductHighlights = () => {
                       )}
                     </div>
                     {vatEnabled && (
-                      <div className="flex items-center gap-1 text-sm text-[#b3b3b5]">
+                      <div className="flex items-center gap-1 text-xs md:text-sm text-[#b3b3b5]">
                         ৳ {item?.priceShowHide ? "" : formatBDT(priceIncVat)}
                         <span className="underline">(Inc. VAT)</span>
                       </div>
@@ -275,7 +275,7 @@ const ProductHighlights = () => {
                                   item.product_name || ""
                                 )}`}
                               >
-                                <button className="w-full bg-[#e62245] cursor-pointer text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors">
+                                <button className="w-full bg-[#e62245] cursor-pointer text-[10px] md:text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors">
                                   GET QUOTATION
                                 </button>
                               </Link>
@@ -283,7 +283,7 @@ const ProductHighlights = () => {
                               // Case 3: ADD TO CART
                               <button
                                 onClick={() => handleAddToCart(item)}
-                                className="w-full bg-[#e62245] cursor-pointer text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
+                                className="w-full bg-[#e62245] cursor-pointer text-[10px] md:text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
                               >
                                 ADD TO CART
                               </button>
@@ -297,7 +297,7 @@ const ProductHighlights = () => {
                               item.product_name || ""
                             )}`}
                           >
-                            <button className="w-full bg-[#e62245] cursor-pointer text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors">
+                            <button className="w-full bg-[#e62245] cursor-pointer text-[10px] md:text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors">
                               CHOOSE OPTION
                             </button>
                           </Link>

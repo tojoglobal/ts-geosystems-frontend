@@ -20,14 +20,14 @@ const OurYoutube = () => {
           </h2>
           <div className="flex-1 h-0.5 bg-[#e62245]"></div>
         </div>
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-8">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 md:gap-8">
           {items?.map((item, idx) => (
             <div
               key={item.id || idx}
               className="youtube-video aspect-w-16 aspect-h-9"
             >
               <iframe
-                className="w-full h-56 rounded-sm"
+                className="w-full md:h-56 rounded-sm"
                 src={item.link}
                 title={`YouTube video ${idx + 1}`}
                 frameBorder="0"
