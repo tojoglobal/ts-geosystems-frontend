@@ -107,15 +107,16 @@ export default function NotificationBell() {
         <div
           ref={containerRef}
           // className="absolute right-0 mt-2 w-96 bg-white dark:bg-gray-800 shadow-xl rounded-lg z-50 max-h-80 border border-gray-200 dark:border-gray-700 flex flex-col"
-          className={`
-            fixed md:absolute 
-            top-12 right-4 left-4 md:left-auto
-            w-auto md:w-96
-            md:right-0 md:top-full md:mt-2
-            bg-white dark:bg-gray-800 
-            shadow-xl rounded-lg z-50 max-h-[60vh] md:max-h-80
-            border border-gray-200 dark:border-gray-700 
-            flex flex-col
+          className={`${open ? "block" : "hidden"} 
+          fixed md:absolute 
+          top-12 right-4 left-4 md:left-auto
+          w-auto md:w-96
+          md:right-0 md:top-full md:mt-2
+          bg-white dark:bg-gray-800 
+          shadow-xl rounded-lg z-50 
+          max-h-[60vh] md:max-h-80
+          border border-gray-200 dark:border-gray-700 
+          flex flex-col
           `}
         >
           <div className="flex items-center justify-between p-3 border-b border-gray-200 dark:border-gray-700">

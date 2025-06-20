@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
+import Swal from "sweetalert2";
 
 const generateSlug = (text) =>
   text
@@ -18,6 +19,22 @@ const Brands = () => {
 
   const { register, handleSubmit, watch, reset, setValue } = useForm();
 
+  const showSuccessToast = (message) => {
+    Swal.fire({
+      icon: "success",
+      title: "Success!",
+      text: message,
+    });
+  };
+
+  const showErrorToast = (message) => {
+    Swal.fire({
+      icon: "error",
+      title: "Error!",
+      text: message,
+    });
+  };
+
   const watchBrandName = watch("brandName", "");
 
   const fetchBrands = async () => {
@@ -26,6 +43,7 @@ const Brands = () => {
       setBrands(res.data);
     } catch (error) {
       console.error("Error fetching brands:", error);
+      showErrorToast("Failed to load brands");
     }
   };
 
@@ -52,10 +70,12 @@ const Brands = () => {
         await axiosPublicUrl.put(`/api/brands/${editingBrand.id}`, formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
+        showSuccessToast("Brand updated successfully");
       } else {
         await axiosPublicUrl.post("/api/brands", formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
+        showSuccessToast("Brand added successfully");
       }
 
       fetchBrands();
@@ -80,9 +100,11 @@ const Brands = () => {
     if (confirm("Are you sure you want to delete this brand?")) {
       try {
         await axiosPublicUrl.delete(`/api/brands/${id}`);
+        showSuccessToast("Brand deleted successfully");
         fetchBrands();
       } catch (error) {
         console.error("Error deleting brand:", error);
+        showErrorToast("Failed to delete brand");
       }
     }
   };

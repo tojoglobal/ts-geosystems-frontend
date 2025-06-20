@@ -122,7 +122,7 @@ const Recommended = ({ category, currentProductId }) => {
       <div className="mt-7">
         <Swiper
           modules={[Navigation]}
-          spaceBetween={33}
+          spaceBetween={24}
           slidesPerView={3}
           slidesPerGroup={3}
           onSwiper={(swiper) => {
@@ -141,10 +141,6 @@ const Recommended = ({ category, currentProductId }) => {
               slidesPerGroup: 1,
             },
             640: {
-              slidesPerView: 2,
-              slidesPerGroup: 2,
-            },
-            1024: {
               slidesPerView: 4,
               slidesPerGroup: 4,
             },
@@ -180,13 +176,12 @@ const Recommended = ({ category, currentProductId }) => {
                       product.product_name || ""
                     )}`}
                   >
-                    <div className="relative group w-full max-w-[120px] sm:max-w-[140px] md:max-w-[260px] mx-auto min-h-[300px]">
+                    <div className="relative group w-full max-w-[120px] sm:max-w-[140px] md:max-w-[240px] mx-auto pb-5 md:pb-0 md:min-h-[290px]">
                       <img
                         src={mainImage}
                         alt={product.product_name}
                         className="w-full h-auto transition-opacity duration-300 group-hover:opacity-0"
                       />
-                      {/* If you have hover images, you can add them here */}
                       <img
                         src={mainImage}
                         alt={`${product.product_name} hover`}
@@ -238,7 +233,7 @@ const Recommended = ({ category, currentProductId }) => {
                                   product.product_name || ""
                                 )}`}
                               >
-                                <button className="w-full bg-[#e62245] cursor-pointer text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors">
+                                <button className="w-full bg-[#e62245] cursor-pointer text-[14px] sm:text-[11px] md:text-[14px] text-white md:px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors">
                                   GET QUOTATION
                                 </button>
                               </Link>
@@ -246,7 +241,7 @@ const Recommended = ({ category, currentProductId }) => {
                               // Case 3: ADD TO CART
                               <button
                                 onClick={() => handleAddToCart(product)}
-                                className="w-full bg-[#e62245] cursor-pointer text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
+                                className="w-full bg-[#e62245] cursor-pointer text-[14px] sm:text-[11px] md:text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
                               >
                                 ADD TO CART
                               </button>
@@ -260,7 +255,7 @@ const Recommended = ({ category, currentProductId }) => {
                               product.product_name || ""
                             )}`}
                           >
-                            <button className="w-full bg-[#e62245] cursor-pointer text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors">
+                            <button className="w-full bg-[#e62245] cursor-pointer text-[14px] sm:text-[11px] md:text-[14px] text-white md:px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors">
                               CHOOSE OPTION
                             </button>
                           </Link>
