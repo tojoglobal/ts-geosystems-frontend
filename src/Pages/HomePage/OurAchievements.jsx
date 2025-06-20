@@ -46,9 +46,9 @@ const OurAchievements = () => {
                   <div className="flex justify-center mb-4">
                     <Icon className="w-10 md:w-16 h-10 md:h-16 text-teal-500" />
                   </div>
-                  <h3 className="text-2xl md:text-4xl font-bold mb-2">
+                  <h3 className="text-3xl md:text-5xl font-normal mb-2">
                     {!isNaN(numericPart) ? (
-                      <div className="text-4xl md:text-5xl font-normal">
+                      <div>
                         {inView ? (
                           <CountUp
                             start={0}

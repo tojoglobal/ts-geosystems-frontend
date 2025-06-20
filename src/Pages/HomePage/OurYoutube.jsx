@@ -20,7 +20,7 @@ const OurYoutube = () => {
           </h2>
           <div className="flex-1 h-0.5 bg-[#e62245]"></div>
         </div>
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 md:gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-8">
           {items?.map((item, idx) => (
             <div
               key={item.id || idx}

@@ -27,7 +27,7 @@ const GadgetBanner = () => {
     <div className="w-full my-3 sm:my-4 md:my-5 px-3 sm:px-4 md:px-0 md:max-w-[95%] 2xl:max-w-[1370px] mx-auto">
       <div className="flex flex-col sm:flex-col md:flex-row gap-3 sm:gap-4 md:gap-4 h-auto md:h-[320px]">
         {/* Left: Swiper */}
-        <div className="w-full md:w-[67%] relative group overflow-hidden rounded-lg h-[230px] sm:h-[240px] md:h-full">
+        <div className="w-full md:w-[67%] relative group overflow-hidden rounded-lg h-[170px] sm:h-[240px] md:h-full">
           <Swiper
             modules={[Autoplay, Pagination]}
             autoplay={{
