@@ -498,7 +498,7 @@ const MobileNavbar = () => {
                     ref={(el) => {
                       if (el) subMenuRefs.current[item.title] = el;
                     }}
-                    className="mobile-mainmenu-dropdown bg-dark-charcoal text-white text-sm shadow-lg rounded-md mt-2 overflow-hidden"
+                    className="mobile-mainmenu-dropdown bg-dark-charcoal text-white text-sm rounded-md mt-2 overflow-hidden"
                     style={{
                       maxHeight:
                         openCategory === item.title
@@ -513,11 +513,11 @@ const MobileNavbar = () => {
                         {item.subLinks.map((sub, i) => (
                           <li
                             key={i}
-                            className="hover:bg-gray-700 hover:shadow-md hover:rounded-md transition-all duration-200 w-full flex items-center"
+                            className="hover:bg-gray-700 hover:shadow-md hover:rounded-md transition-all duration-200 w-full flex items-center  border-l-2 border-l-crimson-red"
                           >
                             <Link
                               to={sub.link}
-                              className="flex-1 block active:scale-95 transition-transform duration-100 text-base text-left p-2 border border-gray-600"
+                              className="flex-1 block active:scale-95 transition-transform duration-100 text-base text-left p-2 text-crimson-red pl-4"
                               onClick={toggleMenu}
                             >
                               {sub.title}
@@ -564,7 +564,7 @@ const MobileNavbar = () => {
                         />
                       </div>
                       <div
-                        className="mobile-mainmenu-dropdown bg-dark-charcoal text-white text-sm shadow-lg rounded-md mt-2 overflow-hidden"
+                        className="mobile-mainmenu-dropdown bg-dark-charcoal text-white text-sm rounded-md mt-2 overflow-hidden"
                         style={{
                           maxHeight:
                             openDropdown === item.title
@@ -578,11 +578,11 @@ const MobileNavbar = () => {
                           {item.dropdownItems.map((sub, i) => (
                             <li
                               key={i}
-                              className="hover:bg-gray-700 hover:shadow-md hover:rounded-md transition-all duration-200 w-full flex items-center"
+                              className="hover:bg-gray-700 hover:shadow-md hover:rounded-md transition-all duration-200 w-full flex items-center border-l-2 border-l-crimson-red"
                             >
                               <Link
                                 to={sub.link}
-                                className="flex-1 block active:scale-95 transition-transform duration-100 text-base text-left p-2 border border-gray-600"
+                                className="flex-1 block active:scale-95 transition-transform duration-100 text-base text-left p-2 text-crimson-red pl-4"
                                 onClick={() => {
                                   setOpenDropdown(null);
                                   toggleMenu();
