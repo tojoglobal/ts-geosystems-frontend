@@ -18,7 +18,7 @@ const ExperienceCenter = () => {
           </h2>
           <div className="flex-1 h-0.5 bg-[#e62245]"></div>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-3 sm:gap-2 md:gap-4 text-center">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-2 md:gap-4 text-center">
           {data?.data.slice(0, 3).map((image, i) => (
             <div key={i} className="overflow-hidden rounded-md">
               <img

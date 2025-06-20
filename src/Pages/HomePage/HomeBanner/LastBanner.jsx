@@ -8,40 +8,54 @@ const LastBanner = () => {
   );
   const LastBanner = data?.data || [];
 
-  const bannerHeight = "h-[350px] sm:h-[180px] md:h-72";
+  const bannerHeight =
+    "h-[170px] sm:h-[180px] md:h-[270px]";
+  const imageLoadingHeight = "h-full";
 
   if (isLoading) {
     return (
-      <div className="w-full max-w-[95%] 2xl:max-w-[1370px] mx-auto flex flex-col sm:flex-row gap-4 px-3 md:px-0 mt-2">
-        <SkeletonLoader
-          className={`w-full sm:w-1/2 ${bannerHeight} rounded-lg`}
-        />
-        <SkeletonLoader
-          className={`w-full sm:w-1/2 ${bannerHeight} rounded-lg`}
-        />
+      <div className="w-full max-w-[95%] 2xl:max-w-[1370px] mx-auto px-3 md:px-0 mt-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
+          <SkeletonLoader className={`w-full ${bannerHeight} rounded-lg`} />
+          <SkeletonLoader
+            className={`w-full ${bannerHeight} rounded-lg hidden sm:block`}
+          />
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="w-full md:max-w-[95%] 2xl:max-w-[1370px] mx-auto flex flex-col sm:flex-row gap-3 md:gap-4 px-3 md:px-0 mt-2">
+    <div className="w-full md:max-w-[95%] 2xl:max-w-[1370px] mx-auto px-3 md:px-0 mt-2">
       {LastBanner.length === 0 ? (
         <div className="w-full text-center py-10 text-gray-400">
           No banners available.
         </div>
       ) : (
-        LastBanner?.map((banner, idx) => (
-          <div
-            key={banner.id}
-            className={`flex-1 overflow-hidden rounded-lg group transition-shadow duration-300 ${bannerHeight}`}
-          >
-            <img
-              src={`${import.meta.env.VITE_OPEN_APIURL}${banner.photourl}`}
-              alt={`Last Banner ${idx + 1}`}
-              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-            />
-          </div>
-        ))
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
+          {LastBanner?.map((banner, idx) => (
+            <div
+              key={banner.id}
+              className={`relative overflow-hidden rounded-lg group ${bannerHeight}`}
+            >
+              <div className="w-full h-full">
+                <img
+                  src={`${import.meta.env.VITE_OPEN_APIURL}${banner.photourl}`}
+                  alt={`Last Banner ${idx + 1}`}
+                  className={`w-full ${imageLoadingHeight} object-cover transition-transform duration-500 group-hover:scale-105`}
+                  loading="lazy"
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = "/path-to-fallback-image.jpg";
+                  }}
+                />
+              </div>
+            </div>
+          ))}
+          {LastBanner.length === 1 && (
+            <div className={`hidden sm:block ${bannerHeight}`}></div>
+          )}
+        </div>
       )}
     </div>
   );
