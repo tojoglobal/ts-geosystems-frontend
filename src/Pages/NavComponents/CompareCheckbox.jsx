@@ -34,7 +34,7 @@ export default function CompareCheckbox({ checked, onChange, id }) {
       </span>
       <label
         htmlFor={`compare-${id}`}
-        className="text-sm cursor-pointer select-none"
+        className="text-xs md:text-sm cursor-pointer select-none"
       >
         COMPARE
       </label>

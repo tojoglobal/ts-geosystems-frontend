@@ -185,9 +185,9 @@ const UsedEquipment = () => {
         <div
           className={`grid mx-1 md:mx-5 ${
             viewMode === "grid"
-              ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-4 items-stretch"
+              ? "grid-cols-1 sm:grid-cols-4 items-stretch"
               : "grid-cols-1 gap-7"
-          } gap-4`}
+          } gap-3`}
         >
           {currentProducts.map((product) => {
             const { isSimpleProduct } = getProductType(product);
@@ -333,7 +333,7 @@ const UsedEquipment = () => {
                               {isSimpleProduct ? (
                                 <button
                                   onClick={() => handleAddToCart(product)}
-                                  className="bg-[#e62245] cursor-pointer text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
+                                  className="bg-[#e62245] cursor-pointer text-[14px] sm:text-[11px] md:text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
                                 >
                                   ADD TO CART
                                 </button>
@@ -343,7 +343,7 @@ const UsedEquipment = () => {
                                   to={`/products/${product.id}/${slugify(
                                     product.product_name || ""
                                   )}`}
-                                  className="w-full block text-center cursor-pointer bg-[#e62245] text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
+                                  className="w-full block text-center cursor-pointer bg-[#e62245] text-[14px] sm:text-[11px] md:text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
                                 >
                                   CHOOSE OPTION
                                 </Link>
@@ -395,7 +395,7 @@ const UsedEquipment = () => {
                           product.product_name || ""
                         )}`}
                       >
-                        <h3 className="text-gray-800 font-medium hover:text-[#e62245] cursor-pointer leading-tight">
+                        <h3 className="text-gray-800 text-sm md:text-base font-medium hover:text-[#e62245] cursor-pointer leading-tight">
                           {product.product_name}
                         </h3>
                       </Link>
@@ -403,7 +403,7 @@ const UsedEquipment = () => {
                     <div className="mt-1">
                       {vatEnabled ? (
                         <>
-                          <div className="flex items-center gap-1">
+                          <div className="flex text-xs md:text-base items-center gap-1">
                             <p className="font-bold">
                               ৳{" "}
                               {product?.priceShowHide
@@ -414,7 +414,7 @@ const UsedEquipment = () => {
                               (Ex. VAT)
                             </p>
                           </div>
-                          <div className="flex items-center gap-1 text-sm text-[#b3b3b5] mt-1">
+                          <div className="flex items-center gap-1 text-xs md:text-sm text-[#b3b3b5] mt-1">
                             ৳{" "}
                             {product?.priceShowHide
                               ? ""
@@ -436,7 +436,7 @@ const UsedEquipment = () => {
                             {isSimpleProduct ? (
                               <button
                                 onClick={() => handleAddToCart(product)}
-                                className="bg-[#e62245] w-full cursor-pointer text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
+                                className="bg-[#e62245] w-full cursor-pointer text-[14px] sm:text-[11px] md:text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
                               >
                                 ADD TO CART
                               </button>
@@ -446,7 +446,7 @@ const UsedEquipment = () => {
                                 to={`/products/${product.id}/${slugify(
                                   product.product_name || ""
                                 )}`}
-                                className="w-full block text-center cursor-pointer bg-[#e62245] text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
+                                className="w-full block text-center cursor-pointer bg-[#e62245] text-[14px] sm:text-[11px] md:text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
                               >
                                 CHOOSE OPTION
                               </Link>

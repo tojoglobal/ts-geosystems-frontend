@@ -241,7 +241,7 @@ const CategoryProduct = () => {
         <div
           className={`grid mx-1 md:mx-5 ${
             viewMode === "grid"
-              ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-4 items-stretch"
+              ? "grid-cols-1 sm:grid-cols-4 items-stretch"
               : "grid-cols-1 gap-7"
           } gap-4`}
         >
@@ -426,14 +426,14 @@ const CategoryProduct = () => {
                                       product.product_name || ""
                                     )}`}
                                   >
-                                    <button className="w-full bg-[#e62245] cursor-pointer text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors">
+                                    <button className="w-full bg-[#e62245] cursor-pointer text-[14px] sm:text-[11px] md:text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors">
                                       GET QUOTATION
                                     </button>
                                   </Link>
                                 ) : (
                                   <button
                                     onClick={() => handleAddToCart(product)}
-                                    className="w-full bg-[#e62245] cursor-pointer text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
+                                    className="w-full bg-[#e62245] cursor-pointer text-[14px] sm:text-[11px] md:text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
                                   >
                                     ADD TO CART
                                   </button>
@@ -446,7 +446,7 @@ const CategoryProduct = () => {
                                   product.product_name || ""
                                 )}`}
                               >
-                                <button className="w-full bg-[#e62245] cursor-pointer text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors">
+                                <button className="w-full bg-[#e62245] cursor-pointer text-[14px] sm:text-[11px] md:text-[14px] text-white px-3 md:px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors">
                                   CHOOSE OPTION
                                 </button>
                               </Link>
@@ -521,14 +521,14 @@ const CategoryProduct = () => {
                                       product.product_name || ""
                                     )}`}
                                   >
-                                    <button className="w-full bg-[#e62245] cursor-pointer text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors">
+                                    <button className="w-full bg-[#e62245] cursor-pointer text-[14px] sm:text-[11px] md:text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors">
                                       GET QUOTATION
                                     </button>
                                   </Link>
                                 ) : (
                                   <button
                                     onClick={() => handleAddToCart(product)}
-                                    className="w-full bg-[#e62245] cursor-pointer text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
+                                    className="w-full bg-[#e62245] cursor-pointer text-[14px] sm:text-[11px] md:text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
                                   >
                                     ADD TO CART
                                   </button>
@@ -541,7 +541,7 @@ const CategoryProduct = () => {
                                   product.product_name || ""
                                 )}`}
                               >
-                                <button className="w-full bg-[#e62245] cursor-pointer text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors">
+                                <button className="w-full bg-[#e62245] cursor-pointer text-[14px] sm:text-[11px] md:text-[14px] text-white px-3 md:px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors">
                                   CHOOSE OPTION
                                 </button>
                               </Link>
