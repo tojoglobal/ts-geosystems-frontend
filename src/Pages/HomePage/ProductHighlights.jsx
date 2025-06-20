@@ -47,6 +47,10 @@ const ProductHighlights = () => {
       else if (activeTab === "top") setItems(highlightsData.top || []);
       else if (activeTab === "new") setItems(highlightsData.new || []);
     }
+    // Reset Swiper position when tab changes to ensure correct arrow state
+    if (swiperRef.current) {
+      swiperRef.current.slideTo(0); // Go to the first slide
+    }
   }, [activeTab, highlightsData, isLoading, error]);
 
   const handleAddToCart = (product) => {
@@ -72,6 +76,14 @@ const ProductHighlights = () => {
     setIsEnd(swiper.isEnd);
   };
 
+  const slideNext = () => {
+    swiperRef.current?.slideNext();
+  };
+
+  const slidePrev = () => {
+    swiperRef.current?.slidePrev();
+  };
+
   if (isLoading || vatLoading)
     return <ComponentLoader componentName="ProductHighlights" />;
 
@@ -87,20 +99,58 @@ const ProductHighlights = () => {
     <div className="w-full md:max-w-[95%] 2xl:max-w-[1370px] mx-auto rounded-md px-3 md:px-0 py-6 md:py-12 bg-white relative">
       {/* Tab Header */}
       <div className="flex flex-row justify-between md:items-center md:justify-between border border-gray-200 rounded-l-[4px] relative">
-        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 px-3 py-[2px]">
+        {/* Tab Options - Original desktop design with mobile modifications */}
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 px-3 py-[2px] w-full sm:w-auto">
           {tabOptions.map((tab, idx) => (
             <div
               key={tab.key}
               onClick={() => setActiveTab(tab.key)}
-              className="relative group cursor-pointer"
+              className={`relative group cursor-pointer w-full sm:w-auto text-center sm:text-left ${
+                tab.key === "new" ? "flex justify-between items-center" : ""
+              }`}
             >
               <h2
-                className={`text-base py-1 uppercase md:text-[20px] font-semibold w-fit pr-4 border-r border-gray-200 ${
+                className={`text-base py-1 uppercase md:text-[20px] font-semibold w-full sm:w-fit sm:pr-4 ${
                   activeTab === tab.key ? "text-[#e62245]" : "text-black"
+                } ${
+                  idx < tabOptions.length - 1
+                    ? "sm:border-r sm:border-gray-200"
+                    : ""
                 }`}
               >
                 {tab.name}
               </h2>
+              {/* Mobile arrows only for "New Products" */}
+              {tab.key === "new" && (
+                <div className="sm:hidden flex gap-2 ml-2">
+                  <div
+                    className={`cursor-pointer ${
+                      isBeginning
+                        ? "text-gray-200 cursor-not-allowed"
+                        : "text-gray-400 hover:text-gray-600"
+                    }`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      slidePrev();
+                    }}
+                  >
+                    <IoIosArrowBack size={18} />
+                  </div>
+                  <div
+                    className={`cursor-pointer ${
+                      isEnd
+                        ? "text-gray-200 cursor-not-allowed"
+                        : "text-gray-400 hover:text-gray-600"
+                    }`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      slideNext();
+                    }}
+                  >
+                    <IoIosArrowForward size={18} />
+                  </div>
+                </div>
+              )}
               <span
                 className={`${
                   idx !== 0 ? "-left-4" : "-left-3"
@@ -109,7 +159,8 @@ const ProductHighlights = () => {
             </div>
           ))}
         </div>
-        <div className="flex gap-2 pt-2 lg:pt-0 pr-4">
+        {/* Desktop Navigation Arrows (hidden on mobile) */}
+        <div className="hidden sm:flex gap-2 pt-2 lg:pt-0 pr-4">
           <div
             className={`swiper-button-prev-custom cursor-pointer ${
               isBeginning
