@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
@@ -8,18 +7,26 @@ import { selectMergedCart } from "../../utils/selectMergedCart";
 import { clearCart, clearCoupon } from "../../features/AddToCart/AddToCart";
 import useToastSwal from "../../Hooks/useToastSwal";
 import { useVatEnabled } from "../../Hooks/useVatEnabled";
+import { formatBDT } from "../../utils/formatBDT";
+function getVatValue(product) {
+  try {
+    return product?.tax ? JSON.parse(product.tax).value : 0;
+  } catch {
+    return 0;
+  }
+}
 
 const Checkout = () => {
   const axiosPublicUrl = useAxiospublic();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const showToast = useToastSwal();
-  const { items, coupon, totalQuantity } = useSelector((state) => state.cart);
+  const { items, coupon, totalQuantity, shipping } = useSelector(
+    (state) => state.cart
+  );
   const { user, isAuth } = useSelector((state) => state.authUser);
   const [step, setStep] = useState(1);
-  // const [coupon, setCoupon] = useState("");
-  const [shippingCost, setShippingCost] = useState(5.99);
-  // const [couponApplied, setCouponApplied] = useState(false);
+
   const [orderPlaced, setOrderPlaced] = useState(false);
   const [orderId, setOrderId] = useState(null);
   const [formData, setFormData] = useState({
@@ -44,14 +51,25 @@ const Checkout = () => {
   const { products } = useProductsByIdsQuery(productIds);
 
   const mergedCart = useSelector((state) => selectMergedCart(state, products));
+  // Use the shipping from the cart state if available
+  const shippingCost =
+    shipping && shipping.amount ? parseFloat(shipping.amount) : 100;
 
   // Do NOT do custom VAT exclusion here, let backend decide!
   const subtotal = mergedCart.reduce(
     (total, item) => total + item.price * item.quantity,
     0
   );
+
+  // Calculate VAT per item and total VAT for the cart
+  const getVatForItem = (item) => {
+    const vatRate = getVatValue(item);
+    const basePrice = parseFloat(item.price) || 0;
+    // VAT for this product (all quantities)
+    return basePrice * (vatRate / 100) * item.quantity;
+  };
   const vat = mergedCart.reduce(
-    (total, item) => total + (item.totalVat || 0),
+    (total, item) => total + getVatForItem(item),
     0
   );
   let discount = 0;
@@ -501,7 +519,7 @@ const Checkout = () => {
                       <span className="px-1">x</span> {item.product_name}
                     </p>
                   </div>
-                  <p>{item.price}</p>
+                  <p>৳{formatBDT(item?.price)}</p>
                 </div>
               ))}
             </>
@@ -510,72 +528,42 @@ const Checkout = () => {
           <div className="space-y-3 text-sm">
             <div className="flex justify-between">
               <span>Subtotal</span>
-              <span>৳{subtotal.toLocaleString()}</span>
+              <span>৳{formatBDT(subtotal)}</span>
             </div>
             <div className="flex justify-between">
               <span>Shipping</span>
-              <span>৳{shippingCost}</span>
+              <span>৳{formatBDT(shippingCost)}</span>
             </div>
             {vatEnabled && (
               <div className="flex justify-between">
                 <span>VAT</span>
-                <span>৳{vat.toLocaleString()}</span>
-              </div>
-            )}
-            {/* <div className="flex justify-between">
-              <span>VAT</span>
-              <span>৳{vat.toLocaleString()}</span>
-            </div> */}
-            {coupon?.code_name && (
-              <div className="flex justify-between text-green-600">
-                <span>Discount:({coupon?.code_name})</span>
-                <span>-৳{discount.toFixed(2)}</span>
+                <span>৳{formatBDT(vat)}</span>
               </div>
             )}
 
-            {/* Coupon */}
-            {/* <div className="mt-2">
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  value={coupon}
-                  onChange={(e) => setCoupon(e.target.value)}
-                  placeholder="Enter coupon"
-                  className="border p-1 rounded flex-1"
-                />
-                <button
-                  // onClick={applyCoupon}
-                  onClick={handleApplyCoupon}
-                  className="bg-[#e62245] text-white px-2 py-1 rounded"
-                >
-                  Apply
-                </button>
+            {coupon?.code_name && (
+              <div className="flex justify-between text-green-600">
+                <span>Discount:({coupon?.code_name})</span>
+                <span>-৳{formatBDT(discount)}</span>
               </div>
-              {couponApplied && (
-                <p className="text-green-600 text-xs mt-1">
-                  Coupon applied: 10% off
-                </p>
-              )}
-            </div> */}
+            )}
           </div>
 
           <hr />
           <div className="flex justify-between text-xl font-semibold">
             <span>Total</span>
-            <span>
-              ৳{total.toLocaleString(undefined, { maximumFractionDigits: 2 })}
-            </span>
+            <span>৳{formatBDT(total)}</span>
           </div>
-          <hr />
+          {/* <hr />
           {vatEnabled && (
             <div className="text-sm">
               <p className="font-semibold mb-1">TAX INCLUDED IN TOTAL:</p>
               <div className="flex justify-between">
                 <span>VAT</span>
-                <span>৳{vat.toLocaleString()}</span>
+                <span>৳{formatBDT(total + vat - discount)}</span>
               </div>
             </div>
-          )}
+          )} */}
         </div>
       </div>
     </div>

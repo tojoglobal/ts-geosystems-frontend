@@ -23,6 +23,7 @@ const MainNavContainer = () => {
     ["dynamicLinks"],
     "/api/dynamic-links"
   );
+  const { data: menus } = useDataQuery(["menu-controll"], "/api/menu-controll");
   const headerLinks = dynamicLinks?.data?.filter((l) => l.show_in_header);
   const { setShowSearch } = useAppContext();
   const [isDropdownOpen, setDropdownOpen] = useState(false);
@@ -127,24 +128,39 @@ const MainNavContainer = () => {
               {/* Right side */}
               {!isSticky ? (
                 <div className="flex gap-6 lg:gap-9 text-[14px] font-bold text-charcoal relative">
-                  <Link
-                    to="/used"
-                    className="cursor-pointer hover:text-crimson-red transition-colors duration-300 py-2"
-                  >
-                    USED EQUIPMENT
-                  </Link>
-                  <Link
-                    to="/clearance"
-                    className="cursor-pointer hover:text-crimson-red transition-colors duration-300 py-2"
-                  >
-                    CLEARANCE
-                  </Link>
-                  <Link
-                    to="/hire"
-                    className="cursor-pointer hover:text-crimson-red transition-colors duration-300 py-2"
-                  >
-                    HIRE
-                  </Link>
+                  {/* Used Equipment */}
+                  {menus?.find(
+                    (m) => m.menu_name === "used_equipment" && m.enabled === 1
+                  ) && (
+                    <Link
+                      to="/used"
+                      className="cursor-pointer hover:text-crimson-red transition-colors duration-300 py-2"
+                    >
+                      USED EQUIPMENT
+                    </Link>
+                  )}
+                  {/* Clearance */}
+                  {menus?.find(
+                    (m) => m.menu_name === "clearance" && m.enabled === 1
+                  ) && (
+                    <Link
+                      to="/clearance"
+                      className="cursor-pointer hover:text-crimson-red transition-colors duration-300 py-2"
+                    >
+                      CLEARANCE
+                    </Link>
+                  )}
+                  {/* Hire */}
+                  {menus?.find(
+                    (m) => m.menu_name === "hire" && m.enabled === 1
+                  ) && (
+                    <Link
+                      to="/hire"
+                      className="cursor-pointer hover:text-crimson-red transition-colors duration-300 py-2"
+                    >
+                      HIRE
+                    </Link>
+                  )}
                   <Link
                     to="/service"
                     className="cursor-pointer hover:text-crimson-red transition-colors duration-300 py-2"

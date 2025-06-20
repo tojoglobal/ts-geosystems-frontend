@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { closeCart } from "../features/CartToggleSlice/CartToggleSlice";
 import useProductsByIdsQuery from "../Hooks/useProductsByIdsQuery";
 import { getFirstImage } from "../utils/getFirstImage";
+import { formatBDT } from "../utils/formatBDT";
 
 const CartWithPopover = () => {
   const { isSticky } = useSelector((state) => state.sticky);
@@ -98,7 +99,7 @@ const CartWithPopover = () => {
                             </p>
                           </Link>
                           <p className="text-xs text-black font-semibold">
-                            {item.quantity}x ৳{item.price}
+                            {item.quantity}x ৳ {formatBDT(item.price)}
                           </p>
                         </div>
                       </div>
@@ -171,7 +172,8 @@ const CartWithPopover = () => {
                         </p>
                       </Link>
                       <p className="text-sm text-black font-semibold">
-                        {item.quantity > 0 && item.quantity}x ৳{item.price}
+                        {item.quantity > 0 && item.quantity}x ৳
+                        {formatBDT(item.price)}
                       </p>
                     </div>
                   </div>
