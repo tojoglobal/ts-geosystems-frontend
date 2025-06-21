@@ -12,6 +12,7 @@ const saveCartToLocalStorage = (cart) => {
 const initialState = {
   items: [],
   coupon: {},
+  shipping: {},
   totalQuantity: 0,
   totalPrice: 0,
 };
@@ -66,11 +67,19 @@ const CartSlice = createSlice({
       }
     },
     setCoupon: (state, action) => {
-      state.coupon = action.payload; // Set coupon
+      state.coupon = action.payload;
     },
     clearCoupon: (state) => {
       state.coupon = {};
     },
+    // shiping logic
+    setShipping: (state, action) => {
+      state.shipping = action.payload;
+    },
+    clearShipping: (state) => {
+      state.shipping = {};
+    },
+    // Clear the cart
     clearCart(state) {
       state.items = [];
       state.totalQuantity = 0;
@@ -86,5 +95,7 @@ export const {
   clearCart,
   setCoupon,
   clearCoupon,
+  setShipping,
+  clearShipping,
 } = CartSlice.actions;
 export default CartSlice.reducer;

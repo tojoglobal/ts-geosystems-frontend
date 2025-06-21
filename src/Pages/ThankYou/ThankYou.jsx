@@ -1,35 +1,43 @@
 import { useSearchParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import { useDispatch } from "react-redux";
 import { clearCart, clearCoupon } from "../../features/AddToCart/AddToCart";
 import { GenerateInvoicePdf } from "../../utils/generateInvoicePdf";
+import { formatBDT } from "../../utils/formatBDT";
+import { useQuery } from "@tanstack/react-query";
 
 const ThankYou = () => {
   const axiosPublic = useAxiospublic();
   const [searchParams] = useSearchParams();
   const orderId = searchParams.get("order_id");
-  const [order, setOrder] = useState(null);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    if (orderId) {
-      axiosPublic
-        .get(`/api/orderdata`, {
-          params: { orderId },
-        })
-        .then((res) => {
-          setOrder(res.data);
-          if (res.data.payment_method === "sslcommerz") {
-            dispatch(clearCart());
-            dispatch(clearCoupon());
-          }
-        })
-        .catch((err) => console.error(err));
-    }
-  }, [orderId, axiosPublic, dispatch]);
+  // Fetch order data with TanStack Query for instant status
+  const {
+    data: order,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["order-data", orderId],
+    enabled: !!orderId,
+    queryFn: async () => {
+      const res = await axiosPublic.get(`/api/orderdata`, {
+        params: { orderId },
+      });
+      return res.data;
+    },
+  });
 
-  // console.log(order);
+  console.log("Order Data:", order);
+
+  // Clear cart and coupon after payment confirmed (sslcommerz)
+  useEffect(() => {
+    if (order && order.payment_method === "sslcommerz") {
+      dispatch(clearCart());
+      dispatch(clearCoupon());
+    }
+  }, [order, dispatch]);
 
   const handleDownload = async () => {
     const doc = await GenerateInvoicePdf(order);
@@ -41,9 +49,15 @@ const ThankYou = () => {
     window.open(doc.output("bloburl"), "_blank");
   };
 
-  if (!order)
+  if (isLoading)
     return (
       <div className="text-center py-10 text-lg">Loading your order...</div>
+    );
+  if (isError || !order)
+    return (
+      <div className="text-center py-10 text-lg text-red-600">
+        Failed to load order. Please refresh.
+      </div>
     );
 
   return (
@@ -58,13 +72,13 @@ const ThankYou = () => {
             <strong>Order ID:</strong> {order.order_id}
           </p>
           <p>
-            <strong>Status:</strong> {order.status}
+            <strong>Status:</strong> {order?.paymentStatus || "Pending"}
           </p>
           <p>
             <strong>Payment Method:</strong> {order.payment_method}
           </p>
           <p>
-            <strong>Total Paid:</strong> ${order.total}
+            <strong>Total Paid:</strong> ৳{formatBDT(order.total)}
           </p>
         </div>
 
@@ -84,8 +98,8 @@ const ThankYou = () => {
               Bank Payment Instructions
             </h2>
             <p>
-              Your order has been received. Please transfer the total amount ($
-              {order.total}) to the following bank account:
+              Your order has been received. Please transfer the total amount (৳
+              {formatBDT(order.total)}) to the following bank account:
             </p>
             <ul className="list-disc pl-6 mt-2">
               <li>

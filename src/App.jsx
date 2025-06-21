@@ -82,7 +82,6 @@ import AddNewAddress from "./UserAccount/AddNewAddress";
 import Chat from "./Dashboard/Chat/Chat";
 import Subscriber from "./Dashboard/Subscriber/Subscriber";
 import AdminServiceInquiries from "./Dashboard/Services/AdminServiceInquiries";
-import MailView from "./Dashboard/Email/MailView";
 import Inbox from "./Dashboard/Email/Inbox";
 import Categories from "./Dashboard/Categorys/Categories";
 import AddUserManuals from "./Dashboard/UserManuals/AddUserManuals";
@@ -110,8 +109,8 @@ import ContactTrackingData from "./Pages/ContactTrackingData/ContactTrackingData
 import { useEffect, useState } from "react";
 import axios from "axios";
 import SiteMeta from "./SiteMeta/SiteMeta";
-import { Helmet } from "react-helmet-async";
-import ScriptInjector from "./SiteMeta/ScriptInjector";
+import MenuControll from "./Dashboard/WebsiteControll/MenuControll/MenuControll";
+import ShippingCostManager from "./Dashboard/shippingCost/shippingCost";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -234,7 +233,7 @@ const AppLayout = () => {
           <Route path="add-quickguides" element={<AddQuickGuides />} />
           {/* order route */}
           <Route path="orders" element={<OrderTable />} />
-          {/* hoem page controll */}
+          {/* home page controll */}
           <Route path="home-page" element={<HomePageControl />} />
           <Route path="help-desk" element={<AdminUpdateHelpDesk />} />
           <Route path="client-messages" element={<ClientMessages />} />
@@ -267,15 +266,18 @@ const AppLayout = () => {
           />
           {/* ts-cc */}
           <Route path="ts-cc" element={<EquipmentManagement />} />
-          {/* ts-cc */}
+          {/* ts shippingcost componets */}
+          <Route path="add-shippingcost" element={<ShippingCostManager />} />
+          {/* ts clinet information manger  */}
           <Route path="ts-client" element={<ClientInformationManager />} />
           {/* SettingsPage */}
           <Route path="settings" element={<SettingsPage />} />
-          {/* dynamic about page */}
+          {/* dynamic website admin conrtoll page */}
           <Route path="hire" element={<AdminUpdateHire />} />
           <Route path="used-equipment" element={<AdminUpdateUsedEquipment />} />
           <Route path="service" element={<AdminUpdateService />} />
           <Route path="tradein" element={<AdminUpdateTradeIn />} />
+          <Route path="menu-controll" element={<MenuControll />} />
           <Route path="quotation" element={<QuotationData />} />
           <Route path="about-us" element={<AdminUpdateAboutUs />} />
           <Route path="contact-us" element={<AdminUpdateContactUs />} />
@@ -283,6 +285,7 @@ const AppLayout = () => {
           <Route path="cc" element={<AdminUpdateCertificateTracking />} />
           <Route path="cc" element={<AdminUpdateCertificateTracking />} />
           <Route path="footer" element={<AdminUpdateFooter />} />
+          {/* pasword chnage option */}
           <Route path="change-password" element={<AdminChangePassword />} />
         </Route>
 

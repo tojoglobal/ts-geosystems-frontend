@@ -242,9 +242,33 @@ const AdminUpdateHire = () => {
                   init={{
                     height: 180,
                     menubar: false,
-                    plugins: "link image code",
+                    plugins: [
+                      "advlist",
+                      "autolink",
+                      "lists",
+                      "link",
+                      "image",
+                      "charmap",
+                      "preview",
+                      "anchor",
+                      "searchreplace",
+                      "visualblocks",
+                      "code",
+                      "fullscreen",
+                      "insertdatetime",
+                      "media",
+                      "table",
+                      "help",
+                      "wordcount",
+                    ],
                     toolbar:
-                      "undo redo | formatselect | bold italic | alignleft aligncenter alignright | code",
+                      "undo redo | formatselect | fontselect fontsizeselect | " +
+                      "bold italic underline removeformat | forecolor backcolor | " +
+                      "alignleft aligncenter alignright alignjustify | " +
+                      "bullist numlist outdent indent | link image media table | " +
+                      "preview fullscreen | help",
+                    content_style:
+                      "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
                   }}
                   onEditorChange={(content) => field.onChange(content)}
                 />
@@ -267,9 +291,33 @@ const AdminUpdateHire = () => {
                   init={{
                     height: 180,
                     menubar: false,
-                    plugins: "link image code",
+                    plugins: [
+                      "advlist",
+                      "autolink",
+                      "lists",
+                      "link",
+                      "image",
+                      "charmap",
+                      "preview",
+                      "anchor",
+                      "searchreplace",
+                      "visualblocks",
+                      "code",
+                      "fullscreen",
+                      "insertdatetime",
+                      "media",
+                      "table",
+                      "help",
+                      "wordcount",
+                    ],
                     toolbar:
-                      "undo redo | formatselect | bold italic | alignleft aligncenter alignright | code",
+                      "undo redo | formatselect | fontselect fontsizeselect | " +
+                      "bold italic underline removeformat | forecolor backcolor | " +
+                      "alignleft aligncenter alignright alignjustify | " +
+                      "bullist numlist outdent indent | link image media table | " +
+                      "preview fullscreen | help",
+                    content_style:
+                      "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
                   }}
                   onEditorChange={(content) => field.onChange(content)}
                 />

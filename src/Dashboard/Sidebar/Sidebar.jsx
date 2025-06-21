@@ -25,6 +25,7 @@ import {
   MessageCircle,
   Settings,
   BookUserIcon,
+  Car,
 } from "lucide-react";
 import {
   MdArticle,
@@ -38,7 +39,7 @@ import { BsQuestionCircle } from "react-icons/bs";
 import logo from "/TS-WEB-LOGO.png";
 import smallLogo from "/favicon.png";
 import SidebarProfileDropdown from "./SidebarProfileDropdown/SidebarProfileDropdown";
-import { FaTelegram } from "react-icons/fa6";
+import { FaCartFlatbedSuitcase, FaTelegram } from "react-icons/fa6";
 import { FaCertificate, FaUserCheck } from "react-icons/fa";
 
 const menuItems = [
@@ -96,6 +97,11 @@ const menuItems = [
     label: "Add Software",
     icon: <Monitor size={20} />,
     to: "/dashboard/add-software",
+  },
+  {
+    label: "shippingCost",
+    icon: <FaCartFlatbedSuitcase size={20} />,
+    to: "/dashboard/add-shippingcost",
   },
   {
     label: "Add UserManuals",
@@ -161,6 +167,7 @@ const menuItems = [
       { label: "Used Equipment", to: "/dashboard/used-equipment" },
       { label: "Hire", to: "/dashboard/hire" },
       { label: "Service", to: "/dashboard/service" },
+      { label: "Menu Controll", to: "/dashboard/menu-controll" },
       { label: "Trade In", to: "/dashboard/tradein" },
       { label: "About Us", to: "/dashboard/about-us" },
       { label: "Contact Us", to: "/dashboard/contact-us" },
