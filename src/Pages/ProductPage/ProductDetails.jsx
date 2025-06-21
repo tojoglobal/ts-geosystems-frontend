@@ -513,12 +513,12 @@ const ProductDetails = () => {
                     </tr>
                     <tr className="border-t">
                       <td className="p-4 text-gray-700">Warranty:</td>
-                      <td
-                        className="p-4 text-gray-700"
-                        dangerouslySetInnerHTML={{
-                          __html: product?.warranty_info,
-                        }}
-                      />
+                      <td className="px-2 text-gray-700">
+                        <RichTextRenderer
+                          html={product?.warranty_info}
+                          isTableCell={true}
+                        />
+                      </td>
                     </tr>
                   </tbody>
                 </table>
