@@ -163,6 +163,7 @@ const MobileNavbar = () => {
         { title: "Software Downloads", link: "/software-downloads" },
         { title: "Quick Guides", link: "/quick-guides" },
         { title: "User Manuals", link: "/user-manuals" },
+        { title: "Certificate Tracking", link: "/cc" },
         { title: "Remote Support", link: "/remote-support" },
       ],
     },
