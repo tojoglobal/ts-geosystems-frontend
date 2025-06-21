@@ -1,4 +1,3 @@
-import React from "react";
 import DOMPurify from "dompurify";
 
 const RichTextRenderer = ({ html }) => {
@@ -19,7 +18,7 @@ const RichTextRenderer = ({ html }) => {
         .rich-text-container h1 {
           font-size: 2em;
           font-weight: bold;
-          margin: 1em 0 0.5em 0;
+          margin: 0 0 0.5em 0;
           color: #111;
           border-bottom: 1px solid #eee;
           padding-bottom: 0.3em;
@@ -46,13 +45,30 @@ const RichTextRenderer = ({ html }) => {
           margin: 0.75em 0;
           color: #333;
         }
-        .rich-text-container ul,
+        .rich-text-container ul {
+          margin: 0.75em 0;
+          padding-left: 1em;
+          list-style-type: none;
+        }
         .rich-text-container ol {
           margin: 0.75em 0;
-          padding-left: 2em;
+          padding-left: 1.5em;
         }
         .rich-text-container li {
-          margin: 0.25em 0;
+          margin: 0.5em 0;
+          position: relative;
+          padding-left: 1.2em;
+        }
+        .rich-text-container ul li::before {
+          content: "•";
+          color: #333;
+          font-weight: bold;
+          display: inline-block;
+          padding-left: 1.2em;
+          width: 1em;
+          margin-left: -1.25em;
+          position: absolute;
+          left: 0;
         }
         .rich-text-container a {
           color: #2563eb;
