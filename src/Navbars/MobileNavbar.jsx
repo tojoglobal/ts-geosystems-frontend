@@ -130,7 +130,7 @@ const MobileNavbar = () => {
     })) || []),
     { title: "Clearance", link: "/clearance" },
   ];
-
+  
   // Dynamic brands data
   const dynamicBrands = brandsData?.map((brand) => ({
     title: brand.name,
@@ -460,19 +460,11 @@ const MobileNavbar = () => {
               {dynamicCategories.map((item, idx) => (
                 <li key={idx} className="relative group mobile-category-item">
                   <div className="flex justify-between items-center text-white">
+                    {/* Category name → clickable link */}
                     <Link
                       to={item.link}
                       className="flex-1"
-                      onClick={(e) => {
-                        if (item.subLinks && item.subLinks.length > 0) {
-                          e.preventDefault();
-                          setOpenCategory(
-                            openCategory === item.title ? null : item.title
-                          );
-                        } else {
-                          toggleMenu();
-                        }
-                      }}
+                      onClick={toggleMenu}
                     >
                       {item.title}
                     </Link>
@@ -513,7 +505,7 @@ const MobileNavbar = () => {
                         {item.subLinks.map((sub, i) => (
                           <li
                             key={i}
-                            className="hover:bg-gray-700 hover:shadow-md hover:rounded-md transition-all duration-200 w-full flex items-center  border-l-2 border-l-crimson-red"
+                            className="hover:bg-gray-700 hover:shadow-md hover:rounded-md transition-all duration-200 w-full flex items-center border-l-2 border-l-crimson-red"
                           >
                             <Link
                               to={sub.link}

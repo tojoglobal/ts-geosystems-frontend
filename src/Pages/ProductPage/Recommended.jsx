@@ -137,8 +137,8 @@ const Recommended = ({ category, currentProductId }) => {
           }}
           breakpoints={{
             320: {
-              slidesPerView: 1,
-              slidesPerGroup: 1,
+              slidesPerView: 2,
+              slidesPerGroup: 2,
             },
             640: {
               slidesPerView: 4,
@@ -196,33 +196,33 @@ const Recommended = ({ category, currentProductId }) => {
                         : "Category"}{" "}
                       | Sku: {product.sku || "N/A"}
                     </p>
-                    <div className="min-h-[48px] flex items-start">
+                    <div className="md:min-h-[48px] flex items-start">
                       <Link
                         onClick={() => trackProductView(product.id)}
                         to={`/products/${product.id}/${slugify(
                           product.product_name || ""
                         )}`}
-                        className="font-semibold text-sm text-gray-800"
+                        className="font-semibold text-xs md:text-sm text-gray-800"
                       >
                         {product.product_name}
                       </Link>
                     </div>
                     <div className="space-x-2">
-                      <span className="text-sm font-bold text-[#222]">
+                      <span className="text-xs md:text-sm font-bold text-[#222]">
                         ৳ {product?.priceShowHide ? "" : formatBDT(basePrice)}
                         {vatEnabled && (
-                          <span className="text-sm text-gray-500">
+                          <span className="text-xs md:text-sm text-gray-500">
                             (Ex. VAT)
                           </span>
                         )}
                       </span>
                     </div>
-                    <div className="flex items-center gap-1 text-sm text-[#b3b3b5]">
+                    <div className="flex items-center gap-1 text-xs md:text-sm text-[#b3b3b5]">
                       ৳{product?.priceShowHide ? "" : formatBDT(priceIncVat)}
                       <span className="underline">(Inc. VAT)</span>
                     </div>
                     {product?.isStock === 1 && (
-                      <div>
+                      <div className="mt-1">
                         {isSimpleProduct ? (
                           <>
                             {Number(product?.priceShowHide) === 1 ? (
