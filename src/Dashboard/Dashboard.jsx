@@ -76,8 +76,8 @@ export default function Dashboard() {
               earningsMetrics && Number(ordersMetrics?.totalOrders) > 0
                 ? `$${(
                     parseFloat(
-                      earningsMetrics.totalEarnings.replace(/[^0-9.-]+/g, "")
-                    ) / Number(ordersMetrics.totalOrders)
+                      earningsMetrics?.totalEarnings?.replace(/[^0-9.-]+/g, "")
+                    ) / Number(ordersMetrics?.totalOrders)
                   ).toFixed(2)}`
                 : "$0.00"
             }
