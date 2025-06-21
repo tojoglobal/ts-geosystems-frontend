@@ -238,7 +238,7 @@ const ProductSidebar = () => {
         {Array.isArray(popularImage?.photo) &&
           popularImage?.photo.slice(0, 1).map((im, i) => (
             <div
-              className="mt-3 h-[92px] overflow-hidden border rounded-[4px]"
+              className="mt-3 h-[108px] overflow-hidden border rounded-[4px]"
               key={i}
             >
               <img
