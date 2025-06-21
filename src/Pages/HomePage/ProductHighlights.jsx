@@ -100,13 +100,19 @@ const ProductHighlights = () => {
       {/* Tab Header */}
       <div className="flex flex-row justify-between md:items-center md:justify-between border border-gray-200 rounded-l-[4px] relative">
         {/* Tab Options - Original desktop design with mobile modifications */}
-        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 px-3 py-[2px] w-full sm:w-auto">
+        <div className="flex flex-col sm:flex-row sm:gap-4 sm:px-3 py-[2px] w-full sm:w-auto">
           {tabOptions.map((tab, idx) => (
             <div
               key={tab.key}
               onClick={() => setActiveTab(tab.key)}
               className={`relative group cursor-pointer w-full sm:w-auto text-center sm:text-left ${
                 tab.key === "new" ? "flex justify-between items-center" : ""
+              } ${
+                idx < 2
+                  ? "sm:border-b-0 border-b border-gray-200 pb-1 sm:pb-0"
+                  : ""
+              } ${idx === 0 && "py-[2px] sm:py-0"} ${idx === 1 && "pt-1 sm:pt-0"} ${
+                idx === 2 && "py-[3px] sm:py-0"
               }`}
             >
               <h2
@@ -244,7 +250,7 @@ const ProductHighlights = () => {
                       item.product_name || ""
                     )}`}
                   >
-                    <div className="relative group w-full max-w-[200px] md:max-w-[260px] mx-auto">
+                    <div className="relative group mb-2 w-full max-w-[200px] md:max-w-[260px] mx-auto">
                       {item.image_urls &&
                         JSON.parse(item.image_urls).length > 0 && (
                           <>
