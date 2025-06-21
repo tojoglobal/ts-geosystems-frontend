@@ -3,9 +3,10 @@ const RichTextRenderer = ({ html }) => {
 
   return (
     <div
-      className="text-black sm:prose-base prose-gray max-w-none [&_ul]:pl-5 [&_ul]:list-disc"
+      className="prose prose-sm sm:prose-base max-w-none text-black bg-white p-4 rounded shadow [&_ul]:pl-5 [&_ul]:list-disc [&_strong]:text-black [&_b]:text-black"
       dangerouslySetInnerHTML={{ __html: html }}
     />
   );
 };
+
 export default RichTextRenderer;

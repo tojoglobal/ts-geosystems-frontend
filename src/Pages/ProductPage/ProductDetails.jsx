@@ -507,7 +507,7 @@ const ProductDetails = () => {
                     </tr>
                     <tr className="border-t">
                       <td className="p-4 text-gray-700">Condition:</td>
-                      <td className="p-4 text-gray-700">
+                      <td className="p-4 text-gray-700 capitalize">
                         {product.product_condition || "New"}
                       </td>
                     </tr>

@@ -378,7 +378,7 @@ const AdminUpdateFooter = () => {
           <div className="flex w-full gap-3">
             <div
               className="relative flex flex-col items-center gap-1"
-              style={{ minWidth: 120, maxWidth: 160 }}
+              // style={{ minWidth: 120, maxWidth: 160 }}
             >
               <label className="flex flex-col items-center p-3 bg-neutral-800 border-2 border-dashed border-neutral-600 rounded-lg cursor-pointer hover:bg-neutral-700 transition w-full">
                 <FaCloudUploadAlt size={28} className="mb-1 text-teal-500" />
@@ -444,7 +444,7 @@ const AdminUpdateFooter = () => {
           </div>
           <button
             type="submit"
-            className="bg-teal-600 hover:bg-teal-700 text-white px-8 py-2 rounded font-semibold transition disabled:opacity-50 w-full"
+            className="bg-teal-600 cursor-pointer hover:bg-teal-700 text-white px-8 py-2 rounded font-semibold transition disabled:opacity-50 w-full"
             disabled={saving}
           >
             {saving ? "Saving..." : "Save Changes"}
