@@ -591,7 +591,7 @@ const ProductAddForm = () => {
                   apiKey={import.meta.env.VITE_TINY_APIKEY}
                   value={field.value}
                   init={{
-                    height: 200,
+                    height: 320,
                     menubar: false,
                     plugins: "link image code",
                     toolbar:
@@ -610,7 +610,7 @@ const ProductAddForm = () => {
                   apiKey={import.meta.env.VITE_TINY_APIKEY}
                   value={field.value}
                   init={{
-                    height: 200,
+                    height: 320,
                     menubar: false,
                     plugins: "link image code",
                     toolbar:

@@ -199,10 +199,10 @@ const MainNavContainer = () => {
                           <Link to="/user-manuals">User Manuals</Link>
                         </li>
                         <li className="hover:text-crimson-red cursor-pointer transition-colors duration-300">
-                          <Link to="/remote-support">Remote Support</Link>
+                          <Link to="/cc">Certificate Tracking</Link>
                         </li>
                         <li className="hover:text-crimson-red cursor-pointer transition-colors duration-300">
-                          <Link to="/cc">Certificate Tracking</Link>
+                          <Link to="/remote-support">Remote Support</Link>
                         </li>
                       </ul>
                     </div>
