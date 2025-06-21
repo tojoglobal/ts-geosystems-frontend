@@ -110,7 +110,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import SiteMeta from "./SiteMeta/SiteMeta";
 import MenuControll from "./Dashboard/WebsiteControll/MenuControll/MenuControll";
-import ShippingCostManager from "./Dashboard/shippingCost/shippingCost";
+import ShippingCostManager from "./Dashboard/shippingCost/ShippingCost";
 
 const AppLayout = () => {
   const location = useLocation();
