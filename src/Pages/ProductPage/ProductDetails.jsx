@@ -22,6 +22,8 @@ import { useVatEnabled } from "../../Hooks/useVatEnabled";
 import GetQuotationModal from "./GetQuotationModal";
 import { formatBDT } from "../../utils/formatBDT";
 import RichTextRenderer from "../../utils/RichTextRenderer";
+import { parseItems } from "../../utils/parseItems";
+import { parseSoftwareOptions } from "../../utils/software_options";
 
 // Helper function to extract YouTube video ID from url
 function getYouTubeId(url) {
@@ -151,6 +153,8 @@ const ProductDetails = () => {
   const basePrice = parsePrice(product.price) || 0;
   const vatAmount = basePrice * (vat / 100);
   const priceIncVat = basePrice + vatAmount;
+
+  console.log(parseSoftwareOptions(product?.software_options));
 
   if (isLoading) return null;
   if (isError)
@@ -284,7 +288,7 @@ const ProductDetails = () => {
                 </span>
               </div>
               {vatEnabled && !product?.priceShowHide && (
-                <div className="text-[18px] sm:text-[24px] font-semibold text-[#999] line-through">
+                <div className="text-[18px] sm:text-[24px] font-semibold text-[#999] ">
                   Price: ৳ {formatBDT(priceIncVat)}
                   <span className="text-sm text-gray-400 ml-2">
                     (Inc. VAT | ৳ {formatBDT(vatAmount)} ({vat}%))
@@ -317,6 +321,18 @@ const ProductDetails = () => {
               <span className="text-[#e62245] capitalize">
                 {product.brand_name || "N/A"}
               </span>
+            </div>
+            <div className="text-sm text-[#222] mb-1">
+              <strong>Software Options:</strong>{" "}
+              {parseSoftwareOptions(product?.software_options).length > 0 ? (
+                <span className="text-[#e62245] capitalize">
+                  {parseSoftwareOptions(product?.software_options)
+                    .map((option) => option.label)
+                    .join(", ") || "N/A"}
+                </span>
+              ) : (
+                <span className="text-[#e62245]">N/A</span>
+              )}
             </div>
             <div className="flex items-center gap-4 my-5">
               <label className="text-sm text-[#111] font-medium">

@@ -17,7 +17,6 @@ const Software = () => {
   const [imagePreview, setImagePreview] = useState(null);
   const [editingBrand, setEditingBrand] = useState(null);
 
-  // Using TanStack Query hook
   const {
     data: softwar = [],
     isLoading,
@@ -34,6 +33,9 @@ const Software = () => {
       formData.append("softwar_name", data.softwarName);
       formData.append("slug", generateSlug(data.softwarName));
       formData.append("softwarlink", data.softwarlink);
+      formData.append("price", data.price || "");
+      formData.append("price_show", data.price_show);
+
       if (data.photo && data.photo[0]) {
         formData.append("photo", data.photo[0]);
       }
@@ -51,7 +53,7 @@ const Software = () => {
         message = "Software added successfully!";
       }
 
-      refetchSoftwar(); // Refetch data after mutation
+      refetchSoftwar();
       reset();
       setEditingBrand(null);
       setImagePreview(null);
@@ -61,11 +63,12 @@ const Software = () => {
     }
   };
 
-  // Simplified edit function without SweetAlert confirmation
   const handleEdit = (brand) => {
     setEditingBrand(brand);
     setValue("softwarName", brand.softwar_name);
     setValue("softwarlink", brand.softwarlink);
+    setValue("price", brand.price || "");
+    setValue("price_show", brand.price_show ? "1" : "0");
     setImagePreview(brand.photo);
   };
 
@@ -82,7 +85,7 @@ const Software = () => {
       if (result.isConfirmed) {
         try {
           await axiosPublicUrl.delete(`/api/software/${id}`);
-          refetchSoftwar(); // Refetch data after deletion
+          refetchSoftwar();
           Swal.fire("Deleted!", "Software has been deleted.", "success");
         } catch (error) {
           Swal.fire(
@@ -171,6 +174,35 @@ const Software = () => {
             />
           </div>
         </div>
+        <div className="mb-4">
+          <label className="block text-sm font-semibold mb-1">Price</label>
+          <input
+            type="number"
+            min="0"
+            step="0.01"
+            {...register("price")}
+            className="w-full input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
+            placeholder="Enter price"
+          />
+        </div>
+        {/* Price Show/Hide Option */}
+        <div className="mb-4 flex items-center gap-3">
+          {/* Hidden always first, then checkbox */}
+          <input type="hidden" value="0" {...register("price_show")} />
+          <input
+            type="checkbox"
+            value="1"
+            {...register("price_show")}
+            className="form-checkbox h-5 w-5 text-teal-600"
+            id="price_show"
+          />
+          <label
+            htmlFor="price_show"
+            className="block text-sm font-semibold mb-1 cursor-pointer select-none"
+          >
+            Show Price
+          </label>
+        </div>
         <button
           type="submit"
           className="w-full bg-teal-600 cursor-pointer text-white py-2 px-4 rounded-md hover:bg-teal-700 transition"
@@ -194,6 +226,9 @@ const Software = () => {
                     </th>
                     <th className="text-center p-2 sm:p-3 border border-gray-600 whitespace-nowrap">
                       Software Link
+                    </th>
+                    <th className="text-center p-2 sm:p-3 border border-gray-600 whitespace-nowrap">
+                      Price
                     </th>
                     <th className="text-center p-2 sm:p-3 border border-gray-600 whitespace-nowrap">
                       Actions
@@ -230,6 +265,17 @@ const Software = () => {
                           </a>
                         </td>
                         <td className="text-center p-2 sm:p-3 border border-gray-600 whitespace-nowrap">
+                          {(brand.price_show === 1 ||
+                            brand.price_show === "1" ||
+                            brand.price_show === true ||
+                            brand.price_show === "true") &&
+                          brand.price ? (
+                            <>৳{brand.price}</>
+                          ) : (
+                            <span className="italic text-gray-400">Hidden</span>
+                          )}
+                        </td>
+                        <td className="text-center p-2 sm:p-3 border border-gray-600 whitespace-nowrap">
                           <div className="flex justify-center items-center gap-3">
                             <button
                               onClick={() => handleEdit(brand)}
@@ -250,7 +296,7 @@ const Software = () => {
                   ) : (
                     <tr className="border border-gray-600 bg-gray-900 text-white">
                       <td
-                        colSpan="4"
+                        colSpan="5"
                         className="text-center p-3 border border-gray-600"
                       >
                         No software found.
