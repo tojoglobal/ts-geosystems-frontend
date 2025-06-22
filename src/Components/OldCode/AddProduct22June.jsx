@@ -382,7 +382,7 @@ const ProductAddForm = () => {
               <p className="text-red-500">{errors.category.message}</p>
             )}
 
-            {/* subCategory*/}
+            {/*  subCategory*/}
             <select
               {...register("subCategory", {
                 required: "Sub Category is required",
@@ -405,7 +405,7 @@ const ProductAddForm = () => {
               <p className="text-red-500">{errors.subCategory.message}</p>
             )}
 
-            {/*SKU / Unique Code */}
+            {/*SKU / Unique Code  */}
             <input
               {...register("sku", { required: "SKU is required" })}
               placeholder="SKU / Unique Code"
@@ -413,7 +413,7 @@ const ProductAddForm = () => {
             />
             {errors.sku && <p className="text-red-500">{errors.sku.message}</p>}
 
-            {/*videoUrls */}
+            {/*videoUrls  */}
             <input
               {...register("videoUrls", {
                 validate: (value) =>
@@ -656,7 +656,7 @@ const ProductAddForm = () => {
               )}
             />
           </div>
-          <div className="col-span-1 md:col-span-2 space-y-4">
+          <div className="col-span-2 space-y-4">
             {/* Meta Keywords Field */}
             <div>
               <label className="block mb-1 font-medium">Meta Keywords</label>
@@ -689,8 +689,8 @@ const ProductAddForm = () => {
               </p>
             </div>
           </div>
-          {/* productOverview*/}
-          <div className="col-span-1 md:col-span-2 space-y-4">
+          {/*  productOverview*/}
+          <div className="col-span-2 space-y-4">
             <label className="ml-1">Product Overview</label>
             <Controller
               name="productOverview"
@@ -778,7 +778,7 @@ const ProductAddForm = () => {
               )}
             />
           </div>
-          <div className="col-span-1 md:col-span-2 space-y-4">
+          <div className="col-span-1 space-y-4">
             <Button text={"Submit Product"} />
           </div>
         </div>

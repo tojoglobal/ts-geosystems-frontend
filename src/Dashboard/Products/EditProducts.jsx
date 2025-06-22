@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { Editor } from "@tinymce/tinymce-react";
 import Select from "react-select";
@@ -9,9 +9,8 @@ import { FaTimes } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
 import Button from "../Button/Button";
 import Swal from "sweetalert2";
-import withReactContent from "sweetalert2-react-content";
 import { useVatEnabled } from "../../Hooks/useVatEnabled";
-const MySwal = withReactContent(Swal);
+import AdminVatSwitch from "./AdminVatSwitch";
 
 // Helper to validate only YouTube URLs (returns true if empty or valid YouTube URL)
 const validateYouTubeUrls = (value) => {
@@ -22,6 +21,79 @@ const validateYouTubeUrls = (value) => {
   return urls.every((url) => url === "" || ytPattern.test(url));
 };
 
+// MetaKeywordsInput component
+const MetaKeywordsInput = ({ value = [], onChange }) => {
+  const [inputValue, setInputValue] = useState("");
+  const [keywords, setKeywords] = useState(value || []);
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && inputValue.trim()) {
+      e.preventDefault();
+      const newKeywords = [...keywords, inputValue.trim()];
+      setKeywords(newKeywords);
+      onChange(newKeywords);
+      setInputValue("");
+    } else if (e.key === "Backspace" && !inputValue && keywords.length > 0) {
+      e.preventDefault();
+      const newKeywords = keywords.slice(0, -1);
+      setKeywords(newKeywords);
+      onChange(newKeywords);
+    }
+  };
+
+  const removeKeyword = (index) => {
+    const newKeywords = keywords.filter((_, i) => i !== index);
+    setKeywords(newKeywords);
+    onChange(newKeywords);
+  };
+
+  return (
+    <div className="border border-gray-600 rounded-md p-2 focus-within:border-teal-500 transition relative">
+      <div className="flex flex-wrap gap-2 items-center pr-14">
+        {keywords.map((keyword, index) => (
+          <div
+            key={index}
+            className="flex items-center bg-teal-100 text-teal-800 px-3 py-1.5 rounded-full text-sm shadow-sm"
+          >
+            {keyword}
+            <button
+              type="button"
+              onClick={() => removeKeyword(index)}
+              className="ml-2 cursor-pointer text-teal-600 hover:text-teal-800 focus:outline-none"
+            >
+              &times;
+            </button>
+          </div>
+        ))}
+        <input
+          type="text"
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          onKeyDown={handleKeyDown}
+          placeholder={
+            keywords.length === 0
+              ? "Type a keyword and press Enter"
+              : "Add another keyword"
+          }
+          className="flex-1 min-w-[150px] bg-white rounded-sm text-gray-800 placeholder-gray-400 px-3 py-2 border-none focus:outline-none"
+        />
+      </div>
+      {keywords.length > 0 && (
+        <button
+          type="button"
+          onClick={() => {
+            setKeywords([]);
+            onChange([]);
+          }}
+          className="absolute cursor-pointer right-3 top-3 text-xs text-gray-500 hover:text-teal-600 transition-colors"
+        >
+          Clear all
+        </button>
+      )}
+    </div>
+  );
+};
+
 const UpdateProductForm = () => {
   const { id } = useParams();
   const axiosPublicUrl = useAxiospublic();
@@ -30,9 +102,9 @@ const UpdateProductForm = () => {
   const [Categories, setCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
   const [brands, setBrands] = useState([]);
+  const [taxes, setTaxes] = useState([]);
   const [productOptions, setProductOptions] = useState([]);
   const [softwareOptions, setSoftwareOptions] = useState([]);
-  const [taxes, setTaxes] = useState([]);
   const { data: vatEnabled } = useVatEnabled();
   const navigate = useNavigate();
 
@@ -48,6 +120,9 @@ const UpdateProductForm = () => {
     defaultValues: {
       priceShowHide: 0,
       productOptionShowHide: 0,
+      clearance: false,
+      metaKeywords: [],
+      metaDescription: "",
     },
   });
 
@@ -69,6 +144,7 @@ const UpdateProductForm = () => {
         console.error("Error fetching products:", err);
       }
     };
+
     fetchProducts();
   }, []);
 
@@ -87,6 +163,7 @@ const UpdateProductForm = () => {
         console.error("Error fetching software:", err);
       }
     };
+
     fetchSoftware();
   }, []);
 
@@ -101,9 +178,9 @@ const UpdateProductForm = () => {
       }
     };
     fetchBrands();
-  }, [axiosPublicUrl]);
+  }, []);
 
-  // fetch categories
+  // fetch categories and subcategories
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -114,7 +191,7 @@ const UpdateProductForm = () => {
       }
     };
     fetchCategories();
-  }, [axiosPublicUrl]);
+  }, []);
 
   // Fetch Subcategories based on selected category
   useEffect(() => {
@@ -129,7 +206,7 @@ const UpdateProductForm = () => {
       };
       fetchSubCategories();
     }
-  }, [watchCategory, axiosPublicUrl]);
+  }, [watchCategory]);
 
   // Fetch taxes
   useEffect(() => {
@@ -150,7 +227,7 @@ const UpdateProductForm = () => {
       }
     };
     fetchProductData();
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     if (productData && productData.sub_category && subCategories.length > 0) {
@@ -206,7 +283,14 @@ const UpdateProductForm = () => {
           : [],
         priceShowHide: productData.priceShowHide || 0,
         productOptionShowHide: productData.productOptionShowHide || 0,
-        tax: productData.tax || null,
+        tax: productData.tax
+          ? typeof productData.tax === "string"
+            ? productData.tax
+            : JSON.stringify({
+                id: productData.tax.id,
+                value: productData.tax.value,
+              })
+          : "",
         isStock: productData.isStock !== undefined ? productData.isStock : true,
         sale: productData.sale !== undefined ? productData.sale : false,
         clearance:
@@ -216,6 +300,10 @@ const UpdateProductForm = () => {
         flashSaleEnd: productData.flash_sale_end
           ? new Date(productData.flash_sale_end).toISOString().slice(0, 16)
           : "",
+        metaKeywords: productData.meta_keywords
+          ? productData.meta_keywords.split(",")
+          : [],
+        metaDescription: productData.meta_description || "",
       });
 
       setImages(
@@ -229,7 +317,7 @@ const UpdateProductForm = () => {
   }, [productData, reset]);
 
   const handleRemoveImage = async (file, index) => {
-    const result = await MySwal.fire({
+    const result = await Swal.fire({
       title: "Are you sure?",
       text: "Do you want to delete this image?",
       icon: "warning",
@@ -237,12 +325,6 @@ const UpdateProductForm = () => {
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
       confirmButtonText: "Yes, delete it!",
-      background: window.matchMedia("(prefers-color-scheme: dark)").matches
-        ? "#1f2937"
-        : "#fff",
-      color: window.matchMedia("(prefers-color-scheme: dark)").matches
-        ? "#fff"
-        : "#000",
     });
 
     if (result.isConfirmed) {
@@ -254,15 +336,15 @@ const UpdateProductForm = () => {
             { imageUrl: file, id }
           );
           if (response.data.success) {
-            MySwal.fire("Deleted!", "Your image has been deleted.", "success");
+            Swal.fire("Deleted!", "Your image has been deleted.", "success");
             setImages((prev) => prev.filter((_, i) => i !== index));
           } else {
-            MySwal.fire("Error!", "Failed to delete the image.", "error");
+            Swal.fire("Error!", "Failed to delete the image.", "error");
           }
         } else {
           // If it's a newly added file, just remove it from the preview
           setImages((prev) => prev.filter((_, i) => i !== index));
-          MySwal.fire(
+          Swal.fire(
             "Removed!",
             "The image has been removed from the upload list.",
             "success"
@@ -270,7 +352,7 @@ const UpdateProductForm = () => {
         }
       } catch (error) {
         console.error("Failed to delete image", error);
-        MySwal.fire("Error!", "Failed to delete the image.", "error");
+        Swal.fire("Error!", "Failed to delete the image.", "error");
       }
     }
   };
@@ -288,59 +370,58 @@ const UpdateProductForm = () => {
   });
 
   const onSubmit = async (data) => {
-    const parsedData = {
-      ...data,
-      category: data.category ? JSON.parse(data.category) : null,
-      subCategory: data.subCategory ? JSON.parse(data.subCategory) : null,
-      productOptions: data.productOptions || [],
-      softwareOptions: data.softwareOptions || [],
-      priceShowHide: parseInt(data.priceShowHide),
-      productOptionShowHide: parseInt(data.productOptionShowHide),
-      tax: data.tax ? JSON.parse(data.tax) : productData.tax || null,
-      clearance:
-        data.clearance === true ||
-        data.clearance === "true" ||
-        data.clearance === 1,
-      isStock:
-        data.isStock === true || data.isStock === "true" || data.isStock === 1,
-      sale: data.sale === true || data.sale === "true" || data.sale === 1,
-      flashSale:
-        data.flashSale === true ||
-        data.flashSale === "true" ||
-        data.flashSale === 1,
-    };
-
-    const formData = new FormData();
-
-    images.forEach((file) => {
-      if (file instanceof File) {
-        formData.append("images", file);
-      } else if (typeof file === "string") {
-        formData.append("existingImages", file);
-      }
-    });
-
-    Object.entries(parsedData).forEach(([key, value]) => {
-      // Convert boolean values to 1/0 for MySQL
-      if (typeof value === "boolean") {
-        formData.append(key, value ? "1" : "0");
-      } else if (typeof value === "object" && value !== null) {
-        formData.append(key, JSON.stringify(value));
-      } else {
-        formData.append(key, value);
-      }
-    });
-
     try {
+      const formData = new FormData();
+
+      // Append images
+      images.forEach((file) => {
+        if (file instanceof File) {
+          formData.append("images", file);
+        } else if (typeof file === "string") {
+          formData.append("existingImages", file);
+        }
+      });
+
+      // Append all other fields
+      formData.append("productName", data.productName);
+      formData.append("price", data.price);
+      formData.append("priceShowHide", data.priceShowHide);
+      formData.append("category", data.category);
+      formData.append("subCategory", data.subCategory);
+      formData.append("tax", data.tax);
+      formData.append("sku", data.sku);
+      formData.append("condition", data.condition);
+      formData.append("productOptionShowHide", data.productOptionShowHide);
+      formData.append("brandName", data.brandName);
+      formData.append("productOverview", data.productOverview);
+      formData.append("videoUrls", data.videoUrls || "");
+      formData.append("warrantyInfo", data.warrantyInfo || "");
+      formData.append("clearance", data.clearance ? "1" : "0");
+      formData.append("flashSale", data.flashSale ? "1" : "0");
+      formData.append("flashSaleEnd", data.flashSaleEnd || "");
+      formData.append("metaKeywords", data.metaKeywords?.join(",") || "");
+      formData.append("metaDescription", data.metaDescription || "");
+
+      // Handle arrays/objects
+      formData.append(
+        "productOptions",
+        JSON.stringify(data.productOptions || [])
+      );
+      formData.append(
+        "softwareOptions",
+        JSON.stringify(data.softwareOptions || [])
+      );
+
       const res = await axiosPublicUrl.put(`/api/products/${id}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
+
       if (res.status === 201) {
         Swal.fire({
           icon: "success",
-          title: "Product update successfully!",
+          title: "Product updated successfully!",
           confirmButtonColor: "#14b8a6",
         });
         navigate("/dashboard/product");
@@ -349,503 +430,536 @@ const UpdateProductForm = () => {
       console.error("Update failed:", error);
       Swal.fire({
         icon: "error",
-        text: "Failed to update product.",
+        text: "Failed to update product. Please try again.",
         confirmButtonColor: "#ef4444",
       });
     }
   };
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="p-6 grid grid-cols-1 md:grid-cols-3 gap-6"
-    >
-      {/* Image Upload Column */}
-      <div className="col-span-1">
-        <label className="block mb-2 font-medium">Update Images</label>
-        <div
-          {...getRootProps()}
-          className="border-2 border-dashed border-gray-300 rounded-md p-6 text-center cursor-pointer hover:border-teal-500"
-        >
-          <input {...getInputProps()} />
-          <p>
-            Drag & drop or{" "}
-            <span className="underline text-teal-500">Browse</span> images (max
-            20)
-          </p>
-        </div>
-        <div className="mt-4 grid grid-cols-3 gap-2">
-          {images?.map((file, index) => (
-            <div key={index} className="relative">
-              <img
-                src={
-                  file instanceof File
-                    ? URL.createObjectURL(file)
-                    : `${import.meta.env.VITE_OPEN_APIURL}${file}`
-                }
-                alt="preview"
-                className="h-20 w-full object-cover rounded"
-              />
-              <button
-                type="button"
-                onClick={() => handleRemoveImage(file, index)}
-                className="absolute top-0 right-0 bg-red-600 text-white p-1 rounded-full"
-              >
-                <FaTimes size={12} />
-              </button>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Second Column */}
-      <div className="col-span-2 space-y-4 grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="col-span-1 space-y-4">
-          {/* productName */}
-          <input
-            {...register("productName", {
-              required: "Product Name is required",
-            })}
-            placeholder="Product Name"
-            className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500"
-          />
-          {errors.productName && (
-            <p className="text-red-500">{errors.productName.message}</p>
-          )}
-
-          {/*  brandName*/}
-          <select
-            {...register("brandName", { required: "Brand is required" })}
-            className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500"
+    <div>
+      <AdminVatSwitch />
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="p-2 sm:p-6 grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6"
+      >
+        {/* Image Upload Column */}
+        <div className="col-span-1">
+          <label className="block mb-2 font-medium">Update Images</label>
+          <div
+            {...getRootProps()}
+            className="border-2 border-dashed border-gray-600 rounded-md p-4 sm:p-6 text-center cursor-pointer hover:border-teal-500"
           >
-            <option value="" className="hover:bg-amber-200">
-              Select Brand
-            </option>
-            {brands.map((br) => (
-              <option key={br.id} value={br.slug}>
-                {br.brands_name}
-              </option>
-            ))}
-          </select>
-          {errors.brandName && (
-            <p className="text-red-500">{errors.brandName.message}</p>
-          )}
-
-          {/*category  */}
-          <select
-            {...register("category", { required: "Category is required" })}
-            className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500"
-          >
-            <option value="" className="hover:bg-amber-200">
-              Select Category
-            </option>
-            {Categories.map((cat) => (
-              <option
-                key={cat.id}
-                value={JSON.stringify({ id: cat.id, cat: cat.slug_name })}
-              >
-                {cat.category_name}
-              </option>
-            ))}
-          </select>
-          {errors.category && (
-            <p className="text-red-500">{errors.category.message}</p>
-          )}
-
-          {/* subCategory */}
-          <select
-            {...register("subCategory", {
-              required: "Sub Category is required",
-            })}
-            className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500"
-          >
-            <option value="">Select Sub Category</option>
-            {subCategories
-              .filter((sub) => sub.main_category_id === watchCategory?.id)
-              .map((sub) => (
-                <option
-                  key={sub.id}
-                  value={JSON.stringify({ id: sub.id, slug: sub.slug })}
+            <input {...getInputProps()} />
+            <p className="text-sm sm:text-base">
+              Drag & drop or{" "}
+              <span className="underline text-teal-500">Browse</span> images
+              (max 20)
+            </p>
+          </div>
+          <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 gap-2">
+            {images.map((file, index) => (
+              <div key={index} className="relative">
+                <img
+                  src={
+                    file instanceof File
+                      ? URL.createObjectURL(file)
+                      : `${import.meta.env.VITE_OPEN_APIURL}${file}`
+                  }
+                  alt="preview"
+                  className="h-16 sm:h-20 w-full object-cover rounded"
+                />
+                <button
+                  type="button"
+                  onClick={() => handleRemoveImage(file, index)}
+                  className="absolute cursor-pointer top-0 right-0 bg-red-600 text-white p-1 rounded-full"
                 >
-                  {sub.name}
-                </option>
-              ))}
-          </select>
-          {errors.subCategory && (
-            <p className="text-red-500">{errors.subCategory.message}</p>
-          )}
+                  <FaTimes size={12} />
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
 
-          {/* SKU / Unique Code */}
-          <input
-            {...register("sku", { required: "SKU is required" })}
-            placeholder="SKU / Unique Code"
-            className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500"
-          />
-          {errors.sku && <p className="text-red-500">{errors.sku.message}</p>}
+        {/* Second Column */}
+        <div className="col-span-1 md:col-span-2 space-y-4 grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+          <div className="col-span-1 space-y-3 sm:space-y-4">
+            {/* productName */}
+            <input
+              {...register("productName", {
+                required: "Product Name is required",
+              })}
+              placeholder="Product Name"
+              className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
+            />
+            {errors.productName && (
+              <p className="text-red-500">{errors.productName.message}</p>
+            )}
 
-          {/* videoUrls */}
-          <input
-            {...register("videoUrls", {
-              validate: (value) =>
-                validateYouTubeUrls(value) ||
-                "Only YouTube URLs are allowed (comma separated)",
-            })}
-            placeholder="YouTube Video URLs (comma separated)"
-            className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500"
-          />
-          {errors.videoUrls && (
-            <p className="text-red-500">{errors.videoUrls.message}</p>
-          )}
-
-          <select
-            {...register("condition", { required: "Condition is required" })}
-            className="input"
-          >
-            <option value="">Condition</option>
-            <option value="new">New</option>
-            <option value="used">Used</option>
-          </select>
-          {errors.condition && (
-            <p className="text-red-500">{errors.condition.message}</p>
-          )}
-
-          {/* Tax selection */}
-          {vatEnabled && (
+            {/* brandName */}
             <select
-              {...register("tax", { required: "Tax is required" })}
-              className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500 focus:dark:border-teal-500"
+              {...register("brandName", { required: "Brand is required" })}
+              className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
             >
-              <option value="">Select Tax</option>
-              {taxes.map((tax) => (
-                <option
-                  key={tax.id}
-                  value={JSON.stringify({ id: tax.id, value: tax.value })}
-                >
-                  {tax.name} ({tax.value}%)
+              <option value="" className="hover:bg-amber-200">
+                Select Brand
+              </option>
+              {brands.map((br) => (
+                <option key={br.id} value={br.slug}>
+                  {br.brands_name}
                 </option>
               ))}
             </select>
-          )}
-          {!vatEnabled && (
-            <input type="hidden" {...register("tax")} value={""} />
-          )}
-          {errors.tax && <p className="text-red-500">{errors.tax.message}</p>}
-        </div>
-        {/* Third Column */}
-        <div className="col-span-1 space-y-4">
-          {/* Clearance */}
-          <div className="flex items-center gap-2">
+            {errors.brandName && (
+              <p className="text-red-500">{errors.brandName.message}</p>
+            )}
+
+            {/* category */}
+            <select
+              {...register("category", { required: "Category is required" })}
+              className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
+            >
+              <option value="" className="hover:bg-amber-200">
+                Select Category
+              </option>
+              {Categories.map((cat) => (
+                <option
+                  key={cat.id}
+                  value={JSON.stringify({ id: cat.id, cat: cat.slug_name })}
+                >
+                  {cat.category_name}
+                </option>
+              ))}
+            </select>
+            {errors.category && (
+              <p className="text-red-500">{errors.category.message}</p>
+            )}
+
+            {/* subCategory*/}
+            <select
+              {...register("subCategory", {
+                required: "Sub Category is required",
+              })}
+              className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
+            >
+              <option value="">Select Sub Category</option>
+              {subCategories
+                .filter((sub) => sub.main_category_id === watchCategory?.id)
+                .map((sub) => (
+                  <option
+                    key={sub.id}
+                    value={JSON.stringify({ id: sub.id, slug: sub.slug })}
+                  >
+                    {sub.name}
+                  </option>
+                ))}
+            </select>
+            {errors.subCategory && (
+              <p className="text-red-500">{errors.subCategory.message}</p>
+            )}
+
+            {/*SKU / Unique Code */}
             <input
-              type="checkbox"
-              {...register("clearance")}
-              defaultChecked={
-                productData.clearance === 1 || productData.clearance === true
-              }
-              className="w-5 h-5 cursor-pointer accent-teal-600"
+              {...register("sku", { required: "SKU is required" })}
+              placeholder="SKU / Unique Code"
+              className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
             />
-            <label>Clearance Item</label>
-          </div>
-          {/* In Stock */}
-          <div className="flex items-center gap-2">
+            {errors.sku && <p className="text-red-500">{errors.sku.message}</p>}
+
+            {/*videoUrls */}
             <input
-              type="checkbox"
-              {...register("isStock")}
-              defaultChecked={
-                productData.isStock === undefined
-                  ? true
-                  : productData.isStock === 1 || productData.isStock === true
-              }
-              className="w-5 h-5 cursor-pointer accent-teal-600"
+              {...register("videoUrls", {
+                validate: (value) =>
+                  validateYouTubeUrls(value) ||
+                  "Only YouTube URLs are allowed (comma separated)",
+              })}
+              placeholder="YouTube Video URLs (comma separated)"
+              className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
             />
-            <label>In Stock</label>
+            {errors.videoUrls && (
+              <p className="text-red-500">{errors.videoUrls.message}</p>
+            )}
+
+            {/* Condition select */}
+            <select
+              {...register("condition", { required: "Condition is required" })}
+              className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
+            >
+              <option value="">Condition</option>
+              <option value="new">New</option>
+              <option value="used">Used</option>
+            </select>
+            {errors.condition && (
+              <p className="text-red-500">{errors.condition.message}</p>
+            )}
+
+            {/* Tax select */}
+            {vatEnabled && (
+              <select
+                {...register("tax", { required: "Tax is required" })}
+                className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
+              >
+                <option value="">Select Tax</option>
+                {taxes.map((tax) => (
+                  <option
+                    key={tax.id}
+                    value={JSON.stringify({ id: tax.id, value: tax.value })}
+                  >
+                    {tax.name} ({tax.value}%)
+                  </option>
+                ))}
+              </select>
+            )}
+            {!vatEnabled && (
+              <input type="hidden" {...register("tax")} value={""} />
+            )}
+            {errors.tax && <p className="text-red-500">{errors.tax.message}</p>}
           </div>
-          {/* On Sale */}
-          <div className="flex items-center gap-2">
+
+          {/* Third Column */}
+          <div className="col-span-1 space-y-3 sm:space-y-4">
+            {/* Clearance, In Stock, On Sale checkboxes */}
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                {...register("clearance")}
+                className="w-5 h-5 cursor-pointer accent-teal-600"
+              />
+              <label>Clearance Item</label>
+            </div>
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                {...register("isStock")}
+                defaultChecked={
+                  productData.isStock === undefined
+                    ? true
+                    : productData.isStock === 1 || productData.isStock === true
+                }
+                className="w-5 h-5 cursor-pointer accent-teal-600"
+              />
+              <label>In Stock</label>
+            </div>
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                {...register("sale")}
+                defaultChecked={
+                  productData.sale === 1 || productData.sale === true
+                }
+                className="w-5 h-5 cursor-pointer accent-teal-600"
+              />
+              <label>On Sale</label>
+            </div>
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                {...register("flashSale")}
+                defaultChecked={
+                  productData.flash_sale === 1 ||
+                  productData.flash_sale === true
+                }
+                className="w-5 h-5 cursor-pointer accent-teal-600"
+              />
+              <label>Flash Sale</label>
+            </div>
             <input
-              type="checkbox"
-              {...register("sale")}
-              defaultChecked={
-                productData.sale === 1 || productData.sale === true
-              }
-              className="w-5 h-5 cursor-pointer accent-teal-600"
+              type="datetime-local"
+              {...register("flashSaleEnd")}
+              className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
+              min={new Date().toISOString().slice(0, 16)}
             />
-            <label>On Sale</label>
-          </div>
-          <div className="flex items-center gap-2">
+            {/* Price */}
             <input
-              type="checkbox"
-              {...register("flashSale")}
-              defaultChecked={
-                productData.flash_sale === 1 || productData.flash_sale === true
-              }
-              className="w-5 h-5 cursor-pointer accent-teal-600"
+              {...register("price", { required: "Price is required" })}
+              placeholder="Price"
+              className="w-full input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
             />
-            <label>Flash Sale</label>
-          </div>
-          <input
-            type="datetime-local"
-            {...register("flashSaleEnd")}
-            defaultValue={
-              productData.flash_sale_end
-                ? new Date(productData.flash_sale_end)
-                    .toISOString()
-                    .slice(0, 16)
-                : ""
-            }
-            className="input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500"
-            min={new Date().toISOString().slice(0, 16)}
-          />
-          {/* price */}
-          <input
-            {...register("price", { required: "Price is required" })}
-            placeholder="Price"
-            className="w-full input border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-teal-500 focus:ring-teal-500"
-          />
-          {errors.price && (
-            <p className="text-red-500">{errors.price.message}</p>
-          )}
-          {/* NEW FIELD: Price Show/Hide */}
-          <div className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              checked={watch("priceShowHide") === 1}
-              onChange={(e) =>
-                setValue("priceShowHide", e.target.checked ? 1 : 0)
-              }
-              className="w-5 h-5 accent-teal-600 cursor-pointer"
-            />
-            <label>Hide Price</label>
-          </div>
-          {/* product option */}
-          <Controller
-            name="productOptions"
-            control={control}
-            render={({ field }) => (
-              <Select
-                {...field}
-                isMulti
-                isSearchable={true}
-                options={productOptions}
-                placeholder="Product Options"
-                className="react-select-container"
-                classNamePrefix="react-select"
-                styles={{
-                  control: (base, state) => ({
-                    ...base,
-                    backgroundColor: "rgb(255, 255, 255)",
-                    borderColor: state.isFocused ? "#14b8a6" : "rgb(75 85 99)",
-                    color: "black",
-                    boxShadow: state.isFocused ? "0 0 0 1px #14b8a6" : "none",
-                  }),
-                  menu: (base) => ({
-                    ...base,
-                    backgroundColor: "rgb(255,255,255)",
-                    color: "black",
-                    zIndex: 10,
-                  }),
-                  option: (base, state) => ({
-                    ...base,
-                    backgroundColor: state.isSelected
-                      ? "#0f766e"
-                      : state.isFocused
-                      ? "#115e59"
-                      : "rgb(209, 213, 219)",
-                    color: state.isFocused ? "white" : "black",
-                  }),
-                  multiValue: (base) => ({
-                    ...base,
-                    backgroundColor: "#363636",
-                    color: "white",
-                  }),
-                  multiValueLabel: (base) => ({
-                    ...base,
-                    color: "white",
-                  }),
-                  multiValueRemove: (base) => ({
-                    ...base,
-                    color: "white",
-                    ":hover": {
-                      backgroundColor: "#0f766e",
+            {errors.price && (
+              <p className="text-red-500">{errors.price.message}</p>
+            )}
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                checked={watch("priceShowHide") === 1}
+                onChange={(e) =>
+                  setValue("priceShowHide", e.target.checked ? 1 : 0)
+                }
+                className="w-5 h-5 accent-teal-600"
+              />
+              <label>Hide Price</label>
+            </div>
+            {/* Product Options */}
+            <Controller
+              name="productOptions"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  {...field}
+                  isMulti
+                  isSearchable={true}
+                  options={productOptions}
+                  placeholder="Product Options"
+                  className="react-select-container"
+                  classNamePrefix="react-select"
+                  styles={{
+                    control: (base, state) => ({
+                      ...base,
+                      backgroundColor: "rgb(255, 255, 255)",
+                      borderColor: state.isFocused
+                        ? "#14b8a6"
+                        : "rgb(75 85 99)",
                       color: "white",
-                    },
-                  }),
-                }}
-              />
-            )}
-          />
-          {/* NEW FIELD: Product Option Show/Hide */}
-          <div className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              checked={watch("productOptionShowHide") === 1}
-              onChange={(e) =>
-                setValue("productOptionShowHide", e.target.checked ? 1 : 0)
-              }
-              className="w-5 h-5 accent-teal-600"
-            />
-            <label>Hide Product Options</label>
-          </div>
-          {/* softaware option */}
-          <Controller
-            name="softwareOptions"
-            control={control}
-            render={({ field }) => (
-              <Select
-                {...field}
-                isMulti
-                isSearchable={true}
-                options={softwareOptions}
-                placeholder="Software Options"
-                className="react-select-container"
-                classNamePrefix="react-select"
-                styles={{
-                  control: (base, state) => ({
-                    ...base,
-                    backgroundColor: "rgb(255, 255, 255)",
-                    borderColor: state.isFocused ? "#14b8a6" : "rgb(75 85 99)",
-                    color: "black",
-                    boxShadow: state.isFocused ? "0 0 0 1px #14b8a6" : "none",
-                  }),
-                  menu: (base) => ({
-                    ...base,
-                    backgroundColor: "rgb(255,255,255)",
-                    color: "black",
-                    zIndex: 10,
-                  }),
-                  option: (base, state) => ({
-                    ...base,
-                    backgroundColor: state.isSelected
-                      ? "#0f766e"
-                      : state.isFocused
-                      ? "#115e59"
-                      : "rgb(209, 213, 219)",
-                    color: state.isFocused ? "white" : "black",
-                  }),
-                  multiValue: (base) => ({
-                    ...base,
-                    backgroundColor: "#363636",
-                    color: "white",
-                  }),
-                  multiValueLabel: (base) => ({
-                    ...base,
-                    color: "white",
-                  }),
-                  multiValueRemove: (base) => ({
-                    ...base,
-                    color: "white",
-                    ":hover": {
-                      backgroundColor: "#0f766e",
+                      boxShadow: state.isFocused ? "0 0 0 1px #14b8a6" : "none",
+                    }),
+                    menu: (base) => ({
+                      ...base,
+                      backgroundColor: "rgb(255,255,255)",
                       color: "white",
-                    },
-                  }),
-                }}
+                      zIndex: 10,
+                    }),
+                    option: (base, state) => ({
+                      ...base,
+                      backgroundColor: state.isSelected
+                        ? "#0f766e"
+                        : state.isFocused
+                        ? "#115e59"
+                        : "rgb(209, 213, 219)",
+                      color: state.isFocused ? "white" : "black",
+                    }),
+                    multiValue: (base) => ({
+                      ...base,
+                      backgroundColor: "#363636",
+                      color: "white",
+                    }),
+                    multiValueLabel: (base) => ({
+                      ...base,
+                      color: "white",
+                    }),
+                    multiValueRemove: (base) => ({
+                      ...base,
+                      color: "white",
+                      ":hover": {
+                        backgroundColor: "#0f766e",
+                        color: "white",
+                      },
+                    }),
+                  }}
+                />
+              )}
+            />
+            {/* Product Option Show/Hide */}
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                checked={watch("productOptionShowHide") === 1}
+                onChange={(e) =>
+                  setValue("productOptionShowHide", e.target.checked ? 1 : 0)
+                }
+                className="w-5 h-5 accent-teal-600"
               />
-            )}
-          />
-        </div>
-        {/* productOverview */}
-        <div className="col-span-2 space-y-4">
-          <label className="ml-1">Product Overview</label>
-          <Controller
-            name="productOverview"
-            control={control}
-            defaultValue=""
-            render={({ field }) => (
-              <Editor
-                apiKey={import.meta.env.VITE_TINY_APIKEY}
-                value={field.value}
-                init={{
-                  height: 320,
-                  menubar: false,
-                  plugins: [
-                    "advlist",
-                    "autolink",
-                    "lists",
-                    "link",
-                    "image",
-                    "charmap",
-                    "preview",
-                    "anchor",
-                    "searchreplace",
-                    "visualblocks",
-                    "code",
-                    "fullscreen",
-                    "insertdatetime",
-                    "media",
-                    "table",
-                    "help",
-                    "wordcount",
-                  ],
-                  toolbar:
-                    "undo redo | formatselect | fontselect fontsizeselect | " +
-                    "bold italic underline removeformat | forecolor backcolor | " +
-                    "alignleft aligncenter alignright alignjustify | " +
-                    "bullist numlist outdent indent | link image media table | " +
-                    "preview fullscreen | help",
-                  content_style:
-                    "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
-                }}
-                onEditorChange={(content) => field.onChange(content)}
+              <label>Hide Product Options</label>
+            </div>
+            {/* softwareOptions */}
+            <Controller
+              name="softwareOptions"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  {...field}
+                  isMulti
+                  isSearchable={true}
+                  options={softwareOptions}
+                  placeholder="Software Options"
+                  className="react-select-container"
+                  classNamePrefix="react-select"
+                  styles={{
+                    control: (base, state) => ({
+                      ...base,
+                      backgroundColor: "rgb(255, 255, 255)",
+                      borderColor: state.isFocused
+                        ? "#14b8a6"
+                        : "rgb(75 85 99)",
+                      color: "white",
+                      boxShadow: state.isFocused ? "0 0 0 1px #14b8a6" : "none",
+                    }),
+                    menu: (base) => ({
+                      ...base,
+                      backgroundColor: "rgb(255,255,255)",
+                      color: "white",
+                      zIndex: 10,
+                    }),
+                    option: (base, state) => ({
+                      ...base,
+                      backgroundColor: state.isSelected
+                        ? "#0f766e"
+                        : state.isFocused
+                        ? "#115e59"
+                        : "rgb(209, 213, 219)",
+                      color: state.isFocused ? "white" : "black",
+                    }),
+                    multiValue: (base) => ({
+                      ...base,
+                      backgroundColor: "#363636",
+                      color: "white",
+                    }),
+                    multiValueLabel: (base) => ({
+                      ...base,
+                      color: "white",
+                    }),
+                    multiValueRemove: (base) => ({
+                      ...base,
+                      color: "white",
+                      ":hover": {
+                        backgroundColor: "#0f766e",
+                        color: "white",
+                      },
+                    }),
+                  }}
+                />
+              )}
+            />
+          </div>
+
+          {/* Meta Keywords and Description */}
+          <div className="col-span-1 md:col-span-2 space-y-4">
+            {/* Meta Keywords Field */}
+            <div>
+              <label className="block mb-1 font-medium">Meta Keywords</label>
+              <Controller
+                name="metaKeywords"
+                control={control}
+                render={({ field }) => (
+                  <MetaKeywordsInput
+                    value={field.value}
+                    onChange={field.onChange}
+                    className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
+                  />
+                )}
               />
-            )}
-          />
-          <label className="ml-1">Warranty Info</label>
-          <Controller
-            name="warrantyInfo"
-            control={control}
-            defaultValue=""
-            render={({ field }) => (
-              <Editor
-                apiKey={import.meta.env.VITE_TINY_APIKEY}
-                value={field.value}
-                init={{
-                  height: 320,
-                  menubar: false,
-                  plugins: [
-                    "advlist",
-                    "autolink",
-                    "lists",
-                    "link",
-                    "image",
-                    "charmap",
-                    "preview",
-                    "anchor",
-                    "searchreplace",
-                    "visualblocks",
-                    "code",
-                    "fullscreen",
-                    "insertdatetime",
-                    "media",
-                    "table",
-                    "help",
-                    "wordcount",
-                  ],
-                  toolbar:
-                    "undo redo | formatselect | fontselect fontsizeselect | " +
-                    "bold italic underline removeformat | forecolor backcolor | " +
-                    "alignleft aligncenter alignright alignjustify | " +
-                    "bullist numlist outdent indent | link image media table | " +
-                    "preview fullscreen | help",
-                  content_style:
-                    "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
-                }}
-                onEditorChange={(content) => field.onChange(content)}
+              <p className="text-xs text-gray-500 mt-1">
+                Add keywords that describe your product
+              </p>
+            </div>
+
+            {/* Meta Description Field */}
+            <div>
+              <label className="block mb-1 font-medium">Meta Description</label>
+              <textarea
+                {...register("metaDescription")}
+                placeholder="Enter a brief description for search engines"
+                className="w-full border border-gray-600 bg-white text-black rounded-md shadow-sm focus:outline-none focus:border-teal-500 focus:ring-teal-500 p-2 text-sm h-24"
               />
-            )}
-          />
+              <p className="text-xs text-gray-500 mt-1">
+                Keep it under 160 characters for best results
+              </p>
+            </div>
+          </div>
+
+          {/* Product Overview and Warranty Info */}
+          <div className="col-span-1 md:col-span-2 space-y-4">
+            <label className="ml-1">Product Overview</label>
+            <Controller
+              name="productOverview"
+              control={control}
+              render={({ field }) => (
+                <Editor
+                  apiKey={import.meta.env.VITE_TINY_APIKEY}
+                  value={field.value}
+                  init={{
+                    height: 320,
+                    menubar: false,
+                    plugins: [
+                      "advlist",
+                      "autolink",
+                      "lists",
+                      "link",
+                      "image",
+                      "charmap",
+                      "preview",
+                      "anchor",
+                      "searchreplace",
+                      "visualblocks",
+                      "code",
+                      "fullscreen",
+                      "insertdatetime",
+                      "media",
+                      "table",
+                      "help",
+                      "wordcount",
+                    ],
+                    toolbar:
+                      "undo redo | formatselect | fontselect fontsizeselect | " +
+                      "bold italic underline removeformat | forecolor backcolor | " +
+                      "alignleft aligncenter alignright alignjustify | " +
+                      "bullist numlist outdent indent | link image media table | " +
+                      "preview fullscreen | help",
+                    content_style:
+                      "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
+                  }}
+                  onEditorChange={(content) => field.onChange(content)}
+                />
+              )}
+            />
+            <label className="ml-1">Warranty Info</label>
+            <Controller
+              name="warrantyInfo"
+              control={control}
+              render={({ field }) => (
+                <Editor
+                  apiKey={import.meta.env.VITE_TINY_APIKEY}
+                  value={field.value}
+                  init={{
+                    height: 280,
+                    menubar: false,
+                    plugins: [
+                      "advlist",
+                      "autolink",
+                      "lists",
+                      "link",
+                      "image",
+                      "charmap",
+                      "preview",
+                      "anchor",
+                      "searchreplace",
+                      "visualblocks",
+                      "code",
+                      "fullscreen",
+                      "insertdatetime",
+                      "media",
+                      "table",
+                      "help",
+                      "wordcount",
+                    ],
+                    toolbar:
+                      "undo redo | formatselect | fontselect fontsizeselect | " +
+                      "bold italic underline removeformat | forecolor backcolor | " +
+                      "alignleft aligncenter alignright alignjustify | " +
+                      "bullist numlist outdent indent | link image media table | " +
+                      "preview fullscreen | help",
+                    content_style:
+                      "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
+                  }}
+                  onEditorChange={(content) => field.onChange(content)}
+                />
+              )}
+            />
+          </div>
+
+          {/* Submit Button */}
+          <div className="col-span-1 md:col-span-2 space-y-4">
+            <Button text={"Update Product"} />
+          </div>
         </div>
-        <div className="col-span-1 space-y-4">
-          <Button text={"Update Product"} />
-        </div>
-      </div>
-    </form>
+      </form>
+    </div>
   );
 };
 
 export default UpdateProductForm;
 
 // Tailwind common input class
-const inputClass = `block w-full rounded-md border border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 p-2 text-sm bg-white dark:bg-gray-800 dark:text-white`;
+const inputClass = `block w-full rounded-md border border-gray-600 shadow-sm focus:border-teal-500 focus:ring-teal-500 p-2 text-sm`;
 const style = document.createElement("style");
 style.innerHTML = `.input { ${inputClass} }`;
 document.head.appendChild(style);
