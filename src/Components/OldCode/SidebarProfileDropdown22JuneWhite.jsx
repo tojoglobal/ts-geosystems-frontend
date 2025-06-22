@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import {
   ChevronDown,
@@ -84,7 +83,7 @@ const SidebarProfileDropdown = () => {
       </button>
       {/* Dropdown Menu */}
       {open && (
-        <div className="absolute bottom-14 left-3 w-56 md:w-60 bg-gray-800 text-white shadow-lg rounded-md z-50 border border-gray-600">
+        <div className="absolute bottom-14 left-3 w-56 md:w-60 bg-white shadow-lg rounded-lg z-50">
           <div className="p-2">
             <Link to="/dashboard/viewprofile">
               <DropdownItem icon={<User size={16} />} label="Profile" />
@@ -125,7 +124,7 @@ const SidebarProfileDropdown = () => {
 
 const DropdownItem = ({ icon, label, onClick }) => (
   <div
-    className="flex items-center gap-3 px-3 bg-gray-800 py-2 text-white hover:bg-gray-700 rounded cursor-pointer transition"
+    className="flex items-center gap-3 px-3 py-2 text-gray-800 hover:bg-gray-100 rounded cursor-pointer transition"
     onClick={onClick}
   >
     {icon}
