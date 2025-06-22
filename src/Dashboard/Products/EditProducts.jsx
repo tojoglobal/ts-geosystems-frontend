@@ -15,9 +15,8 @@ const MySwal = withReactContent(Swal);
 
 // Helper to validate only YouTube URLs (returns true if empty or valid YouTube URL)
 const validateYouTubeUrls = (value) => {
-  if (!value || value.trim() === "") return true; // not required
+  if (!value || value.trim() === "") return true;
   const urls = value.split(",").map((v) => v.trim());
-  // YouTube patterns: youtu.be/xxxx  youtube.com/watch?v=xxxx  youtube.com/embed/xxxx
   const ytPattern =
     /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/(embed\/|watch\?v=)?[A-Za-z0-9\-_]{11,}/;
   return urls.every((url) => url === "" || ytPattern.test(url));

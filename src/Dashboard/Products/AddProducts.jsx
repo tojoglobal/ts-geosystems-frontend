@@ -13,12 +13,68 @@ import AdminVatSwitch from "./AdminVatSwitch";
 
 // Helper to validate only YouTube URLs (returns true if empty or valid YouTube URL)
 const validateYouTubeUrls = (value) => {
-  if (!value || value.trim() === "") return true; // not required
+  if (!value || value.trim() === "") return true;
   const urls = value.split(",").map((v) => v.trim());
-  // YouTube patterns: youtu.be/xxxx  youtube.com/watch?v=xxxx  youtube.com/embed/xxxx
   const ytPattern =
     /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/(embed\/|watch\?v=)?[A-Za-z0-9\-_]{11,}/;
   return urls.every((url) => url === "" || ytPattern.test(url));
+};
+
+// MetaKeywordsInput component
+const MetaKeywordsInput = ({ value = [], onChange }) => {
+  const [inputValue, setInputValue] = useState("");
+  const [keywords, setKeywords] = useState(value || []);
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && inputValue.trim()) {
+      e.preventDefault();
+      const newKeywords = [...keywords, inputValue.trim()];
+      setKeywords(newKeywords);
+      onChange(newKeywords);
+      setInputValue("");
+    } else if (e.key === "Backspace" && !inputValue && keywords.length > 0) {
+      e.preventDefault();
+      const newKeywords = keywords.slice(0, -1);
+      setKeywords(newKeywords);
+      onChange(newKeywords);
+    }
+  };
+
+  const removeKeyword = (index) => {
+    const newKeywords = keywords.filter((_, i) => i !== index);
+    setKeywords(newKeywords);
+    onChange(newKeywords);
+  };
+
+  return (
+    <div className="border border-gray-600 rounded-md p-2 focus-within:border-teal-500 focus-within:ring-1 focus-within:ring-teal-500">
+      <div className="flex flex-wrap gap-2 mb-2">
+        {keywords.map((keyword, index) => (
+          <div
+            key={index}
+            className="bg-teal-100 text-teal-800 px-2 py-1 rounded-md flex items-center"
+          >
+            {keyword}
+            <button
+              type="button"
+              onClick={() => removeKeyword(index)}
+              className="ml-1 text-teal-600 hover:text-teal-800"
+            >
+              &times;
+            </button>
+          </div>
+        ))}
+        <input
+          type="text"
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          onKeyDown={handleKeyDown}
+          placeholder="Type a keyword and press Enter"
+          className="flex-1 min-w-[150px] outline-none bg-transparent"
+        />
+      </div>
+    </div>
+  );
 };
 
 const ProductAddForm = () => {
@@ -45,6 +101,8 @@ const ProductAddForm = () => {
       priceShowHide: 0,
       productOptionShowHide: 0,
       clearance: false,
+      metaKeywords: [],
+      metaDescription: "",
     },
   });
 
@@ -180,6 +238,8 @@ const ProductAddForm = () => {
       formData.append("clearance", data.clearance ? "1" : "0");
       formData.append("flashSale", data.flashSale ? "1" : "0");
       formData.append("flashSaleEnd", data.flashSaleEnd || "");
+      formData.append("metaKeywords", data.metaKeywords?.join(",") || "");
+      formData.append("metaDescription", data.metaDescription || "");
 
       // Handle arrays/objects
       formData.append(
@@ -579,6 +639,38 @@ const ProductAddForm = () => {
                 />
               )}
             />
+          </div>
+          <div className="col-span-2 ">
+              {/* Meta Keywords Field */}
+            <div>
+              <label className="block mb-1 font-medium">Meta Keywords</label>
+              <Controller
+                name="metaKeywords"
+                control={control}
+                render={({ field }) => (
+                  <MetaKeywordsInput
+                    value={field.value}
+                    onChange={field.onChange}
+                  />
+                )}
+              />
+              <p className="text-xs text-gray-500 mt-1">
+                Add keywords that describe your product
+              </p>
+            </div>
+
+            {/* Meta Description Field */}
+            <div>
+              <label className="block mb-1 font-medium">Meta Description</label>
+              <textarea
+                {...register("metaDescription")}
+                placeholder="Enter a brief description for search engines"
+                className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500 w-full h-24"
+              />
+              <p className="text-xs text-gray-500 mt-1">
+                Keep it under 160 characters for best results
+              </p>
+            </div>
           </div>
           {/*  productOverview*/}
           <div className="col-span-2 space-y-4">

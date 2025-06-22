@@ -176,7 +176,7 @@ const Recommended = ({ category, currentProductId }) => {
                       product.product_name || ""
                     )}`}
                   >
-                    <div className="relative group w-full max-w-[120px] sm:max-w-[140px] md:max-w-[240px] mx-auto pb-5 md:pb-0 md:min-h-[290px]">
+                    <div className="relative group w-full max-w-[120px] sm:max-w-[140px] md:max-w-[240px] mx-auto pb-5 md:pb-0 md:min-h-[280px]">
                       <img
                         src={mainImage}
                         alt={product.product_name}
