@@ -23,7 +23,7 @@ function TagInput({ value, onChange, placeholder }) {
           <button
             type="button"
             aria-label="Remove"
-            className="ml-1 text-blue-600 hover:text-red-500"
+            className="ml-1 cursor-pointer text-blue-600 hover:text-red-500"
             onClick={() => {
               const t = value.slice();
               t.splice(idx, 1);
@@ -262,7 +262,7 @@ const SettingsPage = () => {
               <button
                 key={item.key}
                 onClick={() => setActiveTab(item.key)}
-                className={`flex items-center gap-3 px-4 py-2 rounded-lg transition font-semibold
+                className={`flex cursor-pointer items-center gap-3 px-4 py-2 rounded-lg transition font-semibold
                   ${
                     activeTab === item.key
                       ? "bg-blue-100 text-blue-700"
@@ -340,18 +340,18 @@ const SettingsPage = () => {
                       type="checkbox"
                       {...register("decimalSeparatorEnable")}
                       id="decimalSeparatorEnable"
-                      className="mr-2"
+                      className="mr-2 cursor-pointer"
                     />
                     <label
                       htmlFor="decimalSeparatorEnable"
-                      className="block text-sm font-bold text-gray-100"
+                      className="block cursor-pointer text-sm font-bold text-gray-100"
                     >
                       Enable Decimal Separator Selection
                     </label>
                     {watch("decimalSeparatorEnable") && (
                       <select
                         {...register("decimalSeparator")}
-                        className="ml-4 border px-2 py-1 rounded bg-gray-50 dark:bg-gray-800"
+                        className="ml-4 border cursor-pointer px-2 py-1 rounded bg-gray-50 dark:bg-gray-800"
                       >
                         <option value="off">Off</option>
                         <option value="on">On</option>
@@ -364,18 +364,18 @@ const SettingsPage = () => {
                       type="checkbox"
                       {...register("currencyDirectionEnable")}
                       id="currencyDirectionEnable"
-                      className="mr-2"
+                      className="mr-2 cursor-pointer"
                     />
                     <label
                       htmlFor="currencyDirectionEnable"
-                      className="block text-sm font-bold text-gray-100"
+                      className="block text-sm cursor-pointer font-bold text-gray-100"
                     >
                       Enable Currency Direction
                     </label>
                     {watch("currencyDirectionEnable") && (
                       <select
                         {...register("currencyDirection")}
-                        className="ml-4 border px-2 py-1 rounded bg-gray-50 dark:bg-gray-800"
+                        className="ml-4 border cursor-pointer px-2 py-1 rounded bg-gray-50 dark:bg-gray-800"
                       >
                         <option value="left">Left</option>
                         <option value="right">Right</option>
@@ -388,18 +388,18 @@ const SettingsPage = () => {
                       type="checkbox"
                       {...register("decimalSeparatorSelectorEnable")}
                       id="decimalSeparatorSelectorEnable"
-                      className="mr-2"
+                      className="mr-2 cursor-pointer"
                     />
                     <label
                       htmlFor="decimalSeparatorSelectorEnable"
-                      className="block text-sm font-bold text-gray-100"
+                      className="block text-sm cursor-pointer font-bold text-gray-100"
                     >
                       Enable Decimal Separator Selector
                     </label>
                     {watch("decimalSeparatorSelectorEnable") && (
                       <select
                         {...register("decimalSeparatorSelector")}
-                        className="ml-4 border px-2 py-1 rounded bg-gray-50 dark:bg-gray-800"
+                        className="ml-4 border px-2 cursor-pointer py-1 rounded bg-gray-50 dark:bg-gray-800"
                       >
                         <option value="dot">Dot (.)</option>
                         <option value="comma">Comma (,)</option>
@@ -412,18 +412,18 @@ const SettingsPage = () => {
                       type="checkbox"
                       {...register("thousandSeparatorEnable")}
                       id="thousandSeparatorEnable"
-                      className="mr-2"
+                      className="mr-2 cursor-pointer"
                     />
                     <label
                       htmlFor="thousandSeparatorEnable"
-                      className="block text-sm font-bold text-gray-100"
+                      className="block text-sm font-bold cursor-pointer text-gray-100"
                     >
                       Enable Thousand Separator Selector
                     </label>
                     {watch("thousandSeparatorEnable") && (
                       <select
                         {...register("thousandSeparator")}
-                        className="ml-4 border px-2 py-1 rounded bg-gray-50 dark:bg-gray-800"
+                        className="ml-4 border cursor-pointer px-2 py-1 rounded bg-gray-50 dark:bg-gray-800"
                       >
                         <option value="dot">Dot (.)</option>
                         <option value="comma">Comma (,)</option>
@@ -473,7 +473,7 @@ const SettingsPage = () => {
                       type="file"
                       accept="image/*"
                       onChange={handleLogoFile}
-                      className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                      className="block w-full cursor-pointer text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
                     />
                   </div>
                   <p className="text-xs text-gray-500 mt-1">
@@ -503,7 +503,7 @@ const SettingsPage = () => {
                       type="file"
                       accept="image/*"
                       onChange={handleFaviconFile}
-                      className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                      className="block w-full text-sm cursor-pointer text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
                     />
                   </div>
                   <p className="text-xs text-gray-500 mt-1">
@@ -572,16 +572,16 @@ const SettingsPage = () => {
                 <div className="space-y-5">
                   {/* Google Analytics */}
                   <div>
-                    <div className="flex items-center gap-4 mb-2">
+                    <div className="flex items-center gap-1 mb-2">
                       <input
                         type="checkbox"
                         {...register("enableGoogleAnalytics")}
                         id="enableGoogleAnalytics"
-                        className="mr-2"
+                        className="mr-2 cursor-pointer"
                       />
                       <label
                         htmlFor="enableGoogleAnalytics"
-                        className="block text-sm font-bold text-gray-100"
+                        className="block text-sm cursor-pointer font-bold text-gray-100"
                       >
                         Enable Google Analytics
                       </label>
@@ -597,16 +597,16 @@ const SettingsPage = () => {
                   </div>
                   {/* Google Adsense */}
                   <div>
-                    <div className="flex items-center gap-4 mb-2">
+                    <div className="flex items-center gap-1 mb-2">
                       <input
                         type="checkbox"
                         {...register("enableGoogleAdsense")}
                         id="enableGoogleAdsense"
-                        className="mr-2"
+                        className="mr-2 cursor-pointer"
                       />
                       <label
                         htmlFor="enableGoogleAdsense"
-                        className="block text-sm font-bold text-gray-100"
+                        className="block text-sm cursor-pointer font-bold text-gray-100"
                       >
                         Enable Google Adsense Code
                       </label>
@@ -622,16 +622,16 @@ const SettingsPage = () => {
                   </div>
                   {/* Google Recaptcha */}
                   <div>
-                    <div className="flex items-center gap-4 mb-2">
+                    <div className="flex items-center gap-1 mb-2">
                       <input
                         type="checkbox"
                         {...register("displayGoogleRecaptcha")}
                         id="displayGoogleRecaptcha"
-                        className="mr-2"
+                        className="mr-2 cursor-pointer"
                       />
                       <label
                         htmlFor="displayGoogleRecaptcha"
-                        className="block text-sm font-bold text-gray-100"
+                        className="block text-sm cursor-pointer font-bold text-gray-100"
                       >
                         Display Google Recaptcha
                       </label>
@@ -643,30 +643,30 @@ const SettingsPage = () => {
                             required: watch("displayGoogleRecaptcha"),
                           })}
                           placeholder="Google Recaptcha Site Key *"
-                          className="w-full border rounded-lg px-4 py-2 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white"
+                          className="w-full border cursor-pointer rounded-lg px-4 py-2 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white"
                         />
                         <input
                           {...register("googleRecaptchaSecretKey", {
                             required: watch("displayGoogleRecaptcha"),
                           })}
                           placeholder="Google Recaptcha Secret Key"
-                          className="w-full border rounded-lg px-4 py-2 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white"
+                          className="w-full border cursor-pointer rounded-lg px-4 py-2 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white"
                         />
                       </div>
                     )}
                   </div>
                   {/* Facebook Pixel */}
                   <div>
-                    <div className="flex items-center gap-4 mb-2">
+                    <div className="flex items-center gap-1 mb-2">
                       <input
                         type="checkbox"
                         {...register("displayFacebookPixel")}
                         id="displayFacebookPixel"
-                        className="mr-2"
+                        className="mr-2 cursor-pointer"
                       />
                       <label
                         htmlFor="displayFacebookPixel"
-                        className="block text-sm font-bold text-gray-100"
+                        className="block text-sm cursor-pointer font-bold text-gray-100"
                       >
                         Display Facebook Pixel
                       </label>
@@ -682,16 +682,16 @@ const SettingsPage = () => {
                   </div>
                   {/* Facebook Messenger */}
                   <div>
-                    <div className="flex items-center gap-4 mb-2">
+                    <div className="flex items-center gap-1 mb-2">
                       <input
                         type="checkbox"
                         {...register("displayFacebookMessenger")}
                         id="displayFacebookMessenger"
-                        className="mr-2"
+                        className="mr-2 cursor-pointer"
                       />
                       <label
                         htmlFor="displayFacebookMessenger"
-                        className="block text-sm font-bold text-gray-100"
+                        className="block text-sm cursor-pointer font-bold text-gray-100"
                       >
                         Display Facebook Messenger
                       </label>
@@ -708,16 +708,16 @@ const SettingsPage = () => {
                   </div>
                   {/* Disqus */}
                   <div>
-                    <div className="flex items-center gap-4 mb-2">
+                    <div className="flex items-center gap-1 mb-2">
                       <input
                         type="checkbox"
                         {...register("displayDisqus")}
                         id="displayDisqus"
-                        className="mr-2"
+                        className="mr-2 cursor-pointer"
                       />
                       <label
                         htmlFor="displayDisqus"
-                        className="block text-sm font-bold text-gray-100"
+                        className="block text-sm cursor-pointer font-bold text-gray-100"
                       >
                         Display Disqus
                       </label>
@@ -740,7 +740,7 @@ const SettingsPage = () => {
             <div className="flex justify-end pt-8">
               <button
                 type="submit"
-                className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-8 rounded-xl font-semibold text-lg shadow transition-all duration-200"
+                className="bg-blue-600 cursor-pointer hover:bg-blue-700 text-white py-2 px-6 rounded-md font-semibold text-lg shadow transition-all duration-200"
                 disabled={loading}
               >
                 Save Settings
