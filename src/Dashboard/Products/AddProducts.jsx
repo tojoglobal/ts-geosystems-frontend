@@ -47,8 +47,8 @@ const MetaKeywordsInput = ({ value = [], onChange }) => {
   };
 
   return (
-    <div className="border border-gray-600 rounded-md p-2 focus-within:border-teal-500 transition">
-      <div className="flex flex-wrap gap-2 items-center">
+    <div className="border border-gray-600 rounded-md p-2 focus-within:border-teal-500 transition relative">
+      <div className="flex flex-wrap gap-2 items-center pr-14">
         {keywords.map((keyword, index) => (
           <div
             key={index}
@@ -58,7 +58,7 @@ const MetaKeywordsInput = ({ value = [], onChange }) => {
             <button
               type="button"
               onClick={() => removeKeyword(index)}
-              className="ml-2 text-teal-600 hover:text-teal-800 focus:outline-none"
+              className="ml-2 cursor-pointer text-teal-600 hover:text-teal-800 focus:outline-none"
             >
               &times;
             </button>
@@ -78,18 +78,16 @@ const MetaKeywordsInput = ({ value = [], onChange }) => {
         />
       </div>
       {keywords.length > 0 && (
-        <div className="mt-1 flex justify-end">
-          <button
-            type="button"
-            onClick={() => {
-              setKeywords([]);
-              onChange([]);
-            }}
-            className="text-xs text-gray-400 hover:text-teal-300 transition-colors"
-          >
-            Clear all
-          </button>
-        </div>
+        <button
+          type="button"
+          onClick={() => {
+            setKeywords([]);
+            onChange([]);
+          }}
+          className="absolute cursor-pointer right-3 top-3 text-xs text-gray-500 hover:text-teal-600 transition-colors"
+        >
+          Clear all
+        </button>
       )}
     </div>
   );
