@@ -16,6 +16,7 @@ const Software = () => {
   const axiosPublicUrl = useAxiospublic();
   const [imagePreview, setImagePreview] = useState(null);
   const [editingBrand, setEditingBrand] = useState(null);
+  const [priceShow, setPriceShow] = useState(true); // controlled for checkbox
 
   const {
     data: softwar = [],
@@ -27,6 +28,11 @@ const Software = () => {
   const { register, handleSubmit, watch, reset, setValue } = useForm();
   const watchSoftwarName = watch("softwarName", "");
 
+  // Reset priceShow on add/edit
+  useEffect(() => {
+    if (!editingBrand) setPriceShow(true);
+  }, [editingBrand]);
+
   const onSubmit = async (data) => {
     try {
       const formData = new FormData();
@@ -34,7 +40,7 @@ const Software = () => {
       formData.append("slug", generateSlug(data.softwarName));
       formData.append("softwarlink", data.softwarlink);
       formData.append("price", data.price || "");
-      formData.append("price_show", data.price_show);
+      formData.append("price_show", priceShow ? 1 : 0);
 
       if (data.photo && data.photo[0]) {
         formData.append("photo", data.photo[0]);
@@ -57,6 +63,7 @@ const Software = () => {
       reset();
       setEditingBrand(null);
       setImagePreview(null);
+      setPriceShow(true);
       Swal.fire("Success", message, "success");
     } catch (error) {
       Swal.fire("Error", error.message || "Error saving software.", "error");
@@ -68,7 +75,7 @@ const Software = () => {
     setValue("softwarName", brand.softwar_name);
     setValue("softwarlink", brand.softwarlink);
     setValue("price", brand.price || "");
-    setValue("price_show", brand.price_show ? "1" : "0");
+    setPriceShow(Boolean(Number(brand.price_show)));
     setImagePreview(brand.photo);
   };
 
@@ -187,13 +194,11 @@ const Software = () => {
         </div>
         {/* Price Show/Hide Option */}
         <div className="mb-4 flex items-center gap-3">
-          {/* Hidden always first, then checkbox */}
-          <input type="hidden" value="0" {...register("price_show")} />
           <input
             type="checkbox"
-            value="1"
-            {...register("price_show")}
-            className="form-checkbox h-5 w-5 text-teal-600"
+            checked={priceShow}
+            onChange={(e) => setPriceShow(e.target.checked)}
+            className="form-checkbox cursor-pointer h-5 w-5 text-teal-600"
             id="price_show"
           />
           <label
@@ -265,7 +270,7 @@ const Software = () => {
                           </a>
                         </td>
                         <td className="text-center p-2 sm:p-3 border border-gray-600 whitespace-nowrap">
-                          {(brand.price_show === 1 ||
+                          {(brand.price_show == 1 ||
                             brand.price_show === "1" ||
                             brand.price_show === true ||
                             brand.price_show === "true") &&
