@@ -40,10 +40,10 @@ const MenuControll = () => {
 
   return (
     <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700 rounded-2xl shadow-2xl p-4 sm:p-6 md:p-8 max-w-full sm:max-w-lg mx-auto mt-4 sm:mt-8 tw-animate-fade-in-up">
-      <h2 className="text-2xl sm:text-3xl font-extrabold mb-4 sm:mb-6 text-white flex items-center gap-2">
+      <h2 className="md:text-xl font-extrabold mb-4 sm:mb-6 text-white flex items-center gap-2">
         <span role="img" aria-label="menu">
           📋
-        </span>{" "}
+        </span>
         Menu Control
       </h2>
       {loading ? (
@@ -51,13 +51,13 @@ const MenuControll = () => {
           Loading...
         </div>
       ) : (
-        <ul className="space-y-4 sm:space-y-6">
+        <ul className="space-y-3">
           {menus.map((menu) => (
             <li
               key={menu.menu_name}
               className="flex flex-col sm:flex-row sm:items-center justify-between bg-gray-800/80 rounded-lg px-3 sm:px-4 py-2 sm:py-3 shadow hover:shadow-md transition-shadow group"
             >
-              <span className="text-base sm:text-lg font-semibold text-white flex items-center gap-2 mb-2 sm:mb-0">
+              <span className="text-base font-semibold text-white flex items-center gap-2 mb-2 sm:mb-0">
                 {MENU_LABELS[menu.menu_name] || menu.menu_name}
                 {menu.enabled ? (
                   <CheckCircle className="w-5 h-5 text-emerald-400 opacity-80 group-hover:scale-110 transition-transform" />
@@ -65,7 +65,7 @@ const MenuControll = () => {
                   <XCircle className="w-5 h-5 text-red-400 opacity-70 group-hover:scale-110 transition-transform" />
                 )}
               </span>
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2">
                 <Switch
                   checked={!!menu.enabled}
                   onChange={() => toggleMenu(menu.menu_name, !!menu.enabled)}
@@ -87,7 +87,7 @@ const MenuControll = () => {
                   />
                 </Switch>
                 <span
-                  className={`text-sm sm:text-base font-medium select-none ${
+                  className={`text-sm font-medium select-none ${
                     menu.enabled ? "text-emerald-300" : "text-gray-400"
                   }`}
                 >
