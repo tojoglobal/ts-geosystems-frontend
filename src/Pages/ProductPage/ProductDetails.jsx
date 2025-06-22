@@ -179,7 +179,7 @@ const ProductDetails = () => {
             {/* Thumbnails */}
             {imageUrls.length > 1 && (
               <div className="flex justify-center gap-2 mt-2 w-full">
-                {imageUrls.map((img, index) => (
+                {imageUrls?.map((img, index) => (
                   <div
                     key={index}
                     onClick={() => setSelectedImage(img)}
@@ -283,7 +283,6 @@ const ProductDetails = () => {
                   )}
                 </span>
               </div>
-
               {vatEnabled && !product?.priceShowHide && (
                 <div className="text-[18px] sm:text-[24px] font-semibold text-[#999] line-through">
                   Price: ৳ {formatBDT(priceIncVat)}
@@ -292,7 +291,6 @@ const ProductDetails = () => {
                   </span>
                 </div>
               )}
-
               {/* {vatEnabled && (
                 <div className="text-sm text-gray-500">
                   VAT: ৳{formatBDT(vatAmount)} ({vat}%)
@@ -466,7 +464,6 @@ const ProductDetails = () => {
             {activeTab === "OVERVIEW" && (
               <RichTextRenderer html={product?.product_overview} />
             )}
-
             {activeTab === "SPECIFICATIONS" && (
               <div className="border rounded-lg overflow-x-auto m-2 sm:m-4">
                 <table className="w-full">
@@ -487,7 +484,6 @@ const ProductDetails = () => {
                         {product.product_name}
                       </td>
                     </tr>
-
                     <tr className="border-t">
                       <td className="p-4 text-gray-700">Brand:</td>
                       <td className="p-4 text-gray-700">
@@ -511,13 +507,24 @@ const ProductDetails = () => {
                         {product.product_condition || "New"}
                       </td>
                     </tr>
-                    <tr className="border-t">
+                    <tr className="border-t hidden sm:table-row">
                       <td className="p-4 text-gray-700">Warranty:</td>
                       <td className="px-2 text-gray-700">
                         <RichTextRenderer
                           html={product?.warranty_info}
                           isTableCell={true}
                         />
+                      </td>
+                    </tr>
+                    <tr className="border-t sm:hidden">
+                      <td className="p-4 text-gray-700" colSpan={2}>
+                        <div className="font-semibold mb-1">Warranty:</div>
+                        <div>
+                          <RichTextRenderer
+                            html={product?.warranty_info}
+                            isTableCell={true}
+                          />
+                        </div>
                       </td>
                     </tr>
                   </tbody>

@@ -40,10 +40,10 @@ const AskAQuestion = ({ productName, productId }) => {
   return (
     <div className="drawer drawer-end z-50">
       <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
-      <div className="drawer-content -rotate-90 fixed top-1/2 -right-10 transform -translate-y-1/2">
+      <div className="drawer-content -rotate-90 fixed top-1/2 -right-11 md:-right-10 transform -translate-y-1/2">
         <label
           htmlFor="my-drawer-4"
-          className="cursor-pointer bg-[#e62245] text-white py-[14px] px-3 shadow-2xl rounded-[4px] flex items-center gap-2"
+          className="cursor-pointer bg-[#e62245] text-white py-[10px] md:py-[14px] px-3 shadow-2xl rounded-[4px] flex items-center gap-2"
         >
           <span className="flex items-center gap-2 whitespace-nowrap">
             <Mail size={18} /> Ask A Question
