@@ -474,7 +474,7 @@ const UsedEquipment = () => {
                 {currentPage > 1 && (
                   <button
                     onClick={() => setCurrentPage(currentPage - 1)}
-                    className="border flex items-center gap-1 px-1.5 p-1 rounded hover:bg-gray-100 transition text-sm"
+                    className="border cursor-pointer flex items-center gap-1 px-1.5 p-1 rounded hover:bg-gray-100 transition text-sm"
                   >
                     <MdKeyboardArrowLeft /> Previous
                   </button>
@@ -498,7 +498,7 @@ const UsedEquipment = () => {
               {currentPage < totalPages && (
                 <button
                   onClick={() => setCurrentPage(currentPage + 1)}
-                  className="border flex items-center gap-1 px-1.5 p-1 rounded hover:bg-gray-100 transition text-sm"
+                  className="border cursor-pointer flex items-center gap-1 px-1.5 p-1 rounded hover:bg-gray-100 transition text-sm"
                 >
                   Next <MdKeyboardArrowRight />
                 </button>

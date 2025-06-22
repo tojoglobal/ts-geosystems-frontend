@@ -99,7 +99,7 @@ const menuItems = [
     to: "/dashboard/add-software",
   },
   {
-    label: "shippingCost",
+    label: "Shipping Cost",
     icon: <FaCartFlatbedSuitcase size={20} />,
     to: "/dashboard/add-shippingcost",
   },
