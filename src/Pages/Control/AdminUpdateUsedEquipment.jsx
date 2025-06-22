@@ -96,165 +96,175 @@ const AdminUpdateUsedEquipment = () => {
   if (isLoading) return <Loader />;
 
   return (
-    <div>
-      <h1 className="text-xl md:text-2xl font-bold mb-4">
-        Admin - Update Used Equipment Page
-      </h1>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        <div>
-          <label className="block font-medium text-sm mb-2">Banner Image</label>
-          <div
-            {...getRootProps()}
-            className="border-2 border-dashed rounded p-3 text-center cursor-pointer"
-          >
-            <input {...getInputProps()} />
-            <p>
-              Drag & drop or{" "}
-              <span className="underline text-teal-500">browse</span> to upload
-            </p>
+    <div className="w-full m-0 md:m-2">
+      <div className="rounded-lg shadow-2xl mb-4 border border-gray-800 bg-gray-900/95 p-0 sm:p-5">
+        <h1 className="text-xl sm:text-2xl font-extrabold mb-8 text-white tracking-tight">
+          Update Used Equipment Page
+        </h1>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          <div>
+            <label className="block font-medium text-sm mb-2 text-gray-200">
+              Banner Image
+            </label>
+            <div
+              {...getRootProps()}
+              className="border-2 border-dashed border-gray-800 rounded cursor-pointer p-3 text-center transition hover:bg-gray-800/60"
+            >
+              <input {...getInputProps()} />
+              <p>
+                Drag & drop or{" "}
+                <span className="underline text-teal-500 cursor-pointer">
+                  browse
+                </span>{" "}
+                to upload
+              </p>
+            </div>
+            {(bannerFile || watch("banner_image")) && (
+              <img
+                src={
+                  bannerFile
+                    ? URL.createObjectURL(bannerFile)
+                    : watch("banner_image") &&
+                      import.meta.env.VITE_OPEN_APIURL + watch("banner_image")
+                }
+                alt="Banner Preview"
+                className="w-full max-h-48 object-contain mt-2"
+              />
+            )}
+            <label className="inline-flex items-center mt-5 cursor-pointer">
+              <input
+                type="checkbox"
+                {...register("banner_image_show")}
+                className="form-checkbox h-5 w-5 text-[#e62245] border-gray-800 cursor-pointer"
+              />
+              <span className="ml-2 text-sm text-gray-200 cursor-pointer">
+                Show Banner Image
+              </span>
+            </label>
           </div>
-          {(bannerFile || watch("banner_image")) && (
-            <img
-              src={
-                bannerFile
-                  ? URL.createObjectURL(bannerFile)
-                  : watch("banner_image") &&
-                    import.meta.env.VITE_OPEN_APIURL + watch("banner_image")
-              }
-              alt="Banner Preview"
-              className="w-full max-h-48 object-contain mt-2"
+          <div>
+            <label className="block font-medium text-sm mb-2 text-gray-200">
+              Description
+            </label>
+            <Controller
+              name="description"
+              control={control}
+              render={({ field }) => (
+                <Editor
+                  apiKey={import.meta.env.VITE_TINY_APIKEY}
+                  value={field.value}
+                  init={{
+                    height: 250,
+                    menubar: false,
+                    plugins: [
+                      "advlist",
+                      "autolink",
+                      "lists",
+                      "link",
+                      "image",
+                      "charmap",
+                      "preview",
+                      "anchor",
+                      "searchreplace",
+                      "visualblocks",
+                      "code",
+                      "fullscreen",
+                      "insertdatetime",
+                      "media",
+                      "table",
+                      "help",
+                      "wordcount",
+                    ],
+                    toolbar:
+                      "undo redo | formatselect | fontselect fontsizeselect | " +
+                      "bold italic underline removeformat | forecolor backcolor | " +
+                      "alignleft aligncenter alignright alignjustify | " +
+                      "bullist numlist outdent indent | link image media table | " +
+                      "preview fullscreen | help",
+                    content_style:
+                      "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
+                  }}
+                  onEditorChange={field.onChange}
+                />
+              )}
             />
-          )}
-          <label className="inline-flex items-center mt-2">
+          </div>
+          <div className="border-t border-gray-800 pt-4">
+            <label className="block font-medium text-sm mb-2 text-gray-200">
+              Benefits Box Title
+            </label>
             <input
-              type="checkbox"
-              {...register("banner_image_show")}
-              className="form-checkbox h-5 w-5 cursor-pointer text-[#e62245]"
+              type="text"
+              {...register("benefits_box_title")}
+              className="w-full border border-gray-800 rounded-md p-2 text-sm bg-gray-800 text-white"
             />
-            <span className="ml-2 text-sm cursor-pointer">
-              Show Banner Image
-            </span>
-          </label>
-        </div>
-        <div>
-          <label className="block font-medium text-sm mb-2">Description</label>
-          <Controller
-            name="description"
-            control={control}
-            render={({ field }) => (
-              <Editor
-                apiKey={import.meta.env.VITE_TINY_APIKEY}
-                value={field.value}
-                init={{
-                  height: 150,
-                  menubar: false,
-                  plugins: [
-                    "advlist",
-                    "autolink",
-                    "lists",
-                    "link",
-                    "image",
-                    "charmap",
-                    "preview",
-                    "anchor",
-                    "searchreplace",
-                    "visualblocks",
-                    "code",
-                    "fullscreen",
-                    "insertdatetime",
-                    "media",
-                    "table",
-                    "help",
-                    "wordcount",
-                  ],
-                  toolbar:
-                    "undo redo | formatselect | fontselect fontsizeselect | " +
-                    "bold italic underline removeformat | forecolor backcolor | " +
-                    "alignleft aligncenter alignright alignjustify | " +
-                    "bullist numlist outdent indent | link image media table | " +
-                    "preview fullscreen | help",
-                  content_style:
-                    "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
-                }}
-                onEditorChange={field.onChange}
-              />
-            )}
-          />
-        </div>
-        <div className="border-t pt-4">
-          <label className="block font-medium text-sm mb-2">
-            Benefits Box Title
-          </label>
-          <input
-            type="text"
-            {...register("benefits_box_title")}
-            className="w-full border border-gray-600 rounded p-2 text-sm"
-          />
-          <label className="block font-medium text-sm mb-2 mt-4">
-            Benefits Box Description
-          </label>
-          <Controller
-            name="benefits_box_description"
-            control={control}
-            render={({ field }) => (
-              <Editor
-                apiKey={import.meta.env.VITE_TINY_APIKEY}
-                value={field.value}
-                init={{
-                  height: 120,
-                  menubar: false,
-                  plugins: [
-                    "advlist",
-                    "autolink",
-                    "lists",
-                    "link",
-                    "image",
-                    "charmap",
-                    "preview",
-                    "anchor",
-                    "searchreplace",
-                    "visualblocks",
-                    "code",
-                    "fullscreen",
-                    "insertdatetime",
-                    "media",
-                    "table",
-                    "help",
-                    "wordcount",
-                  ],
-                  toolbar:
-                    "undo redo | formatselect | fontselect fontsizeselect | " +
-                    "bold italic underline removeformat | forecolor backcolor | " +
-                    "alignleft aligncenter alignright alignjustify | " +
-                    "bullist numlist outdent indent | link image media table | " +
-                    "preview fullscreen | help",
-                  content_style:
-                    "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
-                }}
-                onEditorChange={field.onChange}
-              />
-            )}
-          />
-          <label className="inline-flex items-center mt-2">
-            <input
-              type="checkbox"
-              {...register("benefits_box_show")}
-              className="form-checkbox h-5 w-5 cursor-pointer text-[#e62245]"
+            <label className="block font-medium text-sm mb-2 mt-4 text-gray-200">
+              Benefits Box Description
+            </label>
+            <Controller
+              name="benefits_box_description"
+              control={control}
+              render={({ field }) => (
+                <Editor
+                  apiKey={import.meta.env.VITE_TINY_APIKEY}
+                  value={field.value}
+                  init={{
+                    height: 250,
+                    menubar: false,
+                    plugins: [
+                      "advlist",
+                      "autolink",
+                      "lists",
+                      "link",
+                      "image",
+                      "charmap",
+                      "preview",
+                      "anchor",
+                      "searchreplace",
+                      "visualblocks",
+                      "code",
+                      "fullscreen",
+                      "insertdatetime",
+                      "media",
+                      "table",
+                      "help",
+                      "wordcount",
+                    ],
+                    toolbar:
+                      "undo redo | formatselect | fontselect fontsizeselect | " +
+                      "bold italic underline removeformat | forecolor backcolor | " +
+                      "alignleft aligncenter alignright alignjustify | " +
+                      "bullist numlist outdent indent | link image media table | " +
+                      "preview fullscreen | help",
+                    content_style:
+                      "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
+                  }}
+                  onEditorChange={field.onChange}
+                />
+              )}
             />
-            <span className="ml-2 text-sm cursor-pointer">
-              Show Benefits Box Section
-            </span>
-          </label>
-        </div>
-        <div className="flex justify-start pt-2">
-          <button
-            type="submit"
-            className="w-full cursor-pointer bg-teal-600 text-white py-2 px-4 rounded-sm hover:bg-teal-700 transition"
-          >
-            Save Changes
-          </button>
-        </div>
-      </form>
+            <label className="inline-flex items-center mt-5 cursor-pointer">
+              <input
+                type="checkbox"
+                {...register("benefits_box_show")}
+                className="form-checkbox h-5 w-5 text-[#e62245] border-gray-800 cursor-pointer"
+              />
+              <span className="ml-2 text-sm text-gray-200 cursor-pointer">
+                Show Benefits Box Section
+              </span>
+            </label>
+          </div>
+          <div className="flex justify-start pt-2">
+            <button
+              type="submit"
+              className="w-full cursor-pointer bg-teal-600 text-white py-2 px-4 rounded-lg hover:bg-teal-700 transition font-bold"
+              disabled={mutation.isPending}
+            >
+              {mutation.isPending ? "Saving..." : "Save Changes"}
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

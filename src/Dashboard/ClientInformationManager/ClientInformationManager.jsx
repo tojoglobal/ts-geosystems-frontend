@@ -1,6 +1,8 @@
 import { useEffect, useState, useMemo } from "react";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import { useQuery } from "@tanstack/react-query";
+import Swal from "sweetalert2";
+import { FaEdit, FaTrash } from "react-icons/fa";
 
 // --- Client Information Form ---
 const initialState = {
@@ -105,7 +107,7 @@ function ClientForm({
       <div className="flex flex-wrap gap-3 mt-8 justify-center">
         <button
           type="submit"
-          className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white py-2 px-8 rounded-lg cursor-pointer shadow hover:brightness-110 font-semibold text-base transition"
+          className="bg-teal-600 text-white py-2 px-5 rounded-sm cursor-pointer shadow hover:brightness-110 font-semibold text-base transition"
         >
           {isEditing ? "Update Client" : "Add New Client"}
         </button>
@@ -113,7 +115,7 @@ function ClientForm({
           <button
             type="button"
             onClick={onCancel}
-            className="bg-gray-400 text-white px-8 py-2 rounded-lg font-semibold hover:bg-gray-500 transition"
+            className="bg-gray-400 cursor-pointer text-white px-8 py-2 rounded-lg font-semibold hover:bg-gray-500 transition"
           >
             Cancel
           </button>
@@ -122,7 +124,7 @@ function ClientForm({
       <style>{`
         .eqp-input {
           width: 100%;
-          padding: 10px 14px;
+          padding: 8px 12px;
           font-size: 16px;
           border: 1.5px solid #dbeafe;
           border-radius: 8px;
@@ -151,16 +153,16 @@ function ClientList({ data, onEdit, onDelete, onSearch, searchValue }) {
           <input
             type="text"
             placeholder="Search by mobile number"
-            className="border border-gray-300 rounded px-3 py-2 text-sm w-56"
+            className="border border-gray-300 focus:outline-none rounded-md px-3 py-2 text-sm w-64"
             value={searchValue}
             onChange={(e) => onSearch(e.target.value)}
           />
         </div>
       </div>
-      <div className="overflow-x-auto rounded-xl shadow-xl border border-gray-600">
+      <div className="overflow-x-auto rounded-sm border border-gray-600">
         <table className="min-w-full text-sm text-left">
           <thead>
-            <tr className="text-left">
+            <tr className="text-left text-lg border-b border-gray-600">
               <th className="p-3 whitespace-nowrap font-semibold">
                 Company Name
               </th>
@@ -170,45 +172,38 @@ function ClientList({ data, onEdit, onDelete, onSearch, searchValue }) {
               <th className="p-3 whitespace-nowrap font-semibold">
                 Mobile Number
               </th>
-              <th className="p-3 whitespace-nowrap font-semibold">
-                Address
-              </th>
-              <th className="p-3 whitespace-nowrap font-semibold">
-                Actions
-              </th>
+              <th className="p-3 whitespace-nowrap font-semibold">Address</th>
+              <th className="p-3 whitespace-nowrap font-semibold">Actions</th>
             </tr>
           </thead>
           <tbody>
             {data.map((client) => (
-              <tr
-                key={client.id || client.companyName}
-                className="transition"
-              >
-                <td className="p-3 border-b border-[#e3eaf5] font-semibold">
+              <tr key={client.id || client.companyName} className="text-gray-100 transition">
+                <td className="p-3 border-b border-gray-600 font-semibold">
                   {client.companyName}
                 </td>
-                <td className="p-3 border-b border-[#e3eaf5] font-semibold">
+                <td className="p-3 border-b border-gray-600 font-semibold">
                   {client.ownerName}
                 </td>
-                <td className="p-3 border-b border-[#e3eaf5] font-semibold">
+                <td className="p-3 border-b border-gray-600 font-semibold">
                   {client.mobileNumber}
                 </td>
-                <td className="p-3 border-b border-[#e3eaf5] font-semibold">
+                <td className="p-3 border-b border-gray-600 font-semibold">
                   {client.address}
                 </td>
-                <td className="p-3 border-b border-[#e3eaf5]">
+                <td className="p-3 border-b border-gray-600">
                   <div className="flex gap-2">
                     <button
                       onClick={() => onEdit(client)}
-                      className="text-blue-600 font-semibold px-3 py-1 rounded hover:bg-blue-50 transition"
+                      className="text-blue-300 cursor-pointer hover:text-blue-500 p-1"
                     >
-                      Edit
+                      <FaEdit />
                     </button>
                     <button
                       onClick={() => onDelete(client.id)}
-                      className="text-red-600 font-semibold px-3 py-1 rounded hover:bg-red-50 transition"
+                      className="text-red-600 cursor-pointer hover:text-red-800 p-1"
                     >
-                      Delete
+                      <FaTrash />
                     </button>
                   </div>
                 </td>
@@ -265,28 +260,79 @@ export default function ClientInformationManager() {
     if (!editing) setResetFormTrigger((prev) => !prev);
   }, [editing]);
 
+  // --- Swal2 success/error standardized
+  const showSwal = ({ icon, title, text }) =>
+    Swal.fire({
+      icon,
+      title,
+      text,
+      background: "#1e293b",
+      color: "#f8fafc",
+      confirmButtonColor: "#e11d48",
+    });
+
   const handleCreateOrUpdate = async (data) => {
     try {
       if (editing && editing.id) {
         await axiosPublicUrl.put(`/api/clients/${editing.id}`, data);
         setEditing(null);
+        showSwal({
+          icon: "success",
+          title: "Updated!",
+          text: "Client updated successfully.",
+        });
       } else {
         await axiosPublicUrl.post("/api/clients", data);
         setResetFormTrigger((prev) => !prev);
+        showSwal({
+          icon: "success",
+          title: "Created!",
+          text: "Client added successfully.",
+        });
       }
       refetch();
     } catch (err) {
-      console.error("Save error:", err);
+      showSwal({
+        icon: "error",
+        title: "Error",
+        text: err?.response?.data?.message || "Failed to save client.",
+      });
     }
   };
 
   const handleDelete = async (id) => {
-    try {
-      await axiosPublicUrl.delete(`/api/clients/${id}`);
-      refetch();
-    } catch (err) {
-      console.error("Delete error:", err);
-    }
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, delete",
+      cancelButtonText: "Cancel",
+      background: "#1e293b",
+      color: "#f8fafc",
+      confirmButtonColor: "#e11d48",
+      cancelButtonColor: "#334155",
+      reverseButtons: true,
+      focusCancel: true,
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await axiosPublicUrl.delete(`/api/clients/${id}`);
+          refetch();
+          showSwal({
+            icon: "success",
+            title: "Deleted!",
+            text: "Client has been deleted.",
+          });
+        } catch (err) {
+          showSwal({
+            icon: "error",
+            title: "Error",
+            text: err?.response?.data?.message || "Error deleting client.",
+          });
+        }
+      }
+    });
   };
 
   const handleEdit = (client) => {

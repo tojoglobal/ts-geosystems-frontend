@@ -33,13 +33,19 @@ const AdminUpdateAboutUs = () => {
         icon: "success",
         title: "Success!",
         text: "About Us content updated successfully",
+        background: "#1e293b",
+        color: "#f8fafc",
+        confirmButtonColor: "#e11d48",
       });
     },
     onError: (error) => {
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: error.response?.data?.message || "Failed to update content",
+        text: error?.response?.data?.message || "Failed to update content",
+        background: "#1e293b",
+        color: "#f8fafc",
+        confirmButtonColor: "#e11d48",
       });
     },
   });
@@ -109,14 +115,12 @@ const AdminUpdateAboutUs = () => {
 
   // Function to strip HTML tags and send plain text
   const stripHtml = (html) => {
-    if (!html) return ""; // Handle null or undefined cases
-    return html.replace(/<\/?[^>]+(>|$)/g, ""); // Removes all HTML tags
+    if (!html) return "";
+    return html.replace(/<\/?[^>]+(>|$)/g, "");
   };
 
   const onSubmit = async (data) => {
     const formData = new FormData();
-
-    // Append all text fields
     Object.entries(data).forEach(([key, value]) => {
       if (key === "section2_points") {
         formData.append(key, JSON.stringify(value));
@@ -126,111 +130,124 @@ const AdminUpdateAboutUs = () => {
         formData.append(key, value);
       }
     });
-
     updateMutation.mutate(formData);
   };
 
   if (isLoading) return <Loader />;
 
   return (
-    <div className="overflow-y-auto">
-      <h1 className="text-lg font-semibold mb-2">Update About Us Page</h1>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((sectionNum) => (
-            <div key={sectionNum} className="rounded">
-              <h2 className="text-base font-semibold mb-2">
-                Section {sectionNum}
-              </h2>
-              <div className="space-y-2">
-                <div>
-                  <label className="block text-sm mb-1">Title</label>
-                  <input
-                    {...register(`section${sectionNum}_title`)}
-                    className="w-full p-1.5 border rounded text-sm"
-                  />
-                </div>
-                {sectionNum === 2 ? (
+    <div className="w-full m-0 md:m-2">
+      <div className="rounded-lg shadow-2xl mb-4 border border-gray-800 bg-gray-900/95 p-0 sm:p-5">
+        <h1 className="text-xl sm:text-2xl font-extrabold mb-8 bg-clip-text text-white tracking-tight">
+          Update About Us Page
+        </h1>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-7">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((sectionNum) => (
+              <div
+                key={sectionNum}
+                className="rounded-lg p-4 border border-gray-800 bg-gray-800/80"
+              >
+                <h2 className="text-base font-semibold mb-2 text-teal-300">
+                  Section {sectionNum}
+                </h2>
+                <div className="space-y-2">
                   <div>
-                    <label className="block text-sm mb-1">Points</label>
-                    <div className="space-y-1">
-                      {fields.map((field, index) => (
-                        <div key={field.id} className="flex gap-1">
-                          <input
-                            {...register(`section2_points.${index}`)}
-                            className="flex-1 p-1.5 border rounded text-sm"
-                            placeholder="Enter point"
-                          />
-                          <button
-                            type="button"
-                            onClick={() => remove(index)}
-                            className="text-red-500 hover:text-red-700"
-                          >
-                            ✕
-                          </button>
-                        </div>
-                      ))}
-                      <button
-                        type="button"
-                        onClick={() => append("")}
-                        className="text-blue-500 text-sm mt-1 hover:underline"
-                      >
-                        + Add Point
-                      </button>
-                    </div>
-                  </div>
-                ) : (
-                  <div>
-                    <label className="block text-sm mb-1">Description</label>
-                    <Controller
-                      name={`section${sectionNum}_description`}
-                      control={control}
-                      render={({ field }) => (
-                        <Editor
-                          apiKey={import.meta.env.VITE_TINY_APIKEY}
-                          value={field.value}
-                          onEditorChange={(content) => field.onChange(content)}
-                          init={{
-                            height: 150,
-                            menubar: false,
-                            plugins: [
-                              "advlist",
-                              "autolink",
-                              "lists",
-                              "link",
-                              "image",
-                              "charmap",
-                              "preview",
-                              "anchor",
-                              "searchreplace",
-                              "visualblocks",
-                              "code",
-                              "fullscreen",
-                              "insertdatetime",
-                              "media",
-                              "table",
-                              "help",
-                              "wordcount",
-                            ],
-                            toolbar:
-                              "undo redo | formatselect | fontselect fontsizeselect | " +
-                              "bold italic underline removeformat | forecolor backcolor | " +
-                              "alignleft aligncenter alignright alignjustify | " +
-                              "bullist numlist outdent indent | link image media table | " +
-                              "preview fullscreen | help",
-                            content_style:
-                              "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
-                          }}
-                        />
-                      )}
+                    <label className="block text-sm mb-1 text-gray-200">
+                      Title
+                    </label>
+                    <input
+                      {...register(`section${sectionNum}_title`)}
+                      className="w-full p-2 border border-gray-800 rounded-lg text-sm bg-gray-900 text-white"
                     />
                   </div>
-                )}
+                  {sectionNum === 2 ? (
+                    <div>
+                      <label className="block text-sm mb-1 text-gray-200">
+                        Points
+                      </label>
+                      <div className="space-y-1">
+                        {fields.map((field, index) => (
+                          <div key={field.id} className="flex gap-1">
+                            <input
+                              {...register(`section2_points.${index}`)}
+                              className="flex-1 p-2 border border-gray-800 rounded-lg text-sm bg-gray-900 text-white"
+                              placeholder="Enter point"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => remove(index)}
+                              className="text-red-500 hover:text-red-700 cursor-pointer bg-gray-900 rounded-lg px-2 py-1"
+                            >
+                              ✕
+                            </button>
+                          </div>
+                        ))}
+                        <button
+                          type="button"
+                          onClick={() => append("")}
+                          className="text-blue-500 text-sm mt-1 hover:underline font-semibold cursor-pointer"
+                        >
+                          + Add Point
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div>
+                      <label className="block text-sm mb-1 text-gray-200">
+                        Description
+                      </label>
+                      <Controller
+                        name={`section${sectionNum}_description`}
+                        control={control}
+                        render={({ field }) => (
+                          <Editor
+                            apiKey={import.meta.env.VITE_TINY_APIKEY}
+                            value={field.value}
+                            onEditorChange={(content) =>
+                              field.onChange(content)
+                            }
+                            init={{
+                              height: 200,
+                              menubar: false,
+                              plugins: [
+                                "advlist",
+                                "autolink",
+                                "lists",
+                                "link",
+                                "image",
+                                "charmap",
+                                "preview",
+                                "anchor",
+                                "searchreplace",
+                                "visualblocks",
+                                "code",
+                                "fullscreen",
+                                "insertdatetime",
+                                "media",
+                                "table",
+                                "help",
+                                "wordcount",
+                              ],
+                              toolbar:
+                                "undo redo | formatselect | fontselect fontsizeselect | " +
+                                "bold italic underline removeformat | forecolor backcolor | " +
+                                "alignleft aligncenter alignright alignjustify | " +
+                                "bullist numlist outdent indent | link image media table | " +
+                                "preview fullscreen | help",
+                              content_style:
+                                "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
+                            }}
+                          />
+                        )}
+                      />
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
-        {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            ))}
+          </div>
+          {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="rounded">
             <h2 className="text-base font-semibold mb-2">Who We Serve Image</h2>
             <div
@@ -296,15 +313,14 @@ const AdminUpdateAboutUs = () => {
             )}
           </div>
         </div> */}
-        <div className="flex justify-end">
-          <Button
-            text={"Update About Us"}
-            type="submit"
-            className="text-sm px-4 py-2"
-          />
-        </div>
-      </form>
-      <div>
+          <div className="flex justify-end">
+            <Button
+              text={"Update About Us"}
+              type="submit"
+              className="text-base px-8 py-3 !rounded-lg cursor-pointer"
+            />
+          </div>
+        </form>
         <AboutUsImgesControlls />
       </div>
     </div>

@@ -33,6 +33,9 @@ const AdminUpdateTradeIn = () => {
         icon: "success",
         title: "Success!",
         text: "Trade-In content updated successfully",
+        background: "#1e293b",
+        color: "#f8fafc",
+        confirmButtonColor: "#e11d48",
       });
     },
     onError: (error) => {
@@ -40,6 +43,9 @@ const AdminUpdateTradeIn = () => {
         icon: "error",
         title: "Error",
         text: error.response?.data?.message || "Failed to update content",
+        background: "#1e293b",
+        color: "#f8fafc",
+        confirmButtonColor: "#e11d48",
       });
     },
   });
@@ -92,209 +98,233 @@ const AdminUpdateTradeIn = () => {
   if (isLoading) return <Loader />;
 
   return (
-    <div className="overflow-y-auto">
-      <h1 className="text-lg font-semibold mb-2">Update Trade-In Page</h1>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          <div className="rounded p-3 border border-gray-600">
-            <h2 className="text-base font-semibold mb-2">Section 1</h2>
-            <div className="space-y-2">
-              <div>
-                <label className="block text-sm mb-1">Title</label>
-                <input
-                  {...register("title1")}
-                  className="w-full p-1.5 border border-gray-600 rounded text-sm"
-                />
-              </div>
-              <div>
-                <label className="block text-sm mb-1">Description</label>
-                <Controller
-                  name="description1"
-                  control={control}
-                  render={({ field }) => (
-                    <Editor
-                      apiKey={import.meta.env.VITE_TINY_APIKEY}
-                      value={field.value}
-                      onEditorChange={(content) => field.onChange(content)}
-                      init={{
-                        height: 150,
-                        menubar: false,
-                        plugins: [
-                          "advlist",
-                          "autolink",
-                          "lists",
-                          "link",
-                          "image",
-                          "charmap",
-                          "preview",
-                          "anchor",
-                          "searchreplace",
-                          "visualblocks",
-                          "code",
-                          "fullscreen",
-                          "insertdatetime",
-                          "media",
-                          "table",
-                          "help",
-                          "wordcount",
-                        ],
-                        toolbar:
-                          "undo redo | formatselect | fontselect fontsizeselect | " +
-                          "bold italic underline removeformat | forecolor backcolor | " +
-                          "alignleft aligncenter alignright alignjustify | " +
-                          "bullist numlist outdent indent | link image media table | " +
-                          "preview fullscreen | help",
-                        content_style:
-                          "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
-                      }}
-                    />
-                  )}
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className="rounded p-3 border border-gray-600">
-            <h2 className="text-base font-semibold mb-2">
-              Section 2 - Buying Process
-            </h2>
-            <div className="space-y-2">
-              <div>
-                <label className="block text-sm mb-1">Title</label>
-                <input
-                  {...register("title2")}
-                  className="w-full p-1.5 border border-gray-600 rounded text-sm"
-                />
-              </div>
-              <div>
-                <label className="block text-sm mb-1">Process Points</label>
-                <div className="space-y-1">
-                  {processPointsFields.map((field, index) => (
-                    <div key={field.id} className="flex gap-1">
-                      <input
-                        {...register(`process_points.${index}`)}
-                        className="flex-1 p-1.5 border border-gray-600 rounded text-sm"
-                        placeholder="Enter process point"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => removeProcessPoint(index)}
-                        className="text-red-500 cursor-pointer hover:text-red-700"
-                      >
-                        ✕
-                      </button>
-                    </div>
-                  ))}
-                  <button
-                    type="button"
-                    onClick={() => appendProcessPoint("")}
-                    className="text-blue-500 cursor-pointer text-sm mt-1 hover:underline"
-                  >
-                    + Add Process Point
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="rounded p-3 border border-gray-600">
-            <h2 className="text-base font-semibold mb-2">
-              Section 3 - Trade-Ins
-            </h2>
-            <div className="space-y-2">
-              <div>
-                <label className="block text-sm mb-1">Title</label>
-                <input
-                  {...register("title3")}
-                  className="w-full p-1.5 border border-gray-600 rounded text-sm"
-                />
-              </div>
-              <div>
-                <label className="block text-sm mb-1">Description</label>
-                <Controller
-                  name="description3"
-                  control={control}
-                  render={({ field }) => (
-                    <Editor
-                      apiKey={import.meta.env.VITE_TINY_APIKEY}
-                      value={field.value}
-                      onEditorChange={(content) => field.onChange(content)}
-                      init={{
-                        height: 150,
-                        menubar: false,
-                        plugins: [
-                          "advlist",
-                          "autolink",
-                          "lists",
-                          "link",
-                          "image",
-                          "charmap",
-                          "preview",
-                          "anchor",
-                          "searchreplace",
-                          "visualblocks",
-                          "code",
-                          "fullscreen",
-                          "insertdatetime",
-                          "media",
-                          "table",
-                          "help",
-                          "wordcount",
-                        ],
-                        toolbar:
-                          "undo redo | formatselect | fontselect fontsizeselect | " +
-                          "bold italic underline removeformat | forecolor backcolor | " +
-                          "alignleft aligncenter alignright alignjustify | " +
-                          "bullist numlist outdent indent | link image media table | " +
-                          "preview fullscreen | help",
-                        content_style:
-                          "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
-                      }}
-                    />
-                  )}
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className="rounded p-3 border border-gray-600">
-            <h2 className="text-base font-semibold mb-2">Instrument Makes</h2>
-            <div className="space-y-1">
-              {instrumentMakesFields.map((field, index) => (
-                <div key={field.id} className="flex gap-1">
+    <div className="w-full m-0 md:m-2">
+      <div className="rounded-lg shadow-2xl mb-4 border border-gray-800 bg-gray-900/95 p-0 sm:p-5">
+        <h1 className="text-xl sm:text-2xl font-extrabold mb-8 bg-clip-text text-white tracking-tight">
+          Update Trade-In Page
+        </h1>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-7">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {/* Section 1 */}
+            <div className="rounded-lg p-4 border border-gray-800 bg-gray-800/80 mb-3">
+              <h2 className="text-base font-semibold mb-2 text-teal-300">
+                Section 1
+              </h2>
+              <div className="space-y-2">
+                <div>
+                  <label className="block text-sm mb-1 text-gray-200">
+                    Title
+                  </label>
                   <input
-                    {...register(`instrument_makes.${index}`)}
-                    className="flex-1 p-1.5 border border-gray-600 rounded text-sm"
-                    placeholder="Enter instrument make"
+                    {...register("title1")}
+                    className="w-full p-2 border border-gray-800 rounded-lg text-sm bg-gray-900 text-white"
                   />
-                  <button
-                    type="button"
-                    onClick={() => removeInstrumentMake(index)}
-                    className="text-red-500 cursor-pointer hover:text-red-700"
-                  >
-                    ✕
-                  </button>
                 </div>
-              ))}
-              <button
-                type="button"
-                onClick={() => appendInstrumentMake("")}
-                className="text-blue-500 text-sm cursor-pointer mt-1 hover:underline"
-              >
-                + Add Instrument Make
-              </button>
+                <div>
+                  <label className="block text-sm mb-1 text-gray-200">
+                    Description
+                  </label>
+                  <Controller
+                    name="description1"
+                    control={control}
+                    render={({ field }) => (
+                      <Editor
+                        apiKey={import.meta.env.VITE_TINY_APIKEY}
+                        value={field.value}
+                        onEditorChange={(content) => field.onChange(content)}
+                        init={{
+                          height: 200,
+                          menubar: false,
+                          plugins: [
+                            "advlist",
+                            "autolink",
+                            "lists",
+                            "link",
+                            "image",
+                            "charmap",
+                            "preview",
+                            "anchor",
+                            "searchreplace",
+                            "visualblocks",
+                            "code",
+                            "fullscreen",
+                            "insertdatetime",
+                            "media",
+                            "table",
+                            "help",
+                            "wordcount",
+                          ],
+                          toolbar:
+                            "undo redo | formatselect | fontselect fontsizeselect | " +
+                            "bold italic underline removeformat | forecolor backcolor | " +
+                            "alignleft aligncenter alignright alignjustify | " +
+                            "bullist numlist outdent indent | link image media table | " +
+                            "preview fullscreen | help",
+                          content_style:
+                            "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
+                        }}
+                      />
+                    )}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Section 2 - Buying Process */}
+            <div className="rounded-lg p-4 border border-gray-800 bg-gray-800/80 mb-3">
+              <h2 className="text-base font-semibold mb-2 text-teal-300">
+                Section 2 - Buying Process
+              </h2>
+              <div className="space-y-2">
+                <div>
+                  <label className="block text-sm mb-1 text-gray-200">
+                    Title
+                  </label>
+                  <input
+                    {...register("title2")}
+                    className="w-full p-2 border border-gray-800 rounded-lg text-sm bg-gray-900 text-white"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm mb-1 text-gray-200">
+                    Process Points
+                  </label>
+                  <div className="space-y-1">
+                    {processPointsFields.map((field, index) => (
+                      <div key={field.id} className="flex gap-1">
+                        <input
+                          {...register(`process_points.${index}`)}
+                          className="flex-1 p-2 border border-gray-800 rounded-lg text-sm bg-gray-900 text-white"
+                          placeholder="Enter process point"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => removeProcessPoint(index)}
+                          className="text-red-500 cursor-pointer hover:text-red-700 rounded-lg px-2 py-1"
+                        >
+                          ✕
+                        </button>
+                      </div>
+                    ))}
+                    <button
+                      type="button"
+                      onClick={() => appendProcessPoint("")}
+                      className="text-blue-500 cursor-pointer text-sm mt-1 hover:underline font-semibold"
+                    >
+                      + Add Process Point
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Section 3 - Trade-Ins */}
+            <div className="rounded-lg p-4 border border-gray-800 bg-gray-800/80 mb-3">
+              <h2 className="text-base font-semibold mb-2 text-teal-300">
+                Section 3 - Trade-Ins
+              </h2>
+              <div className="space-y-2">
+                <div>
+                  <label className="block text-sm mb-1 text-gray-200">
+                    Title
+                  </label>
+                  <input
+                    {...register("title3")}
+                    className="w-full p-2 border border-gray-800 rounded-lg text-sm bg-gray-900 text-white"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm mb-1 text-gray-200">
+                    Description
+                  </label>
+                  <Controller
+                    name="description3"
+                    control={control}
+                    render={({ field }) => (
+                      <Editor
+                        apiKey={import.meta.env.VITE_TINY_APIKEY}
+                        value={field.value}
+                        onEditorChange={(content) => field.onChange(content)}
+                        init={{
+                          height: 200,
+                          menubar: false,
+                          plugins: [
+                            "advlist",
+                            "autolink",
+                            "lists",
+                            "link",
+                            "image",
+                            "charmap",
+                            "preview",
+                            "anchor",
+                            "searchreplace",
+                            "visualblocks",
+                            "code",
+                            "fullscreen",
+                            "insertdatetime",
+                            "media",
+                            "table",
+                            "help",
+                            "wordcount",
+                          ],
+                          toolbar:
+                            "undo redo | formatselect | fontselect fontsizeselect | " +
+                            "bold italic underline removeformat | forecolor backcolor | " +
+                            "alignleft aligncenter alignright alignjustify | " +
+                            "bullist numlist outdent indent | link image media table | " +
+                            "preview fullscreen | help",
+                          content_style:
+                            "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
+                        }}
+                      />
+                    )}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Instrument Makes */}
+            <div className="rounded-lg p-4 border border-gray-800 bg-gray-800/80 mb-3">
+              <h2 className="text-base font-semibold mb-2 text-teal-300">
+                Instrument Makes
+              </h2>
+              <div className="space-y-1">
+                {instrumentMakesFields.map((field, index) => (
+                  <div key={field.id} className="flex gap-1">
+                    <input
+                      {...register(`instrument_makes.${index}`)}
+                      className="flex-1 p-2 border border-gray-800 rounded-lg text-sm bg-gray-900 text-white"
+                      placeholder="Enter instrument make"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => removeInstrumentMake(index)}
+                      className="text-red-500 cursor-pointer hover:text-red-700 rounded-lg px-2 py-1"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                ))}
+                <button
+                  type="button"
+                  onClick={() => appendInstrumentMake("")}
+                  className="text-blue-500 text-sm cursor-pointer mt-1 hover:underline font-semibold"
+                >
+                  + Add Instrument Make
+                </button>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="flex justify-end">
-          <Button
-            text={"Update Trade-In"}
-            type="submit"
-            className="text-sm px-4 py-2"
-          />
-        </div>
-      </form>
+          <div className="flex justify-end">
+            <Button
+              text={"Update Trade-In"}
+              type="submit"
+              className="text-base px-8 py-3 !rounded-lg cursor-pointer"
+            />
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

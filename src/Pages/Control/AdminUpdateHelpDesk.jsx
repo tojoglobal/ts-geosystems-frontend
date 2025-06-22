@@ -22,13 +22,23 @@ const AdminUpdateHelpDesk = () => {
     mutationFn: (data) => axiosPublicUrl.put("/api/helpdesk-info", data),
     onSuccess: () => {
       queryClient.invalidateQueries(["helpdeskInfo"]);
-      Swal.fire({ icon: "success", title: "Updated!" });
+      Swal.fire({
+        icon: "success",
+        title: "Success!",
+        text: "Updated!",
+        background: "#1e293b",
+        color: "#f8fafc",
+        confirmButtonColor: "#e11d48",
+      });
     },
     onError: (error) => {
       Swal.fire({
         icon: "error",
         title: "Error",
         text: error.response?.data?.error || "Failed to update",
+        background: "#1e293b",
+        color: "#f8fafc",
+        confirmButtonColor: "#e11d48",
       });
     },
   });
@@ -64,70 +74,86 @@ const AdminUpdateHelpDesk = () => {
   if (isLoading) return <Loader />;
 
   return (
-    <div>
-      <h1 className="text-xl md:text-2xl font-bold mb-4">
-        Admin - Update Help Desk Info
-      </h1>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label className="block font-medium mb-1">Panel Title</label>
-            <input
-              {...register("title")}
-              className="w-full border border-gray-600 focus:outline-none focus:border focus:border-gray-500 p-2 rounded"
+    <div className="w-full m-0 md:m-2">
+      <div className="rounded-lg shadow-2xl mb-4 border border-gray-800 bg-gray-900/95 p-0 sm:p-5">
+        <h1 className="text-xl sm:text-2xl font-extrabold mb-8 bg-clip-text text-white tracking-tight">
+          Update Help Desk Info
+        </h1>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block font-medium mb-1 text-gray-200">
+                Panel Title
+              </label>
+              <input
+                {...register("title")}
+                className="w-full border border-gray-700 focus:outline-none focus:border focus:border-teal-400 p-2 rounded-lg bg-gray-800 text-white"
+              />
+            </div>
+            <div>
+              <label className="block font-medium mb-1 text-gray-200">
+                Helpline Number
+              </label>
+              <input
+                {...register("helpline_number")}
+                className="w-full border border-gray-700 focus:outline-none focus:border focus:border-teal-400 p-2 rounded-lg bg-gray-800 text-white"
+              />
+            </div>
+            <div>
+              <label className="block font-medium mb-1 text-gray-200">
+                WhatsApp
+              </label>
+              <input
+                {...register("whatsapp")}
+                className="w-full border border-gray-700 focus:outline-none focus:border focus:border-teal-400 p-2 rounded-lg bg-gray-800 text-white"
+              />
+            </div>
+            <div>
+              <label className="block font-medium mb-1 text-gray-200">
+                Support Email
+              </label>
+              <input
+                {...register("email")}
+                className="w-full border border-gray-700 focus:outline-none focus:border focus:border-teal-400 p-2 rounded-lg bg-gray-800 text-white"
+              />
+            </div>
+            <div>
+              <label className="block font-medium mb-1 text-gray-200">
+                Contact Button Label
+              </label>
+              <input
+                {...register("contact_btn_label")}
+                className="w-full border border-gray-700 focus:outline-none focus:border focus:border-teal-400 p-2 rounded-lg bg-gray-800 text-white"
+              />
+            </div>
+            <div>
+              <label className="block font-medium mb-1 text-gray-200">
+                Contact Button Link
+              </label>
+              <input
+                {...register("contact_btn_link")}
+                className="w-full border border-gray-700 focus:outline-none focus:border focus:border-teal-400 p-2 rounded-lg bg-gray-800 text-white"
+              />
+            </div>
+            <div>
+              <label className="block font-medium mb-1 text-gray-200">
+                Tooltip Text
+              </label>
+              <input
+                {...register("tooltip_text")}
+                className="w-full border border-gray-700 focus:outline-none focus:border focus:border-teal-400 p-2 rounded-lg bg-gray-800 text-white"
+              />
+            </div>
+          </div>
+          <div className="mt-6">
+            <Button
+              text="Save Changes"
+              disabled={mutation.isPending}
+              className="cursor-pointer !rounded-lg !text-base"
             />
           </div>
-          <div>
-            <label className="block font-medium mb-1">Helpline Number</label>
-            <input
-              {...register("helpline_number")}
-              className="w-full border border-gray-600 focus:outline-none focus:border focus:border-gray-500 p-2 rounded"
-            />
-          </div>
-          <div>
-            <label className="block font-medium mb-1">WhatsApp</label>
-            <input
-              {...register("whatsapp")}
-              className="w-full border border-gray-600 focus:outline-none focus:border focus:border-gray-500 p-2 rounded"
-            />
-          </div>
-          <div>
-            <label className="block font-medium mb-1">Support Email</label>
-            <input
-              {...register("email")}
-              className="w-full border border-gray-600 focus:outline-none focus:border focus:border-gray-500 p-2 rounded"
-            />
-          </div>
-          <div>
-            <label className="block font-medium mb-1">
-              Contact Button Label
-            </label>
-            <input
-              {...register("contact_btn_label")}
-              className="w-full border border-gray-600 focus:outline-none focus:border focus:border-gray-500 p-2 rounded"
-            />
-          </div>
-          <div>
-            <label className="block font-medium mb-1">
-              Contact Button Link
-            </label>
-            <input
-              {...register("contact_btn_link")}
-              className="w-full border border-gray-600 focus:outline-none focus:border focus:border-gray-500 p-2 rounded"
-            />
-          </div>
-          <div>
-            <label className="block font-medium mb-1">Tooltip Text</label>
-            <input
-              {...register("tooltip_text")}
-              className="w-full border border-gray-600 focus:outline-none focus:border focus:border-gray-500 p-2 rounded"
-            />
-          </div>
-        </div>
-        <div className="mt-5">
-          <Button text="Save Changes" disabled={mutation.isPending} />
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
   );
 };

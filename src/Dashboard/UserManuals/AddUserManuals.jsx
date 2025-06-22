@@ -24,7 +24,6 @@ const AddUserManuals = () => {
     refetch: fetchuserManuals,
   } = useDataQuery(["userManuals"], "/api/userManuals");
   const userManuals = data?.data || [];
-  
   const { register, handleSubmit, watch, reset, setValue } = useForm();
 
   const watchuserManualsName = watch("userManualsName", "");
@@ -60,9 +59,23 @@ const AddUserManuals = () => {
       reset();
       setEditingBrand(null);
       setImagePreview(null);
-      Swal.fire("Success", message, "success");
+      Swal.fire({
+        icon: "success",
+        title: "Success",
+        text: message,
+        background: "#1e293b",
+        color: "#f8fafc",
+        confirmButtonColor: "#e11d48",
+      });
     } catch (error) {
-      Swal.fire("Error", error.message || "Error saving user manual.", "error");
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: error.message || "Error saving user manual.",
+        background: "#1e293b",
+        color: "#f8fafc",
+        confirmButtonColor: "#e11d48",
+      });
     }
   };
 
@@ -79,21 +92,36 @@ const AddUserManuals = () => {
       text: "You won't be able to revert this!",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
       confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "Cancel",
+      background: "#1e293b",
+      color: "#f8fafc",
+      confirmButtonColor: "#e11d48",
+      cancelButtonColor: "#334155",
+      reverseButtons: true,
+      focusCancel: true,
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
           await axiosPublicUrl.delete(`/api/userManuals/${id}`);
           fetchuserManuals();
-          Swal.fire("Deleted!", "User manual has been deleted.", "success");
+          Swal.fire({
+            icon: "success",
+            title: "Deleted!",
+            text: "User manual has been deleted.",
+            background: "#1e293b",
+            color: "#f8fafc",
+            confirmButtonColor: "#e11d48",
+          });
         } catch (error) {
-          Swal.fire(
-            "Error",
-            error.message || "Error deleting user manual.",
-            "error"
-          );
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: error.message || "Error deleting user manual.",
+            background: "#1e293b",
+            color: "#f8fafc",
+            confirmButtonColor: "#e11d48",
+          });
         }
       }
     });

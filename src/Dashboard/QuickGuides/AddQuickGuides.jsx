@@ -61,9 +61,23 @@ const AddQuickGuides = () => {
       reset();
       setEditingGuide(null);
       setImagePreview(null);
-      Swal.fire("Success", message, "success");
+      Swal.fire({
+        icon: "success",
+        title: "Success",
+        text: message,
+        background: "#1e293b",
+        color: "#f8fafc",
+        confirmButtonColor: "#e11d48",
+      });
     } catch (error) {
-      Swal.fire("Error", error.message || "Error saving quick guide.", "error");
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: error.message || "Error saving quick guide.",
+        background: "#1e293b",
+        color: "#f8fafc",
+        confirmButtonColor: "#e11d48",
+      });
     }
   };
 
@@ -80,21 +94,36 @@ const AddQuickGuides = () => {
       text: "You won't be able to revert this!",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
       confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "Cancel",
+      background: "#1e293b",
+      color: "#f8fafc",
+      confirmButtonColor: "#e11d48",
+      cancelButtonColor: "#334155",
+      reverseButtons: true,
+      focusCancel: true,
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
           await axiosPublicUrl.delete(`/api/quickGuides/${id}`);
           fetchQuickGuides();
-          Swal.fire("Deleted!", "Quick guide has been deleted.", "success");
+          Swal.fire({
+            icon: "success",
+            title: "Deleted!",
+            text: "Quick guide has been deleted.",
+            background: "#1e293b",
+            color: "#f8fafc",
+            confirmButtonColor: "#e11d48",
+          });
         } catch (error) {
-          Swal.fire(
-            "Error",
-            error.message || "Error deleting quick guide.",
-            "error"
-          );
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: error.message || "Error deleting quick guide.",
+            background: "#1e293b",
+            color: "#f8fafc",
+            confirmButtonColor: "#e11d48",
+          });
         }
       }
     });

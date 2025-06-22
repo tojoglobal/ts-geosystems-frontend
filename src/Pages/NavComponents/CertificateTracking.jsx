@@ -47,7 +47,7 @@ const CertificateTracking = () => {
     }
   };
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return null;
 
   return (
     <div className="w-full md:max-w-[95%] 2xl:max-w-[1370px] mx-auto p-4 md:p-5">
@@ -61,7 +61,7 @@ const CertificateTracking = () => {
         </Link>{" "}
         / <span className="text-red-600 font-medium">Certificate Tracking</span>
       </div>
-      <h1 className="text-[28px] mt-2 text-[#e62245] mb-4 uppercase">
+      <h1 className="text-xl sm:text-[28px] mt-2 text-[#e62245] mb-4 uppercase">
         {certificateData?.title || "Certificate Tracking"}
       </h1>
       {certificateData?.description && (

@@ -64,7 +64,14 @@ const Software = () => {
       setEditingBrand(null);
       setImagePreview(null);
       setPriceShow(true);
-      Swal.fire("Success", message, "success");
+      Swal.fire({
+        icon: "Success",
+        title: "Success!",
+        text: message,
+        background: "#1e293b",
+        color: "#f8fafc",
+        confirmButtonColor: "#e11d48",
+      });
     } catch (error) {
       Swal.fire("Error", error.message || "Error saving software.", "error");
     }
@@ -81,25 +88,48 @@ const Software = () => {
 
   const handleDelete = async (id) => {
     Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
+      title: "Delete this software?",
+      text: "This action cannot be undone.",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
-      confirmButtonText: "Yes, delete it!",
+      confirmButtonText: "Yes, delete",
+      cancelButtonText: "Cancel",
+      background: "#1e293b",
+      color: "#f8fafc",
+      confirmButtonColor: "#e11d48",
+      cancelButtonColor: "#334155",
+      reverseButtons: true,
+      focusCancel: true,
+      customClass: {
+        popup: "rounded-lg",
+        confirmButton: "swal2-confirm !rounded-md !px-4 !py-2",
+        cancelButton: "swal2-cancel !rounded-md !px-4 !py-2",
+      },
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
+          Swal.showLoading();
           await axiosPublicUrl.delete(`/api/software/${id}`);
           refetchSoftwar();
-          Swal.fire("Deleted!", "Software has been deleted.", "success");
+          Swal.fire({
+            icon: "success",
+            title: "Deleted!",
+            text: "Software has been deleted.",
+            background: "#1e293b",
+            color: "#f8fafc",
+            confirmButtonColor: "#e11d48",
+            customClass: { popup: "rounded-lg" },
+          });
         } catch (error) {
-          Swal.fire(
-            "Error",
-            error.message || "Error deleting software.",
-            "error"
-          );
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: error.message || "Error deleting software.",
+            background: "#1e293b",
+            color: "#f8fafc",
+            confirmButtonColor: "#e11d48",
+            customClass: { popup: "rounded-lg" },
+          });
         }
       }
     });

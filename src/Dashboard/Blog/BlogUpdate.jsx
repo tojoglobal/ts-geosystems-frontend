@@ -315,7 +315,10 @@ const BlogUpdate = () => {
             });
 
             return (
-              <div key={idx} className="border p-4 bg-gray-900 rounded">
+              <div
+                key={idx}
+                className="border p-4 bg-gray-900 rounded-lg border-gray-700"
+              >
                 <label className="block text-white mb-2">Image {idx + 1}</label>
                 <div
                   {...getRootProps()}

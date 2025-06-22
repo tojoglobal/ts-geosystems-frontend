@@ -1,42 +1,63 @@
-export default function AuthorList({ data, onEdit, onDelete }) {
+import { MdEdit, MdDelete } from "react-icons/md";
+
+const AuthorList = ({ data, onEdit, onDelete }) => {
   return (
     <div className="mt-8">
-      <h3 className="text-xl font-semibold mb-3">Author List</h3>
-      <table className="min-w-full text-sm text-left border border-gray-600 mt-6">
+      <h3 className="text-xl sm:text-2xl font-semibold mb-3">
+        Author List
+      </h3>
+      <table className="min-w-full text-sm text-left border border-gray-800 bg-gray-900/95 rounded-xl shadow-xl mt-6 text-white">
         <thead>
-          <tr className="text-left">
-            <th className="p-3 border-b border-gray-600">Name</th>
-            <th className="p-3 border-b border-gray-600">Status</th>
-            <th className="p-3 border-b border-gray-600">Actions</th>
+          <tr>
+            <th className="p-3 border-b border-gray-700 font-semibold">Name</th>
+            <th className="p-3 border-b border-gray-700 font-semibold">
+              Status
+            </th>
+            <th className="p-3 border-b border-gray-700 font-semibold">
+              Actions
+            </th>
           </tr>
         </thead>
         <tbody>
           {data.length > 0 &&
             data.map((author) => (
-              <tr key={author.id}>
-                <td className="p-3 border-b border-gray-600">{author.name}</td>
-                <td className="p-3 border-b border-gray-600">
-                  {author.status === 1 ? "Active" : "Inactive"}
+              <tr key={author.id} className="hover:bg-gray-800/70 transition">
+                <td className="p-3 border-b border-gray-800">{author.name}</td>
+                <td className="p-3 border-b border-gray-800">
+                  {author.status === 1 ? (
+                    <span className="text-green-400 font-semibold">Active</span>
+                  ) : (
+                    <span className="text-gray-400 font-semibold">
+                      Inactive
+                    </span>
+                  )}
                 </td>
-                <td className="p-3 border-b border-gray-600 space-x-3">
-                  <button
-                    onClick={() => onEdit(author)}
-                    className="text-blue-600 cursor-pointer hover:underline"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => onDelete(author.id)}
-                    className="text-red-600 cursor-pointer hover:underline"
-                  >
-                    Delete
-                  </button>
+                <td className="p-3 border-b border-gray-800">
+                  <div className="flex gap-1">
+                    <button
+                      onClick={() => onEdit(author)}
+                      className="text-blue-400 hover:text-blue-600 p-1 rounded cursor-pointer transition"
+                      title="Edit"
+                    >
+                      <MdEdit size={20} />
+                    </button>
+                    <button
+                      onClick={() => onDelete(author.id)}
+                      className="text-red-500 hover:text-red-700 p-1 rounded cursor-pointer transition"
+                      title="Delete"
+                    >
+                      <MdDelete size={20} />
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}
           {data.length === 0 && (
             <tr>
-              <td colSpan="3" className="p-3 text-center text-gray-500">
+              <td
+                colSpan="3"
+                className="p-3 text-center text-gray-400 bg-gray-900"
+              >
                 No authors found
               </td>
             </tr>
@@ -45,4 +66,6 @@ export default function AuthorList({ data, onEdit, onDelete }) {
       </table>
     </div>
   );
-}
+};
+
+export default AuthorList;

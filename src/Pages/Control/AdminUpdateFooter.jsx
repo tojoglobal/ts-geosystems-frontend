@@ -73,11 +73,14 @@ const AdminUpdateFooter = () => {
           );
         }
       } catch (error) {
-        Swal.fire(
-          "Error",
-          error.message || "Failed to fetch footer data",
-          "error"
-        );
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: error.message || "Failed to fetch footer data",
+          background: "#1e293b",
+          color: "#f8fafc",
+          confirmButtonColor: "#e11d48",
+        });
       }
       setLoading(false);
     };
@@ -204,7 +207,14 @@ const AdminUpdateFooter = () => {
       });
 
       if (res.data.success) {
-        Swal.fire("Success", "Footer updated successfully!", "success");
+        Swal.fire({
+          icon: "success",
+          title: "Success",
+          text: "Footer updated successfully!",
+          background: "#1e293b",
+          color: "#f8fafc",
+          confirmButtonColor: "#e11d48",
+        });
 
         // Update ISO images state
         const newUrls = [
@@ -245,213 +255,225 @@ const AdminUpdateFooter = () => {
       }
     } catch (error) {
       console.error("Update error:", error);
-      Swal.fire(
-        "Error",
-        error?.response?.data?.message || "Update failed",
-        "error"
-      );
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: error?.response?.data?.message || "Update failed",
+        background: "#1e293b",
+        color: "#f8fafc",
+        confirmButtonColor: "#e11d48",
+      });
     } finally {
       setSaving(false);
     }
   };
 
   return (
-    <div>
-      <h2 className="text-2xl font-bold mb-7 text-white">
-        Admin Update Footer
-      </h2>
-      {loading ? (
-        <Loader />
-      ) : (
-        <form className="space-y-7" onSubmit={handleSubmit} autoComplete="off">
-          {/* Color controls */}
-          <div>
-            <label className="block font-medium mb-1 text-gray-200">
-              Footer Background Color
-            </label>
-            <div className="flex items-center gap-2">
-              <input
-                type="text"
-                name="bg_color"
-                value={formData.bg_color}
-                onChange={handleChange}
-                className="border border-neutral-700 bg-neutral-900 px-2 py-1 rounded text-white text-sm"
-                placeholder="#HEX or rgb()"
-                style={{ width: 120 }}
-              />
-              <input
-                type="color"
-                name="bg_color"
-                value={formData.bg_color}
-                onChange={handleChange}
-                className="h-8 w-10 border cursor-pointer rounded bg-neutral-900"
-                style={{ backgroundColor: "transparent" }}
-              />
-              <span
-                className="w-7 h-7 rounded-full border border-neutral-700"
-                style={{
-                  backgroundColor: formData.bg_color,
-                  display: "inline-block",
-                }}
-              />
-            </div>
-          </div>
-          <div className="w-full flex flex-col md:flex-row gap-3">
-            <div className="w-full md:w-1/2">
+    <div className="w-full m-0 md:m-2">
+      <div className="rounded-lg shadow-2xl mb-4 border border-gray-800 bg-gray-900/95 p-0 sm:p-6">
+        <h2 className="text-xl sm:text-2xl font-extrabold mb-8 bg-clip-text text-white tracking-tight">
+          Admin Update Footer
+        </h2>
+        {loading ? (
+          <Loader />
+        ) : (
+          <form
+            className="space-y-7"
+            onSubmit={handleSubmit}
+            autoComplete="off"
+          >
+            {/* Color controls */}
+            <div>
               <label className="block font-medium mb-1 text-gray-200">
-                Address Line 1
+                Footer Background Color
               </label>
-              <input
-                type="text"
-                name="address1"
-                value={formData.address1}
-                onChange={handleChange}
-                className="w-full border border-neutral-700 bg-neutral-900 px-3 py-2 rounded text-white text-sm"
-                required
-              />
+              <div className="flex items-center gap-2">
+                <input
+                  type="text"
+                  name="bg_color"
+                  value={formData.bg_color}
+                  onChange={handleChange}
+                  className="border border-gray-800 bg-gray-900 px-2 py-1 rounded-lg text-white text-sm"
+                  placeholder="#HEX or rgb()"
+                  style={{ width: 120 }}
+                />
+                <input
+                  type="color"
+                  name="bg_color"
+                  value={formData.bg_color}
+                  onChange={handleChange}
+                  className="h-8 w-10 border cursor-pointer rounded-lg bg-gray-900"
+                  style={{ backgroundColor: "transparent" }}
+                />
+                <span
+                  className="w-7 h-7 rounded-full border border-gray-800"
+                  style={{
+                    backgroundColor: formData.bg_color,
+                    display: "inline-block",
+                  }}
+                />
+              </div>
             </div>
-            <div className="w-full md:w-1/2">
-              <label className="block font-medium mb-1 text-gray-200">
-                Address Line 2
-              </label>
-              <input
-                type="text"
-                name="address2"
-                value={formData.address2}
-                onChange={handleChange}
-                className="w-full border border-neutral-700 bg-neutral-900 px-3 py-2 rounded text-white text-sm"
-                required
-              />
+            <div className="w-full flex flex-col md:flex-row gap-3">
+              <div className="w-full md:w-1/2">
+                <label className="block font-medium mb-1 text-gray-200">
+                  Address Line 1
+                </label>
+                <input
+                  type="text"
+                  name="address1"
+                  value={formData.address1}
+                  onChange={handleChange}
+                  className="w-full border border-gray-800 bg-gray-900 px-3 py-2 rounded-lg text-white text-sm"
+                  required
+                />
+              </div>
+              <div className="w-full md:w-1/2">
+                <label className="block font-medium mb-1 text-gray-200">
+                  Address Line 2
+                </label>
+                <input
+                  type="text"
+                  name="address2"
+                  value={formData.address2}
+                  onChange={handleChange}
+                  className="w-full border border-gray-800 bg-gray-900 px-3 py-2 rounded-lg text-white text-sm"
+                  required
+                />
+              </div>
             </div>
-          </div>
-          {/* ISO Images */}
-          <h3 className="text-xl font-semibold mt-6 mb-3 text-gray-100">
-            ISO Images (Max 3)
-          </h3>
-          <div className="flex w-full gap-3">
-            {[0, 1, 2].map((index) => (
+            {/* ISO Images */}
+            <h3 className="text-xl font-semibold mt-6 mb-3 text-gray-100">
+              ISO Images (Max 3)
+            </h3>
+            <div className="flex w-full gap-3">
+              {[0, 1, 2].map((index) => (
+                <div
+                  key={index}
+                  className="relative flex flex-col items-center gap-1"
+                  style={{ minWidth: 120, maxWidth: 160 }}
+                >
+                  <label className="flex flex-col items-center p-3 bg-gray-800 border-2 border-dashed border-gray-800 rounded-lg cursor-pointer hover:bg-gray-700 transition w-full">
+                    <FaCloudUploadAlt
+                      size={28}
+                      className="mb-1 text-teal-500"
+                    />
+                    <span className="text-xs text-gray-300 mb-1 text-center">
+                      {imageFiles[index]
+                        ? `Replace image ${index + 1}`
+                        : imagePreviews[index]
+                        ? `Change image ${index + 1}`
+                        : `Upload ISO image ${index + 1}`}
+                    </span>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => handleImageChange(e, index)}
+                      className="hidden"
+                    />
+                    {imagePreviews[index] && (
+                      <img
+                        src={imagePreviews[index]}
+                        alt={`ISO Preview ${index + 1}`}
+                        className="h-14 mb-1 mt-2 rounded-lg shadow border border-gray-800"
+                      />
+                    )}
+                  </label>
+                  {(imageFiles[index] || oldImageUrls[index]) && (
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveImage(index)}
+                      className="absolute top-2 right-2 text-red-500 hover:text-red-700 p-1 rounded-full bg-gray-800 hover:bg-gray-700 transition"
+                      title={`Remove image ${index + 1}`}
+                    >
+                      <FaTimesCircle size={18} />
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
+            {/* Payment Method Image (ISO) */}
+            <h3 className="text-xl font-semibold mt-6 mb-3 text-gray-100">
+              Payment Method Image
+            </h3>
+            <div className="flex w-full gap-3">
               <div
-                key={index}
                 className="relative flex flex-col items-center gap-1"
-                style={{ minWidth: 120, maxWidth: 160 }}
+                // style={{ minWidth: 120, maxWidth: 160 }}
               >
-                <label className="flex flex-col items-center p-3 bg-neutral-800 border-2 border-dashed border-neutral-600 rounded-lg cursor-pointer hover:bg-neutral-700 transition w-full">
+                <label className="flex flex-col items-center p-3 bg-gray-800 border-2 border-dashed border-gray-800 rounded-lg cursor-pointer hover:bg-gray-700 transition w-full">
                   <FaCloudUploadAlt size={28} className="mb-1 text-teal-500" />
                   <span className="text-xs text-gray-300 mb-1 text-center">
-                    {imageFiles[index]
-                      ? `Replace image ${index + 1}`
-                      : imagePreviews[index]
-                      ? `Change image ${index + 1}`
-                      : `Upload ISO image ${index + 1}`}
+                    {paymentImageFile
+                      ? "Replace Payment Method Image"
+                      : paymentImagePreview
+                      ? "Change Payment Method Image"
+                      : "Upload Payment Method Image"}
                   </span>
                   <input
                     type="file"
                     accept="image/*"
-                    onChange={(e) => handleImageChange(e, index)}
+                    onChange={handlePaymentImageChange}
                     className="hidden"
                   />
-                  {imagePreviews[index] && (
+                  {paymentImagePreview && (
                     <img
-                      src={imagePreviews[index]}
-                      alt={`ISO Preview ${index + 1}`}
-                      className="h-14 mb-1 mt-2 rounded shadow border border-gray-600"
+                      src={paymentImagePreview}
+                      alt="Payment Method Preview"
+                      className="h-14 mb-1 mt-2 rounded-lg shadow border border-gray-800"
                     />
                   )}
                 </label>
-                {(imageFiles[index] || oldImageUrls[index]) && (
+                {(paymentImageFile || oldPaymentImageUrl) && (
                   <button
                     type="button"
-                    onClick={() => handleRemoveImage(index)}
-                    className="absolute top-2 right-2 text-red-500 hover:text-red-700 p-1 rounded-full bg-neutral-800 hover:bg-neutral-700 transition"
-                    title={`Remove image ${index + 1}`}
+                    onClick={handleRemovePaymentImage}
+                    className="absolute top-2 right-2 text-red-500 hover:text-red-700 p-1 rounded-full bg-gray-800 hover:bg-gray-700 transition"
+                    title="Remove Payment Method Image"
                   >
                     <FaTimesCircle size={18} />
                   </button>
                 )}
               </div>
-            ))}
-          </div>
-          {/* Payment Method Image (ISO) */}
-          <h3 className="text-xl font-semibold mt-6 mb-3 text-gray-100">
-            Payment Method Image
-          </h3>
-          <div className="flex w-full gap-3">
-            <div
-              className="relative flex flex-col items-center gap-1"
-              // style={{ minWidth: 120, maxWidth: 160 }}
-            >
-              <label className="flex flex-col items-center p-3 bg-neutral-800 border-2 border-dashed border-neutral-600 rounded-lg cursor-pointer hover:bg-neutral-700 transition w-full">
-                <FaCloudUploadAlt size={28} className="mb-1 text-teal-500" />
-                <span className="text-xs text-gray-300 mb-1 text-center">
-                  {paymentImageFile
-                    ? "Replace Payment Method Image"
-                    : paymentImagePreview
-                    ? "Change Payment Method Image"
-                    : "Upload Payment Method Image"}
-                </span>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handlePaymentImageChange}
-                  className="hidden"
-                />
-                {paymentImagePreview && (
-                  <img
-                    src={paymentImagePreview}
-                    alt="Payment Method Preview"
-                    className="h-14 mb-1 mt-2 rounded shadow border border-gray-600"
-                  />
-                )}
-              </label>
-              {(paymentImageFile || oldPaymentImageUrl) && (
-                <button
-                  type="button"
-                  onClick={handleRemovePaymentImage}
-                  className="absolute top-2 right-2 text-red-500 hover:text-red-700 p-1 rounded-full bg-neutral-800 hover:bg-neutral-700 transition"
-                  title="Remove Payment Method Image"
-                >
-                  <FaTimesCircle size={18} />
-                </button>
-              )}
             </div>
-          </div>
-          {/* Mailing */}
-          <div>
-            <label className="block font-medium mb-1 text-gray-200">
-              Mailing Title
-            </label>
-            <input
-              type="text"
-              name="mailing_title"
-              value={formData.mailing_title}
-              onChange={handleChange}
-              className="w-full border border-neutral-700 bg-neutral-900 px-3 py-2 rounded text-white text-sm"
-              required
-            />
-          </div>
-          <div>
-            <label className="block font-medium mb-1 text-gray-200">
-              Mailing Description
-            </label>
-            <textarea
-              name="mailing_text"
-              value={formData.mailing_text}
-              onChange={handleChange}
-              rows={5}
-              className="w-full border border-neutral-700 bg-neutral-900 px-3 py-2 rounded text-white text-sm"
-              required
-            />
-          </div>
-          <button
-            type="submit"
-            className="bg-teal-600 cursor-pointer hover:bg-teal-700 text-white px-8 py-2 rounded font-semibold transition disabled:opacity-50 w-full"
-            disabled={saving}
-          >
-            {saving ? "Saving..." : "Save Changes"}
-          </button>
-        </form>
-      )}
-      <AdminUpdateFooterRoute />
+            {/* Mailing */}
+            <div>
+              <label className="block font-medium mb-1 text-gray-200">
+                Mailing Title
+              </label>
+              <input
+                type="text"
+                name="mailing_title"
+                value={formData.mailing_title}
+                onChange={handleChange}
+                className="w-full border border-gray-800 bg-gray-900 px-3 py-2 rounded-lg text-white text-sm"
+                required
+              />
+            </div>
+            <div>
+              <label className="block font-medium mb-1 text-gray-200">
+                Mailing Description
+              </label>
+              <textarea
+                name="mailing_text"
+                value={formData.mailing_text}
+                onChange={handleChange}
+                rows={5}
+                className="w-full border border-gray-800 bg-gray-900 px-3 py-2 rounded-lg text-white text-sm"
+                required
+              />
+            </div>
+            <button
+              type="submit"
+              className="bg-teal-600 cursor-pointer hover:bg-teal-700 text-white px-8 py-2 rounded-lg font-semibold transition disabled:opacity-50 w-full"
+              disabled={saving}
+            >
+              {saving ? "Saving..." : "Save Changes"}
+            </button>
+          </form>
+        )}
+        <AdminUpdateFooterRoute />
+      </div>
     </div>
   );
 };

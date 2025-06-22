@@ -4,6 +4,7 @@ import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import { useQuery } from "@tanstack/react-query";
 import BlogTypeList from "./BlogTypeList";
 import BlogTypeFrom from "./BlogTypeFrom";
+import { MdEdit, MdDelete } from "react-icons/md";
 
 export default function BlogTypeManage() {
   const axiosPublicUrl = useAxiospublic();
@@ -22,43 +23,79 @@ export default function BlogTypeManage() {
     if (!editing) setResetFormTrigger((prev) => !prev);
   }, [editing]);
 
+  // SweetAlert2 dark premium
+  const showSwal = ({ icon, title, text }) =>
+    Swal.fire({
+      icon,
+      title,
+      text,
+      background: "#1e293b",
+      color: "#f8fafc",
+      confirmButtonColor: "#e11d48",
+    });
+
   const handleCreateOrUpdate = async (data) => {
     try {
       if (editing) {
         await axiosPublicUrl.put(`/api/blog-types/${editing.id}`, data);
         setEditing(null);
-        Swal.fire("Success", "Blog type updated successfully!", "success");
+        showSwal({
+          icon: "success",
+          title: "Success",
+          text: "Blog type updated successfully!",
+        });
       } else {
         await axiosPublicUrl.post("/api/blog-types", data);
         setResetFormTrigger((prev) => !prev);
-        Swal.fire("Success", "Blog type added successfully!", "success");
+        showSwal({
+          icon: "success",
+          title: "Success",
+          text: "Blog type added successfully!",
+        });
       }
       refetch();
     } catch (err) {
       console.error("Save error:", err);
-      Swal.fire("Error", "Failed to save blog type", "error");
+      showSwal({
+        icon: "error",
+        title: "Error",
+        text: "Failed to save blog type",
+      });
     }
   };
 
   const handleDelete = async (id) => {
-    try {
-      const result = await Swal.fire({
-        title: "Are you sure?",
-        text: "Do you really want to delete this blog type?",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#e62245",
-        cancelButtonColor: "#6c757d",
-        confirmButtonText: "Yes, delete it!",
-      });
-      if (result.isConfirmed) {
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "Do you really want to delete this blog type?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, delete",
+      cancelButtonText: "Cancel",
+      background: "#1e293b",
+      color: "#f8fafc",
+      confirmButtonColor: "#e11d48",
+      cancelButtonColor: "#334155",
+      reverseButtons: true,
+      focusCancel: true,
+    });
+    if (result.isConfirmed) {
+      try {
         await axiosPublicUrl.delete(`/api/blog-types/${id}`);
         refetch();
-        Swal.fire("Deleted!", "Blog type has been deleted.", "success");
+        showSwal({
+          icon: "success",
+          title: "Deleted!",
+          text: "Blog type has been deleted.",
+        });
+      } catch (err) {
+        console.error("Delete error:", err);
+        showSwal({
+          icon: "error",
+          title: "Error",
+          text: "Failed to delete blog type",
+        });
       }
-    } catch (err) {
-      console.error("Delete error:", err);
-      Swal.fire("Error", "Failed to delete blog type", "error");
     }
   };
 
@@ -68,7 +105,7 @@ export default function BlogTypeManage() {
 
   return (
     <div className="p-2 md:p-6 max-w-4xl mx-auto">
-      <h2 className="text-xl md:text-2xl font-bold mb-4">
+      <h2 className="text-xl md:text-2xl font-bold mb-4 text-white">
         {editing ? "Edit Blog Type" : "Create New Blog Type"}
       </h2>
       <BlogTypeFrom

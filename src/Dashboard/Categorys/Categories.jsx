@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
-import { FaEdit } from "react-icons/fa";
+import { FaEdit, FaTrash } from "react-icons/fa";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import useDataQuery from "../../utils/useDataQuery";
-// import Categor from "./redux";
 
 const generateSlug = (text) =>
   text
@@ -55,21 +54,34 @@ const Categories = () => {
   } = useForm();
 
   const watchCategoryName = watchCategory("category_name", "");
-  //   const watchSerialNumber = watchCategory("serialNumber", "");
-  // const watchImage = watchCategory("photo");
   const watchSubCategoryName = watchSubCategory("name", "");
 
-  const addCategory = async (data) => {
-    console.log(data);
-    console.log("Submitted photo field:", data.photo);
+  // --- SWAL2 DARK DESIGN ---
+  const showSwal = ({ icon, title, text }) =>
+    Swal.fire({
+      icon,
+      title,
+      text,
+      background: "#1e293b",
+      color: "#f8fafc",
+      confirmButtonColor: "#e11d48",
+    });
 
+  const addCategory = async (data) => {
     const duplicateOrder = mainCategories.some(
       (cat) =>
         cat.serialNumber === parseInt(data.serialNumber) &&
         cat.id !== (editingCategory?.id ?? -1)
     );
     if (duplicateOrder) {
-      Swal.fire("Warning", "This order number is already used.", "warning");
+      Swal.fire({
+        icon: "warning",
+        title: "Warning",
+        text: "This order number is already used.",
+        background: "#1e293b",
+        color: "#f8fafc",
+        confirmButtonColor: "#e11d48",
+      });
       return;
     }
 
@@ -87,7 +99,6 @@ const Categories = () => {
       }
 
       if (editingCategory) {
-        console.log(editingCategory.id);
         await axiosPublicurl.put(
           `/api/category/${editingCategory.id}`,
           formData,
@@ -97,19 +108,34 @@ const Categories = () => {
             },
           }
         );
+        showSwal({
+          icon: "success",
+          title: "Updated!",
+          text: "Category updated successfully.",
+        });
       } else {
         await axiosPublicurl.post("/api/category", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
         });
+        showSwal({
+          icon: "success",
+          title: "Created!",
+          text: "Category added successfully.",
+        });
       }
       setImagePreview(null);
       resetCategory();
       document.querySelector('input[type="file"]').value = null;
       refetchCategories(); // Refetch categories after update
+      setEditingCategory(null);
     } catch (err) {
-      console.error("Error saving category:", err);
+      showSwal({
+        icon: "error",
+        title: "Error",
+        text: err?.response?.data?.message || "Error saving category.",
+      });
     }
   };
 
@@ -134,6 +160,11 @@ const Categories = () => {
             },
           }
         );
+        showSwal({
+          icon: "success",
+          title: "Updated!",
+          text: "Subcategory updated successfully.",
+        });
         setEditingSubCategory(null);
       } else {
         await axiosPublicurl.post("/api/subcategory", formData, {
@@ -141,12 +172,21 @@ const Categories = () => {
             "Content-Type": "multipart/form-data",
           },
         });
+        showSwal({
+          icon: "success",
+          title: "Created!",
+          text: "Subcategory added successfully.",
+        });
       }
       resetSubCategory();
       setImagePreviewSubCategory(null);
       refetchSubCategories(); // Refetch subcategories after update
     } catch (err) {
-      console.error("Error saving subcategory:", err);
+      showSwal({
+        icon: "error",
+        title: "Error",
+        text: err?.response?.data?.message || "Error saving subcategory.",
+      });
     }
   };
 
@@ -165,34 +205,50 @@ const Categories = () => {
     setValueSubCategory("main_category_id", sub.main_category_id);
   };
 
-  // const confirmDelete = (type, id) => {
-  //   Swal.fire({
-  //     title: "Are you sure?",
-  //     text: "You won't be able to revert this!",
-  //     icon: "warning",
-  //     showCancelButton: true,
-  //     confirmButtonColor: "#3085d6",
-  //     cancelButtonColor: "#d33",
-  //     confirmButtonText: "Yes, delete it!",
-  //   }).then(async (result) => {
-  //     if (result.isConfirmed) {
-  //       if (type === "category") {
-  //         await axiosPublicurl.delete(`/api/category/${id}`);
-  //         Swal.fire("Deleted!", "Your category has been deleted.", "success");
-  //         setCategories(categories.filter((c) => c.id !== id));
-  //       } else {
-  //         await axiosPublicurl.delete(`/api/subcategory/${id}`);
-  //         Swal.fire(
-  //           "Deleted!",
-  //           "Your subcategory has been deleted.",
-  //           "success"
-  //         );
-  //         setSubCategories(subCategories.filter((sc) => sc.id !== id));
-  //       }
-  //       Swal.fire("Deleted!", "Your item has been deleted.", "success");
-  //     }
-  //   });
-  // };
+  const confirmDelete = async (type, id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, delete",
+      cancelButtonText: "Cancel",
+      background: "#1e293b",
+      color: "#f8fafc",
+      confirmButtonColor: "#e11d48",
+      cancelButtonColor: "#334155",
+      reverseButtons: true,
+      focusCancel: true,
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          if (type === "category") {
+            await axiosPublicurl.delete(`/api/category/${id}`);
+            showSwal({
+              icon: "success",
+              title: "Deleted!",
+              text: "Category has been deleted.",
+            });
+            refetchCategories();
+          } else {
+            await axiosPublicurl.delete(`/api/subcategory/${id}`);
+            showSwal({
+              icon: "success",
+              title: "Deleted!",
+              text: "Subcategory has been deleted.",
+            });
+            refetchSubCategories();
+          }
+        } catch (err) {
+          showSwal({
+            icon: "error",
+            title: "Error",
+            text: err?.response?.data?.message || "Failed to delete item.",
+          });
+        }
+      }
+    });
+  };
 
   useEffect(() => {
     const subscription = watchCategory((value, { name }) => {
@@ -223,7 +279,6 @@ const Categories = () => {
   }, [watchSubCategory]);
 
   if (isLoadingCategories || isLoadingSubCategories) return null;
-  
   if (categoriesError || subCategoriesError) {
     return <div>Error loading data</div>;
   }
@@ -294,7 +349,7 @@ const Categories = () => {
             <input type="hidden" value={1} {...registerCategory("status")} />
             <button
               type="submit"
-              className="bg-teal-600 text-white cursor-pointer px-4 py-2 rounded hover:bg-teal-700 w-full sm:w-auto"
+              className="bg-teal-600 text-white cursor-pointer px-4 py-2 rounded hover:bg-teal-700 w-full sm:w-auto transition"
             >
               {editingCategory ? "Update Category" : "Add Category"}
             </button>
@@ -341,9 +396,16 @@ const Categories = () => {
                           <div className="flex justify-center space-x-2">
                             <button
                               onClick={() => handleEditCategory(cat)}
-                              className="text-blue-600 cursor-pointer hover:text-blue-800 p-1"
+                              className="text-blue-600 cursor-pointer hover:text-blue-800 p-1 transition"
+                              title="Edit"
                             >
                               <FaEdit size={16} />
+                            </button>
+                            <button
+                              onClick={() => confirmDelete("category", cat.id)}
+                              className="text-red-600 cursor-pointer hover:text-red-800 p-1"
+                            >
+                              <FaTrash />
                             </button>
                           </div>
                         </td>
@@ -406,7 +468,7 @@ const Categories = () => {
             <input type="hidden" value={1} {...registerSubCategory("status")} />
             <button
               type="submit"
-              className="bg-teal-600 cursor-pointer text-white px-4 py-2 rounded hover:bg-teal-700 w-full sm:w-auto"
+              className="bg-teal-600 cursor-pointer text-white px-4 py-2 rounded hover:bg-teal-700 w-full sm:w-auto transition"
             >
               {editingSubCategory ? "Update Subcategory" : "Add Subcategory"}
             </button>
@@ -456,9 +518,18 @@ const Categories = () => {
                           <div className="flex justify-center space-x-2">
                             <button
                               onClick={() => handleEditSubCategory(sub)}
-                              className="text-blue-600 cursor-pointer hover:text-blue-800 p-1"
+                              className="text-blue-600 cursor-pointer hover:text-blue-800 p-1 transition"
+                              title="Edit"
                             >
                               <FaEdit size={16} />
+                            </button>
+                            <button
+                              onClick={() =>
+                                confirmDelete("subcategory", sub.id)
+                              }
+                              className="text-red-600 cursor-pointer hover:text-red-800 p-1"
+                            >
+                              <FaTrash />
                             </button>
                           </div>
                         </td>

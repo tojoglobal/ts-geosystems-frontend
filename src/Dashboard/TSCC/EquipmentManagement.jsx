@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import { useQuery } from "@tanstack/react-query";
+import Swal from "sweetalert2";
+import { MdEdit, MdDelete } from "react-icons/md";
 
 // --- Equipment Form ---
 const initialState = {
@@ -13,7 +15,7 @@ const initialState = {
   validity: "",
 };
 
-// edit time fromate data
+// edit time format data
 function formatDateForInput(date) {
   if (!date) return "";
   // Handles both Date object and string
@@ -62,17 +64,19 @@ function EquipmentForm({
   return (
     <form
       onSubmit={handleSubmit}
-      className="max-w-2xl mx-auto rounded-xl p-4 md:p-6 mb-8 border border-gray-600"
+      className="max-w-2xl mx-auto rounded-xl p-4 md:p-6 mb-8 border border-gray-800 bg-gray-900/95"
       style={{
         boxShadow: "0 6px 32px 0 rgba(25,118,210,0.11)",
       }}
     >
-      <h2 className="font-semibold text-xl mb-8 text-center tracking-wide">
+      <h2 className="font-semibold text-xl mb-8 text-center tracking-wide text-white">
         {isEditing ? "Edit Equipment" : "Add New Equipment"}
       </h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label className="block font-medium mb-1">Tracking No</label>
+          <label className="block font-medium mb-1 text-gray-200">
+            Tracking No
+          </label>
           <input
             name="trackingNo"
             type="text"
@@ -85,7 +89,9 @@ function EquipmentForm({
           />
         </div>
         <div>
-          <label className="block font-medium mb-1">Equipment</label>
+          <label className="block font-medium mb-1 text-gray-200">
+            Equipment
+          </label>
           <input
             name="equipment"
             type="text"
@@ -97,7 +103,9 @@ function EquipmentForm({
           />
         </div>
         <div>
-          <label className="block font-medium mb-1">Serial No</label>
+          <label className="block font-medium mb-1 text-gray-200">
+            Serial No
+          </label>
           <input
             name="serialNo"
             type="text"
@@ -109,7 +117,9 @@ function EquipmentForm({
           />
         </div>
         <div>
-          <label className="block font-medium mb-1">Accuracy</label>
+          <label className="block font-medium mb-1 text-gray-200">
+            Accuracy
+          </label>
           <input
             name="accuracy"
             type="text"
@@ -120,7 +130,9 @@ function EquipmentForm({
           />
         </div>
         <div>
-          <label className="block font-medium mb-1">Manufacturer</label>
+          <label className="block font-medium mb-1 text-gray-200">
+            Manufacturer
+          </label>
           <input
             name="manufacturer"
             type="text"
@@ -132,7 +144,9 @@ function EquipmentForm({
           />
         </div>
         <div>
-          <label className="block font-medium mb-1">Company Name</label>
+          <label className="block font-medium mb-1 text-gray-200">
+            Company Name
+          </label>
           <input
             name="companyName"
             type="text"
@@ -143,7 +157,9 @@ function EquipmentForm({
           />
         </div>
         <div>
-          <label className="block font-medium mb-1">Validity</label>
+          <label className="block font-medium mb-1 text-gray-200">
+            Validity
+          </label>
           <input
             name="validity"
             type="date"
@@ -156,7 +172,7 @@ function EquipmentForm({
       <div className="flex flex-wrap gap-3 mt-8 justify-center">
         <button
           type="submit"
-          className="bg-gradient-to-r from-green-500 to-emerald-500 text-white py-2 px-8 rounded-lg shadow hover:brightness-110 font-semibold text-base transition"
+          className="bg-teal-600 text-white py-2 px-6 rounded-sm shadow hover:brightness-110 font-semibold text-base transition cursor-pointer"
         >
           {isEditing ? "Update Equipment" : "Add New Equipment"}
         </button>
@@ -164,7 +180,7 @@ function EquipmentForm({
           <button
             type="button"
             onClick={onCancel}
-            className="bg-gray-400 text-white px-8 py-2 rounded-lg font-semibold hover:bg-gray-500 transition"
+            className="bg-gray-400 text-white px-8 py-2 rounded-lg font-semibold hover:bg-gray-500 transition cursor-pointer"
           >
             Cancel
           </button>
@@ -173,11 +189,12 @@ function EquipmentForm({
       <style>{`
         .eqp-input {
           width: 100%;
-          padding: 10px 14px;
+          padding: 8px 14px;
           font-size: 16px;
-          border: 1.5px solid #dbeafe;
+          border: 1.5px solid #334155;
           border-radius: 8px;
-          background: #fff;
+          background: #181f2a;
+          color: #f8fafc;
           box-sizing: border-box;
           transition: border 0.2s, box-shadow 0.2s;
           box-shadow: 0 1px 4px 0 rgba(25,118,210,0.04);
@@ -196,69 +213,81 @@ function EquipmentForm({
 function EquipmentList({ data, onEdit, onDelete }) {
   return (
     <div className="mt-5 mb-3">
-      <h3 className="text-xl font-semibold mb-4">Equipment List</h3>
-      <div className="overflow-x-auto rounded-xl shadow-xl border border-gray-600">
-        <table className="min-w-full text-sm text-left">
+      <h3 className="text-2xl sm:text-2xl font-semibold mb-4">Equipment List</h3>
+      <div className="overflow-x-auto rounded-xl shadow-xl border border-gray-800 bg-gray-900/95">
+        <table className="min-w-full text-sm text-left bg-gray-900 text-white rounded-xl">
           <thead>
-            <tr className="text-left">
-              <th className="p-3 whitespace-nowrap font-semibold">
+            <tr className="text-left bg-gray-800/80">
+              <th className="p-3 whitespace-nowrap font-semibold border-b border-gray-700">
                 Tracking No
               </th>
-              <th className="p-3 whitespace-nowrap font-semibold">Equipment</th>
-              <th className="p-3 whitespace-nowrap font-semibold">Serial No</th>
-              <th className="p-3 whitespace-nowrap font-semibold">Accuracy</th>
-              <th className="p-3 whitespace-nowrap font-semibold">
+              <th className="p-3 whitespace-nowrap font-semibold border-b border-gray-700">
+                Equipment
+              </th>
+              <th className="p-3 whitespace-nowrap font-semibold border-b border-gray-700">
+                Serial No
+              </th>
+              <th className="p-3 whitespace-nowrap font-semibold border-b border-gray-700">
+                Accuracy
+              </th>
+              <th className="p-3 whitespace-nowrap font-semibold border-b border-gray-700">
                 Manufacturer
               </th>
-              <th className="p-3 whitespace-nowrap font-semibold">
+              <th className="p-3 whitespace-nowrap font-semibold border-b border-gray-700">
                 Company Name
               </th>
-              <th className="p-3 whitespace-nowrap font-semibold">Validity</th>
-              <th className="p-3 whitespace-nowrap font-semibold">Actions</th>
+              <th className="p-3 whitespace-nowrap font-semibold border-b border-gray-700">
+                Validity
+              </th>
+              <th className="p-3 whitespace-nowrap font-semibold border-b border-gray-700">
+                Actions
+              </th>
             </tr>
           </thead>
           <tbody>
             {data.map((eqp) => (
               <tr
                 key={eqp.id || eqp.trackingNo}
-                className="transition"
+                className="transition hover:bg-gray-800/70"
               >
-                <td className="p-3 border-b font-semibold">
+                <td className="p-3 border-b border-gray-800 font-semibold">
                   {eqp.trackingNo}
                 </td>
-                <td className="p-3 border-b font-semibold">
+                <td className="p-3 border-b border-gray-800 font-semibold">
                   {eqp.equipment}
                 </td>
-                <td className="p-3 border-b font-semibold">
+                <td className="p-3 border-b border-gray-800 font-semibold">
                   {eqp.serialNo}
                 </td>
-                <td className="p-3 border-b font-semibold">
+                <td className="p-3 border-b border-gray-800 font-semibold">
                   {eqp.accuracy}
                 </td>
-                <td className="p-3 border-b font-semibold">
+                <td className="p-3 border-b border-gray-800 font-semibold">
                   {eqp.manufacturer}
                 </td>
-                <td className="p-3 border-b font-semibold">
+                <td className="p-3 border-b border-gray-800 font-semibold">
                   {eqp.companyName}
                 </td>
-                <td className="p-3 border-b font-semibold">
+                <td className="p-3 border-b border-gray-800 font-semibold">
                   {eqp.validity
                     ? new Date(eqp.validity).toLocaleDateString()
                     : ""}
                 </td>
-                <td className="p-3 border-b border-[#e3eaf5] ">
-                  <div className="flex gap-2">
+                <td className="p-3 border-b border-gray-800 ">
+                  <div className="flex gap-1">
                     <button
                       onClick={() => onEdit(eqp)}
-                      className="text-blue-600 font-semibold px-3 py-1 rounded hover:bg-blue-50 transition"
+                      className="text-blue-400 hover:text-blue-600 p-1 rounded cursor-pointer transition"
+                      title="Edit"
                     >
-                      Edit
+                      <MdEdit size={20} />
                     </button>
                     <button
                       onClick={() => onDelete(eqp.id)}
-                      className="text-red-600 font-semibold px-3 py-1 rounded hover:bg-red-50 transition"
+                      className="text-red-500 hover:text-red-700 p-1 rounded cursor-pointer transition"
+                      title="Delete"
                     >
-                      Delete
+                      <MdDelete size={20} />
                     </button>
                   </div>
                 </td>
@@ -266,7 +295,10 @@ function EquipmentList({ data, onEdit, onDelete }) {
             ))}
             {data.length === 0 && (
               <tr>
-                <td colSpan="8" className="p-3 text-center text-gray-500">
+                <td
+                  colSpan="8"
+                  className="p-3 text-center text-gray-400 bg-gray-900"
+                >
                   No equipment found
                 </td>
               </tr>
@@ -292,6 +324,17 @@ export default function EquipmentManagement() {
     },
   });
 
+  // SweetAlert2 dark theme
+  const showSwal = ({ icon, title, text }) =>
+    Swal.fire({
+      icon,
+      title,
+      text,
+      background: "#1e293b",
+      color: "#f8fafc",
+      confirmButtonColor: "#e11d48",
+    });
+
   useEffect(() => {
     if (!editing) setResetFormTrigger((prev) => !prev);
   }, [editing]);
@@ -301,23 +344,63 @@ export default function EquipmentManagement() {
       if (editing && editing.id) {
         await axiosPublicUrl.put(`/api/equipments/${editing.id}`, data);
         setEditing(null);
+        showSwal({
+          icon: "success",
+          title: "Updated!",
+          text: "Equipment updated successfully.",
+        });
       } else {
         await axiosPublicUrl.post("/api/equipments", data);
         setResetFormTrigger((prev) => !prev);
+        showSwal({
+          icon: "success",
+          title: "Created!",
+          text: "Equipment added successfully.",
+        });
       }
       refetch();
     } catch (err) {
-      console.error("Save error:", err);
+      showSwal({
+        icon: "error",
+        title: "Error",
+        text: err?.response?.data?.message || "Failed to save equipment.",
+      });
     }
   };
 
   const handleDelete = async (id) => {
-    try {
-      await axiosPublicUrl.delete(`/api/equipments/${id}`);
-      refetch();
-    } catch (err) {
-      console.error("Delete error:", err);
-    }
+    Swal.fire({
+      title: "Are you sure?",
+      text: "This action cannot be undone!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, delete",
+      cancelButtonText: "Cancel",
+      background: "#1e293b",
+      color: "#f8fafc",
+      confirmButtonColor: "#e11d48",
+      cancelButtonColor: "#334155",
+      reverseButtons: true,
+      focusCancel: true,
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await axiosPublicUrl.delete(`/api/equipments/${id}`);
+          refetch();
+          showSwal({
+            icon: "success",
+            title: "Deleted!",
+            text: "Equipment has been deleted.",
+          });
+        } catch (err) {
+          showSwal({
+            icon: "error",
+            title: "Error",
+            text: err?.response?.data?.message || "Error deleting equipment.",
+          });
+        }
+      }
+    });
   };
 
   const handleEdit = (equipment) => {
@@ -325,8 +408,8 @@ export default function EquipmentManagement() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-2 py-8">
-      <h2 className="text-xl md:text-2xl font-bold mb-6 text-center">
+    <div className="max-w-6xl mx-auto p-2">
+      <h2 className="text-xl md:text-2xl font-bold mb-6 text-center text-white">
         Equipment Management
       </h2>
       <EquipmentForm

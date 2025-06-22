@@ -34,25 +34,38 @@ const BlogTable = () => {
       text: "This blog and all its images will be permanently deleted.",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonText: "Yes, delete it!",
+      confirmButtonText: "Yes, delete",
       cancelButtonText: "Cancel",
       background: "#1e293b",
       color: "#f8fafc",
       confirmButtonColor: "#e11d48",
-      cancelButtonColor: "#64748b",
+      cancelButtonColor: "#334155",
+      reverseButtons: true,
+      focusCancel: true,
     });
 
     if (result.isConfirmed) {
       try {
         await axiosPublicUrl.delete(`/api/blogs/${blogId}`);
-        Swal.fire("Deleted!", "The blog has been deleted.", "success");
-
-        // Refresh blog list or navigate
-        // e.g., refetch blogs or remove from state
+        await Swal.fire({
+          icon: "success",
+          title: "Deleted!",
+          text: "The blog has been deleted.",
+          background: "#1e293b",
+          color: "#f8fafc",
+          confirmButtonColor: "#e11d48",
+        });
         refetch();
       } catch (error) {
         console.error("Delete error:", error);
-        Swal.fire("Error", "Failed to delete blog.", "error");
+        await Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Failed to delete blog.",
+          background: "#1e293b",
+          color: "#f8fafc",
+          confirmButtonColor: "#e11d48",
+        });
       }
     }
   };

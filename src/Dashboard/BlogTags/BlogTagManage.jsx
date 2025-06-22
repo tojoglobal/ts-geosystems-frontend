@@ -27,16 +27,37 @@ export default function BlogTagManage() {
       if (editing) {
         await axiosPublicUrl.put(`/api/tags/${editing.id}`, data);
         setEditing(null);
-        Swal.fire("Success", "Tag updated successfully!", "success");
+        await Swal.fire({
+          icon: "success",
+          title: "Success",
+          text: "Tag updated successfully!",
+          background: "#1e293b",
+          color: "#f8fafc",
+          confirmButtonColor: "#e11d48",
+        });
       } else {
         await axiosPublicUrl.post("/api/tags", data);
         setResetFormTrigger((prev) => !prev);
-        Swal.fire("Success", "Tag added successfully!", "success");
+        await Swal.fire({
+          icon: "success",
+          title: "Success",
+          text: "Tag added successfully!",
+          background: "#1e293b",
+          color: "#f8fafc",
+          confirmButtonColor: "#e11d48",
+        });
       }
       refetch();
     } catch (err) {
       console.error("Save error:", err);
-      Swal.fire("Error", "Failed to save tag", "error");
+      await Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Failed to save tag",
+        background: "#1e293b",
+        color: "#f8fafc",
+        confirmButtonColor: "#e11d48",
+      });
     }
   };
 
@@ -47,18 +68,37 @@ export default function BlogTagManage() {
         text: "Do you really want to delete this tag?",
         icon: "warning",
         showCancelButton: true,
-        confirmButtonColor: "#e62245",
-        cancelButtonColor: "#6c757d",
-        confirmButtonText: "Yes, delete it!",
+        confirmButtonText: "Yes, delete",
+        cancelButtonText: "Cancel",
+        background: "#1e293b",
+        color: "#f8fafc",
+        confirmButtonColor: "#e11d48",
+        cancelButtonColor: "#334155",
+        reverseButtons: true,
+        focusCancel: true,
       });
       if (result.isConfirmed) {
         await axiosPublicUrl.delete(`/api/tags/${id}`);
         refetch();
-        Swal.fire("Deleted!", "Tag has been deleted.", "success");
+        await Swal.fire({
+          icon: "success",
+          title: "Deleted!",
+          text: "Tag has been deleted.",
+          background: "#1e293b",
+          color: "#f8fafc",
+          confirmButtonColor: "#e11d48",
+        });
       }
     } catch (err) {
       console.error("Delete error:", err);
-      Swal.fire("Error", "Failed to delete tag", "error");
+      await Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Failed to delete tag",
+        background: "#1e293b",
+        color: "#f8fafc",
+        confirmButtonColor: "#e11d48",
+      });
     }
   };
 
