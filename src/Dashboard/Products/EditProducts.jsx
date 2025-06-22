@@ -331,8 +331,9 @@ const UpdateProductForm = () => {
       text: "Do you want to delete this image?",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
+      background: "#1e293b",
+      color: "#f8fafc",
+      confirmButtonColor: "#e11d48",
       confirmButtonText: "Yes, delete it!",
     });
 
@@ -344,8 +345,15 @@ const UpdateProductForm = () => {
             "/api/products/delete-image",
             { imageUrl: file, id }
           );
-          if (response.data.success) {
-            Swal.fire("Deleted!", "Your image has been deleted.", "success");
+          if (response?.status === 200) {
+            Swal.fire({
+              title: "Deleted!",
+              text: "Your image has been deleted.",
+              icon: "success",
+              background: "#1e293b",
+              color: "#f8fafc",
+              confirmButtonColor: "#e11d48",
+            });
             setImages((prev) => prev.filter((_, i) => i !== index));
           } else {
             Swal.fire("Error!", "Failed to delete the image.", "error");
@@ -353,11 +361,14 @@ const UpdateProductForm = () => {
         } else {
           // If it's a newly added file, just remove it from the preview
           setImages((prev) => prev.filter((_, i) => i !== index));
-          Swal.fire(
-            "Removed!",
-            "The image has been removed from the upload list.",
-            "success"
-          );
+          Swal.fire({
+            title: "Removed!",
+            text: "The image has been removed from the upload list.",
+            icon: "success",
+            background: "#1e293b",
+            color: "#f8fafc",
+            confirmButtonColor: "#e11d48",
+          });
         }
       } catch (error) {
         console.error("Failed to delete image", error);
@@ -429,11 +440,14 @@ const UpdateProductForm = () => {
 
       if (res.status === 201) {
         Swal.fire({
+          title: "Success",
+          text: "Product updated successfully!",
           icon: "success",
-          title: "Product updated successfully!",
-          confirmButtonColor: "#14b8a6",
+          background: "#1e293b",
+          color: "#f8fafc",
+          confirmButtonColor: "#e11d48",
         });
-        navigate("/dashboard/product");
+        navigate(-1);
       }
     } catch (error) {
       console.error("Update failed:", error);

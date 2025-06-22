@@ -280,11 +280,14 @@ const ProductAddForm = () => {
       setValue("softwareOptions", []);
 
       Swal.fire({
+        title: "Success",
+        text: "Product added successfully!",
         icon: "success",
-        title: "Product added successfully!",
-        confirmButtonColor: "#14b8a6",
+        background: "#1e293b",
+        color: "#f8fafc",
+        confirmButtonColor: "#e11d48",
       });
-      navigate("/dashboard/product");
+      navigate(-1);
     } catch (error) {
       console.error("Upload failed:", error);
       Swal.fire({
