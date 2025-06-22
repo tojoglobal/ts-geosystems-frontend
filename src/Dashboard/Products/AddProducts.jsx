@@ -25,18 +25,38 @@ const MetaKeywordsInput = ({ value = [], onChange }) => {
   const [inputValue, setInputValue] = useState("");
   const [keywords, setKeywords] = useState(value || []);
 
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter" && inputValue.trim()) {
-      e.preventDefault();
+  useEffect(() => {
+    setKeywords(value || []);
+  }, [value]);
+
+  const addKeyword = () => {
+    if (inputValue.trim()) {
       const newKeywords = [...keywords, inputValue.trim()];
       setKeywords(newKeywords);
       onChange(newKeywords);
       setInputValue("");
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" || e.key === ",") {
+      e.preventDefault();
+      addKeyword();
     } else if (e.key === "Backspace" && !inputValue && keywords.length > 0) {
       e.preventDefault();
       const newKeywords = keywords.slice(0, -1);
       setKeywords(newKeywords);
       onChange(newKeywords);
+    }
+  };
+
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    if (value.endsWith(",")) {
+      setInputValue(value.slice(0, -1));
+      addKeyword();
+    } else {
+      setInputValue(value);
     }
   };
 
@@ -67,7 +87,7 @@ const MetaKeywordsInput = ({ value = [], onChange }) => {
         <input
           type="text"
           value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
+          onChange={handleInputChange}
           onKeyDown={handleKeyDown}
           placeholder={
             keywords.length === 0
@@ -77,18 +97,30 @@ const MetaKeywordsInput = ({ value = [], onChange }) => {
           className="flex-1 min-w-[150px] bg-white rounded-sm text-gray-800 placeholder-gray-400 px-3 py-2 border-none focus:outline-none"
         />
       </div>
-      {keywords.length > 0 && (
+
+      {/* Add explicit "Add" button for mobile users */}
+      <div className="flex justify-between mt-2">
         <button
           type="button"
-          onClick={() => {
-            setKeywords([]);
-            onChange([]);
-          }}
-          className="absolute cursor-pointer right-3 top-3 text-xs text-gray-500 hover:text-teal-600 transition-colors"
+          onClick={addKeyword}
+          className="px-3 py-1 cursor-pointer bg-teal-600 text-white rounded text-sm hover:bg-teal-700"
         >
-          Clear all
+          Add Keyword
         </button>
-      )}
+
+        {keywords.length > 0 && (
+          <button
+            type="button"
+            onClick={() => {
+              setKeywords([]);
+              onChange([]);
+            }}
+            className="px-3 py-1 cursor-pointer bg-gray-500 text-white rounded text-sm hover:bg-gray-600"
+          >
+            Clear All
+          </button>
+        )}
+      </div>
     </div>
   );
 };

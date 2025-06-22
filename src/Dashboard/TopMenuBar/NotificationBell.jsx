@@ -92,7 +92,7 @@ export default function NotificationBell() {
     <div className="relative">
       <button
         ref={bellButtonRef}
-        className="relative cursor-pointer flex items-center justify-center text-gray-300 dark:text-gray-400 hover:text-white dark:hover:text-white transition"
+        className="relative cursor-pointer flex items-center justify-center text-gray-400 hover:text-white transition"
         onClick={() => setOpen((o) => !o)}
         aria-label="Notifications"
       >
@@ -112,15 +112,15 @@ export default function NotificationBell() {
           top-12 right-4 left-4 md:left-auto
           w-auto md:w-96
           md:right-0 md:top-full md:mt-2
-          bg-white dark:bg-gray-800 
+          bg-gray-800 
           shadow-xl rounded-lg z-50 
           max-h-[60vh] md:max-h-80
-          border border-gray-200 dark:border-gray-700 
+          border border-gray-700 
           flex flex-col
           `}
         >
-          <div className="flex items-center justify-between p-3 border-b border-gray-200 dark:border-gray-700">
-            <span className="font-semibold text-gray-700 dark:text-gray-200">
+          <div className="flex items-center justify-between p-3 border-b border-gray-700">
+            <span className="font-semibold text-gray-200">
               Notifications
             </span>
             {unreadCount > 0 && (
@@ -133,7 +133,7 @@ export default function NotificationBell() {
             )}
           </div>
           <div
-            className="divide-y divide-gray-200 dark:divide-gray-700 overflow-y-auto flex-1"
+            className="divide-y divide-gray-700 overflow-y-auto flex-1"
             style={{ maxHeight: "20rem" }}
           >
             {isLoading && <div className="p-4 text-center">Loading...</div>}
@@ -151,10 +151,10 @@ export default function NotificationBell() {
                   setOpen(false);
                 }}
                 className={
-                  `block px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition ` +
+                  `block px-4 py-3 hover:bg-gray-700 transition ` +
                   (!n.is_read
-                    ? "bg-blue-50 dark:bg-teal-900 font-semibold border-l-4 border-blue-600"
-                    : "bg-white dark:bg-gray-800")
+                    ? "bg-teal-900 font-semibold border-l-4 border-blue-600"
+                    : "bg-gray-800")
                 }
               >
                 <div className="flex items-center gap-3">
@@ -167,7 +167,7 @@ export default function NotificationBell() {
                         : "bg-yellow-500"
                     }`}
                   ></span>
-                  <span className="text-sm text-gray-800 dark:text-gray-100">
+                  <span className="text-sm text-gray-100">
                     {n.content}
                   </span>
                   <span className="ml-auto text-xs text-gray-400">

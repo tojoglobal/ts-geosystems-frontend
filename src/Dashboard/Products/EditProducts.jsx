@@ -22,26 +22,46 @@ const validateYouTubeUrls = (value) => {
 };
 
 // MetaKeywordsInput component
+// MetaKeywordsInput component with mobile-friendly features
 const MetaKeywordsInput = ({ value = [], onChange }) => {
   const [inputValue, setInputValue] = useState("");
   const [keywords, setKeywords] = useState(value || []);
 
+  // Sync with external value changes
   useEffect(() => {
     setKeywords(value || []);
   }, [value]);
 
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter" && inputValue.trim()) {
-      e.preventDefault();
-      const newKeywords = [...keywords, inputValue.trim()];
+  const addKeyword = () => {
+    const trimmedValue = inputValue.trim();
+    if (trimmedValue) {
+      const newKeywords = [...keywords, trimmedValue];
       setKeywords(newKeywords);
       onChange(newKeywords);
       setInputValue("");
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if ((e.key === "Enter" || e.key === ",") && inputValue.trim()) {
+      e.preventDefault();
+      addKeyword();
     } else if (e.key === "Backspace" && !inputValue && keywords.length > 0) {
       e.preventDefault();
       const newKeywords = keywords.slice(0, -1);
       setKeywords(newKeywords);
       onChange(newKeywords);
+    }
+  };
+
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    // Add keyword when comma is entered (mobile friendly)
+    if (value.endsWith(",")) {
+      setInputValue(value.slice(0, -1));
+      addKeyword();
+    } else {
+      setInputValue(value);
     }
   };
 
@@ -52,8 +72,8 @@ const MetaKeywordsInput = ({ value = [], onChange }) => {
   };
 
   return (
-    <div className="border border-gray-600 rounded-md p-2 focus-within:border-teal-500 transition relative">
-      <div className="flex flex-wrap gap-2 items-center pr-14">
+    <div className="border border-gray-600 rounded-md p-2 focus-within:border-teal-500 transition">
+      <div className="flex flex-wrap gap-2 items-center">
         {keywords.map((keyword, index) => (
           <div
             key={index}
@@ -64,36 +84,51 @@ const MetaKeywordsInput = ({ value = [], onChange }) => {
               type="button"
               onClick={() => removeKeyword(index)}
               className="ml-2 cursor-pointer text-teal-600 hover:text-teal-800 focus:outline-none"
+              aria-label={`Remove keyword ${keyword}`}
             >
               &times;
             </button>
           </div>
         ))}
-        <input
-          type="text"
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-          onKeyDown={handleKeyDown}
-          placeholder={
-            keywords.length === 0
-              ? "Type a keyword and press Enter"
-              : "Add another keyword"
-          }
-          className="flex-1 min-w-[150px] bg-white rounded-sm text-gray-800 placeholder-gray-400 px-3 py-2 border-none focus:outline-none"
-        />
+        <div className="flex-1 flex items-center gap-2">
+          <input
+            type="text"
+            value={inputValue}
+            onChange={handleInputChange}
+            onKeyDown={handleKeyDown}
+            placeholder={
+              keywords.length === 0
+                ? "Type keywords (use comma or Enter)"
+                : "Add another keyword"
+            }
+            className="flex-1 min-w-[100px] bg-white rounded-sm text-gray-800 placeholder-gray-400 px-3 py-2 border-none focus:outline-none"
+          />
+          <button
+            type="button"
+            onClick={addKeyword}
+            className="px-2 py-1 cursor-pointer bg-teal-600 text-white rounded text-sm hover:bg-teal-700 whitespace-nowrap"
+          >
+            Add
+          </button>
+        </div>
       </div>
-      {keywords.length > 0 && (
-        <button
-          type="button"
-          onClick={() => {
-            setKeywords([]);
-            onChange([]);
-          }}
-          className="absolute cursor-pointer right-3 top-3 text-xs text-gray-500 hover:text-teal-600 transition-colors"
-        >
-          Clear all
-        </button>
-      )}
+      <div className="flex justify-between mt-2">
+        {keywords.length > 0 && (
+          <button
+            type="button"
+            onClick={() => {
+              setKeywords([]);
+              onChange([]);
+            }}
+            className="text-xs cursor-pointer text-gray-500 hover:text-teal-600 transition-colors"
+          >
+            Clear all
+          </button>
+        )}
+        <span className="text-xs text-gray-500">
+          {keywords.length} keyword(s) added
+        </span>
+      </div>
     </div>
   );
 };
