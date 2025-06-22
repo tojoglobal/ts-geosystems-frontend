@@ -449,11 +449,11 @@ const Clearance = () => {
       {total > 0 && (
         <>
           <div className="flex items-center justify-between mt-10">
-            <div className="flex items-center">
+            <div className="flex items-center gap-2">
               {currentPage > 1 && (
                 <button
                   onClick={() => setCurrentPage(currentPage - 1)}
-                  className="border flex items-center gap-1 px-1.5 p-1 rounded hover:bg-gray-100 transition text-sm"
+                  className="border flex cursor-pointer items-center gap-1 px-1.5 p-1 rounded hover:bg-gray-100 transition text-sm"
                 >
                   <MdKeyboardArrowLeft /> Previous
                 </button>
@@ -477,7 +477,7 @@ const Clearance = () => {
             {currentPage < totalPages && (
               <button
                 onClick={() => setCurrentPage(currentPage + 1)}
-                className="border flex items-center gap-1 px-1.5 p-1 rounded hover:bg-gray-100 transition text-sm"
+                className="border flex cursor-pointer items-center gap-1 px-1.5 p-1 rounded hover:bg-gray-100 transition text-sm"
               >
                 Next <MdKeyboardArrowRight />
               </button>
