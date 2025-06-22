@@ -58,17 +58,17 @@ export default function PromoCodeList({ data, onEdit, onDelete }) {
                 )}
               </td>
               <td className="px-2 sm:px-4 py-2 whitespace-nowrap">
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-1">
                   <button
                     onClick={() => onEdit(promo)}
-                    className="text-blue-400 hover:text-blue-600 p-2 rounded cursor-pointer transition"
+                    className="text-blue-400 hover:text-blue-600 p-1 rounded cursor-pointer transition"
                     title="Edit"
                   >
                     <MdEdit size={20} />
                   </button>
                   <button
                     onClick={() => onDelete(promo.id)}
-                    className="text-red-500 hover:text-red-700 p-2 rounded cursor-pointer transition"
+                    className="text-red-500 hover:text-red-700 p-1 rounded cursor-pointer transition"
                     title="Delete"
                   >
                     <MdDelete size={20} />

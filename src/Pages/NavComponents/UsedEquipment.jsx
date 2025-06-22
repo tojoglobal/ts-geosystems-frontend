@@ -27,15 +27,13 @@ const stripHtml = (html) => {
 };
 
 const sortOptions = [
-  "FEATURED ITEMS",
-  "NEWEST ITEMS",
-  "BEST SELLING",
-  "A TO Z",
-  "Z TO A",
-  "BY REVIEW",
-  "PRICE: ASCENDING",
-  "PRICE: DESCENDING",
+  { label: "NEWEST ITEMS", value: "newest" },
+  { label: "PRICE: ASCENDING", value: "price_asc" },
+  { label: "PRICE: DESCENDING", value: "price_desc" },
+  { label: "A TO Z", value: "name_asc" },
+  { label: "Z TO A", value: "name_desc" },
 ];
+
 
 const UsedEquipment = () => {
   const axiosPublicUrl = useAxiospublic();
@@ -43,7 +41,7 @@ const UsedEquipment = () => {
   const showToast = useToastSwal();
   const { trackProductView } = useTrackProductView();
   const [viewMode, setViewMode] = useState("grid");
-  const [sortBy, setSortBy] = useState("FEATURED ITEMS");
+  const [sortBy, setSortBy] = useState("newest");
   const [hoveredProductId, setHoveredProductId] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [compareItems, setCompareItems] = useState([]);
@@ -123,6 +121,23 @@ const UsedEquipment = () => {
     }
   };
 
+  // Sort products according to sortBy
+  const sortedProducts = [...products].sort((a, b) => {
+    switch (sortBy) {
+      case "price_asc":
+        return parseFloat(a.price) - parseFloat(b.price);
+      case "price_desc":
+        return parseFloat(b.price) - parseFloat(a.price);
+      case "name_asc":
+        return (a.product_name || "").localeCompare(b.product_name || "");
+      case "name_desc":
+        return (b.product_name || "").localeCompare(a.product_name || "");
+      case "newest":
+      default:
+        return (b.created_at || b.id || 0) - (a.created_at || a.id || 0);
+    }
+  });
+
   if (isLoading || vatLoading) return null;
 
   return (
@@ -173,8 +188,8 @@ const UsedEquipment = () => {
                 className="border py-1 pl-2 text-xs border-[#e1dcdc] rounded-[3px] md:pr-36 appearance-none bg-white cursor-pointer"
               >
                 {sortOptions.map((option) => (
-                  <option key={option} value={option}>
-                    {option}
+                  <option key={option.value} value={option.value}>
+                    {option.label}
                   </option>
                 ))}
               </select>
@@ -189,7 +204,7 @@ const UsedEquipment = () => {
               : "grid-cols-1 gap-7"
           } gap-1 md:gap-3`}
         >
-          {currentProducts.map((product) => {
+          {sortedProducts.map((product) => {
             const { isSimpleProduct } = getProductType(product);
             let images = [];
             try {

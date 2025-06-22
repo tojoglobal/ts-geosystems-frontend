@@ -39,17 +39,17 @@ export default function TaxList({ data, onEdit, onDelete }) {
                   )}
                 </td>
                 <td className="p-2 sm:p-3 border-b border-gray-800 whitespace-nowrap">
-                  <div className="flex gap-2">
+                  <div className="flex gap-1">
                     <button
                       onClick={() => onEdit(tax)}
-                      className="text-blue-400 hover:text-blue-600 p-2 rounded cursor-pointer transition"
+                      className="text-blue-400 hover:text-blue-600 p-1 rounded cursor-pointer transition"
                       title="Edit"
                     >
                       <MdEdit size={20} />
                     </button>
                     <button
                       onClick={() => onDelete(tax.id)}
-                      className="text-red-500 hover:text-red-700 p-2 rounded cursor-pointer transition"
+                      className="text-red-500 hover:text-red-700 p-1 rounded cursor-pointer transition"
                       title="Delete"
                     >
                       <MdDelete size={20} />

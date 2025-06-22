@@ -478,7 +478,7 @@ const ProductAddForm = () => {
             {/* Tax select */}
             {vatEnabled && (
               <select
-                {...register("tax", { required: "Tax is required" })}
+                {...register("tax")}
                 className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
               >
                 <option value="">Select Tax</option>
