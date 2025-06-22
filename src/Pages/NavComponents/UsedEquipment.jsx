@@ -185,9 +185,9 @@ const UsedEquipment = () => {
         <div
           className={`grid mx-1 md:mx-5 ${
             viewMode === "grid"
-              ? "grid-cols-1 sm:grid-cols-4 items-stretch"
+              ? "grid-cols-2 sm:grid-cols-4 items-stretch"
               : "grid-cols-1 gap-7"
-          } gap-3`}
+          } gap-1 md:gap-3`}
         >
           {currentProducts.map((product) => {
             const { isSimpleProduct } = getProductType(product);

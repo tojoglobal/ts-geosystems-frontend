@@ -241,9 +241,9 @@ const CategoryProduct = () => {
         <div
           className={`grid mx-1 md:mx-5 ${
             viewMode === "grid"
-              ? "grid-cols-1 sm:grid-cols-4 items-stretch"
+              ? "grid-cols-2 sm:grid-cols-4 items-stretch"
               : "grid-cols-1 gap-7"
-          } gap-4`}
+          } gap-3 md:gap-4`}
         >
           {products?.map((product) => {
             const { isSimpleProduct } = getProductType(product);
