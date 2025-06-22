@@ -26,6 +26,10 @@ const MetaKeywordsInput = ({ value = [], onChange }) => {
   const [inputValue, setInputValue] = useState("");
   const [keywords, setKeywords] = useState(value || []);
 
+  useEffect(() => {
+    setKeywords(value || []);
+  }, [value]);
+
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && inputValue.trim()) {
       e.preventDefault();
@@ -246,6 +250,13 @@ const UpdateProductForm = () => {
 
   useEffect(() => {
     if (productData) {
+      const parsedMetaKeywords = productData.meta_keywords
+        ? productData.meta_keywords
+            .split(",")
+            .map((k) => k.trim())
+            .filter((k) => k)
+        : [];
+
       reset({
         productName: productData.product_name || "",
         brandName: productData.brand_name || "",
@@ -300,9 +311,7 @@ const UpdateProductForm = () => {
         flashSaleEnd: productData.flash_sale_end
           ? new Date(productData.flash_sale_end).toISOString().slice(0, 16)
           : "",
-        metaKeywords: productData.meta_keywords
-          ? productData.meta_keywords.split(",")
-          : [],
+        metaKeywords: parsedMetaKeywords,
         metaDescription: productData.meta_description || "",
       });
 
@@ -831,7 +840,7 @@ const UpdateProductForm = () => {
                 control={control}
                 render={({ field }) => (
                   <MetaKeywordsInput
-                    value={field.value}
+                    value={field.value || []}
                     onChange={field.onChange}
                     className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
                   />
