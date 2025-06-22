@@ -47,18 +47,18 @@ const MetaKeywordsInput = ({ value = [], onChange }) => {
   };
 
   return (
-    <div className="border border-gray-600 rounded-md p-2 focus-within:border-teal-500 focus-within:ring-1 focus-within:ring-teal-500">
-      <div className="flex flex-wrap gap-2 mb-2">
+    <div className="border border-gray-600 rounded-md p-2 focus-within:border-teal-500 transition">
+      <div className="flex flex-wrap gap-2 items-center">
         {keywords.map((keyword, index) => (
           <div
             key={index}
-            className="bg-teal-100 text-teal-800 px-2 py-1 rounded-md flex items-center"
+            className="flex items-center bg-teal-100 text-teal-800 px-3 py-1.5 rounded-full text-sm shadow-sm"
           >
             {keyword}
             <button
               type="button"
               onClick={() => removeKeyword(index)}
-              className="ml-1 text-teal-600 hover:text-teal-800"
+              className="ml-2 text-teal-600 hover:text-teal-800 focus:outline-none"
             >
               &times;
             </button>
@@ -69,10 +69,28 @@ const MetaKeywordsInput = ({ value = [], onChange }) => {
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Type a keyword and press Enter"
-          className="flex-1 min-w-[150px] outline-none bg-transparent"
+          placeholder={
+            keywords.length === 0
+              ? "Type a keyword and press Enter"
+              : "Add another keyword"
+          }
+          className="flex-1 min-w-[150px] bg-white rounded-sm text-gray-800 placeholder-gray-400 px-3 py-2 border-none focus:outline-none"
         />
       </div>
+      {keywords.length > 0 && (
+        <div className="mt-1 flex justify-end">
+          <button
+            type="button"
+            onClick={() => {
+              setKeywords([]);
+              onChange([]);
+            }}
+            className="text-xs text-gray-400 hover:text-teal-300 transition-colors"
+          >
+            Clear all
+          </button>
+        </div>
+      )}
     </div>
   );
 };
@@ -640,8 +658,8 @@ const ProductAddForm = () => {
               )}
             />
           </div>
-          <div className="col-span-2 ">
-              {/* Meta Keywords Field */}
+          <div className="col-span-2 space-y-4">
+            {/* Meta Keywords Field */}
             <div>
               <label className="block mb-1 font-medium">Meta Keywords</label>
               <Controller
@@ -651,6 +669,7 @@ const ProductAddForm = () => {
                   <MetaKeywordsInput
                     value={field.value}
                     onChange={field.onChange}
+                    className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
                   />
                 )}
               />
@@ -665,7 +684,7 @@ const ProductAddForm = () => {
               <textarea
                 {...register("metaDescription")}
                 placeholder="Enter a brief description for search engines"
-                className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500 w-full h-24"
+                className="w-full border border-gray-600 bg-white text-black rounded-md shadow-sm focus:outline-none focus:border-teal-500 focus:ring-teal-500 p-2 text-sm h-24"
               />
               <p className="text-xs text-gray-500 mt-1">
                 Keep it under 160 characters for best results
@@ -726,7 +745,7 @@ const ProductAddForm = () => {
                   apiKey={import.meta.env.VITE_TINY_APIKEY}
                   value={field.value}
                   init={{
-                    height: 320,
+                    height: 280,
                     menubar: false,
                     plugins: [
                       "advlist",
