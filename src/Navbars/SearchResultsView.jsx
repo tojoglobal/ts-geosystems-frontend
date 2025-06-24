@@ -6,7 +6,6 @@ import { RxCross1 } from "react-icons/rx";
 import { Link } from "react-router-dom";
 import { slugify } from "../utils/slugify";
 import { useEffect, useState } from "react";
-import { useAxiospublic } from "../Hooks/useAxiospublic";
 import { useTrackProductView } from "../Hooks/useTrackProductView";
 
 const SearchResultsView = ({
@@ -332,7 +331,7 @@ const SearchResultsView = ({
                 <div className="flex items-center gap-2">
                   <span className="text-sm text-gray-600">Sort by:</span>
                   <select
-                    className="appearance-none text-sm border rounded px-2 py-1"
+                    className="appearance-none cursor-pointer text-sm border rounded px-2 py-1"
                     value={sortOrder}
                     onChange={handleSort}
                   >
@@ -364,13 +363,13 @@ const SearchResultsView = ({
                   )}
                   <img
                     src={
-                      product.image_urls
+                      product?.image_urls
                         ? `${import.meta.env.VITE_OPEN_APIURL}${JSON.parse(
-                            product.image_urls
-                          )[0].replace(/^["\[]+|["\]]+$/g, "")}`
-                        : product.image
+                            product?.image_urls
+                          )[0]?.replace(/^["\[]+|["\]]+$/g, "")}`
+                        : product?.image
                     }
-                    alt={product.product_name || product.name}
+                    alt={product?.product_name || product.name}
                     className="w-full h-32 object-contain mb-2"
                   />
                   <Link

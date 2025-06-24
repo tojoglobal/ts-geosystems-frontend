@@ -130,7 +130,6 @@ const MobileNavbar = () => {
     })) || []),
     { title: "Clearance", link: "/clearance" },
   ];
-  
   // Dynamic brands data
   const dynamicBrands = brandsData?.map((brand) => ({
     title: brand.name,
@@ -185,10 +184,11 @@ const MobileNavbar = () => {
       const response = await axiosPublicUrl.get(`/api/search`, {
         params: { query },
       });
-      setSearchResults(response.data.products || []);
+      setSearchResults(response?.data?.products ?? []);
       setShowResults(true);
     } catch (error) {
       setSearchResults([]);
+      setShowResults(true);
     } finally {
       setIsSearching(false);
     }
@@ -208,7 +208,7 @@ const MobileNavbar = () => {
     trackProductView(productId);
     navigate(
       `/products/${productId}/${slugify(
-        searchResults.find((p) => p.id === productId)?.product_name || ""
+        searchResults?.find((p) => p.id === productId)?.product_name || ""
       )}`
     );
     setShowResults(false);
@@ -393,7 +393,7 @@ const MobileNavbar = () => {
                 Searching...
               </div>
             )}
-            {showResults && searchResults.length > 0 && (
+            {showResults && (searchResults?.length ?? 0) > 0 && (
               <div className="absolute px-3 top-full left-0 right-0 bg-white border border-gray-200 shadow-lg z-50 max-h-60 overflow-y-auto">
                 {searchResults.map((product) => (
                   <div key={product.id} className="border-b">
@@ -418,7 +418,7 @@ const MobileNavbar = () => {
               </div>
             )}
             {showResults &&
-              searchResults.length === 0 &&
+              (searchResults?.length ?? 0) === 0 &&
               searchQuery &&
               !isSearching && (
                 <div className="absolute top-full left-0 right-0 bg-white border border-gray-200 shadow-lg z-50 p-2 text-black">

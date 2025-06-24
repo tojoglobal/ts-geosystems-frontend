@@ -88,8 +88,8 @@ const SearchOverlay = ({ isOpen, onClose }) => {
 
   // Use recommended products when there's no search text, otherwise use search results
   const displayProducts = searchText
-    ? searchResults?.products || []
-    : recommendedProducts;
+    ? searchResults?.products ?? []
+    : recommendedProducts ?? [];
 
   const handleRemoveSearch = (index) => {
     setLatestSearches(latestSearches.filter((_, i) => i !== index));
@@ -141,6 +141,7 @@ const SearchOverlay = ({ isOpen, onClose }) => {
     setSortOrder(e.target.value);
   };
 
+  // UPDATED: Add responsive breakpoints for tab/mobile
   const settings = {
     dots: false,
     infinite: true,
@@ -149,6 +150,16 @@ const SearchOverlay = ({ isOpen, onClose }) => {
     slidesToScroll: 1,
     prevArrow: <PrevArrow />,
     nextArrow: <NextArrow />,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: { slidesToShow: 3 },
+      },
+      {
+        breakpoint: 768,
+        settings: { slidesToShow: 1 },
+      },
+    ],
   };
 
   const handleAddToCart = (product) => {
@@ -295,8 +306,12 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                 </div>
                 {isLoading ? (
                   <div className="text-center py-10">Loading...</div>
-                ) : displayProducts?.length <= 4 ? (
-                  <div className="grid grid-cols-4 gap-4">
+                ) : (displayProducts?.length ?? 0) === 0 ? (
+                  <div className="text-center py-10 text-gray-400">
+                    No products found.
+                  </div>
+                ) : displayProducts.length <= 4 ? (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                     {displayProducts?.map((product, index) => {
                       const priceOption = product?.priceShowHide;
                       // product price
@@ -315,16 +330,16 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                         >
                           <img
                             src={
-                              product.image_urls
+                              product?.image_urls
                                 ? `${
                                     import.meta.env.VITE_OPEN_APIURL
-                                  }${JSON.parse(product.image_urls)[0].replace(
+                                  }${JSON?.parse(product?.image_urls)[0]?.replace(
                                     /^["\[]+|["\]]+$/g,
                                     ""
                                   )}`
-                                : product.image
+                                : product?.image
                             }
-                            alt={product.product_name || product.name}
+                            alt={product?.product_name || product.name}
                             className="mx-auto h-44 object-contain mb-3"
                           />
                           <p
@@ -340,15 +355,6 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                                 ? ""
                                 : formatBDT(basePrice)}
                             </p>
-                            {/* {product?.isStock === 1 && (
-                              <button
-                                onClick={() => handleAddToCart(product)}
-                                className="mt-2 cursor-pointer w-10 ml-auto p-[6px] flex items-center justify-center gap-2 bg-[#e62245] text-white rounded hover:bg-[#d41f3f] transition-colors"
-                              >
-                                <MdAddShoppingCart size={27} />
-                              </button>
-                            )} */}
-
                             {product?.isStock === 1 && (
                               <button
                                 onClick={() =>
@@ -379,7 +385,6 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                   <Slider {...settings}>
                     {displayProducts.map((product, index) => {
                       const priceOption = product?.priceShowHide;
-
                       // product price
                       const basePrice = parsePrice(product.price) || 0;
                       return (
@@ -401,15 +406,15 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                           >
                             <img
                               src={
-                                product.image_urls
+                                product?.image_urls
                                   ? `${
                                       import.meta.env.VITE_OPEN_APIURL
                                     }${JSON.parse(
-                                      product.image_urls
-                                    )[0].replace(/^["\[]+|["\]]+$/g, "")}`
-                                  : product.image
+                                      product?.image_urls
+                                    )[0]?.replace(/^["\[]+|["\]]+$/g, "")}`
+                                  : product?.image
                               }
-                              alt={product.product_name || product.name}
+                              alt={product?.product_name || product.name}
                               className="mx-auto h-44 object-contain mb-3"
                             />
 
@@ -423,11 +428,6 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                                   ? ""
                                   : formatBDT(basePrice)}
                               </p>
-                              {/* {product?.isStock === 1 && (
-                                <button className={`bg-[#e62245] cursor-pointer p-[6px] rounded text-white hover:bg-[#d41d3f]`}>
-                                  <MdAddShoppingCart size={24} />
-                                </button>
-                              )} */}
                               {product?.isStock === 1 && (
                                 <button
                                   onClick={() =>
