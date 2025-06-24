@@ -1,6 +1,4 @@
 export function parseSoftwareOptions(softwareOptions) {
-  console.log("Parsing software options:", softwareOptions);
-
   try {
     if (typeof softwareOptions === "string") {
       const parsed = JSON.parse(softwareOptions);

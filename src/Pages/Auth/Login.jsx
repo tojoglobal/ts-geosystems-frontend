@@ -51,10 +51,8 @@ const Login = () => {
       }
     } catch (error) {
       let errorMessage = "Login failed. Please try again.";
-
       if (error.response) {
         const { status, data } = error.response;
-
         if (status === 400) {
           errorMessage =
             data.Error || "Invalid request. Please check your input.";
