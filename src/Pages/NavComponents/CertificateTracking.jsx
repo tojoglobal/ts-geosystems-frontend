@@ -25,6 +25,12 @@ const CertificateTracking = () => {
     setResult(null);
     setSearching(true);
 
+    if (!formData.trackingNumber.trim() || !formData.serialNumber.trim()) {
+      setError("Tracking Number and Serial Number are required.");
+      setSearching(false);
+      return;
+    }
+
     try {
       const res = await axiosPublicUrl.get(
         `/api/equipments/search?trackingNo=${encodeURIComponent(
@@ -113,7 +119,7 @@ const CertificateTracking = () => {
 
             <button
               type="submit"
-              className="bg-[#e62245] text-white px-6 py-2 rounded w-full md:w-auto"
+              className="bg-[#e62245] cursor-pointer text-white px-6 py-2 rounded w-full md:w-auto"
               disabled={searching}
             >
               {searching ? "SEARCHING..." : "SUBMIT"}
@@ -127,13 +133,27 @@ const CertificateTracking = () => {
               <table className="border-collapse border text-left shadow-lg rounded-md overflow-hidden bg-white">
                 <thead className="text-crimson-red bg-gray-100">
                   <tr>
-                    <th className="px-2 md:px-4 py-3 font-semibold">Tracking No</th>
-                    <th className="px-2 md:px-4 py-3 font-semibold">Equipment</th>
-                    <th className="px-2 md:px-4 py-3 font-semibold">Serial Number</th>
-                    <th className="px-2 md:px-4 py-3 font-semibold">Accuracy</th>
-                    <th className="px-2 md:px-4 py-3 font-semibold">Manufacturer</th>
-                    <th className="px-2 md:px-4 py-3 font-semibold">Company Name</th>
-                    <th className="px-2 md:px-4 py-3 font-semibold">Validity</th>
+                    <th className="px-2 md:px-4 py-3 font-semibold">
+                      Tracking No
+                    </th>
+                    <th className="px-2 md:px-4 py-3 font-semibold">
+                      Equipment
+                    </th>
+                    <th className="px-2 md:px-4 py-3 font-semibold">
+                      Serial Number
+                    </th>
+                    <th className="px-2 md:px-4 py-3 font-semibold">
+                      Accuracy
+                    </th>
+                    <th className="px-2 md:px-4 py-3 font-semibold">
+                      Manufacturer
+                    </th>
+                    <th className="px-2 md:px-4 py-3 font-semibold">
+                      Company Name
+                    </th>
+                    <th className="px-2 md:px-4 py-3 font-semibold">
+                      Validity
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="text-black border">
