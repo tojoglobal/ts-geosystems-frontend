@@ -87,7 +87,7 @@ export default function NewEquipmentDropdown() {
         <h3 className="font-bold text-base mb-3 text-charcoal underline">
           SHOP BY CATEGORY
         </h3>
-        <ul className="space-y-2 text-sm text-gray-700">
+        <ul className="space-y-2 capitalize text-[13px] font-normal text-gray-700">
           <li>
             <Link
               to="/shop-all"
@@ -130,7 +130,7 @@ export default function NewEquipmentDropdown() {
           ))}
         </ul>
         <h3 className="font-bold text-base mt-6 mb-3 text-charcoal underline">
-          SHOP BY BRANDa
+          SHOP BY BRAND
         </h3>
         <ul className="space-y-1 text-sm text-gray-600">
           {brandsData?.map((brand) => (

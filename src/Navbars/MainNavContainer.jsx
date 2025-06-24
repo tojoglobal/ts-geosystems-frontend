@@ -127,7 +127,7 @@ const MainNavContainer = () => {
               </div>
               {/* Right side */}
               {!isSticky ? (
-                <div className="flex flex-wrap gap-3 md:gap-4 lg:gap-9 text-[14px] font-bold text-charcoal relative">
+                <div className="flex gap-3 md:gap-4 lg:gap-9 text-[14px] font-bold text-charcoal relative">
                   {/* Used Equipment */}
                   {menus?.find(
                     (m) => m.menu_name === "used_equipment" && m.enabled === 1
@@ -284,7 +284,7 @@ const MainNavContainer = () => {
       </div>
       {isDropdownOpen && (
         <div
-          className={`fixed ${!isSticky && "top-44"} inset-0 bg-black/50 z-40`}
+          className={`fixed ${!isSticky && "top-40"} inset-0 bg-black/50 z-40`}
           onClick={toggleDropdown}
         />
       )}
