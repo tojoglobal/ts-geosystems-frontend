@@ -175,7 +175,7 @@ const SearchOverlay = ({ isOpen, onClose }) => {
         <>
           <div
             ref={overlayRef}
-            className={`fixed inset-0 bg-gray-100 z-[100] h-9/11 transition-transform duration-500 ease-in-out transform  animate-slide-down ${
+            className={`fixed inset-0 bg-gray-100 z-[100] h-full xl:h-9/11 transition-transform duration-500 ease-in-out transform  animate-slide-down ${
               isOpen ? "translate-y-0" : "-translate-y-full"
             }`}
           >
@@ -295,9 +295,9 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                 </div>
                 {isLoading ? (
                   <div className="text-center py-10">Loading...</div>
-                ) : displayProducts.length <= 4 ? (
+                ) : displayProducts?.length <= 4 ? (
                   <div className="grid grid-cols-4 gap-4">
-                    {displayProducts.map((product, index) => {
+                    {displayProducts?.map((product, index) => {
                       const priceOption = product?.priceShowHide;
                       // product price
                       const basePrice = parsePrice(product.price) || 0;

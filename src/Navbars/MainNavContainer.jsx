@@ -127,7 +127,7 @@ const MainNavContainer = () => {
               </div>
               {/* Right side */}
               {!isSticky ? (
-                <div className="flex gap-6 lg:gap-9 text-[14px] font-bold text-charcoal relative">
+                <div className="flex flex-wrap gap-3 md:gap-4 lg:gap-9 text-[14px] font-bold text-charcoal relative">
                   {/* Used Equipment */}
                   {menus?.find(
                     (m) => m.menu_name === "used_equipment" && m.enabled === 1
