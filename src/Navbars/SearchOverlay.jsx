@@ -146,18 +146,18 @@ const SearchOverlay = ({ isOpen, onClose }) => {
     dots: false,
     infinite: true,
     speed: 500,
-    slidesToShow: 5,
+    slidesToShow: 5, // Default for xl
     slidesToScroll: 1,
     prevArrow: <PrevArrow />,
     nextArrow: <NextArrow />,
     responsive: [
       {
-        breakpoint: 1024,
-        settings: { slidesToShow: 3 },
+        breakpoint: 1280, // <1280px = lg
+        settings: { slidesToShow: 3 }, // Show 3 products on lg screens!
       },
       {
-        breakpoint: 768,
-        settings: { slidesToShow: 1 },
+        breakpoint: 1024, // <1024px = md
+        settings: { slidesToShow: 2 }, // Show 2 products on tablets
       },
     ],
   };
@@ -333,19 +333,15 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                               product?.image_urls
                                 ? `${
                                     import.meta.env.VITE_OPEN_APIURL
-                                  }${JSON?.parse(product?.image_urls)[0]?.replace(
-                                    /^["\[]+|["\]]+$/g,
-                                    ""
-                                  )}`
+                                  }${JSON?.parse(
+                                    product?.image_urls
+                                  )[0]?.replace(/^["\[]+|["\]]+$/g, "")}`
                                 : product?.image
                             }
                             alt={product?.product_name || product.name}
                             className="mx-auto h-44 object-contain mb-3"
                           />
-                          <p
-                            className="text-sm font-medium mb-1 hover:text-[#e62245]
-                    cursor-pointer"
-                          >
+                          <p className="text-sm font-medium mb-1 hover:text-[#e62245] cursor-pointer">
                             {product.product_name || product.name}
                           </p>
                           <div className="flex justify-between items-center mt-auto">
