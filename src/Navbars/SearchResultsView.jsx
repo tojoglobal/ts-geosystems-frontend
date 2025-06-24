@@ -174,6 +174,14 @@ const SearchResultsView = ({
     setSortOrder(e.target.value);
   };
 
+  // RESET FILTERS
+  const resetBrand = () =>
+    setSelectedFilters((prev) => ({ ...prev, brand: null }));
+  const resetCategory = () =>
+    setSelectedFilters((prev) => ({ ...prev, category: null }));
+  const resetCondition = () =>
+    setSelectedFilters((prev) => ({ ...prev, condition: null }));
+
   return (
     <div className="fixed inset-0 bg-gray-100 z-[100] overflow-y-auto">
       <div className="flex max-w-[99%] z-50 mx-auto items-center pt-6 p-4">
@@ -217,7 +225,17 @@ const SearchResultsView = ({
             {/* Brand Filter */}
             {filters.brands.length > 0 && (
               <div className="mb-6">
-                <h3 className="font-bold text-[18px] mb-4">Brand</h3>
+                <div className="flex justify-between items-center mb-2">
+                  <h3 className="font-bold text-[18px]">Brand</h3>
+                  {selectedFilters.brand && (
+                    <button
+                      className="text-xs px-2 cursor-pointer py-1 bg-gray-200 text-gray-500 rounded hover:text-black"
+                      onClick={resetBrand}
+                    >
+                      Reset
+                    </button>
+                  )}
+                </div>
                 <ul className="space-y-1 text-[14px]">
                   {filters.brands.map((brand, i) => (
                     <li
@@ -240,7 +258,17 @@ const SearchResultsView = ({
             {/* Category Filter */}
             {filters.categories.length > 0 && (
               <div className="mb-6">
-                <h3 className="font-bold text-[18px] mb-4">Category</h3>
+                <div className="flex justify-between items-center mb-2">
+                  <h3 className="font-bold text-[18px]">Category</h3>
+                  {selectedFilters.category && (
+                    <button
+                      className="text-xs px-2 cursor-pointer py-1 bg-gray-200 text-gray-500 rounded hover:text-black"
+                      onClick={resetCategory}
+                    >
+                      Reset
+                    </button>
+                  )}
+                </div>
                 <ul className="space-y-1 text-[14px]">
                   {filters.categories.map((category, i) => (
                     <li
@@ -263,7 +291,17 @@ const SearchResultsView = ({
             {/* Condition Filter */}
             {filters.conditions.length > 0 && (
               <div className="mb-6">
-                <h3 className="font-bold text-[18px] mb-4">Condition</h3>
+                <div className="flex justify-between items-center mb-2">
+                  <h3 className="font-bold text-[18px]">Condition</h3>
+                  {selectedFilters.condition && (
+                    <button
+                      className="text-xs cursor-pointer px-2 py-1 bg-gray-200 text-gray-500 rounded hover:text-black"
+                      onClick={resetCondition}
+                    >
+                      Reset
+                    </button>
+                  )}
+                </div>
                 <ul className="text-[14px]">
                   {filters.conditions.map((condition, i) => (
                     <li
@@ -343,7 +381,7 @@ const SearchResultsView = ({
                 </div>
               </div>
             </div>
-            <div className="grid grid-cols-5 gap-4 p-5">
+            <div className="grid grid-cols-4 xl:grid-cols-5 gap-4 p-5">
               {filteredProducts.map((product, index) => (
                 <Link
                   onClick={(e) => {

@@ -153,7 +153,7 @@ const ProductDetails = () => {
   const vatAmount = basePrice * (vat / 100);
   const priceIncVat = basePrice + vatAmount;
 
-  console.log(parseSoftwareOptions(product?.software_options));
+  // console.log(parseSoftwareOptions(product?.software_options));
 
   if (isLoading) return null;
   if (isError)

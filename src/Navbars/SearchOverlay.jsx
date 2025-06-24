@@ -1,6 +1,5 @@
 /* eslint-disable no-useless-escape */
 import { useEffect, useRef, useState } from "react";
-import Swal from "sweetalert2";
 import Slider from "react-slick";
 import { IoCloseOutline, IoSearchSharp } from "react-icons/io5";
 import "slick-carousel/slick/slick.css";
@@ -19,22 +18,11 @@ import { useDispatch } from "react-redux";
 import { addToCart } from "../features/AddToCart/AddToCart";
 import useToastSwal from "../Hooks/useToastSwal";
 import { formatBDT } from "../utils/formatBDT";
-
-const POPULAR_SEARCHES = [
-  "rtc360",
-  "ap20",
-  "gs16",
-  "rugby 620",
-  "ts16",
-  "benro",
-  "cloudworx",
-  "cmp104",
-  "cs20",
-  "disto",
-];
+import { useAxiospublic } from "../Hooks/useAxiospublic";
 
 const SearchOverlay = ({ isOpen, onClose }) => {
   const dispatch = useDispatch();
+  const axiosPublicUrl = useAxiospublic();
   const { trackProductView } = useTrackProductView();
   const [searchText, setSearchText] = useState("");
   const [sortOrder, setSortOrder] = useState("relevance");
@@ -48,6 +36,7 @@ const SearchOverlay = ({ isOpen, onClose }) => {
     "ortact",
   ]);
   const [recommendedProducts, setRecommendedProducts] = useState([]);
+  const lastTrackedSearch = useRef(""); // To avoid duplicate posts
 
   // Fetch recommended products
   const { data: recommendedData } = useDataQuery(
@@ -56,15 +45,58 @@ const SearchOverlay = ({ isOpen, onClose }) => {
     { enabled: !searchText }
   );
 
+  const { data: popularData } = useDataQuery(
+    "popularSearches",
+    "/api/popular-searches?limit=10"
+  );
+  const popularSearches = popularData?.searches ?? [];
+
   const { data: searchResults, isLoading } = useDataQuery(
     ["searchData", searchText, sortOrder],
     `/api/search?query=${encodeURIComponent(searchText)}&sort=${sortOrder}`,
     { enabled: !!searchText }
   );
 
+  // Debounced track search after user pauses typing and results available
+  useEffect(() => {
+    if (!searchText.trim()) return;
+    const handler = setTimeout(() => {
+      if (
+        searchText.trim() !== lastTrackedSearch.current &&
+        searchResults?.products &&
+        Array.isArray(searchResults.products) &&
+        searchResults.products.length > 0
+      ) {
+        axiosPublicUrl
+          .post("/api/popular-searches", { term: searchText.trim() })
+          .then(() => {
+            lastTrackedSearch.current = searchText.trim();
+          })
+          .catch(() => {});
+      }
+    }, 600);
+    return () => clearTimeout(handler);
+    // eslint-disable-next-line
+  }, [searchText, searchResults]);
+
+  const handleSearchSubmit = async (e) => {
+    e.preventDefault();
+    if (searchText.trim()) {
+      saveToLocalStorage(searchText.trim());
+      try {
+        await axiosPublicUrl.post("/api/popular-searches", {
+          term: searchText.trim(),
+        });
+        lastTrackedSearch.current = searchText.trim();
+      } catch (error) {
+        showToast("error", "Search Track Failed", error.message);
+        console.log(error);
+      }
+    }
+  };
+
   useEffect(() => {
     if (recommendedData?.products) {
-      // Take first 10 recommended products
       setRecommendedProducts(recommendedData.products.slice(0, 10));
     }
   }, [recommendedData]);
@@ -80,13 +112,11 @@ const SearchOverlay = ({ isOpen, onClose }) => {
     } else {
       document.body.style.overflow = "unset";
     }
-
     return () => {
       document.body.style.overflow = "unset";
     };
   }, [isOpen]);
 
-  // Use recommended products when there's no search text, otherwise use search results
   const displayProducts = searchText
     ? searchResults?.products ?? []
     : recommendedProducts ?? [];
@@ -116,13 +146,6 @@ const SearchOverlay = ({ isOpen, onClose }) => {
     setShowResultsView(false);
   };
 
-  const handleSearchSubmit = (e) => {
-    e.preventDefault();
-    if (searchText.trim()) {
-      saveToLocalStorage(searchText.trim());
-    }
-  };
-
   if (showResultsView) {
     return (
       <SearchResultsView
@@ -141,23 +164,22 @@ const SearchOverlay = ({ isOpen, onClose }) => {
     setSortOrder(e.target.value);
   };
 
-  // UPDATED: Add responsive breakpoints for tab/mobile
   const settings = {
     dots: false,
     infinite: true,
     speed: 500,
-    slidesToShow: 5, // Default for xl
+    slidesToShow: 5,
     slidesToScroll: 1,
     prevArrow: <PrevArrow />,
     nextArrow: <NextArrow />,
     responsive: [
       {
-        breakpoint: 1280, // <1280px = lg
-        settings: { slidesToShow: 3 }, // Show 3 products on lg screens!
+        breakpoint: 1280,
+        settings: { slidesToShow: 3 },
       },
       {
-        breakpoint: 1024, // <1024px = md
-        settings: { slidesToShow: 2 }, // Show 2 products on tablets
+        breakpoint: 1024,
+        settings: { slidesToShow: 2 },
       },
     ],
   };
@@ -171,7 +193,6 @@ const SearchOverlay = ({ isOpen, onClose }) => {
     };
 
     dispatch(addToCart(itemToAdd));
-
     showToast(
       "success",
       "Added to Cart!",
@@ -257,11 +278,19 @@ const SearchOverlay = ({ isOpen, onClose }) => {
               <div className="w-full md:w-[20%] p-5 bg-white">
                 <h3 className="font-semibold text-lg mb-2">Popular searches</h3>
                 <ul className="text-sm text-gray-700 space-y-3">
-                  {POPULAR_SEARCHES.map((search, i) => (
-                    <li key={i} className="hover:text-[#e62245] cursor-pointer">
-                      {search}
-                    </li>
-                  ))}
+                  {(popularSearches?.length ? popularSearches : []).map(
+                    (search, i) => (
+                      <li
+                        key={i}
+                        className="hover:text-[#e62245] cursor-pointer"
+                      >
+                        {search}
+                      </li>
+                    )
+                  )}
+                  {(!popularSearches || popularSearches.length === 0) && (
+                    <li className="text-gray-400">No popular searches</li>
+                  )}
                 </ul>
               </div>
               {/* Right - Product Slider */}
@@ -314,7 +343,6 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                     {displayProducts?.map((product, index) => {
                       const priceOption = product?.priceShowHide;
-                      // product price
                       const basePrice = parsePrice(product.price) || 0;
                       return (
                         <Link
@@ -381,7 +409,6 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                   <Slider {...settings}>
                     {displayProducts.map((product, index) => {
                       const priceOption = product?.priceShowHide;
-                      // product price
                       const basePrice = parsePrice(product.price) || 0;
                       return (
                         <div key={index} className="px-2 relative">

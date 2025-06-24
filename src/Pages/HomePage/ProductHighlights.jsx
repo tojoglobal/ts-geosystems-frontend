@@ -286,7 +286,7 @@ const ProductHighlights = () => {
                         to={`/products/${item.id}/${slugify(
                           item.product_name || ""
                         )}`}
-                        className="font-semibold min-h-10 text-xs md:text-sm text-gray-600 hover:text-[#e62245]"
+                        className="font-semibold min-h-10 text-xs md:text-sm text-gray-700 hover:text-[#e62245]"
                       >
                         {item.product_name}
                       </Link>
