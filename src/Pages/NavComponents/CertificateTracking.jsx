@@ -37,7 +37,6 @@ const CertificateTracking = () => {
           formData.trackingNumber
         )}&serialNo=${encodeURIComponent(formData.serialNumber)}`
       );
-      // console.log(res.data);
       if (res.status === 200) {
         setResult(res.data[0]);
       } else {
@@ -88,7 +87,7 @@ const CertificateTracking = () => {
         <div className="w-full">
           <form
             onSubmit={handleSubmit}
-            className={`flex flex-col md:flex-row justify-center gap-4 `}
+            className="flex flex-col md:flex-row justify-center gap-4"
           >
             <input
               type="text"
@@ -101,7 +100,9 @@ const CertificateTracking = () => {
                   trackingNumber: e.target.value,
                 }))
               }
-              className="border border-gray-300 rounded px-4 py-2 w-full md:w-1/3"
+              className="border border-gray-300 rounded px-4 py-2 w-full md:w-1/3 transition-all duration-150 outline-none shadow-smplaceholder-gray-400"
+              autoComplete="off"
+              maxLength={64}
             />
             <input
               type="text"
@@ -114,12 +115,13 @@ const CertificateTracking = () => {
                   serialNumber: e.target.value,
                 }))
               }
-              className="border border-gray-300 rounded px-4 py-2 w-full md:w-1/3"
+              className="border border-gray-300 rounded px-4 py-2 w-full md:w-1/3 transition-all duration-150 outline-none shadow-smplaceholder-gray-400"
+              autoComplete="off"
+              maxLength={64}
             />
-
             <button
               type="submit"
-              className="bg-[#e62245] cursor-pointer text-white px-6 py-2 rounded w-full md:w-auto"
+              className="bg-[#e62245] cursor-pointer text-white px-6 py-2 rounded w-full md:w-auto shadow transition-all duration-150 hover:bg-[#c51c3a] focus:outline-none"
               disabled={searching}
             >
               {searching ? "SEARCHING..." : "SUBMIT"}
