@@ -31,8 +31,7 @@ const CertificateTracking = () => {
           formData.trackingNumber
         )}&serialNo=${encodeURIComponent(formData.serialNumber)}`
       );
-      console.log(res.data);
-
+      // console.log(res.data);
       if (res.status === 200) {
         setResult(res.data[0]);
       } else {
@@ -80,7 +79,7 @@ const CertificateTracking = () => {
         <p className="text-gray-600 text-sm mb-6">
           {certificateData?.tracking_description || ""}
         </p>
-        <div className="w-full w-max-7xl">
+        <div className="w-full">
           <form
             onSubmit={handleSubmit}
             className={`flex flex-col md:flex-row justify-center gap-4 `}
@@ -96,7 +95,7 @@ const CertificateTracking = () => {
                   trackingNumber: e.target.value,
                 }))
               }
-              className="border border-gray-300 rounded px-4 py-2 w-full md:w-1/3 "
+              className="border border-gray-300 rounded px-4 py-2 w-full md:w-1/3"
             />
             <input
               type="text"
@@ -123,35 +122,37 @@ const CertificateTracking = () => {
           {error && <div className="text-crimson-red mt-2">{error}</div>}
         </div>
         {result && (
-          <div className="flex justify-center w-max-7xl mx-auto mt-5">
-            <table className="border-collapse border border-crimson-red   bg-[#28506a] text-left  min-w-[900px]">
-              <thead className="text-crimson-red">
-                <tr>
-                  <th className=" px-4 py-2 font-semibold">Tracking No</th>
-                  <th className=" px-4 py-2 font-semibold">Equipment</th>
-                  <th className=" px-4 py-2 font-semibold">Serial Number</th>
-                  <th className=" px-4 py-2 font-semibold">Accuracy</th>
-                  <th className=" px-4 py-2 font-semibold">Manufacturer</th>
-                  <th className=" px-4 py-2 font-semibold">Company Name</th>
-                  <th className=" px-4 py-2 font-semibold">Validity</th>
-                </tr>
-              </thead>
-              <tbody className="text-[#fff] border border-crimson-red">
-                <tr>
-                  <td className=" px-4 py-2">{result.trackingNo}</td>
-                  <td className=" px-4 py-2">{result.equipment}</td>
-                  <td className=" px-4 py-2">{result.serialNo}</td>
-                  <td className=" px-4 py-2">{result.accuracy}</td>
-                  <td className=" px-4 py-2">{result.manufacturer}</td>
-                  <td className=" px-4 py-2">{result.companyName}</td>
-                  <td className=" px-4 py-2">
-                    {result.validity
-                      ? new Date(result.validity).toISOString().slice(0, 10)
-                      : ""}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+          <div className="flex justify-center max-w-7xl mx-auto mt-5">
+            <div className="overflow-x-auto">
+              <table className="border-collapse border text-left shadow-lg rounded-md overflow-hidden bg-white">
+                <thead className="text-crimson-red bg-gray-100">
+                  <tr>
+                    <th className="px-2 md:px-4 py-3 font-semibold">Tracking No</th>
+                    <th className="px-2 md:px-4 py-3 font-semibold">Equipment</th>
+                    <th className="px-2 md:px-4 py-3 font-semibold">Serial Number</th>
+                    <th className="px-2 md:px-4 py-3 font-semibold">Accuracy</th>
+                    <th className="px-2 md:px-4 py-3 font-semibold">Manufacturer</th>
+                    <th className="px-2 md:px-4 py-3 font-semibold">Company Name</th>
+                    <th className="px-2 md:px-4 py-3 font-semibold">Validity</th>
+                  </tr>
+                </thead>
+                <tbody className="text-black border">
+                  <tr className="hover:bg-gray-50 transition-colors">
+                    <td className="px-2 md:px-4 py-3">{result.trackingNo}</td>
+                    <td className="px-2 md:px-4 py-3">{result.equipment}</td>
+                    <td className="px-2 md:px-4 py-3">{result.serialNo}</td>
+                    <td className="px-2 md:px-4 py-3">{result.accuracy}</td>
+                    <td className="px-2 md:px-4 py-3">{result.manufacturer}</td>
+                    <td className="px-2 md:px-4 py-3">{result.companyName}</td>
+                    <td className="px-2 md:px-4 py-3">
+                      {result.validity
+                        ? new Date(result.validity).toISOString().slice(0, 10)
+                        : ""}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         )}
       </div>

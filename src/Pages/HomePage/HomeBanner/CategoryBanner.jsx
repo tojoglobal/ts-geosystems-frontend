@@ -6,9 +6,8 @@ import "swiper/css";
 import "swiper/css/navigation";
 
 const CategoryBanner = () => {
-  const { data, isLoading } = useDataQuery(["category"], "/api/category");
+  const { data = {}, isLoading } = useDataQuery(["category"], "/api/category");
   if (isLoading) return null;
-
   return (
     <div className="w-full md:max-w-[95%] 2xl:max-w-[1370px] mt-5 md:mt-10 px-3 md:px-0 mx-auto">
       <div className="block sm:hidden">
@@ -47,7 +46,7 @@ const CategoryBanner = () => {
           ))}
         </Swiper>
       </div>
-      <div className="hidden sm:grid-cols-5 sm:gap-2 md:gap-5">
+      <div className="hidden sm:grid sm:grid-cols-5 sm:gap-2 md:gap-5">
         {data?.categories?.slice(0, 5).map((category) => (
           <Link
             to={`/${category.slug_name}`}
