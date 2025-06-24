@@ -29,7 +29,12 @@ const SearchOverlay = ({ isOpen, onClose }) => {
   const [showResultsView, setShowResultsView] = useState(false);
   const overlayRef = useRef(null);
   const showToast = useToastSwal();
-  const [latestSearches, setLatestSearches] = useState([]);
+  const [latestSearches, setLatestSearches] = useState([
+    "blog",
+    "leica",
+    "contact",
+    "ortact",
+  ]);
   const [recommendedProducts, setRecommendedProducts] = useState([]);
   const lastTrackedSearch = useRef(""); // To avoid duplicate posts
 
@@ -52,17 +57,54 @@ const SearchOverlay = ({ isOpen, onClose }) => {
     { enabled: !!searchText }
   );
 
-  // Load latest searches from localStorage (dynamic, no hardcoded array)
+  // Debounced track search after user pauses typing and results available
   useEffect(() => {
-    const saved = JSON.parse(localStorage.getItem("latestSearches")) || [];
-    setLatestSearches(saved);
-  }, []);
+    if (!searchText.trim()) return;
+    const handler = setTimeout(() => {
+      if (
+        searchText.trim() !== lastTrackedSearch.current &&
+        searchResults?.products &&
+        Array.isArray(searchResults.products) &&
+        searchResults.products.length > 0
+      ) {
+        axiosPublicUrl
+          .post("/api/popular-searches", { term: searchText.trim() })
+          .then(() => {
+            lastTrackedSearch.current = searchText.trim();
+          })
+          .catch(() => {});
+      }
+    }, 600);
+    return () => clearTimeout(handler);
+    // eslint-disable-next-line
+  }, [searchText, searchResults]);
+
+  const handleSearchSubmit = async (e) => {
+    e.preventDefault();
+    if (searchText.trim()) {
+      saveToLocalStorage(searchText.trim());
+      try {
+        await axiosPublicUrl.post("/api/popular-searches", {
+          term: searchText.trim(),
+        });
+        lastTrackedSearch.current = searchText.trim();
+      } catch (error) {
+        showToast("error", "Search Track Failed", error.message);
+        console.log(error);
+      }
+    }
+  };
 
   useEffect(() => {
     if (recommendedData?.products) {
       setRecommendedProducts(recommendedData.products.slice(0, 10));
     }
   }, [recommendedData]);
+
+  useEffect(() => {
+    const saved = JSON.parse(localStorage.getItem("latestSearches")) || [];
+    setLatestSearches(saved);
+  }, []);
 
   useEffect(() => {
     if (isOpen) {
@@ -79,7 +121,18 @@ const SearchOverlay = ({ isOpen, onClose }) => {
     ? searchResults?.products ?? []
     : recommendedProducts ?? [];
 
-  // Save new search to localStorage and state (dynamic)
+  const handleRemoveSearch = (index) => {
+    setLatestSearches(latestSearches.filter((_, i) => i !== index));
+  };
+
+  const handleClearAll = () => {
+    setLatestSearches([]);
+  };
+
+  const handleViewAll = () => {
+    setShowResultsView(true);
+  };
+
   const saveToLocalStorage = (value) => {
     let updated = [
       value,
@@ -89,47 +142,8 @@ const SearchOverlay = ({ isOpen, onClose }) => {
     localStorage.setItem("latestSearches", JSON.stringify(updated));
   };
 
-  const handleRemoveSearch = (index) => {
-    const updated = latestSearches.filter((_, i) => i !== index);
-    setLatestSearches(updated);
-    localStorage.setItem("latestSearches", JSON.stringify(updated));
-  };
-
-  const handleClearAll = () => {
-    setLatestSearches([]);
-    localStorage.setItem("latestSearches", JSON.stringify([]));
-  };
-
-  const handleViewAll = () => {
-    setShowResultsView(true);
-  };
-
   const handleCloseResultsView = () => {
     setShowResultsView(false);
-  };
-
-  const handleSort = (e) => {
-    setSortOrder(e.target.value);
-  };
-
-  // Only track search and save to localStorage when user clicks a product
-  const trackSearchOnProductClick = async (searchTerm) => {
-    if (searchTerm?.trim() && searchTerm.trim() !== lastTrackedSearch.current) {
-      try {
-        await axiosPublicUrl.post("/api/popular-searches", {
-          term: searchTerm.trim(),
-        });
-        lastTrackedSearch.current = searchTerm.trim();
-        saveToLocalStorage(searchTerm.trim());
-      } catch (error) {
-        showToast("error", "Search Track Failed", error.message);
-      }
-    }
-  };
-
-  // No need to track on submit or typing now
-  const handleSearchSubmit = (e) => {
-    e.preventDefault();
   };
 
   if (showResultsView) {
@@ -145,6 +159,10 @@ const SearchOverlay = ({ isOpen, onClose }) => {
       />
     );
   }
+
+  const handleSort = (e) => {
+    setSortOrder(e.target.value);
+  };
 
   const settings = {
     dots: false,
@@ -328,9 +346,8 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                       const basePrice = parsePrice(product.price) || 0;
                       return (
                         <Link
-                          onClick={async () => {
+                          onClick={() => {
                             trackProductView(product.id);
-                            await trackSearchOnProductClick(searchText);
                             onClose();
                           }}
                           to={`/products/${product.id}/${slugify(
@@ -401,9 +418,8 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                             </div>
                           )}
                           <Link
-                            onClick={async () => {
+                            onClick={() => {
                               trackProductView(product.id);
-                              await trackSearchOnProductClick(searchText);
                               onClose();
                             }}
                             to={`/products/${product.id}/${slugify(
