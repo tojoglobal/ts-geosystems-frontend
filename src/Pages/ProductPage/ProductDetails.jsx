@@ -22,7 +22,6 @@ import { useVatEnabled } from "../../Hooks/useVatEnabled";
 import GetQuotationModal from "./GetQuotationModal";
 import { formatBDT } from "../../utils/formatBDT";
 import RichTextRenderer from "../../utils/RichTextRenderer";
-import { parseItems } from "../../utils/parseItems";
 import { parseSoftwareOptions } from "../../utils/software_options";
 
 // Helper function to extract YouTube video ID from url
@@ -295,11 +294,6 @@ const ProductDetails = () => {
                   </span>
                 </div>
               )}
-              {/* {vatEnabled && (
-                <div className="text-sm text-gray-500">
-                  VAT: ৳{formatBDT(vatAmount)} ({vat}%)
-                </div>
-              )} */}
             </div>
             <hr className="border-t border-gray-300 my-3" />
             <div className="text-sm text-[#222] mb-1">
