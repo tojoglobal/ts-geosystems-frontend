@@ -238,7 +238,7 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                     <span className="mr-2">{item}</span>
                     <button
                       onClick={() => handleRemoveSearch(i)}
-                      className="text-gray-600 hover:text-black"
+                      className="text-gray-600 cursor-pointer hover:text-black"
                     >
                       <IoCloseOutline size={14} />
                     </button>

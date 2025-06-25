@@ -743,7 +743,7 @@ const UpdateProductForm = () => {
                 onChange={(e) =>
                   setValue("priceShowHide", e.target.checked ? 1 : 0)
                 }
-                className="w-5 h-5 accent-teal-600"
+                className="w-5 h-5 accent-teal-600 cursor-pointer"
               />
               <label>Hide Price</label>
             </div>
@@ -814,7 +814,7 @@ const UpdateProductForm = () => {
                 onChange={(e) =>
                   setValue("productOptionShowHide", e.target.checked ? 1 : 0)
                 }
-                className="w-5 h-5 accent-teal-600"
+                className="w-5 h-5 accent-teal-600 cursor-pointer"
               />
               <label>Hide Product Options</label>
             </div>
