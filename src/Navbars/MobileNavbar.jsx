@@ -69,6 +69,12 @@ const MobileNavbar = () => {
     };
   }, [isSearchOpen, isCartVisible, isMenuOpen, dispatch]);
 
+  const { data = {}, isLoading } = useDataQuery(["seetings"], "/api/settings");
+  const mainLogo =
+    data?.main_logo &&
+    (data.main_logo.startsWith("/") || data.main_logo.startsWith("http"))
+      ? `${import.meta.env.VITE_OPEN_APIURL || ""}${data.main_logo}`
+      : "";
   // Fetch categories
   const {
     data: categoriesData,
@@ -251,7 +257,7 @@ const MobileNavbar = () => {
     document.body.style.overflow = isMenuOpen ? "hidden" : "auto";
   }, [isMenuOpen]);
 
-  if (categoriesLoading || subcategoriesLoading || brandsLoading) {
+  if (isLoading || categoriesLoading || subcategoriesLoading || brandsLoading) {
     return (
       <div className="w-full relative z-50">
         <div className="fixed top-0 w-full">
@@ -428,7 +434,6 @@ const MobileNavbar = () => {
           </div>
         )}
       </div>
-
       {/* Logo Section */}
       <Link
         to="/"
@@ -436,13 +441,14 @@ const MobileNavbar = () => {
         aria-label="Home"
       >
         <img
-          src="https://cdn11.bigcommerce.com/s-ew2v2d3jn1/images/stencil/250x64/g2-survey-logo_1611121872__30054.original.png"
-          alt="G2 Survey"
-          title="G2 Survey"
+          src={mainLogo}
+          alt={data?.app_name || "Logo"}
+          title={data?.app_name || "Logo"}
           className="h-auto max-w-full"
+          loading="lazy"
+          style={{ maxHeight: 70 }}
         />
       </Link>
-
       {/* Side Menu */}
       <div
         className={`fixed top-12 inset-0 bg-charcoal-gray z-50 text-white transition-opacity duration-300 ease-in-out ${
