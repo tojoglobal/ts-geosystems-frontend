@@ -6,21 +6,28 @@ import { closeCart } from "../features/CartToggleSlice/CartToggleSlice";
 import useProductsByIdsQuery from "../Hooks/useProductsByIdsQuery";
 import { getFirstImage } from "../utils/getFirstImage";
 import { formatBDT } from "../utils/formatBDT";
+import { useVatEnabled } from "../Hooks/useVatEnabled";
 
 const CartWithPopover = () => {
   const { isSticky } = useSelector((state) => state.sticky);
   const { items } = useSelector((state) => state.cart);
   const { isCartVisible } = useSelector((state) => state.cartToggle);
+  const { data: vatEnabled = true } = useVatEnabled();
 
   const dispatch = useDispatch();
   const cartRef = useRef(null);
   const productIds = useMemo(() => items.map((item) => item.id), [items]);
   const { products, loading } = useProductsByIdsQuery(productIds);
-
   const mergedCart = items
     .map((item) => {
       const product = products.find((p) => p.id === item.id);
-      return product ? { ...product, quantity: item.quantity } : null;
+      if (!product) return null;
+      const cartPrice = vatEnabled ? item.priceIncVat : item.price;
+      return {
+        ...product,
+        quantity: item.quantity,
+        cartPrice,
+      };
     })
     .filter(Boolean);
 
@@ -99,7 +106,7 @@ const CartWithPopover = () => {
                             </p>
                           </Link>
                           <p className="text-xs text-black font-semibold">
-                            {item.quantity}x ৳ {formatBDT(item.price)}
+                            {item.quantity}x ৳ {formatBDT(item.cartPrice)}
                           </p>
                         </div>
                       </div>
@@ -173,7 +180,7 @@ const CartWithPopover = () => {
                       </Link>
                       <p className="text-sm text-black font-semibold">
                         {item.quantity > 0 && item.quantity}x ৳
-                        {formatBDT(item.price)}
+                        {formatBDT(item?.cartPrice)}
                       </p>
                     </div>
                   </div>

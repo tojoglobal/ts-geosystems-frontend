@@ -59,7 +59,12 @@ const Cart = () => {
     shipping && shipping.amount ? parseFloat(shipping.amount) : 100;
   const productIds = useMemo(() => items.map((item) => item.id), [items]);
   const { products } = useProductsByIdsQuery(productIds);
-  const mergedCart = useSelector((state) => selectMergedCart(state, products));
+  const mergedCart = useSelector((state) =>
+    selectMergedCart(state, products, vatEnabled)
+  );
+
+  console.log("mergedCart product", mergedCart);
+  console.log("cart Items product", items);
 
   const handleQuantityChange = (id, delta) => {
     dispatch(updateQuantity({ id, amount: delta }));

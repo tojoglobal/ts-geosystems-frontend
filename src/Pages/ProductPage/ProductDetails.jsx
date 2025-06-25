@@ -23,8 +23,8 @@ import GetQuotationModal from "./GetQuotationModal";
 import { formatBDT } from "../../utils/formatBDT";
 import RichTextRenderer from "../../utils/RichTextRenderer";
 import { parseSoftwareOptions } from "../../utils/software_options";
-import { getProductType } from "../../utils/productOption";
 import { getParsedProductOptions } from "../../utils/get_product_option";
+import { getFirstImage } from "../../utils/getFirstImage";
 
 // Helper function to extract YouTube video ID from url
 function getYouTubeId(url) {
@@ -46,6 +46,7 @@ const ProductDetails = () => {
   const { data: vatEnabled = true } = useVatEnabled();
   const [playingVideoIdx, setPlayingVideoIdx] = useState(-1);
   const [isQuotationOpen, setIsQuotationOpen] = useState(false);
+  const [selectedOptions, setSelectedOptions] = useState([]);
 
   const {
     data: product = {},
@@ -65,6 +66,7 @@ const ProductDetails = () => {
   const category = product?.category ? JSON.parse(product.category).cat : null;
   const currentProductId = product?.id;
   const priceOption = product?.priceShowHide;
+  const productOptionShowHide = product?.productOptionShowHide;
   // Countdown logic
   const [timeLeft, setTimeLeft] = useState({});
   useEffect(() => {
@@ -121,18 +123,59 @@ const ProductDetails = () => {
     }
   }, [product, dispatch]);
 
+  const handleOptionChange = (option, checked) => {
+    if (checked) {
+      setSelectedOptions((prev) => [...prev, option]);
+    } else {
+      setSelectedOptions((prev) =>
+        prev.filter((opt) => opt.value !== option.value)
+      );
+    }
+  };
+
+  // Deselect all options (for "None")
+  const handleNoneSelected = () => setSelectedOptions([]);
+
   // Quantity handlers
   const incrementQuantity = () => setQuantity((prev) => prev + 1);
   const decrementQuantity = () =>
     quantity > 1 && setQuantity((prev) => prev - 1);
+
+  // Calculate total price with selected options and VAT
+  const getTotalPriceInfo = () => {
+    // main product
+    const productBasePrice = parsePrice(product?.price) || 0;
+    let productVat = product?.tax ? JSON.parse(product.tax).value : 0;
+    let totalBasePrice = productBasePrice;
+    let totalVatAmount = vatEnabled ? productBasePrice * (productVat / 100) : 0;
+    // Add selected options
+    selectedOptions.forEach((opt) => {
+      const optPrice = parsePrice(opt.price) || 0;
+      let optVat = opt?.tax ? JSON.parse(opt.tax).value : 0;
+      totalBasePrice += optPrice;
+      totalVatAmount += vatEnabled ? optPrice * (optVat / 100) : 0;
+    });
+    return {
+      base: totalBasePrice,
+      vat: totalVatAmount,
+      incVat: totalBasePrice + totalVatAmount,
+    };
+  };
+
+  const priceInfo = getTotalPriceInfo();
 
   // Add to cart handler
   const handleAddToCart = () => {
     const itemToAdd = {
       id: product.id,
       product_name: product.product_name,
-      price: parsePrice(product.price),
+      price: parsePrice(priceInfo.base),
+      priceIncVat: parsePrice(priceInfo.incVat),
       quantity,
+      options: selectedOptions.map((opt) => ({
+        id: opt.value,
+        label: opt.label,
+      })),
     };
     dispatch(addToCart(itemToAdd));
 
@@ -142,22 +185,15 @@ const ProductDetails = () => {
       `<b style="color:#333">${product.product_name}</b> has been added to your cart.`,
       { timer: 2000 }
     );
+    // Save selection on add to cart as well
+    localStorage.setItem(
+      `productOptions_${id}`,
+      JSON.stringify({
+        selectedOptions,
+        quantity,
+      })
+    );
   };
-
-  // vat part
-  let vat = 0;
-  try {
-    vat = product?.tax ? JSON.parse(product.tax).value : 0;
-  } catch {
-    vat = 0;
-  }
-  const basePrice = parsePrice(product.price) || 0;
-  const vatAmount = basePrice * (vat / 100);
-  const priceIncVat = basePrice + vatAmount;
-
-  // console.log(parseSoftwareOptions(product?.software_options));
-  // console.log(getProductType(product));
-  console.log(getParsedProductOptions(product));
 
   if (isLoading) return null;
   if (isError)
@@ -278,13 +314,13 @@ const ProductDetails = () => {
                 </div>
               )}
             <p className="text-[#d71a28] text-sm mb-2 capitalize">
-              {product.brand_name || "Brand"}
+              {product?.brand_name || "Brand"}
             </p>
             <div className="mb-2">
               <div className="text-[20px] sm:text-[24px] font-semibold text-[#222]">
                 Price:{" "}
                 <span className="text-[#111]">
-                  ৳{product?.priceShowHide ? "" : formatBDT(basePrice)}
+                  ৳{product?.priceShowHide ? "" : formatBDT(priceInfo.base)}
                   {vatEnabled && (
                     <span className="text-sm text-gray-500">(Ex. VAT)</span>
                   )}
@@ -292,9 +328,9 @@ const ProductDetails = () => {
               </div>
               {vatEnabled && !product?.priceShowHide && (
                 <div className="text-[18px] sm:text-[24px] font-semibold text-[#999] ">
-                  Price: ৳ {formatBDT(priceIncVat)}
+                  Price: ৳ {formatBDT(priceInfo.incVat)}
                   <span className="text-sm text-gray-400 ml-2">
-                    (Inc. VAT | ৳ {formatBDT(vatAmount)} ({vat}%))
+                    (Inc. VAT | ৳ {formatBDT(priceInfo.vat)})
                   </span>
                 </div>
               )}
@@ -447,6 +483,72 @@ const ProductDetails = () => {
                 </div>
               </div>
             </div>
+            {/* product option show in the radio btn none and show the product option */}
+            <div className="text-sm text-[#222] mt-5">
+              {product?.product_options &&
+              product?.product_options.length > 0 ? (
+                <>
+                  <strong>Additional Accessory Options:</strong>{" "}
+                  {product?.isStock === 1 &&
+                    priceOption === 0 &&
+                    productOptionShowHide === 0 && (
+                      <ul className="border-x-1 border-t-1  border-gray-200 mt-2">
+                        <li className="border-b border-gray-200 p-[1.5rem]">
+                          <label className="flex items-center cursor-pointer">
+                            <input
+                              type="checkbox"
+                              name="product_option"
+                              checked={selectedOptions.length === 0}
+                              onChange={handleNoneSelected}
+                              className="mr-2"
+                            />
+                            None
+                          </label>
+                        </li>
+                        {getParsedProductOptions(product?.product_options).map(
+                          (option) => (
+                            <li
+                              className="border-b border-gray-200 p-[1.5rem]"
+                              key={option?.value}
+                            >
+                              <div className="flex items-center gap-4">
+                                <div>
+                                  <img
+                                    src={`${
+                                      import.meta.env.VITE_OPEN_APIURL
+                                    }${getFirstImage(option?.image_urls)}`}
+                                    alt={option?.label}
+                                    className="w-12 h-12 object-cover"
+                                  />
+                                </div>
+                                <label className="flex items-center cursor-pointer">
+                                  <input
+                                    type="checkbox"
+                                    name="product_option"
+                                    checked={selectedOptions.some(
+                                      (opt) => opt.value === option.value
+                                    )}
+                                    onChange={(e) =>
+                                      handleOptionChange(
+                                        option,
+                                        e.target.checked
+                                      )
+                                    }
+                                    className="mr-2"
+                                  />
+                                  {option.label} &nbsp;
+                                </label>
+                              </div>
+                            </li>
+                          )
+                        )}
+                      </ul>
+                    )}
+                </>
+              ) : (
+                <span className="text-[#e62245]">N/A</span>
+              )}
+            </div>
           </div>
         </div>
         {/* Tabs */}
@@ -495,13 +597,13 @@ const ProductDetails = () => {
                     <tr className="border-t">
                       <td className="p-4 text-gray-700">Product Name:</td>
                       <td className="p-4 text-gray-700">
-                        {product.product_name}
+                        {product?.product_name}
                       </td>
                     </tr>
                     <tr className="border-t">
                       <td className="p-4 text-gray-700">Brand:</td>
                       <td className="p-4 text-gray-700">
-                        {product.brand_name}
+                        {product?.brand_name}
                       </td>
                     </tr>
                     <tr className="border-t">
@@ -518,7 +620,7 @@ const ProductDetails = () => {
                     <tr className="border-t">
                       <td className="p-4 text-gray-700">Condition:</td>
                       <td className="p-4 text-gray-700 capitalize">
-                        {product.product_condition || "New"}
+                        {product?.product_condition || "New"}
                       </td>
                     </tr>
                     <tr className="border-t hidden sm:table-row">

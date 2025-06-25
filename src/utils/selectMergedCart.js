@@ -7,11 +7,12 @@ import { calculateVat } from "./calculateVat";
 // Input selectors
 const selectCartItems = (state) => state.cart.items;
 const selectProducts = (_, products) => products;
+const selectVatEnabled = (_, __, vatEnabled) => vatEnabled;
 
 // Memoized selector
 export const selectMergedCart = createSelector(
-  [selectCartItems, selectProducts],
-  (items, products) => {
+  [selectCartItems, selectProducts, selectVatEnabled],
+  (items, products, vatEnabled) => {
     return items
       .map((item) => {
         const product = products.find((p) => p.id === item.id);
@@ -31,7 +32,8 @@ export const selectMergedCart = createSelector(
           vatPerUnit,
           totalVat,
           priceWithVat,
-          price: productPrice,
+          // price: productPrice,
+          price: vatEnabled ? priceWithVat : productPrice,
         };
       })
       .filter(Boolean);

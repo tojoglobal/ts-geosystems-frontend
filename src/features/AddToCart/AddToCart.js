@@ -23,7 +23,9 @@ const CartSlice = createSlice({
   reducers: {
     addToCart(state, action) {
       const newItem = action.payload;
+      // Try to find a cart item with the same id and options
       const existingItem = state.items.find((item) => item.id === newItem.id);
+
       if (existingItem) {
         existingItem.quantity += newItem.quantity;
         existingItem.totalPrice += newItem.price * newItem.quantity;
@@ -33,7 +35,6 @@ const CartSlice = createSlice({
           totalPrice: newItem.price * newItem.quantity,
         });
       }
-
       state.totalQuantity += newItem.quantity;
       state.totalPrice += newItem.price * newItem.quantity;
       saveCartToLocalStorage(state.items);
@@ -54,6 +55,7 @@ const CartSlice = createSlice({
 
         item.quantity = newQuantity;
         item.totalPrice = pricePerUnit * newQuantity;
+        saveCartToLocalStorage(state.items);
       }
     },
     removeFromCart(state, action) {
@@ -64,13 +66,17 @@ const CartSlice = createSlice({
         state.totalQuantity -= existingItem.quantity;
         state.totalPrice -= existingItem.totalPrice;
         state.items = state.items.filter((item) => item.id !== id);
+
+        saveCartToLocalStorage(state.items);
       }
     },
     setCoupon: (state, action) => {
       state.coupon = action.payload;
+      saveCartToLocalStorage(state.items);
     },
     clearCoupon: (state) => {
       state.coupon = {};
+      saveCartToLocalStorage(state.items);
     },
     // shiping logic
     setShipping: (state, action) => {
@@ -78,12 +84,14 @@ const CartSlice = createSlice({
     },
     clearShipping: (state) => {
       state.shipping = {};
+      saveCartToLocalStorage(state.items);
     },
     // Clear the cart
     clearCart(state) {
       state.items = [];
       state.totalQuantity = 0;
       state.totalPrice = 0;
+      saveCartToLocalStorage(state.items);
     },
   },
 });

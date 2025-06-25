@@ -177,6 +177,9 @@ const UpdateProductForm = () => {
           response.data?.products?.map((prod) => ({
             value: prod.id,
             label: prod.product_name,
+            price: prod.price,
+            tax: prod.tax,
+            image_urls: prod.image_urls,
           })) || [];
         setProductOptions(mappedProducts);
       } catch (err) {
@@ -282,6 +285,7 @@ const UpdateProductForm = () => {
       setValue("subCategory", subCatValue);
     }
   }, [productData, subCategories, setValue]);
+  // console.log("Product Data:", productData);
 
   useEffect(() => {
     if (productData) {
@@ -452,6 +456,8 @@ const UpdateProductForm = () => {
       formData.append("videoUrls", data.videoUrls || "");
       formData.append("warrantyInfo", data.warrantyInfo || "");
       formData.append("clearance", data.clearance ? "1" : "0");
+      formData.append("isStock", data.isStock ? "1" : "0");
+      formData.append("sale", data.sale ? "1" : "0");
       formData.append("flashSale", data.flashSale ? "1" : "0");
       formData.append("flashSaleEnd", data.flashSaleEnd || "");
       formData.append("metaKeywords", data.metaKeywords?.join(",") || "");
