@@ -1,20 +1,25 @@
 export const getParsedProductOptions = (ProductOptions) => {
-  //   console.log("getParsedProductOptions called with product:", ProductOptions);
+  // console.log(ProductOptions);
 
-  try {
-    if (typeof ProductOptions === "string") {
-      const parsed = JSON.parse(ProductOptions);
-      if (Array.isArray(parsed)) {
-        return parsed.map((option) => {
-          return {
-            ...option,
-          };
-        });
-      }
-      return parsed?.value ? parsed : { value: 0 };
-    }
-  } catch (error) {
-    console.error("Error parsing product options:", error);
+  // Already an array: return as-is
+  if (Array.isArray(ProductOptions)) {
+    return ProductOptions;
   }
-  return null;
+  // String: parse as JSON, handle array/object
+  if (typeof ProductOptions === "string") {
+    try {
+      const parsed = JSON.parse(ProductOptions);
+      if (Array.isArray(parsed)) return parsed;
+      if (parsed && typeof parsed === "object") return [parsed];
+    } catch (error) {
+      console.error("Error parsing product options string:", error);
+    }
+    return [];
+  }
+  // Plain object: wrap in array
+  if (ProductOptions && typeof ProductOptions === "object") {
+    return [ProductOptions];
+  }
+  // Fallback: empty array
+  return [];
 };

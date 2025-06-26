@@ -25,15 +25,18 @@ export const selectMergedCart = createSelector(
           item?.quantity,
           taxe.value || 0
         );
-
+        const { image_urls, product_options, brand_name } = product;
         return {
-          ...product,
-          quantity: item.quantity,
+          ...item,
+          // quantity: item.quantity,
           vatPerUnit,
-          totalVat,
-          priceWithVat,
-          // price: productPrice,
-          price: vatEnabled ? priceWithVat : productPrice,
+          total_per_product_Vat: totalVat,
+          // priceWithVat,
+          brand_name,
+          image_urls,
+          product_options,
+          price: vatEnabled ? item?.priceIncVat : priceWithVat,
+          product_price: productPrice,
         };
       })
       .filter(Boolean);
