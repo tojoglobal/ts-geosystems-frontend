@@ -75,14 +75,20 @@ const Cart = () => {
     selectMergedCart(state, products, vatEnabled)
   );
 
-  // console.log("mergedCart product", mergedCart);
-  // console.log("cart Items product", items);
-
-  const handleQuantityChange = (id, delta) => {
-    dispatch(updateQuantity({ id, amount: delta }));
+  const priceInfo = getTotalPriceInfo(
+    optionModal.product,
+    optionModal.selectedOptions,
+    vatEnabled,
+    items
+  );
+  const handleQuantityChange = (item, delta) => {
+    dispatch(
+      updateQuantity({ id: item.id, options: item.options, amount: delta })
+    );
   };
-  const handleRemove = (id) => {
-    dispatch(removeFromCart(id));
+
+  const handleRemove = (item) => {
+    dispatch(removeFromCart({ id: item.id, options: item.options }));
     showToast("success", "Removed!", "Item removed from cart.");
   };
 
@@ -111,16 +117,39 @@ const Cart = () => {
   };
 
   // Calculate VAT per item and total VAT for the cart
-  const getVatForItem = (item) => {
-    const vatRate = getVatValue(item);
-    const basePrice = parseFloat(item.price) || 0;
-    return basePrice * (vatRate / 100) * item.quantity;
-  };
+
+  function getVatForItem(item) {
+    console.log(item);
+
+    // Main product VAT
+    const mainVatRate = getVatValue(item);
+    const mainBase = parseFloat(item.product_price || item.price) || 0;
+    let vatPerOne = (mainBase * mainVatRate) / 100;
+
+    // Accessories VAT
+    let accessoryVat = 0;
+    if (item.options && item.options.length > 0) {
+      item.options.forEach((opt) => {
+        const optPrice = parseFloat(opt.price) || 0;
+        let optVatRate = 0;
+        try {
+          optVatRate = opt.tax ? JSON.parse(opt.tax).value : 0;
+        } catch {}
+        accessoryVat += (optPrice * optVatRate) / 100;
+      });
+    }
+
+    const perUnitVat = vatPerOne + accessoryVat;
+    return perUnitVat * item.quantity;
+  }
 
   const vat = mergedCart.reduce(
     (total, item) => total + getVatForItem(item),
     0
   );
+  console.log(mergedCart);
+  // console.log(vat);
+  console.log(priceInfo);
 
   const subTotal = mergedCart.reduce(
     (total, item) => total + item.price * item.quantity,
@@ -225,22 +254,23 @@ const Cart = () => {
       optionModal.selectedOptions,
       vatEnabled
     );
-    console.log("priceInfo", priceInfo);
 
+    // Remove old item (if needed, depends on your reducer)
     dispatch(
       removeFromCart({
         id: optionModal.item.id,
         options: optionModal.item.options || [],
       })
     );
-    dispatch(
-      addToCart({
-        ...optionModal.item,
-        options: optionModal.selectedOptions,
-        price: vatEnabled ? priceInfo.incVat : priceInfo.base,
-        priceIncVat: priceInfo.incVat,
-      })
-    );
+    const itemToAdd = {
+      ...optionModal.item,
+      options: optionModal.selectedOptions,
+      price: vatEnabled ? priceInfo.incVat : priceInfo.base,
+      priceIncVat: priceInfo.incVat,
+    };
+    console.log("itemToAdd", itemToAdd);
+    // Add updated item
+    dispatch(addToCart(itemToAdd));
     setOptionModal({
       open: false,
       item: null,
@@ -248,8 +278,6 @@ const Cart = () => {
       selectedOptions: [],
     });
   };
-
-  console.log("optionModal", optionModal);
 
   return (
     <div className="md:p-2">
@@ -275,6 +303,7 @@ const Cart = () => {
                 <th className="py-2">Item Name</th>
                 <th className="py-2">Price</th>
                 <th className="py-2">Quantity</th>
+                <th className="py-2">vat</th>
                 <th className="py-2 text-right">Total</th>
               </tr>
             </thead>
@@ -323,26 +352,26 @@ const Cart = () => {
                     <td>
                       <div className="flex items-center">
                         <button
-                          onClick={() => handleQuantityChange(item.id, -1)}
+                          onClick={() => handleQuantityChange(item, -1)}
                           className="px-2 border rounded hover:bg-gray-200"
                         >
                           -
                         </button>
                         <span className="px-3">{item.quantity}</span>
                         <button
-                          onClick={() => handleQuantityChange(item.id, 1)}
+                          onClick={() => handleQuantityChange(item, 1)}
                           className="px-2 border rounded hover:bg-gray-200"
                         >
                           +
                         </button>
                       </div>
                     </td>
-                    {/* {vatEnabled && <td>৳{formatBDT(getVatForItem(item))}</td>} */}
+                    {vatEnabled && <td>৳{formatBDT(getVatForItem(item))}</td>}
                     <td className="text-right">
                       <div className="flex items-center justify-end gap-3">
                         <p>৳{formatBDT(item.price * item.quantity)}</p>
                         <button
-                          onClick={() => handleRemove(item.id)}
+                          onClick={() => handleRemove(item)}
                           className="text-red-500 cursor-pointer"
                         >
                           <RxCross2 />
@@ -355,48 +384,89 @@ const Cart = () => {
             </tbody>
             {/* Option Change Popup/Modal */}
             {optionModal.open && (
-              <div className="fixed z-50 inset-0 bg-black/50 flex items-center justify-center">
-                <div className="bg-white p-6 rounded shadow-md min-w-[300px] max-w-md">
-                  <h2 className="text-lg font-semibold mb-4">
-                    Edit Accessories
+              <div className="fixed z-50 inset-0 bg-black/80 flex items-center justify-center px-5">
+                <div className="bg-white rounded-lg shadow-xl w-full max-w-full relative py-6 px-3 sm:px-6 flex flex-col">
+                  <h2 className="text-xl font-light text-[#2f2f2b] mb-4 text-center">
+                    Configure '{optionModal.item?.product_name}'
                   </h2>
-
-                  <ul>
-                    {getParsedProductOptions(
-                      optionModal.product?.product_options
-                    ).map((opt) => (
-                      <li
-                        key={opt.value}
-                        className="mb-2 flex items-center gap-2"
-                      >
-                        <input
-                          type="checkbox"
-                          name="product_option"
-                          checked={optionModal.selectedOptions.some(
-                            (o) => o.id === opt.value
-                          )}
-                          onChange={(e) =>
-                            handleOptionChange(opt, e.target.checked)
-                          }
-                          className="mr-2"
-                        />
-                        {opt.image_urls && (
+                  {/* Scrollable options list */}
+                  <div
+                    className="overflow-y-auto border rounded-md border-gray-200 bg-gray-50 flex-1"
+                    style={{ maxHeight: "60vh", minHeight: "200px" }}
+                  >
+                    <ul className="divide-y divide-gray-200">
+                      {/* "None" Option */}
+                      <li className="p-4 flex items-center">
+                        <label className="flex items-center cursor-pointer w-full">
+                          <input
+                            type="checkbox"
+                            checked={optionModal.selectedOptions.length === 0}
+                            onChange={() =>
+                              setOptionModal((prev) => ({
+                                ...prev,
+                                selectedOptions: [],
+                              }))
+                            }
+                            className="mr-3 accent-[#e62245] w-5 h-5"
+                          />
+                          <span className="text-gray-700 font-medium">
+                            None
+                          </span>
+                        </label>
+                      </li>
+                      {/* Accessories */}
+                      {getParsedProductOptions(
+                        optionModal.item?.product_options
+                      ).map((opt) => (
+                        <li
+                          key={opt.value}
+                          className="p-4 flex items-center gap-4"
+                        >
                           <img
                             src={`${
                               import.meta.env.VITE_OPEN_APIURL
                             }${getFirstImage(opt.image_urls)}`}
                             alt={opt.label}
-                            className="w-8 h-8 object-cover rounded"
+                            className="w-12 h-12 object-cover rounded border border-gray-200 bg-white"
                           />
-                        )}
-                        <span>{opt.label}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  <div className="flex justify-end mt-4">
-                    <div>
+                          <label className="flex items-center cursor-pointer w-full">
+                            <input
+                              type="checkbox"
+                              name="product_option"
+                              checked={optionModal.selectedOptions.some(
+                                (o) => o.id === opt.value
+                              )}
+                              onChange={(e) =>
+                                handleOptionChange(opt, e.target.checked)
+                              }
+                              className="mr-3 accent-[#e62245] w-5 h-5"
+                            />
+                            <div>
+                              <span className="font-semibold text-gray-900">
+                                {opt.label}
+                              </span>
+                            </div>
+                          </label>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  {/* Footer */}
+                  <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-6">
+                    <div className="text-base font-semibold text-gray-800">
+                      Price: ৳
+                      {formatBDT(
+                        vatEnabled ? priceInfo.incVat : priceInfo.base
+                      )}
+                      {vatEnabled && (
+                        <span className="ml-1 text-xs text-gray-500">
+                          (Inc. VAT: ৳{formatBDT(priceInfo.vat)})
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex gap-2">
                       <button
-                        className="px-4 py-2 bg-gray-300 text-gray-700 rounded mr-2"
+                        className="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 transition"
                         onClick={() =>
                           setOptionModal({
                             open: false,
@@ -409,7 +479,7 @@ const Cart = () => {
                         Cancel
                       </button>
                       <button
-                        className="px-4 py-2 bg-[#e62245] text-white rounded"
+                        className="px-4 py-2 bg-[#e62245] text-white rounded hover:bg-[#c81a3d] transition"
                         onClick={saveOptionChanges}
                       >
                         Save
@@ -622,14 +692,14 @@ const Cart = () => {
               <div className="flex items-center gap-2 mt-2">
                 <span className="text-sm">Qty:</span>
                 <button
-                  onClick={() => handleQuantityChange(item.id, -1)}
+                  onClick={() => handleQuantityChange(item, -1)}
                   className="px-2 py-1 border rounded hover:bg-gray-200 text-sm"
                 >
                   -
                 </button>
                 <span className="px-2 text-sm">{item.quantity}</span>
                 <button
-                  onClick={() => handleQuantityChange(item.id, 1)}
+                  onClick={() => handleQuantityChange(item, 1)}
                   className="px-2 py-1 border rounded hover:bg-gray-200 text-sm"
                 >
                   +

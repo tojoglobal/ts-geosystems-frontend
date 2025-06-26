@@ -14,7 +14,6 @@ import {
   MdOutlineKeyboardArrowUp,
 } from "react-icons/md";
 import { addToCart } from "../../features/AddToCart/AddToCart";
-import { parsePrice } from "../../utils/parsePrice";
 import useDataQuery from "../../utils/useDataQuery";
 import { setBreadcrumb } from "../../features/breadcrumb/breadcrumbSlice";
 import useToastSwal from "../../Hooks/useToastSwal";
@@ -25,6 +24,7 @@ import RichTextRenderer from "../../utils/RichTextRenderer";
 import { parseSoftwareOptions } from "../../utils/software_options";
 import { getParsedProductOptions } from "../../utils/get_product_option";
 import { getFirstImage } from "../../utils/getFirstImage";
+import { getTotalPriceInfo } from "../../utils/getTotalPriceInfo";
 
 // Helper function to extract YouTube video ID from url
 function getYouTubeId(url) {
@@ -95,7 +95,6 @@ const ProductDetails = () => {
     if (!selectedImage && imageUrls.length > 0) {
       setSelectedImage(imageUrls[0]);
     }
-    // If product changes, ensure selectedImage resets
     // eslint-disable-next-line
   }, [product]);
 
@@ -122,6 +121,7 @@ const ProductDetails = () => {
       );
     }
   }, [product, dispatch]);
+  // console.log(product);
 
   const handleOptionChange = (option, checked) => {
     if (checked) {
@@ -141,41 +141,27 @@ const ProductDetails = () => {
   const decrementQuantity = () =>
     quantity > 1 && setQuantity((prev) => prev - 1);
 
-  // Calculate total price with selected options and VAT
-  const getTotalPriceInfo = () => {
-    // main product
-    const productBasePrice = parsePrice(product?.price) || 0;
-    let productVat = product?.tax ? JSON.parse(product.tax).value : 0;
-    let totalBasePrice = productBasePrice;
-    let totalVatAmount = vatEnabled ? productBasePrice * (productVat / 100) : 0;
-    // Add selected options
-    selectedOptions.forEach((opt) => {
-      const optPrice = parsePrice(opt.price) || 0;
-      let optVat = opt?.tax ? JSON.parse(opt.tax).value : 0;
-      totalBasePrice += optPrice;
-      totalVatAmount += vatEnabled ? optPrice * (optVat / 100) : 0;
-    });
-    return {
-      base: totalBasePrice,
-      vat: totalVatAmount,
-      incVat: totalBasePrice + totalVatAmount,
-    };
-  };
-
-  const priceInfo = getTotalPriceInfo();
+  const priceInfo = getTotalPriceInfo(product, selectedOptions, vatEnabled);
 
   // Add to cart handler
   const handleAddToCart = () => {
     const itemToAdd = {
       id: product.id,
       product_name: product.product_name,
-      price: parsePrice(priceInfo.base),
-      priceIncVat: parsePrice(priceInfo.incVat),
       quantity,
       options: selectedOptions.map((opt) => ({
         id: opt.value,
         label: opt.label,
+        price: opt.price,
+        tax: opt.tax,
       })),
+      price: priceInfo.incVat,
+      priceBase: priceInfo.base,
+      vat: priceInfo.vat,
+      priceIncVat: priceInfo.incVat,
+      image_urls: product.image_urls,
+      brand_name: product.brand_name,
+      product_options: product.product_options,
     };
     dispatch(addToCart(itemToAdd));
 

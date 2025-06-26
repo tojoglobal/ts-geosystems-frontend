@@ -274,15 +274,26 @@ const UpdateProductForm = () => {
   useEffect(() => {
     if (productData && productData.sub_category && subCategories.length > 0) {
       // The current subcategory value as string
-      const subCatValue =
-        typeof productData.sub_category === "string"
-          ? productData.sub_category
-          : JSON.stringify({
-              id: productData.sub_category.id,
-              slug: productData.sub_category.slug,
-            });
+      // const subCatValue =
+      //   typeof productData.sub_category === "string"
+      //     ? productData.sub_category
+      //     : JSON.stringify({
+      //         id: productData.sub_category.id,
+      //         slug: productData.sub_category.slug,
+      //       });
 
-      setValue("subCategory", subCatValue);
+      let subCatId =
+        typeof productData.sub_category === "string"
+          ? JSON.parse(productData.sub_category).id
+          : productData.sub_category.id;
+      const foundSub = subCategories.find((sc) => sc.id === subCatId);
+      if (foundSub) {
+        const subCatValue = JSON.stringify({
+          id: foundSub.id,
+          slug: foundSub.slug,
+        });
+        setValue("subCategory", subCatValue);
+      }
     }
   }, [productData, subCategories, setValue]);
   // console.log("Product Data:", productData);

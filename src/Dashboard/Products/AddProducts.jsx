@@ -164,7 +164,6 @@ const ProductAddForm = () => {
     const fetchProducts = async () => {
       try {
         const response = await axiosPublicUrl.get("/api/products");
-        // console.log("Fetched products:", response.data?.products);
         const mappedProducts =
           response.data?.products?.map((prod) => ({
             value: prod.id,

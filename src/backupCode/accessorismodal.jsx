@@ -1,742 +1,670 @@
-/* eslint-disable no-useless-escape */
-import { useState, useRef, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { RxCross2 } from "react-icons/rx";
+import { useDispatch, useSelector } from "react-redux";
+import { useMemo, useState } from "react";
+import useProductsByIdsQuery from "../../Hooks/useProductsByIdsQuery";
 import {
-  FaFacebookF,
-  FaXTwitter,
-  FaLinkedinIn,
-  FaWhatsapp,
-} from "react-icons/fa6";
-import Recommended from "./Recommended";
-import { useParams } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import {
-  MdOutlineKeyboardArrowDown,
-  MdOutlineKeyboardArrowUp,
-} from "react-icons/md";
-import { addToCart } from "../../features/AddToCart/AddToCart";
-import { parsePrice } from "../../utils/parsePrice";
-import useDataQuery from "../../utils/useDataQuery";
-import { setBreadcrumb } from "../../features/breadcrumb/breadcrumbSlice";
+  clearCoupon,
+  removeFromCart,
+  setCoupon,
+  updateQuantity,
+  setShipping,
+  clearShipping,
+  addToCart,
+} from "../../features/AddToCart/AddToCart";
+import { useAxiospublic } from "../../Hooks/useAxiospublic";
+import { selectMergedCart } from "../../utils/selectMergedCart";
 import useToastSwal from "../../Hooks/useToastSwal";
 import { useVatEnabled } from "../../Hooks/useVatEnabled";
-import GetQuotationModal from "./GetQuotationModal";
+import { useQuery } from "@tanstack/react-query";
 import { formatBDT } from "../../utils/formatBDT";
-import RichTextRenderer from "../../utils/RichTextRenderer";
-import { parseSoftwareOptions } from "../../utils/software_options";
+import { slugify } from "../../utils/slugify";
 import { getParsedProductOptions } from "../../utils/get_product_option";
 import { getFirstImage } from "../../utils/getFirstImage";
+import { getTotalPriceInfo } from "../../utils/getTotalPriceInfo";
 
-// Helper function to extract YouTube video ID from url
-function getYouTubeId(url) {
-  const regex =
-    /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([A-Za-z0-9_-]{11})/;
-  const match = url.match(regex);
-  if (match && match[1]) return match[1];
-  return null;
-}
-
-const ProductDetails = () => {
-  const { id } = useParams();
-  const showToast = useToastSwal();
+const Cart = () => {
+  const axiosPublicUrl = useAxiospublic();
+  const [optionModal, setOptionModal] = useState({
+    open: false,
+    item: null,
+    product: null,
+    selectedOptions: [],
+  });
   const dispatch = useDispatch();
-  const [selectedImage, setSelectedImage] = useState("");
-  const [activeTab, setActiveTab] = useState("OVERVIEW");
-  const overviewRef = useRef(null);
-  const [quantity, setQuantity] = useState(1);
+  const showToast = useToastSwal();
   const { data: vatEnabled = true } = useVatEnabled();
-  const [playingVideoIdx, setPlayingVideoIdx] = useState(-1);
-  const [isQuotationOpen, setIsQuotationOpen] = useState(false);
-  const [selectedOptions, setSelectedOptions] = useState([]);
+  const { items, coupon, shipping } = useSelector((state) => state.cart);
 
-  const {
-    data: product = {},
-    isLoading,
-    isError,
-    error,
-  } = useDataQuery(["productDetails", id], `/api/products/${id}`, !!id);
-  // Parse the image URLs from the product data
-  const imageUrls = product?.image_urls ? JSON.parse(product.image_urls) : [];
-  // Parse and clean video URLs if available
-  const videoUrls = product?.video_urls
-    ? product.video_urls
-        .split(",")
-        .map((v) => v.trim())
-        .filter((v) => v.length > 0)
-    : [];
-  const category = product?.category ? JSON.parse(product.category).cat : null;
-  const currentProductId = product?.id;
-  const priceOption = product?.priceShowHide;
-  const productOptionShowHide = product?.productOptionShowHide;
-  // Countdown logic
-  const [timeLeft, setTimeLeft] = useState({});
-  useEffect(() => {
-    if (product.flash_sale && product.flash_sale_end) {
-      const interval = setInterval(() => {
-        const end = new Date(product.flash_sale_end).getTime();
-        const now = Date.now();
-        const diff = end - now;
-        if (diff > 0) {
-          const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-          const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-          const minutes = Math.floor((diff / (1000 * 60)) % 60);
-          const seconds = Math.floor((diff / 1000) % 60);
-          setTimeLeft({ days, hours, minutes, seconds });
-        } else {
-          setTimeLeft({});
-          clearInterval(interval);
-        }
-      }, 1000);
-      return () => clearInterval(interval);
-    }
-  }, [product.flash_sale, product.flash_sale_end]);
+  const [showShippingOptions, setShowShippingOptions] = useState(false);
+  const [showCouponInput, setShowCouponInput] = useState(false);
+  const [couponInput, setCouponInput] = useState("");
 
-  // Set default selected image if not set, only on initial load or when product changes
-  useEffect(() => {
-    if (!selectedImage && imageUrls.length > 0) {
-      setSelectedImage(imageUrls[0]);
-    }
-    // If product changes, ensure selectedImage resets
-    // eslint-disable-next-line
-  }, [product]);
+  const { data: shippingCosts = [] } = useQuery({
+    queryKey: ["shipping-costs"],
+    queryFn: async () => {
+      const res = await axiosPublicUrl.get("/api/shipping-costs");
+      return res.data;
+    },
+  });
 
-  // After product loads, set the breadcrumb
-  useEffect(() => {
-    if (product && product.product_name) {
-      let catData = product.category ? JSON.parse(product.category) : null;
-      let subcatData = product.sub_category
-        ? JSON.parse(product.sub_category)
-        : null;
-      dispatch(
-        setBreadcrumb({
-          category: catData
-            ? { slug: catData.cat, name: catData.cat.replace(/-/g, " ") }
-            : null,
-          subcategory: subcatData
-            ? {
-                slug: subcatData.slug,
-                name: subcatData.slug.replace(/-/g, " "),
-              }
-            : null,
-          product: { id: product.id, name: product.product_name },
-        })
-      );
-    }
-  }, [product, dispatch]);
+  const activeShippingOptions = shippingCosts.filter(
+    (opt) => opt?.status === 1 || opt?.status === true
+  );
 
-  const handleOptionChange = (option, checked) => {
-    if (checked) {
-      setSelectedOptions((prev) => [...prev, option]);
-    } else {
-      setSelectedOptions((prev) =>
-        prev.filter((opt) => opt.value !== option.value)
-      );
-    }
+  const shippingCost =
+    shipping && shipping.amount ? parseFloat(shipping.amount) : 100;
+  const productIds = useMemo(() => items.map((item) => item.id), [items]);
+  const { products } = useProductsByIdsQuery(productIds);
+  const mergedCart = useSelector((state) =>
+    selectMergedCart(state, products, vatEnabled)
+  );
+
+  // --- VAT CALCULATION ---
+  const getVatForItem = (item) => {
+    // Use stored per-unit VAT if possible
+    return (item.vat || 0) * (item.quantity || 1);
   };
 
-  // Deselect all options (for "None")
-  const handleNoneSelected = () => setSelectedOptions([]);
+  const vat = mergedCart.reduce(
+    (total, item) => total + getVatForItem(item),
+    0
+  );
 
-  // Quantity handlers
-  const incrementQuantity = () => setQuantity((prev) => prev + 1);
-  const decrementQuantity = () =>
-    quantity > 1 && setQuantity((prev) => prev - 1);
+  const subTotal = mergedCart.reduce(
+    (total, item) => total + item.price * item.quantity,
+    0
+  );
 
-  // Calculate total price with selected options and VAT
-  const getTotalPriceInfo = () => {
-    // main product
-    const productBasePrice = parsePrice(product?.price) || 0;
-    let productVat = product?.tax ? JSON.parse(product.tax).value : 0;
-    let totalBasePrice = productBasePrice;
-    let totalVatAmount = vatEnabled ? productBasePrice * (productVat / 100) : 0;
-    // Add selected options
-    selectedOptions.forEach((opt) => {
-      const optPrice = parsePrice(opt.price) || 0;
-      let optVat = opt?.tax ? JSON.parse(opt.tax).value : 0;
-      totalBasePrice += optPrice;
-      totalVatAmount += vatEnabled ? optPrice * (optVat / 100) : 0;
-    });
-    return {
-      base: totalBasePrice,
-      vat: totalVatAmount,
-      incVat: totalBasePrice + totalVatAmount,
-    };
-  };
+  let discount = 0;
+  if (coupon && coupon.code_name) {
+    if (coupon.type === "percentage") {
+      discount = (subTotal * coupon.discount) / 100;
+    } else if (coupon.type === "flat") {
+      discount = coupon.discount;
+    }
+  }
 
-  const priceInfo = getTotalPriceInfo();
+  const grandTotal =
+    subTotal + (vatEnabled ? vat : 0) + shippingCost - discount;
 
-  // Add to cart handler
-  const handleAddToCart = () => {
-    const itemToAdd = {
-      id: product.id,
-      product_name: product.product_name,
-      price: parsePrice(priceInfo.base),
-      priceIncVat: parsePrice(priceInfo.incVat),
-      quantity,
-      options: selectedOptions.map((opt) => ({
-        id: opt.value,
-        label: opt.label,
-      })),
-    };
-    dispatch(addToCart(itemToAdd));
-
-    showToast(
-      "success",
-      "Added to Cart!",
-      `<b style="color:#333">${product.product_name}</b> has been added to your cart.`,
-      { timer: 2000 }
+  // --- Handlers ---
+  const handleQuantityChange = (item, delta) => {
+    dispatch(
+      updateQuantity({ id: item.id, options: item.options, amount: delta })
     );
-    // Save selection on add to cart as well
-    localStorage.setItem(
-      `productOptions_${id}`,
-      JSON.stringify({
-        selectedOptions,
-        quantity,
+  };
+
+  const handleRemove = (item) => {
+    dispatch(removeFromCart({ id: item.id, options: item.options }));
+    showToast("success", "Removed!", "Item removed from cart.");
+  };
+
+  const handleApplyCoupon = async () => {
+    try {
+      const res = await axiosPublicUrl.post("api/promocode", {
+        code_name: couponInput.trim(),
+      });
+      if (!res.data) {
+        showToast("error", "Your Coupon is invalid", "Invalid coupon.");
+        dispatch(clearCoupon());
+        return;
+      }
+      const data = res.data;
+      dispatch(setCoupon(data));
+      showToast("Success", "success", `Coupon "${data.code_name}" applied!`);
+    } catch (err) {
+      console.error(err);
+      dispatch(clearCoupon());
+      showToast(
+        "error",
+        "error",
+        "An error occurred while applying the coupon"
+      );
+    }
+  };
+
+  const handleShippingChange = (e) => {
+    const selectedId = parseInt(e.target.value, 10);
+    const selected = activeShippingOptions.find((opt) => opt.id === selectedId);
+    if (selected) {
+      dispatch(setShipping(selected));
+      setShowShippingOptions(false);
+    }
+  };
+
+  const handleResetShipping = () => {
+    dispatch(clearShipping());
+    setShowShippingOptions(true);
+  };
+
+  const toggleShippingOptions = () => {
+    setShowShippingOptions((prev) => !prev);
+  };
+
+  // Modal functions
+  const openOptionModal = (item, product) => {
+    setOptionModal({
+      open: true,
+      item,
+      product,
+      selectedOptions: item.options || [],
+    });
+  };
+
+  const handleOptionChange = (changedOption, checked) => {
+    let newSelectedOptions;
+    if (checked) {
+      if (
+        !(optionModal.selectedOptions || []).some(
+          (o) => o.id === changedOption.value
+        )
+      )
+        newSelectedOptions = [
+          ...(optionModal.selectedOptions || []),
+          {
+            id: changedOption.value,
+            label: changedOption.label,
+            price: changedOption.price,
+            tax: changedOption.tax,
+          },
+        ];
+      else newSelectedOptions = optionModal.selectedOptions;
+    } else {
+      newSelectedOptions = (optionModal.selectedOptions || []).filter(
+        (o) => o.id !== changedOption.value
+      );
+    }
+    setOptionModal((prev) => ({
+      ...prev,
+      selectedOptions: newSelectedOptions,
+    }));
+  };
+
+  // --- When saving new options, always update price, base, and vat ---
+  const saveOptionChanges = () => {
+    const priceInfo = getTotalPriceInfo(
+      optionModal.product,
+      optionModal.selectedOptions,
+      vatEnabled
+    );
+    dispatch(
+      removeFromCart({
+        id: optionModal.item.id,
+        options: optionModal.item.options || [],
       })
     );
+    const itemToAdd = {
+      ...optionModal.item,
+      options: optionModal.selectedOptions,
+      price: priceInfo.incVat, // always VAT-inclusive for display
+      priceBase: priceInfo.base, // base price, no VAT
+      vat: priceInfo.vat, // per-unit VAT
+      priceIncVat: priceInfo.incVat, // for clarity
+    };
+    dispatch(addToCart(itemToAdd));
+    setOptionModal({
+      open: false,
+      item: null,
+      product: null,
+      selectedOptions: [],
+    });
   };
 
-  if (isLoading) return null;
-  if (isError)
-    return <div>{error.message} || Error loading product details</div>;
-
+  // --- RENDER ---
   return (
-    <div className="bg-white p-2 sm:p-3">
-      <div className="w-full md:max-w-[95%] 2xl:max-w-[1370px] mx-auto">
-        <div className="flex flex-col md:flex-row gap-5">
-          {/* Image Gallery */}
-          <div className="flex flex-col items-start gap-2 relative w-full md:w-[550px]">
-            {/* Main Image */}
-            <div className="w-full h-[300px] sm:h-[400px] md:w-[550px] md:h-[550px] overflow-hidden rounded bg-white">
-              {selectedImage ? (
-                <img
-                  src={`${import.meta.env.VITE_OPEN_APIURL}${selectedImage}`}
-                  alt="Selected Product"
-                  className="w-full h-full object-contain"
-                />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center text-gray-400">
-                  No Image
-                </div>
-              )}
-            </div>
-            {/* Thumbnails */}
-            {imageUrls.length > 1 && (
-              <div className="flex justify-center gap-2 mt-2 w-full">
-                {imageUrls?.map((img, index) => (
+    <div className="md:p-2">
+      <div className="flex items-center gap-2 text-xs mb-4">
+        <Link to="/" className="hover:text-[#e62245]">
+          Home
+        </Link>
+        <span>/</span>
+        <span className="text-[#e62245]">Your Cart</span>
+      </div>
+      {mergedCart.length === 0 ? (
+        <p className="text-xl">Your cart is empty.</p>
+      ) : (
+        <>
+          <h1 className="text-xl md:text-3xl mb-4">
+            Your Cart ({mergedCart.length} Items)
+          </h1>
+          <table className="w-full border-collapse mb-6 hidden md:table">
+            <thead>
+              <tr className="border-b text-left">
+                <th className="py-2">Image</th>
+                <th className="py-2">Item Name</th>
+                <th className="py-2">Price</th>
+                <th className="py-2">Quantity</th>
+                <th className="py-2">VAT</th>
+                <th className="py-2 text-right">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              {mergedCart.map((item) => {
+                const product = products.find((p) => p.id === item.id);
+                return (
+                  <tr
+                    key={
+                      item.id +
+                      "_" +
+                      (item.options || []).map((o) => o.id).join("_")
+                    }
+                    className="border-b"
+                  >
+                    <td className="flex items-center gap-4 py-4">
+                      <img
+                        src={
+                          item.image_urls
+                            ? `${import.meta.env.VITE_OPEN_APIURL}${
+                                JSON.parse(item.image_urls)[0]
+                              }`
+                            : "/placeholder.jpg"
+                        }
+                        alt={item.product_name}
+                        className="w-20 h-20 object-contain"
+                      />
+                    </td>
+                    <td className="w-2xs">
+                      <p className="font-medium pr-3">{item.brand_name}</p>
+                      <Link
+                        to={`/products/${item.id}/${slugify(
+                          item?.product_name || ""
+                        )}`}
+                      >
+                        <p className="font-medium pr-3 text-[#e62245] underline hover:text-[#e62246b0]">
+                          {item?.product_name}
+                        </p>
+                      </Link>
+                      <p>
+                        Additional Accessory:{" "}
+                        {(item?.options || []).map((o) => o.label).join(", ")}
+                      </p>
+                      <p
+                        className="font-medium text-[#e62245] underline hover:text-[#e62246b0] cursor-pointer"
+                        onClick={() => openOptionModal(item, product)}
+                      >
+                        Change
+                      </p>
+                    </td>
+                    <td>৳{formatBDT(item?.price)}</td>
+                    <td>
+                      <div className="flex items-center">
+                        <button
+                          onClick={() => handleQuantityChange(item, -1)}
+                          className="px-2 border rounded hover:bg-gray-200"
+                        >
+                          -
+                        </button>
+                        <span className="px-3">{item.quantity}</span>
+                        <button
+                          onClick={() => handleQuantityChange(item, 1)}
+                          className="px-2 border rounded hover:bg-gray-200"
+                        >
+                          +
+                        </button>
+                      </div>
+                    </td>
+                    {vatEnabled && <td>৳{formatBDT(getVatForItem(item))}</td>}
+                    <td className="text-right">
+                      <div className="flex items-center justify-end gap-3">
+                        <p>৳{formatBDT(item.price * item.quantity)}</p>
+                        <button
+                          onClick={() => handleRemove(item)}
+                          className="text-red-500 cursor-pointer"
+                        >
+                          <RxCross2 />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+            {/* Option Change Popup/Modal */}
+            {optionModal.open && (
+              <div className="fixed z-50 inset-0 bg-black/80 flex items-center justify-center px-5">
+                <div className="bg-white rounded-lg shadow-xl w-full max-w-full relative py-6 px-3 sm:px-6 flex flex-col">
+                  <h2 className="text-xl font-light text-[#2f2f2b] mb-4 text-center">
+                    Configure '{optionModal.item?.product_name}'
+                  </h2>
                   <div
-                    key={index}
-                    onClick={() => setSelectedImage(img)}
-                    className={`p-1 rounded cursor-pointer hover:ring ring-black ${
-                      selectedImage === img ? "ring ring-black" : ""
-                    }`}
-                    style={{ width: "60px", height: "60px" }}
+                    className="overflow-y-auto border rounded-md border-gray-200 bg-gray-50 flex-1"
+                    style={{ maxHeight: "60vh", minHeight: "200px" }}
                   >
-                    <img
-                      src={`${import.meta.env.VITE_OPEN_APIURL}${img}`}
-                      alt={`Thumb ${index}`}
-                      className="w-full h-full object-contain"
-                    />
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-          {/* Product Info */}
-          <div className="flex-1 w-full">
-            <h1 className="text-[22px] sm:text-[28px] font-semibold text-[#333] mb-4 break-words">
-              {product.product_name}
-            </h1>
-            {product.flash_sale === 1 &&
-              product.flash_sale_end &&
-              timeLeft &&
-              typeof timeLeft.seconds !== "undefined" && (
-                <div className="w-full flex mb-4">
-                  <div className="flex flex-col items-center">
-                    <div className="grid grid-flow-col gap-3 text-center auto-cols-max">
-                      <div className="flex flex-col border-x border-b">
-                        <span className="countdown font-mono py-1 px-3 text-2xl bg-crimson-red text-white rounded-t-sm">
-                          <span
-                            style={{ "--value": timeLeft.days || 0 }}
-                            aria-live="polite"
-                            aria-label="days"
-                          >
-                            {timeLeft.days || 0}
+                    <ul className="divide-y divide-gray-200">
+                      <li className="p-4 flex items-center">
+                        <label className="flex items-center cursor-pointer w-full">
+                          <input
+                            type="checkbox"
+                            checked={optionModal.selectedOptions.length === 0}
+                            onChange={() =>
+                              setOptionModal((prev) => ({
+                                ...prev,
+                                selectedOptions: [],
+                              }))
+                            }
+                            className="mr-3 accent-[#e62245] w-5 h-5"
+                          />
+                          <span className="text-gray-700 font-medium">
+                            None
                           </span>
-                        </span>
-                        <span className="uppercase text-xs py-[2px] px-3 tracking-wide mt-1">
-                          days
-                        </span>
-                      </div>
-                      <div className="flex flex-col border-x border-b">
-                        <span className="countdown font-mono py-1 px-3 text-2xl bg-crimson-red text-white rounded-t-sm">
-                          <span
-                            style={{ "--value": timeLeft.hours || 0 }}
-                            aria-live="polite"
-                            aria-label="hours"
-                          >
-                            {timeLeft.hours || 0}
-                          </span>
-                        </span>
-                        <span className="uppercase text-xs py-[2px] px-3 tracking-wide mt-1">
-                          hrs
-                        </span>
-                      </div>
-                      <div className="flex flex-col border-x border-b">
-                        <span className="countdown font-mono py-1 px-3 text-2xl bg-crimson-red text-white rounded-t-sm">
-                          <span
-                            style={{ "--value": timeLeft.minutes || 0 }}
-                            aria-live="polite"
-                            aria-label="minutes"
-                          >
-                            {timeLeft.minutes || 0}
-                          </span>
-                        </span>
-                        <span className="uppercase text-xs py-[2px] px-3 tracking-wide mt-1">
-                          min
-                        </span>
-                      </div>
-                      <div className="flex flex-col border-x border-b">
-                        <span className="countdown font-mono py-1 px-3 text-2xl bg-crimson-red text-white rounded-t-sm">
-                          <span
-                            style={{ "--value": timeLeft.seconds || 0 }}
-                            aria-live="polite"
-                            aria-label="seconds"
-                          >
-                            {timeLeft.seconds || 0}
-                          </span>
-                        </span>
-                        <span className="uppercase text-xs py-[2px] px-3 tracking-wide mt-1">
-                          sec
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-            <p className="text-[#d71a28] text-sm mb-2 capitalize">
-              {product?.brand_name || "Brand"}
-            </p>
-            <div className="mb-2">
-              <div className="text-[20px] sm:text-[24px] font-semibold text-[#222]">
-                Price:{" "}
-                <span className="text-[#111]">
-                  ৳{product?.priceShowHide ? "" : formatBDT(priceInfo.base)}
-                  {vatEnabled && (
-                    <span className="text-sm text-gray-500">(Ex. VAT)</span>
-                  )}
-                </span>
-              </div>
-              {vatEnabled && !product?.priceShowHide && (
-                <div className="text-[18px] sm:text-[24px] font-semibold text-[#999] ">
-                  Price: ৳ {formatBDT(priceInfo.incVat)}
-                  <span className="text-sm text-gray-400 ml-2">
-                    (Inc. VAT | ৳ {formatBDT(priceInfo.vat)})
-                  </span>
-                </div>
-              )}
-            </div>
-            <hr className="border-t border-gray-300 my-3" />
-            <div className="text-sm text-[#222] mb-1">
-              <strong>SKU:</strong>{" "}
-              <span className="text-[#e62245]">{product.sku || "N/A"}</span>
-            </div>
-            <div className="text-sm text-[#222] mb-1">
-              <strong>Condition:</strong>{" "}
-              <span className="text-[#e62245] capitalize">
-                {product.product_condition || "New"}
-              </span>
-            </div>
-            <div className="text-sm text-[#222] mb-1">
-              <strong>Shipping:</strong>{" "}
-              <span className="text-[#e62245]">Calculated at Checkout</span>
-            </div>
-            <div className="text-sm text-[#222] mb-1">
-              <strong>Brand:</strong>{" "}
-              <span className="text-[#e62245] capitalize">
-                {product.brand_name || "N/A"}
-              </span>
-            </div>
-            <div className="text-sm text-[#222] mb-1">
-              <strong>Software Options:</strong>{" "}
-              {parseSoftwareOptions(product?.software_options).length > 0 ? (
-                <span className="text-[#e62245] capitalize">
-                  {parseSoftwareOptions(product?.software_options)
-                    .map((option) => option.label)
-                    .join(", ") || "N/A"}
-                </span>
-              ) : (
-                <span className="text-[#e62245]">N/A</span>
-              )}
-            </div>
-            <div className="flex items-center gap-4 my-5">
-              <label className="text-sm text-[#111] font-medium">
-                Quantity:
-              </label>
-              <div className="flex items-center border border-gray-300 rounded">
-                <button
-                  onClick={decrementQuantity}
-                  className="px-[5px] cursor-pointer py-[2px] text-gray-600 hover:bg-gray-100 transition-colors"
-                >
-                  <MdOutlineKeyboardArrowDown />
-                </button>
-                <span className="px-[5px] py-[2px] border-x border-gray-300 text-gray-600">
-                  {quantity}
-                </span>
-                <button
-                  onClick={incrementQuantity}
-                  className="px-[5px] cursor-pointer py-[2px] text-gray-600 hover:bg-gray-100 transition-colors"
-                >
-                  <MdOutlineKeyboardArrowUp />
-                </button>
-              </div>
-            </div>
-            {product?.isStock === 1 && priceOption === 0 && (
-              <button
-                onClick={handleAddToCart}
-                className="cursor-pointer overflow-hidden group text-white px-16 font-semibold py-[5px] rounded-[3px] text-[16px] bg-[#e62245] hover:bg-red-800 w-full sm:w-auto"
-              >
-                <span className="relative z-10">ADD TO CART</span>
-              </button>
-            )}
-            {product?.isStock === 1 && priceOption === 1 && (
-              <>
-                <button
-                  className="cursor-pointer overflow-hidden group text-white px-16 font-semibold py-[5px] rounded-[3px] text-[16px] bg-[#e62245] hover:bg-red-800 w-full sm:w-auto"
-                  onClick={() => setIsQuotationOpen(true)}
-                >
-                  <span className="relative z-10">GET QUOTATION</span>
-                </button>
-                <GetQuotationModal
-                  isOpen={isQuotationOpen}
-                  onRequestClose={() => setIsQuotationOpen(false)}
-                  product={product}
-                />
-              </>
-            )}
-            <div className="mt-6">
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="font-medium text-[#8d7f90]">Share:</span>
-                <div className="flex items-center gap-[6px]">
-                  {/* Facebook */}
-                  <button
-                    className="flex cursor-pointer justify-center items-center w-10 h-[29px] bg-[#1877F2] hover:bg-[#166FE5] transition-colors"
-                    style={{ transform: "skewX(-15deg)" }}
-                    onClick={() =>
-                      window.open(
-                        `https://www.facebook.com/sharer/sharer.php?u=${window.location.href}`,
-                        "_blank"
-                      )
-                    }
-                  >
-                    <div style={{ transform: "skewX(15deg)" }}>
-                      <FaFacebookF className="text-white text-sm" />
-                    </div>
-                  </button>
-
-                  {/* LinkedIn */}
-                  <button
-                    className="flex cursor-pointer justify-center items-center w-10 h-[29px] bg-[#0077B5] hover:bg-[#006097] transition-colors"
-                    style={{ transform: "skewX(-15deg)" }}
-                    onClick={() =>
-                      window.open(
-                        `https://www.linkedin.com/sharing/share-offsite/?url=${window.location.href}`,
-                        "_blank"
-                      )
-                    }
-                  >
-                    <div style={{ transform: "skewX(15deg)" }}>
-                      <FaLinkedinIn className="text-white text-sm" />
-                    </div>
-                  </button>
-
-                  {/* Twitter */}
-                  <button
-                    className="flex cursor-pointer justify-center items-center w-10 h-[29px] bg-[#000000] hover:bg-[#333333] transition-colors"
-                    style={{ transform: "skewX(-15deg)" }}
-                    onClick={() =>
-                      window.open(
-                        `https://twitter.com/intent/tweet?url=${window.location.href}`,
-                        "_blank"
-                      )
-                    }
-                  >
-                    <div style={{ transform: "skewX(15deg)" }}>
-                      <FaXTwitter className="text-white text-sm" />
-                    </div>
-                  </button>
-
-                  {/* WhatsApp */}
-                  <button
-                    className="flex cursor-pointer justify-center items-center w-10 h-[29px] bg-[#25D366] hover:bg-[#1DA851] transition-colors"
-                    style={{ transform: "skewX(-15deg)" }}
-                    onClick={() =>
-                      window.open(
-                        `https://wa.me/?text=Check%20this%20out:%20${window.location.href}`,
-                        "_blank"
-                      )
-                    }
-                  >
-                    <div style={{ transform: "skewX(15deg)" }}>
-                      <FaWhatsapp className="text-white text-sm" />
-                    </div>
-                  </button>
-                </div>
-              </div>
-            </div>
-            {/* product option show in the radio btn none and show the product option */}
-            <div className="text-sm text-[#222] mt-5">
-              {product?.product_options &&
-              product?.product_options.length > 0 ? (
-                <>
-                  <strong>Additional Accessory Options:</strong>{" "}
-                  {product?.isStock === 1 &&
-                    priceOption === 0 &&
-                    productOptionShowHide === 0 && (
-                      <ul className="border-x-1 border-t-1  border-gray-200 mt-2">
-                        <li className="border-b border-gray-200 p-[1.5rem]">
-                          <label className="flex items-center cursor-pointer">
+                        </label>
+                      </li>
+                      {getParsedProductOptions(
+                        optionModal.item?.product_options
+                      ).map((opt) => (
+                        <li
+                          key={opt.value}
+                          className="p-4 flex items-center gap-4"
+                        >
+                          <img
+                            src={`${
+                              import.meta.env.VITE_OPEN_APIURL
+                            }${getFirstImage(opt.image_urls)}`}
+                            alt={opt.label}
+                            className="w-12 h-12 object-cover rounded border border-gray-200 bg-white"
+                          />
+                          <label className="flex items-center cursor-pointer w-full">
                             <input
                               type="checkbox"
                               name="product_option"
-                              checked={selectedOptions.length === 0}
-                              onChange={handleNoneSelected}
-                              className="mr-2"
+                              checked={optionModal.selectedOptions.some(
+                                (o) => o.id === opt.value
+                              )}
+                              onChange={(e) =>
+                                handleOptionChange(opt, e.target.checked)
+                              }
+                              className="mr-3 accent-[#e62245] w-5 h-5"
                             />
-                            None
+                            <div>
+                              <span className="font-semibold text-gray-900">
+                                {opt.label}
+                              </span>
+                            </div>
                           </label>
                         </li>
-                        {getParsedProductOptions(product?.product_options).map(
-                          (option) => (
-                            <li
-                              className="border-b border-gray-200 p-[1.5rem]"
-                              key={option?.value}
-                            >
-                              <div className="flex items-center gap-4">
-                                <div>
-                                  <img
-                                    src={`${
-                                      import.meta.env.VITE_OPEN_APIURL
-                                    }${getFirstImage(option?.image_urls)}`}
-                                    alt={option?.label}
-                                    className="w-12 h-12 object-cover"
-                                  />
-                                </div>
-                                <label className="flex items-center cursor-pointer">
-                                  <input
-                                    type="checkbox"
-                                    name="product_option"
-                                    checked={selectedOptions.some(
-                                      (opt) => opt.value === option.value
-                                    )}
-                                    onChange={(e) =>
-                                      handleOptionChange(
-                                        option,
-                                        e.target.checked
-                                      )
-                                    }
-                                    className="mr-2"
-                                  />
-                                  {option.label} &nbsp;
-                                </label>
-                              </div>
-                            </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-6">
+                    <div className="text-base font-semibold text-gray-800">
+                      Price: ৳
+                      {formatBDT(
+                        vatEnabled
+                          ? getTotalPriceInfo(
+                              optionModal.product,
+                              optionModal.selectedOptions,
+                              vatEnabled
+                            ).incVat
+                          : getTotalPriceInfo(
+                              optionModal.product,
+                              optionModal.selectedOptions,
+                              vatEnabled
+                            ).base
+                      )}
+                      {vatEnabled && (
+                        <span className="ml-1 text-xs text-gray-500">
+                          (Inc. VAT: ৳
+                          {formatBDT(
+                            getTotalPriceInfo(
+                              optionModal.product,
+                              optionModal.selectedOptions,
+                              vatEnabled
+                            ).vat
+                          )}
                           )
-                        )}
-                      </ul>
-                    )}
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex gap-2">
+                      <button
+                        className="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 transition"
+                        onClick={() =>
+                          setOptionModal({
+                            open: false,
+                            item: null,
+                            product: null,
+                            selectedOptions: [],
+                          })
+                        }
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        className="px-4 py-2 bg-[#e62245] text-white rounded hover:bg-[#c81a3d] transition"
+                        onClick={saveOptionChanges}
+                      >
+                        Save
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </table>
+          {/* Coupon and Shipping */}
+          <div className="max-w-lg ml-auto p-2 md:p-4 rounded space-y-4">
+            <div className="flex justify-between mb-2 border-b pb-2">
+              <span>Subtotal:</span>
+              <span>৳{formatBDT(subTotal)}</span>
+            </div>
+            {/* Coupon Section */}
+            <div className="mb-2 border-b pb-2">
+              <label className="mb-1 text-base font-medium flex justify-between cursor-pointer">
+                Coupon Code:
+                {!showCouponInput ? (
+                  <button
+                    onClick={() => setShowCouponInput(true)}
+                    className="text-[#e62245] cursor-pointer ml-2 underline text-sm"
+                  >
+                    Show Coupon
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => setShowCouponInput(false)}
+                    className="text-gray-500 cursor-pointer ml-2 underline text-sm"
+                  >
+                    Cancel
+                  </button>
+                )}
+              </label>
+              {showCouponInput && (
+                <>
+                  <div className="flex justify-between gap-3">
+                    <input
+                      type="text"
+                      value={couponInput}
+                      onChange={(e) => setCouponInput(e.target.value)}
+                      placeholder="Enter your coupon code"
+                      className="w-full px-3 py-2 border rounded mt-2"
+                    />
+                    <button
+                      onClick={handleApplyCoupon}
+                      className="bg-[#e62245] cursor-pointer text-white py-2 px-3 mt-2 rounded"
+                    >
+                      APPLY
+                    </button>
+                  </div>
+                  {couponInput && (
+                    <>
+                      {coupon && coupon.code_name === couponInput.trim() ? (
+                        <p className="text-green-600 text-sm mt-1">
+                          Valid coupon code:{" "}
+                          {coupon.type === "percentage"
+                            ? `${coupon.discount}% off`
+                            : `৳${coupon.discount} off`}
+                        </p>
+                      ) : (
+                        <p className="text-red-600 text-sm mt-1">
+                          Invalid coupon code
+                        </p>
+                      )}
+                    </>
+                  )}
                 </>
-              ) : (
-                <span className="text-[#e62245]">N/A</span>
               )}
             </div>
-          </div>
-        </div>
-        {/* Tabs */}
-        <div className="mt-8 sm:mt-12" ref={overviewRef}>
-          <div className="flex gap-2 border-t border-l border-r border-gray-200 rounded-[4px] overflow-hidden text-sm sm:text-base">
-            {["OVERVIEW", "SPECIFICATIONS", "PRODUCT VIDEOS"].map(
-              (tab, idx) => (
-                <div
-                  key={tab}
-                  className={`relative group px-2 sm:px-4 py-2 cursor-pointer ${
-                    idx === 1 ? "border-x border-gray-300" : ""
-                  }`}
-                  onClick={() => setActiveTab(tab)}
-                >
-                  <span
-                    className={`font-semibold transition-colors duration-200 ${
-                      activeTab === tab
-                        ? "text-[#e62245]"
-                        : "text-gray-600 group-hover:text-[#e62245]"
-                    }`}
+            {/* Shipping Section */}
+            <div className="mb-2 border-b pb-2">
+              <label className="mb-1 text-base font-medium flex justify-between cursor-pointer">
+                Shipping:
+                <div className="flex gap-2">
+                  {shipping?.id && (
+                    <button
+                      onClick={handleResetShipping}
+                      className="text-gray-500 underline text-sm"
+                    >
+                      Reset
+                    </button>
+                  )}
+                  <button
+                    onClick={toggleShippingOptions}
+                    className="text-[#e62245] underline text-sm"
                   >
-                    {tab}
-                  </span>
+                    {showShippingOptions
+                      ? "Hide"
+                      : shipping?.id
+                      ? "Change"
+                      : "Choose"}
+                  </button>
                 </div>
-              )
-            )}
-          </div>
-          <div className="border-2 border-[#e5e5e5] rounded-[3px] p-2 sm:p-4">
-            {activeTab === "OVERVIEW" && (
-              <RichTextRenderer html={product?.product_overview} />
-            )}
-            {activeTab === "SPECIFICATIONS" && (
-              <div className="border rounded-lg overflow-x-auto m-2 sm:m-4">
-                <table className="w-full">
-                  <thead>
-                    <tr className="bg-gray-50">
-                      <th className="text-left text-gray-700 p-4">
-                        SPECIFICATIONS
-                      </th>
-                      <th className="text-left p-4 text-gray-700">
-                        Descriptions
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="capitalize">
-                    <tr className="border-t">
-                      <td className="p-4 text-gray-700">Product Name:</td>
-                      <td className="p-4 text-gray-700">
-                        {product?.product_name}
-                      </td>
-                    </tr>
-                    <tr className="border-t">
-                      <td className="p-4 text-gray-700">Brand:</td>
-                      <td className="p-4 text-gray-700">
-                        {product?.brand_name}
-                      </td>
-                    </tr>
-                    <tr className="border-t">
-                      <td className="p-4 text-gray-700">Category:</td>
-                      <td className="p-4 text-gray-700">
-                        {product.category
-                          ? JSON.parse(product.category).cat
-                          : "N/A"}{" "}
-                        {product.sub_category
-                          ? JSON.parse(product.sub_category).cat
-                          : "N/A"}
-                      </td>
-                    </tr>
-                    <tr className="border-t">
-                      <td className="p-4 text-gray-700">Condition:</td>
-                      <td className="p-4 text-gray-700 capitalize">
-                        {product?.product_condition || "New"}
-                      </td>
-                    </tr>
-                    <tr className="border-t hidden sm:table-row">
-                      <td className="p-4 text-gray-700">Warranty:</td>
-                      <td className="px-2 text-gray-700">
-                        <RichTextRenderer
-                          html={product?.warranty_info}
-                          isTableCell={true}
-                        />
-                      </td>
-                    </tr>
-                    <tr className="border-t sm:hidden">
-                      <td className="p-4 text-gray-700" colSpan={2}>
-                        <div className="font-semibold mb-1">Warranty:</div>
-                        <div>
-                          <RichTextRenderer
-                            html={product?.warranty_info}
-                            isTableCell={true}
-                          />
-                        </div>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            )}
-            {activeTab === "PRODUCT VIDEOS" && videoUrls.length > 0 && (
-              <div className="flex flex-col items-center justify-center">
-                {videoUrls.map((url, idx) => {
-                  const youtubeId = getYouTubeId(url);
-                  const thumbnail = youtubeId
-                    ? `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`
-                    : null;
-                  return (
-                    <div
-                      key={idx}
-                      className="flex flex-col items-center my-2 w-full"
+              </label>
+              {showShippingOptions && (
+                <div className="flex flex-col gap-2 mt-2">
+                  {activeShippingOptions.length === 0 && (
+                    <span className="text-gray-400 text-sm">
+                      No shipping options available
+                    </span>
+                  )}
+                  {activeShippingOptions.map((opt) => (
+                    <label
+                      key={opt.id}
+                      className="flex items-center gap-2 cursor-pointer rounded hover:bg-gray-50 py-1 px-2 transition"
                       style={{
-                        minWidth: 0,
-                        maxWidth: "640px",
-                        width: "100%",
+                        border:
+                          shipping?.id === opt.id
+                            ? "1px solid #e62245"
+                            : "1px solid #e5e7eb",
+                        background:
+                          shipping?.id === opt.id ? "#fff0f3" : "#fff",
                       }}
                     >
-                      <div className="flex justify-center w-full">
-                        <div className="relative w-full aspect-video rounded-md bg-gray-100 border border-gray-300 overflow-hidden shadow flex justify-center items-center max-w-[640px]">
-                          {playingVideoIdx === idx ? (
-                            youtubeId ? (
-                              <iframe
-                                width="100%"
-                                height="100%"
-                                src={`https://www.youtube.com/embed/${youtubeId}?autoplay=1`}
-                                title={`Product video ${idx + 1}`}
-                                frameBorder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowFullScreen
-                              ></iframe>
-                            ) : (
-                              <video
-                                width="100%"
-                                height="100%"
-                                controls
-                                autoPlay
-                                onEnded={() => setPlayingVideoIdx(-1)}
-                              >
-                                <source src={url} />
-                                Your browser does not support the video tag.
-                              </video>
-                            )
-                          ) : (
-                            <div
-                              className="group relative w-full h-full cursor-pointer flex items-center justify-center"
-                              onClick={() => setPlayingVideoIdx(idx)}
-                              title="Play video"
-                            >
-                              {youtubeId ? (
-                                <img
-                                  src={thumbnail}
-                                  alt={`Video thumbnail ${idx + 1}`}
-                                  className="w-full h-full object-cover"
-                                />
-                              ) : (
-                                <div className="w-full h-full flex items-center justify-center bg-gray-200">
-                                  <span className="text-gray-500">Video</span>
-                                </div>
-                              )}
-                              <div className="absolute inset-0 flex items-center justify-center">
-                                <div className="w-12 h-12 sm:w-16 sm:h-16 bg-red-600/90 rounded-full flex items-center justify-center shadow-lg">
-                                  <div className="w-0 h-0 border-t-[12px] sm:border-t-[16px] border-t-transparent border-l-[18px] sm:border-l-[24px] border-l-white border-b-[12px] sm:border-b-[16px] border-b-transparent ml-2"></div>
-                                </div>
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                      <div className="mt-2 text-center">
-                        {playingVideoIdx === idx && (
-                          <button
-                            className="block cursor-pointer text-xs text-red-600 mt-1 underline"
-                            onClick={() => setPlayingVideoIdx(-1)}
-                            type="button"
-                          >
-                            Close Video
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                  );
-                })}
+                      <input
+                        type="radio"
+                        value={opt.id}
+                        checked={shipping?.id === opt.id}
+                        onChange={handleShippingChange}
+                      />
+                      <span className="font-medium">{opt.name}</span>
+                      <span className="ml-auto text-sm text-gray-600">
+                        ৳{formatBDT(parseFloat(opt.amount))}
+                      </span>
+                    </label>
+                  ))}
+                </div>
+              )}
+              {!showShippingOptions && shipping?.name && (
+                <div className="flex items-center gap-2 mt-2">
+                  <span className="font-medium">{shipping.name}</span>
+                  <span className="text-sm text-gray-600">
+                    (৳{formatBDT(parseFloat(shipping.amount))})
+                  </span>
+                </div>
+              )}
+            </div>
+            {vatEnabled && (
+              <div className="flex justify-between mb-2 border-b pb-2">
+                <span>VAT:</span>
+                <span>৳{formatBDT(vat)}</span>
               </div>
             )}
+            <div className="flex justify-between mb-2 border-b pb-2">
+              <span>Shipping:</span>
+              <span>৳{formatBDT(shippingCost)}</span>
+            </div>
+            {discount > 0 && (
+              <div className="flex justify-between mb-2 border-b pb-2 text-green-600">
+                <span>Discount:</span>
+                <span>-৳{formatBDT(discount)}</span>
+              </div>
+            )}
+            <div className="flex justify-between text-lg font-semibold">
+              <span>Grand Total:</span>
+              <span>৳{formatBDT(grandTotal)}</span>
+            </div>
+            <div className="flex justify-end mt-5">
+              <Link to="/checkout">
+                <button className="bg-[#e62245] cursor-pointer text-white py-2 px-6 rounded">
+                  CHECKOUT
+                </button>
+              </Link>
+            </div>
           </div>
-        </div>
+        </>
+      )}
+      {/* Mobile Cart View (unchanged) */}
+      <div className="md:hidden space-y-4 mt-2">
+        {mergedCart.map((item) => (
+          <div
+            key={
+              item.id + "_" + (item.options || []).map((o) => o.id).join("_")
+            }
+            className="border rounded-lg p-3 flex flex-col sm:flex-row gap-4 shadow-sm"
+          >
+            <img
+              src={
+                item.image_urls
+                  ? `${import.meta.env.VITE_OPEN_APIURL}${
+                      JSON.parse(item.image_urls)[0]
+                    }`
+                  : "/placeholder.jpg"
+              }
+              alt={item.product_name}
+              className="w-24 h-24 object-contain mx-auto sm:mx-0"
+            />
+            <div className="flex-1">
+              <div className="flex justify-between items-center mb-2">
+                <h2 className="font-semibold text-base">{item.product_name}</h2>
+                <button
+                  onClick={() => handleRemove(item)}
+                  className="text-red-500 cursor-pointer"
+                >
+                  <RxCross2 />
+                </button>
+              </div>
+              <p className="text-sm text-gray-700 mb-1">
+                Price: ৳{formatBDT(item?.price)}
+              </p>
+              {vatEnabled && (
+                <p className="text-sm text-gray-700 mb-1">
+                  VAT: ৳{formatBDT(getVatForItem(item))}
+                </p>
+              )}
+              <div className="flex items-center gap-2 mt-2">
+                <span className="text-sm">Qty:</span>
+                <button
+                  onClick={() => handleQuantityChange(item, -1)}
+                  className="px-2 py-1 border rounded hover:bg-gray-200 text-sm"
+                >
+                  -
+                </button>
+                <span className="px-2 text-sm">{item.quantity}</span>
+                <button
+                  onClick={() => handleQuantityChange(item, 1)}
+                  className="px-2 py-1 border rounded hover:bg-gray-200 text-sm"
+                >
+                  +
+                </button>
+              </div>
+              <div className="mt-3 text-sm font-medium">
+                Total: ৳{formatBDT(item.price * item.quantity)}
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
-      <Recommended category={category} currentProductId={currentProductId} />
     </div>
   );
 };
 
-export default ProductDetails;
+export default Cart;

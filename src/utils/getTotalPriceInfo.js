@@ -6,7 +6,6 @@ export function getTotalPriceInfo(product, selectedOptions, vatEnabled) {
   let totalBasePrice = productBasePrice;
   let totalVatAmount = vatEnabled ? productBasePrice * (productVat / 100) : 0;
 
-  // Accessories
   (selectedOptions || []).forEach((opt) => {
     const optPrice = parseFloat(opt.price) || 0;
     let optVat = 0;
