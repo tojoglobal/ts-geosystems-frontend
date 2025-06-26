@@ -37,10 +37,6 @@ const customModalStyles = {
   },
 };
 
-const resetPassword = (email) => {
-  return sendPasswordResetEmail(auth, email);
-};
-
 const Login = () => {
   const axiosPublic = useAxiospublic();
   const navigate = useNavigate();
@@ -142,7 +138,7 @@ const Login = () => {
       return;
     }
     try {
-      await resetPassword(forgotEmail);
+      await sendPasswordResetEmail(auth, forgotEmail);
       showToast("success", "Reset email sent to your mail.");
       setIsModalOpen(false);
       setForgotEmail(""); // clear field

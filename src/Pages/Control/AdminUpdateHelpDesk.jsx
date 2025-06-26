@@ -76,9 +76,14 @@ const AdminUpdateHelpDesk = () => {
   return (
     <div className="w-full m-0 md:m-2">
       <div className="rounded-lg shadow-2xl mb-4 border border-gray-800 bg-gray-900/95 p-0 sm:p-5">
-        <h1 className="text-xl sm:text-2xl font-extrabold mb-8 bg-clip-text text-white tracking-tight">
+        <h1 className="text-xl sm:text-2xl font-extrabold mb-2 bg-clip-text text-white tracking-tight">
           Update Help Desk Info
         </h1>
+        <p className="text-xs text-gray-300 mb-8">
+          <span className="font-semibold text-teal-300">Note:</span> Changes
+          made here will instantly update the helpline number in the website
+          header and the Help Desk panel for all users.
+        </p>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
