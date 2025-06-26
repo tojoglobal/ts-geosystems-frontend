@@ -10,6 +10,7 @@ import {
   updateQuantity,
   setShipping,
   clearShipping,
+  addToCart,
 } from "../../features/AddToCart/AddToCart";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import { selectMergedCart } from "../../utils/selectMergedCart";
@@ -17,6 +18,10 @@ import useToastSwal from "../../Hooks/useToastSwal";
 import { useVatEnabled } from "../../Hooks/useVatEnabled";
 import { useQuery } from "@tanstack/react-query";
 import { formatBDT } from "../../utils/formatBDT";
+import { slugify } from "../../utils/slugify";
+import { getParsedProductOptions } from "../../utils/get_product_option";
+import { getFirstImage } from "../../utils/getFirstImage";
+import { getTotalPriceInfo } from "../../utils/getTotalPriceInfo";
 
 function getVatValue(product) {
   try {
@@ -28,6 +33,13 @@ function getVatValue(product) {
 
 const Cart = () => {
   const axiosPublicUrl = useAxiospublic();
+  //  State to control which popup is open
+  const [optionModal, setOptionModal] = useState({
+    open: false,
+    item: null,
+    product: null,
+    selectedOptions: [],
+  });
   const dispatch = useDispatch();
   const showToast = useToastSwal();
   const { data: vatEnabled = true } = useVatEnabled();
@@ -59,7 +71,12 @@ const Cart = () => {
     shipping && shipping.amount ? parseFloat(shipping.amount) : 100;
   const productIds = useMemo(() => items.map((item) => item.id), [items]);
   const { products } = useProductsByIdsQuery(productIds);
-  const mergedCart = useSelector((state) => selectMergedCart(state, products));
+  const mergedCart = useSelector((state) =>
+    selectMergedCart(state, products, vatEnabled)
+  );
+
+  // console.log("mergedCart product", mergedCart);
+  // console.log("cart Items product", items);
 
   const handleQuantityChange = (id, delta) => {
     dispatch(updateQuantity({ id, amount: delta }));
@@ -97,9 +114,9 @@ const Cart = () => {
   const getVatForItem = (item) => {
     const vatRate = getVatValue(item);
     const basePrice = parseFloat(item.price) || 0;
-    // VAT for this product (all quantities)
     return basePrice * (vatRate / 100) * item.quantity;
   };
+
   const vat = mergedCart.reduce(
     (total, item) => total + getVatForItem(item),
     0
@@ -139,6 +156,100 @@ const Cart = () => {
   const toggleShippingOptions = () => {
     setShowShippingOptions((prev) => !prev);
   };
+  // Helper to open popup: find product, pass options
+  // const openOptionPopup = (item, product) => {
+  //   console.log("popup", item, product);
+
+  //   let optionsArr = [];
+  //   if (Array.isArray(product?.product_options)) {
+  //     optionsArr = product?.product_options;
+  //   } else if (typeof product.product_options === "string") {
+  //     try {
+  //       optionsArr = JSON.parse(product.product_options);
+  //     } catch {
+  //       optionsArr = [];
+  //     }
+  //   }
+
+  //   optionsArr = getParsedProductOptions(optionsArr);
+  //   console.log("optionsArr", optionsArr);
+  //   setOptionModal({ open: true, item, options: optionsArr });
+  // };
+
+  // Open option edit modal
+  const openOptionModal = (item, product) => {
+    setOptionModal({
+      open: true,
+      item,
+      product,
+      selectedOptions: item.options || [],
+    });
+  };
+
+  // Handle option (accessory) checkbox toggle
+  const handleOptionChange = (changedOption, checked) => {
+    let newSelectedOptions;
+    if (checked) {
+      if (
+        !(optionModal.selectedOptions || []).some(
+          (o) => o.id === changedOption.value
+        )
+      )
+        newSelectedOptions = [
+          ...(optionModal.selectedOptions || []),
+          {
+            id: changedOption.value,
+            label: changedOption.label,
+            price: changedOption.price,
+            tax: changedOption.tax,
+          },
+        ];
+      else newSelectedOptions = optionModal.selectedOptions;
+    } else {
+      // Remove the unchecked option
+      newSelectedOptions = (optionModal.selectedOptions || []).filter(
+        (o) => o.id !== changedOption.value
+      );
+    }
+    setOptionModal((prev) => ({
+      ...prev,
+      selectedOptions: newSelectedOptions,
+    }));
+  };
+
+  // Save changes: replace the cart item with the new options and updated price
+
+  const saveOptionChanges = () => {
+    const priceInfo = getTotalPriceInfo(
+      optionModal.product,
+      optionModal.selectedOptions,
+      vatEnabled
+    );
+    console.log("priceInfo", priceInfo);
+
+    dispatch(
+      removeFromCart({
+        id: optionModal.item.id,
+        options: optionModal.item.options || [],
+      })
+    );
+    dispatch(
+      addToCart({
+        ...optionModal.item,
+        options: optionModal.selectedOptions,
+        price: vatEnabled ? priceInfo.incVat : priceInfo.base,
+        priceIncVat: priceInfo.incVat,
+      })
+    );
+    setOptionModal({
+      open: false,
+      item: null,
+      product: null,
+      selectedOptions: [],
+    });
+  };
+
+  console.log("optionModal", optionModal);
 
   return (
     <div className="md:p-2">
@@ -156,6 +267,7 @@ const Cart = () => {
           <h1 className="text-xl md:text-3xl mb-4">
             Your Cart ({mergedCart.length} Items)
           </h1>
+
           <table className="w-full border-collapse mb-6 hidden md:table">
             <thead>
               <tr className="border-b text-left">
@@ -163,62 +275,150 @@ const Cart = () => {
                 <th className="py-2">Item Name</th>
                 <th className="py-2">Price</th>
                 <th className="py-2">Quantity</th>
-                {vatEnabled && <th className="py-2">Vat</th>}
                 <th className="py-2 text-right">Total</th>
               </tr>
             </thead>
             <tbody>
-              {mergedCart.map((item) => (
-                <tr key={item.id} className="border-b">
-                  <td className="flex items-center gap-4 py-4">
-                    <img
-                      src={
-                        item.image_urls
-                          ? `${import.meta.env.VITE_OPEN_APIURL}${
-                              JSON.parse(item.image_urls)[0]
-                            }`
-                          : "/placeholder.jpg"
-                      }
-                      alt={item.product_name}
-                      className="w-20 h-20 object-contain"
-                    />
-                  </td>
-                  <td className="w-2xs">
-                    <p className="font-medium pr-3">{item.product_name}</p>
-                  </td>
-                  <td>৳{formatBDT(item?.price)}</td>
-                  <td>
-                    <div className="flex items-center">
-                      <button
-                        onClick={() => handleQuantityChange(item.id, -1)}
-                        className="px-2 border rounded hover:bg-gray-200"
+              {mergedCart.map((item) => {
+                const product = products.find((p) => p.id === item.id);
+                return (
+                  <tr key={item.id} className="border-b">
+                    <td className="flex items-center gap-4 py-4">
+                      <img
+                        src={
+                          item.image_urls
+                            ? `${import.meta.env.VITE_OPEN_APIURL}${
+                                JSON.parse(item.image_urls)[0]
+                              }`
+                            : "/placeholder.jpg"
+                        }
+                        alt={item.product_name}
+                        className="w-20 h-20 object-contain"
+                      />
+                    </td>
+                    <td className="w-2xs">
+                      <p className="font-medium pr-3">{item.brand_name}</p>
+                      <Link
+                        to={`/products/${item.id}/${slugify(
+                          item?.product_name || ""
+                        )}`}
                       >
-                        -
-                      </button>
-                      <span className="px-3">{item.quantity}</span>
-                      <button
-                        onClick={() => handleQuantityChange(item.id, 1)}
-                        className="px-2 border rounded hover:bg-gray-200"
+                        <p className="font-medium pr-3 text-[#e62245] underline hover:text-[#e62246b0]">
+                          {item?.product_name}
+                        </p>
+                      </Link>
+
+                      <p>
+                        Additional Accessory:{" "}
+                        {(item?.options || []).map((o) => o.label).join(", ")}
+                      </p>
+                      <p
+                        className="font-medium text-[#e62245] underline hover:text-[#e62246b0] cursor-pointer"
+                        onClick={() => openOptionModal(item, product)}
                       >
-                        +
-                      </button>
-                    </div>
-                  </td>
-                  {vatEnabled && <td>৳{formatBDT(getVatForItem(item))}</td>}
-                  <td className="text-right">
-                    <div className="flex items-center justify-end gap-3">
-                      <p>৳{formatBDT(item.price * item.quantity)}</p>
-                      <button
-                        onClick={() => handleRemove(item.id)}
-                        className="text-red-500 cursor-pointer"
-                      >
-                        <RxCross2 />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
+                        Change
+                      </p>
+                    </td>
+                    <td>৳{formatBDT(item?.price)}</td>
+                    <td>
+                      <div className="flex items-center">
+                        <button
+                          onClick={() => handleQuantityChange(item.id, -1)}
+                          className="px-2 border rounded hover:bg-gray-200"
+                        >
+                          -
+                        </button>
+                        <span className="px-3">{item.quantity}</span>
+                        <button
+                          onClick={() => handleQuantityChange(item.id, 1)}
+                          className="px-2 border rounded hover:bg-gray-200"
+                        >
+                          +
+                        </button>
+                      </div>
+                    </td>
+                    {/* {vatEnabled && <td>৳{formatBDT(getVatForItem(item))}</td>} */}
+                    <td className="text-right">
+                      <div className="flex items-center justify-end gap-3">
+                        <p>৳{formatBDT(item.price * item.quantity)}</p>
+                        <button
+                          onClick={() => handleRemove(item.id)}
+                          className="text-red-500 cursor-pointer"
+                        >
+                          <RxCross2 />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
+            {/* Option Change Popup/Modal */}
+            {optionModal.open && (
+              <div className="fixed z-50 inset-0 bg-black/50 flex items-center justify-center">
+                <div className="bg-white p-6 rounded shadow-md min-w-[300px] max-w-md">
+                  <h2 className="text-lg font-semibold mb-4">
+                    Edit Accessories
+                  </h2>
+
+                  <ul>
+                    {getParsedProductOptions(
+                      optionModal.product?.product_options
+                    ).map((opt) => (
+                      <li
+                        key={opt.value}
+                        className="mb-2 flex items-center gap-2"
+                      >
+                        <input
+                          type="checkbox"
+                          name="product_option"
+                          checked={optionModal.selectedOptions.some(
+                            (o) => o.id === opt.value
+                          )}
+                          onChange={(e) =>
+                            handleOptionChange(opt, e.target.checked)
+                          }
+                          className="mr-2"
+                        />
+                        {opt.image_urls && (
+                          <img
+                            src={`${
+                              import.meta.env.VITE_OPEN_APIURL
+                            }${getFirstImage(opt.image_urls)}`}
+                            alt={opt.label}
+                            className="w-8 h-8 object-cover rounded"
+                          />
+                        )}
+                        <span>{opt.label}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="flex justify-end mt-4">
+                    <div>
+                      <button
+                        className="px-4 py-2 bg-gray-300 text-gray-700 rounded mr-2"
+                        onClick={() =>
+                          setOptionModal({
+                            open: false,
+                            item: null,
+                            product: null,
+                            selectedOptions: [],
+                          })
+                        }
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        className="px-4 py-2 bg-[#e62245] text-white rounded"
+                        onClick={saveOptionChanges}
+                      >
+                        Save
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
           </table>
           {/* Coupon and Shipping */}
           <div className="max-w-lg ml-auto p-2 md:p-4 rounded space-y-4">

@@ -177,6 +177,9 @@ const UpdateProductForm = () => {
           response.data?.products?.map((prod) => ({
             value: prod.id,
             label: prod.product_name,
+            price: prod.price,
+            tax: prod.tax,
+            image_urls: prod.image_urls,
           })) || [];
         setProductOptions(mappedProducts);
       } catch (err) {
@@ -282,6 +285,7 @@ const UpdateProductForm = () => {
       setValue("subCategory", subCatValue);
     }
   }, [productData, subCategories, setValue]);
+  // console.log("Product Data:", productData);
 
   useEffect(() => {
     if (productData) {
@@ -452,6 +456,8 @@ const UpdateProductForm = () => {
       formData.append("videoUrls", data.videoUrls || "");
       formData.append("warrantyInfo", data.warrantyInfo || "");
       formData.append("clearance", data.clearance ? "1" : "0");
+      formData.append("isStock", data.isStock ? "1" : "0");
+      formData.append("sale", data.sale ? "1" : "0");
       formData.append("flashSale", data.flashSale ? "1" : "0");
       formData.append("flashSaleEnd", data.flashSaleEnd || "");
       formData.append("metaKeywords", data.metaKeywords?.join(",") || "");
@@ -543,6 +549,7 @@ const UpdateProductForm = () => {
         <div className="col-span-1 md:col-span-2 space-y-4 grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
           <div className="col-span-1 space-y-3 sm:space-y-4">
             {/* productName */}
+            <label className="block mb-2 font-medium">productName</label>
             <input
               {...register("productName", {
                 required: "Product Name is required",
@@ -555,8 +562,9 @@ const UpdateProductForm = () => {
             )}
 
             {/* brandName */}
+            <label className="block mb-2 font-medium">brandName</label>
             <select
-              {...register("brandName", { required: "Brand is required" })}
+              {...register("brandName")}
               className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
             >
               <option value="" className="hover:bg-amber-200">
@@ -573,8 +581,9 @@ const UpdateProductForm = () => {
             )}
 
             {/* category */}
+            <label className="block mb-2 font-medium">category</label>
             <select
-              {...register("category", { required: "Category is required" })}
+              {...register("category")}
               className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
             >
               <option value="" className="hover:bg-amber-200">
@@ -594,21 +603,20 @@ const UpdateProductForm = () => {
             )}
 
             {/* subCategory*/}
+            <label className="block mb-2 font-medium">subCategory</label>
             <select
-              {...register("subCategory", {
-                required: "Sub Category is required",
-              })}
+              {...register("subCategory")}
               className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
             >
               <option value="">Select Sub Category</option>
               {subCategories
-                .filter((sub) => sub.main_category_id === watchCategory?.id)
+                .filter((sub) => sub?.main_category_id === watchCategory?.id)
                 .map((sub) => (
                   <option
                     key={sub.id}
                     value={JSON.stringify({ id: sub.id, slug: sub.slug })}
                   >
-                    {sub.name}
+                    {sub?.name}
                   </option>
                 ))}
             </select>

@@ -164,10 +164,14 @@ const ProductAddForm = () => {
     const fetchProducts = async () => {
       try {
         const response = await axiosPublicUrl.get("/api/products");
+        // console.log("Fetched products:", response.data?.products);
         const mappedProducts =
           response.data?.products?.map((prod) => ({
             value: prod.id,
             label: prod.product_name,
+            price: prod.price,
+            tax: prod.tax,
+            image_urls: prod.image_urls,
           })) || [];
         setProductOptions(mappedProducts);
       } catch (err) {
@@ -177,6 +181,8 @@ const ProductAddForm = () => {
 
     fetchProducts();
   }, []);
+
+  console.log(productOptions);
 
   // Fetch Software
   useEffect(() => {
