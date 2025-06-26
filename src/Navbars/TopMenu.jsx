@@ -5,10 +5,13 @@ import useDataQuery from "../utils/useDataQuery";
 const TopMenu = () => {
   const { isAuth } = useSelector((state) => state.authUser);
   // Fetch dynamic helpdesk info
-  const { data: info } = useDataQuery(["helpdeskInfo"], "/api/helpdesk-info");
+  const { data: info = {} } = useDataQuery(
+    ["helpdeskInfo"],
+    "/api/helpdesk-info"
+  );
 
   const phoneNumber = info?.helpline_number;
-  const phoneHref = "tel:" + phoneNumber.replace(/[^\d+]/g, "");
+  const phoneHref = "tel:" + phoneNumber?.replace(/[^\d+]/g, "");
 
   return (
     <div className="border-b border-slightly-dark">
