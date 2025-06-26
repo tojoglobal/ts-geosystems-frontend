@@ -2,17 +2,56 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { FaGoogle } from "react-icons/fa";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
-import { signInWithPopup } from "firebase/auth";
+import { signInWithPopup, sendPasswordResetEmail } from "firebase/auth";
 import { auth, googleProvider } from "./firebase.config.js";
 import { useDispatch } from "react-redux";
 import { loginSuccess } from "../../features/UserAuth/authSlice";
 import useToastSwal from "../../Hooks/useToastSwal.jsx";
+import Modal from "react-modal";
+import { useState } from "react";
+
+// Responsive and centered modal styles
+const customModalStyles = {
+  content: {
+    maxWidth: "95vw",
+    width: "350px",
+    inset: "50% auto auto 50%",
+    transform: "translate(-50%, -50%)",
+    borderRadius: "12px",
+    padding: "1.5rem",
+    background: "#fff",
+    boxShadow: "0 4px 32px rgba(0,0,0,0.12)",
+    border: "none",
+    minHeight: "auto",
+    maxHeight: "90vh",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+  },
+  overlay: {
+    zIndex: 1000,
+    background: "rgba(0,0,0,0.5)",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+};
+
+const resetPassword = (email) => {
+  return sendPasswordResetEmail(auth, email);
+};
 
 const Login = () => {
   const axiosPublic = useAxiospublic();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const showToast = useToastSwal();
+
+  // Modal state
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [forgotEmail, setForgotEmail] = useState("");
+  const [forgotEmailErr, setForgotEmailErr] = useState("");
+
   const {
     register,
     handleSubmit,
@@ -33,7 +72,6 @@ const Login = () => {
             role: response.data.user.role,
           })
         );
-        // Dispatch the action to save user info in Redux
         dispatch(
           loginSuccess({
             email: response.data.user.email,
@@ -42,7 +80,6 @@ const Login = () => {
         );
 
         showToast("success", "Login successful!");
-        // Redirect based on user role
         if (response.data.user.role === "USER") {
           navigate("/user/account/orders");
         } else {
@@ -77,7 +114,6 @@ const Login = () => {
       const user = result.user;
       const idToken = await user.getIdToken();
 
-      // Send this token to your backend
       const res = await axiosPublic.post("/api/social-login", {
         token: idToken,
       });
@@ -85,8 +121,6 @@ const Login = () => {
       if (res.status === 200) {
         navigate("/user/account/orders");
         showToast("success", "Google Login successful!");
-        console.log(res.data);
-
         dispatch(
           loginSuccess({
             email: res.data.user.email,
@@ -96,6 +130,24 @@ const Login = () => {
       }
     } catch (error) {
       console.error("Google login error:", error);
+    }
+  };
+
+  // Forgot Password handlers
+  const handleForgotPassword = async (e) => {
+    e.preventDefault();
+    setForgotEmailErr("");
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(forgotEmail)) {
+      setForgotEmailErr("Please provide a valid email address");
+      return;
+    }
+    try {
+      await resetPassword(forgotEmail);
+      showToast("success", "Reset email sent to your mail.");
+      setIsModalOpen(false);
+      setForgotEmail(""); // clear field
+    } catch (err) {
+      setForgotEmailErr(err.message || "Could not send reset email.");
     }
   };
 
@@ -164,16 +216,20 @@ const Login = () => {
                 >
                   LOGIN
                 </button>
-                <Link className="text-sm text-[#e62245] underline">
+                <button
+                  type="button"
+                  className="text-sm cursor-pointer text-[#e62245] underline bg-transparent border-none outline-none"
+                  onClick={() => setIsModalOpen(true)}
+                >
                   Forgot your password?
-                </Link>
+                </button>
               </div>
               <div className="flex gap-3">
                 <span className="text-sm text-gray-500 mt-5">
                   OR LOGIN WITH
-                </span>{" "}
-                {/* Changed to span for text */}
+                </span>
                 <button
+                  type="button"
                   onClick={handleGoogleLogin}
                   className="flex cursor-pointer items-center justify-center px-6 py-2 bg-[#DB4437] text-white rounded hover:bg-[#c23328]"
                 >
@@ -184,8 +240,7 @@ const Login = () => {
             </div>
           </form>
         </div>
-
-        {/* Right Side - New Customer Info f5f5f5 */}
+        {/* Right Side - New Customer Info */}
         <div className="w-full md:w-1/2">
           <div className="bg-[#cac9c9] p-6">
             <h2 className="text-xl text-gray-600 font-semibold mb-4">
@@ -217,6 +272,56 @@ const Login = () => {
           </div>
         </div>
       </div>
+      {/* Forgot Password Modal */}
+      <Modal
+        isOpen={isModalOpen}
+        onRequestClose={() => {
+          setIsModalOpen(false);
+          setForgotEmailErr("");
+        }}
+        style={customModalStyles}
+        contentLabel="Reset Password"
+        ariaHideApp={false}
+      >
+        <h2 className="text-xl mb-3 text-gray-800 font-semibold text-center">
+          Reset Password
+        </h2>
+        <form onSubmit={handleForgotPassword} className="flex flex-col gap-3">
+          <label className="block mb-1 text-sm text-gray-700">
+            Email address
+          </label>
+          <input
+            type="email"
+            className="w-full px-3 py-2 border focus:outline-none focus:border focus:border-gray-400 border-gray-300 rounded-sm"
+            placeholder="Enter your email"
+            value={forgotEmail}
+            onChange={(e) => setForgotEmail(e.target.value)}
+            required
+            autoFocus
+          />
+          {forgotEmailErr && (
+            <p className="text-red-500 text-xs mb-1">{forgotEmailErr}</p>
+          )}
+          <div className="flex flex-col sm:flex-row items-center gap-2 mt-2 w-full">
+            <button
+              type="submit"
+              className="w-full cursor-pointer sm:w-auto bg-[#e62245] text-white px-4 py-2 rounded hover:bg-[#d11a3b] transition-all"
+            >
+              Send Reset Email
+            </button>
+            <button
+              type="button"
+              className="w-full cursor-pointer sm:w-auto text-gray-500 underline"
+              onClick={() => {
+                setIsModalOpen(false);
+                setForgotEmailErr("");
+              }}
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      </Modal>
     </div>
   );
 };
