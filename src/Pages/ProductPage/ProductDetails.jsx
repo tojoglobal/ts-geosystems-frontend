@@ -23,6 +23,8 @@ import GetQuotationModal from "./GetQuotationModal";
 import { formatBDT } from "../../utils/formatBDT";
 import RichTextRenderer from "../../utils/RichTextRenderer";
 import { parseSoftwareOptions } from "../../utils/software_options";
+import { getProductType } from "../../utils/productOption";
+import { getParsedProductOptions } from "../../utils/get_product_option";
 
 // Helper function to extract YouTube video ID from url
 function getYouTubeId(url) {
@@ -154,6 +156,8 @@ const ProductDetails = () => {
   const priceIncVat = basePrice + vatAmount;
 
   // console.log(parseSoftwareOptions(product?.software_options));
+  // console.log(getProductType(product));
+  console.log(getParsedProductOptions(product));
 
   if (isLoading) return null;
   if (isError)
