@@ -23,17 +23,8 @@ import { getParsedProductOptions } from "../../utils/get_product_option";
 import { getFirstImage } from "../../utils/getFirstImage";
 import { getTotalPriceInfo } from "../../utils/getTotalPriceInfo";
 
-function getVatValue(product) {
-  try {
-    return product?.tax ? JSON.parse(product.tax).value : 0;
-  } catch {
-    return 0;
-  }
-}
-
 const Cart = () => {
   const axiosPublicUrl = useAxiospublic();
-  //  State to control which popup is open
   const [optionModal, setOptionModal] = useState({
     open: false,
     item: null,
@@ -118,38 +109,10 @@ const Cart = () => {
 
   // Calculate VAT per item and total VAT for the cart
 
-  function getVatForItem(item) {
-    console.log(item);
-
-    // Main product VAT
-    const mainVatRate = getVatValue(item);
-    const mainBase = parseFloat(item.product_price || item.price) || 0;
-    let vatPerOne = (mainBase * mainVatRate) / 100;
-
-    // Accessories VAT
-    let accessoryVat = 0;
-    if (item.options && item.options.length > 0) {
-      item.options.forEach((opt) => {
-        const optPrice = parseFloat(opt.price) || 0;
-        let optVatRate = 0;
-        try {
-          optVatRate = opt.tax ? JSON.parse(opt.tax).value : 0;
-        } catch {}
-        accessoryVat += (optPrice * optVatRate) / 100;
-      });
-    }
-
-    const perUnitVat = vatPerOne + accessoryVat;
-    return perUnitVat * item.quantity;
-  }
-
   const vat = mergedCart.reduce(
-    (total, item) => total + getVatForItem(item),
+    (total, item) => total + (item.vat || 0) * (item.quantity || 1),
     0
   );
-  console.log(mergedCart);
-  // console.log(vat);
-  console.log(priceInfo);
 
   const subTotal = mergedCart.reduce(
     (total, item) => total + item.price * item.quantity,
@@ -185,25 +148,6 @@ const Cart = () => {
   const toggleShippingOptions = () => {
     setShowShippingOptions((prev) => !prev);
   };
-  // Helper to open popup: find product, pass options
-  // const openOptionPopup = (item, product) => {
-  //   console.log("popup", item, product);
-
-  //   let optionsArr = [];
-  //   if (Array.isArray(product?.product_options)) {
-  //     optionsArr = product?.product_options;
-  //   } else if (typeof product.product_options === "string") {
-  //     try {
-  //       optionsArr = JSON.parse(product.product_options);
-  //     } catch {
-  //       optionsArr = [];
-  //     }
-  //   }
-
-  //   optionsArr = getParsedProductOptions(optionsArr);
-  //   console.log("optionsArr", optionsArr);
-  //   setOptionModal({ open: true, item, options: optionsArr });
-  // };
 
   // Open option edit modal
   const openOptionModal = (item, product) => {
@@ -247,7 +191,6 @@ const Cart = () => {
   };
 
   // Save changes: replace the cart item with the new options and updated price
-
   const saveOptionChanges = () => {
     const priceInfo = getTotalPriceInfo(
       optionModal.product,
@@ -267,8 +210,8 @@ const Cart = () => {
       options: optionModal.selectedOptions,
       price: vatEnabled ? priceInfo.incVat : priceInfo.base,
       priceIncVat: priceInfo.incVat,
+      vat: priceInfo.vat,
     };
-    console.log("itemToAdd", itemToAdd);
     // Add updated item
     dispatch(addToCart(itemToAdd));
     setOptionModal({
@@ -295,8 +238,69 @@ const Cart = () => {
           <h1 className="text-xl md:text-3xl mb-4">
             Your Cart ({mergedCart.length} Items)
           </h1>
-
-          <table className="w-full border-collapse mb-6 hidden md:table">
+          {/* Mobile Cart View */}
+          <div className="block border rounded-lg  md:hidden space-y-4 mt-2 shadow-sm">
+            {mergedCart.map((item) => (
+              <div
+                key={item.id}
+                className=" p-3 flex flex-col sm:flex-row gap-4 border-b-2 "
+              >
+                <img
+                  src={
+                    item.image_urls
+                      ? `${import.meta.env.VITE_OPEN_APIURL}${
+                          JSON.parse(item.image_urls)[0]
+                        }`
+                      : "/placeholder.jpg"
+                  }
+                  alt={item.product_name}
+                  className="w-24 h-24 object-contain mx-auto sm:mx-0"
+                />
+                <div className="flex-1">
+                  <div className="flex justify-between items-center mb-2">
+                    <h2 className="font-semibold text-base">
+                      {item.product_name}
+                    </h2>
+                    <button
+                      onClick={() => handleRemove(item.id)}
+                      className="text-red-500 cursor-pointer"
+                    >
+                      <RxCross2 />
+                    </button>
+                  </div>
+                  <p className="text-sm text-gray-700 mb-1">
+                    Price: ৳{formatBDT(item?.price)}
+                  </p>
+                  {/* {vatEnabled && (
+                    <p className="text-sm text-gray-700 mb-1">
+                      VAT: ৳{formatBDT(item.vat)}
+                    </p>
+                  )} */}
+                  <div className="flex items-center gap-2 mt-2">
+                    <span className="text-sm">Qty:</span>
+                    <button
+                      onClick={() => handleQuantityChange(item, -1)}
+                      className="px-2 py-1 border rounded hover:bg-gray-200 text-sm"
+                    >
+                      -
+                    </button>
+                    <span className="px-2 text-sm">{item.quantity}</span>
+                    <button
+                      onClick={() => handleQuantityChange(item, 1)}
+                      className="px-2 py-1 border rounded hover:bg-gray-200 text-sm"
+                    >
+                      +
+                    </button>
+                  </div>
+                  <div className="mt-3 text-sm font-medium">
+                    Total: ৳{formatBDT(item.price * item.quantity)}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          {/* TABLE VIEW FOR DESKTOP, always first */}
+          <table className="w-full border-collapse mb-6 hidden  md:table">
             <thead>
               <tr className="border-b text-left">
                 <th className="py-2">Image</th>
@@ -366,7 +370,7 @@ const Cart = () => {
                         </button>
                       </div>
                     </td>
-                    {vatEnabled && <td>৳{formatBDT(getVatForItem(item))}</td>}
+                    <td>{vatEnabled && <td>৳{formatBDT(item?.vat)}</td>}</td>
                     <td className="text-right">
                       <div className="flex items-center justify-end gap-3">
                         <p>৳{formatBDT(item.price * item.quantity)}</p>
@@ -490,7 +494,8 @@ const Cart = () => {
               </div>
             )}
           </table>
-          {/* Coupon and Shipping */}
+
+          {/*This is footer Calcuation part  */}
           <div className="max-w-lg ml-auto p-2 md:p-4 rounded space-y-4">
             {/* Totals */}
             <div className="flex justify-between mb-2 border-b pb-2">
@@ -653,65 +658,6 @@ const Cart = () => {
           </div>
         </>
       )}
-      {/* Mobile Cart View (unchanged) */}
-      <div className="md:hidden space-y-4 mt-2">
-        {mergedCart.map((item) => (
-          <div
-            key={item.id}
-            className="border rounded-lg p-3 flex flex-col sm:flex-row gap-4 shadow-sm"
-          >
-            <img
-              src={
-                item.image_urls
-                  ? `${import.meta.env.VITE_OPEN_APIURL}${
-                      JSON.parse(item.image_urls)[0]
-                    }`
-                  : "/placeholder.jpg"
-              }
-              alt={item.product_name}
-              className="w-24 h-24 object-contain mx-auto sm:mx-0"
-            />
-            <div className="flex-1">
-              <div className="flex justify-between items-center mb-2">
-                <h2 className="font-semibold text-base">{item.product_name}</h2>
-                <button
-                  onClick={() => handleRemove(item.id)}
-                  className="text-red-500 cursor-pointer"
-                >
-                  <RxCross2 />
-                </button>
-              </div>
-              <p className="text-sm text-gray-700 mb-1">
-                Price: ৳{formatBDT(item?.price)}
-              </p>
-              {vatEnabled && (
-                <p className="text-sm text-gray-700 mb-1">
-                  VAT: ৳{formatBDT(getVatForItem(item))}
-                </p>
-              )}
-              <div className="flex items-center gap-2 mt-2">
-                <span className="text-sm">Qty:</span>
-                <button
-                  onClick={() => handleQuantityChange(item, -1)}
-                  className="px-2 py-1 border rounded hover:bg-gray-200 text-sm"
-                >
-                  -
-                </button>
-                <span className="px-2 text-sm">{item.quantity}</span>
-                <button
-                  onClick={() => handleQuantityChange(item, 1)}
-                  className="px-2 py-1 border rounded hover:bg-gray-200 text-sm"
-                >
-                  +
-                </button>
-              </div>
-              <div className="mt-3 text-sm font-medium">
-                Total: ৳{formatBDT(item.price * item.quantity)}
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
     </div>
   );
 };
