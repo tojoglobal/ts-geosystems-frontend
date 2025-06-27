@@ -235,7 +235,7 @@ const Cart = () => {
         <p className="text-xl">Your cart is empty.</p>
       ) : (
         <>
-          <h1 className="text-xl md:text-3xl mb-4">
+          <h1 className="text-xl md:text-3xl font-light mb-4">
             Your Cart ({mergedCart.length} Items)
           </h1>
           {/* Mobile Cart View */}
