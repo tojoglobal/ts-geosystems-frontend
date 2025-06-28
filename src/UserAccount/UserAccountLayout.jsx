@@ -45,7 +45,7 @@ const UserAccountLayout = () => {
       </div>
       {/* Page Title */}
       <h1 className="text-[28px] font-light mb-3">{pageInfo.title}</h1>
-      <div className="flex flex-wrap md:flex-row gap-3 md:gap-5 justify-center text-[14px] font-normal mb-12">
+      <div className="flex flex-wrap md:flex-row gap-3 md:gap-5 justify-center text-sm font-normal mb-12">
         <Link
           to="/user/account/orders"
           className={`${

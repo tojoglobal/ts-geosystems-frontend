@@ -19,7 +19,7 @@ const UserOrders = () => {
     return (
       <div className="bg-white p-4 rounded border text-gray-600 flex items-start gap-2">
         <AlertCircle className="mt-[2px]" size={18} />
-        <p className="text-[14px]">
+        <p className="text-sm">
           Failed to load orders. Please try again later.
         </p>
       </div>
@@ -132,7 +132,7 @@ const UserOrders = () => {
       ) : (
         <div className="bg-white p-4 rounded border text-gray-600 flex items-start gap-2">
           <AlertCircle className="mt-[2px]" size={18} />
-          <p className="text-[14px]">
+          <p className="text-sm">
             You haven't placed any orders with us. When you do, their status
             will appear on this page.
           </p>

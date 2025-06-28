@@ -104,7 +104,7 @@ const UserInbox = () => {
     return (
       <div className="bg-red-50 p-4 rounded border border-red-200 text-red-600 flex items-start gap-2">
         <AlertCircle className="mt-[2px]" size={18} />
-        <p className="text-[14px]">
+        <p className="text-sm">
           Failed to load your orders. Please try again later.
         </p>
       </div>
@@ -116,7 +116,7 @@ const UserInbox = () => {
       {data.length === 0 ? (
         <div className="bg-white p-4 rounded border text-gray-600 flex items-start gap-2">
           <AlertCircle className="mt-[2px]" size={18} />
-          <p className="text-[14px]">
+          <p className="text-sm">
             Once you place an order you'll have full access to send messages
             from this page.
           </p>

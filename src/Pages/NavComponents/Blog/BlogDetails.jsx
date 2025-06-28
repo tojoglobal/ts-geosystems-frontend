@@ -147,7 +147,7 @@ const BlogDetails = () => {
       <div className="border-t border-b py-4 mt-12 flex flex-wrap md:flex-row justify-center items-center gap-3 md:gap-6 text-[#db7084] font-medium">
         {tabs.map((tab) => (
           <button
-            className={`capitalize cursor-pointer text-[14px] font-normal hover:text-[#754e55] ${
+            className={`capitalize cursor-pointer text-sm font-normal hover:text-[#754e55] ${
               tab === blog.blog_type ? "text-[#e62245] underline" : ""
             }`}
             key={tab}

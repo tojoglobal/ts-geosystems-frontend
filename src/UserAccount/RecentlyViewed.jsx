@@ -175,7 +175,7 @@ const RecentlyViewed = () => {
                               item.product_name || ""
                             )}`}
                           >
-                            <button className="w-full bg-[#e62245] cursor-pointer text-[14px] sm:text-[11px] md:text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors">
+                            <button className="w-full bg-[#e62245] cursor-pointer text-sm sm:text-[11px] md:text-sm text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors">
                               GET QUOTATION
                             </button>
                           </Link>

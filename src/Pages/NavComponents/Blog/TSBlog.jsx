@@ -133,7 +133,7 @@ const TSBlog = () => {
                   : `/ts-blog?type=${encodeURIComponent(tab)}`
               }
               key={tab}
-              className={`capitalize text-[14px] font-normal hover:text-[#754e55] ${
+              className={`capitalize text-sm font-normal hover:text-[#754e55] ${
                 activeTab === tab ? "text-[#e62245] underline" : ""
               }`}
             >

@@ -122,48 +122,48 @@ const HeaderContainer = () => {
                       <Link
                         onClick={() => setShowUserMenu(!showUserMenu)}
                         to="/user/account/orders"
-                        className="py-[1px] text-[14px] font-normal hover:text-crimson-red"
+                        className="py-[1px] text-sm font-normal hover:text-crimson-red"
                       >
                         Orders
                       </Link>
                       {/* <Link
                         to="/user/account/returns"
-                        className="py-[1px] text-[14px] font-normal hover:text-crimson-red"
+                        className="py-[1px] text-sm font-normal hover:text-crimson-red"
                       >
                         Returns
                       </Link> */}
                       <Link
                         onClick={() => setShowUserMenu(!showUserMenu)}
                         to="/user/account/inbox"
-                        className="py-[1px] text-[14px] font-normal hover:text-crimson-red"
+                        className="py-[1px] text-sm font-normal hover:text-crimson-red"
                       >
                         Messages (0)
                       </Link>
                       <Link
                         onClick={() => setShowUserMenu(!showUserMenu)}
                         to="/user/account/address-book"
-                        className="py-[1px] text-[14px] font-normal hover:text-crimson-red"
+                        className="py-[1px] text-sm font-normal hover:text-crimson-red"
                       >
                         Addresses
                       </Link>
                       <Link
                         onClick={() => setShowUserMenu(!showUserMenu)}
                         to="/user/account/recent-viewed"
-                        className="py-[1px] text-[14px] font-normal hover:text-crimson-red"
+                        className="py-[1px] text-sm font-normal hover:text-crimson-red"
                       >
                         Recently Viewed
                       </Link>
                       <Link
                         onClick={() => setShowUserMenu(!showUserMenu)}
                         to="/user/account/account-settings"
-                        className="py-[1px] text-[14px] font-normal hover:text-crimson-red"
+                        className="py-[1px] text-sm font-normal hover:text-crimson-red"
                       >
                         Account Settings
                       </Link>
                       <div>
                         <div className="flex items-center justify-center my-2">
                           <div className="flex-grow border-t border-gray-300"></div>
-                          <div className="mx-4 text-[14px] font-normal italic">
+                          <div className="mx-4 text-sm font-normal italic">
                             OR
                           </div>
                           <div className="flex-grow border-t border-gray-300"></div>

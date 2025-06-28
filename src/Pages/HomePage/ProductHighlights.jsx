@@ -215,7 +215,7 @@ const ProductHighlights = () => {
               <SwiperSlide key={idx}>
                 <div className="relative flex flex-col items-center bg-white h-full">
                   {item?.sale === 1 && (
-                    <p className="absolute top-1 right-3 px-2 py-[1px] font-bold rounded-[4px] text-white text-[10px] md:text-[14px] bg-[#e62245] z-50">
+                    <p className="absolute top-1 right-3 px-2 py-[1px] font-bold rounded-[4px] text-white text-[10px] md:text-sm bg-[#e62245] z-50">
                       SALE
                     </p>
                   )}
@@ -305,7 +305,7 @@ const ProductHighlights = () => {
                                 item.product_name || ""
                               )}`}
                             >
-                              <button className="w-full bg-[#e62245] cursor-pointer text-[10px] md:text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors">
+                              <button className="w-full bg-[#e62245] cursor-pointer text-[10px] md:text-sm text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors">
                                 GET QUOTATION
                               </button>
                             </Link>
