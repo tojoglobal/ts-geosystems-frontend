@@ -33,12 +33,15 @@ const SearchOverlay = ({ isOpen, onClose }) => {
   const [recommendedProducts, setRecommendedProducts] = useState([]);
   const lastTrackedSearch = useRef(""); // To avoid duplicate posts
 
-  // Fetch recommended products
-  const { data: recommendedData } = useDataQuery(
+  // Fetch recommended products (joined with main product table)
+  const { data: recommendedData, isLoading: recommendedLoading } = useDataQuery(
     "recommendedProducts",
-    "/api/recommended-products",
-    { enabled: !searchText }
+    "/api/recommended-products"
   );
+
+  // Fetch fallback latest products in case recommended is empty or less than 10
+  const { data: latestProductsData, isLoading: latestProductsLoading } =
+    useDataQuery("latestProducts", "/api/products?limit=20");
 
   const { data: popularData } = useDataQuery(
     "popularSearches",
@@ -58,11 +61,31 @@ const SearchOverlay = ({ isOpen, onClose }) => {
     setLatestSearches(saved);
   }, []);
 
+  // Always show 10 recommended; fill with latest if needed
   useEffect(() => {
-    if (recommendedData?.products) {
-      setRecommendedProducts(recommendedData.products.slice(0, 10));
+    let recommended = [];
+    if (Array.isArray(recommendedData) && recommendedData.length > 0) {
+      recommended = recommendedData.slice(0, 10);
+    } else if (recommendedData?.products?.length > 0) {
+      recommended = recommendedData.products.slice(0, 10);
     }
-  }, [recommendedData]);
+
+    if (recommended.length < 10) {
+      let latest = [];
+      if (Array.isArray(latestProductsData?.products)) {
+        latest = latestProductsData.products;
+      } else if (Array.isArray(latestProductsData)) {
+        latest = latestProductsData;
+      }
+      // Exclude already included recommended products by id
+      const excludeIds = new Set(recommended.map((p) => p.id));
+      const toAdd = latest
+        .filter((p) => !excludeIds.has(p.id))
+        .slice(0, 10 - recommended.length);
+      recommended = [...recommended, ...toAdd];
+    }
+    setRecommendedProducts(recommended.slice(0, 10));
+  }, [recommendedData, latestProductsData]);
 
   useEffect(() => {
     if (isOpen) {
@@ -150,17 +173,21 @@ const SearchOverlay = ({ isOpen, onClose }) => {
     dots: false,
     infinite: true,
     speed: 500,
-    slidesToShow: 5,
+    slidesToShow: 5, // 2xl (≥1536px)
     slidesToScroll: 1,
     prevArrow: <PrevArrow />,
     nextArrow: <NextArrow />,
     responsive: [
       {
-        breakpoint: 1280,
+        breakpoint: 1536, // <2xl (xl)
+        settings: { slidesToShow: 4 },
+      },
+      {
+        breakpoint: 1280, // <xl (lg)
         settings: { slidesToShow: 3 },
       },
       {
-        breakpoint: 1024,
+        breakpoint: 1024, // <lg
         settings: { slidesToShow: 2 },
       },
     ],
@@ -265,6 +292,7 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                       <li
                         key={i}
                         className="hover:text-[#e62245] cursor-pointer"
+                        onClick={() => setSearchText(search)}
                       >
                         {search}
                       </li>
@@ -315,7 +343,7 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                     </div>
                   )}
                 </div>
-                {isLoading ? (
+                {isLoading || recommendedLoading || latestProductsLoading ? (
                   <div className="text-center py-10">Loading...</div>
                 ) : (displayProducts?.length ?? 0) === 0 ? (
                   <div className="text-center py-10 text-gray-400">
@@ -324,8 +352,6 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                 ) : displayProducts.length <= 4 ? (
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                     {displayProducts?.map((product, index) => {
-                      const priceOption = product?.priceShowHide;
-                      const basePrice = parsePrice(product.price) || 0;
                       return (
                         <Link
                           onClick={async () => {
@@ -360,22 +386,23 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                               {" "}
                               {product?.priceShowHide
                                 ? ""
-                                : formatBDT(basePrice)}
+                                : formatBDT(parsePrice(product.price) || 0)}
                             </p>
                             {product?.isStock === 1 && (
                               <button
                                 onClick={() =>
-                                  priceOption !== 1 && handleAddToCart(product)
+                                  product?.priceShowHide !== 1 &&
+                                  handleAddToCart(product)
                                 }
                                 className={`p-[6px] rounded text-white transition-colors duration-200 ${
-                                  priceOption === 1
+                                  product?.priceShowHide === 1
                                     ? "bg-gray-400 cursor-not-allowed"
                                     : "bg-[#e62245] hover:bg-[#d41d3f] cursor-pointer"
                                 }`}
-                                disabled={priceOption === 1}
-                                aria-disabled={priceOption === 1}
+                                disabled={product?.priceShowHide === 1}
+                                aria-disabled={product?.priceShowHide === 1}
                                 title={
-                                  priceOption === 1
+                                  product?.priceShowHide === 1
                                     ? "Unavailable for direct purchase"
                                     : "Add to cart"
                                 }
@@ -391,8 +418,6 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                 ) : (
                   <Slider {...settings}>
                     {displayProducts.map((product, index) => {
-                      const priceOption = product?.priceShowHide;
-                      const basePrice = parsePrice(product.price) || 0;
                       return (
                         <div key={index} className="px-2 relative">
                           {product?.sale === 1 && (
@@ -433,23 +458,23 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                                 ৳{" "}
                                 {product?.priceShowHide
                                   ? ""
-                                  : formatBDT(basePrice)}
+                                  : formatBDT(parsePrice(product.price) || 0)}
                               </p>
                               {product?.isStock === 1 && (
                                 <button
                                   onClick={() =>
-                                    priceOption !== 1 &&
+                                    product?.priceShowHide !== 1 &&
                                     handleAddToCart(product)
                                   }
                                   className={`p-[6px] rounded text-white transition-colors duration-200      ${
-                                    priceOption === 1
+                                    product?.priceShowHide === 1
                                       ? "bg-gray-400 cursor-not-allowed"
                                       : "bg-[#e62245] hover:bg-[#d41d3f] cursor-pointer"
                                   }`}
-                                  disabled={priceOption === 1}
-                                  aria-disabled={priceOption === 1}
+                                  disabled={product?.priceShowHide === 1}
+                                  aria-disabled={product?.priceShowHide === 1}
                                   title={
-                                    priceOption === 1
+                                    product?.priceShowHide === 1
                                       ? "Unavailable for direct purchase"
                                       : "Add to cart"
                                   }
