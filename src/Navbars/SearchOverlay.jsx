@@ -39,9 +39,9 @@ const SearchOverlay = ({ isOpen, onClose }) => {
     "/api/recommended-products"
   );
 
-  // Fetch fallback latest products in case recommended is empty
+  // Fetch fallback latest products in case recommended is empty or less than 10
   const { data: latestProductsData, isLoading: latestProductsLoading } =
-    useDataQuery("latestProducts", "/api/products?limit=10");
+    useDataQuery("latestProducts", "/api/products?limit=20");
 
   const { data: popularData } = useDataQuery(
     "popularSearches",
@@ -61,23 +61,30 @@ const SearchOverlay = ({ isOpen, onClose }) => {
     setLatestSearches(saved);
   }, []);
 
-  // Apply logic to show recommended or latest products
+  // Always show 10 recommended; fill with latest if needed
   useEffect(() => {
+    let recommended = [];
     if (Array.isArray(recommendedData) && recommendedData.length > 0) {
-      setRecommendedProducts(recommendedData.slice(0, 10));
+      recommended = recommendedData.slice(0, 10);
     } else if (recommendedData?.products?.length > 0) {
-      setRecommendedProducts(recommendedData.products.slice(0, 10));
-    } else if (
-      (Array.isArray(recommendedData) && recommendedData.length === 0) ||
-      recommendedData?.products?.length === 0
-    ) {
-      // Fallback to latest products if recommended is empty
-      if (Array.isArray(latestProductsData?.products)) {
-        setRecommendedProducts(latestProductsData.products.slice(0, 10));
-      } else if (Array.isArray(latestProductsData)) {
-        setRecommendedProducts(latestProductsData.slice(0, 10));
-      }
+      recommended = recommendedData.products.slice(0, 10);
     }
+
+    if (recommended.length < 10) {
+      let latest = [];
+      if (Array.isArray(latestProductsData?.products)) {
+        latest = latestProductsData.products;
+      } else if (Array.isArray(latestProductsData)) {
+        latest = latestProductsData;
+      }
+      // Exclude already included recommended products by id
+      const excludeIds = new Set(recommended.map((p) => p.id));
+      const toAdd = latest
+        .filter((p) => !excludeIds.has(p.id))
+        .slice(0, 10 - recommended.length);
+      recommended = [...recommended, ...toAdd];
+    }
+    setRecommendedProducts(recommended.slice(0, 10));
   }, [recommendedData, latestProductsData]);
 
   useEffect(() => {
