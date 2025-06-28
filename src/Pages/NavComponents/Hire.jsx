@@ -161,15 +161,15 @@ const Hire = () => {
         )}
       </div>
       <div className="space-y-6 text-gray-700 border-t pt-4 border-gray-200">
-        <h2 className="text-[14px] font-bold">{hireContent?.title}</h2>
+        <h2 className="text-sm font-bold">{hireContent?.title}</h2>
         <div
-          className="text-[14px] font-normal"
+          className="text-sm font-normal"
           dangerouslySetInnerHTML={{ __html: hireContent?.description }}
         ></div>
       </div>
       {hireContent?.show_info_box && (
         <div
-          className="bg-[#ebedf1] mt-12 text-[14px] font-normal p-8 text-center rounded-lg"
+          className="bg-[#ebedf1] mt-12 text-sm font-normal p-8 text-center rounded-lg"
           dangerouslySetInnerHTML={{ __html: hireContent?.infoBox }}
         ></div>
       )}

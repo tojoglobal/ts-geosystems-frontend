@@ -236,7 +236,7 @@ const SearchResultsView = ({
                     </button>
                   )}
                 </div>
-                <ul className="space-y-1 text-[14px]">
+                <ul className="space-y-1 text-sm">
                   {filters.brands.map((brand, i) => (
                     <li
                       key={i}
@@ -269,7 +269,7 @@ const SearchResultsView = ({
                     </button>
                   )}
                 </div>
-                <ul className="space-y-1 text-[14px]">
+                <ul className="space-y-1 text-sm">
                   {filters.categories.map((category, i) => (
                     <li
                       key={i}
@@ -302,7 +302,7 @@ const SearchResultsView = ({
                     </button>
                   )}
                 </div>
-                <ul className="text-[14px]">
+                <ul className="text-sm">
                   {filters.conditions.map((condition, i) => (
                     <li
                       key={i}
