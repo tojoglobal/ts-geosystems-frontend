@@ -34,6 +34,7 @@ export default function BlogTagManage() {
           background: "#1e293b",
           color: "#f8fafc",
           confirmButtonColor: "#e11d48",
+          timer: 4000,
         });
       } else {
         await axiosPublicUrl.post("/api/tags", data);
@@ -45,6 +46,7 @@ export default function BlogTagManage() {
           background: "#1e293b",
           color: "#f8fafc",
           confirmButtonColor: "#e11d48",
+          timer: 4000,
         });
       }
       refetch();
@@ -57,6 +59,7 @@ export default function BlogTagManage() {
         background: "#1e293b",
         color: "#f8fafc",
         confirmButtonColor: "#e11d48",
+        timer: 4000,
       });
     }
   };
@@ -87,6 +90,7 @@ export default function BlogTagManage() {
           background: "#1e293b",
           color: "#f8fafc",
           confirmButtonColor: "#e11d48",
+          timer: 4000,
         });
       }
     } catch (err) {
@@ -98,6 +102,7 @@ export default function BlogTagManage() {
         background: "#1e293b",
         color: "#f8fafc",
         confirmButtonColor: "#e11d48",
+        timer: 4000,
       });
     }
   };

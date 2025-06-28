@@ -58,6 +58,7 @@ const Chat = () => {
         background: "#1e293b",
         color: "#f8fafc",
         confirmButtonColor: "#e11d48",
+        timer: 4000,
       });
       queryClient.invalidateQueries(["messages"]);
       setSelectedMessage(null);
@@ -70,6 +71,7 @@ const Chat = () => {
         background: "#1e293b",
         color: "#f8fafc",
         confirmButtonColor: "#e11d48",
+        timer: 4000,
       });
     },
   });
@@ -88,6 +90,7 @@ const Chat = () => {
         background: "#1e293b",
         color: "#f8fafc",
         confirmButtonColor: "#e11d48",
+        timer: 4000,
       });
       queryClient.invalidateQueries(["messages"]);
     },
@@ -99,6 +102,7 @@ const Chat = () => {
         background: "#1e293b",
         color: "#f8fafc",
         confirmButtonColor: "#e11d48",
+        timer: 4000,
       });
     },
   });

@@ -34,6 +34,7 @@ export default function ShippingCostManager() {
           background: "#1e293b",
           color: "#f8fafc",
           confirmButtonColor: "#e11d48",
+          timer: 4000,
         });
       } else {
         await axiosPublicUrl.post("/api/shipping-costs", data);
@@ -45,6 +46,7 @@ export default function ShippingCostManager() {
           background: "#1e293b",
           color: "#f8fafc",
           confirmButtonColor: "#e11d48",
+          timer: 4000,
         });
       }
       refetch();
@@ -57,6 +59,7 @@ export default function ShippingCostManager() {
         background: "#1e293b",
         color: "#f8fafc",
         confirmButtonColor: "#e11d48",
+        timer: 4000,
       });
     }
   };
@@ -96,6 +99,7 @@ export default function ShippingCostManager() {
             color: "#f8fafc",
             confirmButtonColor: "#e11d48",
             customClass: { popup: "rounded-lg" },
+            timer: 4000,
           });
         } catch (err) {
           Swal.fire({
@@ -107,6 +111,7 @@ export default function ShippingCostManager() {
             color: "#f8fafc",
             confirmButtonColor: "#e11d48",
             customClass: { popup: "rounded-lg" },
+            timer: 4000,
           });
         }
       }

@@ -34,6 +34,7 @@ const AdminChangePassword = () => {
         icon: "warning",
         title: "Missing fields",
         text: "Fill all password fields.",
+        timer: 4000,
       });
       return;
     }
@@ -42,6 +43,7 @@ const AdminChangePassword = () => {
         icon: "error",
         title: "Password mismatch",
         text: "New passwords do not match.",
+        timer: 4000,
       });
       return;
     }
@@ -58,6 +60,7 @@ const AdminChangePassword = () => {
         icon: "warning",
         title: "Same as old",
         text: "New password cannot be the same as old password.",
+        timer: 4000,
       });
       return;
     }
@@ -75,6 +78,7 @@ const AdminChangePassword = () => {
           icon: "success",
           title: "Password changed!",
           text: "Your password was updated successfully.",
+          timer: 4000,
         });
       }
     } catch (err) {
@@ -83,6 +87,7 @@ const AdminChangePassword = () => {
         icon: "error",
         title: "Failed!",
         text: err.response?.data?.error || "Could not update password.",
+        timer: 4000,
       });
     }
   };

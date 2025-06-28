@@ -99,6 +99,7 @@ const AdminUpdateServicePage = () => {
           background: "#1e293b",
           color: "#f8fafc",
           confirmButtonColor: "#e11d48",
+          timer: 4000,
         });
         queryClient.invalidateQueries(["serviceContent"]);
         setGridImage(null);
@@ -114,6 +115,7 @@ const AdminUpdateServicePage = () => {
         background: "#1e293b",
         color: "#f8fafc",
         confirmButtonColor: "#e11d48",
+        timer: 4000,
       });
     } finally {
       setIsUploading(false);

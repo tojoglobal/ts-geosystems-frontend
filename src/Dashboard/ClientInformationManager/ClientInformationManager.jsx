@@ -269,6 +269,7 @@ export default function ClientInformationManager() {
       background: "#1e293b",
       color: "#f8fafc",
       confirmButtonColor: "#e11d48",
+      timer: 4000,
     });
 
   const handleCreateOrUpdate = async (data) => {
@@ -323,12 +324,14 @@ export default function ClientInformationManager() {
             icon: "success",
             title: "Deleted!",
             text: "Client has been deleted.",
+            timer: 4000,
           });
         } catch (err) {
           showSwal({
             icon: "error",
             title: "Error",
             text: err?.response?.data?.message || "Error deleting client.",
+            timer: 4000,
           });
         }
       }

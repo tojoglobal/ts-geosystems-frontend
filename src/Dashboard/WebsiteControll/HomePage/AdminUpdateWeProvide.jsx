@@ -49,13 +49,19 @@ const AdminUpdateWeProvide = () => {
         },
       });
       queryClient.invalidateQueries(["weProvide"]);
-      Swal.fire("Success", "We Provide section updated!", "success");
+      Swal.fire({
+        title: "Success",
+        icon: "Success",
+        text: "We Provide section updated!",
+        timer: 4000,
+      });
     } catch (error) {
-      Swal.fire(
-        "Error",
-        error.response?.data?.error || "Failed to update",
-        "error"
-      );
+      Swal.fire({
+        title: "Error",
+        icon: "error",
+        text: error.response?.data?.error || "Failed to update",
+        timer: 4000,
+      });
     }
   };
 
@@ -75,10 +81,7 @@ const AdminUpdateWeProvide = () => {
   }, [data, reset]);
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="space-y-6"
-    >
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       <h2 className="text-2xl font-bold mb-4 text-teal-500">
         Update {data?.section_title || ""}
       </h2>

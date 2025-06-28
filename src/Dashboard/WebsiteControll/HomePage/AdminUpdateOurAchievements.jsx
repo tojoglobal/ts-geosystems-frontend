@@ -31,13 +31,19 @@ const AdminUpdateOurAchievements = () => {
       }),
     onSuccess: () => {
       queryClient.invalidateQueries(["ourAchievements"]);
-      Swal.fire("Success", "Achievements updated successfully.", "success");
+      Swal.fire({
+        icon: "Success",
+        title: "Success!",
+        text: "Achievements updated successfully.",
+        timer: 4000,
+      });
     },
     onError: () => {
       Swal.fire({
         icon: "error",
         title: "Error!",
         text: "Failed to update achievements. Please try again.",
+        timer: 4000,
       });
     },
   });

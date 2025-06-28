@@ -87,7 +87,7 @@ const Hire = () => {
           title: "Success",
           text: response.data?.message,
           icon: "success",
-          timer: 1500,
+          timer: 4000,
           showConfirmButton: false,
         });
 
@@ -112,7 +112,7 @@ const Hire = () => {
         title: "Error",
         text: error?.response?.data?.message || "An unknown error occurred.",
         icon: "error",
-        timer: 1500,
+        timer: 4000,
         showConfirmButton: false,
       });
     }

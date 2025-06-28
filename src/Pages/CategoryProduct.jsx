@@ -19,6 +19,7 @@ import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 import CompareCheckbox from "./NavComponents/CompareCheckbox";
 import { useVatEnabled } from "../Hooks/useVatEnabled";
 import { formatBDT } from "../utils/formatBDT";
+import AddToCartButton from "../Components/AddToCartButton";
 
 const sortOptions = [
   { label: "NEWEST ITEMS", value: "newest" },
@@ -114,6 +115,7 @@ const CategoryProduct = () => {
         icon: "error",
         confirmButtonColor: "#e62245",
         confirmButtonText: "OK",
+        timer: 4000,
       });
     } else {
       const sortedIds = [...compareItems].sort((a, b) => a - b);
@@ -417,40 +419,26 @@ const CategoryProduct = () => {
                       <div className="flex gap-4 mt-2 flex-row">
                         {product?.isStock === 1 && (
                           <div>
-                            {isSimpleProduct ? (
-                              <>
-                                {Number(product?.priceShowHide) === 1 ? (
-                                  <Link
-                                    onClick={() => trackProductView(product.id)}
-                                    to={`/products/${product.id}/${slugify(
-                                      product.product_name || ""
-                                    )}`}
-                                  >
-                                    <button className="w-full bg-[#e62245] cursor-pointer text-[14px] sm:text-[11px] md:text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors">
-                                      GET QUOTATION
-                                    </button>
-                                  </Link>
-                                ) : (
-                                  <button
-                                    onClick={() => handleAddToCart(product)}
-                                    className="w-full bg-[#e62245] cursor-pointer text-[14px] sm:text-[11px] md:text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
-                                  >
-                                    ADD TO CART
+                            <>
+                              {Number(product?.priceShowHide) === 1 ? (
+                                <Link
+                                  onClick={() => trackProductView(product.id)}
+                                  to={`/products/${product.id}/${slugify(
+                                    product.product_name || ""
+                                  )}`}
+                                >
+                                  <button className="w-full bg-[#e62245] cursor-pointer text-[14px] sm:text-[11px] md:text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors">
+                                    GET QUOTATION
                                   </button>
-                                )}
-                              </>
-                            ) : (
-                              <Link
-                                onClick={() => trackProductView(product.id)}
-                                to={`/products/${product.id}/${slugify(
-                                  product.product_name || ""
-                                )}`}
-                              >
-                                <button className="w-full bg-[#e62245] cursor-pointer text-[14px] sm:text-[11px] md:text-[14px] text-white px-3 md:px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors">
-                                  CHOOSE OPTION
-                                </button>
-                              </Link>
-                            )}
+                                </Link>
+                              ) : (
+                                <AddToCartButton
+                                  product={product}
+                                  quantity={1}
+                                  selectedOptions={[]}
+                                />
+                              )}
+                            </>
                           </div>
                         )}
                         <CompareCheckbox
@@ -511,41 +499,27 @@ const CategoryProduct = () => {
                       <div className="flex flex-col gap-2 mt-2">
                         {product?.isStock === 1 && (
                           <div>
-                            {isSimpleProduct ? (
-                              <>
-                                {Number(product?.priceShowHide) === 1 ? (
-                                  // Case 2: GET QUOTATION
-                                  <Link
-                                    onClick={() => trackProductView(product.id)}
-                                    to={`/products/${product.id}/${slugify(
-                                      product.product_name || ""
-                                    )}`}
-                                  >
-                                    <button className="w-full bg-[#e62245] cursor-pointer text-[14px] sm:text-[11px] md:text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors">
-                                      GET QUOTATION
-                                    </button>
-                                  </Link>
-                                ) : (
-                                  <button
-                                    onClick={() => handleAddToCart(product)}
-                                    className="w-full bg-[#e62245] cursor-pointer text-[14px] sm:text-[11px] md:text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
-                                  >
-                                    ADD TO CART
+                            <>
+                              {Number(product?.priceShowHide) === 1 ? (
+                                // Case 2: GET QUOTATION
+                                <Link
+                                  onClick={() => trackProductView(product.id)}
+                                  to={`/products/${product.id}/${slugify(
+                                    product.product_name || ""
+                                  )}`}
+                                >
+                                  <button className="w-full bg-[#e62245] cursor-pointer text-[14px] sm:text-[11px] md:text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors">
+                                    GET QUOTATION
                                   </button>
-                                )}
-                              </>
-                            ) : (
-                              <Link
-                                onClick={() => trackProductView(product.id)}
-                                to={`/products/${product.id}/${slugify(
-                                  product.product_name || ""
-                                )}`}
-                              >
-                                <button className="w-full bg-[#e62245] cursor-pointer text-[14px] sm:text-[11px] md:text-[14px] text-white px-3 md:px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors">
-                                  CHOOSE OPTION
-                                </button>
-                              </Link>
-                            )}
+                                </Link>
+                              ) : (
+                                <AddToCartButton
+                                  product={product}
+                                  quantity={1}
+                                  selectedOptions={[]}
+                                />
+                              )}
+                            </>
                           </div>
                         )}
                         <CompareCheckbox

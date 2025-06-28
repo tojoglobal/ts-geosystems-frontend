@@ -86,7 +86,7 @@ const SupportRequestForm = () => {
           title: "Success",
           text: response.data?.message,
           icon: "success",
-          timer: 1500,
+          timer: 3000,
           showConfirmButton: false,
         });
 
@@ -117,7 +117,7 @@ const SupportRequestForm = () => {
           error.message ||
           "An unknown error occurred.",
         icon: "error",
-        timer: 1500,
+        timer: 3000,
         showConfirmButton: false,
       });
     }

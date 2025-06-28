@@ -23,7 +23,6 @@ const OrderTable = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(13);
 
-  
   const {
     data: orderData = {},
     isLoading,
@@ -49,7 +48,12 @@ const OrderTable = () => {
       if (res.status === 200) {
         refetch();
         setEditStatusId(null);
-        Swal.fire("Success", "Order status updated!", "success");
+        Swal.fire({
+          title: "Success",
+          icon: "Success",
+          text: "Order status updated!",
+          timer: 4000,
+        });
       } else {
         throw new Error("Failed to update status");
       }
@@ -70,12 +74,22 @@ const OrderTable = () => {
       if (res.status === 200) {
         refetch();
         setEditStatusId(null);
-        Swal.fire("Success", "Payment status updated!", "success");
+        Swal.fire({
+          title: "Success",
+          icon: "Success",
+          text: "Payment status updated!",
+          timer: 4000,
+        });
       } else {
         throw new Error("Failed to update payment status");
       }
     } catch (error) {
-      Swal.fire("Error", error.message, "error");
+      Swal.fire({
+        title: "Error",
+        icon: "error",
+        text: error.message || "Something went wrong.",
+        timer: 4000,
+      });
     }
   };
 
@@ -104,12 +118,18 @@ const OrderTable = () => {
               background: "#1e293b",
               color: "#f8fafc",
               confirmButtonColor: "#e11d48",
+              timer: 4000,
             });
           } else {
             throw new Error("Failed to delete order");
           }
         } catch (error) {
-          Swal.fire("Error", error.message, "error");
+          Swal.fire({
+            title: "Error",
+            icon: "error",
+            text: error.message || "Something went wrong.",
+            timer: 4000,
+          });
         }
       }
     });

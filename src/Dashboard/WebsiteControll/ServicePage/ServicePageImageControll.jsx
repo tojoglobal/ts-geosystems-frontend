@@ -67,10 +67,20 @@ const ServcePageImageControll = () => {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
-      Swal.fire("Success", "service images updated successfully!", "success");
+      Swal.fire({
+        title: "Success",
+        icon: "Success",
+        text: "Service images updated successfully!",
+        timer: 4000,
+      });
     } catch (error) {
       console.error("Failed to update service images:", error);
-      Swal.fire("Error", "Failed to update service images", "error");
+      Swal.fire({
+        title: "Error",
+        icon: "error",
+        text: "Failed to update service images",
+        timer: 4000,
+      });
     } finally {
       setIsUploading(false);
     }

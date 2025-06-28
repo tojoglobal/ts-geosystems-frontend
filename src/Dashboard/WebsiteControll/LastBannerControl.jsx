@@ -22,11 +22,12 @@ const LastBannerControl = () => {
 
     const availableSlots = 2 - images.length;
     if (availableSlots <= 0) {
-      Swal.fire(
-        "Error",
-        "Maximum 2 images already exist. Delete some first.",
-        "error"
-      );
+      Swal.fire({
+        icon: "Error",
+        title: "Error!",
+        text: "Maximum 2 images already exist. Delete some first.",
+        timer: 4000,
+      });
       return;
     }
 
@@ -40,10 +41,20 @@ const LastBannerControl = () => {
         headers: { "Content-Type": "multipart/form-data" },
       });
       await refetch();
-      Swal.fire("Success", "Images uploaded successfully", "success");
+      Swal.fire({
+        icon: "Success",
+        title: "Success!",
+        text: "Images uploaded successfully",
+        timer: 4000,
+      });
     } catch (error) {
       console.error("Upload failed:", error);
-      Swal.fire("Error", "Failed to upload images", "error");
+      Swal.fire({
+        icon: "Error",
+        title: "Error!",
+        text: "Failed to upload images",
+        timer: 4000,
+      });
     }
   };
 
@@ -72,13 +83,15 @@ const LastBannerControl = () => {
           background: "#1e293b",
           color: "#f8fafc",
           confirmButtonColor: "#22c55e", // green
+          timer: 4000,
         });
       } catch (error) {
-        Swal.fire(
-          "Error",
-          `${error.message} || Failed to delete image`,
-          "error"
-        );
+        Swal.fire({
+          icon: "Error",
+          title: "Error!",
+          text: `${error.message} || Failed to delete image`,
+          timer: 4000,
+        });
       }
     }
   };

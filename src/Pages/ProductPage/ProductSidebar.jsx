@@ -50,7 +50,7 @@ const ProductSidebar = () => {
     ["popularBrandPhoto"],
     "/api/brand/popular-photo"
   );
-
+  
   useEffect(() => {
     let catSlug =
       (location.pathname.startsWith("/products/") &&
@@ -250,7 +250,7 @@ const ProductSidebar = () => {
                         className={`font-normal capitalize block px-5 py-3 text-[13px] hover:bg-gray-50 hover:text-[#e62245] border-t border-[#ebebeb] ${
                           activeSubcategorySlug === child.slug &&
                           activeCategorySlug === item.categorySlug
-                            ? "font-bold"
+                            ? "font-bold text-[#e62245]"
                             : ""
                         }`}
                         onMouseEnter={() =>
@@ -284,9 +284,9 @@ const ProductSidebar = () => {
       )}
       <div>
         {Array.isArray(popularImage?.photo) &&
-          popularImage?.photo.slice(0, 1).map((im, i) => (
+          popularImage?.photo?.map((im, i) => (
             <div
-              className="mt-3 h-[108px] overflow-hidden border rounded-[4px]"
+              className="mt-3 h-[110px] overflow-hidden border rounded-[4px]"
               key={i}
             >
               <img

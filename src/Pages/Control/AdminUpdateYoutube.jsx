@@ -33,6 +33,7 @@ const AdminUpdateYoutube = () => {
         icon: "error",
         title: "Error",
         text: "Update failed!",
+        timer: 4000,
       }),
   });
 

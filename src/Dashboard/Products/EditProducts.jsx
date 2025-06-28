@@ -235,35 +235,42 @@ const UpdateProductForm = () => {
 
   // Set subcategory default value
   useEffect(() => {
-    if (productData?.sub_category && SubCategories.length > 0) {
-      try {
-        // Parse subcategory
-        let subCategory = productData.sub_category;
-        if (typeof subCategory === "string" && subCategory !== "") {
-          subCategory = JSON.parse(subCategory);
-        }
-        // Defensive: check subCategory is object and has id
-        if (subCategory && typeof subCategory === "object" && subCategory.id) {
-          const foundSub = SubCategories.find((sc) => sc.id === subCategory.id);
-          if (foundSub) {
-            setValue(
-              "subCategory",
-              JSON.stringify({ id: foundSub.id, slug: foundSub.slug })
-            );
-          } else {
-            setValue("subCategory", "");
-          }
-        } else {
-          setValue("subCategory", "");
-        }
-      } catch (error) {
-        console.log(error);
+    if (!productData?.sub_category || SubCategories.length === 0) {
+      setValue("subCategory", "");
+      return;
+    }
+
+    try {
+      // Handle "null" case
+      if (productData.sub_category === "null") {
+        setValue("subCategory", "");
+        return;
+      }
+
+      // Parse subcategory
+      const subCategory =
+        typeof productData.sub_category === "string"
+          ? JSON.parse(productData.sub_category)
+          : productData.sub_category;
+
+      // Find matching subcategory
+      const foundSub = SubCategories.find((sc) => sc.id === subCategory?.id);
+
+      if (foundSub) {
+        setValue(
+          "subCategory",
+          JSON.stringify({ id: foundSub.id, slug: foundSub.slug }),
+          { shouldDirty: false } // Important to prevent showing as dirty
+        );
+      } else {
         setValue("subCategory", "");
       }
-    } else {
+    } catch (error) {
+      console.error("Error parsing subcategory:", error);
       setValue("subCategory", "");
     }
   }, [productData, SubCategories, setValue]);
+
   useEffect(() => {
     if (productData) {
       const parsedMetaKeywords = productData.meta_keywords
@@ -275,13 +282,14 @@ const UpdateProductForm = () => {
 
       // Figure out subCategory default value
       let subCatValue = "";
-      if (productData.sub_category) {
+      if (productData.sub_category && productData.sub_category !== "null") {
         try {
-          let subCatObj =
+          const subCatObj =
             typeof productData.sub_category === "string"
               ? JSON.parse(productData.sub_category)
               : productData.sub_category;
-          if (subCatObj && subCatObj.id) {
+
+          if (subCatObj?.id) {
             subCatValue = JSON.stringify({
               id: subCatObj.id,
               slug: subCatObj.slug,
@@ -380,6 +388,7 @@ const UpdateProductForm = () => {
               background: "#1e293b",
               color: "#f8fafc",
               confirmButtonColor: "#e11d48",
+              timer: 4000,
             });
             setImages((prev) => prev.filter((_, i) => i !== index));
           } else {
@@ -394,14 +403,16 @@ const UpdateProductForm = () => {
             background: "#1e293b",
             color: "#f8fafc",
             confirmButtonColor: "#e11d48",
+            timer: 4000,
           });
         }
       } catch (error) {
-        Swal.fire(
-          "Error!",
-          error.message || "Failed to delete the image.",
-          "error"
-        );
+        Swal.fire({
+          title: "Error",
+          icon: "error",
+          text: error.message || "Failed to delete the image.",
+          timer: 4000,
+        });
       }
     }
   };
@@ -473,6 +484,7 @@ const UpdateProductForm = () => {
           background: "#1e293b",
           color: "#f8fafc",
           confirmButtonColor: "#e11d48",
+          timer: 4000,
         });
         navigate("/dashboard/product");
       }
@@ -481,6 +493,7 @@ const UpdateProductForm = () => {
         icon: "error",
         text: error.message || "Failed to update product. Please try again.",
         confirmButtonColor: "#ef4444",
+        timer: 4000,
       });
     }
   };
@@ -581,22 +594,29 @@ const UpdateProductForm = () => {
             )}
 
             {/* subCategory */}
-            <select
-              {...register("subCategory")}
-              className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
-            >
-              <option value="">Select SubCategory</option>
-              {SubCategories.filter(
-                (sub) => sub.main_category_id === watchCategory?.id
-              ).map((sub) => (
-                <option
-                  key={sub.id}
-                  value={JSON.stringify({ id: sub.id, slug: sub.slug })}
+            <Controller
+              name="subCategory"
+              control={control}
+              render={({ field }) => (
+                <select
+                  {...field}
+                  className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
                 >
-                  {sub.name}
-                </option>
-              ))}
-            </select>
+                  <option value="">Select SubCategory</option>
+                  {watchCategory?.id &&
+                    SubCategories.filter(
+                      (sub) => sub.main_category_id === watchCategory.id
+                    ).map((sub) => (
+                      <option
+                        key={sub.id}
+                        value={JSON.stringify({ id: sub.id, slug: sub.slug })}
+                      >
+                        {sub.name}
+                      </option>
+                    ))}
+                </select>
+              )}
+            />
 
             {/* SKU */}
             <input

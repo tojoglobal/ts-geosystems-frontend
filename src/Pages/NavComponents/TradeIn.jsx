@@ -71,7 +71,12 @@ const TradeIn = () => {
       });
 
       if (response.status == 201) {
-        Swal.fire("Success", `${response.data?.message}`, "success");
+        Swal.fire({
+          title: "Success",
+          text: `${response.data?.message}`,
+          icon: "success",
+          timer: 4000,
+        });
         setFormData({
           name: "",
           company: "",
@@ -91,7 +96,12 @@ const TradeIn = () => {
         console.error("Failed to submit the form");
       }
     } catch (error) {
-      Swal.fire("Error", error.message, "error");
+      Swal.fire({
+        title: "Error",
+        icon: "Error",
+        text: error.message,
+        timer: 4000,
+      });
       console.error("Error submitting form:", error);
     }
   };

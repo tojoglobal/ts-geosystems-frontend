@@ -37,6 +37,7 @@ const AdminUpdateSupport = () => {
         background: "#1e293b",
         color: "#f8fafc",
         confirmButtonColor: "#e11d48",
+        timer: 4000,
       });
     },
     onError: (error) => {
@@ -47,6 +48,7 @@ const AdminUpdateSupport = () => {
         background: "#1e293b",
         color: "#f8fafc",
         confirmButtonColor: "#e11d48",
+        timer: 4000,
       });
     },
   });

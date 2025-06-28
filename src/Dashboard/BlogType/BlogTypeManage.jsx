@@ -32,6 +32,7 @@ export default function BlogTypeManage() {
       background: "#1e293b",
       color: "#f8fafc",
       confirmButtonColor: "#e11d48",
+      timer: 4000,
     });
 
   const handleCreateOrUpdate = async (data) => {

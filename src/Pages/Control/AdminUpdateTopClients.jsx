@@ -30,9 +30,20 @@ const AdminUpdateTopClients = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["top-clients"] });
-      Swal.fire("Success", "Images uploaded successfully", "success");
+      Swal.fire({
+        title: "Success",
+        icon: "success",
+        text: "Images uploaded successfully",
+        timer: 4000,
+      });
     },
-    onError: () => Swal.fire("Error", "Failed to upload images", "error"),
+    onError: () =>
+      Swal.fire({
+        title: "Error",
+        icon: "Error",
+        text: "Failed to upload images",
+        timer: 4000,
+      }),
   });
 
   // Delete image mutation
@@ -49,14 +60,16 @@ const AdminUpdateTopClients = () => {
         background: "#1e293b",
         color: "#f8fafc",
         confirmButtonColor: "#22c55e",
+        timer: 4000,
       });
     },
     onError: (error) => {
-      Swal.fire(
-        "Error",
-        `${error?.message || "Failed to delete image"}`,
-        "error"
-      );
+      Swal.fire({
+        title: "Error",
+        icon: "Error",
+        text: `${error?.message || "Failed to delete image"}`,
+        timer: 4000,
+      });
     },
   });
 

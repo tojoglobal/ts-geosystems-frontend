@@ -120,6 +120,7 @@ const Service = () => {
         icon: "error",
         title: "Form incomplete",
         text: "Please fill in all required fields and select at least one request type.",
+        timer: 4000,
       });
       return;
     }
@@ -146,7 +147,12 @@ const Service = () => {
         }
       );
       if (res.status === 201) {
-        await Swal.fire("Success", res.data?.message, "success");
+        Swal.fire({
+          title: "Success",
+          icon: "success",
+          text: res.data?.message,
+          timer: 4000,
+        });
         setFormData({
           name: "",
           company: "",
@@ -169,6 +175,7 @@ const Service = () => {
         icon: "error",
         title: error.message || "Submission failed",
         text: "Could not submit your inquiry. Please try again.",
+        timer: 4000,
       });
     }
   };

@@ -50,7 +50,12 @@ const UserLogin = () => {
 
       const data = await response.json();
       if (response.ok && data.success) {
-        Swal.fire("Success", "Login successful!");
+        Swal.fire({
+        title: "Success",
+        text: "Login successful!",
+        icon: "success",
+        timer: 4000,
+      });
         localStorage.setItem("user", JSON.stringify({ username }));
         navigate("/dashboard");
       } else {
@@ -58,6 +63,7 @@ const UserLogin = () => {
           icon: "error",
           title: "Login Failed",
           text: data.message || "Invalid username or password",
+          timer: 3000,
         });
       }
     } catch (error) {
@@ -66,6 +72,7 @@ const UserLogin = () => {
         icon: "error",
         title: "Oops...",
         text: "An error occurred. Please try again.",
+        timer: 4000,
       });
     }
   };
@@ -167,6 +174,7 @@ const AdminLogin = () => {
         icon: "error",
         title: "Login Failed",
         text: "Please check your credentials",
+        timer: 4000,
       });
     }
   };

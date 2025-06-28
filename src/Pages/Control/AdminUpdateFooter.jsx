@@ -80,6 +80,7 @@ const AdminUpdateFooter = () => {
           background: "#1e293b",
           color: "#f8fafc",
           confirmButtonColor: "#e11d48",
+          timer: 4000,
         });
       }
       setLoading(false);
@@ -214,6 +215,7 @@ const AdminUpdateFooter = () => {
           background: "#1e293b",
           color: "#f8fafc",
           confirmButtonColor: "#e11d48",
+          timer: 4000,
         });
 
         // Update ISO images state
@@ -262,6 +264,7 @@ const AdminUpdateFooter = () => {
         background: "#1e293b",
         color: "#f8fafc",
         confirmButtonColor: "#e11d48",
+        timer: 4000,
       });
     } finally {
       setSaving(false);

@@ -73,10 +73,16 @@ const ProductTable = () => {
           icon: "success",
           background: "#1e293b",
           color: "#f8fafc",
+          timer: 4000,
         });
         refetch();
       } catch (err) {
-        Swal.fire("Error!", err.message || "Something went wrong.", "error");
+        Swal.fire({
+          title: "Error",
+          icon: "error",
+          text: err.message || "Something went wrong.",
+          timer: 4000,
+        });
       }
     }
   };

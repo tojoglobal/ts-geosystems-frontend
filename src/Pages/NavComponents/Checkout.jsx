@@ -55,9 +55,11 @@ const Checkout = () => {
   const shippingCost =
     shipping && shipping.amount ? parseFloat(shipping.amount) : 100;
 
+  console.log(mergedCart);
+
   // Do NOT do custom VAT exclusion here, let backend decide!
   const subtotal = mergedCart.reduce(
-    (total, item) => total + item.price * item.quantity,
+    (total, item) => total + item.priceIncVat * item.quantity,
     0
   );
 
@@ -65,7 +67,6 @@ const Checkout = () => {
   const getVatForItem = (item) => {
     const vatRate = getVatValue(item);
     const basePrice = parseFloat(item.price) || 0;
-    // VAT for this product (all quantities)
     return basePrice * (vatRate / 100) * item.quantity;
   };
   const vat = mergedCart.reduce(
@@ -80,7 +81,8 @@ const Checkout = () => {
       discount = coupon.discount;
     }
   }
-  const total = subtotal + (vatEnabled ? vat : 0) + shippingCost - discount;
+  // const total = subtotal + (vatEnabled ? vat : 0) + shippingCost - discount;
+  const total = subtotal + shippingCost - discount;
 
   // Set email if user is authenticated
   useEffect(() => {
@@ -519,7 +521,7 @@ const Checkout = () => {
                       <span className="px-1">x</span> {item.product_name}
                     </p>
                   </div>
-                  <p>৳{formatBDT(item?.price)}</p>
+                  <p>৳{formatBDT(item?.totalPrice)}</p>
                 </div>
               ))}
             </>

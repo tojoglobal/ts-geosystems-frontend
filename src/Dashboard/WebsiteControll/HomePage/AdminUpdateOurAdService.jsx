@@ -9,12 +9,12 @@ const AdminUpdateOurAdService = () => {
   const axiosPublicUrl = useAxiospublic();
   const queryClient = useQueryClient();
 
-  const { data={} } = useQuery({
+  const { data = {} } = useQuery({
     queryKey: ["ourAdServices"],
     queryFn: async () =>
       (await axiosPublicUrl.get("/api/our-ad-services")).data,
   });
-  
+
   const { control, handleSubmit, reset, register } = useForm({
     defaultValues: { section_title: "", items: [] },
   });
@@ -32,17 +32,19 @@ const AdminUpdateOurAdService = () => {
       }),
     onSuccess: () => {
       queryClient.invalidateQueries(["ourAdServices"]);
-      Swal.fire(
-        "Success",
-        "Our Advantage & Services updated successfully.",
-        "success"
-      );
+      Swal.fire({
+        icon: "Success",
+        title: "Success!",
+        text: "Our Advantage & Services updated successfully.",
+        timer: 4000,
+      });
     },
     onError: () => {
       Swal.fire({
         icon: "error",
         title: "Oops!",
         text: "Something went wrong while updating. Please try again.",
+        timer: 4000,
       });
     },
   });
