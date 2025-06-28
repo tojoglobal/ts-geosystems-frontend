@@ -108,14 +108,13 @@ const Cart = () => {
   };
 
   // Calculate VAT per item and total VAT for the cart
-
   const vat = mergedCart.reduce(
     (total, item) => total + (item.vat || 0) * (item.quantity || 1),
     0
   );
 
   const subTotal = mergedCart.reduce(
-    (total, item) => total + item.price * item.quantity,
+    (total, item) => total + item.priceIncVat * item.quantity,
     0
   );
 
@@ -128,8 +127,9 @@ const Cart = () => {
     }
   }
 
-  const grandTotal =
-    subTotal + (vatEnabled ? vat : 0) + shippingCost - discount;
+  // const grandTotal =
+  //   subTotal + (vatEnabled ? vat : 0) + shippingCost - discount;
+  const grandTotal = subTotal + shippingCost - discount;
 
   const handleShippingChange = (e) => {
     const selectedId = parseInt(e.target.value, 10);
@@ -222,6 +222,8 @@ const Cart = () => {
     });
   };
 
+  console.log(mergedCart);
+
   return (
     <div className="md:p-2">
       <div className="flex items-center gap-2 text-xs mb-4">
@@ -307,13 +309,17 @@ const Cart = () => {
                 <th className="py-2">Item Name</th>
                 <th className="py-2">Price</th>
                 <th className="py-2">Quantity</th>
-                <th className="py-2">vat</th>
+                {/*<th className="py-2">vat</th>*/}
                 <th className="py-2 text-right">Total</th>
               </tr>
             </thead>
             <tbody>
               {mergedCart.map((item) => {
                 const product = products.find((p) => p.id === item.id);
+                const chekProductOption = JSON.parse(product?.product_options);
+                console.log("product_options", chekProductOption);
+                console.log("options", item?.options);
+
                 return (
                   <tr key={item.id} className="border-b">
                     <td className="flex items-center gap-4 py-4">
@@ -330,29 +336,48 @@ const Cart = () => {
                       />
                     </td>
                     <td className="w-2xs">
-                      <p className="font-medium pr-3">{item.brand_name}</p>
+                      {/* Brand Name */}
+                      <p className="font-medium pr-3">
+                        {item?.brand_name ?? "Unknown Brand"}
+                      </p>
+
+                      {/* Product Name with Link */}
                       <Link
-                        to={`/products/${item.id}/${slugify(
-                          item?.product_name || ""
+                        to={`/products/${item?.id}/${slugify(
+                          item?.product_name || "product"
                         )}`}
                       >
                         <p className="font-medium pr-3 text-[#e62245] underline hover:text-[#e62246b0]">
-                          {item?.product_name}
+                          {item?.product_name ?? "Unnamed Product"}
                         </p>
                       </Link>
 
-                      <p>
-                        Additional Accessory:{" "}
-                        {(item?.options || []).map((o) => o.label).join(", ")}
-                      </p>
-                      <p
-                        className="font-medium text-[#e62245] underline hover:text-[#e62246b0] cursor-pointer"
-                        onClick={() => openOptionModal(item, product)}
-                      >
-                        Change
-                      </p>
+                      {/* Check for valid product options */}
+                      {Array.isArray(chekProductOption) &&
+                        chekProductOption.length > 0 && (
+                          <>
+                            <p>
+                              Additional Accessory:{" "}
+                              {Array.isArray(item?.options) &&
+                              item.options.length > 0
+                                ? item.options
+                                    .map((o) => o?.label ?? "Unnamed Option")
+                                    .join(", ")
+                                : "None"}
+                            </p>
+
+                            {/* Change option link */}
+                            <p
+                              className="font-medium text-[#e62245] underline hover:text-[#e62246b0] cursor-pointer"
+                              onClick={() => openOptionModal?.(item, product)}
+                            >
+                              Change
+                            </p>
+                          </>
+                        )}
                     </td>
-                    <td>৳{formatBDT(item?.price)}</td>
+
+                    <td>৳{formatBDT(item?.priceIncVat)}</td>
                     <td>
                       <div className="flex items-center">
                         <button
@@ -370,10 +395,10 @@ const Cart = () => {
                         </button>
                       </div>
                     </td>
-                    <td>{vatEnabled && <td>৳{formatBDT(item?.vat)}</td>}</td>
+                    {/* {vatEnabled && <td>৳{formatBDT(item?.vat)}</td>} */}
                     <td className="text-right">
                       <div className="flex items-center justify-end gap-3">
-                        <p>৳{formatBDT(item.price * item.quantity)}</p>
+                        <p>৳{formatBDT(item.priceIncVat * item.quantity)}</p>
                         <button
                           onClick={() => handleRemove(item)}
                           className="text-red-500 cursor-pointer"

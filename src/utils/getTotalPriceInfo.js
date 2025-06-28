@@ -1,12 +1,14 @@
-export function getTotalPriceInfo(product, selectedOptions, vatEnabled) {
-  // Main product
+export function getTotalPriceInfo(product, selectedOptions = [], vatEnabled) {
+  // Ensure selectedOptions is always an array
+  const options = Array.isArray(selectedOptions) ? selectedOptions : [];
+
   const productBasePrice = parseFloat(product?.price) || 0;
   const productVat = product?.tax ? JSON.parse(product.tax).value : 0;
 
   let totalBasePrice = productBasePrice;
   let totalVatAmount = vatEnabled ? productBasePrice * (productVat / 100) : 0;
 
-  (selectedOptions || []).forEach((opt) => {
+  options.forEach((opt) => {
     const optPrice = parseFloat(opt.price) || 0;
     let optVat = 0;
     if (vatEnabled) {

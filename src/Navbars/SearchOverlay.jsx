@@ -14,14 +14,12 @@ import { Link } from "react-router-dom";
 import { slugify } from "../utils/slugify";
 import { parsePrice } from "../utils/parsePrice";
 import { useTrackProductView } from "../Hooks/useTrackProductView";
-import { useDispatch } from "react-redux";
-import { addToCart } from "../features/AddToCart/AddToCart";
 import useToastSwal from "../Hooks/useToastSwal";
 import { formatBDT } from "../utils/formatBDT";
 import { useAxiospublic } from "../Hooks/useAxiospublic";
+import AddToCartButton from "../Components/AddToCartButton";
 
 const SearchOverlay = ({ isOpen, onClose }) => {
-  const dispatch = useDispatch();
   const axiosPublicUrl = useAxiospublic();
   const { trackProductView } = useTrackProductView();
   const [searchText, setSearchText] = useState("");
@@ -166,23 +164,6 @@ const SearchOverlay = ({ isOpen, onClose }) => {
     ],
   };
 
-  const handleAddToCart = (product) => {
-    const itemToAdd = {
-      id: product.id,
-      product_name: product.product_name,
-      price: parsePrice(product.price),
-      quantity: 1,
-    };
-
-    dispatch(addToCart(itemToAdd));
-    showToast(
-      "success",
-      "Added to Cart!",
-      `<b style="color:#333">${product.product_name}</b> has been added to your cart.`,
-      { timer: 2000 }
-    );
-  };
-
   return (
     <>
       {isOpen && (
@@ -324,8 +305,19 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                 ) : displayProducts.length <= 4 ? (
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                     {displayProducts?.map((product, index) => {
+                      // console.log(product);
                       const priceOption = product?.priceShowHide;
+                      // vat part
+                      let vat = 0;
+                      try {
+                        vat = product?.tax ? JSON.parse(product.tax).value : 0;
+                      } catch {
+                        vat = 0;
+                      }
                       const basePrice = parsePrice(product.price) || 0;
+                      const vatAmount = basePrice * (vat / 100);
+                      const priceIncVat = basePrice + vatAmount;
+
                       return (
                         <Link
                           onClick={async () => {
@@ -357,28 +349,25 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                           </p>
                           <div className="flex justify-between items-center mt-auto">
                             <p className="font-semibold">
-                              {" "}
                               {product?.priceShowHide
                                 ? ""
-                                : formatBDT(basePrice)}
+                                : formatBDT(priceIncVat)}
                             </p>
-                            {product?.isStock === 1 && (
+
+                            {product?.isStock === 1 && priceOption !== 1 && (
+                              <AddToCartButton
+                                product={product}
+                                quantity={1}
+                                selectedOptions={[]}
+                              >
+                                <MdAddShoppingCart size={24} />
+                              </AddToCartButton>
+                            )}
+                            {product?.isStock === 1 && priceOption === 1 && (
                               <button
-                                onClick={() =>
-                                  priceOption !== 1 && handleAddToCart(product)
-                                }
-                                className={`p-[6px] rounded text-white transition-colors duration-200 ${
-                                  priceOption === 1
-                                    ? "bg-gray-400 cursor-not-allowed"
-                                    : "bg-[#e62245] hover:bg-[#d41d3f] cursor-pointer"
-                                }`}
-                                disabled={priceOption === 1}
-                                aria-disabled={priceOption === 1}
-                                title={
-                                  priceOption === 1
-                                    ? "Unavailable for direct purchase"
-                                    : "Add to cart"
-                                }
+                                className="p-[6px] rounded bg-gray-400 cursor-not-allowed text-white"
+                                disabled
+                                title="Unavailable for direct purchase"
                               >
                                 <MdAddShoppingCart size={24} />
                               </button>
@@ -391,8 +380,17 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                 ) : (
                   <Slider {...settings}>
                     {displayProducts.map((product, index) => {
-                      const priceOption = product?.priceShowHide;
+                      // vat part
+                      let vat = 0;
+                      try {
+                        vat = product?.tax ? JSON.parse(product.tax).value : 0;
+                      } catch {
+                        vat = 0;
+                      }
                       const basePrice = parsePrice(product.price) || 0;
+                      const vatAmount = basePrice * (vat / 100);
+                      const priceIncVat = basePrice + vatAmount;
+                      const priceOption = product?.priceShowHide;
                       return (
                         <div key={index} className="px-2 relative">
                           {product?.sale === 1 && (
@@ -428,31 +426,26 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                             <p className="text-sm font-medium mb-1 hover:text-[#e62245] cursor-pointer">
                               {product.product_name || product.name}
                             </p>
-                            <div className="flex justify-between items-center mt-auto pt-4">
-                              <p className="text-sm font-semibold text-gray-800">
-                                ৳{" "}
+                            <div className="flex justify-between items-center mt-auto">
+                              <p className="font-semibold">
                                 {product?.priceShowHide
                                   ? ""
-                                  : formatBDT(basePrice)}
+                                  : formatBDT(priceIncVat)}
                               </p>
-                              {product?.isStock === 1 && (
+                              {product?.isStock === 1 && priceOption !== 1 && (
+                                <AddToCartButton
+                                  product={product}
+                                  quantity={1}
+                                  selectedOptions={[]}
+                                >
+                                  <MdAddShoppingCart size={24} />
+                                </AddToCartButton>
+                              )}
+                              {product?.isStock === 1 && priceOption === 1 && (
                                 <button
-                                  onClick={() =>
-                                    priceOption !== 1 &&
-                                    handleAddToCart(product)
-                                  }
-                                  className={`p-[6px] rounded text-white transition-colors duration-200      ${
-                                    priceOption === 1
-                                      ? "bg-gray-400 cursor-not-allowed"
-                                      : "bg-[#e62245] hover:bg-[#d41d3f] cursor-pointer"
-                                  }`}
-                                  disabled={priceOption === 1}
-                                  aria-disabled={priceOption === 1}
-                                  title={
-                                    priceOption === 1
-                                      ? "Unavailable for direct purchase"
-                                      : "Add to cart"
-                                  }
+                                  className="p-[6px] rounded bg-gray-400 cursor-not-allowed text-white"
+                                  disabled
+                                  title="Unavailable for direct purchase"
                                 >
                                   <MdAddShoppingCart size={24} />
                                 </button>

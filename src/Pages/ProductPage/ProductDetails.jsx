@@ -13,10 +13,8 @@ import {
   MdOutlineKeyboardArrowDown,
   MdOutlineKeyboardArrowUp,
 } from "react-icons/md";
-import { addToCart } from "../../features/AddToCart/AddToCart";
 import useDataQuery from "../../utils/useDataQuery";
 import { setBreadcrumb } from "../../features/breadcrumb/breadcrumbSlice";
-import useToastSwal from "../../Hooks/useToastSwal";
 import { useVatEnabled } from "../../Hooks/useVatEnabled";
 import GetQuotationModal from "./GetQuotationModal";
 import { formatBDT } from "../../utils/formatBDT";
@@ -25,6 +23,7 @@ import { parseSoftwareOptions } from "../../utils/software_options";
 import { getParsedProductOptions } from "../../utils/get_product_option";
 import { getFirstImage } from "../../utils/getFirstImage";
 import { getTotalPriceInfo } from "../../utils/getTotalPriceInfo";
+import AddToCartButton from "../../Components/AddToCartButton";
 
 // Helper function to extract YouTube video ID from url
 function getYouTubeId(url) {
@@ -37,7 +36,6 @@ function getYouTubeId(url) {
 
 const ProductDetails = () => {
   const { id } = useParams();
-  const showToast = useToastSwal();
   const dispatch = useDispatch();
   const [selectedImage, setSelectedImage] = useState("");
   const [activeTab, setActiveTab] = useState("OVERVIEW");
@@ -142,44 +140,6 @@ const ProductDetails = () => {
     quantity > 1 && setQuantity((prev) => prev - 1);
 
   const priceInfo = getTotalPriceInfo(product, selectedOptions, vatEnabled);
-
-  // Add to cart handler
-  const handleAddToCart = () => {
-    const itemToAdd = {
-      id: product.id,
-      product_name: product.product_name,
-      quantity,
-      options: selectedOptions.map((opt) => ({
-        id: opt.value,
-        label: opt.label,
-        price: opt.price,
-        tax: opt.tax,
-      })),
-      price: priceInfo.incVat,
-      priceBase: priceInfo.base,
-      vat: priceInfo.vat,
-      priceIncVat: priceInfo.incVat,
-      image_urls: product.image_urls,
-      brand_name: product.brand_name,
-      product_options: product.product_options,
-    };
-    dispatch(addToCart(itemToAdd));
-
-    showToast(
-      "success",
-      "Added to Cart!",
-      `<b style="color:#333">${product.product_name}</b> has been added to your cart.`,
-      { timer: 2000 }
-    );
-    // Save selection on add to cart as well
-    localStorage.setItem(
-      `productOptions_${id}`,
-      JSON.stringify({
-        selectedOptions,
-        quantity,
-      })
-    );
-  };
 
   if (isLoading) return null;
   if (isError)
@@ -377,12 +337,12 @@ const ProductDetails = () => {
               </div>
             </div>
             {product?.isStock === 1 && priceOption === 0 && (
-              <button
-                onClick={handleAddToCart}
-                className="cursor-pointer overflow-hidden group text-white px-16 font-semibold py-[5px] rounded-[3px] text-[16px] bg-[#e62245] hover:bg-red-800 w-full sm:w-auto"
-              >
-                <span className="relative z-10">ADD TO CART</span>
-              </button>
+              <AddToCartButton
+                product={product}
+                quantity={quantity}
+                selectedOptions={selectedOptions}
+                priceInfo={priceInfo}
+              />
             )}
             {product?.isStock === 1 && priceOption === 1 && (
               <>

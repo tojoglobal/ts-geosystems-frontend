@@ -8,15 +8,11 @@ import { Link } from "react-router-dom";
 import useDataQuery from "../../utils/useDataQuery";
 import { useTrackProductView } from "../../Hooks/useTrackProductView";
 import { parsePrice } from "../../utils/parsePrice";
-import { useDispatch } from "react-redux";
-import Swal from "sweetalert2";
-import { addToCart } from "../../features/AddToCart/AddToCart";
 import { slugify } from "../../utils/slugify";
-import { getProductType } from "../../utils/productOption";
 import { ComponentLoader } from "../../utils/Loader/ComponentLoader";
-import useToastSwal from "../../Hooks/useToastSwal";
 import { useVatEnabled } from "../../Hooks/useVatEnabled";
 import { formatBDT } from "../../utils/formatBDT";
+import AddToCartButton from "../../Components/AddToCartButton";
 
 const tabOptions = [
   { name: "Featured Products", key: "featured" },
@@ -25,13 +21,11 @@ const tabOptions = [
 ];
 
 const ProductHighlights = () => {
-  const dispatch = useDispatch();
   const { trackProductView } = useTrackProductView();
   const [activeTab, setActiveTab] = useState("featured");
   const [items, setItems] = useState([]);
   const swiperRef = useRef(null);
   const [isBeginning, setIsBeginning] = useState(true);
-  const showToast = useToastSwal();
   const [isEnd, setIsEnd] = useState(false);
   const { data: vatEnabled = true, isLoading: vatLoading } = useVatEnabled();
   const {
@@ -52,24 +46,6 @@ const ProductHighlights = () => {
       swiperRef.current.slideTo(0); // Go to the first slide
     }
   }, [activeTab, highlightsData, isLoading, error]);
-
-  const handleAddToCart = (product) => {
-    const itemToAdd = {
-      id: product.id,
-      product_name: product.product_name,
-      price: parsePrice(product.price),
-      quantity: 1,
-    };
-
-    dispatch(addToCart(itemToAdd));
-
-    showToast(
-      "success",
-      "Added to Cart!",
-      `<b style="color:#333">${product.product_name}</b> has been added to your cart.`,
-      { timer: 2000 }
-    );
-  };
 
   const handleSlideChange = (swiper) => {
     setIsBeginning(swiper.isBeginning);
@@ -111,9 +87,9 @@ const ProductHighlights = () => {
                 idx < 2
                   ? "sm:border-b-0 border-b border-gray-200 pb-1 sm:pb-0"
                   : ""
-              } ${idx === 0 && "py-[2px] sm:py-0"} ${idx === 1 && "pt-1 sm:pt-0"} ${
-                idx === 2 && "py-[3px] sm:py-0"
-              }`}
+              } ${idx === 0 && "py-[2px] sm:py-0"} ${
+                idx === 1 && "pt-1 sm:pt-0"
+              } ${idx === 2 && "py-[3px] sm:py-0"}`}
             >
               <h2
                 className={`text-base py-1 uppercase md:text-[20px] font-semibold w-full sm:w-fit sm:pr-4 ${
@@ -224,8 +200,6 @@ const ProductHighlights = () => {
           }}
         >
           {items.map((item, idx) => {
-            const { isSimpleProduct } = getProductType(item);
-
             // vat part
             let vat = 0;
             try {
@@ -322,43 +296,27 @@ const ProductHighlights = () => {
                     )}
                     {item?.isStock === 1 && (
                       <div className="w-full">
-                        {isSimpleProduct ? (
-                          <>
-                            {Number(item?.priceShowHide) === 1 ? (
-                              // Case 2: GET QUOTATION
-                              <Link
-                                onClick={() => trackProductView(item.id)}
-                                to={`/products/${item.id}/${slugify(
-                                  item.product_name || ""
-                                )}`}
-                              >
-                                <button className="w-full bg-[#e62245] cursor-pointer text-[10px] md:text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors">
-                                  GET QUOTATION
-                                </button>
-                              </Link>
-                            ) : (
-                              // Case 3: ADD TO CART
-                              <button
-                                onClick={() => handleAddToCart(item)}
-                                className="w-full bg-[#e62245] cursor-pointer text-[10px] md:text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
-                              >
-                                ADD TO CART
+                        <>
+                          {Number(item?.priceShowHide) === 1 ? (
+                            // Case 2: GET QUOTATION
+                            <Link
+                              onClick={() => trackProductView(item.id)}
+                              to={`/products/${item.id}/${slugify(
+                                item.product_name || ""
+                              )}`}
+                            >
+                              <button className="w-full bg-[#e62245] cursor-pointer text-[10px] md:text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors">
+                                GET QUOTATION
                               </button>
-                            )}
-                          </>
-                        ) : (
-                          // Case 1: CHOOSE OPTION
-                          <Link
-                            onClick={() => trackProductView(item.id)}
-                            to={`/products/${item.id}/${slugify(
-                              item.product_name || ""
-                            )}`}
-                          >
-                            <button className="w-full bg-[#e62245] cursor-pointer text-[10px] md:text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors">
-                              CHOOSE OPTION
-                            </button>
-                          </Link>
-                        )}
+                            </Link>
+                          ) : (
+                            <AddToCartButton
+                              product={item}
+                              quantity={1}
+                              selectedOptions={[]}
+                            />
+                          )}
+                        </>
                       </div>
                     )}
                   </div>
