@@ -4,12 +4,11 @@ import { FaThList } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 import { useState, useMemo } from "react";
 import useDataQuery from "../../utils/useDataQuery";
-import { useDispatch } from "react-redux";
-import { addToCart } from "../../features/AddToCart/AddToCart";
 import { parsePrice } from "../../utils/parsePrice";
-import useToastSwal from "../../Hooks/useToastSwal";
 import { useTrackProductView } from "../../Hooks/useTrackProductView";
 import { formatBDT } from "../../utils/formatBDT";
+import AddToCartButton from "../../Components/AddToCartButton";
+import { slugify } from "../../utils/slugify";
 
 // Get array of image URLs, can be stringified JSON or array
 const getImages = (img) => {
@@ -64,29 +63,10 @@ const Compare = () => {
     !!idString,
     normalizeProducts
   );
-  const showToast = useToastSwal();
   const [viewMode, setViewMode] = useState("grid");
   const [hovered, setHovered] = useState(null);
   const products = data || [];
   const { trackProductView } = useTrackProductView();
-  const dispatch = useDispatch();
-
-  // Add to Cart handler
-  const handleAddToCart = (product) => {
-    const itemToAdd = {
-      id: product.id,
-      product_name: product.product_name,
-      price: parsePrice(product.price),
-      quantity: 1,
-    };
-    dispatch(addToCart(itemToAdd));
-    showToast(
-      "success",
-      "Added to Cart!",
-      `<b style="color:#333">${product.product_name}</b> has been added to your cart.`,
-      { timer: 2000 }
-    );
-  };
 
   // Remove product from compare
   const handleRemoveFromCompare = (removeId) => {
@@ -252,12 +232,31 @@ const Compare = () => {
                     </p>
                   </div>
                   {product?.isStock === 1 && (
-                    <button
-                      onClick={() => handleAddToCart(product)}
-                      className="bg-[#e62245] w-full cursor-pointer text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
-                    >
-                      ADD TO CART
-                    </button>
+                    <div>
+                      <>
+                        {Number(product?.priceShowHide) === 1 ? (
+                          // Case 2: GET QUOTATION
+                          <Link
+                            onClick={() => trackProductView(product.id)}
+                            to={`/products/${product.id}/${slugify(
+                              product.product_name || ""
+                            )}`}
+                          >
+                            <button className="w-full bg-[#e62245] cursor-pointer text-[14px] sm:text-[11px] md:text-[14px] text-white px-6 py-[6px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors whitespace-nowrap">
+                              <span className="relative z-10">
+                                GET QUOTATION
+                              </span>
+                            </button>
+                          </Link>
+                        ) : (
+                          <AddToCartButton
+                            product={product}
+                            quantity={1}
+                            selectedOptions={[]}
+                          />
+                        )}
+                      </>
+                    </div>
                   )}
                 </div>
                 <div className="p-1">

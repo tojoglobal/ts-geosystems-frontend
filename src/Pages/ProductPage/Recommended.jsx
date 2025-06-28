@@ -9,28 +9,16 @@ import useDataQuery from "../../utils/useDataQuery";
 import { parsePrice } from "../../utils/parsePrice";
 import { useTrackProductView } from "../../Hooks/useTrackProductView";
 import { slugify } from "../../utils/slugify";
-import { getProductType } from "../../utils/productOption";
-import useToastSwal from "../../Hooks/useToastSwal";
-import { useDispatch } from "react-redux";
-import { addToCart } from "../../features/AddToCart/AddToCart";
 import { formatBDT } from "../../utils/formatBDT";
 import { useVatEnabled } from "../../Hooks/useVatEnabled";
-
-const style = `
-.swiper-button-prev-custom,
-.swiper-button-next-custom {
-  transition: color 0.3s ease;
-}
-`;
+import AddToCartButton from "../../Components/AddToCartButton";
 
 const Recommended = ({ category, currentProductId }) => {
   const swiperRef = useRef(null);
-  const dispatch = useDispatch();
   const { trackProductView } = useTrackProductView();
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
   const [recommendedProducts, setRecommendedProducts] = useState([]);
-  const showToast = useToastSwal();
   const { data: vatEnabled = true } = useVatEnabled();
 
   // Fetch recommended products when category changes
@@ -62,29 +50,11 @@ const Recommended = ({ category, currentProductId }) => {
     setIsEnd(swiper.isEnd);
   };
 
-  const handleAddToCart = (product) => {
-    const itemToAdd = {
-      id: product.id,
-      product_name: product.product_name,
-      price: parsePrice(product.price),
-      quantity: 1,
-    };
-
-    dispatch(addToCart(itemToAdd));
-
-    showToast(
-      "success",
-      "Added to Cart!",
-      `<b style="color:#333">${product.product_name}</b> has been added to your cart.`,
-      { timer: 2000 }
-    );
-  };
-
   if (isLoading || !category || recommendedProducts.length === 0) return null;
 
   return (
     <div className="w-full md:max-w-[95%] 2xl:max-w-[1370px] mx-auto rounded-md py-6 relative">
-      <style>{style}</style>
+      {/* <style>{style}</style> */}
       {/* Tab Header */}
       <div className="flex items-center justify-between rounded-[4px] border border-gray-200">
         <div className="relative cursor-pointer group px-3 py-1">
@@ -155,7 +125,6 @@ const Recommended = ({ category, currentProductId }) => {
               imageUrls.length > 0
                 ? `${import.meta.env.VITE_OPEN_APIURL}${imageUrls[0]}`
                 : "https://via.placeholder.com/150";
-            const { isSimpleProduct } = getProductType(product);
 
             // vat part
             let vat = 0;
@@ -223,50 +192,30 @@ const Recommended = ({ category, currentProductId }) => {
                       <span className="underline">(Inc. VAT)</span>
                     </div>
                     {product?.isStock === 1 && (
-                      <div className="mt-1">
-                        {isSimpleProduct ? (
-                          <>
-                            {Number(product?.priceShowHide) === 1 ? (
-                              // Case 2: GET QUOTATION
-                              <Link
-                                onClick={() => trackProductView(product.id)}
-                                to={`/products/${product.id}/${slugify(
-                                  product.product_name || ""
-                                )}`}
-                              >
-                                <button className="w-full bg-[#e62245] cursor-pointer text-[14px] sm:text-[11px] md:text-[14px] text-white md:px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors">
-                                  GET QUOTATION
-                                </button>
-                              </Link>
-                            ) : (
-                              // Case 3: ADD TO CART
-                              <button
-                                onClick={() => handleAddToCart(product)}
-                                className="w-full bg-[#e62245] cursor-pointer text-[14px] sm:text-[11px] md:text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
-                              >
-                                ADD TO CART
+                      <div>
+                        <>
+                          {Number(product?.priceShowHide) === 1 ? (
+                            // Case 2: GET QUOTATION
+                            <Link
+                              onClick={() => trackProductView(product.id)}
+                              to={`/products/${product.id}/${slugify(
+                                product.product_name || ""
+                              )}`}
+                            >
+                              <button className="w-full bg-[#e62245] cursor-pointer text-[14px] sm:text-[11px] md:text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors">
+                                GET QUOTATION
                               </button>
-                            )}
-                          </>
-                        ) : (
-                          // Case 1: CHOOSE OPTION
-                          <Link
-                            onClick={() => trackProductView(product.id)}
-                            to={`/products/${product.id}/${slugify(
-                              product.product_name || ""
-                            )}`}
-                          >
-                            <button className="w-full bg-[#e62245] cursor-pointer text-[14px] sm:text-[11px] md:text-[14px] text-white md:px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors">
-                              CHOOSE OPTION
-                            </button>
-                          </Link>
-                        )}
+                            </Link>
+                          ) : (
+                            <AddToCartButton
+                              product={product}
+                              quantity={1}
+                              selectedOptions={[]}
+                            />
+                          )}
+                        </>
                       </div>
                     )}
-
-                    {/* <button className="mt-1 cursor-pointer bg-[#e62245] hover:bg-[#c91d3a] text-white text-sm font-semibold py-[6px] px-4 rounded w-full">
-                      ADD TO CART
-                    </button> */}
                   </div>
                 </div>
               </SwiperSlide>

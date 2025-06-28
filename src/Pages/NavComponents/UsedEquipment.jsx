@@ -19,6 +19,7 @@ import useToastSwal from "../../Hooks/useToastSwal";
 import CompareCheckbox from "./CompareCheckbox";
 import { useVatEnabled } from "../../Hooks/useVatEnabled";
 import { formatBDT } from "../../utils/formatBDT";
+import AddToCartButton from "../../Components/AddToCartButton";
 
 // Utility to strip HTML tags (including <p>)
 const stripHtml = (html) => {
@@ -33,7 +34,6 @@ const sortOptions = [
   { label: "A TO Z", value: "name_asc" },
   { label: "Z TO A", value: "name_desc" },
 ];
-
 
 const UsedEquipment = () => {
   const axiosPublicUrl = useAxiospublic();
@@ -345,24 +345,27 @@ const UsedEquipment = () => {
                         <div className="flex gap-4 mt-2 flex-row">
                           {product?.isStock === 1 && (
                             <div>
-                              {isSimpleProduct ? (
-                                <button
-                                  onClick={() => handleAddToCart(product)}
-                                  className="bg-[#e62245] cursor-pointer text-[14px] sm:text-[11px] md:text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
-                                >
-                                  ADD TO CART
-                                </button>
-                              ) : (
-                                <Link
-                                  onClick={() => trackProductView(product.id)}
-                                  to={`/products/${product.id}/${slugify(
-                                    product.product_name || ""
-                                  )}`}
-                                  className="w-full block text-center cursor-pointer bg-[#e62245] text-[14px] sm:text-[11px] md:text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
-                                >
-                                  CHOOSE OPTION
-                                </Link>
-                              )}
+                              <>
+                                {Number(product?.priceShowHide) === 1 ? (
+                                  // Case 2: GET QUOTATION
+                                  <Link
+                                    onClick={() => trackProductView(product.id)}
+                                    to={`/products/${product.id}/${slugify(
+                                      product.product_name || ""
+                                    )}`}
+                                  >
+                                    <button className="w-full bg-[#e62245] cursor-pointer text-[14px] sm:text-[11px] md:text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors">
+                                      GET QUOTATION
+                                    </button>
+                                  </Link>
+                                ) : (
+                                  <AddToCartButton
+                                    product={product}
+                                    quantity={1}
+                                    selectedOptions={[]}
+                                  />
+                                )}
+                              </>
                             </div>
                           )}
                           <CompareCheckbox
@@ -448,24 +451,27 @@ const UsedEquipment = () => {
                       <div className="flex flex-col gap-2 mt-2">
                         {product?.isStock === 1 && (
                           <div>
-                            {isSimpleProduct ? (
-                              <button
-                                onClick={() => handleAddToCart(product)}
-                                className="bg-[#e62245] w-full cursor-pointer text-[14px] sm:text-[11px] md:text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
-                              >
-                                ADD TO CART
-                              </button>
-                            ) : (
-                              <Link
-                                onClick={() => trackProductView(product.id)}
-                                to={`/products/${product.id}/${slugify(
-                                  product.product_name || ""
-                                )}`}
-                                className="w-full block text-center cursor-pointer bg-[#e62245] text-[14px] sm:text-[11px] md:text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
-                              >
-                                CHOOSE OPTION
-                              </Link>
-                            )}
+                            <>
+                              {Number(product?.priceShowHide) === 1 ? (
+                                // Case 2: GET QUOTATION
+                                <Link
+                                  onClick={() => trackProductView(product.id)}
+                                  to={`/products/${product.id}/${slugify(
+                                    product.product_name || ""
+                                  )}`}
+                                >
+                                  <button className="w-full bg-[#e62245] cursor-pointer text-[14px] sm:text-[11px] md:text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors">
+                                    GET QUOTATION
+                                  </button>
+                                </Link>
+                              ) : (
+                                <AddToCartButton
+                                  product={product}
+                                  quantity={1}
+                                  selectedOptions={[]}
+                                />
+                              )}
+                            </>
                           </div>
                         )}
                         <CompareCheckbox

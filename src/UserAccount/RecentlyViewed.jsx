@@ -1,20 +1,16 @@
 /* eslint-disable no-useless-escape */
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import useDataQuery from "../utils/useDataQuery";
 import { useState, useEffect } from "react";
 import Loader from "../utils/Loader";
-import { getProductType } from "../utils/productOption";
-import { parsePrice } from "../utils/parsePrice";
-import { addToCart } from "../features/AddToCart/AddToCart";
 import { slugify } from "../utils/slugify";
 import { Link } from "react-router-dom";
-import useToastSwal from "../Hooks/useToastSwal";
+import { useTrackProductView } from "../Hooks/useTrackProductView";
 
 const RecentlyViewed = () => {
   const { user } = useSelector((state) => state.authUser);
-  const showToast = useToastSwal();
+  const { trackProductView } = useTrackProductView();
   const [page, setPage] = useState(1);
-  const dispatch = useDispatch();
   const [limit, setLimit] = useState(8);
   const [totalPages, setTotalPages] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
@@ -56,24 +52,6 @@ const RecentlyViewed = () => {
     setPage(1); // Reset to first page when changing limit
   };
 
-  const handleAddToCart = (product) => {
-    const itemToAdd = {
-      id: product.id,
-      product_name: product.product_name,
-      price: parsePrice(product.price),
-      quantity: 1,
-    };
-
-    dispatch(addToCart(itemToAdd));
-
-    showToast(
-      "success",
-      "Added to Cart!",
-      `<b style="color:#333">${product.product_name}</b> has been added to your cart.`,
-      { timer: 2000 }
-    );
-  };
-
   if (isLoading) return <Loader />;
 
   return (
@@ -102,7 +80,6 @@ const RecentlyViewed = () => {
       {/* Product grid card view */}
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
         {recentItems?.map((item) => {
-          const { isSimpleProduct } = getProductType(item);
           let images = [];
           try {
             images = JSON.parse(item.image_urls);
@@ -188,24 +165,28 @@ const RecentlyViewed = () => {
                     <span className="underline">(Inc. VAT)</span>
                   </div>
                   {item?.isStock === 1 && (
-                    <div className="mt-4">
-                      {isSimpleProduct ? (
-                        <button
-                          onClick={() => handleAddToCart(item)}
-                          className="bg-[#e62245] w-full cursor-pointer text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
-                        >
-                          ADD TO CART
-                        </button>
-                      ) : (
-                        <Link
-                          to={`/products/${item.id}/${slugify(
-                            item.product_name || ""
-                          )}`}
-                          className="w-full block text-center cursor-pointer bg-[#e62245] text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors"
-                        >
-                          CHOOSE OPTION
-                        </Link>
-                      )}
+                    <div>
+                      <>
+                        {Number(item?.priceShowHide) === 1 ? (
+                          // Case 2: GET QUOTATION
+                          <Link
+                            onClick={() => trackProductView(item.id)}
+                            to={`/products/${item.id}/${slugify(
+                              item.product_name || ""
+                            )}`}
+                          >
+                            <button className="w-full bg-[#e62245] cursor-pointer text-[14px] sm:text-[11px] md:text-[14px] text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors">
+                              GET QUOTATION
+                            </button>
+                          </Link>
+                        ) : (
+                          <AddToCartButton
+                            product={item}
+                            quantity={1}
+                            selectedOptions={[]}
+                          />
+                        )}
+                      </>
                     </div>
                   )}
                 </div>
