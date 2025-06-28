@@ -33,15 +33,12 @@ const SearchOverlay = ({ isOpen, onClose }) => {
   const [recommendedProducts, setRecommendedProducts] = useState([]);
   const lastTrackedSearch = useRef(""); // To avoid duplicate posts
 
-  // Fetch recommended products (joined with main product table)
-  const { data: recommendedData, isLoading: recommendedLoading } = useDataQuery(
+  // Fetch recommended products
+  const { data: recommendedData } = useDataQuery(
     "recommendedProducts",
-    "/api/recommended-products"
+    "/api/recommended-products",
+    { enabled: !searchText }
   );
-
-  // Fetch fallback latest products in case recommended is empty
-  const { data: latestProductsData, isLoading: latestProductsLoading } =
-    useDataQuery("latestProducts", "/api/products?limit=10");
 
   const { data: popularData } = useDataQuery(
     "popularSearches",
@@ -61,24 +58,11 @@ const SearchOverlay = ({ isOpen, onClose }) => {
     setLatestSearches(saved);
   }, []);
 
-  // Apply logic to show recommended or latest products
   useEffect(() => {
-    if (Array.isArray(recommendedData) && recommendedData.length > 0) {
-      setRecommendedProducts(recommendedData.slice(0, 10));
-    } else if (recommendedData?.products?.length > 0) {
+    if (recommendedData?.products) {
       setRecommendedProducts(recommendedData.products.slice(0, 10));
-    } else if (
-      (Array.isArray(recommendedData) && recommendedData.length === 0) ||
-      recommendedData?.products?.length === 0
-    ) {
-      // Fallback to latest products if recommended is empty
-      if (Array.isArray(latestProductsData?.products)) {
-        setRecommendedProducts(latestProductsData.products.slice(0, 10));
-      } else if (Array.isArray(latestProductsData)) {
-        setRecommendedProducts(latestProductsData.slice(0, 10));
-      }
     }
-  }, [recommendedData, latestProductsData]);
+  }, [recommendedData]);
 
   useEffect(() => {
     if (isOpen) {
@@ -166,21 +150,17 @@ const SearchOverlay = ({ isOpen, onClose }) => {
     dots: false,
     infinite: true,
     speed: 500,
-    slidesToShow: 5, // 2xl (≥1536px)
+    slidesToShow: 5,
     slidesToScroll: 1,
     prevArrow: <PrevArrow />,
     nextArrow: <NextArrow />,
     responsive: [
       {
-        breakpoint: 1536, // <2xl (xl)
-        settings: { slidesToShow: 4 },
-      },
-      {
-        breakpoint: 1280, // <xl (lg)
+        breakpoint: 1280,
         settings: { slidesToShow: 3 },
       },
       {
-        breakpoint: 1024, // <lg
+        breakpoint: 1024,
         settings: { slidesToShow: 2 },
       },
     ],
@@ -285,7 +265,6 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                       <li
                         key={i}
                         className="hover:text-[#e62245] cursor-pointer"
-                        onClick={() => setSearchText(search)}
                       >
                         {search}
                       </li>
@@ -336,7 +315,7 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                     </div>
                   )}
                 </div>
-                {isLoading || recommendedLoading || latestProductsLoading ? (
+                {isLoading ? (
                   <div className="text-center py-10">Loading...</div>
                 ) : (displayProducts?.length ?? 0) === 0 ? (
                   <div className="text-center py-10 text-gray-400">
@@ -345,6 +324,8 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                 ) : displayProducts.length <= 4 ? (
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                     {displayProducts?.map((product, index) => {
+                      const priceOption = product?.priceShowHide;
+                      const basePrice = parsePrice(product.price) || 0;
                       return (
                         <Link
                           onClick={async () => {
@@ -379,23 +360,22 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                               {" "}
                               {product?.priceShowHide
                                 ? ""
-                                : formatBDT(parsePrice(product.price) || 0)}
+                                : formatBDT(basePrice)}
                             </p>
                             {product?.isStock === 1 && (
                               <button
                                 onClick={() =>
-                                  product?.priceShowHide !== 1 &&
-                                  handleAddToCart(product)
+                                  priceOption !== 1 && handleAddToCart(product)
                                 }
                                 className={`p-[6px] rounded text-white transition-colors duration-200 ${
-                                  product?.priceShowHide === 1
+                                  priceOption === 1
                                     ? "bg-gray-400 cursor-not-allowed"
                                     : "bg-[#e62245] hover:bg-[#d41d3f] cursor-pointer"
                                 }`}
-                                disabled={product?.priceShowHide === 1}
-                                aria-disabled={product?.priceShowHide === 1}
+                                disabled={priceOption === 1}
+                                aria-disabled={priceOption === 1}
                                 title={
-                                  product?.priceShowHide === 1
+                                  priceOption === 1
                                     ? "Unavailable for direct purchase"
                                     : "Add to cart"
                                 }
@@ -411,6 +391,8 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                 ) : (
                   <Slider {...settings}>
                     {displayProducts.map((product, index) => {
+                      const priceOption = product?.priceShowHide;
+                      const basePrice = parsePrice(product.price) || 0;
                       return (
                         <div key={index} className="px-2 relative">
                           {product?.sale === 1 && (
@@ -451,23 +433,23 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                                 ৳{" "}
                                 {product?.priceShowHide
                                   ? ""
-                                  : formatBDT(parsePrice(product.price) || 0)}
+                                  : formatBDT(basePrice)}
                               </p>
                               {product?.isStock === 1 && (
                                 <button
                                   onClick={() =>
-                                    product?.priceShowHide !== 1 &&
+                                    priceOption !== 1 &&
                                     handleAddToCart(product)
                                   }
                                   className={`p-[6px] rounded text-white transition-colors duration-200      ${
-                                    product?.priceShowHide === 1
+                                    priceOption === 1
                                       ? "bg-gray-400 cursor-not-allowed"
                                       : "bg-[#e62245] hover:bg-[#d41d3f] cursor-pointer"
                                   }`}
-                                  disabled={product?.priceShowHide === 1}
-                                  aria-disabled={product?.priceShowHide === 1}
+                                  disabled={priceOption === 1}
+                                  aria-disabled={priceOption === 1}
                                   title={
-                                    product?.priceShowHide === 1
+                                    priceOption === 1
                                       ? "Unavailable for direct purchase"
                                       : "Add to cart"
                                   }
