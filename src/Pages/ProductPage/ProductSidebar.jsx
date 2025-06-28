@@ -11,6 +11,8 @@ const ProductSidebar = () => {
   const location = useLocation();
   const axiosPublicUrl = useAxiospublic();
   const [openSections, setOpenSections] = useState({});
+  const [hoveredCategory, setHoveredCategory] = useState(null);
+  const [hoveredSubcategory, setHoveredSubcategory] = useState(null);
   const breadcrumb = useSelector((state) => state.breadcrumb);
   const subcategoryRefs = useRef({});
 
@@ -93,7 +95,6 @@ const ProductSidebar = () => {
 
   if (categoriesLoading || subcategoriesLoading || brandsLoading || loading)
     return null;
-
   if (categoriesError || subcategoriesError || brandsError) {
     return <div>Error loading data</div>;
   }
@@ -129,6 +130,38 @@ const ProductSidebar = () => {
       breadcrumb?.subcategory?.slug) ||
     subcategory;
 
+  // Helper to check if a category or any of its subcategories is active
+  const isCategoryActive = (item) => {
+    if (!item.categorySlug) return false;
+    if (item.categorySlug === activeCategorySlug) return true;
+    if (
+      item.children &&
+      item.children.some(
+        (sub) =>
+          sub.slug === activeSubcategorySlug &&
+          item.categorySlug === activeCategorySlug
+      )
+    ) {
+      return true;
+    }
+    return false;
+  };
+
+  // Helper: is subcategory hovered?
+  const isCategoryOrSubHover = (item) => {
+    if (hoveredCategory === item.label) return true;
+    if (
+      item.children &&
+      hoveredSubcategory &&
+      item.children.some(
+        (sub) => hoveredSubcategory === `${item.categorySlug}/${sub.slug}`
+      )
+    ) {
+      return true;
+    }
+    return false;
+  };
+
   return (
     <div className="w-full mt-3">
       {dynamicSidebarData.map((item, index) =>
@@ -141,46 +174,60 @@ const ProductSidebar = () => {
               index !== 0 ? "mt-[5px]" : ""
             }`}
           >
-            {/* Shop All special case - keep as before */}
             {item.label === "Shop All" ? (
               <Link
                 to={item.link}
-                className={`block p-[11px] hover:text-[#e62245] font-bold hover:underline ${
+                className={`block p-[11px] hover:text-[#e62245] font-bold ${
                   item.link === `/${activeCategorySlug}` ? "text-[#e62245]" : ""
                 }`}
               >
                 {item.label}
               </Link>
             ) : item.children !== null && item.children.length > 0 ? (
-              <div>
-                <div className="flex items-center justify-between p-3">
-                  {/* CATEGORY LABEL: ALWAYS A LINK */}
+              <div
+                className="group"
+                onMouseEnter={() => setHoveredCategory(item.label)}
+                onMouseLeave={() => {
+                  setHoveredCategory(null);
+                  setHoveredSubcategory(null);
+                }}
+              >
+                <div
+                  className={`
+                    flex items-center justify-between p-3 cursor-pointer
+                    ${
+                      isCategoryActive(item)
+                        ? "border-b-2 border-[#e62245]"
+                        : "border-b-2 border-transparent"
+                    }
+                  `}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    toggleSection(item.label);
+                  }}
+                >
                   <Link
                     to={`/${item.categorySlug}`}
-                    className={`w-full text-xs capitalize hover:text-[#e62245] font-bold text-left`}
+                    className={`
+                      w-full text-xs capitalize font-bold text-left
+                      ${isCategoryOrSubHover(item) ? "text-[#e62245]" : ""}
+                    `}
                     style={{ flex: 1 }}
                   >
                     {item.label}
                   </Link>
-                  {/* Expand/Collapse Arrow */}
-                  <button
-                    onClick={(e) => {
-                      e.preventDefault();
-                      toggleSection(item.label);
-                    }}
-                    className="cursor-pointer ml-2"
-                    aria-label={
-                      openSections[item.label] ? "Collapse" : "Expand"
-                    }
+                  <span
+                    className={`ml-2 ${
+                      isCategoryOrSubHover(item) ? "text-[#e62245]" : ""
+                    }`}
                   >
                     {openSections[item.label] ? (
                       <SlArrowUp size={14} />
                     ) : (
                       <SlArrowDown size={14} />
                     )}
-                  </button>
+                  </span>
                 </div>
-                {/* Subcategory list */}
                 <div
                   ref={(el) => (subcategoryRefs.current[item.label] = el)}
                   style={{
@@ -203,9 +250,15 @@ const ProductSidebar = () => {
                         className={`font-normal capitalize block px-5 py-3 text-[13px] hover:bg-gray-50 hover:text-[#e62245] border-t border-[#ebebeb] ${
                           activeSubcategorySlug === child.slug &&
                           activeCategorySlug === item.categorySlug
-                            ? "text-[#e62245] font-bold"
+                            ? "font-bold"
                             : ""
                         }`}
+                        onMouseEnter={() =>
+                          setHoveredSubcategory(
+                            `${item.categorySlug}/${child.slug}`
+                          )
+                        }
+                        onMouseLeave={() => setHoveredSubcategory(null)}
                       >
                         {child.name}
                       </Link>
@@ -217,9 +270,9 @@ const ProductSidebar = () => {
               // No children: just a normal category link
               <Link
                 to={`/${item.categorySlug}`}
-                className={`block p-[11px] hover:text-[#e62245] font-bold hover:underline ${
+                className={`block p-[11px] hover:text-[#e62245] font-bold ${
                   `/${item.categorySlug}` === `/${activeCategorySlug}`
-                    ? "text-[#e62245]"
+                    ? "border-b-2 border-[#e62245]"
                     : ""
                 }`}
               >

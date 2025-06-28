@@ -474,7 +474,7 @@ const UpdateProductForm = () => {
           color: "#f8fafc",
           confirmButtonColor: "#e11d48",
         });
-        navigate(-1);
+        navigate("/dashboard/product");
       }
     } catch (error) {
       Swal.fire({
