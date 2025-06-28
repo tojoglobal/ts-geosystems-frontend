@@ -67,10 +67,20 @@ const AboutUsImgesControlls = () => {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
-      Swal.fire("Success", "About Us images updated successfully!", "success");
+      Swal.fire({
+        icon: "Success",
+        title: "Success!",
+        text: "About Us images updated successfully!",
+        timer: 4000,
+      });
     } catch (error) {
       console.error("Failed to update About Us images:", error);
-      Swal.fire("Error", "Failed to update About Us images", "error");
+      Swal.fire({
+        icon: "Error",
+        title: "Error!",
+        text: "Failed to update About Us images",
+        timer: 4000,
+      });
     } finally {
       setIsUploading(false);
     }

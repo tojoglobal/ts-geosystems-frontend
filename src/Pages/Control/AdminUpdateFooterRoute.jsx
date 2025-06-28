@@ -33,6 +33,7 @@ const AdminUpdateFooterRoute = () => {
         title: "Error",
         text: e.message || "Failed to fetch links",
         icon: "error",
+        timer: 4000,
       });
     }
     setLoading(false);
@@ -79,6 +80,7 @@ const AdminUpdateFooterRoute = () => {
         icon: "success",
         background: "#000",
         color: "#fff",
+        timer: 4000,
       });
       fetchLinks();
     } catch (e) {
@@ -86,6 +88,7 @@ const AdminUpdateFooterRoute = () => {
         title: "Error",
         text: e?.response?.data?.message || "Failed to delete link",
         icon: "error",
+        timer: 4000,
       });
     } finally {
       setDeleteDialogOpen(false);
@@ -103,6 +106,7 @@ const AdminUpdateFooterRoute = () => {
           title: "Updated!",
           text: "Link has been updated.",
           icon: "success",
+          timer: 4000,
         });
       } else {
         await axiosPublic.post("/api/dynamic-links", form);
@@ -110,6 +114,7 @@ const AdminUpdateFooterRoute = () => {
           title: "Created!",
           text: "New link has been created.",
           icon: "success",
+          timer: 4000,
         });
       }
       setForm(emptyForm);
@@ -120,6 +125,7 @@ const AdminUpdateFooterRoute = () => {
         title: "Error",
         text: e?.response?.data?.message || "Operation failed",
         icon: "error",
+        timer: 4000,
       });
     }
     setSaving(false);

@@ -78,6 +78,7 @@ const Clearance = () => {
         icon: "error",
         confirmButtonColor: "#e62245",
         confirmButtonText: "OK",
+        timer: 4000,
       });
     } else {
       const sortedIds = [...compareItems].sort((a, b) => a - b);

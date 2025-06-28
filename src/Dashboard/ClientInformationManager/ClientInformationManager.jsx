@@ -324,12 +324,14 @@ export default function ClientInformationManager() {
             icon: "success",
             title: "Deleted!",
             text: "Client has been deleted.",
+            timer: 4000,
           });
         } catch (err) {
           showSwal({
             icon: "error",
             title: "Error",
             text: err?.response?.data?.message || "Error deleting client.",
+            timer: 4000,
           });
         }
       }

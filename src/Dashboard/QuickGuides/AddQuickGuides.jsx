@@ -68,6 +68,7 @@ const AddQuickGuides = () => {
         background: "#1e293b",
         color: "#f8fafc",
         confirmButtonColor: "#e11d48",
+        timer: 4000,
       });
     } catch (error) {
       Swal.fire({
@@ -77,6 +78,7 @@ const AddQuickGuides = () => {
         background: "#1e293b",
         color: "#f8fafc",
         confirmButtonColor: "#e11d48",
+        timer: 4000,
       });
     }
   };
@@ -114,6 +116,7 @@ const AddQuickGuides = () => {
             background: "#1e293b",
             color: "#f8fafc",
             confirmButtonColor: "#e11d48",
+            timer: 4000,
           });
         } catch (error) {
           Swal.fire({
@@ -123,6 +126,7 @@ const AddQuickGuides = () => {
             background: "#1e293b",
             color: "#f8fafc",
             confirmButtonColor: "#e11d48",
+            timer: 4000,
           });
         }
       }

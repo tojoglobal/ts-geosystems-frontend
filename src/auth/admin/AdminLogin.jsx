@@ -38,6 +38,7 @@ const AdminLogin = () => {
         icon: "warning",
         title: "Missing fields",
         text: "Please enter both email and password.",
+        timer: 4000,
       });
       return;
     }
@@ -81,6 +82,7 @@ const AdminLogin = () => {
         text:
           error.response?.data?.message ||
           "Invalid email or password. Please try again.",
+        timer: 4000,
       });
     }
   };

@@ -71,9 +71,15 @@ const Software = () => {
         background: "#1e293b",
         color: "#f8fafc",
         confirmButtonColor: "#e11d48",
+        timer: 4000,
       });
     } catch (error) {
-      Swal.fire("Error", error.message || "Error saving software.", "error");
+      Swal.fire({
+        title: "Error",
+        icon: "error",
+        text: error.message || "Error saving software.",
+        timer: 4000,
+      });
     }
   };
 
@@ -119,6 +125,7 @@ const Software = () => {
             color: "#f8fafc",
             confirmButtonColor: "#e11d48",
             customClass: { popup: "rounded-lg" },
+            timer: 4000,
           });
         } catch (error) {
           Swal.fire({
@@ -129,6 +136,7 @@ const Software = () => {
             color: "#f8fafc",
             confirmButtonColor: "#e11d48",
             customClass: { popup: "rounded-lg" },
+            timer: 4000,
           });
         }
       }

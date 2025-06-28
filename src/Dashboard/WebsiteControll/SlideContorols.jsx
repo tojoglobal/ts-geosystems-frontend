@@ -96,13 +96,28 @@ const SlideContorols = () => {
       );
 
       if (response.data) {
-        Swal.fire("Success", `Slide ${currentSlideId} updated!`, "success");
+        Swal.fire({
+          icon: "Success",
+          title: "Success!",
+          text: `Slide ${currentSlideId} updated!`,
+          timer: 4000,
+        });
       } else {
-        Swal.fire("Error", "Failed to update slide", "error");
+        Swal.fire({
+          icon: "Error",
+          title: "Error!",
+          text: "Failed to update slide",
+          timer: 4000,
+        });
       }
     } catch (error) {
       console.error(error);
-      Swal.fire("Error", "Update failed", "error");
+      Swal.fire({
+        icon: "Error",
+        title: "Error!",
+        text: "Update failed",
+        timer: 4000,
+      });
     }
   };
 

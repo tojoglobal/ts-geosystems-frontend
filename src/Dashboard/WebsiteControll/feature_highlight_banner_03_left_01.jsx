@@ -104,10 +104,20 @@ const Feature_highlight_banner_03_left_01 = () => {
         headers: { "Content-Type": "multipart/form-data" },
       });
       await refetch(); // ✅ Refresh list after upload
-      Swal.fire("Success", "Images uploaded successfully", "success");
+      Swal.fire({
+        icon: "Success",
+        title: "Success!",
+        text: "Images uploaded successfully",
+        timer: 4000,
+      });
     } catch (error) {
       console.error("Upload failed:", error);
-      Swal.fire("Error", "Failed to upload images", "error");
+      Swal.fire({
+        icon: "Error",
+        title: "Error!",
+        text: "Failed to upload images",
+        timer: 4000,
+      });
     }
   };
 
@@ -130,10 +140,20 @@ const Feature_highlight_banner_03_left_01 = () => {
       try {
         await axiosPublicUrl.delete(`/api/feature-delete-image/${id}`);
         await refetch(); // ✅ Refresh list after deletion
-        Swal.fire("Deleted!", "Image has been removed.", "success");
+        Swal.fire({
+          icon: "success",
+          title: "Deleted!",
+          text: "Image has been removed.",
+          timer: 4000,
+        });
       } catch (error) {
         console.error("Delete failed:", error);
-        Swal.fire("Error", "Failed to delete image", "error");
+        Swal.fire({
+          icon: "Error",
+          title: "Error!",
+          text: "Failed to delete image",
+          timer: 4000,
+        });
       }
     }
   };
@@ -157,7 +177,12 @@ const Feature_highlight_banner_03_left_01 = () => {
         await refetch(); // ✅ Ensure backend and frontend stay in sync
       } catch (error) {
         console.error("Order update failed:", error);
-        Swal.fire("Error", "Failed to update image order", "error");
+        Swal.fire({
+          icon: "Error",
+          title: "Error!",
+          text: "Failed to update image order",
+          timer: 4000,
+        });
       }
     }
   };

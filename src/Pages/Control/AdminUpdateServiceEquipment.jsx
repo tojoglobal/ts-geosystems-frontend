@@ -34,6 +34,7 @@ const AdminUpdateServiceEquipment = () => {
         icon: "success",
         title: "Success!",
         text: "Service equipment options updated successfully",
+        timer: 4000,
       });
     },
     onError: (error) => {
@@ -41,6 +42,7 @@ const AdminUpdateServiceEquipment = () => {
         icon: "error",
         title: "Error",
         text: error.response?.data?.message || "Failed to update options",
+        timer: 4000,
       });
     },
   });

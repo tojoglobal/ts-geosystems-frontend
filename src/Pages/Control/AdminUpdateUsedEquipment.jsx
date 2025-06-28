@@ -65,7 +65,7 @@ const AdminUpdateUsedEquipment = () => {
         icon: "success",
         title: "Success!",
         text: "Updated",
-        timer: 1000,
+        timer: 4000,
         showConfirmButton: false,
       });
       setBannerFile(null);
@@ -75,6 +75,7 @@ const AdminUpdateUsedEquipment = () => {
         icon: "error",
         title: "Error",
         text: error?.response?.data?.message || "Failed to update",
+        timer: 4000,
       });
     },
   });

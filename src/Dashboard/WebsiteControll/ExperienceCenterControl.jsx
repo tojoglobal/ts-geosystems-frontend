@@ -78,13 +78,15 @@ const ExperienceCenterControl = () => {
           background: "#1e293b",
           color: "#f8fafc",
           confirmButtonColor: "#22c55e", // green
+          timer: 4000,
         });
       } catch (error) {
-        Swal.fire(
-          "Error",
-          `${error.message} || Failed to delete image`,
-          "error"
-        );
+        Swal.fire({
+          icon: "Error",
+          title: "Error!",
+          text: `${error.message} || Failed to delete image`,
+          timer: 4000,
+        });
       }
     }
   };

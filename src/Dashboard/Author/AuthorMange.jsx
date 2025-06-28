@@ -86,14 +86,12 @@ export default function AuthorManager() {
             icon: "success",
             title: "Deleted!",
             text: "Author deleted successfully.",
-            timer: 4000,
           });
         } catch (err) {
           showSwal({
             icon: "error",
             title: "Error",
             text: err?.response?.data?.message || "Failed to delete author.",
-            timer: 4000,
           });
         }
       }

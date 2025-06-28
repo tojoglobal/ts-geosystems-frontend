@@ -64,18 +64,20 @@ const AccountSettings = () => {
       });
 
       if (response.status === 200) {
-        Swal.fire(
-          "Success",
-          "Account details updated successfully.",
-          "success"
-        );
+        Swal.fire({
+          title: "Success",
+          icon: "Success",
+          text: "Account details updated successfully.",
+          timer: 4000,
+        });
       }
     } catch (error) {
-      Swal.fire(
-        "Error",
-        error?.response?.data?.message || "An error occurred.",
-        "error"
-      );
+      Swal.fire({
+        title: "Error",
+        icon: "error",
+        text: error?.response?.data?.message || "An error occurred.",
+        timer: 4000,
+      });
     }
   };
 

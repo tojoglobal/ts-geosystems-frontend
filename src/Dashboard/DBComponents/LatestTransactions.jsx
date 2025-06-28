@@ -44,7 +44,12 @@ const LatestTransactions = () => {
         throw new Error("Failed to update status");
       }
     } catch (error) {
-      Swal.fire("Error", error.message, "error");
+      Swal.fire({
+        title: "Error",
+        icon: "Error",
+        text: error.message,
+        timer: 4000,
+      });
     }
   };
 

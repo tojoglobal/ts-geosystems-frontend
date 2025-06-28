@@ -52,8 +52,8 @@ const UserInbox = () => {
     onSuccess: () => {
       Swal.fire({
         title: "Success",
-        text: "Message sent successfully!",
         icon: "success",
+        text: "Message sent successfully!",
         timer: 4000,
       });
       reset();
@@ -62,8 +62,8 @@ const UserInbox = () => {
     onError: (error) => {
       Swal.fire({
         title: "Error",
-        text: error.response?.data?.error || "Failed to send message",
         icon: "error",
+        text: error.response?.data?.error || "Failed to send message",
         timer: 4000,
       });
       if (error.response?.data?.errors) {
