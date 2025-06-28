@@ -140,7 +140,7 @@ const UpdateProductForm = () => {
   const { data: vatEnabled } = useVatEnabled();
   const navigate = useNavigate();
 
-  // Use custom hook to fetch categories and subcategories
+  // Fetch categories and subcategories
   const { data: categoriesData } = useDataQuery(
     ["categories"],
     "/api/category"
@@ -179,14 +179,8 @@ const UpdateProductForm = () => {
 
   const watchCategoryRaw = watch("category");
   const watchCategory = watchCategoryRaw ? JSON.parse(watchCategoryRaw) : null;
-  // const subCategoryValue = watch("subCategory");
 
-  // Reset subCategory whenever category changes
-  useEffect(() => {
-    setValue("subCategory", "");
-  }, [watchCategoryRaw, setValue]);
-
-  // Fetch data functions
+  // Fetch brands/products/software/taxes
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -226,6 +220,7 @@ const UpdateProductForm = () => {
     fetchData();
   }, [axiosPublicUrl]);
 
+  // Fetch product data
   useEffect(() => {
     const fetchProductData = async () => {
       try {
@@ -269,8 +264,6 @@ const UpdateProductForm = () => {
       setValue("subCategory", "");
     }
   }, [productData, SubCategories, setValue]);
-
-  // Reset form with product data
   useEffect(() => {
     if (productData) {
       const parsedMetaKeywords = productData.meta_keywords
@@ -279,6 +272,25 @@ const UpdateProductForm = () => {
             .map((k) => k.trim())
             .filter((k) => k)
         : [];
+
+      // Figure out subCategory default value
+      let subCatValue = "";
+      if (productData.sub_category) {
+        try {
+          let subCatObj =
+            typeof productData.sub_category === "string"
+              ? JSON.parse(productData.sub_category)
+              : productData.sub_category;
+          if (subCatObj && subCatObj.id) {
+            subCatValue = JSON.stringify({
+              id: subCatObj.id,
+              slug: subCatObj.slug,
+            });
+          }
+        } catch (err) {
+          console.log(err);
+        }
+      }
 
       reset({
         productName: productData.product_name || "",
@@ -291,7 +303,7 @@ const UpdateProductForm = () => {
                 cat: productData.category.slug_name,
               })
           : "",
-        subCategory: productData.sub_category || "",
+        subCategory: subCatValue,
         sku: productData.sku || "",
         videoUrls: productData.video_urls || "",
         price: productData.price || "",
@@ -480,7 +492,6 @@ const UpdateProductForm = () => {
         onSubmit={handleSubmit(onSubmit)}
         className="p-2 sm:p-6 grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6"
       >
-        {/* Image Upload Column */}
         <div className="col-span-1">
           <label className="block mb-2 font-medium">Update Images</label>
           <div
@@ -518,7 +529,6 @@ const UpdateProductForm = () => {
           </div>
         </div>
 
-        {/* Second Column */}
         <div className="col-span-1 md:col-span-2 space-y-4 grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
           <div className="col-span-1 space-y-3 sm:space-y-4">
             {/* productName */}
@@ -722,7 +732,6 @@ const UpdateProductForm = () => {
               <label>Hide Price</label>
             </div>
 
-            {/* Product Options */}
             <Controller
               name="productOptions"
               control={control}
@@ -782,7 +791,6 @@ const UpdateProductForm = () => {
               )}
             />
 
-            {/* Product Option Show/Hide */}
             <div className="flex items-center gap-2">
               <input
                 type="checkbox"
@@ -795,7 +803,6 @@ const UpdateProductForm = () => {
               <label>Hide Product Options</label>
             </div>
 
-            {/* softwareOptions */}
             <Controller
               name="softwareOptions"
               control={control}
@@ -856,9 +863,7 @@ const UpdateProductForm = () => {
             />
           </div>
 
-          {/* Meta Keywords and Description */}
           <div className="col-span-1 md:col-span-2 space-y-4">
-            {/* Meta Keywords Field */}
             <div>
               <label className="block mb-1 font-medium">Meta Keywords</label>
               <Controller
@@ -877,7 +882,6 @@ const UpdateProductForm = () => {
               </p>
             </div>
 
-            {/* Meta Description Field */}
             <div>
               <label className="block mb-1 font-medium">Meta Description</label>
               <textarea
@@ -891,7 +895,6 @@ const UpdateProductForm = () => {
             </div>
           </div>
 
-          {/* Product Overview and Warranty Info */}
           <div className="col-span-1 md:col-span-2 space-y-4">
             <label className="ml-1">Product Overview</label>
             <Controller
@@ -981,7 +984,6 @@ const UpdateProductForm = () => {
             />
           </div>
 
-          {/* Submit Button */}
           <div className="col-span-1 md:col-span-2 space-y-4">
             <Button text={"Update Product"} />
           </div>
@@ -993,7 +995,7 @@ const UpdateProductForm = () => {
 
 export default UpdateProductForm;
 
-// Tailwind input class
+// Add Tailwind input class
 const inputClass = `block w-full rounded-md border border-gray-600 shadow-sm focus:border-teal-500 focus:ring-teal-500 p-2 text-sm`;
 const style = document.createElement("style");
 style.innerHTML = `.input { ${inputClass} }`;
