@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { Editor } from "@tinymce/tinymce-react";
@@ -10,8 +11,8 @@ import Button from "../Button/Button";
 import Swal from "sweetalert2";
 import { useVatEnabled } from "../../Hooks/useVatEnabled";
 import AdminVatSwitch from "./AdminVatSwitch";
-import useDataQuery from "../../utils/useDataQuery";
 
+// Helper to validate only YouTube URLs (returns true if empty or valid YouTube URL)
 const validateYouTubeUrls = (value) => {
   if (!value || value.trim() === "") return true;
   const urls = value.split(",").map((v) => v.trim());
@@ -20,12 +21,17 @@ const validateYouTubeUrls = (value) => {
   return urls.every((url) => url === "" || ytPattern.test(url));
 };
 
+// MetaKeywordsInput component
+// MetaKeywordsInput component with mobile-friendly features
 const MetaKeywordsInput = ({ value = [], onChange }) => {
   const [inputValue, setInputValue] = useState("");
   const [keywords, setKeywords] = useState(value || []);
+
+  // Sync with external value changes
   useEffect(() => {
     setKeywords(value || []);
   }, [value]);
+
   const addKeyword = () => {
     const trimmedValue = inputValue.trim();
     if (trimmedValue) {
@@ -35,6 +41,7 @@ const MetaKeywordsInput = ({ value = [], onChange }) => {
       setInputValue("");
     }
   };
+
   const handleKeyDown = (e) => {
     if ((e.key === "Enter" || e.key === ",") && inputValue.trim()) {
       e.preventDefault();
@@ -46,8 +53,10 @@ const MetaKeywordsInput = ({ value = [], onChange }) => {
       onChange(newKeywords);
     }
   };
+
   const handleInputChange = (e) => {
     const value = e.target.value;
+    // Add keyword when comma is entered (mobile friendly)
     if (value.endsWith(",")) {
       setInputValue(value.slice(0, -1));
       addKeyword();
@@ -55,11 +64,13 @@ const MetaKeywordsInput = ({ value = [], onChange }) => {
       setInputValue(value);
     }
   };
+
   const removeKeyword = (index) => {
     const newKeywords = keywords.filter((_, i) => i !== index);
     setKeywords(newKeywords);
     onChange(newKeywords);
   };
+
   return (
     <div className="border border-gray-600 rounded-md p-2 focus-within:border-teal-500 transition">
       <div className="flex flex-wrap gap-2 items-center">
@@ -127,25 +138,14 @@ const UpdateProductForm = () => {
   const axiosPublicUrl = useAxiospublic();
   const [productData, setProductData] = useState({});
   const [images, setImages] = useState([]);
+  const [Categories, setCategories] = useState([]);
+  const [subCategories, setSubCategories] = useState([]);
   const [brands, setBrands] = useState([]);
   const [taxes, setTaxes] = useState([]);
   const [productOptions, setProductOptions] = useState([]);
   const [softwareOptions, setSoftwareOptions] = useState([]);
   const { data: vatEnabled } = useVatEnabled();
   const navigate = useNavigate();
-
-  // Use custom hook to fetch categories and subcategories
-  const { data: categoriesData } = useDataQuery(
-    ["categories"],
-    "/api/category"
-  );
-  const { data: subcategoriesData } = useDataQuery(
-    ["subcategories"],
-    "/api/subcategory"
-  );
-
-  const Categories = categoriesData?.categories || [];
-  const SubCategories = subcategoriesData?.subcategories || [];
 
   const {
     register,
@@ -167,23 +167,9 @@ const UpdateProductForm = () => {
 
   const watchCategoryRaw = watch("category");
   const watchCategory = watchCategoryRaw ? JSON.parse(watchCategoryRaw) : null;
-  const subCategoryValue = watch("subCategory");
 
-  // Reset subCategory whenever category changes
+  // Fetch Products
   useEffect(() => {
-    setValue("subCategory", "");
-  }, [watchCategoryRaw, setValue]);
-
-  // Brand, products, software, taxes, productData fetches
-  useEffect(() => {
-    const fetchBrands = async () => {
-      try {
-        const res = await axiosPublicUrl.get("/api/brands");
-        setBrands(res.data);
-      } catch (error) {
-        console.error("Error fetching product data:", error);
-      }
-    };
     const fetchProducts = async () => {
       try {
         const response = await axiosPublicUrl.get("/api/products");
@@ -196,10 +182,16 @@ const UpdateProductForm = () => {
             image_urls: prod.image_urls,
           })) || [];
         setProductOptions(mappedProducts);
-      } catch (error) {
-        console.error("Error fetching product data:", error);
+      } catch (err) {
+        console.error("Error fetching products:", err);
       }
     };
+
+    fetchProducts();
+  }, []);
+
+  // Fetch Software
+  useEffect(() => {
     const fetchSoftware = async () => {
       try {
         const response = await axiosPublicUrl.get("/api/software");
@@ -209,20 +201,64 @@ const UpdateProductForm = () => {
             label: soft.softwar_name,
           })) || [];
         setSoftwareOptions(mappedSoftware);
+      } catch (err) {
+        console.error("Error fetching software:", err);
+      }
+    };
+
+    fetchSoftware();
+  }, []);
+
+  // fetch the brands
+  useEffect(() => {
+    const fetchBrands = async () => {
+      try {
+        const res = await axiosPublicUrl.get("/api/brands");
+        setBrands(res.data);
       } catch (error) {
-        console.error("Error fetching product data:", error);
+        console.error("Error fetching brands:", error);
       }
     };
     fetchBrands();
-    fetchProducts();
-    fetchSoftware();
-  }, [axiosPublicUrl]);
+  }, []);
+
+  // fetch categories and subcategories
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await axiosPublicUrl.get("/api/category");
+        setCategories(response.data?.categories);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+    fetchCategories();
+  }, []);
+
+  // Fetch Subcategories based on selected category
+  useEffect(() => {
+    if (watchCategory) {
+      const fetchSubCategories = async () => {
+        try {
+          const response = await axiosPublicUrl.get("/api/subcategory");
+          setSubCategories(response.data?.subcategories);
+        } catch (error) {
+          console.error("Error fetching subcategories:", error);
+        }
+      };
+      fetchSubCategories();
+    }
+  }, [watchCategory]);
+
+  // Fetch taxes
   useEffect(() => {
     axiosPublicUrl
       .get("/api/taxes")
       .then((res) => setTaxes(res.data))
-      .catch(() => {});
-  }, [axiosPublicUrl]);
+      .catch((err) => console.error("Fetch error:", err));
+  }, []);
+
+  // Fetch product details for updating
   useEffect(() => {
     const fetchProductData = async () => {
       try {
@@ -233,29 +269,35 @@ const UpdateProductForm = () => {
       }
     };
     fetchProductData();
-  }, [id, axiosPublicUrl]);
+  }, [id]);
+
   useEffect(() => {
-    if (productData && productData.sub_category && SubCategories.length > 0) {
-      let subCatId = "";
-      try {
-        subCatId =
-          typeof productData.sub_category === "string"
-            ? JSON.parse(productData.sub_category).id
-            : productData.sub_category.id;
-      } catch {
-        subCatId = "";
-      }
-      const foundSub = SubCategories.find((sc) => sc.id === subCatId);
+    if (productData && productData.sub_category && subCategories.length > 0) {
+      // The current subcategory value as string
+      // const subCatValue =
+      //   typeof productData.sub_category === "string"
+      //     ? productData.sub_category
+      //     : JSON.stringify({
+      //         id: productData.sub_category.id,
+      //         slug: productData.sub_category.slug,
+      //       });
+
+      let subCatId =
+        typeof productData.sub_category === "string"
+          ? JSON.parse(productData.sub_category).id
+          : productData.sub_category.id;
+      const foundSub = subCategories.find((sc) => sc.id === subCatId);
       if (foundSub) {
-        setValue(
-          "subCategory",
-          JSON.stringify({ id: foundSub.id, slug: foundSub.slug })
-        );
-      } else {
-        setValue("subCategory", "");
+        const subCatValue = JSON.stringify({
+          id: foundSub.id,
+          slug: foundSub.slug,
+        });
+        setValue("subCategory", subCatValue);
       }
     }
-  }, [productData, SubCategories, setValue]);
+  }, [productData, subCategories, setValue]);
+  // console.log("Product Data:", productData);
+
   useEffect(() => {
     if (productData) {
       const parsedMetaKeywords = productData.meta_keywords
@@ -264,6 +306,7 @@ const UpdateProductForm = () => {
             .map((k) => k.trim())
             .filter((k) => k)
         : [];
+
       reset({
         productName: productData.product_name || "",
         brandName: productData.brand_name || "",
@@ -279,8 +322,8 @@ const UpdateProductForm = () => {
           ? typeof productData.sub_category === "string"
             ? productData.sub_category
             : JSON.stringify({
-                id: productData.sub_category?.id,
-                slug: productData.sub_category?.slug,
+                id: productData.sub_category.id,
+                slug: productData.sub_category.slug,
               })
           : "",
         sku: productData.sku || "",
@@ -321,6 +364,7 @@ const UpdateProductForm = () => {
         metaKeywords: parsedMetaKeywords,
         metaDescription: productData.meta_description || "",
       });
+
       setImages(
         productData.image_urls
           ? typeof productData.image_urls === "string"
@@ -345,6 +389,7 @@ const UpdateProductForm = () => {
 
     if (result.isConfirmed) {
       try {
+        // If it's an old image (URL string)
         if (typeof file === "string") {
           const response = await axiosPublicUrl.post(
             "/api/products/delete-image",
@@ -364,6 +409,7 @@ const UpdateProductForm = () => {
             Swal.fire("Error!", "Failed to delete the image.", "error");
           }
         } else {
+          // If it's a newly added file, just remove it from the preview
           setImages((prev) => prev.filter((_, i) => i !== index));
           Swal.fire({
             title: "Removed!",
@@ -375,15 +421,13 @@ const UpdateProductForm = () => {
           });
         }
       } catch (error) {
-        Swal.fire(
-          "Error!",
-          error.message || "Failed to delete the image.",
-          "error"
-        );
+        console.error("Failed to delete image", error);
+        Swal.fire("Error!", "Failed to delete the image.", "error");
       }
     }
   };
 
+  // Dropzone for image upload
   const onDrop = (acceptedFiles) => {
     const newFiles = acceptedFiles.slice(0, 20);
     setImages((prev) => [...prev, ...newFiles]);
@@ -398,6 +442,8 @@ const UpdateProductForm = () => {
   const onSubmit = async (data) => {
     try {
       const formData = new FormData();
+
+      // Append images
       images.forEach((file) => {
         if (file instanceof File) {
           formData.append("images", file);
@@ -405,18 +451,13 @@ const UpdateProductForm = () => {
           formData.append("existingImages", file);
         }
       });
+
+      // Append all other fields
       formData.append("productName", data.productName);
       formData.append("price", data.price);
       formData.append("priceShowHide", data.priceShowHide);
       formData.append("category", data.category);
-      formData.append(
-        "subCategory",
-        data.subCategory &&
-          data.subCategory !== "" &&
-          data.subCategory !== "null"
-          ? data.subCategory
-          : null
-      );
+      formData.append("subCategory", data.subCategory);
       formData.append("tax", data.tax);
       formData.append("sku", data.sku);
       formData.append("condition", data.condition);
@@ -432,6 +473,8 @@ const UpdateProductForm = () => {
       formData.append("flashSaleEnd", data.flashSaleEnd || "");
       formData.append("metaKeywords", data.metaKeywords?.join(",") || "");
       formData.append("metaDescription", data.metaDescription || "");
+
+      // Handle arrays/objects
       formData.append(
         "productOptions",
         JSON.stringify(data.productOptions || [])
@@ -440,9 +483,13 @@ const UpdateProductForm = () => {
         "softwareOptions",
         JSON.stringify(data.softwareOptions || [])
       );
+
       const res = await axiosPublicUrl.put(`/api/products/${id}`, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       });
+
       if (res.status === 201) {
         Swal.fire({
           title: "Success",
@@ -455,9 +502,10 @@ const UpdateProductForm = () => {
         navigate(-1);
       }
     } catch (error) {
+      console.error("Update failed:", error);
       Swal.fire({
         icon: "error",
-        text: error.message || "Failed to update product. Please try again.",
+        text: "Failed to update product. Please try again.",
         confirmButtonColor: "#ef4444",
       });
     }
@@ -512,6 +560,7 @@ const UpdateProductForm = () => {
         <div className="col-span-1 md:col-span-2 space-y-4 grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
           <div className="col-span-1 space-y-3 sm:space-y-4">
             {/* productName */}
+            <label className="block mb-1 font-medium">Product Name</label>
             <input
               {...register("productName", {
                 required: "Product Name is required",
@@ -524,6 +573,7 @@ const UpdateProductForm = () => {
             )}
 
             {/* brandName */}
+            <label className="block mb-1 font-medium">Brand Name</label>
             <select
               {...register("brandName")}
               className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
@@ -542,11 +592,14 @@ const UpdateProductForm = () => {
             )}
 
             {/* category */}
+            <label className="block mb-1 font-medium">Category</label>
             <select
-              {...register("category", { required: "Category is required" })}
+              {...register("category")}
               className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
             >
-              <option value="">Select Category</option>
+              <option value="" className="hover:bg-amber-200">
+                Select Category
+              </option>
               {Categories.map((cat) => (
                 <option
                   key={cat.id}
@@ -560,42 +613,37 @@ const UpdateProductForm = () => {
               <p className="text-red-500">{errors.category.message}</p>
             )}
 
-            {/* subCategory */}
+            {/* subCategory*/}
+            <label className="block mb-1 font-medium">Sub Category</label>
             <select
               {...register("subCategory")}
               className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
-              value={subCategoryValue || ""}
-              onChange={(e) => setValue("subCategory", e.target.value)}
             >
-              <option value="">
-                No Sub Category (add under category only)
-              </option>
-              {SubCategories.filter(
-                (sub) => sub.main_category_id === watchCategory?.id
-              ).map((sub) => (
-                <option
-                  key={sub.id}
-                  value={JSON.stringify({ id: sub.id, slug: sub.slug })}
-                >
-                  {sub.name}
-                </option>
-              ))}
+              <option value="">Select Sub Category</option>
+              {subCategories
+                .filter((sub) => sub?.main_category_id === watchCategory?.id)
+                .map((sub) => (
+                  <option
+                    key={sub.id}
+                    value={JSON.stringify({ id: sub.id, slug: sub.slug })}
+                  >
+                    {sub?.name}
+                  </option>
+                ))}
             </select>
-            <div className="text-xs text-gray-500">
-              If you select a subcategory, the product will be added under that
-              subcategory.
-              <br />
-              If you leave this blank, the product will be added under the
-              category only.
-            </div>
-            {/* SKU */}
+            {errors.subCategory && (
+              <p className="text-red-500">{errors.subCategory.message}</p>
+            )}
+
+            {/*SKU / Unique Code */}
             <input
               {...register("sku", { required: "SKU is required" })}
               placeholder="SKU / Unique Code"
               className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
             />
             {errors.sku && <p className="text-red-500">{errors.sku.message}</p>}
-            {/* videoUrls */}
+
+            {/*videoUrls */}
             <input
               {...register("videoUrls", {
                 validate: (value) =>
@@ -608,6 +656,7 @@ const UpdateProductForm = () => {
             {errors.videoUrls && (
               <p className="text-red-500">{errors.videoUrls.message}</p>
             )}
+
             {/* Condition select */}
             <select
               {...register("condition", { required: "Condition is required" })}
@@ -620,6 +669,7 @@ const UpdateProductForm = () => {
             {errors.condition && (
               <p className="text-red-500">{errors.condition.message}</p>
             )}
+
             {/* Tax select */}
             {vatEnabled && (
               <select
@@ -642,6 +692,7 @@ const UpdateProductForm = () => {
             )}
             {errors.tax && <p className="text-red-500">{errors.tax.message}</p>}
           </div>
+
           {/* Third Column */}
           <div className="col-span-1 space-y-3 sm:space-y-4">
             {/* Clearance, In Stock, On Sale checkboxes */}
@@ -984,7 +1035,7 @@ const UpdateProductForm = () => {
 
 export default UpdateProductForm;
 
-// Tailwind input class
+// Tailwind common input class
 const inputClass = `block w-full rounded-md border border-gray-600 shadow-sm focus:border-teal-500 focus:ring-teal-500 p-2 text-sm`;
 const style = document.createElement("style");
 style.innerHTML = `.input { ${inputClass} }`;
