@@ -23,7 +23,7 @@ const validateYouTubeUrls = (value) => {
 const MetaKeywordsInput = ({ value = [], onChange }) => {
   const [inputValue, setInputValue] = useState("");
   const [keywords, setKeywords] = useState(value || []);
-  
+
   useEffect(() => {
     setKeywords(value || []);
   }, [value]);
@@ -37,6 +37,7 @@ const MetaKeywordsInput = ({ value = [], onChange }) => {
       setInputValue("");
     }
   };
+
   const handleKeyDown = (e) => {
     if ((e.key === "Enter" || e.key === ",") && inputValue.trim()) {
       e.preventDefault();
@@ -48,6 +49,7 @@ const MetaKeywordsInput = ({ value = [], onChange }) => {
       onChange(newKeywords);
     }
   };
+
   const handleInputChange = (e) => {
     const value = e.target.value;
     if (value.endsWith(",")) {
@@ -57,11 +59,13 @@ const MetaKeywordsInput = ({ value = [], onChange }) => {
       setInputValue(value);
     }
   };
+
   const removeKeyword = (index) => {
     const newKeywords = keywords.filter((_, i) => i !== index);
     setKeywords(newKeywords);
     onChange(newKeywords);
   };
+
   return (
     <div className="border border-gray-600 rounded-md p-2 focus-within:border-teal-500 transition">
       <div className="flex flex-wrap gap-2 items-center">
@@ -175,62 +179,53 @@ const UpdateProductForm = () => {
 
   const watchCategoryRaw = watch("category");
   const watchCategory = watchCategoryRaw ? JSON.parse(watchCategoryRaw) : null;
-  const subCategoryValue = watch("subCategory");
+  // const subCategoryValue = watch("subCategory");
 
   // Reset subCategory whenever category changes
   useEffect(() => {
     setValue("subCategory", "");
   }, [watchCategoryRaw, setValue]);
 
-  // Brand, products, software, taxes, productData fetches
+  // Fetch data functions
   useEffect(() => {
-    const fetchBrands = async () => {
+    const fetchData = async () => {
       try {
-        const res = await axiosPublicUrl.get("/api/brands");
-        setBrands(res.data);
-      } catch (error) {
-        console.error("Error fetching product data:", error);
-      }
-    };
-    const fetchProducts = async () => {
-      try {
-        const response = await axiosPublicUrl.get("/api/products");
-        const mappedProducts =
-          response.data?.products?.map((prod) => ({
+        const [brandsRes, productsRes, softwareRes, taxesRes] =
+          await Promise.all([
+            axiosPublicUrl.get("/api/brands"),
+            axiosPublicUrl.get("/api/products"),
+            axiosPublicUrl.get("/api/software"),
+            axiosPublicUrl.get("/api/taxes"),
+          ]);
+
+        setBrands(brandsRes.data);
+
+        setProductOptions(
+          productsRes.data?.products?.map((prod) => ({
             value: prod.id,
             label: prod.product_name,
             price: prod.price,
             tax: prod.tax,
             image_urls: prod.image_urls,
-          })) || [];
-        setProductOptions(mappedProducts);
-      } catch (error) {
-        console.error("Error fetching product data:", error);
-      }
-    };
-    const fetchSoftware = async () => {
-      try {
-        const response = await axiosPublicUrl.get("/api/software");
-        const mappedSoftware =
-          response.data?.map((soft) => ({
+          })) || []
+        );
+
+        setSoftwareOptions(
+          softwareRes.data?.map((soft) => ({
             value: soft.slug,
             label: soft.softwar_name,
-          })) || [];
-        setSoftwareOptions(mappedSoftware);
+          })) || []
+        );
+
+        setTaxes(taxesRes.data);
       } catch (error) {
-        console.error("Error fetching product data:", error);
+        console.error("Error fetching data:", error);
       }
     };
-    fetchBrands();
-    fetchProducts();
-    fetchSoftware();
+
+    fetchData();
   }, [axiosPublicUrl]);
-  useEffect(() => {
-    axiosPublicUrl
-      .get("/api/taxes")
-      .then((res) => setTaxes(res.data))
-      .catch(() => {});
-  }, [axiosPublicUrl]);
+
   useEffect(() => {
     const fetchProductData = async () => {
       try {
@@ -242,28 +237,40 @@ const UpdateProductForm = () => {
     };
     fetchProductData();
   }, [id, axiosPublicUrl]);
+
+  // Set subcategory default value
   useEffect(() => {
-    if (productData && productData.sub_category && SubCategories.length > 0) {
-      let subCatId = "";
+    if (productData?.sub_category && SubCategories.length > 0) {
       try {
-        subCatId =
-          typeof productData.sub_category === "string"
-            ? JSON.parse(productData.sub_category).id
-            : productData.sub_category.id;
-      } catch {
-        subCatId = "";
-      }
-      const foundSub = SubCategories.find((sc) => sc.id === subCatId);
-      if (foundSub) {
-        setValue(
-          "subCategory",
-          JSON.stringify({ id: foundSub.id, slug: foundSub.slug })
-        );
-      } else {
+        // Parse subcategory
+        let subCategory = productData.sub_category;
+        if (typeof subCategory === "string" && subCategory !== "") {
+          subCategory = JSON.parse(subCategory);
+        }
+        // Defensive: check subCategory is object and has id
+        if (subCategory && typeof subCategory === "object" && subCategory.id) {
+          const foundSub = SubCategories.find((sc) => sc.id === subCategory.id);
+          if (foundSub) {
+            setValue(
+              "subCategory",
+              JSON.stringify({ id: foundSub.id, slug: foundSub.slug })
+            );
+          } else {
+            setValue("subCategory", "");
+          }
+        } else {
+          setValue("subCategory", "");
+        }
+      } catch (error) {
+        console.log(error);
         setValue("subCategory", "");
       }
+    } else {
+      setValue("subCategory", "");
     }
   }, [productData, SubCategories, setValue]);
+
+  // Reset form with product data
   useEffect(() => {
     if (productData) {
       const parsedMetaKeywords = productData.meta_keywords
@@ -272,6 +279,7 @@ const UpdateProductForm = () => {
             .map((k) => k.trim())
             .filter((k) => k)
         : [];
+
       reset({
         productName: productData.product_name || "",
         brandName: productData.brand_name || "",
@@ -283,14 +291,7 @@ const UpdateProductForm = () => {
                 cat: productData.category.slug_name,
               })
           : "",
-        subCategory: productData.sub_category
-          ? typeof productData.sub_category === "string"
-            ? productData.sub_category
-            : JSON.stringify({
-                id: productData.sub_category?.id,
-                slug: productData.sub_category?.slug,
-              })
-          : "",
+        subCategory: productData.sub_category || "",
         sku: productData.sku || "",
         videoUrls: productData.video_urls || "",
         price: productData.price || "",
@@ -329,6 +330,7 @@ const UpdateProductForm = () => {
         metaKeywords: parsedMetaKeywords,
         metaDescription: productData.meta_description || "",
       });
+
       setImages(
         productData.image_urls
           ? typeof productData.image_urls === "string"
@@ -572,12 +574,8 @@ const UpdateProductForm = () => {
             <select
               {...register("subCategory")}
               className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
-              value={subCategoryValue || ""}
-              onChange={(e) => setValue("subCategory", e.target.value)}
             >
-              <option value="">
-                No Sub Category (add under category only)
-              </option>
+              <option value="">Select SubCategory</option>
               {SubCategories.filter(
                 (sub) => sub.main_category_id === watchCategory?.id
               ).map((sub) => (
@@ -589,13 +587,7 @@ const UpdateProductForm = () => {
                 </option>
               ))}
             </select>
-            <div className="text-xs text-gray-500">
-              If you select a subcategory, the product will be added under that
-              subcategory.
-              <br />
-              If you leave this blank, the product will be added under the
-              category only.
-            </div>
+
             {/* SKU */}
             <input
               {...register("sku", { required: "SKU is required" })}
@@ -603,6 +595,7 @@ const UpdateProductForm = () => {
               className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
             />
             {errors.sku && <p className="text-red-500">{errors.sku.message}</p>}
+
             {/* videoUrls */}
             <input
               {...register("videoUrls", {
@@ -616,6 +609,7 @@ const UpdateProductForm = () => {
             {errors.videoUrls && (
               <p className="text-red-500">{errors.videoUrls.message}</p>
             )}
+
             {/* Condition select */}
             <select
               {...register("condition", { required: "Condition is required" })}
@@ -628,6 +622,7 @@ const UpdateProductForm = () => {
             {errors.condition && (
               <p className="text-red-500">{errors.condition.message}</p>
             )}
+
             {/* Tax select */}
             {vatEnabled && (
               <select
@@ -650,6 +645,7 @@ const UpdateProductForm = () => {
             )}
             {errors.tax && <p className="text-red-500">{errors.tax.message}</p>}
           </div>
+
           {/* Third Column */}
           <div className="col-span-1 space-y-3 sm:space-y-4">
             {/* Clearance, In Stock, On Sale checkboxes */}
@@ -703,6 +699,7 @@ const UpdateProductForm = () => {
               className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
               min={new Date().toISOString().slice(0, 16)}
             />
+
             {/* Price */}
             <input
               {...register("price", { required: "Price is required" })}
@@ -712,6 +709,7 @@ const UpdateProductForm = () => {
             {errors.price && (
               <p className="text-red-500">{errors.price.message}</p>
             )}
+
             <div className="flex items-center gap-2">
               <input
                 type="checkbox"
@@ -723,6 +721,7 @@ const UpdateProductForm = () => {
               />
               <label>Hide Price</label>
             </div>
+
             {/* Product Options */}
             <Controller
               name="productOptions"
@@ -782,6 +781,7 @@ const UpdateProductForm = () => {
                 />
               )}
             />
+
             {/* Product Option Show/Hide */}
             <div className="flex items-center gap-2">
               <input
@@ -794,6 +794,7 @@ const UpdateProductForm = () => {
               />
               <label>Hide Product Options</label>
             </div>
+
             {/* softwareOptions */}
             <Controller
               name="softwareOptions"
