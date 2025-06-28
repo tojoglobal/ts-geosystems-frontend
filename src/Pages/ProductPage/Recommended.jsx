@@ -2,7 +2,6 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
-import "../HomePage/TotalStation.css";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
@@ -16,6 +15,13 @@ import { useDispatch } from "react-redux";
 import { addToCart } from "../../features/AddToCart/AddToCart";
 import { formatBDT } from "../../utils/formatBDT";
 import { useVatEnabled } from "../../Hooks/useVatEnabled";
+
+const style = `
+.swiper-button-prev-custom,
+.swiper-button-next-custom {
+  transition: color 0.3s ease;
+}
+`;
 
 const Recommended = ({ category, currentProductId }) => {
   const swiperRef = useRef(null);
@@ -74,16 +80,11 @@ const Recommended = ({ category, currentProductId }) => {
     );
   };
 
-  if (isLoading) {
-    return <div>Loading recommended products...</div>;
-  }
-
-  if (!category || recommendedProducts.length === 0) {
-    return null; // Don't show if no category or no recommended products
-  }
+  if (isLoading || !category || recommendedProducts.length === 0) return null;
 
   return (
     <div className="w-full md:max-w-[95%] 2xl:max-w-[1370px] mx-auto rounded-md py-6 relative">
+      <style>{style}</style>
       {/* Tab Header */}
       <div className="flex items-center justify-between rounded-[4px] border border-gray-200">
         <div className="relative cursor-pointer group px-3 py-1">

@@ -7,13 +7,10 @@ import "swiper/css/navigation";
 import GoogleReview from "./GoogleReview";
 import useDataQuery from "../../../utils/useDataQuery";
 import { SkeletonLoader } from "../../../utils/Loader/SkeletonLoader";
+import { usePopularBrands } from "../../../Hooks/usePopularBrands";
 
 const AboutUs = () => {
-  const { data = [], isLoading: brandsLoading } = useDataQuery(
-    ["popularBrand"],
-    "/api/brands"
-  );
-  const brands = data.filter((brand) => brand.is_populer === 1);
+  const { brands, isLoading: brandsLoading } = usePopularBrands();
 
   const {
     data: response = {},

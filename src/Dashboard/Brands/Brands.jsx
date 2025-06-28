@@ -158,11 +158,9 @@ const Brands = () => {
 
   return (
     <div className="max-w-4xl mx-auto">
-      <h2 className="text-xl sm:text-2xl font-bold text-white">Add a Brand</h2>
-      <p className="text-sm text-gray-300 mb-3 md:mb-5">
-        The image of the first brand marked as "Popular Brand" will appear at
-        the bottom of the product sidebar.
-      </p>
+      <h2 className="text-xl sm:text-2xl font-bold text-white mb-3 md:mb-5">
+        Add a Brand
+      </h2>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div className="space-y-2">
           <label className="block text-sm font-semibold text-gray-200">

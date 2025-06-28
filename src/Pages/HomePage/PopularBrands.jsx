@@ -3,17 +3,11 @@ import { Navigation, Autoplay } from "swiper/modules";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import "swiper/css";
 import "swiper/css/navigation";
-import useDataQuery from "../../utils/useDataQuery";
+import { usePopularBrands } from "../../Hooks/usePopularBrands";
 
 const PopularBrands = () => {
-  const { data = [], isLoading } = useDataQuery(
-    ["popularBrand"],
-    "/api/brands"
-  );
-
-  if (isLoading) return null;
-  const brands = data.filter((brand) => brand.home_page_show === 1);
-
+  const { brands, isLoading } = usePopularBrands();
+  if (isLoading || brands.length === 0) return null;
   return (
     <div className="py-5 md:py-16">
       <div className="w-full md:max-w-[95%] 2xl:max-w-[1370px] mx-auto px-3 md:px-4">
@@ -52,10 +46,7 @@ const PopularBrands = () => {
           >
             {brands.map((brand) => (
               <SwiperSlide key={brand.id}>
-                <div
-                  // to={`/catalog?brand=${brand.slug}`}
-                  className="brand-card p-4 transition-all duration-300 rounded-lg h-32 flex items-center justify-center"
-                >
+                <div className="brand-card p-4 transition-all duration-300 rounded-lg h-32 flex items-center justify-center">
                   <img
                     src={`${import.meta.env.VITE_OPEN_APIURL}/uploads/${
                       brand.photo

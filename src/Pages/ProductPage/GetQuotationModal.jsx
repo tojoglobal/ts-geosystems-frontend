@@ -3,13 +3,12 @@ import Modal from "react-modal";
 import { useSelector } from "react-redux";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import useToastSwal from "../../Hooks/useToastSwal";
-import { formatBDT } from "../../utils/formatBDT";
 
 Modal.setAppElement("#root");
 
 const modalStyles = {
   content: {
-    maxWidth: "1150px",
+    maxWidth: "1050px",
     width: "98%",
     borderRadius: "18px",
     border: "none",
@@ -197,7 +196,6 @@ export default function GetQuotationModal({ isOpen, onRequestClose, product }) {
               </div>
             </form>
           </div>
-
           {/* RIGHT COLUMN: Order Summary */}
           <div className="space-y-4">
             <div className="border rounded shadow-xl p-4">
@@ -209,7 +207,7 @@ export default function GetQuotationModal({ isOpen, onRequestClose, product }) {
                 </span>
               </div>
               <h3 className="font-medium">1 Item</h3>
-              <div className="flex gap-3 items-center">
+              <div className="flex gap-3">
                 <img
                   src={productImage}
                   alt={product.product_name}
@@ -219,9 +217,6 @@ export default function GetQuotationModal({ isOpen, onRequestClose, product }) {
                   <p className="font-semibold text-charcoal">
                     <span>1 x</span> {product.product_name}
                   </p>
-                  <span className="text-[#d71a28] font-bold">
-                    ৳{formatBDT(product.price)}
-                  </span>
                 </div>
               </div>
               <div className="pt-4 text-xs text-gray-500">

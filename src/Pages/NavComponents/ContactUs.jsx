@@ -11,14 +11,12 @@ import useDataQuery from "../../utils/useDataQuery";
 import { SkeletonLoader } from "../../utils/Loader/SkeletonLoader";
 import SocialButtons from "../../Components/SocialButtons";
 import useToastSwal from "../../Hooks/useToastSwal";
+import { usePopularBrands } from "../../Hooks/usePopularBrands";
 
 const ContactUs = () => {
   const showToast = useToastSwal();
   const axiosPublicUrl = useAxiospublic();
-  const { data = [], isLoading: brandsLoading } = useDataQuery(
-    ["popularBrand"],
-    "/api/brands"
-  );
+  const { brands, isLoading: brandsLoading } = usePopularBrands();
 
   const {
     data: contactInfo,
@@ -57,8 +55,6 @@ const ContactUs = () => {
       );
     }
   };
-
-  const brands = data.filter((brand) => brand.is_populer === 1);
 
   if (isError) {
     return <div className="p-3">Error loading contact information</div>;
