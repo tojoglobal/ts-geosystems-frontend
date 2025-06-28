@@ -560,7 +560,7 @@ const UpdateProductForm = () => {
         <div className="col-span-1 md:col-span-2 space-y-4 grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
           <div className="col-span-1 space-y-3 sm:space-y-4">
             {/* productName */}
-            <label className="block mb-2 font-medium">productName</label>
+            <label className="block mb-1 font-medium">Product Name</label>
             <input
               {...register("productName", {
                 required: "Product Name is required",
@@ -573,7 +573,7 @@ const UpdateProductForm = () => {
             )}
 
             {/* brandName */}
-            <label className="block mb-2 font-medium">brandName</label>
+            <label className="block mb-1 font-medium">Brand Name</label>
             <select
               {...register("brandName")}
               className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
@@ -592,7 +592,7 @@ const UpdateProductForm = () => {
             )}
 
             {/* category */}
-            <label className="block mb-2 font-medium">category</label>
+            <label className="block mb-1 font-medium">Category</label>
             <select
               {...register("category")}
               className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
@@ -614,7 +614,7 @@ const UpdateProductForm = () => {
             )}
 
             {/* subCategory*/}
-            <label className="block mb-2 font-medium">subCategory</label>
+            <label className="block mb-1 font-medium">Sub Category</label>
             <select
               {...register("subCategory")}
               className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"

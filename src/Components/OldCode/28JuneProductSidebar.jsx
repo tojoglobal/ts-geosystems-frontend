@@ -12,7 +12,7 @@ const ProductSidebar = () => {
   const axiosPublicUrl = useAxiospublic();
   const [openSections, setOpenSections] = useState({});
   const breadcrumb = useSelector((state) => state.breadcrumb);
-  const subcategoryRefs = useRef({});
+  const subcategoryRefs = useRef({}); // Ref to hold subcategory div elements
 
   // Fetch categories
   const {
@@ -49,6 +49,7 @@ const ProductSidebar = () => {
     "/api/brand/popular-photo"
   );
 
+  // Main fix: Only open "Shop by Brand" if a brand is selected, or if user explicitly toggles it.
   useEffect(() => {
     let catSlug =
       (location.pathname.startsWith("/products/") &&
@@ -65,6 +66,7 @@ const ProductSidebar = () => {
         newOpenSections[foundCategory.category_name] = true;
       }
     }
+    // Only open 'Shop by Brand' if a brand is selected
     if (brand) {
       newOpenSections["Shop by Brand"] = true;
     }
@@ -141,37 +143,28 @@ const ProductSidebar = () => {
               index !== 0 ? "mt-[5px]" : ""
             }`}
           >
-            {/* Shop All special case - keep as before */}
-            {item.label === "Shop All" ? (
-              <Link
-                to={item.link}
-                className={`block p-[11px] hover:text-[#e62245] font-bold hover:underline ${
-                  item.link === `/${activeCategorySlug}` ? "text-[#e62245]" : ""
-                }`}
-              >
-                {item.label}
-              </Link>
-            ) : item.children !== null && item.children.length > 0 ? (
+            {item.children !== null && item.children.length > 0 ? (
               <div>
-                <div className="flex items-center justify-between p-3">
-                  {/* CATEGORY LABEL: ALWAYS A LINK */}
-                  <Link
-                    to={`/${item.categorySlug}`}
-                    className={`w-full text-xs capitalize hover:text-[#e62245] font-bold text-left`}
-                    style={{ flex: 1 }}
-                  >
-                    {item.label}
-                  </Link>
-                  {/* Expand/Collapse Arrow */}
+                <Link
+                  to={item?.categorySlug}
+                  className={`w-full text-xs capitalize hover:text-[#e62245] flex items-center justify-between bg-[#ebebeb] font-bold text-left p-3 ${
+                    openSections[item.label]
+                      ? "border-b-2 border-[#e62245]"
+                      : ""
+                  }`}
+                >
+                  {item.label}
                   <button
                     onClick={(e) => {
                       e.preventDefault();
-                      toggleSection(item.label);
+                      // For Shop by Brand: only allow manual toggle
+                      if (item.label === "Shop by Brand") {
+                        toggleSection(item.label);
+                      } else {
+                        toggleSection(item.label);
+                      }
                     }}
-                    className="cursor-pointer ml-2"
-                    aria-label={
-                      openSections[item.label] ? "Collapse" : "Expand"
-                    }
+                    className="cursor-pointer"
                   >
                     {openSections[item.label] ? (
                       <SlArrowUp size={14} />
@@ -179,28 +172,43 @@ const ProductSidebar = () => {
                       <SlArrowDown size={14} />
                     )}
                   </button>
-                </div>
-                {/* Subcategory list */}
+                </Link>
+                {/* Only allow Shop by Brand to open if toggled or if a brand is selected */}
                 <div
                   ref={(el) => (subcategoryRefs.current[item.label] = el)}
                   style={{
-                    maxHeight: openSections[item.label]
-                      ? `${
-                          subcategoryRefs.current[item.label]?.scrollHeight ||
-                          999
-                        }px`
-                      : "0",
+                    maxHeight:
+                      openSections[item.label] &&
+                      (item.label !== "Shop by Brand" ||
+                        openSections["Shop by Brand"])
+                        ? `${
+                            subcategoryRefs.current[item.label]?.scrollHeight
+                          }px`
+                        : "0",
                   }}
                   className={`overflow-hidden transition-all duration-300 ease-in-out ${
-                    openSections[item.label] ? "opacity-100" : "opacity-0"
+                    openSections[item.label] &&
+                    (item.label !== "Shop by Brand" ||
+                      openSections["Shop by Brand"])
+                      ? "opacity-100"
+                      : "opacity-0"
                   }`}
                 >
                   <div className="bg-[#f6f6f6]">
                     {item.children.map((child) => (
                       <Link
                         key={child.slug || child.name}
-                        to={`/${item.categorySlug}/${child.slug}`}
+                        to={
+                          item.label === "Shop by Brand"
+                            ? `brand/${child.slug}`
+                            : `/${item.categorySlug}/${child.slug}`
+                        }
                         className={`font-normal capitalize block px-5 py-3 text-[13px] hover:bg-gray-50 hover:text-[#e62245] border-t border-[#ebebeb] ${
+                          item.label === "Shop by Brand" && brand === child.slug
+                            ? "text-[#e62245] font-bold"
+                            : ""
+                        } ${
+                          item.label !== "Shop by Brand" &&
                           activeSubcategorySlug === child.slug &&
                           activeCategorySlug === item.categorySlug
                             ? "text-[#e62245] font-bold"
@@ -214,13 +222,10 @@ const ProductSidebar = () => {
                 </div>
               </div>
             ) : (
-              // No children: just a normal category link
               <Link
-                to={`/${item.categorySlug}`}
+                to={item.link}
                 className={`block p-[11px] hover:text-[#e62245] font-bold hover:underline ${
-                  `/${item.categorySlug}` === `/${activeCategorySlug}`
-                    ? "text-[#e62245]"
-                    : ""
+                  item.link === `/${activeCategorySlug}` ? "text-[#e62245]" : ""
                 }`}
               >
                 {item.label}
@@ -229,7 +234,7 @@ const ProductSidebar = () => {
           </div>
         )
       )}
-      <div>
+      <div className="">
         {Array.isArray(popularImage?.photo) &&
           popularImage?.photo.slice(0, 1).map((im, i) => (
             <div
