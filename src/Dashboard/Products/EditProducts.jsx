@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { Editor } from "@tinymce/tinymce-react";
 import Select from "react-select";
@@ -23,9 +23,11 @@ const validateYouTubeUrls = (value) => {
 const MetaKeywordsInput = ({ value = [], onChange }) => {
   const [inputValue, setInputValue] = useState("");
   const [keywords, setKeywords] = useState(value || []);
+  
   useEffect(() => {
     setKeywords(value || []);
   }, [value]);
+
   const addKeyword = () => {
     const trimmedValue = inputValue.trim();
     if (trimmedValue) {
@@ -144,8 +146,14 @@ const UpdateProductForm = () => {
     "/api/subcategory"
   );
 
-  const Categories = categoriesData?.categories || [];
-  const SubCategories = subcategoriesData?.subcategories || [];
+  const Categories = useMemo(
+    () => categoriesData?.categories || [],
+    [categoriesData]
+  );
+  const SubCategories = useMemo(
+    () => subcategoriesData?.subcategories || [],
+    [subcategoriesData]
+  );
 
   const {
     register,

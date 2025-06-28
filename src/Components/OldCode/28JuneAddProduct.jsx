@@ -1,4 +1,5 @@
-import { useState, useEffect, useMemo } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { Editor } from "@tinymce/tinymce-react";
 import Select from "react-select";
@@ -9,8 +10,8 @@ import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import { useVatEnabled } from "../../Hooks/useVatEnabled";
 import AdminVatSwitch from "./AdminVatSwitch";
-import useDataQuery from "../../utils/useDataQuery";
 
+// Helper to validate only YouTube URLs (returns true if empty or valid YouTube URL)
 const validateYouTubeUrls = (value) => {
   if (!value || value.trim() === "") return true;
   const urls = value.split(",").map((v) => v.trim());
@@ -19,6 +20,7 @@ const validateYouTubeUrls = (value) => {
   return urls.every((url) => url === "" || ytPattern.test(url));
 };
 
+// MetaKeywordsInput component
 const MetaKeywordsInput = ({ value = [], onChange }) => {
   const [inputValue, setInputValue] = useState("");
   const [keywords, setKeywords] = useState(value || []);
@@ -95,6 +97,8 @@ const MetaKeywordsInput = ({ value = [], onChange }) => {
           className="flex-1 min-w-[150px] bg-white rounded-sm text-gray-800 placeholder-gray-400 px-3 py-2 border-none focus:outline-none"
         />
       </div>
+
+      {/* Add explicit "Add" button for mobile users */}
       <div className="flex justify-between mt-2">
         <button
           type="button"
@@ -103,6 +107,7 @@ const MetaKeywordsInput = ({ value = [], onChange }) => {
         >
           Add Keyword
         </button>
+
         {keywords.length > 0 && (
           <button
             type="button"
@@ -123,33 +128,13 @@ const MetaKeywordsInput = ({ value = [], onChange }) => {
 const ProductAddForm = () => {
   const axiosPublicUrl = useAxiospublic();
   const [images, setImages] = useState([]);
+  const [Categories, setCategories] = useState([]);
+  const [subCategories, setSubCategories] = useState([]);
+  const [brands, setBrands] = useState([]);
+  const [taxes, setTaxes] = useState([]);
   const [productOptions, setProductOptions] = useState([]);
   const [softwareOptions, setSoftwareOptions] = useState([]);
   const { data: vatEnabled } = useVatEnabled();
-  const navigate = useNavigate();
-
-  // Tanstack Query for categories, subcategories, brands, taxes
-  const { data: categoriesData } = useDataQuery(
-    ["categories"],
-    "/api/category"
-  );
-  const { data: subcategoriesData } = useDataQuery(
-    ["subcategories"],
-    "/api/subcategory"
-  );
-  const { data: brandsData } = useDataQuery(["brands"], "/api/brands");
-  const { data: taxesData } = useDataQuery(["taxes"], "/api/taxes");
-
-  const Categories = useMemo(
-    () => categoriesData?.categories || [],
-    [categoriesData]
-  );
-  const SubCategoriesAll = useMemo(
-    () => subcategoriesData?.subcategories || [],
-    [subcategoriesData]
-  );
-  const Brands = useMemo(() => brandsData || [], [brandsData]);
-  const Taxes = useMemo(() => taxesData || [], [taxesData]);
 
   const {
     register,
@@ -169,17 +154,12 @@ const ProductAddForm = () => {
     },
   });
 
+  const navigate = useNavigate();
+
   const watchCategoryRaw = watch("category");
   const watchCategory = watchCategoryRaw ? JSON.parse(watchCategoryRaw) : null;
 
-  const SubCategories = useMemo(
-    () =>
-      SubCategoriesAll.filter(
-        (sub) => sub.main_category_id === watchCategory?.id
-      ),
-    [SubCategoriesAll, watchCategory]
-  );
-
+  // Fetch Products
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -194,8 +174,17 @@ const ProductAddForm = () => {
           })) || [];
         setProductOptions(mappedProducts);
       } catch (err) {
-        console.log(err);}
+        console.error("Error fetching products:", err);
+      }
     };
+
+    fetchProducts();
+  }, []);
+
+  console.log(productOptions);
+
+  // Fetch Software
+  useEffect(() => {
     const fetchSoftware = async () => {
       try {
         const response = await axiosPublicUrl.get("/api/software");
@@ -206,41 +195,91 @@ const ProductAddForm = () => {
           })) || [];
         setSoftwareOptions(mappedSoftware);
       } catch (err) {
-        console.log(err);
+        console.error("Error fetching software:", err);
       }
     };
-    fetchProducts();
-    fetchSoftware();
-  }, [axiosPublicUrl]);
 
+    fetchSoftware();
+  }, []);
+
+  // fetch the brands
+  useEffect(() => {
+    const fetchBrands = async () => {
+      try {
+        const res = await axiosPublicUrl.get("/api/brands");
+        setBrands(res.data);
+      } catch (error) {
+        console.error("Error fetching brands:", error);
+      }
+    };
+    fetchBrands();
+  }, []);
+
+  // fetch categories and subcategories
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await axiosPublicUrl.get("/api/category");
+        setCategories(response.data?.categories);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+    fetchCategories();
+  }, []);
+
+  // Fetch Subcategories based on selected category
+  useEffect(() => {
+    if (watchCategory) {
+      const fetchSubCategories = async () => {
+        try {
+          const response = await axiosPublicUrl.get("/api/subcategory");
+          setSubCategories(response.data?.subcategories);
+        } catch (error) {
+          console.error("Error fetching subcategories:", error);
+        }
+      };
+      fetchSubCategories();
+    }
+  }, [watchCategory]);
+
+  // Fetch taxes
+  useEffect(() => {
+    axiosPublicUrl
+      .get("/api/taxes")
+      .then((res) => setTaxes(res.data))
+      .catch((err) => console.error("Fetch error:", err));
+  }, []);
+
+  // Dropzone for image upload
   const onDrop = (acceptedFiles) => {
     const newFiles = acceptedFiles.slice(0, 20);
     setImages((prev) => [...prev, ...newFiles]);
   };
+
+  // Remove image from preview
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
     multiple: true,
     maxFiles: 20,
   });
 
+  // onChange handler for file input
   const onSubmit = async (data) => {
     try {
       const formData = new FormData();
+
+      // Append images
       images.forEach((file) => {
         formData.append("images", file);
       });
+
+      // Append all other fields
       formData.append("productName", data.productName);
       formData.append("price", data.price);
       formData.append("priceShowHide", data.priceShowHide);
       formData.append("category", data.category);
-      formData.append(
-        "subCategory",
-        data.subCategory &&
-          data.subCategory !== "" &&
-          data.subCategory !== "null"
-          ? data.subCategory
-          : null
-      );
+      formData.append("subCategory", data.subCategory);
       formData.append("tax", data.tax);
       formData.append("sku", data.sku);
       formData.append("condition", data.condition);
@@ -254,6 +293,8 @@ const ProductAddForm = () => {
       formData.append("flashSaleEnd", data.flashSaleEnd || "");
       formData.append("metaKeywords", data.metaKeywords?.join(",") || "");
       formData.append("metaDescription", data.metaDescription || "");
+
+      // Handle arrays/objects
       formData.append(
         "productOptions",
         JSON.stringify(data.productOptions || [])
@@ -269,8 +310,9 @@ const ProductAddForm = () => {
         },
       });
 
+      // Reset the form after successful submission
       reset();
-      setImages([]);
+      setImages([]); // Clear the images
       setValue("productOptions", []);
       setValue("softwareOptions", []);
 
@@ -284,9 +326,10 @@ const ProductAddForm = () => {
       });
       navigate(-1);
     } catch (error) {
+      console.error("Upload failed:", error);
       Swal.fire({
         icon: "error",
-        text: error.message || "Failed to upload product. Please try again.",
+        text: "Failed to upload product. Please try again.",
         confirmButtonColor: "#ef4444",
       });
     }
@@ -324,6 +367,7 @@ const ProductAddForm = () => {
             ))}
           </div>
         </div>
+
         {/* Second Column */}
         <div className="col-span-1 md:col-span-2 space-y-4 grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
           <div className="col-span-1 space-y-3 sm:space-y-4">
@@ -338,6 +382,7 @@ const ProductAddForm = () => {
             {errors.productName && (
               <p className="text-red-500">{errors.productName.message}</p>
             )}
+
             {/* brandName */}
             <select
               {...register("brandName", { required: "Brand is required" })}
@@ -346,7 +391,7 @@ const ProductAddForm = () => {
               <option value="" className="hover:bg-amber-200">
                 Select Brand
               </option>
-              {Brands.map((br) => (
+              {brands.map((br) => (
                 <option key={br.id} value={br.slug}>
                   {br.brands_name}
                 </option>
@@ -355,6 +400,7 @@ const ProductAddForm = () => {
             {errors.brandName && (
               <p className="text-red-500">{errors.brandName.message}</p>
             )}
+
             {/* category */}
             <select
               {...register("category", { required: "Category is required" })}
@@ -375,22 +421,25 @@ const ProductAddForm = () => {
             {errors.category && (
               <p className="text-red-500">{errors.category.message}</p>
             )}
-            {/* subCategory */}
+
+            {/* subCategory*/}
             <select
-              {...register("subCategory")}
+              {...register("subCategory", {
+                required: "Sub Category is required",
+              })}
               className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
             >
-              <option value="">
-                No Sub Category (add under category only)
-              </option>
-              {SubCategories.map((sub) => (
-                <option
-                  key={sub.id}
-                  value={JSON.stringify({ id: sub.id, slug: sub.slug })}
-                >
-                  {sub.name}
-                </option>
-              ))}
+              <option value="">Select Sub Category</option>
+              {subCategories
+                .filter((sub) => sub.main_category_id === watchCategory?.id)
+                .map((sub) => (
+                  <option
+                    key={sub.id}
+                    value={JSON.stringify({ id: sub.id, slug: sub.slug })}
+                  >
+                    {sub.name}
+                  </option>
+                ))}
             </select>
             {errors.subCategory && (
               <p className="text-red-500">{errors.subCategory.message}</p>
@@ -438,7 +487,7 @@ const ProductAddForm = () => {
                 className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
               >
                 <option value="">Select Tax</option>
-                {Taxes.map((tax) => (
+                {taxes.map((tax) => (
                   <option
                     key={tax.id}
                     value={JSON.stringify({ id: tax.id, value: tax.value })}
@@ -453,6 +502,7 @@ const ProductAddForm = () => {
             )}
             {errors.tax && <p className="text-red-500">{errors.tax.message}</p>}
           </div>
+
           {/* Third Column */}
           <div className="col-span-1 space-y-3 sm:space-y-4">
             {/* Clearance, In Stock, On Sale checkboxes remain the same */}
@@ -779,7 +829,7 @@ const ProductAddForm = () => {
 
 export default ProductAddForm;
 
-// Tailwind input class
+// Tailwind common input class
 const inputClass = `block w-full rounded-md border border-gray-600 shadow-sm focus:border-teal-500 focus:ring-teal-500 p-2 text-sm`;
 const style = document.createElement("style");
 style.innerHTML = `.input { ${inputClass} }`;
