@@ -250,7 +250,7 @@ const ProductSidebar = () => {
                         className={`font-normal capitalize block px-5 py-3 text-[13px] hover:bg-gray-50 hover:text-[#e62245] border-t border-[#ebebeb] ${
                           activeSubcategorySlug === child.slug &&
                           activeCategorySlug === item.categorySlug
-                            ? "font-bold"
+                            ? "font-bold text-[#e62245]"
                             : ""
                         }`}
                         onMouseEnter={() =>
