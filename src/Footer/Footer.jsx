@@ -19,7 +19,7 @@ const Footer = () => {
   const axiosPublic = useAxiospublic();
   const [email, setEmail] = useState(user?.email || "");
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+// console.log(object);
   const { data: dynamicLinks } = useDataQuery(
     ["dynamicLinks"],
     "/api/dynamic-links"
