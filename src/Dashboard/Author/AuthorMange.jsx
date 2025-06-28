@@ -31,6 +31,7 @@ export default function AuthorManager() {
       background: "#1e293b",
       color: "#f8fafc",
       confirmButtonColor: "#e11d48",
+      timer: 4000,
     });
 
   const handleCreateOrUpdate = async (data) => {
@@ -85,12 +86,14 @@ export default function AuthorManager() {
             icon: "success",
             title: "Deleted!",
             text: "Author deleted successfully.",
+            timer: 4000,
           });
         } catch (err) {
           showSwal({
             icon: "error",
             title: "Error",
             text: err?.response?.data?.message || "Failed to delete author.",
+            timer: 4000,
           });
         }
       }

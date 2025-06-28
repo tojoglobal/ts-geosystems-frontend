@@ -36,6 +36,7 @@ const ClientMessages = () => {
           background: "#1e293b",
           color: "#f8fafc",
           confirmButtonColor: "#e11d48",
+          timer: 4000,
         });
       } catch (error) {
         console.error("Error deleting message:", error);
@@ -46,6 +47,7 @@ const ClientMessages = () => {
           background: "#1e293b",
           color: "#f8fafc",
           confirmButtonColor: "#e11d48",
+          timer: 4000,
         });
       }
     }

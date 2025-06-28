@@ -65,6 +65,7 @@ const Categories = () => {
       background: "#1e293b",
       color: "#f8fafc",
       confirmButtonColor: "#e11d48",
+      timer: 4000,
     });
 
   const addCategory = async (data) => {

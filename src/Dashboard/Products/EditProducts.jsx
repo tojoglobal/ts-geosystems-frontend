@@ -380,6 +380,7 @@ const UpdateProductForm = () => {
               background: "#1e293b",
               color: "#f8fafc",
               confirmButtonColor: "#e11d48",
+              timer: 4000,
             });
             setImages((prev) => prev.filter((_, i) => i !== index));
           } else {

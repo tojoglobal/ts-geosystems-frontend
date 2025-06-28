@@ -104,13 +104,23 @@ const BlogCreate = () => {
         },
       });
 
-      Swal.fire("Success", "Blog post created!", "success");
+      Swal.fire({
+        icon: "Success",
+        title: "success",
+        text: "Blog post created!",
+        timer: 4000,
+      });
       reset();
       setSelectedTags([]);
       setImages(images.map((img) => ({ ...img, file: null })));
     } catch (error) {
       console.error(error);
-      Swal.fire("Error", "Failed to create blog post", "error");
+      Swal.fire({
+        icon: "Error",
+        title: "error",
+        text: "Failed to create blog post",
+        timer: 4000,
+      });
     } finally {
       setIsUploading(false);
     }

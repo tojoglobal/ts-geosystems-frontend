@@ -54,6 +54,7 @@ const UserInbox = () => {
         title: "Success",
         text: "Message sent successfully!",
         icon: "success",
+        timer: 4000,
       });
       reset();
       queryClient.invalidateQueries(["userMessages"]);
@@ -63,6 +64,7 @@ const UserInbox = () => {
         title: "Error",
         text: error.response?.data?.error || "Failed to send message",
         icon: "error",
+        timer: 4000,
       });
       if (error.response?.data?.errors) {
         error.response.data.errors.forEach((err) => {

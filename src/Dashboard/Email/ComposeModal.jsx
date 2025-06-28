@@ -24,6 +24,7 @@ const ComposeModal = ({ onClose, onSent, initialData }) => {
         confirmButtonColor: "#3B82F6",
         background: "#18181b",
         color: "#fff",
+        timer: 4000,
       });
 
       onClose();
@@ -35,6 +36,7 @@ const ComposeModal = ({ onClose, onSent, initialData }) => {
         confirmButtonColor: "#EF4444",
         background: "#18181b",
         color: "#fff",
+        timer: 4000,
       });
     }
   };

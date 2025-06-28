@@ -283,6 +283,7 @@ const ProductAddForm = () => {
         icon: "success",
         title: "Product added successfully!",
         confirmButtonColor: "#14b8a6",
+        timer: 4000,
       });
       navigate("/dashboard/product");
     } catch (error) {
@@ -291,6 +292,7 @@ const ProductAddForm = () => {
         icon: "error",
         text: "Failed to upload product. Please try again.",
         confirmButtonColor: "#ef4444",
+        timer: 4000,
       });
     }
   };

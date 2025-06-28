@@ -34,7 +34,12 @@ const LatestTransactions = () => {
       if (res.status === 200) {
         refetch();
         setEditStatusId(null);
-        Swal.fire("Success", "Order status updated!", "success");
+        Swal.fire({
+          icon: "Success",
+          title: "Success",
+          text: "Order status updated!",
+          timer: 4000,
+        });
       } else {
         throw new Error("Failed to update status");
       }
@@ -61,12 +66,22 @@ const LatestTransactions = () => {
           const res = await axiospublic.delete(`/api/orders/${order_id}`);
           if (res.status === 200) {
             refetch();
-            Swal.fire("Deleted!", res?.data?.message, "success");
+            Swal.fire({
+              icon: "success",
+              title: "Deleted!",
+              text: res?.data?.message,
+              timer: 4000,
+            });
           } else {
             throw new Error("Failed to delete order");
           }
         } catch (error) {
-          Swal.fire("Error", error.message, "error");
+          Swal.fire({
+            icon: "Error",
+            title: "Error!",
+            text: error.message,
+            timer: 4000,
+          });
         }
       }
     });

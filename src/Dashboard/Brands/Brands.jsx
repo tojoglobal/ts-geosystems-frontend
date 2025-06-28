@@ -28,6 +28,7 @@ const Brands = () => {
       background: "#1e293b",
       color: "#f8fafc",
       confirmButtonColor: "#e11d48",
+      timer: 3000,
     });
 
   const watchBrandName = watch("brandName", "");

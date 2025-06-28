@@ -26,6 +26,7 @@ const UserAddress = () => {
         title: "Deleted",
         text: "Address has been deleted.",
         icon: "success",
+        timer: 4000,
       });
       refetch();
     }
