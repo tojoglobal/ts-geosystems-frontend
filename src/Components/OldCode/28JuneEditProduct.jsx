@@ -1,4 +1,5 @@
-import { useState, useEffect, useMemo } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { Editor } from "@tinymce/tinymce-react";
 import Select from "react-select";
@@ -10,8 +11,8 @@ import Button from "../Button/Button";
 import Swal from "sweetalert2";
 import { useVatEnabled } from "../../Hooks/useVatEnabled";
 import AdminVatSwitch from "./AdminVatSwitch";
-import useDataQuery from "../../utils/useDataQuery";
 
+// Helper to validate only YouTube URLs (returns true if empty or valid YouTube URL)
 const validateYouTubeUrls = (value) => {
   if (!value || value.trim() === "") return true;
   const urls = value.split(",").map((v) => v.trim());
@@ -20,10 +21,13 @@ const validateYouTubeUrls = (value) => {
   return urls.every((url) => url === "" || ytPattern.test(url));
 };
 
+// MetaKeywordsInput component
+// MetaKeywordsInput component with mobile-friendly features
 const MetaKeywordsInput = ({ value = [], onChange }) => {
   const [inputValue, setInputValue] = useState("");
   const [keywords, setKeywords] = useState(value || []);
 
+  // Sync with external value changes
   useEffect(() => {
     setKeywords(value || []);
   }, [value]);
@@ -52,6 +56,7 @@ const MetaKeywordsInput = ({ value = [], onChange }) => {
 
   const handleInputChange = (e) => {
     const value = e.target.value;
+    // Add keyword when comma is entered (mobile friendly)
     if (value.endsWith(",")) {
       setInputValue(value.slice(0, -1));
       addKeyword();
@@ -133,31 +138,14 @@ const UpdateProductForm = () => {
   const axiosPublicUrl = useAxiospublic();
   const [productData, setProductData] = useState({});
   const [images, setImages] = useState([]);
+  const [Categories, setCategories] = useState([]);
+  const [subCategories, setSubCategories] = useState([]);
   const [brands, setBrands] = useState([]);
   const [taxes, setTaxes] = useState([]);
   const [productOptions, setProductOptions] = useState([]);
   const [softwareOptions, setSoftwareOptions] = useState([]);
   const { data: vatEnabled } = useVatEnabled();
   const navigate = useNavigate();
-
-  // Fetch categories and subcategories
-  const { data: categoriesData } = useDataQuery(
-    ["categories"],
-    "/api/category"
-  );
-  const { data: subcategoriesData } = useDataQuery(
-    ["subcategories"],
-    "/api/subcategory"
-  );
-
-  const Categories = useMemo(
-    () => categoriesData?.categories || [],
-    [categoriesData]
-  );
-  const SubCategories = useMemo(
-    () => subcategoriesData?.subcategories || [],
-    [subcategoriesData]
-  );
 
   const {
     register,
@@ -180,47 +168,97 @@ const UpdateProductForm = () => {
   const watchCategoryRaw = watch("category");
   const watchCategory = watchCategoryRaw ? JSON.parse(watchCategoryRaw) : null;
 
-  // Fetch brands/products/software/taxes
+  // Fetch Products
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchProducts = async () => {
       try {
-        const [brandsRes, productsRes, softwareRes, taxesRes] =
-          await Promise.all([
-            axiosPublicUrl.get("/api/brands"),
-            axiosPublicUrl.get("/api/products"),
-            axiosPublicUrl.get("/api/software"),
-            axiosPublicUrl.get("/api/taxes"),
-          ]);
-
-        setBrands(brandsRes.data);
-
-        setProductOptions(
-          productsRes.data?.products?.map((prod) => ({
+        const response = await axiosPublicUrl.get("/api/products");
+        const mappedProducts =
+          response.data?.products?.map((prod) => ({
             value: prod.id,
             label: prod.product_name,
             price: prod.price,
             tax: prod.tax,
             image_urls: prod.image_urls,
-          })) || []
-        );
-
-        setSoftwareOptions(
-          softwareRes.data?.map((soft) => ({
-            value: soft.slug,
-            label: soft.softwar_name,
-          })) || []
-        );
-
-        setTaxes(taxesRes.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
+          })) || [];
+        setProductOptions(mappedProducts);
+      } catch (err) {
+        console.error("Error fetching products:", err);
       }
     };
 
-    fetchData();
-  }, [axiosPublicUrl]);
+    fetchProducts();
+  }, []);
 
-  // Fetch product data
+  // Fetch Software
+  useEffect(() => {
+    const fetchSoftware = async () => {
+      try {
+        const response = await axiosPublicUrl.get("/api/software");
+        const mappedSoftware =
+          response.data?.map((soft) => ({
+            value: soft.slug,
+            label: soft.softwar_name,
+          })) || [];
+        setSoftwareOptions(mappedSoftware);
+      } catch (err) {
+        console.error("Error fetching software:", err);
+      }
+    };
+
+    fetchSoftware();
+  }, []);
+
+  // fetch the brands
+  useEffect(() => {
+    const fetchBrands = async () => {
+      try {
+        const res = await axiosPublicUrl.get("/api/brands");
+        setBrands(res.data);
+      } catch (error) {
+        console.error("Error fetching brands:", error);
+      }
+    };
+    fetchBrands();
+  }, []);
+
+  // fetch categories and subcategories
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await axiosPublicUrl.get("/api/category");
+        setCategories(response.data?.categories);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+    fetchCategories();
+  }, []);
+
+  // Fetch Subcategories based on selected category
+  useEffect(() => {
+    if (watchCategory) {
+      const fetchSubCategories = async () => {
+        try {
+          const response = await axiosPublicUrl.get("/api/subcategory");
+          setSubCategories(response.data?.subcategories);
+        } catch (error) {
+          console.error("Error fetching subcategories:", error);
+        }
+      };
+      fetchSubCategories();
+    }
+  }, [watchCategory]);
+
+  // Fetch taxes
+  useEffect(() => {
+    axiosPublicUrl
+      .get("/api/taxes")
+      .then((res) => setTaxes(res.data))
+      .catch((err) => console.error("Fetch error:", err));
+  }, []);
+
+  // Fetch product details for updating
   useEffect(() => {
     const fetchProductData = async () => {
       try {
@@ -231,39 +269,35 @@ const UpdateProductForm = () => {
       }
     };
     fetchProductData();
-  }, [id, axiosPublicUrl]);
+  }, [id]);
 
-  // Set subcategory default value
   useEffect(() => {
-    if (productData?.sub_category && SubCategories.length > 0) {
-      try {
-        // Parse subcategory
-        let subCategory = productData.sub_category;
-        if (typeof subCategory === "string" && subCategory !== "") {
-          subCategory = JSON.parse(subCategory);
-        }
-        // Defensive: check subCategory is object and has id
-        if (subCategory && typeof subCategory === "object" && subCategory.id) {
-          const foundSub = SubCategories.find((sc) => sc.id === subCategory.id);
-          if (foundSub) {
-            setValue(
-              "subCategory",
-              JSON.stringify({ id: foundSub.id, slug: foundSub.slug })
-            );
-          } else {
-            setValue("subCategory", "");
-          }
-        } else {
-          setValue("subCategory", "");
-        }
-      } catch (error) {
-        console.log(error);
-        setValue("subCategory", "");
+    if (productData && productData.sub_category && subCategories.length > 0) {
+      // The current subcategory value as string
+      // const subCatValue =
+      //   typeof productData.sub_category === "string"
+      //     ? productData.sub_category
+      //     : JSON.stringify({
+      //         id: productData.sub_category.id,
+      //         slug: productData.sub_category.slug,
+      //       });
+
+      let subCatId =
+        typeof productData.sub_category === "string"
+          ? JSON.parse(productData.sub_category).id
+          : productData.sub_category.id;
+      const foundSub = subCategories.find((sc) => sc.id === subCatId);
+      if (foundSub) {
+        const subCatValue = JSON.stringify({
+          id: foundSub.id,
+          slug: foundSub.slug,
+        });
+        setValue("subCategory", subCatValue);
       }
-    } else {
-      setValue("subCategory", "");
     }
-  }, [productData, SubCategories, setValue]);
+  }, [productData, subCategories, setValue]);
+  // console.log("Product Data:", productData);
+
   useEffect(() => {
     if (productData) {
       const parsedMetaKeywords = productData.meta_keywords
@@ -272,25 +306,6 @@ const UpdateProductForm = () => {
             .map((k) => k.trim())
             .filter((k) => k)
         : [];
-
-      // Figure out subCategory default value
-      let subCatValue = "";
-      if (productData.sub_category) {
-        try {
-          let subCatObj =
-            typeof productData.sub_category === "string"
-              ? JSON.parse(productData.sub_category)
-              : productData.sub_category;
-          if (subCatObj && subCatObj.id) {
-            subCatValue = JSON.stringify({
-              id: subCatObj.id,
-              slug: subCatObj.slug,
-            });
-          }
-        } catch (err) {
-          console.log(err);
-        }
-      }
 
       reset({
         productName: productData.product_name || "",
@@ -303,7 +318,14 @@ const UpdateProductForm = () => {
                 cat: productData.category.slug_name,
               })
           : "",
-        subCategory: subCatValue,
+        subCategory: productData.sub_category
+          ? typeof productData.sub_category === "string"
+            ? productData.sub_category
+            : JSON.stringify({
+                id: productData.sub_category.id,
+                slug: productData.sub_category.slug,
+              })
+          : "",
         sku: productData.sku || "",
         videoUrls: productData.video_urls || "",
         price: productData.price || "",
@@ -367,6 +389,7 @@ const UpdateProductForm = () => {
 
     if (result.isConfirmed) {
       try {
+        // If it's an old image (URL string)
         if (typeof file === "string") {
           const response = await axiosPublicUrl.post(
             "/api/products/delete-image",
@@ -386,6 +409,7 @@ const UpdateProductForm = () => {
             Swal.fire("Error!", "Failed to delete the image.", "error");
           }
         } else {
+          // If it's a newly added file, just remove it from the preview
           setImages((prev) => prev.filter((_, i) => i !== index));
           Swal.fire({
             title: "Removed!",
@@ -397,15 +421,13 @@ const UpdateProductForm = () => {
           });
         }
       } catch (error) {
-        Swal.fire(
-          "Error!",
-          error.message || "Failed to delete the image.",
-          "error"
-        );
+        console.error("Failed to delete image", error);
+        Swal.fire("Error!", "Failed to delete the image.", "error");
       }
     }
   };
 
+  // Dropzone for image upload
   const onDrop = (acceptedFiles) => {
     const newFiles = acceptedFiles.slice(0, 20);
     setImages((prev) => [...prev, ...newFiles]);
@@ -420,6 +442,8 @@ const UpdateProductForm = () => {
   const onSubmit = async (data) => {
     try {
       const formData = new FormData();
+
+      // Append images
       images.forEach((file) => {
         if (file instanceof File) {
           formData.append("images", file);
@@ -427,18 +451,13 @@ const UpdateProductForm = () => {
           formData.append("existingImages", file);
         }
       });
+
+      // Append all other fields
       formData.append("productName", data.productName);
       formData.append("price", data.price);
       formData.append("priceShowHide", data.priceShowHide);
       formData.append("category", data.category);
-      formData.append(
-        "subCategory",
-        data.subCategory &&
-          data.subCategory !== "" &&
-          data.subCategory !== "null"
-          ? data.subCategory
-          : null
-      );
+      formData.append("subCategory", data.subCategory);
       formData.append("tax", data.tax);
       formData.append("sku", data.sku);
       formData.append("condition", data.condition);
@@ -454,6 +473,8 @@ const UpdateProductForm = () => {
       formData.append("flashSaleEnd", data.flashSaleEnd || "");
       formData.append("metaKeywords", data.metaKeywords?.join(",") || "");
       formData.append("metaDescription", data.metaDescription || "");
+
+      // Handle arrays/objects
       formData.append(
         "productOptions",
         JSON.stringify(data.productOptions || [])
@@ -462,9 +483,13 @@ const UpdateProductForm = () => {
         "softwareOptions",
         JSON.stringify(data.softwareOptions || [])
       );
+
       const res = await axiosPublicUrl.put(`/api/products/${id}`, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       });
+
       if (res.status === 201) {
         Swal.fire({
           title: "Success",
@@ -474,12 +499,13 @@ const UpdateProductForm = () => {
           color: "#f8fafc",
           confirmButtonColor: "#e11d48",
         });
-        navigate("/dashboard/product");
+        navigate(-1);
       }
     } catch (error) {
+      console.error("Update failed:", error);
       Swal.fire({
         icon: "error",
-        text: error.message || "Failed to update product. Please try again.",
+        text: "Failed to update product. Please try again.",
         confirmButtonColor: "#ef4444",
       });
     }
@@ -492,6 +518,7 @@ const UpdateProductForm = () => {
         onSubmit={handleSubmit(onSubmit)}
         className="p-2 sm:p-6 grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6"
       >
+        {/* Image Upload Column */}
         <div className="col-span-1">
           <label className="block mb-2 font-medium">Update Images</label>
           <div
@@ -529,9 +556,11 @@ const UpdateProductForm = () => {
           </div>
         </div>
 
+        {/* Second Column */}
         <div className="col-span-1 md:col-span-2 space-y-4 grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
           <div className="col-span-1 space-y-3 sm:space-y-4">
             {/* productName */}
+            <label className="block mb-1 font-medium">Product Name</label>
             <input
               {...register("productName", {
                 required: "Product Name is required",
@@ -544,6 +573,7 @@ const UpdateProductForm = () => {
             )}
 
             {/* brandName */}
+            <label className="block mb-1 font-medium">Brand Name</label>
             <select
               {...register("brandName")}
               className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
@@ -562,11 +592,14 @@ const UpdateProductForm = () => {
             )}
 
             {/* category */}
+            <label className="block mb-1 font-medium">Category</label>
             <select
-              {...register("category", { required: "Category is required" })}
+              {...register("category")}
               className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
             >
-              <option value="">Select Category</option>
+              <option value="" className="hover:bg-amber-200">
+                Select Category
+              </option>
               {Categories.map((cat) => (
                 <option
                   key={cat.id}
@@ -580,25 +613,29 @@ const UpdateProductForm = () => {
               <p className="text-red-500">{errors.category.message}</p>
             )}
 
-            {/* subCategory */}
+            {/* subCategory*/}
+            <label className="block mb-1 font-medium">Sub Category</label>
             <select
               {...register("subCategory")}
               className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
             >
-              <option value="">Select SubCategory</option>
-              {SubCategories.filter(
-                (sub) => sub.main_category_id === watchCategory?.id
-              ).map((sub) => (
-                <option
-                  key={sub.id}
-                  value={JSON.stringify({ id: sub.id, slug: sub.slug })}
-                >
-                  {sub.name}
-                </option>
-              ))}
+              <option value="">Select Sub Category</option>
+              {subCategories
+                .filter((sub) => sub?.main_category_id === watchCategory?.id)
+                .map((sub) => (
+                  <option
+                    key={sub.id}
+                    value={JSON.stringify({ id: sub.id, slug: sub.slug })}
+                  >
+                    {sub?.name}
+                  </option>
+                ))}
             </select>
+            {errors.subCategory && (
+              <p className="text-red-500">{errors.subCategory.message}</p>
+            )}
 
-            {/* SKU */}
+            {/*SKU / Unique Code */}
             <input
               {...register("sku", { required: "SKU is required" })}
               placeholder="SKU / Unique Code"
@@ -606,7 +643,7 @@ const UpdateProductForm = () => {
             />
             {errors.sku && <p className="text-red-500">{errors.sku.message}</p>}
 
-            {/* videoUrls */}
+            {/*videoUrls */}
             <input
               {...register("videoUrls", {
                 validate: (value) =>
@@ -709,7 +746,6 @@ const UpdateProductForm = () => {
               className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
               min={new Date().toISOString().slice(0, 16)}
             />
-
             {/* Price */}
             <input
               {...register("price", { required: "Price is required" })}
@@ -719,7 +755,6 @@ const UpdateProductForm = () => {
             {errors.price && (
               <p className="text-red-500">{errors.price.message}</p>
             )}
-
             <div className="flex items-center gap-2">
               <input
                 type="checkbox"
@@ -731,7 +766,7 @@ const UpdateProductForm = () => {
               />
               <label>Hide Price</label>
             </div>
-
+            {/* Product Options */}
             <Controller
               name="productOptions"
               control={control}
@@ -790,7 +825,7 @@ const UpdateProductForm = () => {
                 />
               )}
             />
-
+            {/* Product Option Show/Hide */}
             <div className="flex items-center gap-2">
               <input
                 type="checkbox"
@@ -802,7 +837,7 @@ const UpdateProductForm = () => {
               />
               <label>Hide Product Options</label>
             </div>
-
+            {/* softwareOptions */}
             <Controller
               name="softwareOptions"
               control={control}
@@ -863,7 +898,9 @@ const UpdateProductForm = () => {
             />
           </div>
 
+          {/* Meta Keywords and Description */}
           <div className="col-span-1 md:col-span-2 space-y-4">
+            {/* Meta Keywords Field */}
             <div>
               <label className="block mb-1 font-medium">Meta Keywords</label>
               <Controller
@@ -882,6 +919,7 @@ const UpdateProductForm = () => {
               </p>
             </div>
 
+            {/* Meta Description Field */}
             <div>
               <label className="block mb-1 font-medium">Meta Description</label>
               <textarea
@@ -895,6 +933,7 @@ const UpdateProductForm = () => {
             </div>
           </div>
 
+          {/* Product Overview and Warranty Info */}
           <div className="col-span-1 md:col-span-2 space-y-4">
             <label className="ml-1">Product Overview</label>
             <Controller
@@ -984,6 +1023,7 @@ const UpdateProductForm = () => {
             />
           </div>
 
+          {/* Submit Button */}
           <div className="col-span-1 md:col-span-2 space-y-4">
             <Button text={"Update Product"} />
           </div>
@@ -995,7 +1035,7 @@ const UpdateProductForm = () => {
 
 export default UpdateProductForm;
 
-// Add Tailwind input class
+// Tailwind common input class
 const inputClass = `block w-full rounded-md border border-gray-600 shadow-sm focus:border-teal-500 focus:ring-teal-500 p-2 text-sm`;
 const style = document.createElement("style");
 style.innerHTML = `.input { ${inputClass} }`;

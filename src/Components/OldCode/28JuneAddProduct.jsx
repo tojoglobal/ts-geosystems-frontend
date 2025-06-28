@@ -1,17 +1,17 @@
-import { useState, useEffect, useMemo } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { Editor } from "@tinymce/tinymce-react";
 import Select from "react-select";
 import { useDropzone } from "react-dropzone";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
-import { FaTimes } from "react-icons/fa";
-import { useNavigate, useParams } from "react-router-dom";
 import Button from "../Button/Button";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 import { useVatEnabled } from "../../Hooks/useVatEnabled";
 import AdminVatSwitch from "./AdminVatSwitch";
-import useDataQuery from "../../utils/useDataQuery";
 
+// Helper to validate only YouTube URLs (returns true if empty or valid YouTube URL)
 const validateYouTubeUrls = (value) => {
   if (!value || value.trim() === "") return true;
   const urls = value.split(",").map((v) => v.trim());
@@ -20,6 +20,7 @@ const validateYouTubeUrls = (value) => {
   return urls.every((url) => url === "" || ytPattern.test(url));
 };
 
+// MetaKeywordsInput component
 const MetaKeywordsInput = ({ value = [], onChange }) => {
   const [inputValue, setInputValue] = useState("");
   const [keywords, setKeywords] = useState(value || []);
@@ -29,9 +30,8 @@ const MetaKeywordsInput = ({ value = [], onChange }) => {
   }, [value]);
 
   const addKeyword = () => {
-    const trimmedValue = inputValue.trim();
-    if (trimmedValue) {
-      const newKeywords = [...keywords, trimmedValue];
+    if (inputValue.trim()) {
+      const newKeywords = [...keywords, inputValue.trim()];
       setKeywords(newKeywords);
       onChange(newKeywords);
       setInputValue("");
@@ -39,7 +39,7 @@ const MetaKeywordsInput = ({ value = [], onChange }) => {
   };
 
   const handleKeyDown = (e) => {
-    if ((e.key === "Enter" || e.key === ",") && inputValue.trim()) {
+    if (e.key === "Enter" || e.key === ",") {
       e.preventDefault();
       addKeyword();
     } else if (e.key === "Backspace" && !inputValue && keywords.length > 0) {
@@ -67,8 +67,8 @@ const MetaKeywordsInput = ({ value = [], onChange }) => {
   };
 
   return (
-    <div className="border border-gray-600 rounded-md p-2 focus-within:border-teal-500 transition">
-      <div className="flex flex-wrap gap-2 items-center">
+    <div className="border border-gray-600 rounded-md p-2 focus-within:border-teal-500 transition relative">
+      <div className="flex flex-wrap gap-2 items-center pr-14">
         {keywords.map((keyword, index) => (
           <div
             key={index}
@@ -79,35 +79,35 @@ const MetaKeywordsInput = ({ value = [], onChange }) => {
               type="button"
               onClick={() => removeKeyword(index)}
               className="ml-2 cursor-pointer text-teal-600 hover:text-teal-800 focus:outline-none"
-              aria-label={`Remove keyword ${keyword}`}
             >
               &times;
             </button>
           </div>
         ))}
-        <div className="flex-1 flex items-center gap-2">
-          <input
-            type="text"
-            value={inputValue}
-            onChange={handleInputChange}
-            onKeyDown={handleKeyDown}
-            placeholder={
-              keywords.length === 0
-                ? "Type keywords (use comma or Enter)"
-                : "Add another keyword"
-            }
-            className="flex-1 min-w-[100px] bg-white rounded-sm text-gray-800 placeholder-gray-400 px-3 py-2 border-none focus:outline-none"
-          />
-          <button
-            type="button"
-            onClick={addKeyword}
-            className="px-2 py-1 cursor-pointer bg-teal-600 text-white rounded text-sm hover:bg-teal-700 whitespace-nowrap"
-          >
-            Add
-          </button>
-        </div>
+        <input
+          type="text"
+          value={inputValue}
+          onChange={handleInputChange}
+          onKeyDown={handleKeyDown}
+          placeholder={
+            keywords.length === 0
+              ? "Type a keyword and press Enter"
+              : "Add another keyword"
+          }
+          className="flex-1 min-w-[150px] bg-white rounded-sm text-gray-800 placeholder-gray-400 px-3 py-2 border-none focus:outline-none"
+        />
       </div>
+
+      {/* Add explicit "Add" button for mobile users */}
       <div className="flex justify-between mt-2">
+        <button
+          type="button"
+          onClick={addKeyword}
+          className="px-3 py-1 cursor-pointer bg-teal-600 text-white rounded text-sm hover:bg-teal-700"
+        >
+          Add Keyword
+        </button>
+
         {keywords.length > 0 && (
           <button
             type="button"
@@ -115,49 +115,26 @@ const MetaKeywordsInput = ({ value = [], onChange }) => {
               setKeywords([]);
               onChange([]);
             }}
-            className="text-xs cursor-pointer text-gray-500 hover:text-teal-600 transition-colors"
+            className="px-3 py-1 cursor-pointer bg-gray-500 text-white rounded text-sm hover:bg-gray-600"
           >
-            Clear all
+            Clear All
           </button>
         )}
-        <span className="text-xs text-gray-500">
-          {keywords.length} keyword(s) added
-        </span>
       </div>
     </div>
   );
 };
 
-const UpdateProductForm = () => {
-  const { id } = useParams();
+const ProductAddForm = () => {
   const axiosPublicUrl = useAxiospublic();
-  const [productData, setProductData] = useState({});
   const [images, setImages] = useState([]);
+  const [Categories, setCategories] = useState([]);
+  const [subCategories, setSubCategories] = useState([]);
   const [brands, setBrands] = useState([]);
   const [taxes, setTaxes] = useState([]);
   const [productOptions, setProductOptions] = useState([]);
   const [softwareOptions, setSoftwareOptions] = useState([]);
   const { data: vatEnabled } = useVatEnabled();
-  const navigate = useNavigate();
-
-  // Fetch categories and subcategories
-  const { data: categoriesData } = useDataQuery(
-    ["categories"],
-    "/api/category"
-  );
-  const { data: subcategoriesData } = useDataQuery(
-    ["subcategories"],
-    "/api/subcategory"
-  );
-
-  const Categories = useMemo(
-    () => categoriesData?.categories || [],
-    [categoriesData]
-  );
-  const SubCategories = useMemo(
-    () => subcategoriesData?.subcategories || [],
-    [subcategoriesData]
-  );
 
   const {
     register,
@@ -177,268 +154,132 @@ const UpdateProductForm = () => {
     },
   });
 
+  const navigate = useNavigate();
+
   const watchCategoryRaw = watch("category");
   const watchCategory = watchCategoryRaw ? JSON.parse(watchCategoryRaw) : null;
 
-  // Fetch brands/products/software/taxes
+  // Fetch Products
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchProducts = async () => {
       try {
-        const [brandsRes, productsRes, softwareRes, taxesRes] =
-          await Promise.all([
-            axiosPublicUrl.get("/api/brands"),
-            axiosPublicUrl.get("/api/products"),
-            axiosPublicUrl.get("/api/software"),
-            axiosPublicUrl.get("/api/taxes"),
-          ]);
-
-        setBrands(brandsRes.data);
-
-        setProductOptions(
-          productsRes.data?.products?.map((prod) => ({
+        const response = await axiosPublicUrl.get("/api/products");
+        const mappedProducts =
+          response.data?.products?.map((prod) => ({
             value: prod.id,
             label: prod.product_name,
             price: prod.price,
             tax: prod.tax,
             image_urls: prod.image_urls,
-          })) || []
-        );
+          })) || [];
+        setProductOptions(mappedProducts);
+      } catch (err) {
+        console.error("Error fetching products:", err);
+      }
+    };
 
-        setSoftwareOptions(
-          softwareRes.data?.map((soft) => ({
+    fetchProducts();
+  }, []);
+
+  console.log(productOptions);
+
+  // Fetch Software
+  useEffect(() => {
+    const fetchSoftware = async () => {
+      try {
+        const response = await axiosPublicUrl.get("/api/software");
+        const mappedSoftware =
+          response.data?.map((soft) => ({
             value: soft.slug,
             label: soft.softwar_name,
-          })) || []
-        );
-
-        setTaxes(taxesRes.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
+          })) || [];
+        setSoftwareOptions(mappedSoftware);
+      } catch (err) {
+        console.error("Error fetching software:", err);
       }
     };
 
-    fetchData();
-  }, [axiosPublicUrl]);
+    fetchSoftware();
+  }, []);
 
-  // Fetch product data
+  // fetch the brands
   useEffect(() => {
-    const fetchProductData = async () => {
+    const fetchBrands = async () => {
       try {
-        const response = await axiosPublicUrl.get(`/api/products/${id}`);
-        setProductData(response.data);
+        const res = await axiosPublicUrl.get("/api/brands");
+        setBrands(res.data);
       } catch (error) {
-        console.error("Error fetching product data:", error);
+        console.error("Error fetching brands:", error);
       }
     };
-    fetchProductData();
-  }, [id, axiosPublicUrl]);
+    fetchBrands();
+  }, []);
 
-  // Set subcategory default value
+  // fetch categories and subcategories
   useEffect(() => {
-    if (productData?.sub_category && SubCategories.length > 0) {
+    const fetchCategories = async () => {
       try {
-        // Parse subcategory
-        let subCategory = productData.sub_category;
-        if (typeof subCategory === "string" && subCategory !== "") {
-          subCategory = JSON.parse(subCategory);
-        }
-        // Defensive: check subCategory is object and has id
-        if (subCategory && typeof subCategory === "object" && subCategory.id) {
-          const foundSub = SubCategories.find((sc) => sc.id === subCategory.id);
-          if (foundSub) {
-            setValue(
-              "subCategory",
-              JSON.stringify({ id: foundSub.id, slug: foundSub.slug })
-            );
-          } else {
-            setValue("subCategory", "");
-          }
-        } else {
-          setValue("subCategory", "");
-        }
+        const response = await axiosPublicUrl.get("/api/category");
+        setCategories(response.data?.categories);
       } catch (error) {
-        console.log(error);
-        setValue("subCategory", "");
+        console.error("Error fetching categories:", error);
       }
-    } else {
-      setValue("subCategory", "");
-    }
-  }, [productData, SubCategories, setValue]);
-  useEffect(() => {
-    if (productData) {
-      const parsedMetaKeywords = productData.meta_keywords
-        ? productData.meta_keywords
-            .split(",")
-            .map((k) => k.trim())
-            .filter((k) => k)
-        : [];
+    };
+    fetchCategories();
+  }, []);
 
-      // Figure out subCategory default value
-      let subCatValue = "";
-      if (productData.sub_category) {
+  // Fetch Subcategories based on selected category
+  useEffect(() => {
+    if (watchCategory) {
+      const fetchSubCategories = async () => {
         try {
-          let subCatObj =
-            typeof productData.sub_category === "string"
-              ? JSON.parse(productData.sub_category)
-              : productData.sub_category;
-          if (subCatObj && subCatObj.id) {
-            subCatValue = JSON.stringify({
-              id: subCatObj.id,
-              slug: subCatObj.slug,
-            });
-          }
-        } catch (err) {
-          console.log(err);
+          const response = await axiosPublicUrl.get("/api/subcategory");
+          setSubCategories(response.data?.subcategories);
+        } catch (error) {
+          console.error("Error fetching subcategories:", error);
         }
-      }
-
-      reset({
-        productName: productData.product_name || "",
-        brandName: productData.brand_name || "",
-        category: productData.category
-          ? typeof productData.category === "string"
-            ? productData.category
-            : JSON.stringify({
-                id: productData.category.id,
-                cat: productData.category.slug_name,
-              })
-          : "",
-        subCategory: subCatValue,
-        sku: productData.sku || "",
-        videoUrls: productData.video_urls || "",
-        price: productData.price || "",
-        condition: productData.product_condition || "",
-        productOverview: productData.product_overview || "",
-        warrantyInfo: productData.warranty_info || "",
-        productOptions: productData.product_options
-          ? typeof productData.product_options === "string"
-            ? JSON.parse(productData.product_options)
-            : productData.product_options
-          : [],
-        softwareOptions: productData.software_options
-          ? typeof productData.software_options === "string"
-            ? JSON.parse(productData.software_options)
-            : productData.software_options
-          : [],
-        priceShowHide: productData.priceShowHide || 0,
-        productOptionShowHide: productData.productOptionShowHide || 0,
-        tax: productData.tax
-          ? typeof productData.tax === "string"
-            ? productData.tax
-            : JSON.stringify({
-                id: productData.tax.id,
-                value: productData.tax.value,
-              })
-          : "",
-        isStock: productData.isStock !== undefined ? productData.isStock : true,
-        sale: productData.sale !== undefined ? productData.sale : false,
-        clearance:
-          productData.clearance === 1 || productData.clearance === true,
-        flashSale:
-          productData.flash_sale === 1 || productData.flash_sale === true,
-        flashSaleEnd: productData.flash_sale_end
-          ? new Date(productData.flash_sale_end).toISOString().slice(0, 16)
-          : "",
-        metaKeywords: parsedMetaKeywords,
-        metaDescription: productData.meta_description || "",
-      });
-
-      setImages(
-        productData.image_urls
-          ? typeof productData.image_urls === "string"
-            ? JSON.parse(productData.image_urls)
-            : productData.image_urls
-          : []
-      );
+      };
+      fetchSubCategories();
     }
-  }, [productData, reset]);
+  }, [watchCategory]);
 
-  const handleRemoveImage = async (file, index) => {
-    const result = await Swal.fire({
-      title: "Are you sure?",
-      text: "Do you want to delete this image?",
-      icon: "warning",
-      showCancelButton: true,
-      background: "#1e293b",
-      color: "#f8fafc",
-      confirmButtonColor: "#e11d48",
-      confirmButtonText: "Yes, delete it!",
-    });
+  // Fetch taxes
+  useEffect(() => {
+    axiosPublicUrl
+      .get("/api/taxes")
+      .then((res) => setTaxes(res.data))
+      .catch((err) => console.error("Fetch error:", err));
+  }, []);
 
-    if (result.isConfirmed) {
-      try {
-        if (typeof file === "string") {
-          const response = await axiosPublicUrl.post(
-            "/api/products/delete-image",
-            { imageUrl: file, id }
-          );
-          if (response?.status === 200) {
-            Swal.fire({
-              title: "Deleted!",
-              text: "Your image has been deleted.",
-              icon: "success",
-              background: "#1e293b",
-              color: "#f8fafc",
-              confirmButtonColor: "#e11d48",
-            });
-            setImages((prev) => prev.filter((_, i) => i !== index));
-          } else {
-            Swal.fire("Error!", "Failed to delete the image.", "error");
-          }
-        } else {
-          setImages((prev) => prev.filter((_, i) => i !== index));
-          Swal.fire({
-            title: "Removed!",
-            text: "The image has been removed from the upload list.",
-            icon: "success",
-            background: "#1e293b",
-            color: "#f8fafc",
-            confirmButtonColor: "#e11d48",
-          });
-        }
-      } catch (error) {
-        Swal.fire(
-          "Error!",
-          error.message || "Failed to delete the image.",
-          "error"
-        );
-      }
-    }
-  };
-
+  // Dropzone for image upload
   const onDrop = (acceptedFiles) => {
     const newFiles = acceptedFiles.slice(0, 20);
     setImages((prev) => [...prev, ...newFiles]);
   };
 
+  // Remove image from preview
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
     multiple: true,
     maxFiles: 20,
   });
 
+  // onChange handler for file input
   const onSubmit = async (data) => {
     try {
       const formData = new FormData();
+
+      // Append images
       images.forEach((file) => {
-        if (file instanceof File) {
-          formData.append("images", file);
-        } else if (typeof file === "string") {
-          formData.append("existingImages", file);
-        }
+        formData.append("images", file);
       });
+
+      // Append all other fields
       formData.append("productName", data.productName);
       formData.append("price", data.price);
       formData.append("priceShowHide", data.priceShowHide);
       formData.append("category", data.category);
-      formData.append(
-        "subCategory",
-        data.subCategory &&
-          data.subCategory !== "" &&
-          data.subCategory !== "null"
-          ? data.subCategory
-          : null
-      );
+      formData.append("subCategory", data.subCategory);
       formData.append("tax", data.tax);
       formData.append("sku", data.sku);
       formData.append("condition", data.condition);
@@ -448,12 +289,12 @@ const UpdateProductForm = () => {
       formData.append("videoUrls", data.videoUrls || "");
       formData.append("warrantyInfo", data.warrantyInfo || "");
       formData.append("clearance", data.clearance ? "1" : "0");
-      formData.append("isStock", data.isStock ? "1" : "0");
-      formData.append("sale", data.sale ? "1" : "0");
       formData.append("flashSale", data.flashSale ? "1" : "0");
       formData.append("flashSaleEnd", data.flashSaleEnd || "");
       formData.append("metaKeywords", data.metaKeywords?.join(",") || "");
       formData.append("metaDescription", data.metaDescription || "");
+
+      // Handle arrays/objects
       formData.append(
         "productOptions",
         JSON.stringify(data.productOptions || [])
@@ -462,24 +303,33 @@ const UpdateProductForm = () => {
         "softwareOptions",
         JSON.stringify(data.softwareOptions || [])
       );
-      const res = await axiosPublicUrl.put(`/api/products/${id}`, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
+
+      await axiosPublicUrl.post("/api/products", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       });
-      if (res.status === 201) {
-        Swal.fire({
-          title: "Success",
-          text: "Product updated successfully!",
-          icon: "success",
-          background: "#1e293b",
-          color: "#f8fafc",
-          confirmButtonColor: "#e11d48",
-        });
-        navigate("/dashboard/product");
-      }
+
+      // Reset the form after successful submission
+      reset();
+      setImages([]); // Clear the images
+      setValue("productOptions", []);
+      setValue("softwareOptions", []);
+
+      Swal.fire({
+        title: "Success",
+        text: "Product added successfully!",
+        icon: "success",
+        background: "#1e293b",
+        color: "#f8fafc",
+        confirmButtonColor: "#e11d48",
+      });
+      navigate(-1);
     } catch (error) {
+      console.error("Upload failed:", error);
       Swal.fire({
         icon: "error",
-        text: error.message || "Failed to update product. Please try again.",
+        text: "Failed to upload product. Please try again.",
         confirmButtonColor: "#ef4444",
       });
     }
@@ -492,8 +342,9 @@ const UpdateProductForm = () => {
         onSubmit={handleSubmit(onSubmit)}
         className="p-2 sm:p-6 grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6"
       >
+        {/* Image Upload Column */}
         <div className="col-span-1">
-          <label className="block mb-2 font-medium">Update Images</label>
+          <label className="block mb-2 font-medium">Upload Images</label>
           <div
             {...getRootProps()}
             className="border-2 border-dashed border-gray-600 rounded-md p-4 sm:p-6 text-center cursor-pointer hover:border-teal-500"
@@ -507,28 +358,17 @@ const UpdateProductForm = () => {
           </div>
           <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 gap-2">
             {images.map((file, index) => (
-              <div key={index} className="relative">
-                <img
-                  src={
-                    file instanceof File
-                      ? URL.createObjectURL(file)
-                      : `${import.meta.env.VITE_OPEN_APIURL}${file}`
-                  }
-                  alt="preview"
-                  className="h-16 sm:h-20 w-full object-cover rounded"
-                />
-                <button
-                  type="button"
-                  onClick={() => handleRemoveImage(file, index)}
-                  className="absolute cursor-pointer top-0 right-0 bg-red-600 text-white p-1 rounded-full"
-                >
-                  <FaTimes size={12} />
-                </button>
-              </div>
+              <img
+                key={index}
+                src={URL.createObjectURL(file)}
+                alt="preview"
+                className="h-16 sm:h-20 w-full object-cover rounded"
+              />
             ))}
           </div>
         </div>
 
+        {/* Second Column */}
         <div className="col-span-1 md:col-span-2 space-y-4 grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
           <div className="col-span-1 space-y-3 sm:space-y-4">
             {/* productName */}
@@ -545,7 +385,7 @@ const UpdateProductForm = () => {
 
             {/* brandName */}
             <select
-              {...register("brandName")}
+              {...register("brandName", { required: "Brand is required" })}
               className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
             >
               <option value="" className="hover:bg-amber-200">
@@ -566,7 +406,9 @@ const UpdateProductForm = () => {
               {...register("category", { required: "Category is required" })}
               className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
             >
-              <option value="">Select Category</option>
+              <option value="" className="hover:bg-amber-200">
+                Select Category
+              </option>
               {Categories.map((cat) => (
                 <option
                   key={cat.id}
@@ -580,25 +422,30 @@ const UpdateProductForm = () => {
               <p className="text-red-500">{errors.category.message}</p>
             )}
 
-            {/* subCategory */}
+            {/* subCategory*/}
             <select
-              {...register("subCategory")}
+              {...register("subCategory", {
+                required: "Sub Category is required",
+              })}
               className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
             >
-              <option value="">Select SubCategory</option>
-              {SubCategories.filter(
-                (sub) => sub.main_category_id === watchCategory?.id
-              ).map((sub) => (
-                <option
-                  key={sub.id}
-                  value={JSON.stringify({ id: sub.id, slug: sub.slug })}
-                >
-                  {sub.name}
-                </option>
-              ))}
+              <option value="">Select Sub Category</option>
+              {subCategories
+                .filter((sub) => sub.main_category_id === watchCategory?.id)
+                .map((sub) => (
+                  <option
+                    key={sub.id}
+                    value={JSON.stringify({ id: sub.id, slug: sub.slug })}
+                  >
+                    {sub.name}
+                  </option>
+                ))}
             </select>
+            {errors.subCategory && (
+              <p className="text-red-500">{errors.subCategory.message}</p>
+            )}
 
-            {/* SKU */}
+            {/*SKU / Unique Code */}
             <input
               {...register("sku", { required: "SKU is required" })}
               placeholder="SKU / Unique Code"
@@ -606,7 +453,7 @@ const UpdateProductForm = () => {
             />
             {errors.sku && <p className="text-red-500">{errors.sku.message}</p>}
 
-            {/* videoUrls */}
+            {/*videoUrls */}
             <input
               {...register("videoUrls", {
                 validate: (value) =>
@@ -658,7 +505,7 @@ const UpdateProductForm = () => {
 
           {/* Third Column */}
           <div className="col-span-1 space-y-3 sm:space-y-4">
-            {/* Clearance, In Stock, On Sale checkboxes */}
+            {/* Clearance, In Stock, On Sale checkboxes remain the same */}
             <div className="flex items-center gap-2">
               <input
                 type="checkbox"
@@ -671,11 +518,7 @@ const UpdateProductForm = () => {
               <input
                 type="checkbox"
                 {...register("isStock")}
-                defaultChecked={
-                  productData.isStock === undefined
-                    ? true
-                    : productData.isStock === 1 || productData.isStock === true
-                }
+                defaultChecked={true}
                 className="w-5 h-5 cursor-pointer accent-teal-600"
               />
               <label>In Stock</label>
@@ -684,9 +527,6 @@ const UpdateProductForm = () => {
               <input
                 type="checkbox"
                 {...register("sale")}
-                defaultChecked={
-                  productData.sale === 1 || productData.sale === true
-                }
                 className="w-5 h-5 cursor-pointer accent-teal-600"
               />
               <label>On Sale</label>
@@ -695,10 +535,6 @@ const UpdateProductForm = () => {
               <input
                 type="checkbox"
                 {...register("flashSale")}
-                defaultChecked={
-                  productData.flash_sale === 1 ||
-                  productData.flash_sale === true
-                }
                 className="w-5 h-5 cursor-pointer accent-teal-600"
               />
               <label>Flash Sale</label>
@@ -709,8 +545,7 @@ const UpdateProductForm = () => {
               className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
               min={new Date().toISOString().slice(0, 16)}
             />
-
-            {/* Price */}
+            {/* Price and other fields remain the same */}
             <input
               {...register("price", { required: "Price is required" })}
               placeholder="Price"
@@ -719,7 +554,6 @@ const UpdateProductForm = () => {
             {errors.price && (
               <p className="text-red-500">{errors.price.message}</p>
             )}
-
             <div className="flex items-center gap-2">
               <input
                 type="checkbox"
@@ -727,11 +561,11 @@ const UpdateProductForm = () => {
                 onChange={(e) =>
                   setValue("priceShowHide", e.target.checked ? 1 : 0)
                 }
-                className="w-5 h-5 accent-teal-600 cursor-pointer"
+                className="w-5 h-5 accent-teal-600"
               />
               <label>Hide Price</label>
             </div>
-
+            {/* Product Options and other fields remain the same */}
             <Controller
               name="productOptions"
               control={control}
@@ -747,7 +581,7 @@ const UpdateProductForm = () => {
                   styles={{
                     control: (base, state) => ({
                       ...base,
-                      backgroundColor: "rgb(255, 255, 255)",
+                      backgroundColor: "rgb(255, 255, 255)", // Tailwind: dark:bg-gray-800
                       borderColor: state.isFocused
                         ? "#14b8a6"
                         : "rgb(75 85 99)",
@@ -763,15 +597,15 @@ const UpdateProductForm = () => {
                     option: (base, state) => ({
                       ...base,
                       backgroundColor: state.isSelected
-                        ? "#0f766e"
+                        ? "#0f766e" // Tailwind: bg-teal-700
                         : state.isFocused
-                        ? "#115e59"
+                        ? "#115e59" // Tailwind: hover:bg-teal-800
                         : "rgb(209, 213, 219)",
                       color: state.isFocused ? "white" : "black",
                     }),
                     multiValue: (base) => ({
                       ...base,
-                      backgroundColor: "#363636",
+                      backgroundColor: "#363636", // dark teal
                       color: "white",
                     }),
                     multiValueLabel: (base) => ({
@@ -790,7 +624,7 @@ const UpdateProductForm = () => {
                 />
               )}
             />
-
+            {/* Product Option Show/Hide */}
             <div className="flex items-center gap-2">
               <input
                 type="checkbox"
@@ -798,11 +632,11 @@ const UpdateProductForm = () => {
                 onChange={(e) =>
                   setValue("productOptionShowHide", e.target.checked ? 1 : 0)
                 }
-                className="w-5 h-5 accent-teal-600 cursor-pointer"
+                className="w-5 h-5 accent-teal-600"
               />
               <label>Hide Product Options</label>
             </div>
-
+            {/* softwareOptions */}
             <Controller
               name="softwareOptions"
               control={control}
@@ -818,7 +652,7 @@ const UpdateProductForm = () => {
                   styles={{
                     control: (base, state) => ({
                       ...base,
-                      backgroundColor: "rgb(255, 255, 255)",
+                      backgroundColor: "rgb(255, 255, 255)", // Tailwind: dark:bg-gray-800
                       borderColor: state.isFocused
                         ? "#14b8a6"
                         : "rgb(75 85 99)",
@@ -834,15 +668,15 @@ const UpdateProductForm = () => {
                     option: (base, state) => ({
                       ...base,
                       backgroundColor: state.isSelected
-                        ? "#0f766e"
+                        ? "#0f766e" // Tailwind: bg-teal-700
                         : state.isFocused
-                        ? "#115e59"
+                        ? "#115e59" // Tailwind: hover:bg-teal-800
                         : "rgb(209, 213, 219)",
                       color: state.isFocused ? "white" : "black",
                     }),
                     multiValue: (base) => ({
                       ...base,
-                      backgroundColor: "#363636",
+                      backgroundColor: "#363636", // dark teal
                       color: "white",
                     }),
                     multiValueLabel: (base) => ({
@@ -862,8 +696,8 @@ const UpdateProductForm = () => {
               )}
             />
           </div>
-
           <div className="col-span-1 md:col-span-2 space-y-4">
+            {/* Meta Keywords Field */}
             <div>
               <label className="block mb-1 font-medium">Meta Keywords</label>
               <Controller
@@ -871,7 +705,7 @@ const UpdateProductForm = () => {
                 control={control}
                 render={({ field }) => (
                   <MetaKeywordsInput
-                    value={field.value || []}
+                    value={field.value}
                     onChange={field.onChange}
                     className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
                   />
@@ -882,6 +716,7 @@ const UpdateProductForm = () => {
               </p>
             </div>
 
+            {/* Meta Description Field */}
             <div>
               <label className="block mb-1 font-medium">Meta Description</label>
               <textarea
@@ -894,7 +729,7 @@ const UpdateProductForm = () => {
               </p>
             </div>
           </div>
-
+          {/* productOverview*/}
           <div className="col-span-1 md:col-span-2 space-y-4">
             <label className="ml-1">Product Overview</label>
             <Controller
@@ -983,9 +818,8 @@ const UpdateProductForm = () => {
               )}
             />
           </div>
-
           <div className="col-span-1 md:col-span-2 space-y-4">
-            <Button text={"Update Product"} />
+            <Button text={"Submit Product"} />
           </div>
         </div>
       </form>
@@ -993,9 +827,9 @@ const UpdateProductForm = () => {
   );
 };
 
-export default UpdateProductForm;
+export default ProductAddForm;
 
-// Add Tailwind input class
+// Tailwind common input class
 const inputClass = `block w-full rounded-md border border-gray-600 shadow-sm focus:border-teal-500 focus:ring-teal-500 p-2 text-sm`;
 const style = document.createElement("style");
 style.innerHTML = `.input { ${inputClass} }`;
