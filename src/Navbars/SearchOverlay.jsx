@@ -31,7 +31,7 @@ const SearchOverlay = ({ isOpen, onClose }) => {
   const showToast = useToastSwal();
   const [latestSearches, setLatestSearches] = useState([]);
   const [recommendedProducts, setRecommendedProducts] = useState([]);
-  const lastTrackedSearch = useRef(""); // To avoid duplicate posts
+  const lastTrackedSearch = useRef(""); // To avoid duplicate posts!
 
   // Fetch recommended products (joined with main product table)
   const { data: recommendedData, isLoading: recommendedLoading } = useDataQuery(
