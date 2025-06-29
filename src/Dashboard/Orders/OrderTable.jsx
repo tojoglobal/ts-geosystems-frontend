@@ -26,7 +26,6 @@ const OrderTable = () => {
   const {
     data: orderData = {},
     isLoading,
-    isError,
     refetch,
   } = useDataQuery(
     ["orders", currentPage, itemsPerPage],
@@ -289,10 +288,9 @@ const OrderTable = () => {
   };
 
   if (isLoading) return <Loader />;
-  if (isError) return <div>Failed to load orders.</div>;
 
   return (
-    <div className="bg-slate-800 text-white rounded-lg p-4 my-2">
+    <div className="bg-slate-800 text-white rounded-lg p-4">
       <div className="flex justify-between items-center mb-4">
         <h2 className="md:text-xl font-semibold">Order Management</h2>
         <div className="flex items-center gap-2">

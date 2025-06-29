@@ -268,7 +268,7 @@ const AddQuickGuides = () => {
                           </a>
                         </td>
                         <td className="text-center p-2 sm:p-3 border border-gray-600 whitespace-nowrap">
-                          <div className="flex justify-center items-center gap-3">
+                          <div className="flex justify-center items-center gap-1">
                             <button
                               onClick={() => handleEdit(guide)}
                               className="text-blue-300 cursor-pointer hover:text-blue-500 p-1"

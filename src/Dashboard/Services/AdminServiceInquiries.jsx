@@ -1,12 +1,56 @@
 import Swal from "sweetalert2";
 import useDataQuery from "../../utils/useDataQuery";
-import { Eye } from "lucide-react";
+import { Eye, Trash } from "lucide-react";
+import { useAxiospublic } from "../../Hooks/useAxiospublic";
+import Loader from "../../utils/Loader";
 
 const AdminServiceInquiries = () => {
-  const { data = [], isLoading } = useDataQuery(
-    ["service-inquiries"],
-    "/api/service-inquiries"
-  );
+  const axiosPublic = useAxiospublic();
+  const {
+    data = [],
+    isLoading,
+    refetch,
+  } = useDataQuery(["service-inquiries"], "/api/service-inquiries");
+
+  const handleDelete = async (id) => {
+    const result = await Swal.fire({
+      title: "Delete Service Inquiry?",
+      text: "This action cannot be undone!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "Cancel",
+      background: "#1e293b",
+      color: "#f8fafc",
+      confirmButtonColor: "#e11d48",
+      cancelButtonColor: "#64748b",
+    });
+    if (result.isConfirmed) {
+      try {
+        await axiosPublic.delete(`/api/service-inquiries/${id}`);
+        refetch();
+        Swal.fire({
+          title: "Deleted!",
+          text: "The service inquiry has been deleted.",
+          icon: "success",
+          background: "#1e293b",
+          color: "#f8fafc",
+          confirmButtonColor: "#e11d48",
+          timer: 4000,
+        });
+      } catch (error) {
+        Swal.fire({
+          title: "Error!",
+          text: error.message || "Failed to delete service inquiry",
+          icon: "error",
+          background: "#1e293b",
+          color: "#f8fafc",
+          confirmButtonColor: "#e11d48",
+          timer: 4000,
+        });
+      }
+    }
+  };
 
   const showFullDetails = (inquiry) => {
     // Parse file_paths as array
@@ -101,18 +145,10 @@ const AdminServiceInquiries = () => {
     });
   };
 
-  if (isLoading) {
-    return (
-      <div className="bg-slate-800 text-white rounded-lg p-4 my-4">
-        <div className="flex justify-center items-center h-40">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-white"></div>
-        </div>
-      </div>
-    );
-  }
+  if (isLoading) return <Loader />;
 
   return (
-    <div className="bg-slate-800 text-white rounded-lg p-4 my-4">
+    <div className="bg-slate-800 text-white rounded-lg p-4">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold">Service Inquiries</h2>
         <div className="text-sm text-gray-400">
@@ -133,7 +169,7 @@ const AdminServiceInquiries = () => {
               <th className="px-4 py-2">Calibration</th>
               <th className="px-4 py-2">Repair</th>
               <th className="px-4 py-2">Date</th>
-              <th className="px-4 py-2">View</th>
+              <th className="px-4 py-2 text-center">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -160,12 +196,20 @@ const AdminServiceInquiries = () => {
                 <td className="px-4 py-2">
                   {new Date(inquiry.created_at).toLocaleDateString()}
                 </td>
-                <td className="px-4 py-2">
+                <td className="px-4 py-2 flex gap-2 justify-center items-center">
                   <button
                     onClick={() => showFullDetails(inquiry)}
                     className="text-yellow-400 cursor-pointer bg-yellow-900 p-1 rounded hover:bg-yellow-800"
+                    title="View"
                   >
                     <Eye size={16} />
+                  </button>
+                  <button
+                    onClick={() => handleDelete(inquiry.id)}
+                    className="text-red-400 cursor-pointer bg-red-900 p-1 rounded hover:bg-red-800"
+                    title="Delete"
+                  >
+                    <Trash size={16} />
                   </button>
                 </td>
               </tr>

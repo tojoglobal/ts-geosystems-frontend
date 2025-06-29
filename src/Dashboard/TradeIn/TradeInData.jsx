@@ -1,17 +1,60 @@
 import Swal from "sweetalert2";
 import useDataQuery from "../../utils/useDataQuery";
-import { Eye } from "lucide-react";
+import { Eye, Trash } from "lucide-react";
+import { useAxiospublic } from "../../Hooks/useAxiospublic";
 
 const TradeInData = () => {
-  const { data = [], isLoading } = useDataQuery(
-    ["tradeInData"],
-    "/api/trade-in"
-  );
+  const axiosPublic = useAxiospublic();
+  const {
+    data = [],
+    isLoading,
+    refetch,
+  } = useDataQuery(["tradeInData"], "/api/trade-in");
+
+  const handleDelete = async (id) => {
+    const result = await Swal.fire({
+      title: "Delete Trade-In Request?",
+      text: "This action cannot be undone!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "Cancel",
+      background: "#1e293b",
+      color: "#f8fafc",
+      confirmButtonColor: "#e11d48",
+      cancelButtonColor: "#64748b",
+    });
+
+    if (result.isConfirmed) {
+      try {
+        await axiosPublic.delete(`/api/trade-in/${id}`);
+        refetch();
+        Swal.fire({
+          title: "Deleted!",
+          text: "The trade-in request has been deleted.",
+          icon: "success",
+          background: "#1e293b",
+          color: "#f8fafc",
+          confirmButtonColor: "#e11d48",
+          timer: 4000,
+        });
+      } catch (error) {
+        Swal.fire({
+          title: "Error!",
+          text: error.message || "Failed to delete trade-in request",
+          icon: "error",
+          background: "#1e293b",
+          color: "#f8fafc",
+          confirmButtonColor: "#e11d48",
+          timer: 4000,
+        });
+      }
+    }
+  };
 
   const showFullDetails = (request) => {
     // Parse the photos array from the string
     const photos = JSON.parse(request.photos || "[]");
-
     Swal.fire({
       title: `Trade-In Request from ${request.name}`,
       html: `
@@ -107,7 +150,7 @@ const TradeInData = () => {
               <th className="px-3 md:px-4 py-2">Model</th>
               <th className="px-3 md:px-4 py-2">Condition</th>
               <th className="px-3 md:px-4 py-2">Date</th>
-              <th className="px-3 md:px-4 py-2">View</th>
+              <th className="px-3 md:px-4 py-2 text-center">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -125,12 +168,20 @@ const TradeInData = () => {
                 <td className="px-3 md:px-4 py-2">
                   {new Date(request.createdAt).toLocaleDateString()}
                 </td>
-                <td className="px-3 md:px-4 py-2">
+                <td className="px-3 md:px-4 py-2 flex gap-2 justify-center items-center">
                   <button
                     onClick={() => showFullDetails(request)}
                     className="text-yellow-400 cursor-pointer bg-yellow-900 p-1 rounded hover:bg-yellow-800"
+                    title="View"
                   >
                     <Eye size={16} />
+                  </button>
+                  <button
+                    onClick={() => handleDelete(request.id)}
+                    className="text-red-400 cursor-pointer bg-red-900 p-1 rounded hover:bg-red-800"
+                    title="Delete"
+                  >
+                    <Trash size={16} />
                   </button>
                 </td>
               </tr>

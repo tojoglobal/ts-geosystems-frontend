@@ -196,7 +196,11 @@ const ProductTable = () => {
     <div>
       <div className="flex justify-between mb-5">
         <h1 className="text-xl md:text-2xl font-bold">Products List</h1>
-        <div className="flex gap-2">
+        <div className="flex items-center gap-4">
+          <div className="text-gray-300 text-md font-semibold">
+            Total Products:{" "}
+            <span className="text-teal-400 font-bold">{total}</span>
+          </div>
           <input
             type="text"
             placeholder="Search by product name"

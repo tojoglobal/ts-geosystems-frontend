@@ -45,10 +45,7 @@ function ClientForm({
   return (
     <form
       onSubmit={handleSubmit}
-      className="max-w-2xl mx-auto rounded-xl p-6 mb-8 border border-gray-600"
-      style={{
-        boxShadow: "0 6px 32px 0 rgba(25,118,210,0.11)",
-      }}
+      className="max-w-2xl mx-auto rounded-lg p-6 mb-8 border border-gray-600"
     >
       <h2 className="font-semibold text-xl mb-8 text-center tracking-wide">
         {isEditing ? "Edit Client" : "Add New Client"}

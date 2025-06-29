@@ -2,6 +2,7 @@ import { Eye, Trash } from "lucide-react";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import useDataQuery from "../../utils/useDataQuery";
 import Swal from "sweetalert2";
+import Loader from "../../utils/Loader";
 
 const ClientMessages = () => {
   const axiosPublic = useAxiospublic();
@@ -42,7 +43,7 @@ const ClientMessages = () => {
         console.error("Error deleting message:", error);
         Swal.fire({
           title: "Error!",
-          text: "Failed to delete message",
+          text: "Failed to delete message. Please refresh and try again or contact admin if the problem persists.",
           icon: "error",
           background: "#1e293b",
           color: "#f8fafc",
@@ -77,15 +78,7 @@ const ClientMessages = () => {
     });
   };
 
-  if (isLoading) {
-    return (
-      <div className="bg-slate-800 text-white rounded-lg p-4 my-4">
-        <div className="flex justify-center items-center h-40">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-white"></div>
-        </div>
-      </div>
-    );
-  }
+  if (isLoading) return <Loader />;
 
   return (
     <div className="bg-slate-800 text-white rounded-lg p-4">
@@ -129,16 +122,18 @@ const ClientMessages = () => {
                 <td className="px-3 md:px-4 py-2">
                   {new Date(message.created_at).toLocaleDateString()}
                 </td>
-                <td className="px-3 md:px-4 py-2 space-x-2">
+                <td className="px-3 md:px-4 py-2 flex gap-2">
                   <button
                     onClick={() => showFullMessage(message)}
                     className="text-yellow-400 cursor-pointer bg-yellow-900 p-1 rounded hover:bg-yellow-800"
+                    title="View"
                   >
                     <Eye size={16} />
                   </button>
                   <button
                     onClick={() => handleDelete(message.id)}
                     className="text-red-400 cursor-pointer bg-red-900 p-1 rounded hover:bg-red-800"
+                    title="Delete"
                   >
                     <Trash size={16} />
                   </button>

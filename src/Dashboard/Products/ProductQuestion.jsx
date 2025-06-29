@@ -2,6 +2,7 @@ import { Eye, Trash } from "lucide-react";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import useDataQuery from "../../utils/useDataQuery";
 import Swal from "sweetalert2";
+import Loader from "../../utils/Loader";
 
 const ProductQuestion = () => {
   const axiosPublic = useAxiospublic();
@@ -78,15 +79,7 @@ const ProductQuestion = () => {
     });
   };
 
-  if (isLoading) {
-    return (
-      <div className="bg-slate-800 text-white rounded-lg p-4 my-4">
-        <div className="flex justify-center items-center h-40">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-white"></div>
-        </div>
-      </div>
-    );
-  }
+  if (isLoading) return <Loader />;
 
   return (
     <div className="bg-slate-800 text-white rounded-lg p-4">
