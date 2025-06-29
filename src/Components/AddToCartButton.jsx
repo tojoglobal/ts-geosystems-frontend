@@ -6,11 +6,13 @@ const AddToCartButton = ({
   selectedOptions = [],
   priceInfo,
   children,
-  variant, // added for details page
+  variant,
+  showAddToCartButton = true,
 }) => {
   const handleAddToCart = useAddToCart();
 
-  // Style based on variant
+  if (!showAddToCartButton) return null;
+
   const className =
     variant === "details"
       ? "cursor-pointer overflow-hidden group text-white px-16 font-semibold py-[5px] rounded-[3px] text-[16px] bg-[#e62245] hover:bg-red-800 w-full sm:w-auto"

@@ -4,11 +4,7 @@ import Slider from "react-slick";
 import { IoCloseOutline, IoSearchSharp } from "react-icons/io5";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import {
-  MdAddShoppingCart,
-  MdOutlineKeyboardVoice,
-  MdRequestQuote,
-} from "react-icons/md";
+import { MdAddShoppingCart, MdOutlineKeyboardVoice } from "react-icons/md";
 import { RxCross1 } from "react-icons/rx";
 import PrevArrow from "../Components/PrevArrow";
 import NextArrow from "../Components/NextArrow";
@@ -34,19 +30,6 @@ const SearchOverlay = ({ isOpen, onClose }) => {
   const [latestSearches, setLatestSearches] = useState([]);
   const [recommendedProducts, setRecommendedProducts] = useState([]);
   const lastTrackedSearch = useRef(""); // To avoid duplicate posts!
-
-  // Settings API for dynamic logo
-  const { data: settingsData = {} } = useDataQuery(
-    ["seetings"],
-    "/api/settings"
-  );
-  const mainLogo =
-    settingsData?.main_logo &&
-    (settingsData.main_logo.startsWith("/") ||
-      settingsData.main_logo.startsWith("http"))
-      ? `${import.meta.env.VITE_OPEN_APIURL || ""}${settingsData.main_logo}`
-      : "";
-  const appName = settingsData?.app_name || "Logo";
 
   // Fetch recommended products (joined with main product table)
   const { data: recommendedData, isLoading: recommendedLoading } = useDataQuery(
@@ -220,12 +203,9 @@ const SearchOverlay = ({ isOpen, onClose }) => {
           >
             <div className="flex max-w-[99%] z-50 mx-auto items-center pt-6 p-4">
               <img
-                src={mainLogo}
-                alt={appName}
-                title={appName}
-                className="h-auto max-w-full mr-4"
-                loading="lazy"
-                style={{ maxHeight: 70 }}
+                src="https://cdn11.bigcommerce.com/s-ew2v2d3jn1/images/stencil/250x64/g2-survey-logo_1611121872__30054.original.png"
+                className="w-[190px] h-full mr-4"
+                alt="G2 Survey"
               />
               <form
                 onSubmit={handleSearchSubmit}
@@ -304,7 +284,7 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                   )}
                 </ul>
               </div>
-              {/* Right - Product Slider or Grid */}
+              {/* Right - Product Slider */}
               <div className="w-full md:w-[80%] pl-10">
                 <div className="flex justify-between items-center mb-4 mx-2">
                   <h3 className="text-sm">
@@ -353,7 +333,8 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                 ) : displayProducts.length <= 4 ? (
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                     {displayProducts?.map((product, index) => {
-                      const priceOption = Number(product?.priceShowHide);
+                      // console.log(product);
+                      const priceOption = product?.priceShowHide;
                       // vat part
                       let vat = 0;
                       try {
@@ -366,69 +347,61 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                       const priceIncVat = basePrice + vatAmount;
 
                       return (
-                        <div
+                        <Link
+                          onClick={async () => {
+                            trackProductView(product.id);
+                            await trackSearchOnProductClick(searchText);
+                            onClose();
+                          }}
+                          to={`/products/${product.id}/${slugify(
+                            product.product_name || ""
+                          )}`}
                           key={index}
                           className="h-full min-h-[350px] flex flex-col bg-white p-6 shadow-sm border border-gray-200 hover:border-gray-300 transition-all duration-200"
                         >
-                          <Link
-                            onClick={async () => {
-                              trackProductView(product.id);
-                              await trackSearchOnProductClick(searchText);
-                              onClose();
-                            }}
-                            to={`/products/${product.id}/${slugify(
-                              product.product_name || ""
-                            )}`}
-                            className="w-full"
-                          >
-                            <img
-                              src={
-                                product?.image_urls
-                                  ? `${
-                                      import.meta.env.VITE_OPEN_APIURL
-                                    }${JSON?.parse(
-                                      product?.image_urls
-                                    )[0]?.replace(/^["\[]+|["\]]+$/g, "")}`
-                                  : product?.image
-                              }
-                              alt={product?.product_name || product.name}
-                              className="mx-auto h-44 object-contain mb-3"
-                            />
-                            <p className="text-sm font-medium mb-1 hover:text-[#e62245] cursor-pointer">
-                              {product.product_name || product.name}
-                            </p>
-                          </Link>
-                          <div className="flex justify-between items-center mt-auto gap-2">
+                          <img
+                            src={
+                              product?.image_urls
+                                ? `${
+                                    import.meta.env.VITE_OPEN_APIURL
+                                  }${JSON?.parse(
+                                    product?.image_urls
+                                  )[0]?.replace(/^["\[]+|["\]]+$/g, "")}`
+                                : product?.image
+                            }
+                            alt={product?.product_name || product.name}
+                            className="mx-auto h-44 object-contain mb-3"
+                          />
+                          <p className="text-sm font-medium mb-1 hover:text-[#e62245] cursor-pointer">
+                            {product.product_name || product.name}
+                          </p>
+                          <div className="flex justify-between items-center mt-auto">
                             <p className="font-semibold">
-                              {priceOption === 1 ? "" : formatBDT(priceIncVat)}
+                              {product?.priceShowHide
+                                ? ""
+                                : formatBDT(priceIncVat)}
                             </p>
-                            {product?.isStock === 1 && priceOption === 1 && (
-                              <Link
-                                to={`/products/${product.id}/${slugify(
-                                  product.product_name || ""
-                                )}`}
-                                title="Get Quotation"
-                                className="ml-auto p-[4px] rounded bg-[#e62245] hover:bg-[#d41d3f] text-white transition min-w-0 flex items-center"
-                                style={{ fontSize: "11px", fontWeight: 500 }}
-                              >
-                                <MdRequestQuote size={15} className="mr-1" />
-                                QUOTE
-                              </Link>
-                            )}
+
                             {product?.isStock === 1 && priceOption !== 1 && (
-                              <span className="ml-auto flex items-center">
-                                <AddToCartButton
-                                  product={product}
-                                  quantity={1}
-                                  selectedOptions={[]}
-                                  variant="icon"
-                                >
-                                  <MdAddShoppingCart size={16} />
-                                </AddToCartButton>
-                              </span>
+                              <AddToCartButton
+                                product={product}
+                                quantity={1}
+                                selectedOptions={[]}
+                              >
+                                <MdAddShoppingCart size={24} />
+                              </AddToCartButton>
+                            )}
+                            {product?.isStock === 1 && priceOption === 1 && (
+                              <button
+                                className="p-[6px] rounded bg-gray-400 cursor-not-allowed text-white"
+                                disabled
+                                title="Unavailable for direct purchase"
+                              >
+                                <MdAddShoppingCart size={24} />
+                              </button>
                             )}
                           </div>
-                        </div>
+                        </Link>
                       );
                     })}
                   </div>
@@ -445,12 +418,9 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                       const basePrice = parsePrice(product.price) || 0;
                       const vatAmount = basePrice * (vat / 100);
                       const priceIncVat = basePrice + vatAmount;
-                      const priceOption = Number(product?.priceShowHide);
+                      const priceOption = product?.priceShowHide;
                       return (
-                        <div
-                          key={index}
-                          className="px-2 relative h-full min-h-[350px] flex flex-col"
-                        >
+                        <div key={index} className="px-2 relative">
                           {product?.sale === 1 && (
                             <div className="absolute top-2 right-4 bg-[#e62245] text-white px-2 py-[1px] font-semibold rounded-sm text-sm">
                               SALE
@@ -465,7 +435,7 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                             to={`/products/${product.id}/${slugify(
                               product.product_name || ""
                             )}`}
-                            className="w-full"
+                            className="h-full min-h-[350px] flex flex-col bg-white p-6 shadow-sm border border-gray-200 hover:border-gray-300 transition-all duration-200"
                           >
                             <img
                               src={
@@ -484,37 +454,32 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                             <p className="text-sm font-medium mb-1 hover:text-[#e62245] cursor-pointer">
                               {product.product_name || product.name}
                             </p>
-                          </Link>
-                          <div className="flex justify-between items-center mt-auto gap-2">
-                            <p className="font-semibold">
-                              {priceOption === 1 ? "" : formatBDT(priceIncVat)}
-                            </p>
-                            {product?.isStock === 1 && priceOption === 1 && (
-                              <Link
-                                to={`/products/${product.id}/${slugify(
-                                  product.product_name || ""
-                                )}`}
-                                title="Get Quotation"
-                                className="ml-auto p-[4px] rounded bg-[#e62245] hover:bg-[#d41d3f] text-white transition min-w-0 flex items-center"
-                                style={{ fontSize: "11px", fontWeight: 500 }}
-                              >
-                                <MdRequestQuote size={15} className="mr-1" />
-                                QUOTE
-                              </Link>
-                            )}
-                            {product?.isStock === 1 && priceOption !== 1 && (
-                              <span className="ml-auto flex items-center">
+                            <div className="flex justify-between items-center mt-auto">
+                              <p className="font-semibold">
+                                {product?.priceShowHide
+                                  ? ""
+                                  : formatBDT(priceIncVat)}
+                              </p>
+                              {product?.isStock === 1 && priceOption !== 1 && (
                                 <AddToCartButton
                                   product={product}
                                   quantity={1}
                                   selectedOptions={[]}
-                                  variant="icon"
                                 >
-                                  <MdAddShoppingCart size={16} />
+                                  <MdAddShoppingCart size={24} />
                                 </AddToCartButton>
-                              </span>
-                            )}
-                          </div>
+                              )}
+                              {product?.isStock === 1 && priceOption === 1 && (
+                                <button
+                                  className="p-[6px] rounded bg-gray-400 cursor-not-allowed text-white"
+                                  disabled
+                                  title="Unavailable for direct purchase"
+                                >
+                                  <MdAddShoppingCart size={24} />
+                                </button>
+                              )}
+                            </div>
+                          </Link>
                         </div>
                       );
                     })}
