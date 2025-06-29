@@ -23,6 +23,9 @@ import { formatBDT } from "../utils/formatBDT";
 import { useAxiospublic } from "../Hooks/useAxiospublic";
 import AddToCartButton from "../Components/AddToCartButton";
 
+// Shorter card for compact look
+const CARD_HEIGHT = "h-[260px] min-h-[350px]"; // adjust as needed for more compact look
+
 const SearchOverlay = ({ isOpen, onClose }) => {
   const axiosPublicUrl = useAxiospublic();
   const { trackProductView } = useTrackProductView();
@@ -70,7 +73,6 @@ const SearchOverlay = ({ isOpen, onClose }) => {
     { enabled: !!searchText }
   );
 
-  // Load latest searches from localStorage (dynamic, no hardcoded array)
   useEffect(() => {
     const saved = JSON.parse(localStorage.getItem("latestSearches")) || [];
     setLatestSearches(saved);
@@ -84,7 +86,6 @@ const SearchOverlay = ({ isOpen, onClose }) => {
     } else if (recommendedData?.products?.length > 0) {
       recommended = recommendedData.products.slice(0, 10);
     }
-
     if (recommended.length < 10) {
       let latest = [];
       if (Array.isArray(latestProductsData?.products)) {
@@ -92,7 +93,6 @@ const SearchOverlay = ({ isOpen, onClose }) => {
       } else if (Array.isArray(latestProductsData)) {
         latest = latestProductsData;
       }
-      // Exclude already included recommended products by id
       const excludeIds = new Set(recommended.map((p) => p.id));
       const toAdd = latest
         .filter((p) => !excludeIds.has(p.id))
@@ -117,7 +117,6 @@ const SearchOverlay = ({ isOpen, onClose }) => {
     ? searchResults?.products ?? []
     : recommendedProducts ?? [];
 
-  // Save new search to localStorage and state (dynamic)
   const saveToLocalStorage = (value) => {
     let updated = [
       value,
@@ -150,7 +149,6 @@ const SearchOverlay = ({ isOpen, onClose }) => {
     setSortOrder(e.target.value);
   };
 
-  // Only track search and save to localStorage when user clicks a product
   const trackSearchOnProductClick = async (searchTerm) => {
     if (searchTerm?.trim() && searchTerm.trim() !== lastTrackedSearch.current) {
       try {
@@ -165,10 +163,13 @@ const SearchOverlay = ({ isOpen, onClose }) => {
     }
   };
 
-  // No need to track on submit or typing now
   const handleSearchSubmit = (e) => {
     e.preventDefault();
   };
+
+  // -- Height logic: expand overlay when searchText is not empty
+  const overlayHeightClass =
+    searchText.length > 0 ? "h-full xl:h-[87vh]" : "h-[80vh] xl:h-[87vh]";
 
   if (showResultsView) {
     return (
@@ -188,25 +189,35 @@ const SearchOverlay = ({ isOpen, onClose }) => {
     dots: false,
     infinite: true,
     speed: 500,
-    slidesToShow: 5, // 2xl (≥1536px)
+    slidesToShow: 5,
     slidesToScroll: 1,
     prevArrow: <PrevArrow />,
     nextArrow: <NextArrow />,
     responsive: [
       {
-        breakpoint: 1536, // <2xl (xl)
+        breakpoint: 1536,
         settings: { slidesToShow: 4 },
       },
       {
-        breakpoint: 1280, // <xl (lg)
+        breakpoint: 1280,
         settings: { slidesToShow: 3 },
       },
       {
-        breakpoint: 1024, // <lg
+        breakpoint: 1024,
         settings: { slidesToShow: 2 },
       },
     ],
   };
+
+  // Compact card
+  const cardClass = `card bg-white border border-gray-200 hover:border-2 hover:border-gray-500 transition-all rounded-md ${CARD_HEIGHT} flex flex-col justify-between group`;
+
+  // Product name min height for alignment
+  const nameClass =
+    "text-[13px] font-medium mb-1 hover:text-[#e62245] cursor-pointer min-h-[38px] flex items-center justify-center text-center";
+
+  // Image height
+  const imgClass = "mx-auto h-24 object-contain";
 
   return (
     <>
@@ -214,7 +225,7 @@ const SearchOverlay = ({ isOpen, onClose }) => {
         <>
           <div
             ref={overlayRef}
-            className={`fixed inset-0 bg-gray-100 z-[100] h-full xl:h-9/11 transition-transform duration-500 ease-in-out transform  animate-slide-down ${
+            className={`fixed inset-0 bg-gray-100 z-[100] ${overlayHeightClass} transition-transform duration-500 ease-in-out transform animate-slide-down ${
               isOpen ? "translate-y-0" : "-translate-y-full"
             }`}
           >
@@ -351,10 +362,9 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                     No products found.
                   </div>
                 ) : displayProducts.length <= 4 ? (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
                     {displayProducts?.map((product, index) => {
                       const priceOption = Number(product?.priceShowHide);
-                      // vat part
                       let vat = 0;
                       try {
                         vat = product?.tax ? JSON.parse(product.tax).value : 0;
@@ -366,10 +376,7 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                       const priceIncVat = basePrice + vatAmount;
 
                       return (
-                        <div
-                          key={index}
-                          className="h-full min-h-[350px] flex flex-col bg-white p-6 shadow-sm border border-gray-200 hover:border-gray-300 transition-all duration-200"
-                        >
+                        <div key={index} className={cardClass}>
                           <Link
                             onClick={async () => {
                               trackProductView(product.id);
@@ -381,25 +388,32 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                             )}`}
                             className="w-full"
                           >
-                            <img
-                              src={
-                                product?.image_urls
-                                  ? `${
-                                      import.meta.env.VITE_OPEN_APIURL
-                                    }${JSON?.parse(
-                                      product?.image_urls
-                                    )[0]?.replace(/^["\[]+|["\]]+$/g, "")}`
-                                  : product?.image
-                              }
-                              alt={product?.product_name || product.name}
-                              className="mx-auto h-44 object-contain mb-3"
-                            />
-                            <p className="text-sm font-medium mb-1 hover:text-[#e62245] cursor-pointer">
-                              {product.product_name || product.name}
-                            </p>
+                            <figure className="pt-2">
+                              <img
+                                src={
+                                  product?.image_urls
+                                    ? `${
+                                        import.meta.env.VITE_OPEN_APIURL
+                                      }${JSON?.parse(
+                                        product?.image_urls
+                                      )[0]?.replace(/^["\[]+|["\]]+$/g, "")}`
+                                    : product?.image
+                                }
+                                alt={product?.product_name || product.name}
+                                className={imgClass}
+                              />
+                            </figure>
+                            <div className="card-body px-0 py-2">
+                              <p
+                                className={nameClass}
+                                style={{ lineHeight: "1.18" }}
+                              >
+                                {product.product_name || product.name}
+                              </p>
+                            </div>
                           </Link>
-                          <div className="flex justify-between items-center mt-auto gap-2">
-                            <p className="font-semibold">
+                          <div className="card-actions px-0 pb-2 pt-1 flex justify-between items-center mt-auto gap-2">
+                            <p className="font-semibold text-[14px]">
                               {priceOption === 1 ? "" : formatBDT(priceIncVat)}
                             </p>
                             {product?.isStock === 1 && priceOption === 1 && (
@@ -435,7 +449,6 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                 ) : (
                   <Slider {...settings}>
                     {displayProducts.map((product, index) => {
-                      // vat part
                       let vat = 0;
                       try {
                         vat = product?.tax ? JSON.parse(product.tax).value : 0;
@@ -447,10 +460,7 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                       const priceIncVat = basePrice + vatAmount;
                       const priceOption = Number(product?.priceShowHide);
                       return (
-                        <div
-                          key={index}
-                          className="px-2 relative h-full min-h-[350px] flex flex-col"
-                        >
+                        <div key={index} className={cardClass + "mx-1"}>
                           {product?.sale === 1 && (
                             <div className="absolute top-2 right-4 bg-[#e62245] text-white px-2 py-[1px] font-semibold rounded-sm text-sm">
                               SALE
@@ -467,26 +477,32 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                             )}`}
                             className="w-full"
                           >
-                            <img
-                              src={
-                                product?.image_urls
-                                  ? `${
-                                      import.meta.env.VITE_OPEN_APIURL
-                                    }${JSON.parse(
-                                      product?.image_urls
-                                    )[0]?.replace(/^["\[]+|["\]]+$/g, "")}`
-                                  : product?.image
-                              }
-                              alt={product?.product_name || product.name}
-                              className="mx-auto h-44 object-contain mb-3"
-                            />
-
-                            <p className="text-sm font-medium mb-1 hover:text-[#e62245] cursor-pointer">
-                              {product.product_name || product.name}
-                            </p>
+                            <figure className="pt-2">
+                              <img
+                                src={
+                                  product?.image_urls
+                                    ? `${
+                                        import.meta.env.VITE_OPEN_APIURL
+                                      }${JSON.parse(
+                                        product?.image_urls
+                                      )[0]?.replace(/^["\[]+|["\]]+$/g, "")}`
+                                    : product?.image
+                                }
+                                alt={product?.product_name || product.name}
+                                className={imgClass}
+                              />
+                            </figure>
+                            <div className="card-body px-0 py-2">
+                              <p
+                                className={nameClass}
+                                style={{ lineHeight: "1.18" }}
+                              >
+                                {product.product_name || product.name}
+                              </p>
+                            </div>
                           </Link>
-                          <div className="flex justify-between items-center mt-auto gap-2">
-                            <p className="font-semibold">
+                          <div className="card-actions px-0 pb-2 pt-1 flex justify-between items-center mt-auto gap-2">
+                            <p className="font-semibold text-[14px]">
                               {priceOption === 1 ? "" : formatBDT(priceIncVat)}
                             </p>
                             {product?.isStock === 1 && priceOption === 1 && (
