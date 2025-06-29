@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaEdit, FaTrash } from "react-icons/fa";
-import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import Swal from "sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
-import useDataQuery from "../../utils/useDataQuery";
 import Loader from "../../utils/Loader";
+import useDataQuery from "../../utils/useDataQuery";
+import { useAxiospublic } from "../../Hooks/useAxiospublic";
 
 const generateSlug = (text) =>
   text

@@ -1,7 +1,7 @@
 import { Eye, Trash } from "lucide-react";
-import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import useDataQuery from "../../utils/useDataQuery";
 import Swal from "sweetalert2";
+import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import Loader from "../../utils/Loader";
 
 const ProductQuestion = () => {

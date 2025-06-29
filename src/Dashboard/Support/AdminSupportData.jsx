@@ -1,8 +1,8 @@
 import Swal from "sweetalert2";
 import useDataQuery from "../../utils/useDataQuery";
 import { Eye, Trash } from "lucide-react";
-import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import Loader from "../../utils/Loader";
+import { useAxiospublic } from "../../Hooks/useAxiospublic";
 
 const AdminSupportData = () => {
   const axiosPublic = useAxiospublic();
@@ -161,7 +161,7 @@ const AdminSupportData = () => {
     });
   };
 
-  if (isLoading) return <Loader />;
+  if (!isLoading) return <Loader />;
 
   return (
     <div className="bg-slate-800 text-white rounded-lg p-4">

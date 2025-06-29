@@ -8,7 +8,6 @@ import {
   ChevronsLeft,
   ChevronsRight,
 } from "lucide-react";
-import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import { parseItems } from "../../utils/parseItems";
 import { formatDate } from "../../utils/formatDate";
 import { FaFilePdf } from "react-icons/fa";
@@ -16,6 +15,7 @@ import Swal from "sweetalert2";
 import { GenerateInvoicePdf } from "../../utils/generateInvoicePdf";
 import Loader from "../../utils/Loader";
 import useDataQuery from "../../utils/useDataQuery";
+import { useAxiospublic } from "../../Hooks/useAxiospublic";
 
 const OrderTable = () => {
   const axiospublic = useAxiospublic();
@@ -112,7 +112,7 @@ const OrderTable = () => {
             refetch();
             Swal.fire({
               title: "Deleted!",
-              text: res?.data?.message,
+              text: res?.data?.message || "Order has been deleted.",
               icon: "success",
               background: "#1e293b",
               color: "#f8fafc",

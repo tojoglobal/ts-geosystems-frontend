@@ -1,8 +1,8 @@
 import { Eye, Trash } from "lucide-react";
 import Swal from "sweetalert2";
 import useDataQuery from "../../utils/useDataQuery";
-import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import Loader from "../../utils/Loader";
+import { useAxiospublic } from "../../Hooks/useAxiospublic";
 
 const DISCOVERY_METHOD_LABELS = {
   1: "Friends & Colleague",

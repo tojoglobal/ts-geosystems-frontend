@@ -13,10 +13,10 @@ import DOMPurify from "dompurify";
 import Swal from "sweetalert2";
 import { FaTimes } from "react-icons/fa";
 import useDataQuery from "../../utils/useDataQuery";
-import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import { Dialog, Transition } from "@headlessui/react";
 import PremiumProductViewModal from "./ProductViewModal";
 import PremiumProductTable from "./PremiumProductTable";
+import { useAxiospublic } from "../../Hooks/useAxiospublic";
 
 const ProductTable = () => {
   const axiosPublicUrl = useAxiospublic();
