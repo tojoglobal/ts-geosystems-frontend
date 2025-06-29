@@ -105,7 +105,7 @@ const AdminUpdateHire = () => {
         },
       });
 
-      if (response.data.success) {
+      if (response?.data?.success) {
         Swal.fire({
           icon: "success",
           title: "Success!",
