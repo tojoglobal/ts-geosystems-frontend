@@ -556,11 +556,11 @@ const ProductDetails = () => {
                     <tr className="border-t">
                       <td className="p-4 text-gray-700">Category:</td>
                       <td className="p-4 text-gray-700">
-                        {product.category
-                          ? JSON.parse(product.category).cat
+                        {product?.category
+                          ? JSON.parse(product?.category)?.cat
                           : "N/A"}{" "}
-                        {product.sub_category
-                          ? JSON.parse(product.sub_category).cat
+                        {product?.sub_category
+                          ? JSON.parse(product?.sub_category)?.cat
                           : "N/A"}
                       </td>
                     </tr>
