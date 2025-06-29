@@ -216,8 +216,8 @@ const SearchOverlay = ({ isOpen, onClose }) => {
   const nameClass =
     "text-[13px] font-medium mb-1 hover:text-[#e62245] cursor-pointer min-h-[38px] flex items-center justify-center text-center";
 
-  // Image height
-  const imgClass = "mx-auto h-24 object-contain";
+  // Image height - MODIFIED: Increased height
+  const imgClass = "mx-auto h-36 object-contain"; // Changed from h-24 to h-36
 
   return (
     <>
@@ -362,7 +362,9 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                     No products found.
                   </div>
                 ) : displayProducts.length <= 4 ? (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    {" "}
+                    {/* Added gap-4 for spacing */}
                     {displayProducts?.map((product, index) => {
                       const priceOption = Number(product?.priceShowHide);
                       let vat = 0;
@@ -460,76 +462,86 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                       const priceIncVat = basePrice + vatAmount;
                       const priceOption = Number(product?.priceShowHide);
                       return (
-                        <div key={index} className={cardClass + "mx-1"}>
-                          {product?.sale === 1 && (
-                            <div className="absolute top-2 right-4 bg-[#e62245] text-white px-2 py-[1px] font-semibold rounded-sm text-sm">
-                              SALE
-                            </div>
-                          )}
-                          <Link
-                            onClick={async () => {
-                              trackProductView(product.id);
-                              await trackSearchOnProductClick(searchText);
-                              onClose();
-                            }}
-                            to={`/products/${product.id}/${slugify(
-                              product.product_name || ""
-                            )}`}
-                            className="w-full"
-                          >
-                            <figure className="pt-2">
-                              <img
-                                src={
-                                  product?.image_urls
-                                    ? `${
-                                        import.meta.env.VITE_OPEN_APIURL
-                                      }${JSON.parse(
-                                        product?.image_urls
-                                      )[0]?.replace(/^["\[]+|["\]]+$/g, "")}`
-                                    : product?.image
-                                }
-                                alt={product?.product_name || product.name}
-                                className={imgClass}
-                              />
-                            </figure>
-                            <div className="card-body px-0 py-2">
-                              <p
-                                className={nameClass}
-                                style={{ lineHeight: "1.18" }}
-                              >
-                                {product.product_name || product.name}
-                              </p>
-                            </div>
-                          </Link>
-                          <div className="card-actions px-0 pb-2 pt-1 flex justify-between items-center mt-auto gap-2">
-                            <p className="font-semibold text-[14px]">
-                              {priceOption === 1 ? "" : formatBDT(priceIncVat)}
-                            </p>
-                            {product?.isStock === 1 && priceOption === 1 && (
-                              <Link
-                                to={`/products/${product.id}/${slugify(
-                                  product.product_name || ""
-                                )}`}
-                                title="Get Quotation"
-                                className="ml-auto p-[4px] rounded bg-[#e62245] hover:bg-[#d41d3f] text-white transition min-w-0 flex items-center"
-                                style={{ fontSize: "11px", fontWeight: 500 }}
-                              >
-                                <MdRequestQuote size={15} className="mr-1" />
-                                QUOTE
-                              </Link>
+                        <div
+                          key={index}
+                          style={{ paddingLeft: 10, paddingRight: 10 }} // Modified: Increased padding for gap
+                        >
+                          <div className={cardClass}>
+                            {product?.sale === 1 && (
+                              <div className="absolute top-2 right-4 bg-[#e62245] text-white px-2 py-[1px] font-semibold rounded-sm text-sm">
+                                SALE
+                              </div>
                             )}
-                            {product?.isStock === 1 && priceOption !== 1 && (
-                              <span className="ml-auto flex items-center">
-                                <AddToCartButton
-                                  product={product}
-                                  quantity={1}
-                                  selectedOptions={[]}
-                                  variant="icon"
+                            <Link
+                              onClick={async () => {
+                                trackProductView(product.id);
+                                await trackSearchOnProductClick(searchText);
+                                onClose();
+                              }}
+                              to={`/products/${product.id}/${slugify(
+                                product.product_name || ""
+                              )}`}
+                              className="w-full"
+                            >
+                              <figure className="pt-2">
+                                <img
+                                  src={
+                                    product?.image_urls
+                                      ? `${
+                                          import.meta.env.VITE_OPEN_APIURL
+                                        }${JSON.parse(
+                                          product?.image_urls
+                                        )[0]?.replace(/^["\[]+|["\]]+$/g, "")}`
+                                      : product?.image
+                                  }
+                                  alt={product?.product_name || product.name}
+                                  className={imgClass}
+                                />
+                              </figure>
+                              <div className="card-body px-0 py-2">
+                                <p
+                                  className={nameClass}
+                                  style={{ lineHeight: "1.18" }}
                                 >
-                                  <MdAddShoppingCart size={16} />
-                                </AddToCartButton>
-                              </span>
-                            )}
+                                  {product.product_name || product.name}
+                                </p>
+                              </div>
+                            </Link>
+                            <div className="card-actions px-0 pb-2 pt-1 flex justify-between items-center mt-auto gap-2">
+                              <p className="font-semibold text-[14px]">
+                                {priceOption === 1
+                                  ? ""
+                                  : formatBDT(priceIncVat)}
+                              </p>
+                              {product?.isStock === 1 && priceOption === 1 && (
+                                <Link
+                                  to={`/products/${product.id}/${slugify(
+                                    product.product_name || ""
+                                  )}`}
+                                  title="Get Quotation"
+                                  className="ml-auto p-[4px] rounded bg-[#e62245] hover:bg-[#d41d3f] text-white transition min-w-0 flex items-center"
+                                  style={{
+                                    fontSize: "11px",
+                                    fontWeight: 500,
+                                  }}
+                                >
+                                  <MdRequestQuote size={15} className="mr-1" />
+                                  QUOTE
+                                </Link>
+                              )}
+                              {product?.isStock === 1 && priceOption !== 1 && (
+                                <span className="ml-auto flex items-center">
+                                  <AddToCartButton
+                                    product={product}
+                                    quantity={1}
+                                    selectedOptions={[]}
+                                    variant="icon"
+                                  >
+                                    <MdAddShoppingCart size={16} />
+                                  </AddToCartButton>
+                                </span>
+                              )}
+                            </div>
                           </div>
                         </div>
                       );
