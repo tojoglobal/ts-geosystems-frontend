@@ -50,7 +50,7 @@ const ProductSidebar = () => {
     ["popularBrandPhoto"],
     "/api/brand/popular-photo"
   );
-  
+
   useEffect(() => {
     let catSlug =
       (location.pathname.startsWith("/products/") &&
@@ -282,21 +282,19 @@ const ProductSidebar = () => {
           </div>
         )
       )}
-      <div>
-        {Array.isArray(popularImage?.photo) &&
-          popularImage?.photo?.map((im, i) => (
-            <div
-              className="mt-3 h-[110px] overflow-hidden border rounded-[4px]"
-              key={i}
-            >
-              <img
-                src={`${import.meta.env.VITE_OPEN_APIURL}/uploads/${im.photo}`}
-                alt="Leica Authorized Distributor"
-                className="h-full w-full transition-transform duration-1000 hover:scale-110"
-              />
-            </div>
-          ))}
-      </div>
+      {Array.isArray(popularImage?.photos) &&
+        popularImage.photos.map((filename, i) => (
+          <div
+            className="mt-3 h-[110px] overflow-hidden border rounded-[4px]"
+            key={i}
+          >
+            <img
+              src={`${import.meta.env.VITE_OPEN_APIURL}/uploads/${filename}`}
+              alt="Brand"
+              className="h-full w-full transition-transform duration-1000 hover:scale-110"
+            />
+          </div>
+        ))}
     </div>
   );
 };
