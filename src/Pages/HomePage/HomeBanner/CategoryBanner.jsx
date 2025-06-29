@@ -12,9 +12,7 @@ const CategoryBanner = () => {
   );
   if (isLoading) return null;
 
-  // Filter out categories without photos if needed
-  const categoriesWithPhotos =
-    data?.categories?.filter((category) => category.photo) || [];
+  const categories = data?.categories || [];
 
   return (
     <div className="w-full md:max-w-[95%] 2xl:max-w-[1370px] mt-5 md:mt-10 px-3 md:px-0 mx-auto">
@@ -31,7 +29,7 @@ const CategoryBanner = () => {
           loop={true}
           className="category-swiper-mobile"
         >
-          {categoriesWithPhotos.map((category) => (
+          {categories.map((category) => (
             <SwiperSlide key={category.id}>
               <Link
                 to={`/${category.slug_name}`}
@@ -55,7 +53,7 @@ const CategoryBanner = () => {
         </Swiper>
       </div>
       <div className="hidden sm:grid sm:grid-cols-5 sm:gap-2 md:gap-5">
-        {categoriesWithPhotos.map((category) => (
+        {categories.map((category) => (
           <Link
             to={`/${category.slug_name}`}
             key={category.id}
