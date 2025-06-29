@@ -23,8 +23,8 @@ import { formatBDT } from "../utils/formatBDT";
 import { useAxiospublic } from "../Hooks/useAxiospublic";
 import AddToCartButton from "../Components/AddToCartButton";
 
-// Shorter card for compact look
-const CARD_HEIGHT = "h-[260px] min-h-[350px]"; // adjust as needed for more compact look
+// Larger card for bigger image height
+const CARD_HEIGHT = "h-[350px] min-h-[350px]"; // adjust as needed for bigger image
 
 const SearchOverlay = ({ isOpen, onClose }) => {
   const axiosPublicUrl = useAxiospublic();
@@ -209,15 +209,15 @@ const SearchOverlay = ({ isOpen, onClose }) => {
     ],
   };
 
-  // Compact card
-  const cardClass = `card bg-white border border-gray-200 hover:border-2 hover:border-gray-500 transition-all rounded-md ${CARD_HEIGHT} flex flex-col justify-between group`;
+  // Product card with more vertical and horizontal gap
+  const cardClass = `card bg-white border border-gray-200 hover:border-2 hover:border-gray-500 transition-all rounded-md ${CARD_HEIGHT} flex flex-col justify-between group mx-2 my-4`;
 
   // Product name min height for alignment
   const nameClass =
-    "text-[13px] font-medium mb-1 hover:text-[#e62245] cursor-pointer min-h-[38px] flex items-center justify-center text-center";
+    "text-[14px] font-medium mb-1 hover:text-[#e62245] cursor-pointer min-h-[38px] flex items-center justify-center text-center";
 
-  // Image height - MODIFIED: Increased height
-  const imgClass = "mx-auto h-36 object-contain"; // Changed from h-24 to h-36
+  // Bigger Image height
+  const imgClass = "mx-auto h-[180px] object-contain";
 
   return (
     <>
@@ -316,7 +316,7 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                 </ul>
               </div>
               {/* Right - Product Slider or Grid */}
-              <div className="w-full md:w-[80%] pl-10">
+              <div className="w-full md:w-[80%] pl-10 rounded-[6px]">
                 <div className="flex justify-between items-center mb-4 mx-2">
                   <h3 className="text-sm">
                     {searchText
@@ -362,9 +362,7 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                     No products found.
                   </div>
                 ) : displayProducts.length <= 4 ? (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                    {" "}
-                    {/* Added gap-4 for spacing */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                     {displayProducts?.map((product, index) => {
                       const priceOption = Number(product?.priceShowHide);
                       let vat = 0;
@@ -390,7 +388,7 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                             )}`}
                             className="w-full"
                           >
-                            <figure className="pt-2">
+                            <figure className="pt-4 pb-2 flex justify-center items-center h-[190px]">
                               <img
                                 src={
                                   product?.image_urls
@@ -414,8 +412,8 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                               </p>
                             </div>
                           </Link>
-                          <div className="card-actions px-0 pb-2 pt-1 flex justify-between items-center mt-auto gap-2">
-                            <p className="font-semibold text-[14px]">
+                          <div className="card-actions px-0 pb-2 pt-1 flex justify-between items-center mt-auto gap-2 mx-3">
+                            <p className="font-semibold text-[15px]">
                               {priceOption === 1 ? "" : formatBDT(priceIncVat)}
                             </p>
                             {product?.isStock === 1 && priceOption === 1 && (
@@ -425,9 +423,9 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                                 )}`}
                                 title="Get Quotation"
                                 className="ml-auto p-[4px] rounded bg-[#e62245] hover:bg-[#d41d3f] text-white transition min-w-0 flex items-center"
-                                style={{ fontSize: "11px", fontWeight: 500 }}
+                                style={{ fontSize: "13px", fontWeight: 500 }}
                               >
-                                <MdRequestQuote size={15} className="mr-1" />
+                                <MdRequestQuote size={18} className="mr-1" />
                                 QUOTE
                               </Link>
                             )}
@@ -439,7 +437,7 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                                   selectedOptions={[]}
                                   variant="icon"
                                 >
-                                  <MdAddShoppingCart size={16} />
+                                  <MdAddShoppingCart size={22} />
                                 </AddToCartButton>
                               </span>
                             )}
@@ -464,7 +462,7 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                       return (
                         <div
                           key={index}
-                          style={{ paddingLeft: 10, paddingRight: 10 }} // Modified: Increased padding for gap
+                          style={{ paddingLeft: 5, paddingRight: 5 }}
                         >
                           <div className={cardClass}>
                             {product?.sale === 1 && (
@@ -483,7 +481,7 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                               )}`}
                               className="w-full"
                             >
-                              <figure className="pt-2">
+                              <figure className="pt-4 pb-2 flex justify-center items-center h-[190px]">
                                 <img
                                   src={
                                     product?.image_urls
@@ -507,8 +505,8 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                                 </p>
                               </div>
                             </Link>
-                            <div className="card-actions px-0 pb-2 pt-1 flex justify-between items-center mt-auto gap-2">
-                              <p className="font-semibold text-[14px]">
+                            <div className="card-actions px-0 pb-2 pt-1 flex justify-between items-center mt-auto gap-2 mx-3">
+                              <p className="font-semibold text-[15px]">
                                 {priceOption === 1
                                   ? ""
                                   : formatBDT(priceIncVat)}
@@ -521,11 +519,11 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                                   title="Get Quotation"
                                   className="ml-auto p-[4px] rounded bg-[#e62245] hover:bg-[#d41d3f] text-white transition min-w-0 flex items-center"
                                   style={{
-                                    fontSize: "11px",
+                                    fontSize: "13px",
                                     fontWeight: 500,
                                   }}
                                 >
-                                  <MdRequestQuote size={15} className="mr-1" />
+                                  <MdRequestQuote size={18} className="mr-1" />
                                   QUOTE
                                 </Link>
                               )}
@@ -537,7 +535,7 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                                     selectedOptions={[]}
                                     variant="icon"
                                   >
-                                    <MdAddShoppingCart size={16} />
+                                    <MdAddShoppingCart size={22} />
                                   </AddToCartButton>
                                 </span>
                               )}

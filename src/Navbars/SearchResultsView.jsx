@@ -1,12 +1,19 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-useless-escape */
-import { MdAddShoppingCart, MdOutlineKeyboardVoice } from "react-icons/md";
+import {
+  MdAddShoppingCart,
+  MdOutlineKeyboardVoice,
+  MdRequestQuote,
+} from "react-icons/md";
 import { IoSearchSharp } from "react-icons/io5";
 import { RxCross1 } from "react-icons/rx";
 import { Link } from "react-router-dom";
 import { slugify } from "../utils/slugify";
 import { useEffect, useState } from "react";
 import { useTrackProductView } from "../Hooks/useTrackProductView";
+import AddToCartButton from "../Components/AddToCartButton"; // ADD THIS
+import { parsePrice } from "../utils/parsePrice"; // ADD THIS
+import { formatBDT } from "../utils/formatBDT"; // ADD THIS
 
 const SearchResultsView = ({
   products,
@@ -382,56 +389,87 @@ const SearchResultsView = ({
               </div>
             </div>
             <div className="grid grid-cols-4 xl:grid-cols-5 gap-4 p-5">
-              {filteredProducts.map((product, index) => (
-                <Link
-                  onClick={(e) => {
-                    trackProductView(product.id);
-                    onClose();
-                  }}
-                  to={`/products/${product.id}/${slugify(
-                    product.product_name || ""
-                  )}`}
-                  key={index}
-                  className="relative flex flex-col bg-white p-4 border border-gray-200 hover:border-gray-300"
-                >
-                  {product?.sale === 1 && (
-                    <div className="absolute top-2 right-2 bg-[#e62245] text-white px-2 py-[1px] font-semibold rounded-sm text-sm">
-                      SALE
-                    </div>
-                  )}
-                  <img
-                    src={
-                      product?.image_urls
-                        ? `${import.meta.env.VITE_OPEN_APIURL}${JSON.parse(
-                            product?.image_urls
-                          )[0]?.replace(/^["\[]+|["\]]+$/g, "")}`
-                        : product?.image
-                    }
-                    alt={product?.product_name || product.name}
-                    className="w-full h-32 object-contain mb-2"
-                  />
-                  <Link
-                    onClick={(e) => {
-                      trackProductView(product.id);
-                      onClose();
-                    }}
-                    to={`/products/${product.id}/${slugify(
-                      product.product_name || ""
-                    )}`}
-                    className="text-xs font-medium mb-1 hover:text-[#e62245] cursor-pointer"
+              {filteredProducts.map((product, index) => {
+                // --- ADD CODE SIMILAR TO SearchOverlay ---
+                const priceOption = Number(product?.priceShowHide);
+                let vat = 0;
+                try {
+                  vat = product?.tax ? JSON.parse(product.tax).value : 0;
+                } catch {
+                  vat = 0;
+                }
+                const basePrice = parsePrice(product.price) || 0;
+                const vatAmount = basePrice * (vat / 100);
+                const priceIncVat = basePrice + vatAmount;
+
+                return (
+                  <div
+                    key={index}
+                    className="relative flex flex-col bg-white p-4 border border-gray-200 hover:border-gray-300"
                   >
-                    {product.product_name || product.name}
-                  </Link>
-                  <div className="flex justify-between items-center mt-auto">
-                    <p className="text-xs font-semibold">৳{product.price}</p>
-                    {product?.isStock === 1 && (
-                      <button className="p-1 cursor-pointer bg-[#e62245] text-white rounded hover:bg-[#d41d3f]">
-                        <MdAddShoppingCart size={20} />
-                      </button>
+                    {product?.sale === 1 && (
+                      <div className="absolute top-2 right-2 bg-[#e62245] text-white px-2 py-[1px] font-semibold rounded-sm text-sm">
+                        SALE
+                      </div>
                     )}
+                    <Link
+                      onClick={() => {
+                        trackProductView(product.id);
+                        onClose();
+                      }}
+                      to={`/products/${product.id}/${slugify(
+                        product.product_name || ""
+                      )}`}
+                      className="w-full"
+                    >
+                      <img
+                        src={
+                          product?.image_urls
+                            ? `${import.meta.env.VITE_OPEN_APIURL}${JSON.parse(
+                                product?.image_urls
+                              )[0]?.replace(/^["\[]+|["\]]+$/g, "")}`
+                            : product?.image
+                        }
+                        alt={product?.product_name || product.name}
+                        className="w-full h-32 object-contain mb-2"
+                      />
+                      <div className="text-xs font-medium mb-1 hover:text-[#e62245] cursor-pointer">
+                        {product.product_name || product.name}
+                      </div>
+                    </Link>
+                    <div className="flex justify-between items-center mt-auto">
+                      <p className="font-semibold text-xs">
+                        {priceOption === 1 ? "" : formatBDT(priceIncVat)}
+                      </p>
+                      {product?.isStock === 1 && priceOption === 1 && (
+                        <Link
+                          to={`/products/${product.id}/${slugify(
+                            product.product_name || ""
+                          )}`}
+                          title="Get Quotation"
+                          className="ml-auto p-[4px] rounded bg-[#e62245] hover:bg-[#d41d3f] text-white transition min-w-0 flex items-center"
+                          style={{ fontSize: "11px", fontWeight: 500 }}
+                        >
+                          <MdRequestQuote size={15} className="mr-1" />
+                          QUOTE
+                        </Link>
+                      )}
+                      {product?.isStock === 1 && priceOption !== 1 && (
+                        <span className="ml-auto flex items-center">
+                          <AddToCartButton
+                            product={product}
+                            quantity={1}
+                            selectedOptions={[]}
+                            variant="icon"
+                          >
+                            <MdAddShoppingCart size={16} />
+                          </AddToCartButton>
+                        </span>
+                      )}
+                    </div>
                   </div>
-                </Link>
-              ))}
+                );
+              })}
             </div>
           </div>
         </div>
