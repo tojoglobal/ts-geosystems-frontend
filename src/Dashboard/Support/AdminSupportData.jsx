@@ -161,7 +161,7 @@ const AdminSupportData = () => {
     });
   };
 
-  if (!isLoading) return <Loader />;
+  if (isLoading) return <Loader />;
 
   return (
     <div className="bg-slate-800 text-white rounded-lg p-4">
