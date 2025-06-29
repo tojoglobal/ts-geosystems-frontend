@@ -51,11 +51,11 @@ const UserLogin = () => {
       const data = await response.json();
       if (response.ok && data.success) {
         Swal.fire({
-        title: "Success",
-        text: "Login successful!",
-        icon: "success",
-        timer: 4000,
-      });
+          title: "Success",
+          text: "Login successful!",
+          icon: "success",
+          timer: 4000,
+        });
         localStorage.setItem("user", JSON.stringify({ username }));
         navigate("/dashboard");
       } else {

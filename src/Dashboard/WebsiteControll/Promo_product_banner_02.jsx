@@ -139,7 +139,7 @@ const Promo_product_banner_02 = () => {
       } catch (error) {
         console.error("Delete failed:", error);
         Swal.fire({
-          icon: "Error",
+          icon: "error",
           title: "Error!",
           text: "Failed to delete image",
           timer: 4000,
@@ -168,7 +168,7 @@ const Promo_product_banner_02 = () => {
       } catch (error) {
         console.error("Order update failed:", error);
         Swal.fire({
-          icon: "Error",
+          icon: "error",
           title: "Error!",
           text: "Failed to update image order",
           timer: 4000,

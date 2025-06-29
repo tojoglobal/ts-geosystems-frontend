@@ -171,7 +171,7 @@ const BlogUpdate = () => {
       });
 
       Swal.fire({
-        icon: "Success",
+        icon: "success",
         title: "Success",
         text: "Blog post updated successfully!",
         timer: 4000,
@@ -179,7 +179,7 @@ const BlogUpdate = () => {
     } catch (error) {
       console.error(error);
       Swal.fire({
-        icon: "Error",
+        icon: "error",
         title: "Error",
         text: "Failed to update blog pos",
         timer: 4000,

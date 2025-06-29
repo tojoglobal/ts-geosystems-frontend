@@ -32,7 +32,7 @@ const AdminUpdateOurAchievements = () => {
     onSuccess: () => {
       queryClient.invalidateQueries(["ourAchievements"]);
       Swal.fire({
-        icon: "Success",
+        icon: "success",
         title: "Success!",
         text: "Achievements updated successfully.",
         timer: 4000,

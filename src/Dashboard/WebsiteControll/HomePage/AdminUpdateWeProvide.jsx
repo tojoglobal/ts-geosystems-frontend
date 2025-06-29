@@ -51,7 +51,7 @@ const AdminUpdateWeProvide = () => {
       queryClient.invalidateQueries(["weProvide"]);
       Swal.fire({
         title: "Success",
-        icon: "Success",
+        icon: "success",
         text: "We Provide section updated!",
         timer: 4000,
       });

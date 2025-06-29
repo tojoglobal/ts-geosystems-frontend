@@ -213,7 +213,9 @@ function EquipmentForm({
 function EquipmentList({ data, onEdit, onDelete }) {
   return (
     <div className="mt-5 mb-3">
-      <h3 className="text-2xl sm:text-2xl font-semibold mb-4">Equipment List</h3>
+      <h3 className="text-2xl sm:text-2xl font-semibold mb-4">
+        Equipment List
+      </h3>
       <div className="overflow-x-auto rounded-xl shadow-xl border border-gray-800 bg-gray-900/95">
         <table className="min-w-full text-sm text-left bg-gray-900 text-white rounded-xl">
           <thead>

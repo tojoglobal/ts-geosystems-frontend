@@ -98,7 +98,7 @@ const TradeIn = () => {
     } catch (error) {
       Swal.fire({
         title: "Error",
-        icon: "Error",
+        icon: "error",
         text: error.message,
         timer: 4000,
       });

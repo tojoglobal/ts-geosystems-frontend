@@ -82,7 +82,7 @@ const ExperienceCenterControl = () => {
         });
       } catch (error) {
         Swal.fire({
-          icon: "Error",
+          icon: "error",
           title: "Error!",
           text: `${error.message} || Failed to delete image`,
           timer: 4000,

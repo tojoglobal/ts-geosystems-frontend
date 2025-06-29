@@ -33,7 +33,7 @@ const AdminUpdateOurAdService = () => {
     onSuccess: () => {
       queryClient.invalidateQueries(["ourAdServices"]);
       Swal.fire({
-        icon: "Success",
+        icon: "success",
         title: "Success!",
         text: "Our Advantage & Services updated successfully.",
         timer: 4000,

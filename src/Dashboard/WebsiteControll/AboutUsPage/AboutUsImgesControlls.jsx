@@ -68,7 +68,7 @@ const AboutUsImgesControlls = () => {
       });
 
       Swal.fire({
-        icon: "Success",
+        icon: "success",
         title: "Success!",
         text: "About Us images updated successfully!",
         timer: 4000,
@@ -76,7 +76,7 @@ const AboutUsImgesControlls = () => {
     } catch (error) {
       console.error("Failed to update About Us images:", error);
       Swal.fire({
-        icon: "Error",
+        icon: "error",
         title: "Error!",
         text: "Failed to update About Us images",
         timer: 4000,

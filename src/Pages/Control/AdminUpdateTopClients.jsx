@@ -40,7 +40,7 @@ const AdminUpdateTopClients = () => {
     onError: () =>
       Swal.fire({
         title: "Error",
-        icon: "Error",
+        icon: "error",
         text: "Failed to upload images",
         timer: 4000,
       }),
@@ -66,7 +66,7 @@ const AdminUpdateTopClients = () => {
     onError: (error) => {
       Swal.fire({
         title: "Error",
-        icon: "Error",
+        icon: "error",
         text: `${error?.message || "Failed to delete image"}`,
         timer: 4000,
       });

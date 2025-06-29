@@ -77,7 +77,7 @@ const HireEquipmentEditor = () => {
     }
   };
 
-  if (isLoading) return <Loader />
+  if (isLoading) return <Loader />;
   if (error) return <div>Error loading equipment</div>;
 
   return (

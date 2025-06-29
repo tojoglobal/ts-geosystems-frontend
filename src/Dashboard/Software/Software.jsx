@@ -65,7 +65,7 @@ const Software = () => {
       setImagePreview(null);
       setPriceShow(true);
       Swal.fire({
-        icon: "Success",
+        icon: "success",
         title: "Success!",
         text: message,
         background: "#1e293b",

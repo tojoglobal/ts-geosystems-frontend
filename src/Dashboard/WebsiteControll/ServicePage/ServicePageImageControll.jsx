@@ -69,7 +69,7 @@ const ServcePageImageControll = () => {
 
       Swal.fire({
         title: "Success",
-        icon: "Success",
+        icon: "success",
         text: "Service images updated successfully!",
         timer: 4000,
       });

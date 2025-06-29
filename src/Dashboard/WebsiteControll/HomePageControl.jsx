@@ -75,14 +75,14 @@ const HomePageControl = () => {
       });
       if (res.data.success) {
         Swal.fire({
-          icon: "Success",
+          icon: "success",
           title: "Success!",
           text: "Settings saved successfully!",
           timer: 4000,
         });
       } else {
         Swal.fire({
-          icon: "Error",
+          icon: "error",
           title: "Error!",
           text: "Failed to save settings",
           timer: 4000,

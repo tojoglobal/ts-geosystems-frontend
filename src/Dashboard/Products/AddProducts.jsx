@@ -194,7 +194,8 @@ const ProductAddForm = () => {
           })) || [];
         setProductOptions(mappedProducts);
       } catch (err) {
-        console.log(err);}
+        console.log(err);
+      }
     };
     const fetchSoftware = async () => {
       try {

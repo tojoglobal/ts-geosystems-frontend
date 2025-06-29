@@ -35,7 +35,7 @@ const LatestTransactions = () => {
         refetch();
         setEditStatusId(null);
         Swal.fire({
-          icon: "Success",
+          icon: "success",
           title: "Success",
           text: "Order status updated!",
           timer: 4000,
@@ -46,7 +46,7 @@ const LatestTransactions = () => {
     } catch (error) {
       Swal.fire({
         title: "Error",
-        icon: "Error",
+        icon: "error",
         text: error.message,
         timer: 4000,
       });
@@ -82,7 +82,7 @@ const LatestTransactions = () => {
           }
         } catch (error) {
           Swal.fire({
-            icon: "Error",
+            icon: "error",
             title: "Error!",
             text: error.message,
             timer: 4000,

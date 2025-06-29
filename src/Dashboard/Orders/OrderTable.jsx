@@ -50,7 +50,7 @@ const OrderTable = () => {
         setEditStatusId(null);
         Swal.fire({
           title: "Success",
-          icon: "Success",
+          icon: "success",
           text: "Order status updated!",
           timer: 4000,
         });
@@ -76,7 +76,7 @@ const OrderTable = () => {
         setEditStatusId(null);
         Swal.fire({
           title: "Success",
-          icon: "Success",
+          icon: "success",
           text: "Payment status updated!",
           timer: 4000,
         });
