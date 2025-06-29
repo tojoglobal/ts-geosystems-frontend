@@ -23,7 +23,7 @@ const LastBannerControl = () => {
     const availableSlots = 2 - images.length;
     if (availableSlots <= 0) {
       Swal.fire({
-        icon: "Error",
+        icon: "error",
         title: "Error!",
         text: "Maximum 2 images already exist. Delete some first.",
         timer: 4000,
@@ -42,7 +42,7 @@ const LastBannerControl = () => {
       });
       await refetch();
       Swal.fire({
-        icon: "Success",
+        icon: "success",
         title: "Success!",
         text: "Images uploaded successfully",
         timer: 4000,
@@ -50,7 +50,7 @@ const LastBannerControl = () => {
     } catch (error) {
       console.error("Upload failed:", error);
       Swal.fire({
-        icon: "Error",
+        icon: "error",
         title: "Error!",
         text: "Failed to upload images",
         timer: 4000,
@@ -87,7 +87,7 @@ const LastBannerControl = () => {
         });
       } catch (error) {
         Swal.fire({
-          icon: "Error",
+          icon: "error",
           title: "Error!",
           text: `${error.message} || Failed to delete image`,
           timer: 4000,

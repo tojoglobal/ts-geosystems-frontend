@@ -98,9 +98,15 @@ const BlogTable = () => {
           {blogs?.length > 0 &&
             blogs?.map((blog) => (
               <tr key={blog.id}>
-                <td className="border border-gray-700 px-4 py-2">{blog.title}</td>
-                <td className="border border-gray-700 px-4 py-2 capitalize">{blog.author}</td>
-                <td className="border border-gray-700 px-4 py-2">{blog.blogType}</td>
+                <td className="border border-gray-700 px-4 py-2">
+                  {blog.title}
+                </td>
+                <td className="border border-gray-700 px-4 py-2 capitalize">
+                  {blog.author}
+                </td>
+                <td className="border border-gray-700 px-4 py-2">
+                  {blog.blogType}
+                </td>
                 <td className="border border-gray-700 px-4 py-2 space-x-3 text-center">
                   {/* View */}
                   <Link to={`/dashboard/ts-blog/view/${blog.id}`}>

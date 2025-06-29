@@ -178,7 +178,10 @@ function ClientList({ data, onEdit, onDelete, onSearch, searchValue }) {
           </thead>
           <tbody>
             {data.map((client) => (
-              <tr key={client.id || client.companyName} className="text-gray-100 transition">
+              <tr
+                key={client.id || client.companyName}
+                className="text-gray-100 transition"
+              >
                 <td className="p-3 border-b border-gray-600 font-semibold">
                   {client.companyName}
                 </td>

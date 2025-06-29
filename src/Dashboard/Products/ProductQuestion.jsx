@@ -2,11 +2,9 @@ import { Eye, Trash } from "lucide-react";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import useDataQuery from "../../utils/useDataQuery";
 import Swal from "sweetalert2";
-import useToastSwal from "../../Hooks/useToastSwal";
 
 const ProductQuestion = () => {
   const axiosPublic = useAxiospublic();
-  const showToast = useToastSwal();
   const {
     data = { questions: [] },
     isLoading,
@@ -31,13 +29,25 @@ const ProductQuestion = () => {
       try {
         await axiosPublic.delete(`/api/product-questions/${id}`);
         refetch();
-        showToast("success", "Deleted!", "The question has been deleted.");
+        Swal.fire({
+          title: "Deleted!",
+          text: "The question has been deleted.",
+          icon: "success",
+          background: "#1e293b",
+          color: "#f8fafc",
+          confirmButtonColor: "#e11d48",
+          timer: 4000,
+        });
       } catch (error) {
-        showToast(
-          "error",
-          "Error!",
-          error.message || "Failed to delete question"
-        );
+        Swal.fire({
+          title: "Error!",
+          text: error.message || "Failed to delete question",
+          icon: "error",
+          background: "#1e293b",
+          color: "#f8fafc",
+          confirmButtonColor: "#e11d48",
+          timer: 4000,
+        });
       }
     }
   };
@@ -81,7 +91,9 @@ const ProductQuestion = () => {
   return (
     <div className="bg-slate-800 text-white rounded-lg p-4">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold">Product Questions (From details Page)</h2>
+        <h2 className="text-xl font-semibold">
+          Product Questions (From details Page)
+        </h2>
         <div className="text-sm text-gray-400">
           Total Questions: {data.questions.length}
         </div>

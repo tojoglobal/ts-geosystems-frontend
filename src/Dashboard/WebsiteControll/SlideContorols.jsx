@@ -97,14 +97,14 @@ const SlideContorols = () => {
 
       if (response.data) {
         Swal.fire({
-          icon: "Success",
+          icon: "success",
           title: "Success!",
           text: `Slide ${currentSlideId} updated!`,
           timer: 4000,
         });
       } else {
         Swal.fire({
-          icon: "Error",
+          icon: "error",
           title: "Error!",
           text: "Failed to update slide",
           timer: 4000,
@@ -113,7 +113,7 @@ const SlideContorols = () => {
     } catch (error) {
       console.error(error);
       Swal.fire({
-        icon: "Error",
+        icon: "error",
         title: "Error!",
         text: "Update failed",
         timer: 4000,

@@ -66,7 +66,7 @@ const AccountSettings = () => {
       if (response.status === 200) {
         Swal.fire({
           title: "Success",
-          icon: "Success",
+          icon: "success",
           text: "Account details updated successfully.",
           timer: 4000,
         });

@@ -105,7 +105,7 @@ const Feature_highlight_banner_03_left_01 = () => {
       });
       await refetch(); // ✅ Refresh list after upload
       Swal.fire({
-        icon: "Success",
+        icon: "success",
         title: "Success!",
         text: "Images uploaded successfully",
         timer: 4000,
@@ -113,7 +113,7 @@ const Feature_highlight_banner_03_left_01 = () => {
     } catch (error) {
       console.error("Upload failed:", error);
       Swal.fire({
-        icon: "Error",
+        icon: "error",
         title: "Error!",
         text: "Failed to upload images",
         timer: 4000,
@@ -149,7 +149,7 @@ const Feature_highlight_banner_03_left_01 = () => {
       } catch (error) {
         console.error("Delete failed:", error);
         Swal.fire({
-          icon: "Error",
+          icon: "error",
           title: "Error!",
           text: "Failed to delete image",
           timer: 4000,
@@ -178,7 +178,7 @@ const Feature_highlight_banner_03_left_01 = () => {
       } catch (error) {
         console.error("Order update failed:", error);
         Swal.fire({
-          icon: "Error",
+          icon: "error",
           title: "Error!",
           text: "Failed to update image order",
           timer: 4000,
