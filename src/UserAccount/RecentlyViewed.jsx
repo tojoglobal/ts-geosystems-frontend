@@ -6,6 +6,7 @@ import Loader from "../utils/Loader";
 import { slugify } from "../utils/slugify";
 import { Link } from "react-router-dom";
 import { useTrackProductView } from "../Hooks/useTrackProductView";
+import AddToCartButton from "../Components/AddToCartButton";
 
 const RecentlyViewed = () => {
   const { user } = useSelector((state) => state.authUser);
@@ -160,7 +161,7 @@ const RecentlyViewed = () => {
                     <p className="font-bold">৳{formatPrice(price)}</p>
                     <p className="text-xs text-gray-500 underline">(Ex. VAT)</p>
                   </div>
-                  <div className="flex items-center gap-1 text-xs text-[#b3b3b5] mt-1 px-2">
+                  <div className="flex items-center gap-1 text-xs text-[#b3b3b5] my-1 px-2">
                     ৳{formatPrice(priceIncVat)}{" "}
                     <span className="underline">(Inc. VAT)</span>
                   </div>

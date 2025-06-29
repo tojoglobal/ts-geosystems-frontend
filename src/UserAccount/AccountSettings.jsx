@@ -264,7 +264,7 @@ const AccountSettings = () => {
       <div>
         <button
           type="submit"
-          className="bg-crimson-red text-white px-6 py-2 rounded-sm hover:bg-red-700 transition-colors"
+          className="bg-crimson-red text-white px-6 py-2 text-sm rounded-sm hover:bg-red-700 transition-colors"
         >
           UPDATE DETAILS
         </button>

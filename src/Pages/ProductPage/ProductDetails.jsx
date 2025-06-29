@@ -342,6 +342,7 @@ const ProductDetails = () => {
                 quantity={quantity}
                 selectedOptions={selectedOptions}
                 priceInfo={priceInfo}
+                variant="details"
               />
             )}
             {product?.isStock === 1 && priceOption === 1 && (

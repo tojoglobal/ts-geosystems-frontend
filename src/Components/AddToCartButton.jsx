@@ -6,14 +6,22 @@ const AddToCartButton = ({
   selectedOptions = [],
   priceInfo,
   children,
+  variant, // added for details page
 }) => {
   const handleAddToCart = useAddToCart();
+
+  // Style based on variant
+  const className =
+    variant === "details"
+      ? "cursor-pointer overflow-hidden group text-white px-16 font-semibold py-[5px] rounded-[3px] text-[16px] bg-[#e62245] hover:bg-red-800 w-full sm:w-auto"
+      : "cursor-pointer overflow-hidden group text-white font-semibold py-[5px] px-4 lg:px-9 rounded-[4px] text-sm bg-[#e62245] hover:bg-red-800 w-full transition-all";
+
   return (
     <button
       onClick={() =>
         handleAddToCart({ product, quantity, selectedOptions, priceInfo })
       }
-      className="cursor-pointer overflow-hidden group text-white font-semibold py-[5px] px-4 lg:px-9 rounded-[4px] text-sm bg-[#e62245] hover:bg-red-800 w-full whitespace-nowrap"
+      className={className}
     >
       <span className="relative z-10">{children || "ADD TO CART"}</span>
     </button>
