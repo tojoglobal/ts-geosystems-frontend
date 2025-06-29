@@ -13,7 +13,7 @@ const AddToCartButton = ({
       onClick={() =>
         handleAddToCart({ product, quantity, selectedOptions, priceInfo })
       }
-      className="cursor-pointer overflow-hidden group text-white font-semibold py-[5px] rounded-[4px] text-sm bg-[#e62245] hover:bg-red-800 w-full whitespace-nowrap"
+      className="cursor-pointer overflow-hidden group text-white font-semibold py-[5px] px-4 lg:px-9 rounded-[4px] text-sm bg-[#e62245] hover:bg-red-800 w-full whitespace-nowrap"
     >
       <span className="relative z-10">{children || "ADD TO CART"}</span>
     </button>
