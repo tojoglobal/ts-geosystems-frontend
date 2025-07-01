@@ -91,7 +91,7 @@ const HelpDeskButton = () => {
           <div className="space-y-1 text-sm">
             {info?.helpline_number && (
               <div className="flex items-center gap-1">
-                <p className="text-gray-600">Helpline Number:</p>
+                <p className="text-gray-600">{info?.helpline_label}</p>
                 <p className="font-medium text-crimson-red">
                   {info.helpline_number}
                 </p>
@@ -99,13 +99,13 @@ const HelpDeskButton = () => {
             )}
             {info?.whatsapp && (
               <div className="flex items-center gap-1">
-                <p className="text-gray-600">WhatsApp:</p>
+                <p className="text-gray-600">{info?.whatsapp_label}</p>
                 <p className="font-medium text-crimson-red">{info.whatsapp}</p>
               </div>
             )}
             {info?.email && (
               <div className="flex items-center gap-1">
-                <p className="text-gray-600">Email:</p>
+                <p className="text-gray-600">{info?.email_label}</p>
                 <p className="font-medium text-crimson-red">{info.email}</p>
               </div>
             )}

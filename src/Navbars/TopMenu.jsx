@@ -10,8 +10,10 @@ const TopMenu = () => {
     "/api/helpdesk-info"
   );
 
-  const phoneNumber = info?.helpline_number;
-  const phoneHref = "tel:" + phoneNumber?.replace(/[^\d+]/g, "");
+  const phoneNumber = info?.top_menu_phone;
+  const phoneHref = phoneNumber
+    ? "tel:" + phoneNumber.replace(/[^\d+]/g, "")
+    : "#";
 
   return (
     <div className="border-b border-slightly-dark">
@@ -21,14 +23,7 @@ const TopMenu = () => {
             {phoneNumber}
           </a>
         </div>
-        <div>
-          {isAuth && (
-            // <p>
-            //   Welcome, {user?.email} ({user?.role})
-            // </p>
-            <Logout />
-          )}
-        </div>
+        <div>{isAuth && <Logout />}</div>
       </div>
     </div>
   );
