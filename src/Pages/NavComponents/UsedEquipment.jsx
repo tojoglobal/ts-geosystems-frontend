@@ -51,9 +51,7 @@ const UsedEquipment = () => {
   const { data = {}, isLoading } = useQuery({
     queryKey: ["usedProducts"],
     queryFn: async () => {
-      const res = await axiosPublicUrl.get(
-        "/api/category-with-subcategories/2"
-      );
+      const res = await axiosPublicUrl.get("/api/used-products");
       return res?.data;
     },
   });

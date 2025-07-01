@@ -46,9 +46,9 @@ const ProductSidebar = () => {
     },
   });
 
-  const { data: popularImage = {}, isLoading: loading } = useDataQuery(
-    ["popularBrandPhoto"],
-    "/api/brand/popular-photo"
+  const { data = {}, isLoading: loading } = useDataQuery(
+    ["popularBrand"],
+    "/api/brand/popular"
   );
 
   useEffect(() => {
@@ -282,14 +282,16 @@ const ProductSidebar = () => {
           </div>
         )
       )}
-      {Array.isArray(popularImage?.photos) &&
-        popularImage.photos.map((filename, i) => (
+      {Array.isArray(data?.brands) &&
+        data.brands.map((filename, i) => (
           <div
             className="mt-3 h-[110px] overflow-hidden border rounded-[4px]"
             key={i}
           >
             <img
-              src={`${import.meta.env.VITE_OPEN_APIURL}/uploads/${filename}`}
+              src={`${import.meta.env.VITE_OPEN_APIURL}/uploads/${
+                filename.photo
+              }`}
               alt="Brand"
               className="h-full w-full transition-transform duration-1000 hover:scale-110"
             />

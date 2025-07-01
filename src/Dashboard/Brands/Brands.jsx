@@ -159,9 +159,12 @@ const Brands = () => {
 
   return (
     <div className="max-w-4xl mx-auto">
-      <h2 className="text-xl sm:text-2xl font-bold text-white mb-3 md:mb-5">
-        Add a Brand
-      </h2>
+      <h2 className="text-xl sm:text-2xl font-bold text-white">Add a Brand</h2>
+      <p className="mb-3 md:mb-5 text-sm text-gray-400">
+        Only active brands will be shown. Popular brands appear in the product
+        sidebar. Brands selected for Home Page will be displayed on the Home,
+        Contact Us, and About Us pages.
+      </p>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div className="space-y-2">
           <label className="block text-sm font-semibold text-gray-200">
