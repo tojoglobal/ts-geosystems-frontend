@@ -222,7 +222,7 @@ const Cart = () => {
     });
   };
 
-  console.log(mergedCart);
+  console.log("mergedCart", mergedCart);
 
   return (
     <div className="md:p-2">
@@ -309,7 +309,6 @@ const Cart = () => {
                 <th className="py-2">Item Name</th>
                 <th className="py-2">Price</th>
                 <th className="py-2">Quantity</th>
-                {/*<th className="py-2">vat</th>*/}
                 <th className="py-2 text-right">Total</th>
               </tr>
             </thead>
@@ -317,9 +316,6 @@ const Cart = () => {
               {mergedCart.map((item) => {
                 const product = products.find((p) => p.id === item.id);
                 const chekProductOption = JSON.parse(product?.product_options);
-                console.log("product_options", chekProductOption);
-                console.log("options", item?.options);
-
                 return (
                   <tr key={item.id} className="border-b">
                     <td className="flex items-center gap-4 py-4">

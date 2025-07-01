@@ -124,12 +124,10 @@ const Checkout = () => {
       paymentMethod: formData.paymentMethod,
       paymentStatus: "pending",
       items: mergedCart,
-      coupon: coupon || null,
+      coupon: coupon ? coupon.code_name : null,
       shipping_cost: shippingCost || null,
       total,
     };
-
-    const _items = mergedCart.map((item) => item);
 
     const sslPaymentInfo = {
       total_amount: total,
@@ -144,7 +142,7 @@ const Checkout = () => {
       items: items.map((item) => ({
         id: item.id,
         quantity: item.quantity,
-        options: item.options.map((opt) => opt.id),
+        selectedOption: item.options,
       })),
       shippingCost,
       coupon: coupon ? coupon.code_name : null,
