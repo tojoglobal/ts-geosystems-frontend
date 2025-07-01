@@ -56,7 +56,6 @@ const Checkout = () => {
     shipping && shipping.amount ? parseFloat(shipping.amount) : 100;
 
   console.log(mergedCart);
-
   // Do NOT do custom VAT exclusion here, let backend decide!
   const subtotal = mergedCart.reduce(
     (total, item) => total + item.priceIncVat * item.quantity,
@@ -217,7 +216,7 @@ const Checkout = () => {
         </p>
         <Link
           to="/shop-all"
-          className="inline-block bg-[#e62245] text-white px-6 py-2 rounded"
+          className="inline-block bg-[#e62245] text-white px-6 py-2 rounded cursor-pointer"
         >
           Browse Products
         </Link>
@@ -234,11 +233,11 @@ const Checkout = () => {
           <div>
             <p className="text-sm mb-2">Check out faster with:</p>
             <div className="flex gap-2 mb-2">
-              <button className="flex-1 bg-[#ffc439] py-2 rounded flex items-center justify-center gap-2">
+              <button className="flex-1 bg-[#ffc439] py-2 rounded flex items-center justify-center gap-2 cursor-pointer">
                 <img src="/paypal.svg" alt="PayPal" className="h-5" />
                 <span className="font-semibold">PayPal</span>
               </button>
-              <button className="flex-1 bg-[#f7dfa5] py-2 rounded flex items-center justify-center gap-1">
+              <button className="flex-1 bg-[#f7dfa5] py-2 rounded flex items-center justify-center gap-1 cursor-pointer">
                 <span>Pay with</span>
                 <img
                   src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg"
@@ -276,7 +275,7 @@ const Checkout = () => {
                 />
                 <button
                   onClick={() => handleContinue(1)}
-                  className="bg-[#e62245] cursor-pointer text-white px-4 py-2 rounded"
+                  className="bg-[#e62245] text-white px-4 py-2 rounded cursor-pointer"
                   disabled={!((user && isAuth) || formData.email)}
                 >
                   CONTINUE
@@ -288,6 +287,7 @@ const Checkout = () => {
                   name="newsletter"
                   checked={formData.newsletter}
                   onChange={handleInputChange}
+                  className="cursor-pointer"
                 />
                 <label>Subscribe to our newsletter</label>
               </div>
@@ -394,6 +394,7 @@ const Checkout = () => {
                       name="billingSameAsShipping"
                       checked={formData.billingSameAsShipping}
                       onChange={handleInputChange}
+                      className="cursor-pointer"
                     />
                     Billing address is same as shipping address
                   </label>
@@ -412,7 +413,7 @@ const Checkout = () => {
                 {step === 3 && (
                   <button
                     onClick={() => handleContinue(3)}
-                    className="bg-[#e62245] cursor-pointer text-white px-4 py-2 rounded"
+                    className="bg-[#e62245] text-white px-4 py-2 rounded cursor-pointer"
                   >
                     CONTINUE
                   </button>
@@ -432,7 +433,7 @@ const Checkout = () => {
                   name="paymentMethod"
                   value={formData.paymentMethod}
                   onChange={handleInputChange}
-                  className="border p-2 rounded w-full mb-4"
+                  className="border p-2 rounded w-full mb-4 cursor-pointer"
                 >
                   <option value="">Select Payment Method</option>
                   <option value="sslcommerz">SSLCOMMERZ Payment Gateway</option>
@@ -441,7 +442,7 @@ const Checkout = () => {
 
                 <button
                   onClick={handlePlaceOrder}
-                  className="bg-[#e62245] cursor-pointer text-white px-4 py-2 rounded"
+                  className="bg-[#e62245] text-white px-4 py-2 rounded cursor-pointer"
                 >
                   Place Order
                 </button>
@@ -463,7 +464,7 @@ const Checkout = () => {
                   <p>Payment completed via SSLCOMMERZ.</p>
                   <button
                     onClick={() => window.print()}
-                    className="bg-blue-600 text-white px-3 py-2 rounded"
+                    className="bg-blue-600 text-white px-3 py-2 rounded cursor-pointer"
                   >
                     Print Invoice
                   </button>
@@ -489,74 +490,75 @@ const Checkout = () => {
         </div>
 
         {/* RIGHT COLUMN: Order Summary */}
-        <div className="border  rounded shadow-xl p-4 space-y-4">
-          <div className="flex justify-between items-center border-b pb-4">
-            <h2 className="text-lg font-semibold">Order Summary</h2>
-            <Link to="/cart" className="text-[#e62245] text-sm font-semibold">
-              Edit Cart
-            </Link>
-          </div>
+        <div>
+          <div className="space-y-4 shadow-lg border rounded p-4">
+            <div className="flex justify-between items-center border-b pb-4">
+              <h2 className="text-lg font-semibold">Order Summary</h2>
+              <Link to="/cart" className="text-[#e62245] text-sm font-semibold">
+                Edit Cart
+              </Link>
+            </div>
 
-          <h3 className="font-medium">{totalQuantity} Items</h3>
-          {mergedCart.length === 0 ? (
-            <p className="text-xl">Your cart is empty.</p>
-          ) : (
-            <>
-              {mergedCart.map((item, index) => (
-                <div key={index} className="flex gap-3 ">
-                  <img
-                    src={
-                      item.image_urls
-                        ? `${import.meta.env.VITE_OPEN_APIURL}${
-                            JSON.parse(item.image_urls)[0]
-                          }`
-                        : "/placeholder.jpg"
-                    }
-                    alt={item.product_name}
-                    className="w-20 h-20 object-cover"
-                  />
-                  <div className="flex flex-col justify-between text-sm">
-                    <p className="font-semibold text-charcoal">
-                      <span>{item.quantity}</span>{" "}
-                      <span className="px-1">x</span> {item.product_name}
-                    </p>
+            <h3 className="font-medium">{totalQuantity} Items</h3>
+            {mergedCart.length === 0 ? (
+              <p className="text-xl">Your cart is empty.</p>
+            ) : (
+              <>
+                {mergedCart.map((item, index) => (
+                  <div key={index} className="flex gap-3 ">
+                    <img
+                      src={
+                        item.image_urls
+                          ? `${import.meta.env.VITE_OPEN_APIURL}${
+                              JSON.parse(item.image_urls)[0]
+                            }`
+                          : "/placeholder.jpg"
+                      }
+                      alt={item.product_name}
+                      className="w-20 h-20 object-cover"
+                    />
+                    <div className="flex flex-col justify-between text-sm">
+                      <p className="font-semibold text-charcoal">
+                        <span>{item.quantity}</span>{" "}
+                        <span className="px-1">x</span> {item.product_name}
+                      </p>
+                    </div>
+                    <p>৳{formatBDT(item?.totalPrice)}</p>
                   </div>
-                  <p>৳{formatBDT(item?.totalPrice)}</p>
-                </div>
-              ))}
-            </>
-          )}
-          <hr />
-          <div className="space-y-3 text-sm">
-            <div className="flex justify-between">
-              <span>Subtotal</span>
-              <span>৳{formatBDT(subtotal)}</span>
-            </div>
-            <div className="flex justify-between">
-              <span>Shipping</span>
-              <span>৳{formatBDT(shippingCost)}</span>
-            </div>
-            {vatEnabled && (
+                ))}
+              </>
+            )}
+            <hr />
+            <div className="space-y-3 text-sm">
               <div className="flex justify-between">
-                <span>VAT</span>
-                <span>৳{formatBDT(vat)}</span>
+                <span>Subtotal</span>
+                <span>৳{formatBDT(subtotal)}</span>
               </div>
-            )}
-
-            {coupon?.code_name && (
-              <div className="flex justify-between text-green-600">
-                <span>Discount:({coupon?.code_name})</span>
-                <span>-৳{formatBDT(discount)}</span>
+              <div className="flex justify-between">
+                <span>Shipping</span>
+                <span>৳{formatBDT(shippingCost)}</span>
               </div>
-            )}
-          </div>
+              {vatEnabled && (
+                <div className="flex justify-between">
+                  <span>VAT</span>
+                  <span>৳{formatBDT(vat)}</span>
+                </div>
+              )}
 
-          <hr />
-          <div className="flex justify-between text-xl font-semibold">
-            <span>Total</span>
-            <span>৳{formatBDT(total)}</span>
-          </div>
-          {/* <hr />
+              {coupon?.code_name && (
+                <div className="flex justify-between text-green-600">
+                  <span>Discount:({coupon?.code_name})</span>
+                  <span>-৳{formatBDT(discount)}</span>
+                </div>
+              )}
+            </div>
+
+            <hr />
+            <div className="flex justify-between text-xl font-semibold">
+              <span>Total</span>
+              <span>৳{formatBDT(total)}</span>
+            </div>
+            {/* <hr />
           {vatEnabled && (
             <div className="text-sm">
               <p className="font-semibold mb-1">TAX INCLUDED IN TOTAL:</p>
@@ -566,6 +568,7 @@ const Checkout = () => {
               </div>
             </div>
           )} */}
+          </div>
         </div>
       </div>
     </div>

@@ -282,14 +282,14 @@ const Cart = () => {
                     <span className="text-sm">Qty:</span>
                     <button
                       onClick={() => handleQuantityChange(item, -1)}
-                      className="px-2 py-1 border rounded hover:bg-gray-200 text-sm"
+                      className="px-2 py-1 border rounded hover:bg-gray-200 text-sm  cursor-pointer"
                     >
                       -
                     </button>
                     <span className="px-2 text-sm">{item.quantity}</span>
                     <button
                       onClick={() => handleQuantityChange(item, 1)}
-                      className="px-2 py-1 border rounded hover:bg-gray-200 text-sm"
+                      className="px-2 py-1 border rounded hover:bg-gray-200 text-sm cursor-pointer"
                     >
                       +
                     </button>
@@ -382,14 +382,14 @@ const Cart = () => {
                       <div className="flex items-center">
                         <button
                           onClick={() => handleQuantityChange(item, -1)}
-                          className="px-2 border rounded hover:bg-gray-200"
+                          className="px-2 border rounded hover:bg-gray-200 cursor-pointer"
                         >
                           -
                         </button>
                         <span className="px-3">{item.quantity}</span>
                         <button
                           onClick={() => handleQuantityChange(item, 1)}
-                          className="px-2 border rounded hover:bg-gray-200"
+                          className="px-2 border rounded hover:bg-gray-200 cursor-pointer"
                         >
                           +
                         </button>
@@ -436,7 +436,7 @@ const Cart = () => {
                                 selectedOptions: [],
                               }))
                             }
-                            className="mr-3 accent-[#e62245] w-5 h-5"
+                            className="mr-3 accent-[#e62245] w-5 h-5 cursor-pointer"
                           />
                           <span className="text-gray-700 font-medium">
                             None
@@ -468,7 +468,7 @@ const Cart = () => {
                               onChange={(e) =>
                                 handleOptionChange(opt, e.target.checked)
                               }
-                              className="mr-3 accent-[#e62245] w-5 h-5"
+                              className="mr-3 accent-[#e62245] w-5 h-5 cursor-pointer"
                             />
                             <div>
                               <span className="font-semibold text-gray-900">
@@ -495,7 +495,7 @@ const Cart = () => {
                     </div>
                     <div className="flex gap-2">
                       <button
-                        className="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 transition"
+                        className="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 transition cursor-pointer"
                         onClick={() =>
                           setOptionModal({
                             open: false,
@@ -508,7 +508,7 @@ const Cart = () => {
                         Cancel
                       </button>
                       <button
-                        className="px-4 py-2 bg-[#e62245] text-white rounded hover:bg-[#c81a3d] transition"
+                        className="px-4 py-2 bg-[#e62245] text-white rounded hover:bg-[#c81a3d] transition cursor-pointer"
                         onClick={saveOptionChanges}
                       >
                         Save
@@ -593,14 +593,14 @@ const Cart = () => {
                   {shipping?.id && (
                     <button
                       onClick={handleResetShipping}
-                      className="text-gray-500 underline text-sm"
+                      className="text-gray-500 underline text-sm cursor-pointer"
                     >
                       Reset
                     </button>
                   )}
                   <button
                     onClick={toggleShippingOptions}
-                    className="text-[#e62245] underline text-sm"
+                    className="text-[#e62245] underline text-sm cursor-pointer"
                   >
                     {showShippingOptions
                       ? "Hide"
@@ -620,7 +620,7 @@ const Cart = () => {
                   {activeShippingOptions.map((opt) => (
                     <label
                       key={opt.id}
-                      className="flex items-center gap-2 cursor-pointer rounded hover:bg-gray-50 py-1 px-2 transition"
+                      className="flex items-center gap-2 cursor-pointer rounded hover:bg-gray-50 py-1 px-2 capitalize transition"
                       style={{
                         border:
                           shipping?.id === opt.id
@@ -635,6 +635,7 @@ const Cart = () => {
                         value={opt.id}
                         checked={shipping?.id === opt.id}
                         onChange={handleShippingChange}
+                        className="cursor-pointer"
                       />
                       <span className="font-medium">{opt.name}</span>
                       <span className="ml-auto text-sm text-gray-600">
