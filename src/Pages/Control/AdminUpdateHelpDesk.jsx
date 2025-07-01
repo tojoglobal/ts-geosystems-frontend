@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import Button from "../../Dashboard/Button/Button";
 import Swal from "sweetalert2";
 import { useAxiospublic } from "../../Hooks/useAxiospublic";
@@ -45,7 +45,7 @@ const AdminUpdateHelpDesk = () => {
     },
   });
 
-  const { register, handleSubmit, reset } = useForm({
+  const { register, handleSubmit, reset, control } = useForm({
     defaultValues: {
       title: "",
       helpline_number: "",
@@ -72,12 +72,20 @@ const AdminUpdateHelpDesk = () => {
         contact_btn_link: info.contact_btn_link || "",
         tooltip_text: info.tooltip_text || "",
         top_menu_phone: info.top_menu_phone || "",
-        helpline_label: info.helpline_label || "Helpline Number:",
-        whatsapp_label: info.whatsapp_label || "WhatsApp:",
-        email_label: info.email_label || "Email:",
+        helpline_label: info.helpline_label || "",
+        whatsapp_label: info.whatsapp_label || "",
+        email_label: info.email_label || "",
       });
     }
   }, [info, reset]);
+
+  // Helper to trim colon and spaces
+  const cleanLabel = (label) => (label || "").split(":")[0].trim();
+
+  // Dynamically watch for label changes
+  const helplineLabel = useWatch({ control, name: "helpline_label" }) || "";
+  const whatsappLabel = useWatch({ control, name: "whatsapp_label" }) || "";
+  const emailLabel = useWatch({ control, name: "email_label" }) || "";
 
   const onSubmit = (data) => mutation.mutate(data);
 
@@ -120,22 +128,25 @@ const AdminUpdateHelpDesk = () => {
                 className="w-full border border-gray-700 focus:outline-none focus:border focus:border-teal-400 p-2 rounded-lg bg-gray-800 text-white"
               />
             </div>
+          </div>
 
+          {/* Flexible Label/Value Rows */}
+          <div className="flex flex-col gap-4 mt-4">
             {/* Helpline Row */}
-            <div className="col-span-2 flex flex-col md:flex-row gap-2">
+            <div className="flex flex-col md:flex-row gap-2">
               <div className="flex-1">
                 <label className="block font-medium mb-1 text-gray-200">
-                  Helpline Label
+                  Field Name (left)
                 </label>
                 <input
                   {...register("helpline_label")}
                   className="w-full border border-gray-700 focus:outline-none focus:border focus:border-teal-400 p-2 rounded-lg bg-gray-800 text-white"
-                  placeholder="e.g. Helpline Number:"
+                  placeholder="e.g. Helpline, Personal, Support, etc"
                 />
               </div>
               <div className="flex-1">
                 <label className="block font-medium mb-1 text-gray-200">
-                  Number
+                  {cleanLabel(helplineLabel) || "Field"} Value (right)
                 </label>
                 <input
                   {...register("helpline_number")}
@@ -144,22 +155,21 @@ const AdminUpdateHelpDesk = () => {
                 />
               </div>
             </div>
-
             {/* WhatsApp Row */}
-            <div className="col-span-2 flex flex-col md:flex-row gap-2">
+            <div className="flex flex-col md:flex-row gap-2">
               <div className="flex-1">
                 <label className="block font-medium mb-1 text-gray-200">
-                  WhatsApp Label
+                  Field Name (left)
                 </label>
                 <input
                   {...register("whatsapp_label")}
                   className="w-full border border-gray-700 focus:outline-none focus:border focus:border-teal-400 p-2 rounded-lg bg-gray-800 text-white"
-                  placeholder="e.g. WhatsApp:"
+                  placeholder="e.g. WhatsApp, Office WhatsApp, etc"
                 />
               </div>
               <div className="flex-1">
                 <label className="block font-medium mb-1 text-gray-200">
-                  Number
+                  {cleanLabel(whatsappLabel) || "Field"} Value (right)
                 </label>
                 <input
                   {...register("whatsapp")}
@@ -168,22 +178,21 @@ const AdminUpdateHelpDesk = () => {
                 />
               </div>
             </div>
-
             {/* Email Row */}
-            <div className="col-span-2 flex flex-col md:flex-row gap-2">
+            <div className="flex flex-col md:flex-row gap-2">
               <div className="flex-1">
                 <label className="block font-medium mb-1 text-gray-200">
-                  Email Label
+                  Field Name (left)
                 </label>
                 <input
                   {...register("email_label")}
                   className="w-full border border-gray-700 focus:outline-none focus:border focus:border-teal-400 p-2 rounded-lg bg-gray-800 text-white"
-                  placeholder="e.g. Email:"
+                  placeholder="e.g. Email, Support Email, etc"
                 />
               </div>
               <div className="flex-1">
                 <label className="block font-medium mb-1 text-gray-200">
-                  Email
+                  {cleanLabel(emailLabel) || "Field"} Value (right)
                 </label>
                 <input
                   {...register("email")}
@@ -192,8 +201,10 @@ const AdminUpdateHelpDesk = () => {
                 />
               </div>
             </div>
+          </div>
 
-            {/* Contact Button Label & Link */}
+          {/* Other fields */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
             <div>
               <label className="block font-medium mb-1 text-gray-200">
                 Button Label
