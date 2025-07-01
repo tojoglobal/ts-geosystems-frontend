@@ -4,7 +4,6 @@ import {
   ArrowDownRight,
   ArrowUpRight,
   Users,
-  DollarSign,
   ShoppingCart,
   CreditCard,
   MoreVertical,
@@ -20,6 +19,26 @@ import DashboardCharts from "./DBComponents/DashboardCharts";
 import DashboardWidgets from "./DBComponents/DashboardWidgets";
 import LatestTransactions from "./DBComponents/LatestTransactions";
 
+// Helper function to format BDT amounts with commas
+const formatBDT = (amount) => {
+  if (!amount && amount !== 0) return "৳0.00";
+
+  // Extract numeric value from string if needed
+  const numericValue =
+    typeof amount === "string"
+      ? parseFloat(amount.replace(/[^0-9.-]+/g, ""))
+      : Number(amount);
+
+  if (isNaN(numericValue)) return "৳0.00";
+
+  // Format with commas and 2 decimal places
+  return new Intl.NumberFormat("en-IN", {
+    style: "decimal",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(numericValue);
+};
+
 export default function Dashboard() {
   const [earningsPeriod, setEarningsPeriod] = useState("year");
   const [ordersPeriod, setOrdersPeriod] = useState("year");
@@ -31,15 +50,20 @@ export default function Dashboard() {
     useDashboardMetrics(ordersPeriod);
   const { data: usersMetrics = {}, isLoading: usersLoading } =
     useDashboardMetrics("all");
+
   return (
     <div className="p-1 pt-0 grid md:gap-4 grid-cols-1 xl:grid-cols-4">
       {/* Top Metrics */}
       <Card className="border-0 col-span-1 xl:col-span-4 bg-slate-900 text-white">
         <CardContent className="px-0 md:px-0 grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
           <MetricBox
-            icon={<DollarSign />}
+            icon={<span className="text-xl font-bold">৳</span>}
             title="Total Earnings"
-            value={earningsMetrics?.totalEarnings || "$0.00 USD"}
+            value={
+              earningsMetrics?.totalEarnings
+                ? `৳${formatBDT(earningsMetrics.totalEarnings)} BDT`
+                : "৳0.00 BDT"
+            }
             change={earningsMetrics?.earningsChange || "+0.0%"}
             up={!earningsMetrics?.earningsChange?.startsWith("-")}
             period={earningsPeriod}
@@ -73,13 +97,13 @@ export default function Dashboard() {
             icon={<CreditCard />}
             title="Avg. Order Value"
             value={
-              earningsMetrics && Number(ordersMetrics?.totalOrders) > 0
-                ? `$${(
+              earningsMetrics?.totalEarnings && ordersMetrics?.totalOrders
+                ? `৳${formatBDT(
                     parseFloat(
-                      earningsMetrics?.totalEarnings?.replace(/[^0-9.-]+/g, "")
-                    ) / Number(ordersMetrics?.totalOrders)
-                  ).toFixed(2)}`
-                : "$0.00"
+                      earningsMetrics.totalEarnings.replace(/[^0-9.-]+/g, "")
+                    ) / Number(ordersMetrics.totalOrders)
+                  )}`
+                : "৳0.00"
             }
             change=""
             loading={earningsLoading || ordersLoading}
@@ -132,8 +156,17 @@ function MetricBox({
         <div className="text-sm text-gray-400">{title}</div>
         <div className="text-gray-300">{icon}</div>
       </div>
-      <div className="text-base md:text-2xl font-bold">
-        {loading ? <span className="animate-pulse">...</span> : value}
+      <div className="text-base md:text-xl lg:text-2xl font-bold truncate">
+        {loading ? (
+          <span className="animate-pulse">...</span>
+        ) : (
+          <span
+            className="whitespace-nowrap overflow-hidden text-ellipsis block"
+            title={value}
+          >
+            {value}
+          </span>
+        )}
       </div>
       <div className="flex justify-between items-center gap-1">
         <div className={`flex items-center gap-1 text-sm ${arrowClass}`}>
