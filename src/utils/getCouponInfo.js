@@ -1,5 +1,7 @@
 // utils/getCouponInfo.js
 export const getCouponInfo = async (code_name) => {
+  console.log(code_name);
+
   try {
     const res = await fetch(
       `${import.meta.env.VITE_OPEN_APIURL}/api/promocode`,
