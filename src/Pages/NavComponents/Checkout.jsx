@@ -8,13 +8,6 @@ import { clearCart, clearCoupon } from "../../features/AddToCart/AddToCart";
 import useToastSwal from "../../Hooks/useToastSwal";
 import { useVatEnabled } from "../../Hooks/useVatEnabled";
 import { formatBDT } from "../../utils/formatBDT";
-function getVatValue(product) {
-  try {
-    return product?.tax ? JSON.parse(product.tax).value : 0;
-  } catch {
-    return 0;
-  }
-}
 
 const Checkout = () => {
   const axiosPublicUrl = useAxiospublic();
@@ -55,24 +48,15 @@ const Checkout = () => {
   const shippingCost =
     shipping && shipping.amount ? parseFloat(shipping.amount) : 100;
 
-  console.log(mergedCart);
-
   // Do NOT do custom VAT exclusion here, let backend decide!
   const subtotal = mergedCart.reduce(
     (total, item) => total + item.priceIncVat * item.quantity,
     0
   );
 
-  // Calculate VAT per item and total VAT for the cart
-  const getVatForItem = (item) => {
-    const vatRate = getVatValue(item);
-    const basePrice = parseFloat(item.price) || 0;
-    return basePrice * (vatRate / 100) * item.quantity;
-  };
-  const vat = mergedCart.reduce(
-    (total, item) => total + getVatForItem(item),
-    0
-  );
+  const vat = mergedCart.reduce((total, item) => total + item?.vat, 0);
+
+  // const priceInfo = getTotalPriceInfo(product, selectedOptions, vatEnabled);
   let discount = 0;
   if (coupon && coupon.code_name) {
     if (coupon.type === "percentage") {
@@ -125,7 +109,6 @@ const Checkout = () => {
   const handlePlaceOrder = async () => {
     const newOrderId = "TSGB" + Date.now();
     setOrderId(newOrderId);
-
     const orderData = {
       order_id: newOrderId,
       email: formData.email,
@@ -141,14 +124,16 @@ const Checkout = () => {
       paymentMethod: formData.paymentMethod,
       paymentStatus: "pending",
       items: mergedCart,
-      coupon: coupon || null, // full coupon object or null
+      coupon: coupon || null,
       shipping_cost: shippingCost || null,
       total,
     };
 
+    const _items = mergedCart.map((item) => item);
+    console.log(_items);
+
     const sslPaymentInfo = {
       total_amount: total,
-      shippingCost: shippingCost,
       order_id: newOrderId,
       productIds: productIds,
       customer_name: formData.shippingName,
@@ -157,14 +142,18 @@ const Checkout = () => {
       shipping_address: formData.shippingAddress,
       shipping_city: formData.shippingCity,
       shipping_zip: formData.shippingZip,
-      items: mergedCart.map((item) => ({
+      items: items.map((item) => ({
         id: item.id,
-        price: item.price,
         quantity: item.quantity,
+        options: item.options.map((opt) => opt.id),
       })),
-      coupon: coupon || null,
-      vatEnabled, // <-- send to backend!
+      // coupon: coupon || null,
+      shippingCost,
+      coupon: coupon ? coupon.code_name : null,
+      vatEnabled,
+      paymentMethod: formData.paymentMethod,
     };
+    console.log(sslPaymentInfo);
 
     if (formData.paymentMethod === "sslcommerz") {
       try {
@@ -172,7 +161,6 @@ const Checkout = () => {
         const saveRes = await axiosPublicUrl.post("/api/orderdata", orderData);
 
         if (saveRes.status === 200 || saveRes.status === 201) {
-          // Trigger SSLCommerz payment
           const paymentInitRes = await axiosPublicUrl.post(
             "/api/ssl-payment/init",
             sslPaymentInfo
@@ -556,16 +544,6 @@ const Checkout = () => {
             <span>Total</span>
             <span>৳{formatBDT(total)}</span>
           </div>
-          {/* <hr />
-          {vatEnabled && (
-            <div className="text-sm">
-              <p className="font-semibold mb-1">TAX INCLUDED IN TOTAL:</p>
-              <div className="flex justify-between">
-                <span>VAT</span>
-                <span>৳{formatBDT(total + vat - discount)}</span>
-              </div>
-            </div>
-          )} */}
         </div>
       </div>
     </div>
