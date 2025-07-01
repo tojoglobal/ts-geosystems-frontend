@@ -11,6 +11,7 @@ import Swal from "sweetalert2";
 import { useVatEnabled } from "../../Hooks/useVatEnabled";
 import AdminVatSwitch from "./AdminVatSwitch";
 import useDataQuery from "../../utils/useDataQuery";
+import { useHomeBrands } from "../../Hooks/useHomeBrands";
 
 const validateYouTubeUrls = (value) => {
   if (!value || value.trim() === "") return true;
@@ -133,7 +134,6 @@ const UpdateProductForm = () => {
   const axiosPublicUrl = useAxiospublic();
   const [productData, setProductData] = useState({});
   const [images, setImages] = useState([]);
-  const [brands, setBrands] = useState([]);
   const [taxes, setTaxes] = useState([]);
   const [productOptions, setProductOptions] = useState([]);
   const [softwareOptions, setSoftwareOptions] = useState([]);
@@ -149,6 +149,8 @@ const UpdateProductForm = () => {
     ["subcategories"],
     "/api/subcategory"
   );
+
+  const { brands: homeBrands } = useHomeBrands();
 
   const Categories = useMemo(
     () => categoriesData?.categories || [],
@@ -184,15 +186,11 @@ const UpdateProductForm = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [brandsRes, productsRes, softwareRes, taxesRes] =
-          await Promise.all([
-            axiosPublicUrl.get("/api/brands"),
-            axiosPublicUrl.get("/api/products"),
-            axiosPublicUrl.get("/api/software"),
-            axiosPublicUrl.get("/api/taxes"),
-          ]);
-
-        setBrands(brandsRes.data);
+        const [productsRes, softwareRes, taxesRes] = await Promise.all([
+          axiosPublicUrl.get("/api/products"),
+          axiosPublicUrl.get("/api/software"),
+          axiosPublicUrl.get("/api/taxes"),
+        ]);
 
         setProductOptions(
           productsRes.data?.products?.map((prod) => ({
@@ -260,7 +258,7 @@ const UpdateProductForm = () => {
         setValue(
           "subCategory",
           JSON.stringify({ id: foundSub.id, slug: foundSub.slug }),
-          { shouldDirty: false } // Important to prevent showing as dirty
+          { shouldDirty: false }
         );
       } else {
         setValue("subCategory", "");
@@ -556,7 +554,7 @@ const UpdateProductForm = () => {
               <p className="text-red-500">{errors.productName.message}</p>
             )}
 
-            {/* brandName */}
+            {/* brandName - use only home brands */}
             <select
               {...register("brandName")}
               className="input border border-gray-600 focus:outline-none focus:border-teal-500 focus:ring-teal-500"
@@ -564,7 +562,7 @@ const UpdateProductForm = () => {
               <option value="" className="hover:bg-amber-200">
                 Select Brand
               </option>
-              {brands.map((br) => (
+              {homeBrands.map((br) => (
                 <option key={br.id} value={br.slug}>
                   {br.brands_name}
                 </option>

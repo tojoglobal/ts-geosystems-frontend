@@ -7,10 +7,10 @@ import "swiper/css/navigation";
 import GoogleReview from "./GoogleReview";
 import useDataQuery from "../../../utils/useDataQuery";
 import { SkeletonLoader } from "../../../utils/Loader/SkeletonLoader";
-import { usePopularBrands } from "../../../Hooks/usePopularBrands";
+import { useHomeBrands } from "../../../Hooks/useHomeBrands";
 
 const AboutUs = () => {
-  const { brands, isLoading: brandsLoading } = usePopularBrands();
+  const { brands, isLoading: brandsLoading } = useHomeBrands();
 
   const {
     data: response = {},

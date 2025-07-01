@@ -1,15 +1,13 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useParams, useLocation } from "react-router-dom";
 import { SlArrowDown, SlArrowUp } from "react-icons/sl";
-import { useAxiospublic } from "../../Hooks/useAxiospublic";
-import { useQuery } from "@tanstack/react-query";
 import useDataQuery from "../../utils/useDataQuery";
 import { useSelector } from "react-redux";
+import { useHomeBrands } from "../../Hooks/useHomeBrands";
 
 const ProductSidebar = () => {
   const { category, subcategory, brand } = useParams();
   const location = useLocation();
-  const axiosPublicUrl = useAxiospublic();
   const [openSections, setOpenSections] = useState({});
   const [hoveredCategory, setHoveredCategory] = useState(null);
   const [hoveredSubcategory, setHoveredSubcategory] = useState(null);
@@ -30,23 +28,10 @@ const ProductSidebar = () => {
     error: subcategoriesError,
   } = useDataQuery(["subcategories"], "/api/subcategory");
 
-  // Fetch brands
-  const {
-    data: brandsData,
-    isLoading: brandsLoading,
-    error: brandsError,
-  } = useQuery({
-    queryKey: ["brands"],
-    queryFn: async () => {
-      const res = await axiosPublicUrl.get("/api/brands");
-      return res?.data?.map((brand) => ({
-        name: brand.brands_name,
-        slug: brand.slug,
-      }));
-    },
-  });
-
-  const { data = {}, isLoading: loading } = useDataQuery(
+  // Fetch only Home Page brands for "Shop by Brand"
+  const { brands: brandsData, isLoading: loading } = useHomeBrands();
+  console.log(brandsData);
+  const { data = {}, isLoading: brandsLoading } = useDataQuery(
     ["popularBrand"],
     "/api/brand/popular"
   );
@@ -93,9 +78,9 @@ const ProductSidebar = () => {
     );
   };
 
-  if (categoriesLoading || subcategoriesLoading || brandsLoading || loading)
+  if (categoriesLoading || subcategoriesLoading || loading || brandsLoading)
     return null;
-  if (categoriesError || subcategoriesError || brandsError) {
+  if (categoriesError || subcategoriesError) {
     return <div>Error loading data</div>;
   }
 
@@ -114,10 +99,12 @@ const ProductSidebar = () => {
     { label: "", type: "spacer", height: "20px" },
     {
       label: "Shop by Brand",
-      children: brandsData?.map((brand) => ({
-        name: brand.name,
-        slug: brand.slug,
-      })),
+      children: Array.isArray(brandsData)
+        ? brandsData.map((brand) => ({
+            name: brand.brands_name,
+            slug: brand.slug,
+          }))
+        : [],
     },
   ];
 
@@ -207,7 +194,11 @@ const ProductSidebar = () => {
                   }}
                 >
                   <Link
-                    to={`/${item.categorySlug}`}
+                    to={
+                      item.label === "Shop by Brand"
+                        ? undefined
+                        : `/${item.categorySlug}`
+                    }
                     className={`
                       w-full text-xs capitalize font-bold text-left
                       ${isCategoryOrSubHover(item) ? "text-[#e62245]" : ""}
@@ -246,16 +237,24 @@ const ProductSidebar = () => {
                     {item.children.map((child) => (
                       <Link
                         key={child.slug || child.name}
-                        to={`/${item.categorySlug}/${child.slug}`}
+                        to={
+                          item.label === "Shop by Brand"
+                            ? `/brand/${child.slug}`
+                            : `/${item.categorySlug}/${child.slug}`
+                        }
                         className={`font-normal capitalize block px-5 py-3 text-[13px] hover:bg-gray-50 hover:text-[#e62245] border-t border-[#ebebeb] ${
-                          activeSubcategorySlug === child.slug &&
-                          activeCategorySlug === item.categorySlug
+                          item.label === "Shop by Brand" && brand === child.slug
+                            ? "font-bold text-[#e62245]"
+                            : activeSubcategorySlug === child.slug &&
+                              activeCategorySlug === item.categorySlug
                             ? "font-bold text-[#e62245]"
                             : ""
                         }`}
                         onMouseEnter={() =>
                           setHoveredSubcategory(
-                            `${item.categorySlug}/${child.slug}`
+                            item.label === "Shop by Brand"
+                              ? child.slug
+                              : `${item.categorySlug}/${child.slug}`
                           )
                         }
                         onMouseLeave={() => setHoveredSubcategory(null)}

@@ -11,12 +11,12 @@ import useDataQuery from "../../utils/useDataQuery";
 import { SkeletonLoader } from "../../utils/Loader/SkeletonLoader";
 import SocialButtons from "../../Components/SocialButtons";
 import useToastSwal from "../../Hooks/useToastSwal";
-import { usePopularBrands } from "../../Hooks/usePopularBrands";
+import { useHomeBrands } from "../../Hooks/useHomeBrands";
 
 const ContactUs = () => {
   const showToast = useToastSwal();
   const axiosPublicUrl = useAxiospublic();
-  const { brands, isLoading: brandsLoading } = usePopularBrands();
+  const { brands, isLoading: brandsLoading } = useHomeBrands();
 
   const {
     data: contactInfo,

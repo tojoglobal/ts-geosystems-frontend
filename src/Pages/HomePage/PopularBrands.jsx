@@ -3,10 +3,10 @@ import { Navigation, Autoplay } from "swiper/modules";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import "swiper/css";
 import "swiper/css/navigation";
-import { usePopularBrands } from "../../Hooks/usePopularBrands";
+import { useHomeBrands } from "../../Hooks/useHomeBrands";
 
 const PopularBrands = () => {
-  const { brands, isLoading } = usePopularBrands();
+  const { brands, isLoading } = useHomeBrands();
   if (isLoading || brands.length === 0) return null;
   return (
     <div className="py-5 md:py-16">
