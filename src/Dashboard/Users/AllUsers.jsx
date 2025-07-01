@@ -1,7 +1,6 @@
 import { useState } from "react";
 import {
   Eye,
-  Edit,
   Trash,
   ChevronLeft,
   ChevronRight,
@@ -266,14 +265,6 @@ const AllUsers = () => {
                       className="text-yellow-400 cursor-pointer bg-yellow-900 p-1 rounded hover:bg-yellow-800"
                     >
                       <Eye size={16} />
-                    </button>
-                    <button
-                      className="text-green-400 cursor-pointer bg-green-900 p-1 rounded hover:bg-green-800"
-                      onClick={() => {
-                        // Implement edit logic here if needed
-                      }}
-                    >
-                      <Edit size={16} />
                     </button>
                     <button
                       onClick={() => handleDeleteUser(user.id)}
