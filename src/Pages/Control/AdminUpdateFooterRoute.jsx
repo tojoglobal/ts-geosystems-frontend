@@ -1,9 +1,10 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Swal from "sweetalert2";
-import { useAxiospublic } from "../../Hooks/useAxiospublic";
+import { Pencil, Trash2, Plus, X, Loader2 } from "lucide-react";
+import { Editor } from "@tinymce/tinymce-react";
 import Loader from "../../utils/Loader";
-import { Pencil, Trash2, Plus, X } from "lucide-react";
+import { useAxiospublic } from "../../Hooks/useAxiospublic";
+import useDataQuery from "../../utils/useDataQuery";
 
 const emptyForm = {
   name: "",
@@ -15,32 +16,25 @@ const emptyForm = {
 
 const AdminUpdateFooterRoute = () => {
   const axiosPublic = useAxiospublic();
-  const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [links, setLinks] = useState([]);
   const [form, setForm] = useState(emptyForm);
   const [editingId, setEditingId] = useState(null);
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [linkToDelete, setLinkToDelete] = useState(null);
+  const [successButton, setSuccessButton] = useState(false);
+  const successTimeout = useRef(null);
 
-  const fetchLinks = async () => {
-    setLoading(true);
-    try {
-      const res = await axiosPublic.get("/api/dynamic-links");
-      setLinks(res.data.data || []);
-    } catch (e) {
-      Swal.fire({
-        title: "Error",
-        text: e.message || "Failed to fetch links",
-        icon: "error",
-        timer: 4000,
-      });
-    }
-    setLoading(false);
-  };
+  // Fetch links using useDataQuery
+  const {
+    data: linksData,
+    isLoading,
+    refetch: fetchLinks,
+  } = useDataQuery(["dynamicLinks"], "/api/dynamic-links");
+  const links = linksData?.data || [];
 
   useEffect(() => {
-    fetchLinks();
+    // Cleanup success timeout on unmount
+    return () => {
+      if (successTimeout.current) clearTimeout(successTimeout.current);
+    };
   }, []);
 
   const handleChange = (e) => {
@@ -65,35 +59,45 @@ const AdminUpdateFooterRoute = () => {
       ?.scrollIntoView({ behavior: "smooth" });
   };
 
+  // Delete link with SweetAlert confirmation
   const handleDeleteClick = (link) => {
-    setLinkToDelete(link);
-    setDeleteDialogOpen(true);
-  };
-
-  const handleDeleteConfirm = async () => {
-    if (!linkToDelete) return;
-    try {
-      await axiosPublic.delete(`/api/dynamic-links/${linkToDelete.id}`);
-      Swal.fire({
-        title: "Deleted!",
-        text: "Link has been deleted.",
-        icon: "success",
-        background: "#000",
-        color: "#fff",
-        timer: 4000,
-      });
-      fetchLinks();
-    } catch (e) {
-      Swal.fire({
-        title: "Error",
-        text: e?.response?.data?.message || "Failed to delete link",
-        icon: "error",
-        timer: 4000,
-      });
-    } finally {
-      setDeleteDialogOpen(false);
-      setLinkToDelete(null);
-    }
+    Swal.fire({
+      title: "Are you absolutely sure?",
+      text: `This action cannot be undone. This will permanently delete the "${link.name}" link.`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, delete",
+      cancelButtonText: "Cancel",
+      background: "#1e293b",
+      color: "#f8fafc",
+      confirmButtonColor: "#e11d48",
+      cancelButtonColor: "#334155",
+      reverseButtons: true,
+      focusCancel: true,
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await axiosPublic.delete(`/api/dynamic-links/${link.id}`);
+          Swal.fire({
+            title: "Deleted!",
+            text: "Link has been deleted.",
+            icon: "success",
+            background: "#1e293b",
+            color: "#f8fafc",
+            confirmButtonColor: "#e11d48",
+            timer: 4000,
+          });
+          fetchLinks();
+        } catch (e) {
+          Swal.fire({
+            title: "Error",
+            text: e?.response?.data?.message || "Failed to delete link",
+            icon: "error",
+            timer: 4000,
+          });
+        }
+      }
+    });
   };
 
   const handleSubmit = async (e) => {
@@ -117,6 +121,9 @@ const AdminUpdateFooterRoute = () => {
           timer: 4000,
         });
       }
+      setSuccessButton(true);
+      if (successTimeout.current) clearTimeout(successTimeout.current);
+      successTimeout.current = setTimeout(() => setSuccessButton(false), 1500);
       setForm(emptyForm);
       setEditingId(null);
       fetchLinks();
@@ -136,6 +143,8 @@ const AdminUpdateFooterRoute = () => {
     setForm(emptyForm);
   };
 
+  const editorRef = useRef(null);
+
   return (
     <div className="mt-7">
       <div>
@@ -145,7 +154,7 @@ const AdminUpdateFooterRoute = () => {
           footer
         </p>
         <div>
-          {loading ? (
+          {isLoading ? (
             <Loader className="my-12" />
           ) : (
             <div className="space-y-8">
@@ -182,7 +191,6 @@ const AdminUpdateFooterRoute = () => {
                           required
                           pattern="^[a-z0-9\-]+$"
                           title="Lowercase letters, numbers, and hyphens only"
-                          // disabled={!!editingId} // <-- this line removed, so slug is always editable
                         />
                       </div>
                     </div>
@@ -226,23 +234,77 @@ const AdminUpdateFooterRoute = () => {
                       <label className="block text-sm font-medium text-gray-300">
                         Content
                       </label>
-                      <textarea
-                        className="w-full rounded-md bg-gray-800 border-gray-700 text-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500 min-h-[120px]"
-                        name="description"
-                        value={form.description}
-                        onChange={handleChange}
-                        placeholder="Page content (supports HTML/Markdown)"
-                        required
-                      />
+                      <div className="border border-gray-800 rounded-md bg-gray-900">
+                        <Editor
+                          apiKey={import.meta.env.VITE_TINY_APIKEY}
+                          value={form.description}
+                          onEditorChange={(val) =>
+                            setForm((prev) => ({
+                              ...prev,
+                              description: val,
+                            }))
+                          }
+                          onInit={(_, editor) => {
+                            editorRef.current = editor;
+                          }}
+                          init={{
+                            height: 300,
+                            menubar: false,
+                            plugins: [
+                              "advlist",
+                              "autolink",
+                              "lists",
+                              "link",
+                              "image",
+                              "charmap",
+                              "preview",
+                              "anchor",
+                              "searchreplace",
+                              "visualblocks",
+                              "code",
+                              "fullscreen",
+                              "insertdatetime",
+                              "media",
+                              "table",
+                              "help",
+                              "wordcount",
+                            ],
+                            toolbar:
+                              "undo redo | formatselect | fontselect fontsizeselect | " +
+                              "bold italic underline removeformat | forecolor backcolor | " +
+                              "alignleft aligncenter alignright alignjustify | " +
+                              "bullist numlist outdent indent | link image media table | " +
+                              "preview fullscreen | help",
+                            content_style:
+                              "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
+                          }}
+                        />
+                      </div>
                     </div>
                     <div className="flex items-center gap-2">
                       <button
                         type="submit"
                         disabled={saving}
-                        className="inline-flex items-center justify-center rounded-md bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-teal-500 cursor-pointer focus:ring-offset-2 disabled:opacity-50"
+                        className={
+                          "inline-flex items-center justify-center rounded-md bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 text-sm font-medium transition-colors focus:outline-none cursor-pointer disabled:opacity-50" +
+                          (successButton
+                            ? " border-2 border-green-500 shadow-green-400"
+                            : "")
+                        }
+                        style={
+                          successButton
+                            ? {
+                                borderColor: "#22c55e",
+                                boxShadow:
+                                  "0 0 0 2px #22c55e66, 0 2px 4px 0 #22c55e33",
+                                transition:
+                                  "border-color 0.2s, box-shadow 0.2s",
+                              }
+                            : {}
+                        }
                       >
                         {saving ? (
-                          <Loader size="sm" className="mr-2" />
+                          <Loader2 className="mr-2 animate-spin" />
                         ) : editingId ? (
                           <Pencil className="mr-2 h-4 w-4" />
                         ) : (
@@ -351,37 +413,6 @@ const AdminUpdateFooterRoute = () => {
           )}
         </div>
       </div>
-
-      {/* Delete Confirmation Dialog */}
-      {deleteDialogOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
-          <div className="rounded-lg border border-gray-700 bg-gray-900 p-6 shadow-xl w-full max-w-md">
-            <div className="text-center sm:text-left">
-              <h3 className="text-lg font-semibold text-white">
-                Are you absolutely sure?
-              </h3>
-              <p className="mt-2 text-gray-400">
-                This action cannot be undone. This will permanently delete the "
-                {linkToDelete?.name}" link.
-              </p>
-            </div>
-            <div className="mt-4 flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2">
-              <button
-                onClick={() => setDeleteDialogOpen(false)}
-                className="rounded-md border border-gray-600 bg-gray-800 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-500 mt-2 sm:mt-0"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleDeleteConfirm}
-                className="rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

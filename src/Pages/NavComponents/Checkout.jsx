@@ -1,3 +1,5 @@
+import ssl from "/image/ssl.png";
+import bank from "/image/digitalbank.jpg";
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
@@ -48,8 +50,6 @@ const Checkout = () => {
   const shippingCost =
     shipping && shipping.amount ? parseFloat(shipping.amount) : 100;
 
-  console.log(mergedCart);
-
   // Do NOT do custom VAT exclusion here, let backend decide!
   const subtotal = mergedCart.reduce(
     (total, item) => total + item.priceIncVat * item.quantity,
@@ -58,7 +58,6 @@ const Checkout = () => {
 
   const vat = mergedCart.reduce((total, item) => total + item?.vat, 0);
 
-  // const priceInfo = getTotalPriceInfo(product, selectedOptions, vatEnabled);
   let discount = 0;
   if (coupon && coupon.code_name) {
     if (coupon.type === "percentage") {
@@ -67,7 +66,6 @@ const Checkout = () => {
       discount = coupon.discount;
     }
   }
-  // const total = subtotal + (vatEnabled ? vat : 0) + shippingCost - discount;
   const total = subtotal + shippingCost - discount;
 
   // Set email if user is authenticated
@@ -132,7 +130,6 @@ const Checkout = () => {
     };
 
     const _items = mergedCart.map((item) => item);
-    console.log(_items);
 
     const sslPaymentInfo = {
       total_amount: total,
@@ -149,17 +146,14 @@ const Checkout = () => {
         quantity: item.quantity,
         options: item.options.map((opt) => opt.id),
       })),
-      // coupon: coupon || null,
       shippingCost,
       coupon: coupon ? coupon.code_name : null,
       vatEnabled,
       paymentMethod: formData.paymentMethod,
     };
-    console.log(sslPaymentInfo);
 
     if (formData.paymentMethod === "sslcommerz") {
       try {
-        // Save order with status "pending"
         const saveRes = await axiosPublicUrl.post("/api/orderdata", orderData);
 
         if (saveRes.status === 200 || saveRes.status === 201) {
@@ -185,7 +179,6 @@ const Checkout = () => {
         const res = await axiosPublicUrl.post("/api/orderdata", orderData);
         if (res.status === 200 || res.status === 201) {
           setOrderPlaced(true); // Show thank-you page etc.
-          // Order was successful
           dispatch(clearCart());
           dispatch(clearCoupon());
           navigate("");
@@ -224,30 +217,21 @@ const Checkout = () => {
           <div>
             <p className="text-sm mb-2">Check out faster with:</p>
             <div className="flex gap-2 mb-2">
-              <button className="flex-1 bg-[#ffc439] py-2 rounded flex items-center justify-center gap-2 cursor-pointer">
-                <img src="/paypal.svg" alt="PayPal" className="h-5" />
-                <span className="font-semibold">PayPal</span>
+              <button className="flex-1 bg-[#f7dfa5] py-2 rounded flex items-center justify-center gap-1 cursor-pointer">
+                <span>Pay with</span>
+                <img src={ssl} alt="Amazon" className="h-6" />
               </button>
               <button className="flex-1 bg-[#f7dfa5] py-2 rounded flex items-center justify-center gap-1 cursor-pointer">
                 <span>Pay with</span>
-                <img
-                  src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg"
-                  alt="Amazon"
-                  className="h-4"
-                />
+                <img src={bank} alt="Digital Bank" className="h-6 ml-[2px]" />
               </button>
             </div>
-            <p className="text-xs text-center uppercase text-gray-700 font-bold">
-              Use your Amazon account
-            </p>
           </div>
-
           <div className="flex items-center gap-2 mb-6">
             <hr className="flex-grow border-gray-300" />
             <span className="text-gray-500 text-xs">OR</span>
             <hr className="flex-grow border-gray-300" />
           </div>
-
           {/* Step 1: Customer */}
           {step >= 1 && (
             <div>
@@ -549,16 +533,6 @@ const Checkout = () => {
               <span>Total</span>
               <span>৳{formatBDT(total)}</span>
             </div>
-            {/* <hr />
-          {vatEnabled && (
-            <div className="text-sm">
-              <p className="font-semibold mb-1">TAX INCLUDED IN TOTAL:</p>
-              <div className="flex justify-between">
-                <span>VAT</span>
-                <span>৳{formatBDT(total + vat - discount)}</span>
-              </div>
-            </div>
-          )} */}
           </div>
         </div>
       </div>
