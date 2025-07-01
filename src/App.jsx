@@ -111,6 +111,7 @@ import axios from "axios";
 import SiteMeta from "./SiteMeta/SiteMeta";
 import MenuControll from "./Dashboard/WebsiteControll/MenuControll/MenuControll";
 import ShippingCostManager from "./Dashboard/shippingCost/ShippingCost";
+import AllUsers from "./Dashboard/Users/AllUsers";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -278,6 +279,7 @@ const AppLayout = () => {
           <Route path="service" element={<AdminUpdateService />} />
           <Route path="tradein" element={<AdminUpdateTradeIn />} />
           <Route path="menu-controll" element={<MenuControll />} />
+          <Route path="users" element={<AllUsers />} />
           <Route path="quotation" element={<QuotationData />} />
           <Route path="about-us" element={<AdminUpdateAboutUs />} />
           <Route path="contact-us" element={<AdminUpdateContactUs />} />
