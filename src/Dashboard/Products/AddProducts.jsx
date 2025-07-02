@@ -137,9 +137,8 @@ const ProductAddForm = () => {
     ["subcategories"],
     "/api/subcategory"
   );
-  const {
-    data: { brands: brandsData },
-  } = useDataQuery(["brands"], "/api/brand/home");
+  const { data = {} } = useDataQuery(["brands"], "/api/brand/home");
+  const brandsData = data?.brands;
   const { data: taxesData } = useDataQuery(["taxes"], "/api/taxes");
 
   const Categories = useMemo(

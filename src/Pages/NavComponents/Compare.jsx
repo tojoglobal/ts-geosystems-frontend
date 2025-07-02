@@ -9,6 +9,7 @@ import { useTrackProductView } from "../../Hooks/useTrackProductView";
 import { formatBDT } from "../../utils/formatBDT";
 import AddToCartButton from "../../Components/AddToCartButton";
 import { slugify } from "../../utils/slugify";
+import { useVatEnabled } from "../../Hooks/useVatEnabled";
 
 // Get array of image URLs, can be stringified JSON or array
 const getImages = (img) => {
@@ -28,12 +29,11 @@ const getImageFullUrl = (url) =>
     ? url
     : `${import.meta.env.VITE_OPEN_APIURL || ""}${url}`;
 
-// Remove <p> tags and undefined
-const stripPTags = (str) => {
+// Remove all HTML tags and undefined
+const stripHTMLTags = (str) => {
   if (!str) return "";
   return String(str)
-    .replace(/<p>/gi, "")
-    .replace(/<\/p>/gi, "")
+    .replace(/<[^>]*>/g, "") // This regex will remove any HTML tag
     .replace(/undefined/gi, "")
     .trim();
 };
@@ -63,6 +63,8 @@ const Compare = () => {
     !!idString,
     normalizeProducts
   );
+  // Use the useVatEnabled hook to get the global VAT status
+  const { data: vatEnabled = true, isLoading: vatLoading } = useVatEnabled();
   const [viewMode, setViewMode] = useState("grid");
   const [hovered, setHovered] = useState(null);
   const products = data || [];
@@ -89,7 +91,8 @@ const Compare = () => {
     );
   }
 
-  if (isLoading) {
+  // Handle loading states for both products and VAT status
+  if (isLoading || vatLoading) {
     return (
       <div className="p-3">
         <h1 className="text-xl">Loading products...</h1>
@@ -171,7 +174,7 @@ const Compare = () => {
                 .replace(/[^a-z0-9-]/g, "")
             );
 
-          // vat part
+          // vat part from product data
           let vat = 0;
           try {
             vat = product?.tax ? JSON.parse(product.tax).value : 0;
@@ -181,10 +184,35 @@ const Compare = () => {
           const basePrice = parsePrice(product.price) || 0;
           const vatAmount = basePrice * (vat / 100);
           const priceIncVat = basePrice + vatAmount;
-          // Show description as in Clearance (strip HTML, slice to 300 chars)
-          const desc = stripPTags(
+
+          // Process category and sub_category
+          let categoryName = "N/A";
+          try {
+            const categoryObj = product?.category
+              ? JSON.parse(product.category)
+              : null;
+            categoryName = categoryObj?.cat || "N/A";
+          } catch (e) {
+            console.error("Error parsing category:", e);
+          }
+
+          let subCategorySlug = "N/A";
+          try {
+            const subCategoryObj = product?.sub_category
+              ? JSON.parse(product.sub_category)
+              : null;
+            subCategorySlug = subCategoryObj?.slug || "N/A";
+          } catch (e) {
+            console.error("Error parsing sub_category:", e);
+          }
+
+          // Strip all HTML tags from overview/description
+          const desc = stripHTMLTags(
             product.product_overview || product.description || ""
           ).slice(0, 300);
+
+          // Strip HTML tags from warranty info
+          const warranty = stripHTMLTags(product.warranty_info || "");
 
           return (
             <div key={product.id} className="relative group">
@@ -223,23 +251,25 @@ const Compare = () => {
                     </Link>
                   </h3>
                   <div>
+                    {/* Display prices based on global vatEnabled setting */}
                     <div className="flex items-center gap-1">
                       <p className="font-bold">
                         ৳{product?.priceShowHide ? "" : formatBDT(basePrice)}
-                        (Ex. VAT)
+                        &nbsp;(Ex. VAT)
                       </p>
                     </div>
 
-                    <p className="text-gray-500">
-                      ৳{product?.priceShowHide ? "" : formatBDT(priceIncVat)}
-                      (Inc. VAT)
-                    </p>
+                    {vatEnabled && ( // Only show "Inc. VAT" if VAT is globally enabled
+                      <p className="text-gray-500">
+                        ৳{product?.priceShowHide ? "" : formatBDT(priceIncVat)}
+                        &nbsp;(Inc. VAT)
+                      </p>
+                    )}
                   </div>
                   {product?.isStock === 1 && (
                     <div>
                       <>
                         {Number(product?.priceShowHide) === 1 ? (
-                          // GET QUOTATION button, style & logic as in Clearance
                           <Link
                             onClick={() => trackProductView(product.id)}
                             to={`/products/${product.id}/${slugify(
@@ -272,8 +302,25 @@ const Compare = () => {
                       </p>
                     </div>
                     <div>
-                      <h4 className="font-bold">Description</h4>
-                      <p className="text-gray-600">{desc}...</p>
+                      <h4 className="font-bold">Category:</h4>
+                      <p className="text-gray-600 capitalize">{categoryName}</p>
+                    </div>
+                    <div>
+                      <h4 className="font-bold">Sub Category:</h4>
+                      <p className="text-gray-600 capitalize">
+                        {subCategorySlug}
+                      </p>
+                    </div>
+                    <div>
+                      <h4 className="font-bold">SKU:</h4>
+                      <p className="text-gray-600">{product.sku || "N/A"}</p>
+                    </div>
+                    <div>
+                      <h4 className="font-bold">Description:</h4>
+                      <p className="text-gray-600">
+                        {desc}
+                        {desc.length === 300 ? "..." : ""}
+                      </p>
                     </div>
                     <div>
                       <p className="font-medium">
@@ -281,30 +328,29 @@ const Compare = () => {
                       </p>
                     </div>
                     <div>
-                      <h4 className="font-bold">Availability</h4>
+                      <h4 className="font-bold">Availability:</h4>
                       <p className="text-gray-600">
-                        {product.availability || "Usually ships in 24 hours"}
+                        {product.isStock === 1 ? "In Stock" : "Out of Stock"}
                       </p>
                     </div>
-                    {product.manufactured && (
-                      <div>
-                        <h4 className="font-medium">Manufactured</h4>
-                        <p className="text-gray-600">{product.manufactured}</p>
-                      </div>
-                    )}
                     {(product.condition || product.product_condition) && (
                       <div>
-                        <h4 className="font-medium">Condition</h4>
-                        <p className="text-gray-600">
+                        <h4 className="font-bold">Condition:</h4>
+                        <p className="text-gray-600 capitalize">
                           {product.condition || product.product_condition}
                         </p>
                       </div>
                     )}
+                    {warranty && (
+                      <div>
+                        <h4 className="font-bold">Warranty Info:</h4>
+                        <p className="text-gray-600">{warranty}</p>
+                      </div>
+                    )}
+                    {/* Display "VAT Enabled" based on the product's individual tax value, not the global setting */}
                     <div>
-                      <h4 className="font-bold">Other Details</h4>
-                      <p className="text-gray-600 font-bold">
-                        {product.otherDetails || product.other_details || "N/A"}
-                      </p>
+                      <h4 className="font-bold">VAT Applied to Product:</h4>
+                      <p className="text-gray-600">{vat > 0 ? "Yes" : "No"}</p>
                     </div>
                   </div>
                 </div>
