@@ -56,7 +56,6 @@ const UsedEquipment = () => {
     },
   });
 
-  // Extract subcategories and products from API response
   const subcategories = data?.subcategories || [];
   const products = data?.products || [];
 
