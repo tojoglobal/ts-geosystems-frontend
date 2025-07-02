@@ -264,7 +264,7 @@ const Cart = () => {
                       {item.product_name}
                     </h2>
                     <button
-                      onClick={() => handleRemove(item.id)}
+                      onClick={() => handleRemove(item)}
                       className="text-red-500 cursor-pointer"
                     >
                       <RxCross2 />
