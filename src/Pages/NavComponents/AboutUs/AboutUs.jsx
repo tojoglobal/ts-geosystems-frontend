@@ -105,7 +105,7 @@ const AboutUs = () => {
           <SkeletonLoader className="h-4 w-5/6" />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-9">
             {[1, 2].map((i) => (
-              <SkeletonLoader key={i} className="w-full h-44 md:h-80" />
+              <SkeletonLoader key={i} className="w-full aspect-[16/10]" />
             ))}
           </div>
         </div>
@@ -124,7 +124,7 @@ const AboutUs = () => {
                   key={index}
                   src={`${import.meta.env.VITE_OPEN_APIURL}${img.filePath}`}
                   alt={`Who we serve ${index + 1}`}
-                  className="w-full h-44 md:h-80 object-cover rounded-md"
+                  className="w-full aspect-[16/10] object-cover rounded-md"
                 />
               ))}
             </div>
@@ -155,7 +155,7 @@ const AboutUs = () => {
         {imagesLoading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-9">
             {[1, 2].map((i) => (
-              <SkeletonLoader key={i} className="w-full h-44 md:h-80" />
+              <SkeletonLoader key={i} className="w-full aspect-[16/10]" />
             ))}
           </div>
         ) : (
@@ -166,7 +166,7 @@ const AboutUs = () => {
                   key={index}
                   src={`${import.meta.env.VITE_OPEN_APIURL}${img.filePath}`}
                   alt={`Our journey ${index + 1}`}
-                  className="w-full h-44 md:h-80 object-cover rounded-md"
+                  className="w-full aspect-[16/10] object-cover rounded-md"
                 />
               ))}
             </div>
@@ -227,7 +227,7 @@ const AboutUs = () => {
           >
             {brands.map((brand) => (
               <SwiperSlide key={brand.id}>
-                <div className="w-56  flex items-center justify-center">
+                <div className="w-56 flex items-center justify-center">
                   <Link to={brand.slug}>
                     <img
                       src={`${import.meta.env.VITE_OPEN_APIURL}/uploads/${
@@ -254,7 +254,7 @@ const AboutUs = () => {
       {imagesLoading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-9">
           {[1, 2].map((i) => (
-            <SkeletonLoader key={i} className="w-full h-44 md:h-80" />
+            <SkeletonLoader key={i} className="w-full aspect-[16/10]" />
           ))}
         </div>
       ) : (
@@ -265,7 +265,7 @@ const AboutUs = () => {
                 key={index}
                 src={`${import.meta.env.VITE_OPEN_APIURL}${img.filePath}`}
                 alt={`About us ${index + 1}`}
-                className="w-full h-44 md:h-80 object-cover rounded-md"
+                className="w-full aspect-[16/10] object-cover rounded-md"
               />
             ))}
           </section>
