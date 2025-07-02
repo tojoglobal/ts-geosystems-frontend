@@ -40,6 +40,16 @@ const MobileNavbar = () => {
   const [isSearching, setIsSearching] = useState(false);
   const cartRef = useRef(null);
 
+  const {
+    data: helpdeskInfo = {},
+    isLoading: helpdeskLoading,
+    error: helpdeskError,
+  } = useDataQuery(["helpdeskInfo"], "/api/helpdesk-info");
+  const phoneNumber = helpdeskInfo?.top_menu_phone;
+  const phoneHref = phoneNumber
+    ? "tel:" + phoneNumber.replace(/[^\d+]/g, "")
+    : "#";
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (isSearchOpen && !event.target.closest(".search-container")) {
@@ -257,7 +267,13 @@ const MobileNavbar = () => {
     document.body.style.overflow = isMenuOpen ? "hidden" : "auto";
   }, [isMenuOpen]);
 
-  if (isLoading || categoriesLoading || subcategoriesLoading || brandsLoading) {
+  if (
+    isLoading ||
+    categoriesLoading ||
+    subcategoriesLoading ||
+    brandsLoading ||
+    helpdeskLoading
+  ) {
     return (
       <div className="w-full relative z-50">
         <div className="fixed top-0 w-full">
@@ -280,7 +296,7 @@ const MobileNavbar = () => {
     );
   }
 
-  if (categoriesError || subcategoriesError || brandsError) {
+  if (categoriesError || subcategoriesError || brandsError || helpdeskError) {
     return (
       <div className="w-full relative z-50">
         <div className="fixed top-0 w-full">
@@ -291,9 +307,7 @@ const MobileNavbar = () => {
                 <span className="block w-5 h-0.5 bg-gray-400"></span>
                 <span className="block w-5 h-0.5 bg-gray-400"></span>
               </button>
-              <span className="text-xs font-normal text-gray-400">
-                +44 (0)333 023 2200
-              </span>
+              <span className="text-xs font-normal text-gray-400">"Error"</span>
             </div>
             <div className="flex gap-2">
               <div className="text-2xl text-gray-400">
@@ -343,12 +357,11 @@ const MobileNavbar = () => {
                 }`}
               />
             </button>
-            <a
-              href="tel:+443330232200"
-              className="text-xs font-normal text-burgundy"
-            >
-              +44 (0)333 023 2200
-            </a>
+            {phoneNumber && (
+              <a href={phoneHref} className="text-xs font-normal text-burgundy">
+                {phoneNumber}
+              </a>
+            )}
           </div>
           {/* Icons: search, user, cart */}
           <div className="flex gap-2">
