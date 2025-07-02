@@ -19,11 +19,8 @@ const BlogUpdate = () => {
     ["blogTypes"],
     "/api/blog-types"
   );
-  const { data: { blog } = {} } = useDataQuery(
-    ["blogView", id],
-    `/api/blogs/${id}`
-  );
-
+  const { data = {} } = useDataQuery(["blogView", id], `/api/blogs/${id}`);
+  const blog = data?.blog || {};
   // Fetch tags dynamically
   const { data: tagData = {} } = useDataQuery(["blogTags"], "/api/tags");
   const availableTags = tagData?.tags || [];

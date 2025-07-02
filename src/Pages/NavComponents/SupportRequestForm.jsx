@@ -19,11 +19,11 @@ const SupportRequestForm = () => {
     files: [],
   });
 
-  const { data: { data: supportContent } = {}, isLoading } = useDataQuery(
+  const { data = {}, isLoading } = useDataQuery(
     ["supportContent"],
     "/api/support-content"
   );
-
+  const supportContent = data?.data || {};
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -285,7 +285,7 @@ const SupportRequestForm = () => {
                     required
                   >
                     <option value=""></option>
-                    {supportContent.instrument_types?.map((type, index) => (
+                    {supportContent?.instrument_types?.map((type, index) => (
                       <option key={index} value={type}>
                         {type}
                       </option>

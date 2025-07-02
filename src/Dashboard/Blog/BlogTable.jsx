@@ -9,24 +9,8 @@ const BlogTable = () => {
   const axiosPublicUrl = useAxiospublic();
   // const [blogs, setBlogs] = useState([]);
 
-  const { data: { blogs } = [], refetch } = useDataQuery(
-    ["AllblogView"],
-    `/api/blogs`
-  );
-
-  // const handleDelete = async (id) => {
-  //   if (confirm("Are you sure you want to delete this blog?")) {
-  //     try {
-  //       await axiosPublicUrl.delete(`/api/blogs/${id}`);
-  //       setBlogs(blogs.filter((b) => b.id !== id));
-  //       alert("Blog deleted successfully!");
-  //     } catch (err) {
-  //       console.error("Delete failed:", err);
-  //     }
-  //   }
-  // };
-
-  // console.log(blogs);
+  const { data = {}, refetch } = useDataQuery(["AllblogView"], `/api/blogs`);
+  const blogs = data?.blogs || [];
 
   const handleDelete = async (blogId) => {
     const result = await Swal.fire({
