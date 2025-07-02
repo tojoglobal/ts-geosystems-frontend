@@ -114,7 +114,7 @@ const Compare = () => {
   }
 
   return (
-    <div className="p-3">
+    <div className="p-1 md:p-3">
       <div className="flex items-center gap-2 text-sm mb-4">
         <Link to="/" className="hover:text-[#e62245]">
           Home
@@ -148,11 +148,11 @@ const Compare = () => {
         </button>
       </div>
       <div
-        className={
+        className={`grid mx-1 md:mx-5 ${
           viewMode === "grid"
-            ? "grid grid-cols-4 gap-6"
-            : "grid grid-cols-1 gap-6"
-        }
+            ? "grid-cols-2 sm:grid-cols-4 items-stretch"
+            : "grid-cols-1 gap-7"
+        } gap-1 md:gap-3`}
       >
         {products.map((product) => {
           const images = getImages(product.image_urls);
@@ -181,6 +181,10 @@ const Compare = () => {
           const basePrice = parsePrice(product.price) || 0;
           const vatAmount = basePrice * (vat / 100);
           const priceIncVat = basePrice + vatAmount;
+          // Show description as in Clearance (strip HTML, slice to 300 chars)
+          const desc = stripPTags(
+            product.product_overview || product.description || ""
+          ).slice(0, 300);
 
           return (
             <div key={product.id} className="relative group">
@@ -211,7 +215,7 @@ const Compare = () => {
                   }}
                 />
               </Link>
-              <div className="flex flex-col flex-grow px-4 pb-4">
+              <div className="flex flex-col flex-grow lg:px-4 pb-4">
                 <div className="flex-grow flex flex-col space-y-4">
                   <h3 className="font-medium leading-tight min-h-[2.5em]">
                     <Link to={link} className="hover:text-[#e62245] transition">
@@ -235,14 +239,14 @@ const Compare = () => {
                     <div>
                       <>
                         {Number(product?.priceShowHide) === 1 ? (
-                          // Case 2: GET QUOTATION
+                          // GET QUOTATION button, style & logic as in Clearance
                           <Link
                             onClick={() => trackProductView(product.id)}
                             to={`/products/${product.id}/${slugify(
                               product.product_name || ""
                             )}`}
                           >
-                            <button className="w-full bg-[#e62245] cursor-pointer text-sm sm:text-[11px] md:text-sm text-white px-6 py-[6px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors whitespace-nowrap">
+                            <button className="w-full bg-[#e62245] cursor-pointer text-sm sm:text-[11px] md:text-sm text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors whitespace-nowrap">
                               <span className="relative z-10">
                                 GET QUOTATION
                               </span>
@@ -269,11 +273,7 @@ const Compare = () => {
                     </div>
                     <div>
                       <h4 className="font-bold">Description</h4>
-                      <p className="text-gray-600">
-                        {stripPTags(product.description) ||
-                          stripPTags(product.product_overview) ||
-                          ""}
-                      </p>
+                      <p className="text-gray-600">{desc}...</p>
                     </div>
                     <div>
                       <p className="font-medium">
