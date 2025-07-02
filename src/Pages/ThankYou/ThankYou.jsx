@@ -29,7 +29,7 @@ const ThankYou = () => {
     },
   });
 
-  console.log("Order Data:", order);
+  // console.log("Order Data:", order);
 
   // Clear cart and coupon after payment confirmed (sslcommerz)
   useEffect(() => {

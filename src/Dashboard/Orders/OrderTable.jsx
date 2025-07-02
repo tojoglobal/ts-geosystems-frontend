@@ -137,7 +137,7 @@ const OrderTable = () => {
 
   const handleShowOrderDetails = (order) => {
     const items = JSON.parse(order?.items);
-    console.log(order);
+    // console.log(order);
 
     // Compose modal content
     const html =

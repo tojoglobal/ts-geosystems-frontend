@@ -30,7 +30,6 @@ const ProductSidebar = () => {
 
   // Fetch only Home Page brands for "Shop by Brand"
   const { brands: brandsData, isLoading: loading } = useHomeBrands();
-  console.log(brandsData);
   const { data = {}, isLoading: brandsLoading } = useDataQuery(
     ["popularBrand"],
     "/api/brand/popular"

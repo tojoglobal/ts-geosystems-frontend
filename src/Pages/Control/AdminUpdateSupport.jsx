@@ -53,14 +53,7 @@ const AdminUpdateSupport = () => {
     },
   });
 
-  const {
-    register,
-    handleSubmit,
-    control,
-    reset,
-    formState: { errors },
-  } = useForm();
-  console.log(errors);
+  const { register, handleSubmit, control, reset } = useForm();
 
   const {
     fields: instrumentTypeFields,

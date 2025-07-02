@@ -1,31 +1,10 @@
-// BlogView.jsx
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { useAxiospublic } from "../../Hooks/useAxiospublic";
 import useDataQuery from "../../utils/useDataQuery";
 
 const BlogView = () => {
   const { id } = useParams();
-  const axiosPublicUrl = useAxiospublic();
-  const [blog, setBlog] = useState(null);
-
-  // useEffect(() => {
-  //   const fetchBlog = async () => {
-  //     try {
-  //       const res = await axiosPublicUrl.get(`/api/blogs/${id}`);
-  //       setBlog(res.data?.blog);
-  //     } catch (err) {
-  //       console.error("Error fetching blog:", err);
-  //     }
-  //   };
-
-  //   fetchBlog();
-  // }, [id, axiosPublicUrl]);
-
-  const { data } = useDataQuery(["blogView", id], `/api/blogs/${id}`, !!id);
+  const { data ={}} = useDataQuery(["blogView", id], `/api/blogs/${id}`, !!id);
   const blogData = data?.blog;
-
-  console.log(blogData);
 
   if (!blogData) return <p className="text-center mt-6">Loading blog...</p>;
 

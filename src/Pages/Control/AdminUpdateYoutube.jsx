@@ -12,7 +12,7 @@ const AdminUpdateYoutube = () => {
     queryKey: ["youtubeVideos"],
     queryFn: async () => (await axiosPublicUrl.get("/api/our-youtube")).data,
   });
-  console.log(data);
+  
   const { control, handleSubmit, reset, register } = useForm({
     defaultValues: { section_title: "", items: [{ link: "" }] },
   });

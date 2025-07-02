@@ -28,7 +28,7 @@ const TradeIn = () => {
     "/api/trade-in-content"
   );
   const tradeInContent = data?.data || {};
-  console.log(tradeInContent);
+  // console.log(tradeInContent);
 
   const handleChange = (e) => {
     const { name, value, type } = e.target;

@@ -1,6 +1,6 @@
 // utils/getCouponInfo.js
 export const getCouponInfo = async (code_name) => {
-  console.log(code_name);
+  // console.log(code_name);
 
   try {
     const res = await fetch(

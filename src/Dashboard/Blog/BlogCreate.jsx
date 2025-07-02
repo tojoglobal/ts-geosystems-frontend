@@ -96,7 +96,7 @@ const BlogCreate = () => {
             ? { name: value.name, size: value.size, type: value.type }
             : value;
       }
-      console.log("FormData to be sent:", formDataObject);
+      // console.log("FormData to be sent:", formDataObject);
 
       await axiosPublicUrl.post("/api/blogs", formData, {
         headers: {

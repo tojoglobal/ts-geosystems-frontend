@@ -55,8 +55,6 @@ const UsedEquipment = () => {
       return res?.data;
     },
   });
-
-  const subcategories = data?.subcategories || [];
   const products = data?.products || [];
 
   // Pagination logic

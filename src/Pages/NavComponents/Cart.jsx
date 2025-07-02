@@ -222,7 +222,7 @@ const Cart = () => {
     });
   };
 
-  console.log("mergedCart", mergedCart);
+  // console.log("mergedCart", mergedCart);
 
   return (
     <div className="md:p-2">

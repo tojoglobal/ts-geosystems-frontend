@@ -3,12 +3,12 @@ import { increment } from "../../features/Counters/CounterSlice";
 
 const Categor = () => {
   const count = useSelector((state) => state.counter);
-  console.log("count", count);
+  // console.log("count", count);
 
   const dispatch = useDispatch();
 
   const handleIncrement = (id) => {
-    console.log("increment", id);
+    // console.log("increment", id);
     dispatch(increment(id));
   };
   return (

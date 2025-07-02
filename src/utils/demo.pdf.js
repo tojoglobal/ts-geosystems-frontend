@@ -45,7 +45,7 @@ export const GenerateInvoicePdf = async (order) => {
   // 🧮 Final total
   const total = subtotal + vatAmount + shippingCost - discountAmount;
 
-  console.log(order);
+  // console.log(order);
   const doc = new jsPDF("p", "mm", "a4");
   const logoUrl = "/TS-WEB-LOGO.png";
 
