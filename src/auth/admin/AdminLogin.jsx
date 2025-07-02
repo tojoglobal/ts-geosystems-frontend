@@ -13,7 +13,6 @@ const AdminLogin = () => {
   const navigate = useNavigate();
 
   const [passwordType, ToggleIcon] = usePasswordToggle();
-  // form data
   const [formData, setFormData] = useState({
     adminemail: "",
     password: "",
