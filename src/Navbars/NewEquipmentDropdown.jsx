@@ -1,12 +1,9 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { MdArrowForwardIos } from "react-icons/md";
-import { useAxiospublic } from "../Hooks/useAxiospublic";
-import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import useDataQuery from "../utils/useDataQuery";
 
 export default function NewEquipmentDropdown() {
-  const axiosPublicUrl = useAxiospublic();
   const [hoveredCategory, setHoveredCategory] = useState(null);
   const timeoutRef = useRef(null);
   const [animateLine, setAnimateLine] = useState(true);
@@ -27,20 +24,12 @@ export default function NewEquipmentDropdown() {
 
   // Fetch brands
   const {
-    data: brandsData,
+    data = {},
     isLoading: brandsLoading,
     error: brandsError,
-  } = useQuery({
-    queryKey: ["brands"],
-    queryFn: async () => {
-      const res = await axiosPublicUrl.get("/api/brands");
-      return res?.data?.map((brand) => ({
-        name: brand.brands_name,
-        slug: brand.slug,
-      }));
-    },
-  });
-
+  } = useDataQuery(["popularBrand"], "/api/brand/home");
+  const brandsData = data?.brands || [];
+  
   useEffect(() => {
     setAnimateLine(false);
     const timeout = setTimeout(() => setAnimateLine(true), 10);
@@ -145,7 +134,7 @@ export default function NewEquipmentDropdown() {
                 to={`brand/${brand.slug}`}
                 className="group-hover:text-[#e62245] group-hover:tracking-wide group-hover:mr-[5px]"
               >
-                {brand.name}
+                {brand.brands_name}
               </Link>
             </li>
           ))}

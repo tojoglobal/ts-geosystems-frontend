@@ -8,7 +8,6 @@ import { Link } from "react-router-dom";
 import useDataQuery from "../../utils/useDataQuery";
 import { useTrackProductView } from "../../Hooks/useTrackProductView";
 import { parsePrice } from "../../utils/parsePrice";
-import { slugify } from "../../utils/slugify";
 import { ComponentLoader } from "../../utils/Loader/ComponentLoader";
 import { useVatEnabled } from "../../Hooks/useVatEnabled";
 import { formatBDT } from "../../utils/formatBDT";
@@ -219,11 +218,7 @@ const ProductHighlights = () => {
                       SALE
                     </p>
                   )}
-                  <Link
-                    to={`/products/${item.id}/${slugify(
-                      item.product_name || ""
-                    )}`}
-                  >
+                  <Link to={`/product/${item.slug}`}>
                     <div className="relative group mb-2 w-full max-w-[200px] md:max-w-[260px] mx-auto">
                       {item.image_urls &&
                         JSON.parse(item.image_urls).length > 0 && (
@@ -257,9 +252,7 @@ const ProductHighlights = () => {
                     </p>
                     <div className="flex items-start">
                       <Link
-                        to={`/products/${item.id}/${slugify(
-                          item.product_name || ""
-                        )}`}
+                        to={`/product/${item.slug}`}
                         className="font-semibold min-h-10 text-xs md:text-sm text-gray-700 hover:text-[#e62245]"
                       >
                         {item.product_name}
@@ -301,9 +294,7 @@ const ProductHighlights = () => {
                             // Case 2: GET QUOTATION
                             <Link
                               onClick={() => trackProductView(item.id)}
-                              to={`/products/${item.id}/${slugify(
-                                item.product_name || ""
-                              )}`}
+                              to={`/product/${item.slug}`}
                             >
                               <button className="w-full bg-[#e62245] cursor-pointer text-[10px] md:text-sm text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors">
                                 GET QUOTATION

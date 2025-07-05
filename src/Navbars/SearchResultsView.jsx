@@ -8,7 +8,6 @@ import {
 import { IoSearchSharp } from "react-icons/io5";
 import { RxCross1 } from "react-icons/rx";
 import { Link } from "react-router-dom";
-import { slugify } from "../utils/slugify";
 import { useEffect, useState } from "react";
 import { useTrackProductView } from "../Hooks/useTrackProductView";
 import AddToCartButton from "../Components/AddToCartButton"; // ADD THIS
@@ -417,9 +416,7 @@ const SearchResultsView = ({
                         trackProductView(product.id);
                         onClose();
                       }}
-                      to={`/products/${product.id}/${slugify(
-                        product.product_name || ""
-                      )}`}
+                      to={`/product/${product.slug}`}
                       className="w-full"
                     >
                       <img
@@ -443,9 +440,7 @@ const SearchResultsView = ({
                       </p>
                       {product?.isStock === 1 && priceOption === 1 && (
                         <Link
-                          to={`/products/${product.id}/${slugify(
-                            product.product_name || ""
-                          )}`}
+                          to={`/product/${product.slug}`}
                           title="Get Quotation"
                           className="ml-auto p-[4px] rounded bg-[#e62245] hover:bg-[#d41d3f] text-white transition min-w-0 flex items-center"
                           style={{ fontSize: "11px", fontWeight: 500 }}

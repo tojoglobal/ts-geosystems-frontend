@@ -134,7 +134,7 @@ const AppLayout = () => {
           <Route path="/:category" element={<CategoryProduct />} />
           <Route path="/:category/:subcategory" element={<CategoryProduct />} />
           <Route path="/brand/:brand" element={<CategoryProduct />} />
-          <Route path="/products/:id/:slug" element={<ProductDetails />} />
+          <Route path="/product/:slug" element={<ProductDetails />} />
           <Route path="/clearance" element={<Clearance />} />
           <Route path="/compare/:ids" element={<Compare />} />
           <Route path="/used" element={<UsedEquipment />} />
@@ -221,7 +221,7 @@ const AppLayout = () => {
           <Route path="credit-account" element={<AdminShowCreditAccount />} />
           <Route path="product/question" element={<ProductQuestion />} />
           <Route path="add-product" element={<ProductAddForm />} />
-          <Route path="update-product/:id" element={<UpdateProductForm />} />
+          <Route path="update-product/:slug" element={<UpdateProductForm />} />
           {/* category add */}
           <Route path="add-categorys" element={<Categories />} />
           {/* add brand */}

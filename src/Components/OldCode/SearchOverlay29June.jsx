@@ -11,7 +11,6 @@ import NextArrow from "../Components/NextArrow";
 import useDataQuery from "../utils/useDataQuery";
 import SearchResultsView from "./SearchResultsView";
 import { Link } from "react-router-dom";
-import { slugify } from "../utils/slugify";
 import { parsePrice } from "../utils/parsePrice";
 import { useTrackProductView } from "../Hooks/useTrackProductView";
 import useToastSwal from "../Hooks/useToastSwal";
@@ -353,9 +352,7 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                             await trackSearchOnProductClick(searchText);
                             onClose();
                           }}
-                          to={`/products/${product.id}/${slugify(
-                            product.product_name || ""
-                          )}`}
+                          to={`/product/${product.slug}`}
                           key={index}
                           className="h-full min-h-[350px] flex flex-col bg-white p-6 shadow-sm border border-gray-200 hover:border-gray-300 transition-all duration-200"
                         >
@@ -432,9 +429,7 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                               await trackSearchOnProductClick(searchText);
                               onClose();
                             }}
-                            to={`/products/${product.id}/${slugify(
-                              product.product_name || ""
-                            )}`}
+                            to={`/product/${product.slug}`}
                             className="h-full min-h-[350px] flex flex-col bg-white p-6 shadow-sm border border-gray-200 hover:border-gray-300 transition-all duration-200"
                           >
                             <img

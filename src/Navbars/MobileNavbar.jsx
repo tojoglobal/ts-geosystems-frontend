@@ -7,7 +7,6 @@ import { PiShoppingCart } from "react-icons/pi";
 import { Link, useNavigate } from "react-router-dom";
 import { useAxiospublic } from "../Hooks/useAxiospublic";
 import { useTrackProductView } from "../Hooks/useTrackProductView";
-import { slugify } from "../utils/slugify";
 import { useQuery } from "@tanstack/react-query";
 import useDataQuery from "../utils/useDataQuery";
 import { useDispatch, useSelector } from "react-redux";
@@ -222,11 +221,8 @@ const MobileNavbar = () => {
 
   const handleResultClick = (productId) => {
     trackProductView(productId);
-    navigate(
-      `/products/${productId}/${slugify(
-        searchResults?.find((p) => p.id === productId)?.product_name || ""
-      )}`
-    );
+    const product = searchResults?.find((p) => p.id === productId);
+    navigate(`/products/${productId}/${product?.slug}`);
     setShowResults(false);
     setIsSearchOpen(false);
     setSearchQuery("");
@@ -420,9 +416,7 @@ const MobileNavbar = () => {
                       onClick={() => {
                         handleResultClick(product.id);
                       }}
-                      to={`/products/${product.id}/${slugify(
-                        product.product_name || ""
-                      )}`}
+                      to={`/product/${product.slug}`}
                       className="p-1 cursor-pointer block"
                     >
                       <div className="font-medium capitalize text-black">

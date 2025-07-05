@@ -25,7 +25,7 @@ export const selectMergedCart = createSelector(
           item?.quantity,
           taxe.value || 0
         );
-        const { image_urls, product_options, brand_name } = product;
+        const { image_urls, product_options, brand_name, slug } = product;
         return {
           ...item,
           // quantity: item.quantity,
@@ -35,6 +35,7 @@ export const selectMergedCart = createSelector(
           brand_name,
           image_urls,
           product_options,
+          slug,
           price: vatEnabled ? item?.priceIncVat : priceWithVat,
           product_price: productPrice,
         };

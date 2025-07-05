@@ -9,7 +9,6 @@ import { useQuery } from "@tanstack/react-query";
 import { useAxiospublic } from "../Hooks/useAxiospublic";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../features/AddToCart/AddToCart";
-import { slugify } from "../utils/slugify";
 import { parsePrice } from "../utils/parsePrice";
 import { useBreadcrumbLabel } from "../utils/useBreadcrumbLabel";
 import { useTrackProductView } from "../Hooks/useTrackProductView";
@@ -314,9 +313,7 @@ const CategoryProduct = () => {
                 {viewMode === "list" ? (
                   <Link
                     onClick={() => trackProductView(product.id)}
-                    to={`/products/${product.id}/${slugify(
-                      product.product_name || ""
-                    )}`}
+                    to={`/product/${product.slug}`}
                     className="w-full md:w-1/3"
                   >
                     <div
@@ -334,9 +331,7 @@ const CategoryProduct = () => {
                   <div className="w-full h-56 flex items-center justify-center bg-white">
                     <Link
                       onClick={() => trackProductView(product.id)}
-                      to={`/products/${product.id}/${slugify(
-                        product.product_name || ""
-                      )}`}
+                      to={`/product/${product.slug}`}
                       className="w-full h-full"
                     >
                       <div
@@ -362,9 +357,7 @@ const CategoryProduct = () => {
                       </div> */}
                       <Link
                         onClick={() => trackProductView(product.id)}
-                        to={`/products/${product.id}/${slugify(
-                          product.product_name || ""
-                        )}`}
+                        to={`/product/${product.slug}`}
                       >
                         <h3 className="text-xl text-gray-800 font-medium hover:text-[#e62245] cursor-pointer">
                           {product.product_name}
@@ -423,9 +416,7 @@ const CategoryProduct = () => {
                               {Number(product?.priceShowHide) === 1 ? (
                                 <Link
                                   onClick={() => trackProductView(product.id)}
-                                  to={`/products/${product.id}/${slugify(
-                                    product.product_name || ""
-                                  )}`}
+                                  to={`/product/${product.slug}`}
                                 >
                                   <button className="w-full bg-[#e62245] cursor-pointer text-sm sm:text-[11px] md:text-sm text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors">
                                     GET QUOTATION
@@ -457,9 +448,7 @@ const CategoryProduct = () => {
                       </div>
                       <Link
                         onClick={() => trackProductView(product.id)}
-                        to={`/products/${product.id}/${slugify(
-                          product.product_name || ""
-                        )}`}
+                        to={`/product/${product.slug}`}
                       >
                         <h3 className="text-gray-800 font-medium hover:text-[#e62245] cursor-pointer leading-tight">
                           {product.product_name}
@@ -504,9 +493,7 @@ const CategoryProduct = () => {
                                 // Case 2: GET QUOTATION
                                 <Link
                                   onClick={() => trackProductView(product.id)}
-                                  to={`/products/${product.id}/${slugify(
-                                    product.product_name || ""
-                                  )}`}
+                                  to={`/product/${product.slug}`}
                                 >
                                   <button className="w-full bg-[#e62245] cursor-pointer text-sm sm:text-[11px] md:text-sm text-white px-2 lg:px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors">
                                     GET QUOTATION

@@ -8,7 +8,6 @@ import { parsePrice } from "../../utils/parsePrice";
 import { useTrackProductView } from "../../Hooks/useTrackProductView";
 import { formatBDT } from "../../utils/formatBDT";
 import AddToCartButton from "../../Components/AddToCartButton";
-import { slugify } from "../../utils/slugify";
 import { useVatEnabled } from "../../Hooks/useVatEnabled";
 
 // Get array of image URLs, can be stringified JSON or array
@@ -272,9 +271,7 @@ const Compare = () => {
                         {Number(product?.priceShowHide) === 1 ? (
                           <Link
                             onClick={() => trackProductView(product.id)}
-                            to={`/products/${product.id}/${slugify(
-                              product.product_name || ""
-                            )}`}
+                            to={`/product/${product.slug}`}
                           >
                             <button className="w-full bg-[#e62245] cursor-pointer text-sm sm:text-[11px] md:text-sm text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors whitespace-nowrap">
                               <span className="relative z-10">

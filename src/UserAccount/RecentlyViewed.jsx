@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 import useDataQuery from "../utils/useDataQuery";
 import { useState, useEffect } from "react";
 import Loader from "../utils/Loader";
-import { slugify } from "../utils/slugify";
 import { Link } from "react-router-dom";
 import { useTrackProductView } from "../Hooks/useTrackProductView";
 import AddToCartButton from "../Components/AddToCartButton";
@@ -129,11 +128,7 @@ const RecentlyViewed = () => {
                     SALE
                   </span>
                 )}
-                <Link
-                  to={`/products/${item.id}/${slugify(
-                    item.product_name || ""
-                  )}`}
-                >
+                <Link to={`/product/${item.slug}`}>
                   <img
                     src={displayImage}
                     alt={item.product_name}
@@ -146,11 +141,7 @@ const RecentlyViewed = () => {
                   <div className="capitalize text-xs text-gray-600 mb-1 border-t border-gray-200 pt-3">
                     {item.brand_name} | Sku: {item.sku}
                   </div>
-                  <Link
-                    to={`/products/${item.id}/${slugify(
-                      item.product_name || ""
-                    )}`}
-                  >
+                  <Link to={`/product/${item.slug}`}>
                     <h3 className="text-base min-h-10 font-medium text-gray-900 mb-2 hover:text-[#e62245] cursor-pointer">
                       {item.product_name}
                     </h3>{" "}
@@ -172,9 +163,7 @@ const RecentlyViewed = () => {
                           // Case 2: GET QUOTATION
                           <Link
                             onClick={() => trackProductView(item.id)}
-                            to={`/products/${item.id}/${slugify(
-                              item.product_name || ""
-                            )}`}
+                            to={`/product/${item.slug}`}
                           >
                             <button className="w-full bg-[#e62245] cursor-pointer text-sm sm:text-[11px] md:text-sm text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors">
                               GET QUOTATION

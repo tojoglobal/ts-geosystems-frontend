@@ -18,7 +18,6 @@ import useToastSwal from "../../Hooks/useToastSwal";
 import { useVatEnabled } from "../../Hooks/useVatEnabled";
 import { useQuery } from "@tanstack/react-query";
 import { formatBDT } from "../../utils/formatBDT";
-import { slugify } from "../../utils/slugify";
 import { getParsedProductOptions } from "../../utils/get_product_option";
 import { getFirstImage } from "../../utils/getFirstImage";
 import { getTotalPriceInfo } from "../../utils/getTotalPriceInfo";
@@ -62,6 +61,7 @@ const Cart = () => {
     shipping && shipping.amount ? parseFloat(shipping.amount) : 100;
   const productIds = useMemo(() => items.map((item) => item.id), [items]);
   const { products } = useProductsByIdsQuery(productIds);
+  console.log(products);
   const mergedCart = useSelector((state) =>
     selectMergedCart(state, products, vatEnabled)
   );
@@ -222,7 +222,7 @@ const Cart = () => {
     });
   };
 
-  // console.log("mergedCart", mergedCart);
+  console.log("mergedCart", mergedCart);
 
   return (
     <div className="md:p-2">
@@ -338,11 +338,7 @@ const Cart = () => {
                       </p>
 
                       {/* Product Name with Link */}
-                      <Link
-                        to={`/products/${item?.id}/${slugify(
-                          item?.product_name || "product"
-                        )}`}
-                      >
+                      <Link to={`/product/${item.slug}`}>
                         <p className="font-medium pr-3 text-[#e62245] underline hover:text-[#e62246b0]">
                           {item?.product_name ?? "Unnamed Product"}
                         </p>

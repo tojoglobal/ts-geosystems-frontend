@@ -72,7 +72,7 @@ const PremiumProductTable = ({
                 <td className="py-3 px-2 sm:px-4">
                   <div className="flex flex-wrap gap-1 justify-center">
                     <Link
-                      to={`/dashboard/update-product/${product.id}`}
+                      to={`/dashboard/update-product/${product.slug}`}
                       className="bg-gradient-to-r from-green-600 to-green-400 text-white p-2 rounded-full shadow hover:scale-110 duration-150 cursor-pointer"
                     >
                       <Edit size={16} />

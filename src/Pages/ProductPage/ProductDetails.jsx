@@ -35,7 +35,7 @@ function getYouTubeId(url) {
 }
 
 const ProductDetails = () => {
-  const { id } = useParams();
+  const { slug } = useParams();
   const dispatch = useDispatch();
   const [selectedImage, setSelectedImage] = useState("");
   const [activeTab, setActiveTab] = useState("OVERVIEW");
@@ -51,7 +51,11 @@ const ProductDetails = () => {
     isLoading,
     isError,
     error,
-  } = useDataQuery(["productDetails", id], `/api/products/${id}`, !!id);
+  } = useDataQuery(
+    ["productDetails", slug],
+    `/api/product/${slug}`,
+    !!slug
+  );
   // Parse the image URLs from the product data
   const imageUrls = product?.image_urls ? JSON.parse(product.image_urls) : [];
   // Parse and clean video URLs if available
@@ -120,6 +124,10 @@ const ProductDetails = () => {
     }
   }, [product, dispatch]);
   // console.log(product);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, []);
 
   const handleOptionChange = (option, checked) => {
     if (checked) {

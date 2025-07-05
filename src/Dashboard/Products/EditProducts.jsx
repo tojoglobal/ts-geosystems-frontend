@@ -130,7 +130,7 @@ const MetaKeywordsInput = ({ value = [], onChange }) => {
 };
 
 const UpdateProductForm = () => {
-  const { id } = useParams();
+  const { slug } = useParams();
   const axiosPublicUrl = useAxiospublic();
   const [productData, setProductData] = useState({});
   const [images, setImages] = useState([]);
@@ -222,14 +222,14 @@ const UpdateProductForm = () => {
   useEffect(() => {
     const fetchProductData = async () => {
       try {
-        const response = await axiosPublicUrl.get(`/api/products/${id}`);
+        const response = await axiosPublicUrl.get(`/api/product/${slug}`);
         setProductData(response.data);
       } catch (error) {
         console.error("Error fetching product data:", error);
       }
     };
     fetchProductData();
-  }, [id, axiosPublicUrl]);
+  }, [slug, axiosPublicUrl]);
 
   // Set subcategory default value
   useEffect(() => {
@@ -376,7 +376,7 @@ const UpdateProductForm = () => {
         if (typeof file === "string") {
           const response = await axiosPublicUrl.post(
             "/api/products/delete-image",
-            { imageUrl: file, id }
+            { imageUrl: file, slug }
           );
           if (response?.status === 200) {
             Swal.fire({
@@ -427,6 +427,7 @@ const UpdateProductForm = () => {
   });
 
   const onSubmit = async (data) => {
+    console.log(data);
     try {
       const formData = new FormData();
       images.forEach((file) => {
@@ -471,7 +472,7 @@ const UpdateProductForm = () => {
         "softwareOptions",
         JSON.stringify(data.softwareOptions || [])
       );
-      const res = await axiosPublicUrl.put(`/api/products/${id}`, formData, {
+      const res = await axiosPublicUrl.put(`/api/products/${slug}`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       if (res.status === 201) {

@@ -8,7 +8,6 @@ import { Link } from "react-router-dom";
 import useDataQuery from "../../utils/useDataQuery";
 import { parsePrice } from "../../utils/parsePrice";
 import { useTrackProductView } from "../../Hooks/useTrackProductView";
-import { slugify } from "../../utils/slugify";
 import { formatBDT } from "../../utils/formatBDT";
 import { useVatEnabled } from "../../Hooks/useVatEnabled";
 import AddToCartButton from "../../Components/AddToCartButton";
@@ -142,9 +141,7 @@ const Recommended = ({ category, currentProductId }) => {
                 <div className="relative flex flex-col items-center bg-white h-full">
                   <Link
                     onClick={() => trackProductView(product.id)}
-                    to={`/products/${product.id}/${slugify(
-                      product.product_name || ""
-                    )}`}
+                    to={`/product/${product.slug}`}
                   >
                     <div className="relative group w-full max-w-[120px] sm:max-w-[140px] md:max-w-[240px] mx-auto pb-5 md:pb-0 md:min-h-[280px]">
                       <img
@@ -169,9 +166,7 @@ const Recommended = ({ category, currentProductId }) => {
                     <div className="md:min-h-[48px] flex items-start">
                       <Link
                         onClick={() => trackProductView(product.id)}
-                        to={`/products/${product.id}/${slugify(
-                          product.product_name || ""
-                        )}`}
+                        to={`/product/${product.slug}`}
                         className="font-semibold text-xs md:text-sm text-gray-800"
                       >
                         {product.product_name}
@@ -198,9 +193,7 @@ const Recommended = ({ category, currentProductId }) => {
                             // Case 2: GET QUOTATION
                             <Link
                               onClick={() => trackProductView(product.id)}
-                              to={`/products/${product.id}/${slugify(
-                                product.product_name || ""
-                              )}`}
+                              to={`/product/${product.slug}`}
                             >
                               <button className="w-full bg-[#e62245] cursor-pointer text-sm sm:text-[11px] md:text-sm text-white px-6 py-[5px] rounded-[4px] hover:bg-[#d41d3f] font-bold transition-colors">
                                 GET QUOTATION

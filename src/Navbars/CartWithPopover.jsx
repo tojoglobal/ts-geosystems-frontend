@@ -1,6 +1,5 @@
 import { useRef, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
-import { slugify } from "../utils/slugify";
 import { useDispatch, useSelector } from "react-redux";
 import { closeCart } from "../features/CartToggleSlice/CartToggleSlice";
 import useProductsByIdsQuery from "../Hooks/useProductsByIdsQuery";
@@ -96,9 +95,7 @@ const CartWithPopover = () => {
                             {item.brand_name}
                           </p>
                           <Link
-                            to={`/products/${item.id}/${slugify(
-                              item.product_name || ""
-                            )}`}
+                            to={`/product/${item.slug}`}
                             onClick={() => dispatch(closeCart())}
                           >
                             <p className="text-xs font-medium text-crimson-red leading-tight mb-1 line-clamp-2">
@@ -169,9 +166,7 @@ const CartWithPopover = () => {
                         {item.brand_name}
                       </p>
                       <Link
-                        to={`/products/${item.id}/${slugify(
-                          item.product_name || ""
-                        )}`}
+                        to={`/product/${item.slug}`}
                         onClick={() => dispatch(closeCart())}
                       >
                         <p className="text-xs font-medium text-crimson-red leading-tight mb-1">

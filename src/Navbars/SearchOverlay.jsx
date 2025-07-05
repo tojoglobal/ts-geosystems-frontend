@@ -15,7 +15,6 @@ import NextArrow from "../Components/NextArrow";
 import useDataQuery from "../utils/useDataQuery";
 import SearchResultsView from "./SearchResultsView";
 import { Link } from "react-router-dom";
-import { slugify } from "../utils/slugify";
 import { parsePrice } from "../utils/parsePrice";
 import { useTrackProductView } from "../Hooks/useTrackProductView";
 import useToastSwal from "../Hooks/useToastSwal";
@@ -383,9 +382,7 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                               await trackSearchOnProductClick(searchText);
                               onClose();
                             }}
-                            to={`/products/${product.id}/${slugify(
-                              product.product_name || ""
-                            )}`}
+                            to={`/product/${product.slug}`}
                             className="w-full"
                           >
                             <figure className="pt-4 pb-2 flex justify-center items-center h-[190px]">
@@ -418,9 +415,7 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                             </p>
                             {product?.isStock === 1 && priceOption === 1 && (
                               <Link
-                                to={`/products/${product.id}/${slugify(
-                                  product.product_name || ""
-                                )}`}
+                                to={`/product/${product.slug}`}
                                 title="Get Quotation"
                                 className="ml-auto p-[4px] rounded bg-[#e62245] hover:bg-[#d41d3f] text-white transition min-w-0 flex items-center"
                                 style={{ fontSize: "13px", fontWeight: 500 }}
@@ -476,9 +471,7 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                                 await trackSearchOnProductClick(searchText);
                                 onClose();
                               }}
-                              to={`/products/${product.id}/${slugify(
-                                product.product_name || ""
-                              )}`}
+                              to={`/product/${product.slug}`}
                               className="w-full"
                             >
                               <figure className="pt-4 pb-2 flex justify-center items-center h-[190px]">
@@ -513,9 +506,7 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                               </p>
                               {product?.isStock === 1 && priceOption === 1 && (
                                 <Link
-                                  to={`/products/${product.id}/${slugify(
-                                    product.product_name || ""
-                                  )}`}
+                                  to={`/product/${product.slug}`}
                                   title="Get Quotation"
                                   className="ml-auto p-[4px] rounded bg-[#e62245] hover:bg-[#d41d3f] text-white transition min-w-0 flex items-center"
                                   style={{
